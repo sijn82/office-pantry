@@ -1,0 +1,6 @@
+
+ <select name="assigned_route-dropdown" id="assigned_route-dropdown">
+  @foreach($assigned_route as $route_name )
+    <option value="{{ $route_name->assigned_to }}">{{ $route_name->assigned_to }}</option>
+  @endforeach
+</select>
