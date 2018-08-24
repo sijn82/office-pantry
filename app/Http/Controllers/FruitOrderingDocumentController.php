@@ -36,7 +36,7 @@ class FruitOrderingDocumentController extends Controller
      * @return \Illuminate\Http\Response
      */
     // public function store(Request $request, $week_start = 60818)
-        public function store(Request $request, $week_start = 130818)
+        public function store(Request $request, $week_start = 270818)
     {
         // Upload Fruit Ordering Document Data
 

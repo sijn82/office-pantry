@@ -17,7 +17,7 @@ class RoutesController extends Controller
   //   return \Excel::download(new Exports\RoutesExport, 'routelists' . $week_start . '.xlsx');
   // }
 
-  public function download($week_start = 130818)
+  public function download($week_start = 270818)
 {
     // return (new Exports\RoutesExport($week_start))->download('routesheets.xlsx');
     return \Excel::download(new Exports\RoutesExport($week_start), 'routelists' . $week_start . '.xlsx');
@@ -31,9 +31,11 @@ class RoutesController extends Controller
      */
     public function index()
     {
+        phpinfo();
         //
           $routes = Route::all();
           $assigned_route = Route::select('assigned_to')->distinct()->get();
+
                 return view ('display-routes', ['routes' => $routes, 'assigned_route' => $assigned_route]);
     }
 
@@ -47,7 +49,7 @@ class RoutesController extends Controller
         //
     }
 
-    public function updateRouteAndPosition(Request $request, $week_start = 130818)
+    public function updateRouteAndPosition(Request $request, $week_start = 270818)
     {
       // Get all existing route information
       $routes = Route::where('week_start', $week_start)->get();
@@ -99,7 +101,7 @@ class RoutesController extends Controller
                           // Update drinks, snacks and other column with actual values where applicable.
                           'drinks'	=> $data[22],
                           'snacks'	=> $data[23],
-                          // 'other' => $data[24],
+                          'other' => $data[24],
 
                           // Update the route and position on route to match any updates Nick has made in rejigged routes.
                           'assigned_to' => $data[25],
@@ -215,7 +217,7 @@ class RoutesController extends Controller
                           'milk_1l_alt_lactose_free_semi'	=> $data[21],
                           'drinks'	=> $data[22],
                           'snacks'	=> $data[23],
-                          // 'other' => $data[24],
+                          'other' => $data[24],
                           'assigned_to' => $data[25],
                           'delivery_day' => $data[26],
                           'position_on_route' => $data[27],
@@ -319,112 +321,238 @@ class RoutesController extends Controller
     }
 
     // Currently calling this a store function, however it will always(?) be updating an entry so should maybe be renamed?
-    public function storeDrinksSnacks(Request $request, $week_start = 130818)
+    public function storeDrinksSnacks(Request $request, $week_start = 270818)
     {
         // Get all existing route information MAYBE => $routes::where('week_start', $week_start)->get()
         $routes = Route::where('week_start', $week_start)->get();
         // Just grab Company Names to quickly check if company has received previous deliveries
         $route_company_names = Route::pluck('company_name')->all();
         $company_invoice_names = Company::pluck('invoice_name')->all();
+        $company_route_names = Company::pluck('route_name')->all();
         // var_dump($route_company_names);
         // dd(array_map('strlen', $route_company_names));
 
-          if (($handle = fopen(public_path() . '/drinks-n-snacks/drinksnsnacks-' . $week_start . '-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
-                // if (($handle = fopen(public_path() . '/drinks-n-snacks/drinksnsnacks-' . $week_start . '-wed-thur-fri-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
+        if (($handle = fopen(public_path() . '/drinks-n-snacks/drinksnsnacks-' . $week_start . '-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
+        // if (($handle = fopen(public_path() . '/drinks-n-snacks/drinksnsnacks-' . $week_start . '-wed-thur-fri-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
 
-              while (($data = fgetcsv ($handle, 1000, ',')) !== FALSE) {
+                while (($data = fgetcsv ($handle, 1000, ',')) !== FALSE) {
 
-                $company_name_encoded = json_encode($data[0]);
-                $company_name_fixed = str_replace('\u00a0', ' ', $company_name_encoded);
-                $company_name = json_decode($company_name_fixed);
-                $company_name = trim($company_name);
+                        // The usual tidying up of data - this one only covers the company name.
+                        $company_name_encoded = json_encode($data[0]);
+                        $company_name_fixed = str_replace('\u00a0', ' ', $company_name_encoded);
+                        $company_name = json_decode($company_name_fixed);
+                        $company_name = trim($company_name);
 
-              // Find that company data and update snacks and drinks column.
-              // But only if it matches both the week_start and delivery day.
+                        // Let's set these variables as empty arrays unless/until they get populated through the function later.
+                        $currentRoutingEntry = [];
+                        $currentRoutingEntrySecondChance = [];
+                        $currentRoutingEntryThirdChance = [];
 
-                $currentRoutingEntry = Route::where('company_name', $company_name) // Current Current route name and delivery day
-                  ->where('delivery_day', $data[4])->get();
+                        // Find that company data and update snacks and drinks column.
+                        // But only if it matches both the week_start and delivery day.
 
-                  // Only worry about successfully retrieved routes, otherwise this variable (array) will be empty
-                  if (count($currentRoutingEntry) !== 0) {
-                    // dd($currentRoutingEntry);
-                      // If it isn't empty, grab the company name and delivery day as currently listed in database.
-                      $selectedCompany = trim($currentRoutingEntry[0]->company_name);
-                      $selectedtDeliveryDay = $currentRoutingEntry[0]->delivery_day;
+                        $currentRoutingEntry = Route::where('company_name', $company_name) // Current Current route name and delivery day
+                          ->where('delivery_day', $data[4])->get();
 
-                      // Grab the routing data, update the snacks and drinks columns where company name and day of delivery match the updating data.
-                        Route::where('company_name', trim($company_name))->where('delivery_day', $data[4])
-                          ->update([
-                            // Company Name = $data[0];
-                            'drinks' => $data[1],
-                            'snacks' => $data[2],
-                            // 'other' => $data[3],
-                            // Delivery Day = $data[4];
-                            'week_start' => $data[5],
-                        ]);
+                        // Only worry about successfully retrieved routes, (matching route name/day) otherwise this variable (array) will be empty
+                        if (count($currentRoutingEntry) !== 0) {
 
-                        echo 'Found the Route entry for ' . $company_name . ' updating with drinks and snacks now <br>';
+                                // If it isn't empty, grab the company name and delivery day as currently listed in database.
+                                $selectedCompany = trim($currentRoutingEntry[0]->company_name);
+                                $selectedtDeliveryDay = $currentRoutingEntry[0]->delivery_day;
 
-                      // If we can't find the company under its route name then maybe we can check the company tables and look for a connected route name.
-                    }  elseif(in_array($company_name, $company_invoice_names)) {
+                                // if the entry hasn't had its week_start updated by this point then we should strip out its old order values before updating it with snacks, drinks and other.
+                                if ($currentRoutingEntry[0]->week_start != $week_start) {
 
-                      $selected_company_details = Company::where('invoice_name', $company_name)->get();
-                      $selected_company_route_name = $selected_company_details[0]->route_name;
-                      $selected_company_postcode = $selected_company_details[0]->postcode;
-                      $selected_company_route_summary_address = $selected_company_details[0]->route_summary_address;
-                      $selected_company_route_delivery_information = $selected_company_details[0]->delivery_information;
+                                      Route::where('company_name', trim($company_name))->where('delivery_day', $data[4])
+                                        ->update([
 
-                      $currentRoutingEntrySecondChance = Route::where('company_name', $selected_company_route_name) // Current Current route name and delivery day
-                        ->where('delivery_day', $data[4])->get();
+                                            'fruit_crates'	=> null,
+                                            'fruit_boxes'	=> null,
+                                            'milk_2l_semi_skimmed'	=> null,
+                                            'milk_2l_skimmed'	=> null,
+                                            'milk_2l_whole'	=> null,
+                                            'milk_1l_semi_skimmed'	=> null,
+                                            'milk_1l_skimmed'	=> null,
+                                            'milk_1l_whole'	=> null,
+                                            'milk_1l_alt_coconut'	=> null,
+                                            'milk_1l_alt_unsweetened_almond'	=> null,
+                                            'milk_1l_alt_almond'	=> null,
+                                            'milk_1l_alt_unsweetened_soya'	=> null,
+                                            'milk_1l_alt_soya'	=> null,
+                                            'milk_1l_alt_oat' => null,
+                                            'milk_1l_alt_rice' => null,
+                                            'milk_1l_alt_cashew' => null,
+                                            'milk_1l_alt_lactose_free_semi'	=> null,
+                                      ]);
+                                      echo 'Updated old entry ' . $company_name . ' / ' . $data[4] . ' by resetting fruit and milk totals. <br>';
+                                }
 
-                      if(count($currentRoutingEntrySecondChance) !== 0) { // company invoice name has a matching route with an existing entry and correct delivery day, we can update that entry.
-                              Route::where('company_name', trim($selected_company_route_name))->where('delivery_day', $data[4])
-                                ->update([
-                                  // Company Name = $data[0];
-                                  'drinks' => $data[1],
-                                  'snacks' => $data[2],
-                                  // 'other' => $data[3],
-                                  // Delivery Day = $data[4];
-                                  'week_start' => $data[5],
-                              ]);
+                                // Grab the routing data, update the snacks and drinks columns where company name and day of delivery match the updating data.
+                                Route::where('company_name', trim($company_name))->where('delivery_day', $data[4])
+                                  ->update([
+                                    // Company Name = $data[0];
+                                    'drinks' => $data[1],
+                                    'snacks' => $data[2],
+                                    'other' => $data[3],
+                                    // Delivery Day = $data[4];
+                                    'week_start' => $data[5],
+                                ]);
 
-                              echo 'Found the Route entry for ' . $company_name . ' under Route: ' . $selected_company_route_name . ', updating with drinks and snacks now <br>';
-                      } else {
+                                echo 'Found the Route entry for ' . $company_name . ' / ' . $data[4] . ' updating with drinks and snacks now <br>';
 
-                                // If no suitable entry exists, we need to create one from scratch.
-                                // If the route name is found in Company details but not in the routes ta ble we can go ahead and create a new route entry for the snacks and drinks order.
+                          // If we can't find the company under its route name then maybe we can check the company tables and look for a connected route name.
+                        }  elseif (in_array($company_name, $company_invoice_names) || in_array($company_name, $company_route_names)) {
 
-                                $newSnacksNDrinksRoute = new Route();
+                                // only attempt to populate these if through the $company_name matches an invoice name, otherwise it'll get upset that [0] is an undefined offset.
+                                if (in_array($company_name, $company_invoice_names)) {
+                                    $selected_company_details = Company::where('invoice_name', $company_name)->get();
+                                    $selected_company_route_name = $selected_company_details[0]->route_name;
+                                    $selected_company_postcode = $selected_company_details[0]->postcode;
+                                    $selected_company_route_summary_address = $selected_company_details[0]->route_summary_address;
+                                    $selected_company_route_delivery_information = $selected_company_details[0]->delivery_information;
 
-                                $newSnacksNDrinksRoute->week_start = $data[5];
-                                $newSnacksNDrinksRoute->company_name = $selected_company_route_name;
-                                $newSnacksNDrinksRoute->postcode = $selected_company_postcode;
-                                $newSnacksNDrinksRoute->address = $selected_company_route_summary_address; // Condensed values of address_line_1, address_line_2, city and county.
-                                $newSnacksNDrinksRoute->delivery_information = $selected_company_route_delivery_information;
+                                    $currentRoutingEntrySecondChance = Route::where('company_name', $selected_company_route_name) // Current Current route name and delivery day
+                                        ->where('delivery_day', $data[4])->get();
+                                }
+                                // only attempt to populate these if through the $company_name matches a route name, otherwise it'll get upset that [0] is an undefined offset.
+                                if (in_array($company_name, $company_route_names)) {
+                                    $selected_company_details_alt = Company::where('route_name', $company_name)->get();
+                                    $selected_company_route_name_alt = $selected_company_details_alt[0]->route_name;
+                                    $selected_company_postcode_alt = $selected_company_details_alt[0]->postcode;
+                                    $selected_company_route_summary_address_alt = $selected_company_details_alt[0]->route_summary_address;
+                                    $selected_company_route_delivery_information_alt = $selected_company_details_alt[0]->delivery_information;
 
-                                $newSnacksNDrinksRoute->drinks = $data[1];
-                                $newSnacksNDrinksRoute->snacks = $data[2];
-                                $newSnacksNDrinksRoute->other = $data[3];
+                                    $currentRoutingEntryThirdChance = Route::where('company_name', $selected_company_route_name_alt)
+                                        ->where('delivery_day', $data[4])->get();
+                                }
+                                // if company invoice name has a matching route with an existing entry and correct delivery day, we can update that entry.
+                                if(count($currentRoutingEntrySecondChance) !== 0) {
 
-                                // $newSpecialRoute->assigned_to = will default to TBC as we don't have any data on this shoud the route not yet exist.
-                                $newSnacksNDrinksRoute->delivery_day = $data[4];
-                                // $newSpecialRoute->position_on_route = Likewise this will default to null until Nick gives it a home.
+                                        // if the entry hasn't had its week_start updated by this point then we should make strip out its old order values before updating it with snacks, drinks and other.
+                                        if ($currentRoutingEntrySecondChance[0]->week_start != $week_start) {
 
-                                // Expected Time and Delivery Needed By columns to be either returned empty
-                                // or (more likely) Delivery Needed By will be held in the company model.
-                                $newSnacksNDrinksRoute->save();
+                                              Route::where('company_name', trim($selected_company_route_name))->where('delivery_day', $data[4])
+                                                ->update([
 
+                                                    'fruit_crates'	=> null,
+                                                    'fruit_boxes'	=> null,
+                                                    'milk_2l_semi_skimmed'	=> null,
+                                                    'milk_2l_skimmed'	=> null,
+                                                    'milk_2l_whole'	=> null,
+                                                    'milk_1l_semi_skimmed'	=> null,
+                                                    'milk_1l_skimmed'	=> null,
+                                                    'milk_1l_whole'	=> null,
+                                                    'milk_1l_alt_coconut'	=> null,
+                                                    'milk_1l_alt_unsweetened_almond'	=> null,
+                                                    'milk_1l_alt_almond'	=> null,
+                                                    'milk_1l_alt_unsweetened_soya'	=> null,
+                                                    'milk_1l_alt_soya'	=> null,
+                                                    'milk_1l_alt_oat' => null,
+                                                    'milk_1l_alt_rice' => null,
+                                                    'milk_1l_alt_cashew' => null,
+                                                    'milk_1l_alt_lactose_free_semi'	=> null,
+                                              ]);
+                                               echo 'Updated old entry ' . $company_name . ' / ' . $data[4] . ' by resetting fruit and milk totals. <br>';
+                                        }
 
-                                echo 'Found the Route entry for ' . $company_name . ' in Company table under Route Name: ' . $selected_company_route_name .  ', but no Route Name / Delivery Day match; creating snacks and drinks ONLY entry now. <br>';
-                      }
+                                          Route::where('company_name', trim($selected_company_route_name))->where('delivery_day', $data[4])
+                                            ->update([
+                                              // Company Name = $data[0];
+                                              'drinks' => $data[1],
+                                              'snacks' => $data[2],
+                                              'other' => $data[3],
+                                              // Delivery Day = $data[4];
+                                              'week_start' => $data[5],
+                                          ]);
 
-                    } else {
+                                          echo 'Found the Route entry for ' . $company_name . ' (under Company \'invoice_name\') Route: ' . $selected_company_route_name . ', updating with drinks and snacks now <br>';
 
-                      echo 'Uh, oh? ' . $company_name . ' on ' . $data[4] . ' couldn\'t be added! <br>';
-                    }
-              }
-          }
-    }
+                                } elseif(count($currentRoutingEntryThirdChance) !== 0) {
+
+                                        // if the entry hasn't had its week_start updated by this point then we should make strip out its old order values before updating it with snacks, drinks and other.
+                                        if ($currentRoutingEntryThirdChance[0]->week_start != $week_start) {
+
+                                              Route::where('company_name', trim($selected_company_route_name_alt))->where('delivery_day', $data[4])
+                                                ->update([
+
+                                                    'fruit_crates'	=> null,
+                                                    'fruit_boxes'	=> null,
+                                                    'milk_2l_semi_skimmed'	=> null,
+                                                    'milk_2l_skimmed'	=> null,
+                                                    'milk_2l_whole'	=> null,
+                                                    'milk_1l_semi_skimmed'	=> null,
+                                                    'milk_1l_skimmed'	=> null,
+                                                    'milk_1l_whole'	=> null,
+                                                    'milk_1l_alt_coconut'	=> null,
+                                                    'milk_1l_alt_unsweetened_almond'	=> null,
+                                                    'milk_1l_alt_almond'	=> null,
+                                                    'milk_1l_alt_unsweetened_soya'	=> null,
+                                                    'milk_1l_alt_soya'	=> null,
+                                                    'milk_1l_alt_oat' => null,
+                                                    'milk_1l_alt_rice' => null,
+                                                    'milk_1l_alt_cashew' => null,
+                                                    'milk_1l_alt_lactose_free_semi'	=> null,
+                                              ]);
+                                               echo 'Updated old entry ' . $company_name . ' / ' . $data[4] . ' by resetting fruit and milk totals. <br>';
+                                        }
+
+                                          Route::where('company_name', trim($selected_company_route_name_alt))->where('delivery_day', $data[4])
+                                            ->update([
+                                              // Company Name = $data[0];
+                                              'drinks' => $data[1],
+                                              'snacks' => $data[2],
+                                              'other' => $data[3],
+                                              // Delivery Day = $data[4];
+                                              'week_start' => $data[5],
+                                          ]);
+
+                                          echo 'Found the Route entry for ' . $company_name . ' (under Company \'route_name\') Route: ' . $selected_company_route_name . ', updating with drinks and snacks now <br>';
+                                } else {
+
+                                        // If no suitable entry exists, we need to create one from scratch.
+                                        // If the route name is found in Company details but not in the routes table we can go ahead and create a new route entry for the snacks and drinks order.
+
+                                        // If nether of these returns a hit the company is absent from the Company table.
+                                        // Should we throw an error here or let it go ahead and create an entry with the data we do have?
+                                        $newSnacksNDrinksRouteInfo = Company::where('route_name', $company_name)->orWhere('invoice_name', $company_name)->get();
+
+                                        // on the basis we're going to go ahead and let it create an entry, this is how we would do it.
+                                        $newRouteName = $newSnacksNDrinksRouteInfo[0]->route_name ? $newSnacksNDrinksRouteInfo[0]->route_name : $company_name;
+                                        $newRoutePostcode = $newSnacksNDrinksRouteInfo[0]->postcode ? $newSnacksNDrinksRouteInfo[0]->postcode : 'N/A';
+                                        $newRouteSummaryAddress = $newSnacksNDrinksRouteInfo[0]->route_summary_address ? $newSnacksNDrinksRouteInfo[0]->route_summary_address : 'N/A';
+                                        $newRouteDeliveryInformation = $newSnacksNDrinksRouteInfo[0]->delivery_information ? $newSnacksNDrinksRouteInfo[0]->delivery_information : 'N/A';
+
+                                        $newSnacksNDrinksRoute = new Route();
+                                        $newSnacksNDrinksRoute->week_start = $data[5];
+                                        $newSnacksNDrinksRoute->company_name = $newRouteName;
+                                        $newSnacksNDrinksRoute->postcode = $newRoutePostcode;
+                                        $newSnacksNDrinksRoute->address = $newRouteSummaryAddress;
+                                        $newSnacksNDrinksRoute->delivery_information = $newRouteDeliveryInformation;
+
+                                        $newSnacksNDrinksRoute->drinks = $data[1];
+                                        $newSnacksNDrinksRoute->snacks = $data[2];
+                                        $newSnacksNDrinksRoute->other = $data[3];
+
+                                        // $newSpecialRoute->assigned_to = will default to TBC as we don't have any data on this shoud the route not yet exist.
+                                        $newSnacksNDrinksRoute->delivery_day = $data[4];
+                                        // $newSpecialRoute->position_on_route = Likewise this will default to null until Nick gives it a home.
+
+                                        // Expected Time and Delivery Needed By columns to be either returned empty
+                                        // or (more likely) Delivery Needed By will be held in the company model.
+                                        $newSnacksNDrinksRoute->save();
+
+                                        echo 'Found the Route entry for ' . $company_name . ' in Company table under Route Name: ' . $newRouteName .  ', but no Route Name / Delivery Day match; creating snacks and drinks ONLY entry now. <br>';
+                                } // end of - if (count($currentRoutingEntrySecondChance) !== 0), elseif(count($currentRoutingEntryThirdChance) !== 0), else (make new entry).
+                        } else {
+                            // this else statement is hit if the route to be updated with drinks and snacks doesn't exist as a recognised name/day combo in the Routes table
+                            // or if the company name provided doesn't match a company invoice_name or route_name in the Company table.
+                            echo 'Uh, oh? ' . $company_name . ' on ' . $data[4] . ' couldn\'t be added! <br>';
+                        } // end of - if (count($currentRoutingEntry) !== 0), elseif (in_array($company_name, $company_invoice_names) || in_array($company_name, $company_route_names)), else (uh oh!)
+                } // end of while (($data = fgetcsv ($handle, 1000, ',')) !== FALSE) {
+        } // end of if (($handle = fopen(public_path() . '/drinks-n-snacks/drinksnsnacks-' . $week_start . '-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
+
+    } // end of function = public function storeDrinksSnacks(Request $request, $week_start = xxxxxx)
 
 
     /**
@@ -513,7 +641,7 @@ class RoutesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $week_start = 130818)
+    public function update(Request $request, $week_start = 270818)
     {
 
       // Get existing Route data
@@ -647,7 +775,7 @@ class RoutesController extends Controller
 
                     } else { // End of if (count($currentRoutingEntry) !== 0)
                       // They have previously featured on routes, but not for this delivery day.  Create a new entry in routes.
-                         echo 'Couldn\'t locate delivery for ' . '<strong style="color: red";>' . $selectedCompany . ' on ' . $fruitOrderingDocument->delivery_day . '</strong> in routes. <br> Adding now :) <br>';
+                         echo 'Couldn\'t locate delivery for ' . '<strong style="color: red";>' . $fruitOrderingDocument->company_name . ' on ' . $fruitOrderingDocument->delivery_day . '</strong> in routes. <br> Adding now :) <br>';
 
                          $backupCompanyData = Company::where('route_name', $fruitOrderingDocument->company_name)->get(); // Grab entry where the route name matches a company route name.
                          $backupRouteData = Route::where('company_name', $fruitOrderingDocument->company_name)->get();
@@ -738,7 +866,7 @@ class RoutesController extends Controller
                             $selected_route_entry = Route::where('company_name', $selected_company[0]->route_name)->where('delivery_day', $fruitOrderingDocument->delivery_day)->get();
                              // var_dump(empty($selected_route_entry[0]->week_start));
                                 // most of the time this will return empty, so lets just ignore any of those
-                                if((empty($selected_route_entry[0]->week_start) == FALSE)) // what am i really doing here, is there a better way to check?
+                                if((empty($selected_route_entry[0]->week_start) == FALSE)) // what am i really doing here, is there a better way to check? EDIT - I think it just ensures a failed record retrieval doesn't throw an error.
                                 {
                                       echo $fruitOrderingDocument->company_name . ' got this far!<br>';
                                       // if we're here then the selected route is ready to be updated,
@@ -824,7 +952,7 @@ class RoutesController extends Controller
 
                                               // These are only the fields which will likely change from one delivery to the next.
 
-                                              'week_start' => $fruitOrderingDocument->week_start, // We actually want to keep this the same, so probably don't need it here
+                                              // 'week_start' => $fruitOrderingDocument->week_start, // We actually want to keep this the same, so probably don't need it here
                                               'fruit_crates' => $new_fruitcrate_total,
                                               'fruit_boxes' => $new_fruitbox_total,
                                               'milk_2l_semi_skimmed' => $new_milk_2l_semi_skimmed_total,
@@ -897,7 +1025,6 @@ class RoutesController extends Controller
                                   $newRoutingData->save();
 
                                   echo 'Created new route entry for <strong style="color: green";>' . $selected_company[0]->route_name . '</strong> on <strong style="color: green";>' . $selected_company[0]->route_name . '</strong><br>';
-
 
                                 }
 

@@ -12,9 +12,33 @@ class SnackBoxController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index_OP()
     {
         //
+        $snd_OP_multipleBoxes = SnackBox::where('delivered_by', 'OP')->where('no_of_boxes_split_between', '>', 1)->get();
+
+        $snd_OP_singleBoxes = SnackBox::where('delivered_by', 'OP')->where('no_of_boxes_split_between', '=', 1)->get();
+
+        $chunks = $snd_OP_singleBoxes->chunk(4);
+        $chunks = $chunks->all();
+
+
+        // dd($chunks);
+        $snd_OP_uniqueBoxes = SnackBox::where('delivered_by', 'OP')->where('no_of_boxes_split_between', '=', 0)->get();
+
+        return view ('snackboxes-multi-company', ['snd_OP_singleBoxes' => $snd_OP_singleBoxes, 'snd_OP_multipleBoxes' => $snd_OP_multipleBoxes, 'snd_OP_uniqueBoxes' => $snd_OP_uniqueBoxes, 'chunks' => $chunks ]);
+}
+
+    public function index_DPD()
+    {
+        //
+        $snd_DPD = SnackBox::where('delivered_by', 'DPD')->get();
+    }
+
+    public function index_APC()
+    {
+        //
+        $snd_APC = SnackBox::where('delivered_by', 'APC')->get();
     }
 
     /**
@@ -40,6 +64,14 @@ class SnackBoxController extends Controller
               if (($handle = fopen(public_path() . '/snackboxes/snackboxes-' . $week_start . '-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
 
                     while (($data = fgetcsv ($handle, 1000, ',')) !== FALSE) {
+
+                        // function default_value()
+                        // {
+                        //     isset( $data ) ? $data : null;
+                        //     return $this->data;
+                        // }
+                        //
+                        // array_walk($data, 'default_value');
 
                         $newSnackBox = new SnackBox();
                         $newSnackBox->week_start = $data[0];

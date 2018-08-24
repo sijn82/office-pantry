@@ -81,28 +81,6 @@ class CompaniesExport implements FromView, WithHeadings, WithEvents
 
         return [
             AfterSheet::class    => function(AfterSheet $event) {
-                // $styleArray = [
-                //     'borders' => [
-                //         'outline' => [
-                //             'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
-                //             'color' => ['argb' => 'FFFF0000'],
-                //         ],
-                //     ],
-                //     'fill' => [
-                //                 'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                //                 'color' => [
-                //                   'argb' => 'FFA0A0A0'
-                //                 ]
-                //         // 'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_GRADIENT_LINEAR,
-                //         // 'rotation' => 90,
-                //         // 'startColor' => [
-                //         //     'argb' => 'FFA0A0A0',
-                //         // ],
-                //         // 'endColor' => [
-                //         //     'argb' => 'FFFFFFFF',
-                //         // ],
-                //     ],
-                // ];
 
                 $highestRow = $event->sheet->getHighestRow();
                 $rowWidth = $event->sheet->getHighestColumn();

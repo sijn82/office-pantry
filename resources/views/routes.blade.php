@@ -1,5 +1,3 @@
-
-
 @extends('welcome')
 @section('routes')
 

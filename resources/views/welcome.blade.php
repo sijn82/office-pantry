@@ -102,6 +102,7 @@
 
                 @yield('content-excel')
                 @yield('display-routes')
+                @yield('snackboxes-multi-company')
                 <!-- @yield('companies') -->
 
 

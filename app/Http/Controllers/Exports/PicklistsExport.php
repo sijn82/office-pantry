@@ -44,7 +44,7 @@ class PicklistsExport implements FromCollection, WithHeadings
 
     public function collection()
     {
-        return PickList::where('week_start', '130818')->where('delivery_day', 'Tuesday')->orderBy('assigned_to', 'asc')->orderBy('position_on_route', 'asc');
+        return PickList::where('week_start', '200818')->where('delivery_day', 'Friday')->orderBy('assigned_to', 'asc')->orderBy('position_on_route', 'asc');
         // I want this functionality (somehow) to ignore these columns when exporting = ->except(['id', 'created_at', 'updated_at'])
         // I've found a solution but can't believe Laravel doesn't have a built in sytem to handle this (typical) request?
     }

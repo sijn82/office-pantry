@@ -1,4 +1,3 @@
-
 @extends('welcome')
 @section('display-routes')
 
