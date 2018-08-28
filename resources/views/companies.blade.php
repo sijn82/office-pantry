@@ -1,8 +1,7 @@
-<!-- @extends('welcome') -->
-<!-- @section('companies') -->
-<!-- <companies></companies> -->
+@extends('welcome')
+@section('companies')
 
-<!-- <h3 class="route-header"> Display Companies </h3> -->
+<h3 class="route-header"> Display Companies </h3>
 
 <table>
     <thead>

@@ -22,7 +22,7 @@ Route::get('fruitorderingdocs', 'FruitOrderingDocumentController@index');
 Route::get('picklists', 'PickListsController@index');
 Route::get('products', 'ProductsController@index');
 Route::get('routes', 'RoutesController@index');
-// Route::get('companies', 'CompanyController@index');s
+// Route::get('companies', 'CompanyController@index');
 
 // Store routes/picklists - this was used once to populate the tables with some data to work with.
 Route::get('import-routing', 'RoutesController@store');

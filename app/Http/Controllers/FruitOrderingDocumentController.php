@@ -40,9 +40,9 @@ class FruitOrderingDocumentController extends Controller
     {
         // Upload Fruit Ordering Document Data
 
-      if (($handle = fopen(public_path() . '/fod/fod-' . $week_start . '-inc-zeros-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
+      // if (($handle = fopen(public_path() . '/fod/fod-' . $week_start . '-inc-zeros-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
 
-      // if (($handle = fopen(public_path() . '/fod/fod-' . $week_start . '-inc-zeros-wed-thur-fri-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
+      if (($handle = fopen(public_path() . '/fod/fod-' . $week_start . '-inc-zeros-wed-thur-fri-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
 
         while (($data = fgetcsv ($handle, 1000, ',')) !== FALSE) {
 

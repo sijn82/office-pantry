@@ -50,7 +50,6 @@
         {{ $totalMilk1lAltRice = 0 }}
         {{ $totalMilk1lAltCashew = 0 }}
         {{ $totalMilk1lAltLactoseFreeSemi = 0 }}
-        {{ $totalOther = 0 }}
 
         @foreach ($routes as $route)
 
@@ -71,7 +70,6 @@
         {{ $totalMilk1lAltRice += $route->milk_1l_alt_rice }}
         {{ $totalMilk1lAltCashew += $route->milk_1l_alt_cashew }}
         {{ $totalMilk1lAltLactoseFreeSemi += $route->milk_1l_alt_lactose_free_semi }}
-        {{ $totalOther += $route->other }}
 
         <tr>
             <td>{{ $route->week_start }}</td>
@@ -131,7 +129,7 @@
             <td>{{ $totalMilk1lAltLactoseFreeSemi }}</td>
             <td></td>
             <td></td>
-            <td>{{ $totalOther }}</td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>

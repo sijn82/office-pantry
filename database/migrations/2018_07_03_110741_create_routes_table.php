@@ -39,7 +39,7 @@ class CreateRoutesTable extends Migration
             $table->integer('milk_1l_alt_lactose_free_semi')->default('0');
             $table->string('drinks')->nullable();
             $table->string('snacks')->nullable();
-            $table->integer('other')->nullable();
+            $table->string('other')->nullable();
             $table->string('assigned_to')->default('TBC');
             $table->integer('position_on_route')->nullable();
             $table->string('delivery_day');

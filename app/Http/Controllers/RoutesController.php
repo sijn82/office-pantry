@@ -17,8 +17,17 @@ class RoutesController extends Controller
   //   return \Excel::download(new Exports\RoutesExport, 'routelists' . $week_start . '.xlsx');
   // }
 
+   public function week_start()
+   {
+       $week_start = 27818;
+       return $week_start;
+   }
+
+
+
   public function download($week_start = 270818)
 {
+    // $week_start = week_start($week_start);
     // return (new Exports\RoutesExport($week_start))->download('routesheets.xlsx');
     return \Excel::download(new Exports\RoutesExport($week_start), 'routelists' . $week_start . '.xlsx');
 }
@@ -31,7 +40,7 @@ class RoutesController extends Controller
      */
     public function index()
     {
-        phpinfo();
+        // phpinfo();
         //
           $routes = Route::all();
           $assigned_route = Route::select('assigned_to')->distinct()->get();
@@ -59,8 +68,8 @@ class RoutesController extends Controller
       // var_dump($route_company_names);
       // dd(array_map('strlen', $route_company_names));
 
-        if (($handle = fopen(public_path() . '/rejigged-routing/rejigged-routing-' . $week_start . '-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
-        // if (($handle = fopen(public_path() . '/rejigged-routing/rejigged-routing-' . $week_start . '-wed-thur-fri-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
+        // if (($handle = fopen(public_path() . '/rejigged-routing/rejigged-routing-' . $week_start . '-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
+        if (($handle = fopen(public_path() . '/rejigged-routing/rejigged-routing-' . $week_start . '-wed-thur-fri-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
 
             while (($data = fgetcsv ($handle, 1000, ',')) !== FALSE) {
 
@@ -332,8 +341,8 @@ class RoutesController extends Controller
         // var_dump($route_company_names);
         // dd(array_map('strlen', $route_company_names));
 
-        if (($handle = fopen(public_path() . '/drinks-n-snacks/drinksnsnacks-' . $week_start . '-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
-        // if (($handle = fopen(public_path() . '/drinks-n-snacks/drinksnsnacks-' . $week_start . '-wed-thur-fri-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
+        // if (($handle = fopen(public_path() . '/drinks-n-snacks/drinksnsnacks-' . $week_start . '-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
+        if (($handle = fopen(public_path() . '/drinks-n-snacks/drinksnsnacks-' . $week_start . '-wed-thur-fri-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
 
                 while (($data = fgetcsv ($handle, 1000, ',')) !== FALSE) {
 

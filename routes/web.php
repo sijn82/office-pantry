@@ -28,7 +28,7 @@ Route::get('routes', function () {
 Route::get('display-routes', 'RoutesController@index');
 Route::get('snackboxes-multi-company', 'SnackBoxController@index_OP');
 
-// Route::get('companies', 'CompaniesController@index');
+Route::get('companies', 'CompaniesController@index');
 // Route::get('products', 'ProductsController@index');
 
 Route::get('/import', 'ImportController@getImport')->name('import');
