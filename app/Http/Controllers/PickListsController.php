@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Exports;
 use App\PickList;
 use App\Route;
 use Illuminate\Http\Request;
@@ -22,7 +23,8 @@ class PickListsController extends Controller
 
     // return (new PicklistsExport)->download('invoices.xlsx');
     // return \Excel::export(new Export);
-    return \Excel::download(new Exports\PicklistsExport, 'picklists' . $week_start . '.xlsx');
+    return \Excel::download(new Exports\PicklistsExport($week_start), 'picklists' . $week_start . '.xlsx');
+
   }
 
     /**

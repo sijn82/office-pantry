@@ -17,11 +17,11 @@ class RoutesController extends Controller
   //   return \Excel::download(new Exports\RoutesExport, 'routelists' . $week_start . '.xlsx');
   // }
 
-   public function week_start()
-   {
-       $week_start = 27818;
-       return $week_start;
-   }
+   // public function week_start()
+   // {
+   //     $week_start = 27818;
+   //     return $week_start;
+   // }
 
 
 
