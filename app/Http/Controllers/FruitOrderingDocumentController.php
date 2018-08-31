@@ -7,6 +7,14 @@ use Illuminate\Http\Request;
 
 class FruitOrderingDocumentController extends Controller
 {
+
+    protected $week_start;
+
+    public function __construct()
+    {
+        $this->week_start = 30918;
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -35,14 +43,33 @@ class FruitOrderingDocumentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    // public function store(Request $request, $week_start = 60818)
-        public function store(Request $request, $week_start = 270818)
+    // public function store(Request $request, $this->week_start = 60818)
+        public function upload(Request $request)
+    {
+         // dd($request);
+        $requestFixed = str_replace('data:application/vnd.ms-excel;','',$request->fod_csv);
+        $request = base64_decode($requestFixed);
+        dd($request);
+        $data = str_getcsv ($request,',','"','\r\n');
+            // dd($data);
+
+        // dd($request);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    // public function store(Request $request, $this->week_start = 60818)
+        public function store(Request $request)
     {
         // Upload Fruit Ordering Document Data
 
-      // if (($handle = fopen(public_path() . '/fod/fod-' . $week_start . '-inc-zeros-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
+      if (($handle = fopen(public_path() . '/fod/fod-' . $this->week_start . '-inc-zeros-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
 
-      if (($handle = fopen(public_path() . '/fod/fod-' . $week_start . '-inc-zeros-wed-thur-fri-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
+      // if (($handle = fopen(public_path() . '/fod/fod-' . $this->week_start . '-inc-zeros-wed-thur-fri-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
 
         while (($data = fgetcsv ($handle, 1000, ',')) !== FALSE) {
 

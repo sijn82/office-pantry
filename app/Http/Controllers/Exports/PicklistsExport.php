@@ -31,43 +31,10 @@ WithMultipleSheets
         $this->week_starting = $week_starting;
     }
 
-    // This isn't currently in use anymore as we're now using the view template to add headers but again, I'm keeping this here as an example of using headers this way.
-
-    // public function headings(): array
-    // {
-    //   return [
-    //       'id',
-    //       'week_start',
-    //       'company_name',
-    //       'fruit_crates',
-    //       'fruit_boxes',
-    //       'deliciously_red_apples',
-    //       'pink_lady_apples',
-    //       'red_apples',
-    //       'green_apples',
-    //       'satsumas',
-    //       'pears',
-    //       'bananas',
-    //       'nectarines',
-    //       'limes',
-    //       'lemons',
-    //       'grapes',
-    //       'seasonal_berries',
-    //       'oranges',
-    //       'cucumbers',
-    //       'mint',
-    //       'assigned_to',
-    //       'position_on_route',
-    //       'delivery_day',
-    //       'created_at',
-    //       'updated_at',
-    //   ];
-    // }
-
-
     // This is the most important part of the Picklist Export Class,
     // it's where we determine how the multiple sheets are divided up.
     // Currently the sheets are seperated by their 'assigned_to' routes.
+    
     /**
      * @return array
      */
@@ -173,7 +140,7 @@ WithEvents
                                             || $chosenCellsArray[$selectedRow]['R'] != 0
                                             || $chosenCellsArray[$selectedRow]['S'] != 0)
                                     {
-                                        // styleCells() is a custom built Macro and registered 
+                                        // styleCells() is a custom built Macro and registered
                                         $event->sheet->styleCells(
                                               $selectedCell, // Cell Range
                                               [ // Styles Array

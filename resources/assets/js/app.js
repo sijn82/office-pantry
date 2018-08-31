@@ -26,6 +26,7 @@ Vue.component('companies', require('./components/Companies.vue'));
 Vue.component('picklists', require('./components/Picklists.vue'));
 Vue.component('routes', require('./components/Routes.vue'));
 Vue.component('update-picklist-n-routes', require('./components/UpdatePicklistNRoutes.vue'));
+Vue.component('import-file', require('./components/ImportFile.vue'));
 
 const app = new Vue({
     el: '#app'

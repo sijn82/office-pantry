@@ -43,6 +43,8 @@ Route::get('update-picklist-with-routes', 'PickListsController@updatePicklistWit
 
 // Import FOD data => currently this just stores fresh data each time, however this should be updating the existing entries.
 Route::get('import-fod', 'FruitOrderingDocumentController@store');
+// This a temporary entry to keep it away from currently used functions/urls but may get updated to import-fod.
+Route::post('import-csv', 'FruitOrderingDocumentController@upload');
 
 // This is again a temporary solution to adding the drinks and snacks totals to routes, as it doesn't get brought in with FOD at the moment.
 // Calling it store is maybe misleading as it will only update existing entries.
@@ -61,6 +63,7 @@ Route::get('importFruitBox', 'FruitBoxController@store');
 
 // Export excel data for picklists and routing.
 Route::get('export-picklists', 'PickListsController@export');
+Route::get('export-picklists-full', 'PickListsController@full_export');
 // Route::get('export-routing', 'RoutesController@export');
 Route::get('export-routing', 'RoutesController@download');
 Route::get('export-companies', 'CompaniesController@export');

@@ -100,13 +100,14 @@
                 </div>
 
 
-                @yield('content-excel')
+
                 @yield('display-routes')
                 @yield('snackboxes-multi-company')
                 @yield('companies')
 
 
                 <div id="app">
+                    @yield('content-excel')
                     @yield('routes')
                     @yield('products')
                      <!-- <products></products> -->

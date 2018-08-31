@@ -16,14 +16,27 @@ use App\Company;
 
 class PickListsController extends Controller
 {
-  // public $week_start = 230718;
 
-  public function export($week_start = 270818)
+    protected $week_start;
+
+    public function __construct()
+    {
+        $this->week_start = 30918;
+    }
+
+    public function full_export()
+    {
+        // $picklistcollection = Picklist::where('week_start', $this->week_start)->get();
+
+        return \Excel::download(new Exports\PicklistsExportFull($this->week_start), 'picklists-full' . $this->week_start . '.xlsx');
+    }
+
+  public function export()
   {
 
     // return (new PicklistsExport)->download('invoices.xlsx');
     // return \Excel::export(new Export);
-    return \Excel::download(new Exports\PicklistsExport($week_start), 'picklists' . $week_start . '.xlsx');
+    return \Excel::download(new Exports\PicklistsExport($this->week_start), 'picklists' . $this->week_start . '.xlsx');
 
   }
 
@@ -119,11 +132,11 @@ class PickListsController extends Controller
       //
     }
 
-    public function updatePicklistWithRejiggedRoutes($week_start = 270818)
+    public function updatePicklistWithRejiggedRoutes()
     {
           // Current Logic
               // Get existing Picklist data
-              // $picklists = PickList::where('week_start', $week_start)->get();
+              // $picklists = PickList::where('week_start', $this->week_start)->get();
               // // Just grab Company Names to quickly check if company has received previous deliveries
               // $picklist_company_names = PickList::pluck('company_name')->all();
               // // And any leading/trailing spaces
@@ -132,13 +145,13 @@ class PickListsController extends Controller
 
           // New Logic
               // This picklist company names could more accurately represent picklist box_names
-              $picklists = PickList::where('week_start', $week_start)->get();
+              $picklists = PickList::where('week_start', $this->week_start)->get();
               $picklist_box_names = PickList::pluck('company_name')->all();
               $picklist_box_names = array_map('trim', $picklist_box_names);
               $company_route_names = Company::pluck('route_name')->all(); // Moving this declaration to the top of function so the call only needs to be made once.
           // End of new logic.
 
-          $newRoutes = Route::where('week_start', $week_start)->get();
+          $newRoutes = Route::where('week_start', $this->week_start)->get();
 
         foreach($newRoutes as $newRoute) {
                 // If Company entry in Routes matches a Company Name entry in Picklist and has at least one fruit box which needs picking.
@@ -160,7 +173,7 @@ class PickListsController extends Controller
 
                                         // this is only checking that a picklist entry exists in the picklist table, not necessarily that it's out for delivery this week.  Should I add week_start?
                                         $currentPicklistEntry = PickList::where('company_name', trim($company_picklist_box_name))
-                                            ->where('delivery_day', $newRoute->delivery_day)->where('week_start', $week_start)->get();
+                                            ->where('delivery_day', $newRoute->delivery_day)->where('week_start', $this->week_start)->get();
 
                                         // Only worry about successfully retrieved picklists, otherwise this variable (array) will be empty
                                         if (count($currentPicklistEntry) !== 0) { // I found unpredictable results with empty(), however I feel there may be an option better than count()?
@@ -170,7 +183,7 @@ class PickListsController extends Controller
                                                 $selectedtDeliveryDay = $currentPicklistEntry[0]->delivery_day;
                                                 $selectedWeekStart = $currentPicklistEntry[0]->week_start;
 
-                                                PickList::where('company_name', trim($selectedCompany))->where('delivery_day', $selectedtDeliveryDay)->where('week_start', $week_start)
+                                                PickList::where('company_name', trim($selectedCompany))->where('delivery_day', $selectedtDeliveryDay)->where('week_start', $this->week_start)
                                                     ->update([
                                                       'assigned_to' => $newRoute->assigned_to,
                                                       'position_on_route' => $newRoute->position_on_route,
@@ -180,7 +193,7 @@ class PickListsController extends Controller
                                                       . ' to be on ' . $newRoute->assigned_to . ' at position: ' . $newRoute->position_on_route . '<br>';
 
                                         } else {
-                                        echo  $company_picklist_box_name . ' hasn\'t been updated to this week ( ' . $week_start . ' ) and doesn\'t appear to be out for delivery on ' . $newRoute->delivery_day . ' this week.  Is it?<br>';
+                                        echo  $company_picklist_box_name . ' hasn\'t been updated to this week ( ' . $this->week_start . ' ) and doesn\'t appear to be out for delivery on ' . $newRoute->delivery_day . ' this week.  Is it?<br>';
                                         }
                                 } // end of foreach - ($company_picklist_box_names[0] as $company_picklist_box_name)
 
@@ -193,7 +206,7 @@ class PickListsController extends Controller
 
                                                 // this is only checking that a picklist entry exists in the picklist table, not necessarily that it's out for delivery this week.  Should I add week_start?
                                                 $currentPicklistEntry = PickList::where('company_name', trim($company_picklist_box_name))
-                                                    ->where('delivery_day', $newRoute->delivery_day)->where('week_start', $week_start)->get();
+                                                    ->where('delivery_day', $newRoute->delivery_day)->where('week_start', $this->week_start)->get();
 
                                                 // Only worry about successfully retrieved picklists, otherwise this variable (array) will be empty
                                                 if (count($currentPicklistEntry) !== 0) { // I found unpredictable results with empty(), however I feel there may be an option better than count()?
@@ -203,7 +216,7 @@ class PickListsController extends Controller
                                                         $selectedtDeliveryDay = $currentPicklistEntry[0]->delivery_day;
                                                         $selectedWeekStart = $currentPicklistEntry[0]->week_start;
 
-                                                        PickList::where('company_name', trim($selectedCompany))->where('delivery_day', $selectedtDeliveryDay)->where('week_start', $week_start)
+                                                        PickList::where('company_name', trim($selectedCompany))->where('delivery_day', $selectedtDeliveryDay)->where('week_start', $this->week_start)
                                                             ->update([
                                                               'assigned_to' => $newRoute->assigned_to,
                                                               'position_on_route' => $newRoute->position_on_route,
@@ -213,7 +226,7 @@ class PickListsController extends Controller
                                                                   . ' to be on ' . $newRoute->assigned_to . ' at position: ' . $newRoute->position_on_route . '<br>';
 
                                                 } else {
-                                                echo  $selectedCompany . ' out for delivery on ' . $selectedtDeliveryDay . ' ( ' . $selectedWeekStart . ' ) is being treated as an old entry.  Is it?<br>';
+                                                echo  $newRoute->company_name . ' out for delivery on ' . $newRoute->delivery_day . ' ( ' . $newRoute->week_start . ' ) is being treated as an old entry.  Is it?<br>';
                                                 }
                                         } // end of foreach - ($company_picklist_box_names[1] as $company_picklist_box_name)
                                 } // end of if - ($count($company_picklist_box_names) > 1)
@@ -251,9 +264,9 @@ class PickListsController extends Controller
                                 foreach ($company_picklist_box_names[0] as $company_picklist_box_name) {
 
                                         // attempt to grab the valid week_start from an entry in the picklists for this week, if this fails we will output 'unavailable' further down.
-                                        $picklist_box_week_start = Picklist::where('company_name', $company_picklist_box_name)->where('week_start', $week_start)->pluck('week_start')->first();
+                                        $picklist_box_week_start = Picklist::where('company_name', $company_picklist_box_name)->where('week_start', $this->week_start)->pluck('week_start')->first();
                                         // grab an array of the week days this compnay is expecting a delivery for this week.
-                                        $selected_picklist_box_delivery_day = Picklist::where('company_name', $company_picklist_box_name)->where('week_start', $week_start)->pluck('delivery_day')->all();
+                                        $selected_picklist_box_delivery_day = Picklist::where('company_name', $company_picklist_box_name)->where('week_start', $this->week_start)->pluck('delivery_day')->all();
 
                                         var_dump($picklist_box_week_start);
                                         var_dump($selected_picklist_box_delivery_day);
@@ -266,7 +279,7 @@ class PickListsController extends Controller
 
 
                                         if (in_array($company_picklist_box_name, $picklist_box_names) // If company picklist name in list of picklist box names
-                                            && ($picklist_box_week_start == $week_start) // If picklist box name has been updated to this weeks start date
+                                            && ($picklist_box_week_start == $this->week_start) // If picklist box name has been updated to this weeks start date
                                             && (in_array($newRoute->delivery_day, $selected_picklist_box_delivery_day))) // And the picklist name is down for a delivery on this particular day of the week.
                                         {
                                             // if all checks are passed we have an entry to update with the new 'assigned_to' and 'position_on_route' values.
@@ -281,7 +294,7 @@ class PickListsController extends Controller
 
                                         } else {
                                             echo 'Couldn\'t find picklist for ' . $newRoute->company_name . ', or company listed box name: ( ' . $company_picklist_box_name . ' )
-                                             was last updated on ( ' . $picklist_box_week_start . ' ) and is not due for a delivery on ' . $newRoute->delivery_day . ' this week (' . $week_start . '). <br>';
+                                             was last updated on ( ' . $picklist_box_week_start . ' ) and is not due for a delivery on ' . $newRoute->delivery_day . ' this week (' . $this->week_start . '). <br>';
                                         }
                                   } //end of foreach ($company_picklist_box_names[0] as $company_picklist_box_name)
                         } else {
@@ -298,8 +311,8 @@ class PickListsController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    // public function update(Request $request, $id) --Maybe replace $id with $week_start? This would help to automate collecting only the recently updated data for the week ahead.
-    public function update(Request $request, $week_start = 270818)
+    // public function update(Request $request, $id) --Maybe replace $id with $this->week_start? This would help to automate collecting only the recently updated data for the week ahead.
+    public function update(Request $request)
     {
 
         // Get existing Picklist data
@@ -310,7 +323,7 @@ class PickListsController extends Controller
 
         // This is limited to only files which have been recently updated to the new Week Start.
         // Until the $variable can be updated manually (through users), I will need to remember to adjust it here (top of function, as parameter) before running the fod-vs-picklist
-        $fruitOrderingDocuments = FruitOrderingDocument::where('week_start', $week_start)->get();
+        $fruitOrderingDocuments = FruitOrderingDocument::where('week_start', $this->week_start)->get();
 
         // Now iterate through the new FOD data
         foreach($fruitOrderingDocuments as $fruitOrderingDocument) {
