@@ -7,12 +7,26 @@ use App\PickList;
 use App\Route;
 use Illuminate\Http\Request;
 
-
 // Use FruitOrderingDocument to compare database
 use App\FruitOrderingDocument;
 // use Companies model to compare route name where it doesn't match with picklist names
 use App\Company;
 // use App\Exports;
+
+
+// Function index                                                                   Changes for picklist and routing
+
+// public function __construct()                            - 36                    - 38 (Change $week_start date)
+// public function full_export()                            - 41
+// public function export()                                 - 48
+// public function index()                                  - 62
+// public function create()                                 - 74
+// public function store(Request $request)                  - 85
+// public function show($id)                                - 133
+// public function edit($id)                                - 144
+// public function updatePicklistWithRejiggedRoutes()       - 149 (url - update-picklist-with-routes)
+// public function update(Request $request)                 - 329 (url - picklist-vs-fod)
+// public function destroy($id)                             - 499
 
 class PickListsController extends Controller
 {
@@ -153,13 +167,28 @@ class PickListsController extends Controller
 
           $newRoutes = Route::where('week_start', $this->week_start)->get();
 
-        foreach($newRoutes as $newRoute) {
-                // If Company entry in Routes matches a Company Name entry in Picklist and has at least one fruit box which needs picking.
-                // if (in_array(strtolower(trim($newRoute->company_name)),
-                //     array_map('strtolower', $picklist_box_names)) // why am i checking the picklist box names, what if the route name has no matching picklist box name?
-                //     // array_map('strtolower', $picklist_company_names))
-                //     && ($newRoute->fruit_boxes > 0))
-                // {
+          foreach($newRoutes as $newRoute) {
+
+                    $company_route_name_exceptions =    [
+                                                            'Legal and General London (FAO Simon Chong)' => 'Legal and General London',
+                                                            'London Business School (FAO Victoria Gilbert)' => 'London Business School',
+                                                            'JP Morgan (FAO Sara Cordwell 15th Floor)' => 'JP Morgan',
+                                                            'JP Morgan (FAO Sara Cordwell 15th Floor)' => 'JP Morgan II',
+                                                            'TI Media Limited (FAO Ruth Stanley)' => 'TI Media Limited',
+                                                            'Lloyds (Gatwick - FAO Katie Artlett)' => 'Lloyds (Gatwick)',
+                                                            'Lloyds (London - London Wall - FAO Elaine Charlery)' => 'Lloyds (London - London Wall)',
+                                                            'Lloyds (London - 10 Gresham Street – FAO Marytn Shone / Ben Pryce)' => 'Lloyds (London - 10 Gresham Street)',
+                                                            'Lloyds (London - 25 Gresham Street - FAO James Gamble / Maryn Shone / Ben Pryce)' => 'Lloyds (London - 25 Gresham Street)',
+                                                            'Lloyds (London - Old Broad Street - FAO Jamie Mcreesh / Daniel Lee / Parul Patel)' => 'Lloyds (London - Old Broad Street)'
+                                                        ];
+
+                          // If $newRoute->company_name doesn't match a Company route_name, check to see if this value matches a Company route_name exception.
+                          // These are some of the rare cases where the route name is tailored for the delivery with an FAO attached.
+                        if (array_search($newRoute->company_name, $company_route_name_exceptions)) {
+                                // if it finds a matching value, it returns the associated key.
+                                $newRoute->company_name = array_search($newRoute->company_name, $company_route_name_exceptions);
+                        }
+
                         // if the route name matches a route name in the company tables - this should be the case for most entries.
                         if (in_array(strtolower(trim($newRoute->company_name)),
                             array_map('strtolower', $company_route_names))
@@ -239,25 +268,6 @@ class PickListsController extends Controller
                         echo 'Couldn\'t locate route for ' . '<strong style="color: red";>' . $newRoute->company_name
                             . ' - char: ' . strlen($newRoute->company_name) . '</strong> in Company (route_names) to access associated Company (box_names). Checking the exceptions array...<br>  Or fruit boxes for delivery (' . $newRoute->fruit_boxes . ') won\'t be troubling the picklist team<br>';
 
-                        $company_route_name_exceptions =    [
-                                                                'Legal and General London (FAO Simon Chong)' => 'Legal and General London',
-                                                                'London Business School (FAO Victoria Gilbert)' => 'Legal and General London',
-                                                                'JP Morgan (FAO Sara Cordwell 15th Floor)' => 'JP Morgan',
-                                                                'TI Media Limited (FAO Ruth Stanley)' => 'TI Media Limited',
-                                                                'Lloyds (Gatwick - FAO Katie Artlett)' => 'Lloyds (Gatwick)',
-                                                                'Lloyds (London - London Wall - FAO Elaine Charlery)' => 'Lloyds (London - London Wall)',
-                                                                'Lloyds (London - 10 Gresham Street – FAO Marytn Shone / Ben Pryce)' => 'Lloyds (London - 10 Gresham Street)',
-                                                                'Lloyds (London - 25 Gresham Street - FAO James Gamble / Maryn Shone / Ben Pryce)' => 'Lloyds (London - 25 Gresham Street)',
-                                                                'Lloyds (London - Old Broad Street - FAO Jamie Mcreesh / Daniel Lee / Parul Patel)' => 'Lloyds (London - Old Broad Street)'
-                                                            ];
-
-                          // If $newRoute->company_name doesn't match a Company route_name, check to see if this value matches a Company route_name exception.
-                          // These are some of the rare cases where the route name is tailored for the delivery with an FAO attached.
-                        if (array_search($newRoute->company_name, $company_route_name_exceptions)) {
-                                // if it finds a matching value, it returns the associated key.
-                                $newRoute->company_name = array_search($newRoute->company_name, $company_route_name_exceptions);
-                        }
-
                         // (If it does), then check the associated company->box_names
                         $company_picklist_box_names = Company::where('route_name', $newRoute->company_name)->pluck('box_names')->all(); // Error:  Call to a member function where() on array
                         if (count($company_picklist_box_names) !== 0) {
@@ -327,6 +337,28 @@ class PickListsController extends Controller
 
         // Now iterate through the new FOD data
         foreach($fruitOrderingDocuments as $fruitOrderingDocument) {
+
+            $company_box_name_exceptions =    [
+                                                    'Legal and General London (FAO Simon Chong)' => 'Legal and General London',
+                                                    'London Business School (FAO Victoria Gilbert)' => 'London Business School',
+                                                    'JP Morgan (FAO Sara Cordwell 15th Floor)' => 'JP Morgan',
+                                                    'JP Morgan (FAO Sara Cordwell 15th Floor)' => 'JP Morgan II',
+                                                    'TI Media Limited (FAO Ruth Stanley)' => 'TI Media Limited',
+                                                    'Lloyds (Gatwick - FAO Katie Artlett)' => 'Lloyds (Gatwick)',
+                                                    'Lloyds (London - London Wall - FAO Elaine Charlery)' => 'Lloyds (London - London Wall)',
+                                                    'Lloyds (London - 10 Gresham Street – FAO Marytn Shone / Ben Pryce)' => 'Lloyds (London - 10 Gresham Street)',
+                                                    'Lloyds (London - 25 Gresham Street - FAO James Gamble / Maryn Shone / Ben Pryce)' => 'Lloyds (London - 25 Gresham Street)',
+                                                    'Lloyds (London - Old Broad Street - FAO Jamie Mcreesh / Daniel Lee / Parul Patel)' => 'Lloyds (London - Old Broad Street)'
+                                                ];
+
+              // If $fruitOrderingDocument->company_name doesn't match a Company route_name, check to see if this value matches a Company route_name exception.
+              // These are some of the rare cases where the route name is tailored for the delivery with an FAO attached.
+            if (array_search($fruitOrderingDocument->company_name, $company_box_name_exceptions)) {
+                    // if it finds a matching value, it returns the associated key.
+                    $fruitOrderingDocument->company_name = array_search($fruitOrderingDocument->company_name, $company_route_name_exceptions);
+                    echo 'Found a matching entry in the exceptions array, updated box name to ' . $fruitOrderingDocument->company_name . '<br>';
+            }
+
             // If Company entry in FOD matches a Company Name entry in Picklist and has at least one fruit box which needs picking.
             if (in_array(strtolower($fruitOrderingDocument->company_name),
                 array_map('strtolower', $picklist_company_names))
@@ -420,7 +452,7 @@ class PickListsController extends Controller
                 // If we couldn't find them in the picklist, but they're ordering at least one box of fruit we need to make a new entry in the picklists.
             } else {
 
-                  echo 'Couldn\'t locate any previous delivery for ' . '<strong style="color: red";>' . $fruitOrderingDocument->company_name . ' on any day, including ' . $fruitOrderingDocument->delivery_day . '</strong> in our picklist records. <br> Adding now :) <br>';
+                  echo 'Couldn\'t locate any previous delivery for ' . '<strong style="color: red";>' . $fruitOrderingDocument->company_name . ' on any day, including ' . $fruitOrderingDocument->delivery_day . '</strong> in our picklist records. <br> Checking the exceptions array...  <br>';
 
                   $newPicklistData = new PickList();
                   $newPicklistData->week_start = $fruitOrderingDocument->week_start;
@@ -463,9 +495,9 @@ class PickListsController extends Controller
 
                           'box_names' => json_encode($addToCompanyBoxes[0]),
                       ]);
-                      echo 'Adding box name ' . $fruitOrderingDocument->company_name . ' to Company (table column) box_names.';
+                      echo 'Adding box name ' . $fruitOrderingDocument->company_name . ' to Company (table column) box_names. <br>';
                   } else {
-                      echo 'Box name ' . $fruitOrderingDocument->company_name . ' already found in Company table, so no update needed.';
+                      echo 'Box name ' . $fruitOrderingDocument->company_name . ' already found in Company table, so no update needed. <br>';
                   }
 
                    // dd($addToCompanyBoxes);

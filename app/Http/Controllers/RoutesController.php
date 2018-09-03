@@ -8,6 +8,18 @@ use App\Route;
 use App\FruitOrderingDocument;
 use App\Company;
 
+// Function Index                                                                   Changes for picklist and routing
+
+// public function __construct()                                - 36                - 38 (Change $week_start date)
+// public function download()                                   - 42
+// public function index()                                      - 55
+// public function create()                                     - 70
+// public function updateRouteAndPosition(Request $request)     - 75                - 90/91 (Change the url for file to either regular or wed-thur-fri option)
+// public function storeDrinksSnacks(Request $request)          - 352               - 363/364 (Change the url for file to either regular or wed-thur-fri option)
+// public function store(Request $request)                      - 592
+// public function update(Request $request)                     - 672   (url - update-routing)
+
+
 class RoutesController extends Controller
 {
   // public function export($this->week_start = 300718)
@@ -19,20 +31,20 @@ class RoutesController extends Controller
 
 
 
-   protected $week_start;
+        protected $week_start;
 
-       public function __construct()
+        public function __construct()
        {
            $this->week_start = 30918;
        }
 
 
-  public function download()
-{
-    // $this->week_start = week_start($this->week_start);
-    // return (new Exports\RoutesExport($this->week_start))->download('routesheets.xlsx');
-    return \Excel::download(new Exports\RoutesExport($this->week_start), 'routelists' . $this->week_start . '.xlsx');
-}
+        public function download()
+        {
+        // $this->week_start = week_start($this->week_start);
+        // return (new Exports\RoutesExport($this->week_start))->download('routesheets.xlsx');
+        return \Excel::download(new Exports\RoutesExport($this->week_start), 'routelists' . $this->week_start . '.xlsx');
+        }
 
 
     /**
@@ -75,8 +87,8 @@ class RoutesController extends Controller
       // var_dump($route_company_names);
       // dd(array_map('strlen', $route_company_names));
 
-        if (($handle = fopen(public_path() . '/rejigged-routing/rejigged-routing-' . $this->week_start . '-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
-        // if (($handle = fopen(public_path() . '/rejigged-routing/rejigged-routing-' . $this->week_start . '-wed-thur-fri-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
+        // if (($handle = fopen(public_path() . '/rejigged-routing/rejigged-routing-' . $this->week_start . '-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
+        if (($handle = fopen(public_path() . '/rejigged-routing/rejigged-routing-' . $this->week_start . '-wed-thur-fri-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
 
             while (($data = fgetcsv ($handle, 1000, ',')) !== FALSE) {
 
@@ -348,8 +360,8 @@ class RoutesController extends Controller
         // var_dump($route_company_names);
         // dd(array_map('strlen', $route_company_names));
 
-        if (($handle = fopen(public_path() . '/drinks-n-snacks/drinksnsnacks-' . $this->week_start . '-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
-        // if (($handle = fopen(public_path() . '/drinks-n-snacks/drinksnsnacks-' . $this->week_start . '-wed-thur-fri-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
+        // if (($handle = fopen(public_path() . '/drinks-n-snacks/drinksnsnacks-' . $this->week_start . '-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
+        if (($handle = fopen(public_path() . '/drinks-n-snacks/drinksnsnacks-' . $this->week_start . '-wed-thur-fri-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
 
                 while (($data = fgetcsv ($handle, 1000, ',')) !== FALSE) {
 
