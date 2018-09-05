@@ -37,6 +37,7 @@ Route::get('rejig-routing', 'RoutesController@updateRouteAndPosition');
 
 // Not sure this one will be working properly anymore now that I'm using grouped routing names rather than a mirror of the picklists. - Edit: Actually it looks like I was omnipotent, need to test it.
 Route::get('update-picklist-with-routes', 'PickListsController@updatePicklistWithRejiggedRoutes');
+Route::get('reorder-seasonal-berries', 'PickListsController@reorder_seasonal_berries');
 
 // This is now defunct, will remove at some point when I clean the code up generally.
 // Route::get('strip-picklists-company-name', 'PickListsController@stripu00a0FromPicklistsCompanyName');
@@ -44,7 +45,8 @@ Route::get('update-picklist-with-routes', 'PickListsController@updatePicklistWit
 // Import FOD data => currently this just stores fresh data each time, however this should be updating the existing entries.
 Route::get('import-fod', 'FruitOrderingDocumentController@store');
 // This a temporary entry to keep it away from currently used functions/urls but may get updated to import-fod.
-Route::post('import-csv', 'FruitOrderingDocumentController@upload');
+Route::post('import-fod-csv', 'FruitOrderingDocumentController@upload');
+Route::get('process-csv', 'FruitOrderingDocumentController@create');
 
 // This is again a temporary solution to adding the drinks and snacks totals to routes, as it doesn't get brought in with FOD at the moment.
 // Calling it store is maybe misleading as it will only update existing entries.

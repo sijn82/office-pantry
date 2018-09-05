@@ -27,9 +27,10 @@ use App\Company;
 // public function updatePicklistWithRejiggedRoutes()       - 149 (url - update-picklist-with-routes)
 // public function update(Request $request)                 - 329 (url - picklist-vs-fod)
 // public function destroy($id)                             - 499
-
+set_time_limit(0);
 class PickListsController extends Controller
 {
+
 
     protected $week_start;
 
@@ -342,7 +343,7 @@ class PickListsController extends Controller
                                                     'Legal and General London (FAO Simon Chong)' => 'Legal and General London',
                                                     'London Business School (FAO Victoria Gilbert)' => 'London Business School',
                                                     'JP Morgan (FAO Sara Cordwell 15th Floor)' => 'JP Morgan',
-                                                    'JP Morgan (FAO Sara Cordwell 15th Floor)' => 'JP Morgan II',
+                                                    'JP Morgan II (FAO Sara Cordwell 15th Floor)' => 'JP Morgan II',
                                                     'TI Media Limited (FAO Ruth Stanley)' => 'TI Media Limited',
                                                     'Lloyds (Gatwick - FAO Katie Artlett)' => 'Lloyds (Gatwick)',
                                                     'Lloyds (London - London Wall - FAO Elaine Charlery)' => 'Lloyds (London - London Wall)',
@@ -517,5 +518,66 @@ class PickListsController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    // this is currently not necessary as adding a second orderby() to the picklistexport view query has created the results I wanted,
+    // albeit with a slight php execution error that needed bypassing.
+    public function reorder_seasonal_berries()
+    {phpinfo();
+        // all picklists for this week
+        $picklists = PickList::where('week_start', $this->week_start)->get();
+
+        // each distinct route out for delivery this week.
+        $assigned_picklist_routes = Picklist::select('assigned_to')->distinct()->get();
+
+        // dd($assigned_picklist_routes);
+
+        $seasonal_berries = [];
+        $remainder_of_picklist = [];
+
+        // foreach picklists grouped by route
+        foreach($assigned_picklist_routes as $assigned_picklist_route)
+        {
+            // dd($assigned_picklist_route);
+            $picklists = PickList::where('week_start', $this->week_start)->where('assigned_to', $assigned_picklist_route->assigned_to)->orderBy('seasonal_berries')->orderBy('position_on_route')->get();
+
+            // dd($picklists);
+            // foreach picklist on this particular route pull the ones with seasonal berries out of the initial array so we can add them in again at the end.
+            foreach($picklists as $picklist)
+            {
+
+                echo $picklist->company_name . ' has ' . $picklist->seasonal_berries . ' in picklist at position ' . $picklist->position_on_route . '<br>';
+
+            // $reordered_picklist = usort($picklists, function($a, $b)
+            //     {
+            //         return strcmp($a->seasonal_berries, $b->seasonal_berries);
+            //     });
+            //     dd($reordered_picklist);
+
+            //     if ($picklist->seasonal_berries > 0)
+            //     {
+            //         // we want to take these out of the $picklist array,
+            //         // reassign the position on those that remain and add the seasonal berries in again at the end,
+            //         // so they feature at the bottom of the pick list.
+            //         $seasonal_berries[] = $picklist;
+            //     } else {
+            //
+            //         $remainder_of_picklist[] = $picklist;
+            //     }
+            //
+            }
+            // var_dump($seasonal_berries);
+            // var_dump($remainder_of_picklist);
+            // $reordered_picklist = array_merge($remainder_of_picklist, $seasonal_berries);
+            // // dd($remainder_of_picklist);
+            //
+            // foreach($reordered_picklist as $new_picklist)
+            // {
+            //     echo $new_picklist->company_name . ' has ' . $new_picklist->seasonal_berries . ' on ' . $new_picklist->assigned_to . ' at position ' . $new_picklist->position_on_route . '<br>';
+            // }
+
+        }
+
+        // dd($seasonal_berries);
     }
 }

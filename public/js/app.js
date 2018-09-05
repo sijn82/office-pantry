@@ -18225,7 +18225,7 @@ module.exports = Cancel;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(17);
-module.exports = __webpack_require__(79);
+module.exports = __webpack_require__(89);
 
 
 /***/ }),
@@ -18265,7 +18265,9 @@ Vue.component('companies', __webpack_require__(54));
 Vue.component('picklists', __webpack_require__(59));
 Vue.component('routes', __webpack_require__(64));
 Vue.component('update-picklist-n-routes', __webpack_require__(69));
-Vue.component('import-file', __webpack_require__(74));
+Vue.component('import-fod-file', __webpack_require__(74));
+Vue.component('import-snacks-n-drinks-file', __webpack_require__(79));
+Vue.component('import-rejigged-routes-file', __webpack_require__(84));
 
 var app = new Vue({
   el: '#app'
@@ -49001,7 +49003,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/assets/js/components/ImportFile.vue"
+Component.options.__file = "resources/assets/js/components/ImportFodFile.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -49010,9 +49012,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-6ceaf090", Component.options)
+    hotAPI.createRecord("data-v-323effcb", Component.options)
   } else {
-    hotAPI.reload("data-v-6ceaf090", Component.options)
+    hotAPI.reload("data-v-323effcb", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -49033,13 +49035,13 @@ var content = __webpack_require__(76);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(2)("960aa750", content, false, {});
+var update = __webpack_require__(2)("c7e9700c", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6ceaf090\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ImportFile.vue", function() {
-     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6ceaf090\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ImportFile.vue");
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-323effcb\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ImportFodFile.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-323effcb\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ImportFodFile.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -49146,9 +49148,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             };
         },
 
-        uploadCSV: function uploadCSV() {
+        uploadFodCSV: function uploadFodCSV() {
             var self = this;
-            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('api/import-csv', {
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('api/import-fod-csv', {
                 delivery_days: self.form.delivery_days,
                 fod_csv: self.form.fod_csv,
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv' }
@@ -49164,7 +49166,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     mounted: function mounted() {
-        console.log('Component Import CSV mounted.');
+        console.log('Component Import FOD CSV mounted.');
     }
 });
 
@@ -49185,7 +49187,7 @@ var render = function() {
           "form",
           {
             attrs: {
-              action: "/api/import-csv",
+              action: "/api/import-fod-csv",
               enctype: "multipart/form-data",
               method: "post",
               name: "newFOD"
@@ -49193,7 +49195,7 @@ var render = function() {
             on: {
               submit: function($event) {
                 $event.preventDefault()
-                return _vm.uploadCSV($event)
+                return _vm.uploadFodCSV($event)
               }
             }
           },
@@ -49246,11 +49248,11 @@ var render = function() {
                       _vm._v("Select Delivery Days")
                     ]),
                     _vm._v(" "),
-                    _c("option", { attrs: { value: "mon_tue" } }, [
+                    _c("option", { attrs: { value: "mon-tue" } }, [
                       _vm._v("Monday and Tuesday")
                     ]),
                     _vm._v(" "),
-                    _c("option", { attrs: { value: "wed_thur_fri" } }, [
+                    _c("option", { attrs: { value: "wed-thur-fri" } }, [
                       _vm._v("Wednesday, Thursday and Friday")
                     ])
                   ]
@@ -49319,12 +49321,716 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-6ceaf090", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-323effcb", module.exports)
   }
 }
 
 /***/ }),
 /* 79 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(80)
+}
+var normalizeComponent = __webpack_require__(3)
+/* script */
+var __vue_script__ = __webpack_require__(82)
+/* template */
+var __vue_template__ = __webpack_require__(83)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/ImportSnacksNDrinksFile.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-49862e54", Component.options)
+  } else {
+    hotAPI.reload("data-v-49862e54", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 80 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(81);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("3eb7e7f5", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-49862e54\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ImportSnacksNDrinksFile.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-49862e54\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ImportSnacksNDrinksFile.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 81 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.title-headers {\n  margin-top: 30px;\n}\n.input-group label {\n  margin-right: 30px;\n}\nform div {\n  margin-top: 10px;\n  margin-bottom: 10px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 82 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            form: {
+                delivery_days: '',
+                snacks_n_drinks_csv: ''
+            }
+
+        };
+    },
+
+
+    methods: {
+        newFileUpload: function newFileUpload(event) {
+            var _this = this;
+
+            var fileReader = new FileReader();
+            fileReader.readAsDataURL(event.target.files[0]);
+            fileReader.onload = function (event) {
+                _this.form.snacks_n_drinks_csv = event.target.result;
+            };
+        },
+
+        uploadSnacksNDrinksCSV: function uploadSnacksNDrinksCSV() {
+            var self = this;
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('api/import-snacks-n-drinks-csv', {
+                delivery_days: self.form.delivery_days,
+                snacks_n_drinks_csv: self.form.snacks_n_drinks_csv,
+                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv' }
+                // user_id: self.userData.id
+            }).then(function (response) {
+                console.log(response.data);
+                console.log('saved Snacks N Drinks CSV successfully, or have i?');
+            }).catch(function (error) {
+                return console.log(error);
+            });
+            // this.$router.push('/thank-you')
+        }
+    },
+
+    mounted: function mounted() {
+        console.log('Component Import Snacks N Drinks CSV mounted.');
+    }
+});
+
+/***/ }),
+/* 83 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "container-fluid" }, [
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-12" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _c(
+          "form",
+          {
+            attrs: {
+              action: "/api/import-snacks-n-drinks-csv",
+              enctype: "multipart/form-data",
+              method: "post",
+              name: "newSnacksNDrinks"
+            },
+            on: {
+              submit: function($event) {
+                $event.preventDefault()
+                return _vm.uploadSnacksNDrinksCSV($event)
+              }
+            }
+          },
+          [
+            _c(
+              "div",
+              {
+                staticClass: "input-group input-group-md col-md-8 offset-md-2"
+              },
+              [
+                _c("label", { staticClass: "input-group-addon" }, [
+                  _vm._v("Delivery Days:")
+                ]),
+                _vm._v(" "),
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.delivery_days,
+                        expression: "form.delivery_days"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { name: "delivery_days" },
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.form,
+                          "delivery_days",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      }
+                    }
+                  },
+                  [
+                    _c("option", { attrs: { disabled: "", value: "" } }, [
+                      _vm._v("Select Delivery Days")
+                    ]),
+                    _vm._v(" "),
+                    _c("option", { attrs: { value: "mon-tue" } }, [
+                      _vm._v("Monday and Tuesday")
+                    ]),
+                    _vm._v(" "),
+                    _c("option", { attrs: { value: "wed-thur-fri" } }, [
+                      _vm._v("Wednesday, Thursday and Friday")
+                    ])
+                  ]
+                )
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "input-group input-group-md col-md-8 offset-md-2"
+              },
+              [
+                _c("label", { staticClass: "input-group-addon" }, [
+                  _vm._v("Upload Snacks N Drinks CSV:")
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  staticClass: "form-control",
+                  attrs: { type: "file", name: "snacks_n_drinks_csv" },
+                  on: { change: _vm.newFileUpload }
+                })
+              ]
+            ),
+            _vm._v(" "),
+            _vm._m(1)
+          ]
+        )
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "title-headers" }, [
+      _c("h3", [_vm._v(" New Snacks and Drinks Upload ")]),
+      _vm._v(" "),
+      _c("p", [
+        _vm._v(
+          " This section will allow new Snacks and Drinks CSV files to be uploaded and attached to the routes (prior to exporting and rejigging). "
+        )
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "submit-button input-group input-group-md" },
+      [
+        _c("input", {
+          staticClass: " col-md-2 col-sm-3 offset-md-5 btn btn-success",
+          attrs: { type: "submit", value: "Upload Snacks N Drinks CSV" }
+        })
+      ]
+    )
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-49862e54", module.exports)
+  }
+}
+
+/***/ }),
+/* 84 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(85)
+}
+var normalizeComponent = __webpack_require__(3)
+/* script */
+var __vue_script__ = __webpack_require__(87)
+/* template */
+var __vue_template__ = __webpack_require__(88)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/ImportRejiggedRoutesFile.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-48f0dfb3", Component.options)
+  } else {
+    hotAPI.reload("data-v-48f0dfb3", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 85 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(86);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("4a630a37", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-48f0dfb3\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ImportRejiggedRoutesFile.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-48f0dfb3\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ImportRejiggedRoutesFile.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 86 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.title-headers {\n  margin-top: 30px;\n}\n.input-group label {\n  margin-right: 30px;\n}\nform div {\n  margin-top: 10px;\n  margin-bottom: 10px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 87 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            form: {
+                delivery_days: '',
+                rejigged_routes_csv: ''
+            }
+
+        };
+    },
+
+
+    methods: {
+        newFileUpload: function newFileUpload(event) {
+            var _this = this;
+
+            var fileReader = new FileReader();
+            fileReader.readAsDataURL(event.target.files[0]);
+            fileReader.onload = function (event) {
+                _this.form.rejigged_routes_csv = event.target.result;
+            };
+        },
+
+        uploadCSV: function uploadCSV() {
+            var self = this;
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('api/import-rejigged-routes-csv', {
+                delivery_days: self.form.delivery_days,
+                rejigged_routes_csv: self.form.rejigged_routes_csv,
+                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv' }
+                // user_id: self.userData.id
+            }).then(function (response) {
+                console.log(response.data);
+                console.log('saved Rejigged Routes CSV successfully, or have i?');
+            }).catch(function (error) {
+                return console.log(error);
+            });
+            // this.$router.push('/thank-you')
+        }
+    },
+
+    mounted: function mounted() {
+        console.log('Component Import Rejigged Routes CSV mounted.');
+    }
+});
+
+/***/ }),
+/* 88 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "container-fluid" }, [
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-12" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _c(
+          "form",
+          {
+            attrs: {
+              action: "/api/import-rejigged-routes-csv",
+              enctype: "multipart/form-data",
+              method: "post",
+              name: "newRejiggedRoutes"
+            },
+            on: {
+              submit: function($event) {
+                $event.preventDefault()
+                return _vm.uploadRejiggedRoutesCSV($event)
+              }
+            }
+          },
+          [
+            _c(
+              "div",
+              {
+                staticClass: "input-group input-group-md col-md-8 offset-md-2"
+              },
+              [
+                _c("label", { staticClass: "input-group-addon" }, [
+                  _vm._v("Delivery Days:")
+                ]),
+                _vm._v(" "),
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.delivery_days,
+                        expression: "form.delivery_days"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { name: "delivery_days" },
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.form,
+                          "delivery_days",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      }
+                    }
+                  },
+                  [
+                    _c("option", { attrs: { disabled: "", value: "" } }, [
+                      _vm._v("Select Delivery Days")
+                    ]),
+                    _vm._v(" "),
+                    _c("option", { attrs: { value: "mon-tue" } }, [
+                      _vm._v("Monday and Tuesday")
+                    ]),
+                    _vm._v(" "),
+                    _c("option", { attrs: { value: "wed-thur-fri" } }, [
+                      _vm._v("Wednesday, Thursday and Friday")
+                    ])
+                  ]
+                )
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "input-group input-group-md col-md-8 offset-md-2"
+              },
+              [
+                _c("label", { staticClass: "input-group-addon" }, [
+                  _vm._v("Upload Rejigged Routes CSV:")
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  staticClass: "form-control",
+                  attrs: { type: "file", name: "rejigged_routes_csv" },
+                  on: { change: _vm.newFileUpload }
+                })
+              ]
+            ),
+            _vm._v(" "),
+            _vm._m(1)
+          ]
+        )
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "title-headers" }, [
+      _c("h3", [_vm._v(" New Rejigged Routes Upload ")]),
+      _vm._v(" "),
+      _c("p", [
+        _vm._v(
+          " This section will allow the rejigged routes CSV file to be uploaded, reordering the routes which can then reorder the picklists to match. "
+        )
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "submit-button input-group input-group-md" },
+      [
+        _c("input", {
+          staticClass: " col-md-2 col-sm-3 offset-md-5 btn btn-success",
+          attrs: { type: "submit", value: "Upload Rejigged Routes CSV" }
+        })
+      ]
+    )
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-48f0dfb3", module.exports)
+  }
+}
+
+/***/ }),
+/* 89 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

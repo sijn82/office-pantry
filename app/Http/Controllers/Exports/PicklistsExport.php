@@ -34,7 +34,7 @@ WithMultipleSheets
     // This is the most important part of the Picklist Export Class,
     // it's where we determine how the multiple sheets are divided up.
     // Currently the sheets are seperated by their 'assigned_to' routes.
-    
+
     /**
      * @return array
      */
@@ -77,10 +77,18 @@ WithEvents
     }
 
     // This is using a view (blade table template) to shape how the exported excel file will look.
+    // public function view(): View
+    // {
+    //     return view('exports.picklists', [
+    //        'picklists' => PickList::all()->where('week_start', $this->week_starting)->where('assigned_to', $this->picklistsolo)->sortBy('position_on_route')
+    //    ]);
+    // }
+
+
     public function view(): View
     {
         return view('exports.picklists', [
-           'picklists' => PickList::all()->where('week_start', $this->week_starting)->where('assigned_to', $this->picklistsolo)->sortBy('position_on_route')
+           'picklists' => PickList::where('week_start', $this->week_starting)->where('assigned_to', $this->picklistsolo)->orderBy('seasonal_berries')->orderBy('position_on_route')->get()
        ]);
     }
 

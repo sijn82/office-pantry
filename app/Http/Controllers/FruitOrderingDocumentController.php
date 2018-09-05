@@ -2,8 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
 use App\FruitOrderingDocument;
 use Illuminate\Http\Request;
+
+use League\Csv\Reader;
+use League\Csv\Writer;
+
+require '../vendor/league/csv/autoload.php';
 
 class FruitOrderingDocumentController extends Controller
 {
@@ -12,7 +18,7 @@ class FruitOrderingDocumentController extends Controller
 
     public function __construct()
     {
-        $this->week_start = 30918;
+        $this->week_start = 54444;
     }
 
     /**
@@ -34,7 +40,7 @@ class FruitOrderingDocumentController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -43,17 +49,86 @@ class FruitOrderingDocumentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    // public function store(Request $request, $this->week_start = 60818)
+    // public function store(Request $request, $this->week_start = 60818)i
         public function upload(Request $request)
     {
-         // dd($request);
-        $requestFixed = str_replace('data:application/vnd.ms-excel;','',$request->fod_csv);
-        $request = base64_decode($requestFixed);
-        dd($request);
-        $data = str_getcsv ($request,',','"','\r\n');
-            // dd($data);
+        // these are the additional parameters we'll use to save the file in the right place and with the right name, which is built further down in this function
+        $delivery_days = $request->delivery_days ? 'wed-thur-fri' : '';
 
-        // dd($request);
+        // strip out the automatic base encoding with wrong mime after file upload form
+        $request_mime_fix = str_replace('data:application/vnd.ms-excel;base64,','',$request->fod_csv);
+        // now we can decode the remainder of the encoded data string
+        $requestcsv = base64_decode($request_mime_fix);
+        // however it now has some unwated unicode characters i.e the 'no break space' - (U+00A0) and use json_encode to make them visible
+        $csv_data_with_unicode_characters = json_encode($requestcsv);
+        // now they're no longer hidden characters, we can strip them out of the data
+        $csv_data_fixed = str_replace('\u00a0', ' ', $csv_data_with_unicode_characters);
+        // and return the file ready for storage
+        $ready_csv = json_decode($csv_data_fixed);
+
+        // this is how we determine where to put the file, these variables are populated with the $week_start variable at the top of this class
+        // and the request parameters attached to the form on submission.
+        Storage::put('public/fod/fod-' . $this->week_start . '-inc-zeros-' . $delivery_days . '-noheaders-utf8-nobom.csv', $ready_csv);
+
+        // i've decided to place this here, processing the request immediately after storing a copy
+        // because i can't think of a reason why the file would be uploaded without processing them straight away.
+        if (($handle = fopen('../storage/app/public/fod/fod-' . $this->week_start . '-inc-zeros-' . $delivery_days . '-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
+               while (($data = fgetcsv ($handle,',')) !== FALSE) {
+
+                   // this is just to test the data a little before we risk putting stuff automatically into the database.
+                   echo $data[0] . ' is ' . strlen($data[0]) . ' characters long and ' . json_encode($data[1]) . ' is also ' . strlen($data[1]) . '<br>';
+
+                   // when I'm feeling a little braver, it'll look just like this...
+
+                   // $fodData =  new FruitOrderingDocument();
+                   // $fodData->week_start = $data[0];
+                   // $fodData->company_name = trim($company_name);
+                   // $fodData->company_supplier = $data[2];
+                   // $fodData->pointless = $data[3];
+                   // $fodData->delivery_notes = $data[4];
+                   // $fodData->fruit_crates = $data[5];
+                   // $fodData->fruit_boxes = $data[6];
+                   // $fodData->deliciously_red_apples = $data[7];
+                   // $fodData->pink_lady_apples = $data[8];
+                   // $fodData->red_apples = $data[9];
+                   // $fodData->green_apples = $data[10];
+                   // $fodData->satsumas = $data[11];
+                   // $fodData->pears = $data[12];
+                   // $fodData->bananas = $data[13];
+                   // $fodData->nectarines = $data[14];
+                   // $fodData->limes = $data[15];
+                   // $fodData->lemons = $data[16];
+                   // $fodData->grapes = $data[17];
+                   // $fodData->seasonal_berries = $data[18];
+                   // $fodData->milk_1l_alt_coconut = $data[19];
+                   // $fodData->milk_1l_alt_unsweetened_almond = $data[20];
+                   // $fodData->milk_1l_alt_almond = $data[21];
+                   // $fodData->milk_1l_alt_unsweetened_soya = $data[22];
+                   // $fodData->milk_1l_alt_soya = $data[23];
+                   // $fodData->milk_1l_alt_lactose_free_semi = $data[24];
+                   // $fodData->filter_coffee_250g = $data[25];
+                   // $fodData->expresso_coffee_250g = $data[26];
+                   // $fodData->muesli = $data[27];
+                   // $fodData->granola = $data[28];
+                   // $fodData->still_water = $data[29];
+                   // $fodData->sparkling_water = $data[30];
+                   // $fodData->milk_2l_semi_skimmed = $data[31];
+                   // $fodData->milk_2l_skimmed = $data[32];
+                   // $fodData->milk_2l_whole = $data[33];
+                   // $fodData->milk_1l_semi_skimmed = $data[34];
+                   // $fodData->milk_1l_skimmed = $data[35];
+                   // $fodData->milk_1l_whole = $data[36];
+                   // $fodData->milk_pint_semi_skimmed = $data[37];
+                   // $fodData->milk_pint_skimmed = $data[38];
+                   // $fodData->milk_pint_whole = $data[39];
+                   // $fodData->milk_1l_organic_semi_skimmed = $data[40];
+                   // $fodData->milk_1l_organic_skimmed = $data[41];
+                   // // $fodData->snack_boxes = $data[41];
+                   // $fodData->delivery_day = $data[42];
+                   // $fodData->save();
+               }
+               fclose ($handle);
+        }
     }
 
     /**
@@ -72,7 +147,6 @@ class FruitOrderingDocumentController extends Controller
       if (($handle = fopen(public_path() . '/fod/fod-' . $this->week_start . '-inc-zeros-wed-thur-fri-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
 
         while (($data = fgetcsv ($handle, 1000, ',')) !== FALSE) {
-
 
           $company_name_encoded = json_encode($data[1]);
           $company_name_fixed = str_replace('\u00a0', ' ', $company_name_encoded);

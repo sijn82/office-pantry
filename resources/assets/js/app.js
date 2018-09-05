@@ -26,7 +26,9 @@ Vue.component('companies', require('./components/Companies.vue'));
 Vue.component('picklists', require('./components/Picklists.vue'));
 Vue.component('routes', require('./components/Routes.vue'));
 Vue.component('update-picklist-n-routes', require('./components/UpdatePicklistNRoutes.vue'));
-Vue.component('import-file', require('./components/ImportFile.vue'));
+Vue.component('import-fod-file', require('./components/ImportFodFile.vue'));
+Vue.component('import-snacks-n-drinks-file', require('./components/ImportSnacksNDrinksFile.vue'));
+Vue.component('import-rejigged-routes-file', require('./components/ImportRejiggedRoutesFile.vue'));
 
 const app = new Vue({
     el: '#app'
