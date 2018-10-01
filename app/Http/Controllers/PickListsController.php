@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Exports;
+use Illuminate\Support\Facades\Log;
 use App\PickList;
 use App\Route;
 use Illuminate\Http\Request;
-
+// Use weekStart to make sure everything is run off of the recently imported new week_start variable.
+use App\WeekStart;
 // Use FruitOrderingDocument to compare database
 use App\FruitOrderingDocument;
 // use Companies model to compare route name where it doesn't match with picklist names
@@ -33,10 +35,13 @@ class PickListsController extends Controller
 
 
     protected $week_start;
+    protected $delivery_days;
 
     public function __construct()
     {
-        $this->week_start = 30918;
+        $week_start = WeekStart::all()->toArray();
+        $this->week_start = $week_start[0]['current'];
+        $this->delivery_days = $week_start[0]['delivery_days'];
     }
 
     public function full_export()
@@ -174,7 +179,7 @@ class PickListsController extends Controller
                                                             'Legal and General London (FAO Simon Chong)' => 'Legal and General London',
                                                             'London Business School (FAO Victoria Gilbert)' => 'London Business School',
                                                             'JP Morgan (FAO Sara Cordwell 15th Floor)' => 'JP Morgan',
-                                                            'JP Morgan (FAO Sara Cordwell 15th Floor)' => 'JP Morgan II',
+                                                            'JP Morgan II (FAO Sara Cordwell 15th Floor)' => 'JP Morgan II',
                                                             'TI Media Limited (FAO Ruth Stanley)' => 'TI Media Limited',
                                                             'Lloyds (Gatwick - FAO Katie Artlett)' => 'Lloyds (Gatwick)',
                                                             'Lloyds (London - London Wall - FAO Elaine Charlery)' => 'Lloyds (London - London Wall)',
@@ -325,6 +330,12 @@ class PickListsController extends Controller
     // public function update(Request $request, $id) --Maybe replace $id with $this->week_start? This would help to automate collecting only the recently updated data for the week ahead.
     public function update(Request $request)
     {
+        // Create our logging variables to bulk the reponses as successful (regular), successful (created new),
+        // omitted (no fruit on delivery) and couldn't locate previous records, created new entry and added to Company box names.
+        $success_regular = "*Successful (Found Route/Day Combo)* \n";
+        $success_created_entry_newday = "*Successful (Found Route/Created Entry on New Day)* \n";
+        $omitted_from_picklist = "*Omitted (No Fruit on Order)* \n";
+        $created_entry_added_boxname = "*New Entry (No existing entry in Picklists)* \n";
 
         // Get existing Picklist data
         $picklists = PickList::all()->toArray();
@@ -333,32 +344,35 @@ class PickListsController extends Controller
         // Get existing (and what should be freshly imported) data to update Picklists with
 
         // This is limited to only files which have been recently updated to the new Week Start.
-        // Until the $variable can be updated manually (through users), I will need to remember to adjust it here (top of function, as parameter) before running the fod-vs-picklist
-        $fruitOrderingDocuments = FruitOrderingDocument::where('week_start', $this->week_start)->get();
+
+        $fruitOrderingDocuments = ($this->delivery_days == 'mon-tue') ? FruitOrderingDocument::where('week_start', $this->week_start)->WhereIn('delivery_day', ['Monday', 'Tuesday'])->get()
+                                                                      : FruitOrderingDocument::where('week_start', $this->week_start)->WhereIn('delivery_day', ['Wednesday', 'Thursday', 'Friday'])->get();
+
+        dd($fruitOrderingDocuments);
 
         // Now iterate through the new FOD data
         foreach($fruitOrderingDocuments as $fruitOrderingDocument) {
 
-            $company_box_name_exceptions =    [
-                                                    'Legal and General London (FAO Simon Chong)' => 'Legal and General London',
-                                                    'London Business School (FAO Victoria Gilbert)' => 'London Business School',
-                                                    'JP Morgan (FAO Sara Cordwell 15th Floor)' => 'JP Morgan',
-                                                    'JP Morgan II (FAO Sara Cordwell 15th Floor)' => 'JP Morgan II',
-                                                    'TI Media Limited (FAO Ruth Stanley)' => 'TI Media Limited',
-                                                    'Lloyds (Gatwick - FAO Katie Artlett)' => 'Lloyds (Gatwick)',
-                                                    'Lloyds (London - London Wall - FAO Elaine Charlery)' => 'Lloyds (London - London Wall)',
-                                                    'Lloyds (London - 10 Gresham Street – FAO Marytn Shone / Ben Pryce)' => 'Lloyds (London - 10 Gresham Street)',
-                                                    'Lloyds (London - 25 Gresham Street - FAO James Gamble / Maryn Shone / Ben Pryce)' => 'Lloyds (London - 25 Gresham Street)',
-                                                    'Lloyds (London - Old Broad Street - FAO Jamie Mcreesh / Daniel Lee / Parul Patel)' => 'Lloyds (London - Old Broad Street)'
-                                                ];
-
-              // If $fruitOrderingDocument->company_name doesn't match a Company route_name, check to see if this value matches a Company route_name exception.
-              // These are some of the rare cases where the route name is tailored for the delivery with an FAO attached.
-            if (array_search($fruitOrderingDocument->company_name, $company_box_name_exceptions)) {
-                    // if it finds a matching value, it returns the associated key.
-                    $fruitOrderingDocument->company_name = array_search($fruitOrderingDocument->company_name, $company_route_name_exceptions);
-                    echo 'Found a matching entry in the exceptions array, updated box name to ' . $fruitOrderingDocument->company_name . '<br>';
-            }
+            // $company_box_name_exceptions =    [
+            //                                         'Legal and General London (FAO Simon Chong)' => 'Legal and General London',
+            //                                         'London Business School (FAO Victoria Gilbert)' => 'London Business School',
+            //                                         'JP Morgan (FAO Sara Cordwell 15th Floor)' => 'JP Morgan',
+            //                                         'JP Morgan II (FAO Sara Cordwell 15th Floor)' => 'JP Morgan II',
+            //                                         'TI Media Limited (FAO Ruth Stanley)' => 'TI Media Limited',
+            //                                         'Lloyds (Gatwick - FAO Katie Artlett)' => 'Lloyds (Gatwick)',
+            //                                         'Lloyds (London - London Wall - FAO Elaine Charlery)' => 'Lloyds (London - London Wall)',
+            //                                         'Lloyds (London - 10 Gresham Street – FAO Marytn Shone / Ben Pryce)' => 'Lloyds (London - 10 Gresham Street)',
+            //                                         'Lloyds (London - 25 Gresham Street - FAO James Gamble / Maryn Shone / Ben Pryce)' => 'Lloyds (London - 25 Gresham Street)',
+            //                                         'Lloyds (London - Old Broad Street - FAO Jamie Mcreesh / Daniel Lee / Parul Patel)' => 'Lloyds (London - Old Broad Street)'
+            //                                     ];
+            //
+            //   // If $fruitOrderingDocument->company_name doesn't match a Company route_name, check to see if this value matches a Company route_name exception.
+            //   // These are some of the rare cases where the route name is tailored for the delivery with an FAO attached.
+            // if (array_search($fruitOrderingDocument->company_name, $company_box_name_exceptions)) {
+            //         // if it finds a matching value, it returns the associated key.
+            //         $fruitOrderingDocument->company_name = array_search($fruitOrderingDocument->company_name, $company_box_name_exceptions);
+            //         // echo 'Found a matching entry in the exceptions array, updated box name to ' . $fruitOrderingDocument->company_name . '<br>';
+            // }
 
             // If Company entry in FOD matches a Company Name entry in Picklist and has at least one fruit box which needs picking.
             if (in_array(strtolower($fruitOrderingDocument->company_name),
@@ -408,14 +422,15 @@ class PickListsController extends Controller
                             // 'cucumbers' => $fruitOrderingDocument->,
                             // 'mint' => $fruitOrderingDocument->,
                           ]);
-                          echo 'Updated <strong style="color: green";>' . $fruitOrderingDocument->company_name . ' on ' . $fruitOrderingDocument->delivery_day . '</strong>' . '<br>';
+
+                            $success_regular .= '• Updated ' . $fruitOrderingDocument->company_name . ' on ' . $fruitOrderingDocument->delivery_day . "\n";
                         // } // This is the end of (optional) if statement that double checks whether the company and delivery day combination match the data about to be updated.
                              // This check is also basically made in the new count() if statement which doesn't break should the picklist company/delivery day combination not already exist.
 
                         // If the company appears in previous picklists but not on this delivery day, we need a new entry in the picklist.
                     } else {
 
-                           echo 'Couldn\'t locate delivery for ' . '<strong style="color: red";>' . $fruitOrderingDocument->company_name . ' on ' . $fruitOrderingDocument->delivery_day . '</strong> in picklist. <br> Adding now :) <br>';
+                           $success_created_entry_newday .= '• Couldn\'t locate delivery for ' . $fruitOrderingDocument->company_name . ' on ' . $fruitOrderingDocument->delivery_day . " in picklist...  Adding now :)\n";
 
                            $newPicklistData = new PickList();
                            $newPicklistData->week_start = $fruitOrderingDocument->week_start;
@@ -448,12 +463,13 @@ class PickListsController extends Controller
 
                  // If they're a new company but not requesting fruit (either this week or ever) we just need to omit them from the picklist.
             } elseif ($fruitOrderingDocument->fruit_boxes == 0) {
-                echo 'Omitting ' . $fruitOrderingDocument->company_name . ' from Picklist as no fruit is on delivery. <br>';
+
+                $omitted_from_picklist .= '• Omitting ' . $fruitOrderingDocument->company_name . " from Picklist as no fruit is on their " . $fruitOrderingDocument->delivery_day  . " delivery.\n";
 
                 // If we couldn't find them in the picklist, but they're ordering at least one box of fruit we need to make a new entry in the picklists.
             } else {
 
-                  echo 'Couldn\'t locate any previous delivery for ' . '<strong style="color: red";>' . $fruitOrderingDocument->company_name . ' on any day, including ' . $fruitOrderingDocument->delivery_day . '</strong> in our picklist records. <br> Checking the exceptions array...  <br>';
+                  $created_entry_added_boxname .= '• Couldn\'t locate any previous delivery for ' . $fruitOrderingDocument->company_name . ' on any day, including ' . $fruitOrderingDocument->delivery_day . " in our picklist records. \n";
 
                   $newPicklistData = new PickList();
                   $newPicklistData->week_start = $fruitOrderingDocument->week_start;
@@ -485,28 +501,43 @@ class PickListsController extends Controller
 
                   // Update the company table box_names with the new box added to array.
 
-                  $addToCompanyBoxes = Company::where('invoice_name', $fruitOrderingDocument->company_name)->orWhere('route_name', $fruitOrderingDocument->company_name)->pluck('box_names')->all();
+                  // This isn't working as intended unfortunately, as if the picklist name doesn't match either the invoice or route names,
+                  // then pulling through the company details to update doesn't work.  As this ection is largely used to create new entries, more often than not this will fail to run.
 
-                  $addToCompanyBoxes = empty($addToCompanyBoxes) ? '[0] => []' : $addToCompanyBoxes;
+                  // When we are using a more consistent process for entering companies this will eliminate the issue anyway so putting this on the backburner.
+
+                  $addToCompanyBoxes = Company::where('invoice_name', $fruitOrderingDocument->company_name)->orWhere('route_name', $fruitOrderingDocument->company_name)->orWhere('box_names', 'LIKE', '%' . $fruitOrderingDocument->company_name . '%')->pluck('box_names')->all();
+
+                  $addToCompanyBoxes = empty($addToCompanyBoxes) ? [[]] : $addToCompanyBoxes;
+                  // dd($addToCompanyBoxes);
                   if (!in_array($fruitOrderingDocument->company_name, $addToCompanyBoxes[0] )) {
 
                       $addToCompanyBoxes[0] = array_filter($addToCompanyBoxes[0]);
                       $addToCompanyBoxes[0][] = $fruitOrderingDocument->company_name;
+                      // dd($addToCompanyBoxes);
                       Company::where('invoice_name', $fruitOrderingDocument->company_name)->orWhere('route_name', $fruitOrderingDocument->company_name)->update([
 
                           'box_names' => json_encode($addToCompanyBoxes[0]),
                       ]);
-                      echo 'Adding box name ' . $fruitOrderingDocument->company_name . ' to Company (table column) box_names. <br>';
+                      $created_entry_added_boxname .= 'Unless this box is named after invoice name or route, ' . $fruitOrderingDocument->company_name . " will need adding to Company (table column) box_names.\n";
                   } else {
-                      echo 'Box name ' . $fruitOrderingDocument->company_name . ' already found in Company table, so no update needed. <br>';
+                      $created_entry_added_boxname .= 'Box name ' . $fruitOrderingDocument->company_name . " already found in Company table, so no update needed.\n";
                   }
 
                    // dd($addToCompanyBoxes);
 
-
             }
         } // end of foreach - ($fruitOrderingDocuments as $fruitOrderingDocument)
 
+        // Send feedback to slack on the results of each entry - grouped by the 4 main outcomes.
+        $title = "*UPDATED PICKLIST RESULTS _for Week Commencing_* - $this->week_start";
+        Log::channel('slack')->info($title);
+        Log::channel('slack')->info($success_regular);
+        Log::channel('slack')->info($success_created_entry_newday);
+        Log::channel('slack')->warning($omitted_from_picklist);
+        Log::channel('slack')->alert($created_entry_added_boxname);
+
+        return redirect()->route('import-file')->with('picklist_success', 'Picklists Updated');
     }
 
     /**

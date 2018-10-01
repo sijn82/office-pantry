@@ -40,13 +40,46 @@ WithMultipleSheets
      */
     public function sheets(): array
     {
+        $correctOrderMonTue =   [
+                                        '12 - Thames Valley II',
+                                        '11 - Thames Valley I',
+                                        '10 - West Central',
+                                        '09 - Michael',
+                                        '08 - Gus',
+                                        '07 - Dwain',
+                                        '06 - Catalin',
+                                        '05 - City',
+                                        '04 - M25 North',
+                                        '03 - M25 South',
+                                        '02 - Serviced II',
+                                        '01 - Serviced I',
+                                        '00 - Tuesday Route Serviced',
+                                        '000 - Tuesday Route',
+                                        'TBC'
+                                ];
+
+        $correctOrderWedThurFri =   [
+                                        '20 - Pete',
+                                        '21 - Piers',
+                                        '22 - Gareth',
+                                        '23 - M25 Wednesday',
+                                        '24 - Thursday Route',
+                                        '25 - Friday Route',
+                                        'TBC'
+                                    ];
+
         $picklistscollection = PickList::select('assigned_to')->distinct()->get();
         $sheets = [];
 
-        foreach ($picklistscollection as $picklistsolo) {
+        // foreach ($picklistscollection as $picklistsolo) {
+        //
+        //     // Each distinct assigned_to (route) calls the PicklistCollection Class below.
+        //     $sheets[] = new PicklistCollection($picklistsolo->assigned_to, $this->week_starting);
+        // }
+        foreach ($correctOrderWedThurFri as $picklistsolo) {
 
             // Each distinct assigned_to (route) calls the PicklistCollection Class below.
-            $sheets[] = new PicklistCollection($picklistsolo->assigned_to, $this->week_starting);
+            $sheets[] = new PicklistCollection($picklistsolo, $this->week_starting);
         }
 
         return $sheets;
@@ -84,18 +117,18 @@ WithEvents
     //    ]);
     // }
 
-
     public function view(): View
     {
         return view('exports.picklists', [
            'picklists' => PickList::where('week_start', $this->week_starting)->where('assigned_to', $this->picklistsolo)->orderBy('seasonal_berries')->orderBy('position_on_route')->get()
+          
        ]);
     }
 
     // This adds a named title to each worksheet tab.
     public function title(): string
     {
-        return 'Picklist - ' . $this->picklistsolo;
+        return $this->picklistsolo;
     }
 
     // This is where all the styling magic happens.  This is ultilising the PHPSpreadsheet classes which lie beneath the Laravel-Excel module.
@@ -137,7 +170,7 @@ WithEvents
                                     && $chosenCellsArray[$selectedRow]['K'] == 16
                                     && $chosenCellsArray[$selectedRow]['L'] == 12)
                             {
-
+                                    
                                     if (    $chosenCellsArray[$selectedRow]['E'] != 0
                                             || $chosenCellsArray[$selectedRow]['F'] != 0
                                             || $chosenCellsArray[$selectedRow]['M'] != 0

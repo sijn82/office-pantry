@@ -27,7 +27,7 @@ Route::get('import-file', function () {
     return view('import-file');
 });
 
-
+Route::get('import-file', 'WeekStartController@show')->name('import-file');
 Route::get('display-routes', 'RoutesController@index');
 Route::get('snackboxes-multi-company', 'SnackBoxController@index_OP');
 

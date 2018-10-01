@@ -46,26 +46,36 @@
         {{ $totalOranges = 0 }}
         {{ $totalCucumbers = 0 }}
         {{ $totalMint = 0 }}
+        {{ $standard_count = 0 }}
 
         @foreach ($picklists as $picklist)
 
         {{ $totalFruitCrates += $picklist->fruit_crates }}
         {{ $totalFruitBoxes += $picklist->fruit_boxes }}
-        {{ $totalDeliciouslyRedApples += $picklist->deliciously_red_apples }}
-        {{ $totalPinkLadyApples += $picklist->pink_lady_apples }}
-        {{ $totalRed_apples += $picklist->red_apples }}
-        {{ $totalGreen_apples += $picklist->green_apples }}
-        {{ $totalSatsumas += $picklist->satsumas }}
-        {{ $totalPears += $picklist->pears }}
-        {{ $totalBananas += $picklist->bananas }}
-        {{ $totalNectarines += $picklist->nectarines }}
-        {{ $totalLimes += $picklist->limes }}
-        {{ $totalLemons += $picklist->lemons }}
-        {{ $totalGrapes += $picklist->grapes }}
-        {{ $totalSeasonalBerries += $picklist->seasonal_berries }}
-        {{ $totalOranges += $picklist->oranges }}
-        {{ $totalCucumbers += $picklist->cucumbers }}
-        {{ $totalMint += $picklist->mint }}
+        {{ $totalDeliciouslyRedApples += $picklist->deliciously_red_apples * $picklist->fruit_boxes }}
+        {{ $totalPinkLadyApples += $picklist->pink_lady_apples * $picklist->fruit_boxes }}
+        {{ $totalRed_apples += $picklist->red_apples * $picklist->fruit_boxes }}
+        {{ $totalGreen_apples += $picklist->green_apples * $picklist->fruit_boxes }}
+        {{ $totalSatsumas += $picklist->satsumas * $picklist->fruit_boxes }}
+        {{ $totalPears += $picklist->pears * $picklist->fruit_boxes }}
+        {{ $totalBananas += $picklist->bananas * $picklist->fruit_boxes }}
+        {{ $totalNectarines += $picklist->nectarines * $picklist->fruit_boxes }}
+        {{ $totalLimes += $picklist->limes * $picklist->fruit_boxes }}
+        {{ $totalLemons += $picklist->lemons * $picklist->fruit_boxes }}
+        {{ $totalGrapes += $picklist->grapes * $picklist->fruit_boxes }}
+        {{ $totalSeasonalBerries += $picklist->seasonal_berries * $picklist->fruit_boxes }}
+        {{ $totalOranges += $picklist->oranges * $picklist->fruit_boxes }}
+        {{ $totalCucumbers += $picklist->cucumbers * $picklist->fruit_boxes }}
+        {{ $totalMint += $picklist->mint * $picklist->fruit_boxes }}
+
+        <?php
+            if (
+                    $picklist->red_apples == 6 && $picklist->green_apples == 3 && $picklist->satsumas == 10 
+                    && $picklist->pears == 3 && $picklist->bananas == 16 && $picklist->nectarines == 12
+             ){
+                     $standard_count += $picklist->fruit_boxes; 
+            } 
+        ?>
 
         <tr>
             <td>{{ $picklist->week_start }}</td>
@@ -96,7 +106,7 @@
 
         <tr>
             <td></td>
-            <td></td>
+            <td>Standard Boxes on Route: {{ $standard_count }}</td>
             <td>{{ $totalFruitCrates }}</td>
             <td>{{ $totalFruitBoxes }}</td>
             <td>{{ $totalDeliciouslyRedApples }}</td>

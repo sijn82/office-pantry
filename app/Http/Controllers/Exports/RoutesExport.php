@@ -37,12 +37,57 @@ class RoutesExport implements WithMultipleSheets
      */
     public function sheets(): array
     {
-        $routescollection = Route::select('assigned_to')->distinct()->get();
+        $correctOrderMonTue =   [
+                                        'New Offices',
+                                        '12 - Thames Valley II',
+                                        '11 - Thames Valley I',
+                                        '10 - West Central',
+                                        '09 - Michael',
+                                        '08 - Gus',
+                                        '07 - Dwain',
+                                        '06 - Catalin',
+                                        '05 - City',
+                                        '04 - M25 North',
+                                        '03 - M25 South',
+                                        '02 - Serviced II',
+                                        '01 - Serviced I',
+                                        '00 - Tuesday Route Serviced',
+                                        '000 - Tuesday Route',
+                                        'TBC'
+                                ];
+
+        $correctOrderWedThurFri =   [
+                                        'New Offices',
+                                        'Pete',
+                                        'Piers',
+                                        'Gareth',
+                                        'M25 Wednesday',
+                                        'Thursday Route',
+                                        'Friday Route',
+                                        'TBC'
+                                    ];
+
+        // This $routecollection isn't currently used, even though it's more reliable at pulling through all the routes for the week
+        // because by hardcoding an order for the routes I can select which ones to output and in which order.
+        // However if a route is added or has a name change it won't get pulled through.
+
+        // I should find a way to manipulate $routecollection in the same way (to get the best of both worlds) but for now this will work with manual code changes.
+
+        $routescollection = Route::select('assigned_to')->distinct()->get()->toArray();
+        // dd($routescollection);
+
+        // $reorderedRoutesCollection = array_replace($correctOrder, $routescollection);
+        // dd($reorderedRoutesCollection);
         $sheets = [];
 
-        foreach ($routescollection as $routesolo) {
+        // foreach ($routescollection as $routesolo) {
+        //
+        //     $sheets[] = new RoutesCollection($routesolo->assigned_to, $this->week_starting);
+        // }
 
-            $sheets[] = new RoutesCollection($routesolo->assigned_to, $this->week_starting);
+        foreach ($correctOrderWedThurFri as $routesolo) {
+
+            $sheets[] = new RoutesCollection($routesolo, $this->week_starting);
         }
 
         return $sheets;
@@ -123,7 +168,7 @@ WithEvents
     */
    public function title(): string
    {
-       return 'Route - ' . $this->routesolo;
+       return $this->routesolo;
    }
 
    /**

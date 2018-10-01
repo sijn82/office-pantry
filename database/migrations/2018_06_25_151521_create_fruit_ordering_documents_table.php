@@ -15,7 +15,7 @@ class CreateFruitOrderingDocumentsTable extends Migration
     {
         Schema::create('fruit_ordering_documents', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('week_start');
+            $table->date('week_start');
             $table->string('company_name');
             $table->string('company_supplier');
             $table->string('pointless')->nullable();
