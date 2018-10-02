@@ -26,6 +26,9 @@
                                 <label><b>Upload FOD CSV:</b></label>
                                 <input class="form-control" type="file" name="fod_csv" @change="newFileUpload" required>
                             </div>
+                            <b-form-text>
+                                If you need to change the file, click cancel on the currently held one before making the change, especially if you wish to select a file with the same name!
+                            </b-form-text>
 
                             <div class="submit-button input-group input-group-md">
                                 <input class="col-md-2 col-sm-3 offset-md-5 btn btn-success" type="submit" value="Upload FOD CSV">
@@ -37,7 +40,7 @@
                         <b-button href="api/reset-routing" variant="danger"> Reset Routes </b-button>
                     </div>
                     <b-form-text text-variant="danger">
-                        Warning: Do not run FOD over ROUTES more than once, as this will multiply the expected values.  The routes need resetting in the database if the first run was unsuccessful.
+                        Warning: Do not run FOD over ROUTES more than once, as this will multiply the expected values.  The routes need resetting in the database (with the big red button on the right!) if the first run was unsuccessful.
                     </b-form-text>
                 </div>
             </div>

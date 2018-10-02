@@ -37,3 +37,7 @@ Route::get('companies', 'CompaniesController@index');
 // Route::get('/import', 'ImportController@getImport')->name('import');
 // Route::post('/import_parse', 'ImportController@parseImport')->name('import_parse');
 // Route::post('/import_process', 'ImportController@processImport')->name('import_process');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

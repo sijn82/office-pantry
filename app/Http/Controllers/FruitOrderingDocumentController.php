@@ -167,13 +167,15 @@ class FruitOrderingDocumentController extends Controller
         }
     }
 
+    // This function was the temporary measure before creating the upload one above.  It is now subservient but a good backup in case the bells and whistles fall off.
+
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    // public function store(Request $request, $this->week_start = 60818)
+
         public function store(Request $request)
     {
         // Upload Fruit Ordering Document Data

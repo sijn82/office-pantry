@@ -25,6 +25,9 @@
                                 <label><b>Upload Snacks N Drinks CSV:</b></label>
                                 <input class="form-control" type="file" name="snacks_n_drinks_csv" @change="newFileUpload">
                             </div>
+                            <b-form-text>
+                                If you need to change the file, click cancel on the currently held one before making the change, especially if you wish to select a file with the same name!
+                            </b-form-text>
 
                             <div class="submit-button input-group input-group-md">
                                 <input class=" col-md-2 col-sm-3 offset-md-5 btn btn-success" type="submit" value="Upload Snacks N Drinks CSV">
