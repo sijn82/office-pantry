@@ -182,90 +182,90 @@ class FruitOrderingDocumentController extends Controller
 
       // if (($handle = fopen(public_path() . '/fod/fod-' . $this->week_start . '-inc-zeros-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
 
-      if (($handle = fopen(public_path() . '/fod/fod-' . $this->week_start . '-inc-zeros-wed-thur-fri-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
-
-        while (($data = fgetcsv ($handle, 1000, ',')) !== FALSE) {
-
-            $company_route_name_exceptions =    [
-                                                   'Legal and General London (FAO Simon Chong)' => 'Legal and General London',
-                                                   'London Business School (FAO Victoria Gilbert)' => 'London Business School',
-                                                   'JP Morgan (FAO Sara Cordwell 15th Floor)' => 'JP Morgan',
-                                                   'JP Morgan II (FAO Sara Cordwell 15th Floor)' => 'JP Morgan II',
-                                                   'TI Media Limited (FAO Ruth Stanley)' => 'TI Media Limited',
-                                                   'Lloyds (Gatwick - FAO Katie Artlett)' => 'Lloyds (Gatwick)',
-                                                   'Lloyds (London - London Wall - FAO Elaine Charlery)' => 'Lloyds (London - London Wall)',
-                                                   'Lloyds (London - 10 Gresham Street – FAO Marytn Shone / Ben Pryce)' => 'Lloyds (London - 10 Gresham Street)',
-                                                   'Lloyds (London - 25 Gresham Street - FAO James Gamble / Maryn Shone / Ben Pryce)' => 'Lloyds (London - 25 Gresham Street)',
-                                                   'Lloyds (London - Old Broad Street - FAO Jamie Mcreesh / Daniel Lee / Parul Patel)' => 'Lloyds (London - Old Broad Street)',
-                                                   'BNP Paribas Basingstoke (FAO Stacy Scott/Jessica Howarth)' => 'BNP Paribas Basingstoke',
-                                                   'Gu (Noble Foods - FAO Ali Heal)' => 'Gu (Noble Foods)',
-                                                   'Paddle (FAO Yago Cano)' => 'Paddle',
-                                                   'Charlotte Tilbury (FAO Sophie Kendrick)' => 'Charlotte Tilbury - We Work',
-                                               ];
-
-                 // If $newRoute->company_name doesn't match a Company route_name, check to see if this value matches a Company route_name exception.
-                 // These are some of the rare cases where the route name is tailored for the delivery with an FAO attached.
-            if (array_search($data[1], $company_route_name_exceptions)) {
-                       // if it finds a matching value, it returns the associated key.
-                       $data[1] = array_search($data[1], $company_route_name_exceptions);
-            }
-
-            $company_name_encoded = json_encode($data[1]);
-            $company_name_fixed = str_replace('\u00a0', ' ', $company_name_encoded);
-            $company_name = json_decode($company_name_fixed);
-
-          echo $company_name . ' is ' . strlen($company_name) . ' characters long. <br>';
-
-          $fodData =  new FruitOrderingDocument();
-          $fodData->week_start = $data[0];
-          $fodData->company_name = trim($company_name);
-          $fodData->company_supplier = $data[2];
-          $fodData->pointless = $data[3];
-          $fodData->delivery_notes = $data[4];
-          $fodData->fruit_crates = $data[5];
-          $fodData->fruit_boxes = $data[6];
-          $fodData->deliciously_red_apples = $data[7];
-          $fodData->pink_lady_apples = $data[8];
-          $fodData->red_apples = $data[9];
-          $fodData->green_apples = $data[10];
-          $fodData->satsumas = $data[11];
-          $fodData->pears = $data[12];
-          $fodData->bananas = $data[13];
-          $fodData->nectarines = $data[14];
-          $fodData->limes = $data[15];
-          $fodData->lemons = $data[16];
-          $fodData->grapes = $data[17];
-          $fodData->seasonal_berries = $data[18];
-          $fodData->milk_1l_alt_coconut = $data[19];
-          $fodData->milk_1l_alt_unsweetened_almond = $data[20];
-          $fodData->milk_1l_alt_almond = $data[21];
-          $fodData->milk_1l_alt_unsweetened_soya = $data[22];
-          $fodData->milk_1l_alt_soya = $data[23];
-          $fodData->milk_1l_alt_lactose_free_semi = $data[24];
-          $fodData->filter_coffee_250g = $data[25];
-          $fodData->expresso_coffee_250g = $data[26];
-          $fodData->muesli = $data[27];
-          $fodData->granola = $data[28];
-          $fodData->still_water = $data[29];
-          $fodData->sparkling_water = $data[30];
-          $fodData->milk_2l_semi_skimmed = $data[31];
-          $fodData->milk_2l_skimmed = $data[32];
-          $fodData->milk_2l_whole = $data[33];
-          $fodData->milk_1l_semi_skimmed = $data[34];
-          $fodData->milk_1l_skimmed = $data[35];
-          $fodData->milk_1l_whole = $data[36];
-          $fodData->milk_pint_semi_skimmed = $data[37];
-          $fodData->milk_pint_skimmed = $data[38];
-          $fodData->milk_pint_whole = $data[39];
-          $fodData->milk_1l_organic_semi_skimmed = $data[40];
-          $fodData->milk_1l_organic_skimmed = $data[41];
-          // $fodData->snack_boxes = $data[41];
-          $fodData->delivery_day = $data[42];
-          $fodData->save();
-
-        }
-        fclose ($handle);
-      }
+      // if (($handle = fopen(public_path() . '/fod/fod-' . $this->week_start . '-inc-zeros-wed-thur-fri-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
+      // 
+      //   while (($data = fgetcsv ($handle, 1000, ',')) !== FALSE) {
+      // 
+      //       $company_route_name_exceptions =    [
+      //                                              'Legal and General London (FAO Simon Chong)' => 'Legal and General London',
+      //                                              'London Business School (FAO Victoria Gilbert)' => 'London Business School',
+      //                                              'JP Morgan (FAO Sara Cordwell 15th Floor)' => 'JP Morgan',
+      //                                              'JP Morgan II (FAO Sara Cordwell 15th Floor)' => 'JP Morgan II',
+      //                                              'TI Media Limited (FAO Ruth Stanley)' => 'TI Media Limited',
+      //                                              'Lloyds (Gatwick - FAO Katie Artlett)' => 'Lloyds (Gatwick)',
+      //                                              'Lloyds (London - London Wall - FAO Elaine Charlery)' => 'Lloyds (London - London Wall)',
+      //                                              'Lloyds (London - 10 Gresham Street – FAO Marytn Shone / Ben Pryce)' => 'Lloyds (London - 10 Gresham Street)',
+      //                                              'Lloyds (London - 25 Gresham Street - FAO James Gamble / Maryn Shone / Ben Pryce)' => 'Lloyds (London - 25 Gresham Street)',
+      //                                              'Lloyds (London - Old Broad Street - FAO Jamie Mcreesh / Daniel Lee / Parul Patel)' => 'Lloyds (London - Old Broad Street)',
+      //                                              'BNP Paribas Basingstoke (FAO Stacy Scott/Jessica Howarth)' => 'BNP Paribas Basingstoke',
+      //                                              'Gu (Noble Foods - FAO Ali Heal)' => 'Gu (Noble Foods)',
+      //                                              'Paddle (FAO Yago Cano)' => 'Paddle',
+      //                                              'Charlotte Tilbury (FAO Sophie Kendrick)' => 'Charlotte Tilbury - We Work',
+      //                                          ];
+      // 
+      //            // If $newRoute->company_name doesn't match a Company route_name, check to see if this value matches a Company route_name exception.
+      //            // These are some of the rare cases where the route name is tailored for the delivery with an FAO attached.
+      //       if (array_search($data[1], $company_route_name_exceptions)) {
+      //                  // if it finds a matching value, it returns the associated key.
+      //                  $data[1] = array_search($data[1], $company_route_name_exceptions);
+      //       }
+      // 
+      //       $company_name_encoded = json_encode($data[1]);
+      //       $company_name_fixed = str_replace('\u00a0', ' ', $company_name_encoded);
+      //       $company_name = json_decode($company_name_fixed);
+      // 
+      //     echo $company_name . ' is ' . strlen($company_name) . ' characters long. <br>';
+      // 
+      //     $fodData =  new FruitOrderingDocument();
+      //     $fodData->week_start = $data[0];
+      //     $fodData->company_name = trim($company_name);
+      //     $fodData->company_supplier = $data[2];
+      //     $fodData->pointless = $data[3];
+      //     $fodData->delivery_notes = $data[4];
+      //     $fodData->fruit_crates = $data[5];
+      //     $fodData->fruit_boxes = $data[6];
+      //     $fodData->deliciously_red_apples = $data[7];
+      //     $fodData->pink_lady_apples = $data[8];
+      //     $fodData->red_apples = $data[9];
+      //     $fodData->green_apples = $data[10];
+      //     $fodData->satsumas = $data[11];
+      //     $fodData->pears = $data[12];
+      //     $fodData->bananas = $data[13];
+      //     $fodData->nectarines = $data[14];
+      //     $fodData->limes = $data[15];
+      //     $fodData->lemons = $data[16];
+      //     $fodData->grapes = $data[17];
+      //     $fodData->seasonal_berries = $data[18];
+      //     $fodData->milk_1l_alt_coconut = $data[19];
+      //     $fodData->milk_1l_alt_unsweetened_almond = $data[20];
+      //     $fodData->milk_1l_alt_almond = $data[21];
+      //     $fodData->milk_1l_alt_unsweetened_soya = $data[22];
+      //     $fodData->milk_1l_alt_soya = $data[23];
+      //     $fodData->milk_1l_alt_lactose_free_semi = $data[24];
+      //     $fodData->filter_coffee_250g = $data[25];
+      //     $fodData->expresso_coffee_250g = $data[26];
+      //     $fodData->muesli = $data[27];
+      //     $fodData->granola = $data[28];
+      //     $fodData->still_water = $data[29];
+      //     $fodData->sparkling_water = $data[30];
+      //     $fodData->milk_2l_semi_skimmed = $data[31];
+      //     $fodData->milk_2l_skimmed = $data[32];
+      //     $fodData->milk_2l_whole = $data[33];
+      //     $fodData->milk_1l_semi_skimmed = $data[34];
+      //     $fodData->milk_1l_skimmed = $data[35];
+      //     $fodData->milk_1l_whole = $data[36];
+      //     $fodData->milk_pint_semi_skimmed = $data[37];
+      //     $fodData->milk_pint_skimmed = $data[38];
+      //     $fodData->milk_pint_whole = $data[39];
+      //     $fodData->milk_1l_organic_semi_skimmed = $data[40];
+      //     $fodData->milk_1l_organic_skimmed = $data[41];
+      //     // $fodData->snack_boxes = $data[41];
+      //     $fodData->delivery_day = $data[42];
+      //     $fodData->save();
+      // 
+      //   }
+      //   fclose ($handle);
+      // }
       // return redirect('routes');
     }
 
