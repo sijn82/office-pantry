@@ -22,5 +22,10 @@ yarn-error.log
 homestead.dump
 office_pantry_sql.load
 
+.psql_history
+homestead.dump
+office_pantry_sql.load
+
+
 /package.xml
 xdebug-2.6.1/
