@@ -19,5 +19,10 @@ npm-debug.log
 yarn-error.log
 .env
 
+.psql_history
+homestead.dump
+office_pantry_sql.load
+
+
 /package.xml
 xdebug-2.6.1/
