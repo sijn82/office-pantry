@@ -39,6 +39,7 @@ class RoutesExport implements WithMultipleSheets
     {
         $correctOrderMonTue =   [
                                         'New Offices',
+                                        '13 - Sunday Route',
                                         '12 - Thames Valley II',
                                         '11 - Thames Valley I',
                                         '10 - West Central',
@@ -58,12 +59,12 @@ class RoutesExport implements WithMultipleSheets
 
         $correctOrderWedThurFri =   [
                                         'New Offices',
-                                        'Pete',
-                                        'Piers',
-                                        'Gareth',
-                                        'M25 Wednesday',
-                                        'Thursday Route',
-                                        'Friday Route',
+                                        '20 - Pete',
+                                        '21 - Piers',
+                                        '22 - Gareth',
+                                        '23 - M25 Wednesday',
+                                        '24 - Thursday Route',
+                                        '25 - Friday Route',
                                         'TBC'
                                     ];
 

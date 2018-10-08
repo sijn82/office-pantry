@@ -348,7 +348,7 @@ class PickListsController extends Controller
         $fruitOrderingDocuments = ($this->delivery_days == 'mon-tue') ? FruitOrderingDocument::where('week_start', $this->week_start)->WhereIn('delivery_day', ['Monday', 'Tuesday'])->get()
                                                                       : FruitOrderingDocument::where('week_start', $this->week_start)->WhereIn('delivery_day', ['Wednesday', 'Thursday', 'Friday'])->get();
 
-        dd($fruitOrderingDocuments);
+        // dd($fruitOrderingDocuments);
 
         // Now iterate through the new FOD data
         foreach($fruitOrderingDocuments as $fruitOrderingDocument) {

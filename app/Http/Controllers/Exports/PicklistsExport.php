@@ -41,12 +41,13 @@ WithMultipleSheets
     public function sheets(): array
     {
         $correctOrderMonTue =   [
+                                        '13 - Sunday Route',
                                         '12 - Thames Valley II',
                                         '11 - Thames Valley I',
                                         '10 - West Central',
                                         '09 - Michael',
                                         '08 - Gus',
-                                        '07 - Dwain',
+                                        '07 - South London',
                                         '06 - Catalin',
                                         '05 - City',
                                         '04 - M25 North',
@@ -121,7 +122,7 @@ WithEvents
     {
         return view('exports.picklists', [
            'picklists' => PickList::where('week_start', $this->week_starting)->where('assigned_to', $this->picklistsolo)->orderBy('seasonal_berries')->orderBy('position_on_route')->get()
-          
+
        ]);
     }
 
@@ -170,7 +171,7 @@ WithEvents
                                     && $chosenCellsArray[$selectedRow]['K'] == 16
                                     && $chosenCellsArray[$selectedRow]['L'] == 12)
                             {
-                                    
+
                                     if (    $chosenCellsArray[$selectedRow]['E'] != 0
                                             || $chosenCellsArray[$selectedRow]['F'] != 0
                                             || $chosenCellsArray[$selectedRow]['M'] != 0
