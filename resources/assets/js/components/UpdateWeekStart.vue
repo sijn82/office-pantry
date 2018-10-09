@@ -67,6 +67,7 @@
             margin-bottom: auto;
         }
     }
+    
     // b-form-input[type=date]::-webkit-inner-spin-button,
     // b-form-input[type=date]::-webkit-outer-spin-button {
     //   -webkit-appearance: none;
