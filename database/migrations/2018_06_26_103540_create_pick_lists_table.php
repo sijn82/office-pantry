@@ -15,7 +15,7 @@ class CreatePickListsTable extends Migration
     {
         Schema::create('pick_lists', function (Blueprint $table) {
             $table->increments('id'); //not using this, not sure picklist_id should represent this either?
-            $table->integer('week_start');
+            $table->date('week_start');
             $table->string('company_name');
             $table->string('fruit_crates')->nullable();
             $table->string('fruit_boxes')->nullable();

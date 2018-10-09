@@ -15,10 +15,10 @@ class CreateRoutesTable extends Migration
     {
         Schema::create('routes', function (Blueprint $table) {
             $table->increments('id'); // This may not work as I'd like because in an ideal world I'd have an id of 1 for each route/day.
-            $table->integer('week_start');
+            $table->date('week_start');
             $table->string('company_name');
             $table->string('postcode')->nullable();
-            $table->string('address')->nullable();
+            $table->longText('address')->nullable();
             $table->longText('delivery_information')->nullable();
             $table->integer('fruit_crates')->default('0');
             $table->integer('fruit_boxes')->default('0');
@@ -41,8 +41,8 @@ class CreateRoutesTable extends Migration
             $table->string('snacks')->nullable();
             $table->string('other')->nullable();
             $table->string('assigned_to')->default('TBC');
+            $table->string('delivery_day'); // The mispositioning of this field upsets me but for now it's much quicker to keep it and not corrupt the current data for live upload.
             $table->integer('position_on_route')->nullable();
-            $table->string('delivery_day');
             $table->timestamps();
         });
     }

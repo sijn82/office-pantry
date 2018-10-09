@@ -15,15 +15,15 @@ class CreateCompaniesTable extends Migration
     {
         Schema::create('companies', function (Blueprint $table) {
             $table->increments('company_id');
-            $table->string('is_active');
+            $table->string('is_active')->default('Active');
             $table->string('invoice_name')->nullable();
             $table->string('route_name')->nullable();
             $table->string('box_names')->nullable();
             $table->string('primary_contact')->nullable();
             $table->string('primary_email')->nullable();
             $table->string('secondary_email')->nullable();
-            $table->string('delivery_information')->nullable();
-            $table->string('route_summary_address')->nullable();
+            $table->longText('delivery_information')->nullable();
+            $table->longText('route_summary_address')->nullable();
             $table->string('address_line_1')->nullable();
             $table->string('address_line_2')->nullable();
             $table->string('city')->nullable();
