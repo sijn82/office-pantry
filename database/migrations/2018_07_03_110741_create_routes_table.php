@@ -35,7 +35,7 @@ class CreateRoutesTable extends Migration
             $table->integer('milk_1l_alt_soya')->nullable();
             $table->integer('milk_1l_alt_oat')->nullable();
             $table->integer('milk_1l_alt_rice')->nullable();
-            $table->integer('milk_1l_alt_cashew')->nullable()
+            $table->integer('milk_1l_alt_cashew')->nullable();
             $table->integer('milk_1l_alt_lactose_free_semi')->nullable();
             $table->string('drinks')->nullable();
             $table->string('snacks')->nullable();
