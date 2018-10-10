@@ -45,6 +45,14 @@ return [
             'driver' => 'passport',
             'provider' => 'users',
         ],
+        'office' => [
+            'driver' => 'session',
+            'provider' => 'officeteam',
+        ],
+        'warehouse' => [
+            'driver' => 'session',
+            'provider' => 'warehouseteam',
+        ],
     ],
 
     /*
@@ -68,6 +76,14 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\User::class,
+        ],
+        'officeteam' => [
+            'driver' => 'eloquent',
+            'model' => App\OfficeTeam::class,
+        ],
+        'warehouseteam' => [
+            'driver' => 'eloquent',
+            'model' => App\WarehouseTeam::class,
         ],
 
         // 'users' => [

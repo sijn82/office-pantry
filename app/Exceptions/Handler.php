@@ -5,6 +5,9 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
+use Illuminate\Auth\AuthenticationException;
+use Auth;
+
 class Handler extends ExceptionHandler
 {
     /**
@@ -48,4 +51,31 @@ class Handler extends ExceptionHandler
     {
         return parent::render($request, $exception);
     }
+    
+    
+        protected function unauthenticated($request, AuthenticationException $exception)
+        {
+            // dd($request);
+            if ($request->expectsJson()) {
+                return response()->json(['error' => 'Unauthenticated.'], 401);
+            }
+
+            if ($request->is('office') || $request->is('office/*')) {
+                return redirect()->guest('/login/office');
+            }
+            
+            if (    $request->is('api/export-picklists') 
+                ||  $request->is('api/export-picklists-full')
+                ||  $request->is('api/export-routing')
+                ||  $request->is('api/export-companies')        
+            ) {
+                return redirect()->guest('/login/office');
+            }
+
+            if ($request->is('warehouse') || $request->is('warehouse/*')) {
+                return redirect()->guest('/login/warehouse');
+            }
+
+            return redirect()->guest(route('login'));
+        }
 }

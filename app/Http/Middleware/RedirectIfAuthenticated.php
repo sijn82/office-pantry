@@ -17,9 +17,25 @@ class RedirectIfAuthenticated
      */
     public function handle($request, Closure $next, $guard = null)
     {
+        if ($guard == "office" && Auth::guard($guard)->check()) {
+
+            return redirect('/office');
+        }
+
+        if ($guard == "warehouse" && Auth::guard($guard)->check()) {
+
+            return redirect('/warehouse');
+        }
+
         if (Auth::guard($guard)->check()) {
+    
             return redirect('/home');
         }
+
+        // This is the old check, now updated and improved with the code above.
+        // if (Auth::guard($guard)->check()) {
+        //     return redirect('/home');
+        // }
 
         return $next($request);
     }

@@ -3,6 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+
+use App\OfficeTeam;
+use App\WarehouseTeam;
+use Illuminate\Http\Request;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -38,6 +43,8 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+        $this->middleware('guest:office');
+        $this->middleware('guest:warehouse');
     }
 
     /**
@@ -68,5 +75,43 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+    }
+
+    // Same process as in the login Controller, determining the template used for the newly registered url paths.
+    public function showOfficeRegisterForm()
+    {
+        return view('auth.register', ['url' => 'office']);
+    }
+
+    // See above.
+    public function showWarehouseRegisterForm()
+    {
+        return view('auth.register', ['url' => 'warehouse']);
+    }
+    
+    // Validate the new admin info and create suitable entries as new admins
+    protected function createOffice(Request $request)
+    {
+        $this->validator($request->all())->validate();
+        $admin = OfficeTeam::create([
+            'name' => $request['name'],
+            'email' => $request['email'],
+            'password' => Hash::make($request['password']),
+        ]);
+
+        return redirect()->intended('login/office');
+    }
+
+    // Validate the new warehouse user info and create suitable entries as new operatives
+    protected function createWarehouse(Request $request)
+    {
+        $this->validator($request->all())->validate();
+        $writer = WarehouseTeam::create([
+            'name' => $request['name'],
+            'email' => $request['email'],
+            'password' => Hash::make($request['password']),
+        ]);
+
+        return redirect()->intended('login/warehouse');
     }
 }

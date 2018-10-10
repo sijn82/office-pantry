@@ -73,11 +73,11 @@ Route::get('importProduct', 'ProductsController@store');
 Route::get('importFruitBox', 'FruitBoxController@store');
 
 // Export excel data for picklists and routing.
-Route::get('export-picklists', 'PickListsController@export');
-Route::get('export-picklists-full', 'PickListsController@full_export');
+Route::get('export-picklists', 'PickListsController@export')->middleware('auth:office');
+Route::get('export-picklists-full', 'PickListsController@full_export')->middleware('auth:office');
 // Route::get('export-routing', 'RoutesController@export');
-Route::get('export-routing', 'RoutesController@download');
-Route::get('export-companies', 'CompaniesController@export');
+Route::get('export-routing', 'RoutesController@download')->middleware('auth:office');
+Route::get('export-companies', 'CompaniesController@export')->middleware('auth:office');
 
 // Not currently using these, but maybe (very?) soon.
 

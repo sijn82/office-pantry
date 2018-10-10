@@ -41,3 +41,20 @@ Route::get('companies', 'CompaniesController@index');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::view('/', 'welcome');
+
+
+Route::get('/login/office', 'Auth\LoginController@showOfficeLoginForm');
+Route::get('/login/warehouse', 'Auth\LoginController@showWarehouseLoginForm');
+Route::get('/register/office', 'Auth\RegisterController@showOfficeRegisterForm');
+Route::get('/register/warehouse', 'Auth\RegisterController@showWarehouseRegisterForm');
+
+Route::post('/login/office', 'Auth\LoginController@officeLogin');
+Route::post('/login/warehouse', 'Auth\LoginController@warehouseLogin');
+Route::post('/register/office', 'Auth\RegisterController@createOffice');
+Route::post('/register/warehouse', 'Auth\RegisterController@createWarehouse');
+
+Route::view('/home', 'home')->middleware('auth');
+Route::view('/office', 'office')->middleware('auth:office');
+Route::view('/warehouse', 'warehouse')->middleware('auth:warehouse');
