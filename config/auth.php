@@ -113,6 +113,16 @@ return [
             'table' => 'password_resets',
             'expire' => 60,
         ],
+        'office' => [
+            'provider' => 'office',
+            'table' => 'password_resets',
+            'expire' => 60,
+        ],
+        'warehouse' => [
+            'provider' => 'warehouse',
+            'table' => 'password_resets',
+            'expire' => 60,
+        ],
     ],
 
 ];

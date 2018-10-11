@@ -27,7 +27,7 @@ Route::get('import-file', function () {
     return view('import-file');
 });
 
-Route::get('import-file', 'WeekStartController@show')->name('import-file');
+Route::get('import-file', 'WeekStartController@show')->name('import-file')->middleware('auth:office');
 Route::get('display-routes', 'RoutesController@index');
 Route::get('snackboxes-multi-company', 'SnackBoxController@index_OP');
 
@@ -45,10 +45,10 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::view('/', 'welcome');
 
 
-Route::get('/login/office', 'Auth\LoginController@showOfficeLoginForm');
-Route::get('/login/warehouse', 'Auth\LoginController@showWarehouseLoginForm');
+Route::get('/login/office', 'Auth\LoginController@showOfficeLoginForm')->name('login/office');
+Route::get('/login/warehouse', 'Auth\LoginController@showWarehouseLoginForm')->name('login/warehouse');
 Route::get('/register/office', 'Auth\RegisterController@showOfficeRegisterForm');
-Route::get('/register/warehouse', 'Auth\RegisterController@showWarehouseRegisterForm');
+Route::get('/register/warehouse', 'Auth\RegisterController@showWarehouseRegisterForm')->middleware('auth:office');
 
 Route::post('/login/office', 'Auth\LoginController@officeLogin');
 Route::post('/login/warehouse', 'Auth\LoginController@warehouseLogin');

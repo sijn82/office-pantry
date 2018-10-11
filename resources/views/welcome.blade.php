@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>Laravel</title>
+        <title>Office Pantry</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
@@ -94,8 +94,8 @@
                 </div>
 
                 <div class="links">
-                    <a href="https://laravel.com/docs">Orders</a>
-                    <a href="routes">Routes</a>
+                    <a href="{{ route('login/office') }}">Office Login</a>
+                    <a href="{{ route('login/warehouse') }}">Warehouse Login</a>
                     <a href="https://laravel-news.com">Stocklist</a>
                     <a href="https://forge.laravel.com">Invoices</a>
                     <a href="https://github.com/laravel/laravel">Payments</a>

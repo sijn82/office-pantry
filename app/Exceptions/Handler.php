@@ -60,7 +60,7 @@ class Handler extends ExceptionHandler
                 return response()->json(['error' => 'Unauthenticated.'], 401);
             }
 
-            if ($request->is('office') || $request->is('office/*')) {
+            if ($request->is('office') || $request->is('office/*' || $request->is('register/office'))) {
                 return redirect()->guest('/login/office');
             }
             
@@ -72,7 +72,10 @@ class Handler extends ExceptionHandler
                 return redirect()->guest('/login/office');
             }
 
-            if ($request->is('warehouse') || $request->is('warehouse/*')) {
+            if (    $request->is('warehouse') 
+                ||  $request->is('warehouse/*') 
+                ||  $request->is('register/warehouse')
+            ) {
                 return redirect()->guest('/login/warehouse');
             }
 

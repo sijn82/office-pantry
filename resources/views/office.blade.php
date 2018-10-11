@@ -10,6 +10,10 @@
                     <div class="card-body">
                         Hi boss!
                     </div>
+                    <div class="card-body">
+                        <a href=" {{route('import-file') }}"> Import and Process Files </a>
+                    </div>
+                    
                 </div>
             </div>
         </div>
