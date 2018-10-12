@@ -175,25 +175,25 @@ class PickListsController extends Controller
 
           foreach($newRoutes as $newRoute) {
 
-                    $company_route_name_exceptions =    [
-                                                            'Legal and General London (FAO Simon Chong)' => 'Legal and General London',
-                                                            'London Business School (FAO Victoria Gilbert)' => 'London Business School',
-                                                            'JP Morgan (FAO Sara Cordwell 15th Floor)' => 'JP Morgan',
-                                                            'JP Morgan II (FAO Sara Cordwell 15th Floor)' => 'JP Morgan II',
-                                                            'TI Media Limited (FAO Ruth Stanley)' => 'TI Media Limited',
-                                                            'Lloyds (Gatwick - FAO Katie Artlett)' => 'Lloyds (Gatwick)',
-                                                            'Lloyds (London - London Wall - FAO Elaine Charlery)' => 'Lloyds (London - London Wall)',
-                                                            'Lloyds (London - 10 Gresham Street – FAO Marytn Shone / Ben Pryce)' => 'Lloyds (London - 10 Gresham Street)',
-                                                            'Lloyds (London - 25 Gresham Street - FAO James Gamble / Maryn Shone / Ben Pryce)' => 'Lloyds (London - 25 Gresham Street)',
-                                                            'Lloyds (London - Old Broad Street - FAO Jamie Mcreesh / Daniel Lee / Parul Patel)' => 'Lloyds (London - Old Broad Street)'
-                                                        ];
-
-                          // If $newRoute->company_name doesn't match a Company route_name, check to see if this value matches a Company route_name exception.
-                          // These are some of the rare cases where the route name is tailored for the delivery with an FAO attached.
-                        if (array_search($newRoute->company_name, $company_route_name_exceptions)) {
-                                // if it finds a matching value, it returns the associated key.
-                                $newRoute->company_name = array_search($newRoute->company_name, $company_route_name_exceptions);
-                        }
+                    // $company_route_name_exceptions =    [
+                    //                                         'Legal and General London (FAO Simon Chong)' => 'Legal and General London',
+                    //                                         'London Business School (FAO Victoria Gilbert)' => 'London Business School',
+                    //                                         'JP Morgan (FAO Sara Cordwell 15th Floor)' => 'JP Morgan',
+                    //                                         'JP Morgan II (FAO Sara Cordwell 15th Floor)' => 'JP Morgan II',
+                    //                                         'TI Media Limited (FAO Ruth Stanley)' => 'TI Media Limited',
+                    //                                         'Lloyds (Gatwick - FAO Katie Artlett)' => 'Lloyds (Gatwick)',
+                    //                                         'Lloyds (London - London Wall - FAO Elaine Charlery)' => 'Lloyds (London - London Wall)',
+                    //                                         'Lloyds (London - 10 Gresham Street – FAO Marytn Shone / Ben Pryce)' => 'Lloyds (London - 10 Gresham Street)',
+                    //                                         'Lloyds (London - 25 Gresham Street - FAO James Gamble / Maryn Shone / Ben Pryce)' => 'Lloyds (London - 25 Gresham Street)',
+                    //                                         'Lloyds (London - Old Broad Street - FAO Jamie Mcreesh / Daniel Lee / Parul Patel)' => 'Lloyds (London - Old Broad Street)'
+                    //                                     ];
+                    // 
+                    //       // If $newRoute->company_name doesn't match a Company route_name, check to see if this value matches a Company route_name exception.
+                    //       // These are some of the rare cases where the route name is tailored for the delivery with an FAO attached.
+                    //     if (array_search($newRoute->company_name, $company_route_name_exceptions)) {
+                    //             // if it finds a matching value, it returns the associated key.
+                    //             $newRoute->company_name = array_search($newRoute->company_name, $company_route_name_exceptions);
+                    //     }
 
                         // if the route name matches a route name in the company tables - this should be the case for most entries.
                         if (in_array(strtolower(trim($newRoute->company_name)),

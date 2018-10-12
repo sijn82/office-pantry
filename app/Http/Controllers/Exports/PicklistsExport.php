@@ -49,14 +49,15 @@ WithMultipleSheets
     public function sheets(): array
     {
         $correctOrderMonTue =   [
-                                        '13 - Sunday Route',
-                                        '12 - Thames Valley II',
-                                        '11 - Thames Valley I',
-                                        '10 - West Central',
-                                        '09 - Michael',
-                                        '08 - Gus',
-                                        '07 - South London',
-                                        '06 - Catalin',
+                                        '14 - Sunday Route',
+                                        '13 - Thames Valley II',
+                                        '12 - Thames Valley I',
+                                        '11 - West Central',
+                                        '10 - Michael',
+                                        '09 - Gus',
+                                        '08 - South London',
+                                        '07 - Catalin',
+                                        '06 - Stratford',
                                         '05 - City',
                                         '04 - M25 North',
                                         '03 - M25 South',
