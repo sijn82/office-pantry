@@ -85,7 +85,7 @@ class RoutesExport implements WithMultipleSheets
         $routescollection = Route::select('assigned_to')->distinct()->get()->toArray();
         $sheets = [];
 
-        if ($this->week_start == 'mon-tue') {
+        if ($this->delivery_days == 'mon-tue') {
 
             foreach ($correctOrderMonTue as $routesolo) {
 

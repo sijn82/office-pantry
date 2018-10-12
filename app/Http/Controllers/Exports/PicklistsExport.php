@@ -86,7 +86,7 @@ WithMultipleSheets
         //     $sheets[] = new PicklistCollection($picklistsolo->assigned_to, $this->week_starting);
         // }
         
-            if ($this->week_start == 'mon-tue') {
+            if ($this->delivery_days == 'mon-tue') {
                 
                 foreach ($correctOrderMonTue as $picklistsolo) {
 
