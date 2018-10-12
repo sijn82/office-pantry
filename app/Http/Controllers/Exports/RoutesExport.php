@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Exports;
 
 use App\Route;
+use App\WeekStart;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
@@ -27,9 +28,16 @@ class RoutesExport implements WithMultipleSheets
     protected $week_starting;
     protected $routescollection;
 
+    protected $week_start;
+    protected $delivery_days;
+
         public function __construct($week_starting)
         {
             $this->week_starting = $week_starting;
+
+            $week_start = WeekStart::all()->toArray();
+            $this->week_start = $week_start[0]['current'];
+            $this->delivery_days = $week_start[0]['delivery_days'];
         }
 
     /**
@@ -45,7 +53,7 @@ class RoutesExport implements WithMultipleSheets
                                         '10 - West Central',
                                         '09 - Michael',
                                         '08 - Gus',
-                                        '07 - Dwain',
+                                        '07 - South London',
                                         '06 - Catalin',
                                         '05 - City',
                                         '04 - M25 North',
@@ -75,23 +83,47 @@ class RoutesExport implements WithMultipleSheets
         // I should find a way to manipulate $routecollection in the same way (to get the best of both worlds) but for now this will work with manual code changes.
 
         $routescollection = Route::select('assigned_to')->distinct()->get()->toArray();
+        $sheets = [];
+
+        if ($this->week_start == 'mon-tue') {
+
+            foreach ($correctOrderMonTue as $routesolo) {
+
+                $sheets[] = new RoutesCollection($routesolo, $this->week_starting);
+            }
+
+            return $sheets;
+
+        } else {
+
+            foreach ($correctOrderWedThurFri as $routesolo) {
+
+                $sheets[] = new RoutesCollection($routesolo, $this->week_starting);
+            }
+
+            return $sheets;
+
+        }
+
+
+
         // dd($routescollection);
 
         // $reorderedRoutesCollection = array_replace($correctOrder, $routescollection);
         // dd($reorderedRoutesCollection);
-        $sheets = [];
+
 
         // foreach ($routescollection as $routesolo) {
         //
         //     $sheets[] = new RoutesCollection($routesolo->assigned_to, $this->week_starting);
         // }
 
-        foreach ($correctOrderWedThurFri as $routesolo) {
-
-            $sheets[] = new RoutesCollection($routesolo, $this->week_starting);
-        }
-
-        return $sheets;
+        // foreach ($correctOrderMonTue as $routesolo) {
+        //
+        //     $sheets[] = new RoutesCollection($routesolo, $this->week_starting);
+        // }
+        //
+        // return $sheets;
     }
 
     // public function collection()

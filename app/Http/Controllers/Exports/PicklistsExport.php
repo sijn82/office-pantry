@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Exports;
 
 use App\PickList;
+use App\WeekStart;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -25,10 +26,17 @@ WithMultipleSheets
     // use Exportable;
     private $picklistsolo;
     private $week_starting;
+    
+    protected $week_start;
+    protected $delivery_days;
 
     public function __construct( $week_starting)
     {
         $this->week_starting = $week_starting;
+        
+        $week_start = WeekStart::all()->toArray();
+        $this->week_start = $week_start[0]['current'];
+        $this->delivery_days = $week_start[0]['delivery_days'];
     }
 
     // This is the most important part of the Picklist Export Class,
@@ -77,14 +85,30 @@ WithMultipleSheets
         //     // Each distinct assigned_to (route) calls the PicklistCollection Class below.
         //     $sheets[] = new PicklistCollection($picklistsolo->assigned_to, $this->week_starting);
         // }
-        foreach ($correctOrderWedThurFri as $picklistsolo) {
+        
+            if ($this->week_start == 'mon-tue') {
+                
+                foreach ($correctOrderMonTue as $picklistsolo) {
 
-            // Each distinct assigned_to (route) calls the PicklistCollection Class below.
-            $sheets[] = new PicklistCollection($picklistsolo, $this->week_starting);
-        }
+                    // Each distinct assigned_to (route) calls the PicklistCollection Class below.
+                    $sheets[] = new PicklistCollection($picklistsolo, $this->week_starting);
+                }
 
-        return $sheets;
+                return $sheets;
+                
+            } else {
+                
+                foreach ($correctOrderWedThurFri as $picklistsolo) {
+
+                    // Each distinct assigned_to (route) calls the PicklistCollection Class below.
+                    $sheets[] = new PicklistCollection($picklistsolo, $this->week_starting);
+                }
+
+                return $sheets;
+        
+            }
     }
+    
         // Keeping this here as a backup incase of future issues and as a reminder of when the inner workings of laravel excel appeared to unravel.
         // and I had to add the '->get()' at the end to make the export work and not throw the error 'Call to undefined method Illuminate\Database\Eloquent\Builder::all()'
 
