@@ -71251,6 +71251,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -71398,8 +71399,15 @@ var render = function() {
                     staticClass:
                       "col-md-2 col-sm-3 offset-md-5 btn btn-success",
                     attrs: { type: "submit", value: "Upload FOD CSV" }
-                  })
-                ]
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "b-button",
+                    { attrs: { href: "api/reset-fod", variant: "danger" } },
+                    [_vm._v("Reset FOD")]
+                  )
+                ],
+                1
               )
             ],
             1
