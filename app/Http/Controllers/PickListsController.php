@@ -202,6 +202,9 @@ class PickListsController extends Controller
                          { // i.e Awin would be but Awin Banana Box (rightly) wouldn't.
                                 $company_picklist_box_names = Company::where('route_name', $newRoute->company_name)->pluck('box_names')->all();
                                 var_dump($company_picklist_box_names);
+                                
+                                $company_picklist_box_names = empty($company_picklist_box_names) ? [[]] : $company_picklist_box_names;
+                                
                                 // now we need to check the company tables for any associated picklist boxes that match entries out for delivery this week
                                 foreach ($company_picklist_box_names[0] as $company_picklist_box_name) {
                                         echo $company_picklist_box_name . '<br>';
