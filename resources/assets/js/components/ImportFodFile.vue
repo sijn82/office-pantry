@@ -32,6 +32,7 @@
 
                             <div class="submit-button input-group input-group-md">
                                 <input class="col-md-2 col-sm-3 offset-md-5 btn btn-success" type="submit" value="Upload FOD CSV">
+                                <b-button href="api/reset-fod" variant="danger">Reset FOD</b-button>
                             </div>
                     </b-form>
                     <div>

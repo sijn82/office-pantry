@@ -39,6 +39,7 @@ Route::get('picklists-vs-fod', 'PickListsController@update');
 Route::get('update-routing', 'RoutesController@update');
 
 Route::get('reset-routing', 'RoutesController@reset');
+Route::get('reset-fod', 'FruitOrderingDocumentController@reset');
 
 Route::post('upload-rejigged-routes-csv', 'RoutesController@uploadRejiggedRoutes');
 Route::get('rejig-routing', 'RoutesController@updateRouteAndPosition');

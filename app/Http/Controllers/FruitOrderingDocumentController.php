@@ -48,6 +48,24 @@ class FruitOrderingDocumentController extends Controller
     {
 
     }
+    
+    public function reset()
+    {
+        // This function is to strip out all the existing values from the FOD.  We have no need to keep them after processing with the current system, 
+        // and now the site is live we should be more concerned with using unnecessary rows in the database. 
+        
+        $message = 'FOD entries deleted.';
+        
+        $fods = FruitOrderingDocument::all();
+        // dd($routes);
+        foreach ($fods as $fod)
+        {
+            $fod->delete();
+        }
+        
+        Log::channel('slack')->info($message);
+
+    }
 
     /**
      * Store a newly created resource in storage.
