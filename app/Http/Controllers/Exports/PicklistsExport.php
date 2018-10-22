@@ -73,7 +73,8 @@ WithMultipleSheets
                                         '21 - Piers',
                                         '22 - Gareth',
                                         '23 - M25 Wednesday',
-                                        '24 - Thursday Route',
+                                        '24 - Thursday Route Gareth',
+                                        '24.5 - Thursday Route Jordan',
                                         '25 - Friday Route',
                                         'TBC'
                                     ];

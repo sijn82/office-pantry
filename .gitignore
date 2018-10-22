@@ -8,6 +8,8 @@
 /public/rejigged-routing
 /public/snackboxes
 
+/config/database.php
+
 /storage/*.key
 /vendor
 /.idea

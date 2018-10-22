@@ -26,8 +26,12 @@ Route::get('routes', function () {
 Route::get('import-file', function () {
     return view('import-file');
 });
+Route::get('import-products', function () {
+    return view('process-snackboxes');
+});
 
 Route::get('import-file', 'WeekStartController@show')->name('import-file')->middleware('auth:office');
+// Route::get('import-products', 'SnackBoxController@upload_products_and_codes')->name('import-products')->middleware('auth:office');
 Route::get('display-routes', 'RoutesController@index');
 Route::get('snackboxes-multi-company', 'SnackBoxController@index_OP');
 

@@ -1,5 +1,10 @@
+
 @extends('welcome')
 @section('companies')
+
+<div>
+    <add-new-company></add-new-company>
+</div>
 
 <h3 class="route-header"> Display Companies </h3>
 
@@ -77,7 +82,7 @@
     @endforeach
     </tbody>
 </table>
-<!-- @endsection
+@endsection
 
 @section('company-assets')
   <style>
@@ -91,6 +96,7 @@
       border-right: 1px solid #636b6f;
       border-bottom: 1px solid #636b6f;
     }
+    
     table tbody tr td {
       font-size: 0.6rem;
       font-weight: 400;
@@ -122,4 +128,4 @@
     }
 
   </style>
-@endsection -->
+@endsection

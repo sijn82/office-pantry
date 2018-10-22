@@ -393,6 +393,16 @@ class RoutesController extends Controller
                   }
             }
         }
+        
+        $title = "REJIGGED ROUTING - _rerouting for week commencing_ - $this->week_start";
+        Log::channel('slack')->info($title);
+        Log::channel('slack')->info($regular_rejig);
+        Log::channel('slack')->info($special_delivery);
+        Log::channel('slack')->info($new_special_delivery);
+        Log::channel('slack')->info($last_minute_entry_regular_day);
+        Log::channel('slack')->warning($last_minute_entry_new_day);
+        Log::channel('slack')->alert($last_minute_completely_new_entry);
+
         return redirect()->route('import-file');
     }
 

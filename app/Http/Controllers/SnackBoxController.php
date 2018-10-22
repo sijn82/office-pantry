@@ -2,11 +2,118 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+
 use Illuminate\Http\Request;
 use App\SnackBox;
+use App\WeekStart;
 
 class SnackBoxController extends Controller
 {
+
+
+        protected $week_start;
+
+
+        public function __construct()
+        {
+            // $this->week_start = 170918;
+            $week_start = WeekStart::all()->toArray();
+            $this->week_start = $week_start[0]['current'];
+            $this->delivery_days = $week_start[0]['delivery_days'];
+
+        }
+
+    // This is an attempt to send the data for snacks and drinks to the templates without troubling a database for anything.
+    // This is to allow the product list to be dynamic and not hard coded, otherwise weekly code changes would be required and the database table rebuilt each time.
+
+    public function upload_products_and_codes(Request $request)
+    {
+        // these are the additional parameters we'll use to save the file in the right place and with the right name, which is built further down in this function
+        // $delivery_days = $request->delivery_days ? 'wed-thur-fri' : '';
+        $delivery_days = $request->delivery_days;
+
+        // strip out the automatic base encoding with wrong mime after file upload form
+        $request_mime_fix = str_replace('data:application/vnd.ms-excel;base64,','',$request->products_and_codes);
+        // now we can decode the remainder of the encoded data string
+        $requestcsv = base64_decode($request_mime_fix);
+        // however it now has some unwated unicode characters i.e the 'no break space' - (U+00A0) and use json_encode to make them visible
+        $csv_data_with_unicode_characters = json_encode($requestcsv);
+        // now they're no longer hidden characters, we can strip them out of the data
+        $csv_data_fixed = str_replace('\u00a0', ' ', $csv_data_with_unicode_characters);
+        // and return the file ready for storage
+        $ready_csv = json_decode($csv_data_fixed);
+
+        // this is how we determine where to put the file, these variables are populated with the $week_start variable at the top of this class
+        // and the request parameters attached to the form on submission.
+        Storage::put('public/snackboxes/productcodes-' . $this->week_start . '-' . $delivery_days . '.csv', $ready_csv);
+
+        $message = 'Uploaded latest product codes as of ' . $this->week_start . ' for delivery on ' . $delivery_days;
+
+        Log::channel('slack')->info($message);
+    }
+
+    public function auto_process_snackboxes()
+    {
+
+            // $delivery_days = $request->delivery_days;
+
+              if (($handle = fopen('../storage/app/public/snackboxes/productcodes-' . $this->week_start . '-' . $this->delivery_days . '.csv', 'r')) !== FALSE) {
+
+                    while (($data = fgetcsv ($handle, 1000, ',')) !== FALSE) {
+
+                        $product_list[$data[0]] = trim($data[1]);
+                    }
+
+                fclose ($handle);
+
+                dd($product_list);
+              }
+
+        // Get week start, delivered by, no. of boxes (to split between), company name and columns of data to organise.
+        $company_orders; // This is the csv file we'll import.
+
+        // This is the current array of product codes, which will vary from week to week but always match up to the columns after the company name (in $company_orders)
+        $product_list; // This will also be imported from a seperate csv file.
+
+        // We know that any items coming after $company_orders[5+]
+        // $company_orders[0] = ID,
+        // $company_orders[1] = week_start,
+        // $company_orders[2] = delivered_by,
+        // $company_orders[3] = no of boxes (split between),
+        // $company_orders[4] = company_name
+        // are product codes directly correllating to the order of $product_list.
+
+        // So we can create $product_list[0] => $company_orders[5] as a key value pair.
+
+        // Or is that unnecessary?  Instead we can have a key => value pair of product code => product name saved as $product_list
+
+
+        // $products = uploaded csv file ($products[0] = key, $products[1 = value])
+        // $product_list = array_combine($products[0], $products[1]);
+        //
+        // foreach ($company_orders as $company_order)
+        // {
+        //      if ($company_order[2] == 'OP' && $company_order[3] > 1) {
+        //
+        //          $snd_OP_multipleBoxes .= $company_order;
+        //      }
+        //      elseif ($company_order[2] == 'OP' && $company_order[3] = 1) {
+        //
+        //          $snd_OP_singleBoxes .= $company_order;
+        //      }
+        //      elseif ($company_order[2] == 'OP' && $company_order[3] = 0) {
+        //
+        //          $snd_OP_uniqueBoxes .= $company_order;
+        //      }
+        //
+        // }
+
+    }
+
+
+
     /**
      * Display a listing of the resource.
      *
@@ -27,7 +134,7 @@ class SnackBoxController extends Controller
         $snd_OP_uniqueBoxes = SnackBox::where('delivered_by', 'OP')->where('no_of_boxes_split_between', '=', 0)->get();
 
         return view ('snackboxes-multi-company', ['snd_OP_singleBoxes' => $snd_OP_singleBoxes, 'snd_OP_multipleBoxes' => $snd_OP_multipleBoxes, 'snd_OP_uniqueBoxes' => $snd_OP_uniqueBoxes, 'chunks' => $chunks ]);
-}
+    }
 
     public function index_DPD()
     {

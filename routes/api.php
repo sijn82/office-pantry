@@ -62,12 +62,18 @@ Route::post('upload-snacks-n-drinks-csv', 'RoutesController@storeSnacksNDrinksCS
 // This is again a temporary solution to adding the drinks and snacks totals to routes, as it doesn't get brought in with FOD at the moment.
 Route::get('import-drinks-n-snacks', 'RoutesController@addDrinksNSnacksToRoute');
 
-Route::get('import-snackboxes', 'SnackBoxController@store');
+// Route::get('import-snackboxes', 'SnackBoxController@store');
+
+Route::post('upload-snackbox-product-codes', 'SnackBoxController@upload_products_and_codes');
+
+Route::get('auto_process_snackboxes', 'SnackBoxController@auto_process_snackboxes');
 
 // Import main Company data.
 Route::get('import-companies', 'CompaniesController@store');
 // Import additional route summary address and delivery info
 Route::get('import-route-summary-delivery-info', 'CompaniesController@updateRouteSummaryAddressAndDeliveryInfo');
+//
+Route::post('add-new-company', 'CompaniesController@create');
 
 // To be useful at a later date when more of the process has been implimented.
 Route::get('importProduct', 'ProductsController@store');

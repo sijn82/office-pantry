@@ -128,6 +128,17 @@ class CompaniesController extends Controller
         }
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function create(Request $request) // $id will be added to this later when we have the space for it in the companies table.
+    {
+        //
+        dd($request->company_data);
+    }
 
 
     /**

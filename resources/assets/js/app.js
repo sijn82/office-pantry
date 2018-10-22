@@ -8,8 +8,8 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
-import vSelect from 'vue-select';
-Vue.component('v-select', vSelect);
+// import vSelect from 'vue-select';
+// Vue.component('v-select', vSelect);
 
 import BootstrapVue from 'bootstrap-vue';
 Vue.use(BootstrapVue);
@@ -47,6 +47,8 @@ Vue.component('update-week-start', require('./components/UpdateWeekStart.vue'));
 Vue.component('import-fod-file', require('./components/ImportFodFile.vue'));
 Vue.component('import-snacks-n-drinks-file', require('./components/ImportSnacksNDrinksFile.vue'));
 Vue.component('import-rejigged-routes-file', require('./components/ImportRejiggedRoutesFile.vue'));
+Vue.component('add-new-company', require('./components/AddNewCompany.vue'));
+Vue.component('process-snacks-into-templates', require('./components/ProcessSnacksIntoTemplates.vue'));
 
 const app = new Vue({
     el: '#app'

@@ -73,6 +73,7 @@
         @yield('routing-assets')
         @yield('routing-display-assets')
         @yield('company-assets')
+        @yield('process-snackboxes-styling')
         
     </head>
     <body>
@@ -105,13 +106,15 @@
 
                 @yield('display-routes')
                 @yield('snackboxes-multi-company')
-                @yield('companies')
+                
 
 
                 <div id="app">
                     @yield('content-excel')
+                    @yield('process-snackboxes')
                     @yield('routes')
                     @yield('products')
+                    @yield('companies')
                      <!-- <products></products> -->
                      <example-component></example-component>
                  </div>
