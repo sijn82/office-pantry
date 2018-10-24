@@ -11,6 +11,8 @@ class Company extends Model
 
     use Notifiable;
 
+    protected $primaryKey = 'company_id';
+    
     protected $casts = [
       'box_names' => 'array'
     ];
