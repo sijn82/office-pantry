@@ -65,6 +65,8 @@ Route::get('import-drinks-n-snacks', 'RoutesController@addDrinksNSnacksToRoute')
 // Route::get('import-snackboxes', 'SnackBoxController@store');
 
 Route::post('upload-snackbox-product-codes', 'SnackBoxController@upload_products_and_codes');
+Route::post('upload-snackbox-orders', 'SnackBoxController@upload_snackbox_orders');
+
 
 Route::get('auto_process_snackboxes', 'SnackBoxController@auto_process_snackboxes');
 
@@ -73,7 +75,8 @@ Route::get('import-companies', 'CompaniesController@store');
 // Import additional route summary address and delivery info
 Route::get('import-route-summary-delivery-info', 'CompaniesController@updateRouteSummaryAddressAndDeliveryInfo');
 //
-Route::post('add-new-company', 'CompaniesController@create');
+
+Route::post('companies/add-new-company', 'CompaniesController@create');
 
 // To be useful at a later date when more of the process has been implimented.
 Route::get('importProduct', 'ProductsController@store');

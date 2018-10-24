@@ -72637,7 +72637,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       evt.preventDefault();
       var self = this;
       // alert(JSON.stringify(this.form));
-      axios.post('api/add-new-company', {
+      axios.post('/api/companies/add-new-company', {
         company_data: self.form,
         headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv' }
         // user_id: self.userData.id // This hasn't been setup yet so proabably won't work yet?!
@@ -73547,6 +73547,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -73555,6 +73584,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             form: {
                 delivery_days: '',
+                delivery_days_orders: '',
                 products_and_codes: '',
                 options: [{ value: null, text: 'Please Select an Option', disabled: true }, { value: 'mon-tue', text: 'Monday & Tuesday' }, { value: 'wed-thur-fri', text: 'Wednesday, Thursday & Friday' }]
             }
@@ -73573,6 +73603,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this.form.products_and_codes = event.target.result;
             };
         },
+        newOrderUpload: function newOrderUpload(event) {
+            var _this2 = this;
+
+            var fileReader = new FileReader();
+            fileReader.readAsDataURL(event.target.files[0]);
+            fileReader.onload = function (event) {
+                _this2.form.snackbox_orders = event.target.result;
+            };
+        },
 
         uploadSnackboxProductCodesCSV: function uploadSnackboxProductCodesCSV() {
             var self = this;
@@ -73583,6 +73622,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 // user_id: self.userData.id
             }).then(function (response) {
                 alert('Uploaded Snackbox Product Codes CSV successfully!');
+                console.log(response.data);
+            }).catch(function (error) {
+                return console.log(error);
+            });
+            // this.$router.push('/thank-you')
+        },
+        uploadSnackboxOrdersCSV: function uploadSnackboxOrdersCSV() {
+            var self = this;
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('api/upload-snackbox-orders', {
+                delivery_days: self.form.delivery_days_orders,
+                snackbox_orders: self.form.snackbox_orders,
+                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv' }
+                // user_id: self.userData.id
+            }).then(function (response) {
+                alert('Uploaded Snackbox Orders CSV successfully!');
                 console.log(response.data);
             }).catch(function (error) {
                 return console.log(error);
@@ -73691,6 +73745,90 @@ var render = function() {
             )
           ],
           1
+        ),
+        _vm._v(" "),
+        _c(
+          "form",
+          {
+            attrs: {
+              action: "api/upload-snackbox-orders",
+              enctype: "multipart/form-data",
+              method: "post",
+              name: "upload-snackbox-orders-form"
+            },
+            on: {
+              submit: function($event) {
+                $event.preventDefault()
+                return _vm.uploadSnackboxOrdersCSV($event)
+              }
+            }
+          },
+          [
+            _c(
+              "div",
+              {
+                staticClass: "input-group input-group-md col-md-8 offset-md-2"
+              },
+              [
+                _vm._m(4),
+                _vm._v(" "),
+                _c("b-form-select", {
+                  attrs: { options: _vm.form.options },
+                  model: {
+                    value: _vm.form.delivery_days_orders,
+                    callback: function($$v) {
+                      _vm.$set(_vm.form, "delivery_days_orders", $$v)
+                    },
+                    expression: "form.delivery_days_orders"
+                  }
+                })
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c("b-form-text", [
+              _vm._v(
+                "\n                            Select the delivery days for processing and choose the Product/Codes CSV.\n                        "
+              )
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "input-group input-group-md col-md-8 offset-md-2"
+              },
+              [
+                _vm._m(5),
+                _vm._v(" "),
+                _c("input", {
+                  staticClass: "form-control",
+                  attrs: { type: "file", name: "snackbox-orders" },
+                  on: { change: _vm.newOrderUpload }
+                })
+              ]
+            ),
+            _vm._v(" "),
+            _c("b-form-text", [
+              _vm._v(
+                "\n                            If you need to change the file, click cancel on the currently held one before making the change, especially if you wish to select a file with the same name!\n                        "
+              )
+            ]),
+            _vm._v(" "),
+            _vm._m(6),
+            _vm._v(" "),
+            _c(
+              "div",
+              [
+                _c(
+                  "b-button",
+                  { attrs: { href: "api/auto_process_snackboxes" } },
+                  [_vm._v(" Refresh Product Codes ")]
+                )
+              ],
+              1
+            )
+          ],
+          1
         )
       ])
     ])
@@ -73736,6 +73874,33 @@ var staticRenderFns = [
         _c("input", {
           staticClass: " col-md-2 col-sm-3 offset-md-5 btn btn-success",
           attrs: { type: "submit", value: "Upload Products and Codes CSV" }
+        })
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", [_c("b", [_vm._v("Delivery Days:")])])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", [_c("b", [_vm._v("Upload Snackbox Orders CSV:")])])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "submit-button input-group input-group-md" },
+      [
+        _c("input", {
+          staticClass: " col-md-2 col-sm-3 offset-md-5 btn btn-success",
+          attrs: { type: "submit", value: "Upload Snackbox Orders CSV" }
         })
       ]
     )

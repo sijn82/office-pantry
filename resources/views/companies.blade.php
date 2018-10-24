@@ -2,10 +2,6 @@
 @extends('welcome')
 @section('companies')
 
-<div>
-    <add-new-company></add-new-company>
-</div>
-
 <h3 class="route-header"> Display Companies </h3>
 
 <table>

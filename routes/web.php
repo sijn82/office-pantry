@@ -29,13 +29,18 @@ Route::get('import-file', function () {
 Route::get('import-products', function () {
     return view('process-snackboxes');
 });
+Route::get('companies/new', function () {
+    return view('new-company');
+});
 
 Route::get('import-file', 'WeekStartController@show')->name('import-file')->middleware('auth:office');
 // Route::get('import-products', 'SnackBoxController@upload_products_and_codes')->name('import-products')->middleware('auth:office');
 Route::get('display-routes', 'RoutesController@index');
-Route::get('snackboxes-multi-company', 'SnackBoxController@index_OP');
+// Route::get('snackboxes-multi-company', 'SnackBoxController@index_OP');
+Route::get('snackboxes-multi-company', 'SnackBoxController@auto_process_snackboxes');
 
 Route::get('companies', 'CompaniesController@index');
+
 // Route::get('products', 'ProductsController@index');
 
 // Route::get('/import', 'ImportController@getImport')->name('import');

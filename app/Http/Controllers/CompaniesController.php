@@ -137,9 +137,45 @@ class CompaniesController extends Controller
     public function create(Request $request) // $id will be added to this later when we have the space for it in the companies table.
     {
         //
-        dd($request->company_data);
-    }
+        // dd($request->company_data);
+        
+        // Set the array - maybe not even necessary.
+        $box_names_array = [];
+        
+        // The amount of fruit boxes associated with a company can vary and we don't really want to have an array of empty strings
+        // so if the $request->company_data['box_names']['box_blah'] is empty, strip the whole entry out.
+        // There is also a current max od 4 boxes but this can be easily increased if needed.
+        
+        $box_names_array[] = $request->company_data['box_names']['box_one'] ?? 'n/a';
+        $box_names_array[] = $request->company_data['box_names']['box_two'] ?? 'n/a';
+        $box_names_array[] = $request->company_data['box_names']['box_three'] ?? 'n/a';
+        $box_names_array[] = $request->company_data['box_names']['box_four'] ?? 'n/a';
 
+        $box_names_array_cleaned = array_filter($box_names_array, function ($value) {
+            return is_string($value) && 'n/a' !== trim($value);
+        });
+        
+         // dd($box_names_array_cleaned);
+        
+        $companyData = new Company();
+        $companyData->is_active = 'Active';
+        $companyData->invoice_name = trim($request->company_data['invoice_name']);
+        $companyData->route_name = trim($request->company_data['route_name']);
+        $companyData->box_names = $box_names_array_cleaned;
+        $companyData->primary_contact = $request->company_data['primary_contact'];
+        $companyData->primary_email = $request->company_data['primary_email'];
+        $companyData->secondary_email = $request->company_data['secondary_contact'];
+        $companyData->delivery_information = $request->company_data['delivery_information'];
+        $companyData->route_summary_address = $request->company_data['route_summary_address'];
+        $companyData->address_line_1 = $request->company_data['address_line_1'];
+        $companyData->address_line_2 = $request->company_data['address_line_2'];
+        $companyData->city = $request->company_data['city'];
+        $companyData->region = $request->company_data['region'];
+        $companyData->postcode = $request->company_data['postcode'];
+        $companyData->branding_theme = $request->company_data['branding_theme'];
+        $companyData->supplier = $request->company_data['supplier_options'];
+        $companyData->save();
+    }
 
     /**
      * Display the specified resource.

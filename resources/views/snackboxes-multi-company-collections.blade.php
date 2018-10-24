@@ -5,13 +5,11 @@
 <h3> Display Single Snackboxes Multiple Companies </h3>
 
 
-
+@php
+    $productNames = array_flip($product_list);
+@endphp
 
     @foreach($chunks as $chunk)
-
-    @php
-        $productNames = $product_list;
-    @endphp
 
     @php
      $g = 0;
@@ -20,7 +18,6 @@
     @endphp
 
     @foreach ($chunk as $key => $snackbox)
-
 
     @php (array) $group[$i] = $snackbox @endphp
     @php $i++ @endphp
@@ -45,21 +42,35 @@
             <tr>
                 <th>Product Name</th>
                 <th>Total</th>
-                <th>@if (isset($group[0][2])) {{ $group[0][2] }} @endif</th>
-                <th>@if (isset($group[1][2])) {{ $group[1][2] }} @endif</th>
-                <th>@if (isset($group[2][2])) {{ $group[2][2] }} @endif</th>
-                <th>@if (isset($group[3][2])) {{ $group[3][2] }} @endif</th>
+                <th>@if (isset($group[0]->company_name)) {{ $group[0]->company_name }} @endif</th>
+                <th>@if (isset($group[1]->company_name)) {{ $group[1]->company_name }} @endif</th>
+                <th>@if (isset($group[2]->company_name)) {{ $group[2]->company_name }} @endif</th>
+                <th>@if (isset($group[3]->company_name)) {{ $group[3]->company_name }} @endif</th>
                 <th>Packed?</th>
             </tr>
         </thead>
         <tbody>
+            @php
+            if (isset($group[0])) { (array) $group[0] = $group[0]->getAttributes(); }
+            if (isset($group[1])) { (array) $group[1] = $group[1]->getAttributes(); }
+            if (isset($group[2])) { (array) $group[2] = $group[2]->getAttributes(); }
+            if (isset($group[3])) { (array) $group[3] = $group[3]->getAttributes(); }
+            @endphp
 
-            @php while($h < 1) {
-                if (isset($group[0]) && is_array($group[0])) { $group[0] = array_slice($group[0], 3); };
-                if (isset($group[1]) && is_array($group[1])) { $group[1] = array_slice($group[1], 3); };
-                if (isset($group[2]) && is_array($group[2])) { $group[2] = array_slice($group[2], 3); };
-                if (isset($group[3]) && is_array($group[3])) { $group[3] = array_slice($group[3], 3); };
+            @php while($h <= 4) {
+                if (isset($group[0]) && is_array($group[0])) { $unwanted = array_shift($group[0]); };
+                if (isset($group[1]) && is_array($group[1])) { $unwanted = array_shift($group[1]); };
+                if (isset($group[2]) && is_array($group[2])) { $unwanted = array_shift($group[2]); };
+                if (isset($group[3]) && is_array($group[3])) { $unwanted = array_shift($group[3]); };
                 $h++;
+            }; @endphp
+
+            @php while($g < 2) {
+                if (isset($group[0]) && is_array($group[0])) { $unwanted = array_pop($group[0]); };
+                if (isset($group[1]) && is_array($group[1])) { $unwanted = array_pop($group[1]); };
+                if (isset($group[2]) && is_array($group[2])) { $unwanted = array_pop($group[2]); };
+                if (isset($group[3]) && is_array($group[3])) { $unwanted = array_pop($group[3]); };
+                $g++;
             }; @endphp
 
             @foreach ($group[0] as $key => $snack )
@@ -80,23 +91,19 @@
                 @php $snackFour = array_shift($group[3]); @endphp
                 @endif
 
-                @php $keyProductName = array_shift($productNames) @endphp
                 @php
                     $snackTotal = 0;
 
-                    (!empty($snackOne)) ? $snackTotal += $snackOne : $snackTotal += ($snackOne = 0);
-                    (!empty($snackTwo)) ? $snackTotal += $snackTwo : $snackTotal += ($snackTwo = 0);
-                    (!empty($snackThree)) ? $snackTotal += $snackThree : $snackTotal += ($snackThree = 0);
-                    (!empty($snackFour)) ? $snackTotal += $snackFour : $snackTotal += ($snackFour = 0);
-
+                    (isset($snackOne)) ? $snackTotal += $snackOne : $snackTotal += ($snackOne = 0);
+                    (isset($snackTwo)) ? $snackTotal += $snackTwo : $snackTotal += ($snackTwo = 0);
+                    (isset($snackThree)) ? $snackTotal += $snackThree : $snackTotal += ($snackThree = 0);
+                    (isset($snackFour)) ? $snackTotal += $snackFour : $snackTotal += ($snackFour = 0);
                 @endphp
 
-
                 @if ($snackTotal != 0)
-
+                @php $keyProductName = array_search($key, $productNames) ? array_search($key, $productNames) : $key; @endphp
                     <tr>
                         <td>{{ $keyProductName }}</td>
-                        @php unset($keyProductName) @endphp
                         <td>{{ $snackTotal }}</td>
 
                         <td>{{ $snackOne }}</td>
@@ -111,8 +118,7 @@
                         <td>{{ $snackFour }}</td>
                         @php unset($snackFour); @endphp
                     </tr>
-
-                    @endif
+                @endif
             @endforeach
 
         </tbody>
@@ -130,10 +136,6 @@
     margin_bottom: 80px;
     padding_left: 50px;
     padding_right: 50px;
-  }
-
-  .flex-center {
-    display: block;
   }
 
 </style>

@@ -54,10 +54,37 @@ class SnackBoxController extends Controller
         Log::channel('slack')->info($message);
     }
 
+    public function upload_snackbox_orders(Request $request)
+    {
+        // these are the additional parameters we'll use to save the file in the right place and with the right name, which is built further down in this function
+        // $delivery_days = $request->delivery_days ? 'wed-thur-fri' : '';
+        $delivery_days = $request->delivery_days;
+
+        // strip out the automatic base encoding with wrong mime after file upload form
+        $request_mime_fix = str_replace('data:application/vnd.ms-excel;base64,','',$request->snackbox_orders);
+        // now we can decode the remainder of the encoded data string
+        $requestcsv = base64_decode($request_mime_fix);
+        // however it now has some unwated unicode characters i.e the 'no break space' - (U+00A0) and use json_encode to make them visible
+        $csv_data_with_unicode_characters = json_encode($requestcsv);
+        // now they're no longer hidden characters, we can strip them out of the data
+        $csv_data_fixed = str_replace('\u00a0', ' ', $csv_data_with_unicode_characters);
+        // and return the file ready for storage
+        $ready_csv = json_decode($csv_data_fixed);
+
+        // this is how we determine where to put the file, these variables are populated with the $week_start variable at the top of this class
+        // and the request parameters attached to the form on submission.
+        Storage::put('public/snackboxes/snackbox_orders-' . $this->week_start . '-' . $delivery_days . '.csv', $ready_csv);
+
+        $message = 'Uploaded latest snackbox orders as of ' . $this->week_start . ' for delivery on ' . $delivery_days;
+
+        Log::channel('slack')->info($message);
+    }
+
     public function auto_process_snackboxes()
     {
 
-            // $delivery_days = $request->delivery_days;
+                // this will pull in the product name/code information so long as the file exists to be read.
+                // it is then saved to a $product_list variable and passed to the template.
 
               if (($handle = fopen('../storage/app/public/snackboxes/productcodes-' . $this->week_start . '-' . $this->delivery_days . '.csv', 'r')) !== FALSE) {
 
@@ -68,14 +95,53 @@ class SnackBoxController extends Controller
 
                 fclose ($handle);
 
-                dd($product_list);
+                // dd($product_list);
               }
+
+                // Next we need to do the same with this week's snackbox data which needs to be processed and spat out into the appropriate templates.
+
+                if (($handle = fopen('../storage/app/public/snackboxes/snackbox_orders-' . $this->week_start . '-' . $this->delivery_days . '.csv', 'r')) !== FALSE) {
+
+                      while (($data = fgetcsv ($handle, 1000, ',')) !== FALSE) {
+
+
+                          $company_order = $data;
+                        
+                              
+                               if ($company_order[0] == 'OP' && $company_order[1] > 1) {
+
+                                   $snd_OP_multipleBoxes[] = $company_order;
+                               }
+                               elseif ($company_order[0] == 'OP' && $company_order[1] = 1) {
+
+                                   $snd_OP_singleBoxes[] = $company_order;
+                               }
+                               elseif ($company_order[0] == 'OP' && $company_order[1] = 0) {
+
+                                   $snd_OP_uniqueBoxes[] = $company_order;
+                               }
+
+                          
+                      }
+
+                  fclose ($handle);
+
+                  // dd($product_list);
+                  // dd($snd_OP_singleBoxes);
+                }
+
+              // $chunks = [];
+              $chunks = array_chunk($snd_OP_singleBoxes, 4);
+              // $chunks = $chunks->all();
+              
+
+              return view('snackboxes-multi-company')->with('product_list', $product_list)->with('chunks', $chunks);
 
         // Get week start, delivered by, no. of boxes (to split between), company name and columns of data to organise.
         $company_orders; // This is the csv file we'll import.
 
         // This is the current array of product codes, which will vary from week to week but always match up to the columns after the company name (in $company_orders)
-        $product_list; // This will also be imported from a seperate csv file.
+        // $product_list; // This will also be imported from a seperate csv file.
 
         // We know that any items coming after $company_orders[5+]
         // $company_orders[0] = ID,
