@@ -42,7 +42,7 @@ class RoutesController extends Controller
     {
         // $this->week_start = week_start($this->week_start);
         // return (new Exports\RoutesExport($this->week_start))->download('routesheets.xlsx');
-        return \Excel::download(new Exports\RoutesExport($this->week_start), 'routelists' . $this->week_start . '.xlsx');
+        return dd(\Excel::download(new Exports\RoutesExport($this->week_start), 'routelists' . $this->week_start . '.xlsx'));
     }
 
 
@@ -393,7 +393,7 @@ class RoutesController extends Controller
                   }
             }
         }
-        
+
         $title = "REJIGGED ROUTING - _rerouting for week commencing_ - $this->week_start";
         Log::channel('slack')->info($title);
         Log::channel('slack')->info($regular_rejig);
@@ -822,10 +822,10 @@ class RoutesController extends Controller
       // This is limited to only files which have been recently updated to the new Week Start.
       // Until the $variable can be updated manually (through users), I will need to remember to adjust it here (top of function, as parameter) before running the update-routing
       // $fruitOrderingDocuments = FruitOrderingDocument::where('week_start', $this->week_start)->get();
-      
+
       $fruitOrderingDocuments = ($this->delivery_days == 'mon-tue') ? FruitOrderingDocument::where('week_start', $this->week_start)->WhereIn('delivery_day', ['Monday', 'Tuesday'])->get()
                                                                     : FruitOrderingDocument::where('week_start', $this->week_start)->WhereIn('delivery_day', ['Wednesday', 'Thursday', 'Friday'])->get();
-      
+
       // dd($fruitOrderingDocuments);
           // Now iterate through the new FOD data
         foreach($fruitOrderingDocuments as $fruitOrderingDocument) {

@@ -23,6 +23,9 @@ Route::get('products', function () {
 Route::get('routes', function () {
     return view('routes');
 });
+Route::get('berry-picklists', function () {
+    return view('berry-picklists');
+});
 Route::get('import-file', function () {
     return view('import-file');
 });
@@ -42,7 +45,18 @@ Route::get('snackboxes-multi-company', 'SnackBoxController@auto_process_snackbox
 Route::get('companies', 'CompaniesController@index');
 
 // Route::get('products', 'ProductsController@index');
+Route::group(['middleware' => 'web'], function () {
+    Route::get('auto_process_snackboxes', 'SnackBoxController@auto_process_snackboxes');
 
+    Route::get('export-snackbox-op-multicompany', 'SnackBoxController@download_snackbox_op_multicompany')->name('SnackboxOPMultiCompany');
+    Route::get('export-snackbox-dpd-multicompany', 'SnackBoxController@download_snackbox_dpd_multicompany')->name('SnackboxDPDMultiCompany');
+    Route::get('export-snackbox-apc-multicompany', 'SnackBoxController@download_snackbox_apc_multicompany')->name('SnackboxAPCMultiCompany');
+
+    Route::get('export-snackbox-op-singlecompany', 'SnackBoxController@download_snackbox_op_singlecompany')->name('SnackboxOPSingleCompany');
+    Route::get('export-snackbox-dpd-singlecompany', 'SnackBoxController@download_snackbox_dpd_singlecompany')->name('SnackboxDPDSingleCompany');
+    Route::get('export-snackbox-apc-singlecompany', 'SnackBoxController@download_snackbox_apc_singlecompany')->name('SnackboxAPCSingleCompany');
+
+});
 // Route::get('/import', 'ImportController@getImport')->name('import');
 // Route::post('/import_parse', 'ImportController@parseImport')->name('import_parse');
 // Route::post('/import_process', 'ImportController@processImport')->name('import_process');

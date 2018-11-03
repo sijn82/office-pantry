@@ -119,6 +119,8 @@ class FruitOrderingDocumentController extends Controller
                                                             'Paddle (FAO Yago Cano)' => 'Paddle',
                                                             'Charlotte Tilbury - We Work (FAO Sophie Kendrick)' => 'Charlotte Tilbury - We Work',
                                                             'Juro (FAO Adrienne)' => 'Juro',
+                                                            'Home Office Eaton House (FAO Mike Jarrett)' => 'Home Office Eaton House',
+                                                            
                                                        ];
 
                          // If $newRoute->company_name doesn't match a Company route_name, check to see if this value matches a Company route_name exception.

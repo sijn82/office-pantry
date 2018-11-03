@@ -5,16 +5,18 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 
+use Session;
+
 use Illuminate\Http\Request;
 use App\SnackBox;
 use App\WeekStart;
 
+
+
+
 class SnackBoxController extends Controller
 {
-
-
         protected $week_start;
-
 
         public function __construct()
         {
@@ -23,6 +25,46 @@ class SnackBoxController extends Controller
             $this->week_start = $week_start[0]['current'];
             $this->delivery_days = $week_start[0]['delivery_days'];
 
+        }
+        // There are a couple of options here, use the same function with a switch statement value based on the button pressed, or as I'm going to do for now, create several functions
+        // one to handle each scenario.
+        public function download_snackbox_op_singlecompany()
+        {
+            // $snackbox = session()->get('snackbox_OP_multicompany');
+            // $product_list = session()->get('snackbox_product_list');
+            return \Excel::download(new Exports\SnackboxOPSingleCompanyExport, 'snackboxesOPSingleCompany' . $this->week_start . '.xlsx');
+        }
+        public function download_snackbox_dpd_singlecompany()
+        {
+            // $snackbox = session()->get('snackbox_OP_multicompany');
+            // $product_list = session()->get('snackbox_product_list');
+            return \Excel::download(new Exports\SnackboxDPDSingleCompanyExport, 'snackboxesOPSingleCompany' . $this->week_start . '.xlsx');
+        }
+        public function download_snackbox_apc_singlecompany()
+        {
+            // $snackbox = session()->get('snackbox_OP_multicompany');
+            // $product_list = session()->get('snackbox_product_list');
+            return \Excel::download(new Exports\SnackboxAPCSingleCompanyExport, 'snackboxesOPSingleCompany' . $this->week_start . '.xlsx');
+        }
+        // There are a couple of options here, use the same function with a switch statement value based on the button pressed, or as I'm going to do for now, create several functions
+        // one to handle each scenario.
+        public function download_snackbox_op_multicompany()
+        {
+            // $snackbox = session()->get('snackbox_OP_multicompany');
+            // $product_list = session()->get('snackbox_product_list');
+            return \Excel::download(new Exports\SnackboxOPMultiCompanyExport, 'snackboxesOPMultiCompany' . $this->week_start . '.xlsx');
+        }
+        public function download_snackbox_dpd_multicompany()
+        {
+            // $snackbox = session()->get('snackbox_OP_multicompany');
+            // $product_list = session()->get('snackbox_product_list');
+            return \Excel::download(new Exports\SnackboxDPDMultiCompanyExport, 'snackboxesDPDMultiCompany' . $this->week_start . '.xlsx');
+        }
+        public function download_snackbox_apc_multicompany()
+        {
+            // $snackbox = session()->get('snackbox_OP_multicompany');
+            // $product_list = session()->get('snackbox_product_list');
+            return \Excel::download(new Exports\SnackboxAPCMultiCompanyExport, 'snackboxesDPDMultiCompany' . $this->week_start . '.xlsx');
         }
 
     // This is an attempt to send the data for snacks and drinks to the templates without troubling a database for anything.
@@ -80,9 +122,9 @@ class SnackBoxController extends Controller
         Log::channel('slack')->info($message);
     }
 
+    // This function primarily uploads the snackbox/drinks orders and latest product lines, seperating them into groups and saving the collections to session variables.
     public function auto_process_snackboxes()
     {
-
                 // this will pull in the product name/code information so long as the file exists to be read.
                 // it is then saved to a $product_list variable and passed to the template.
 
@@ -104,77 +146,60 @@ class SnackBoxController extends Controller
 
                       while (($data = fgetcsv ($handle, 1000, ',')) !== FALSE) {
 
+                            $company_order = $data;
 
-                          $company_order = $data;
-                        
-                              
-                               if ($company_order[0] == 'OP' && $company_order[1] > 1) {
+                            // I don't like how anti DRY this seems but neither do I think a switch case will work or be more readable?
 
-                                   $snd_OP_multipleBoxes[] = $company_order;
-                               }
-                               elseif ($company_order[0] == 'OP' && $company_order[1] = 1) {
+                            // if delivered by Office Pantry
+                            if      ($company_order[0] == 'OP' && $company_order[1] > 1) { $snd_OP_multipleBoxes[] = $company_order; }
+                            elseif  ($company_order[0] == 'OP' && $company_order[1] = 1) { $snd_OP_singleBoxes[] = $company_order; }
+                            elseif  ($company_order[0] == 'OP' && $company_order[1] = 0) { $snd_OP_uniqueBoxes[] = $company_order; }
 
-                                   $snd_OP_singleBoxes[] = $company_order;
-                               }
-                               elseif ($company_order[0] == 'OP' && $company_order[1] = 0) {
+                            // if delivered by DPD
+                            if      ($company_order[0] == 'DPD' && $company_order[1] > 1) { $snd_DPD_multipleBoxes[] = $company_order; }
+                            elseif  ($company_order[0] == 'DPD' && $company_order[1] = 1) { $snd_DPD_singleBoxes[] = $company_order; }
+                            elseif  ($company_order[0] == 'DPD' && $company_order[1] = 0) { $snd_DPD_uniqueBoxes[] = $company_order; }
 
-                                   $snd_OP_uniqueBoxes[] = $company_order;
-                               }
-
-                          
+                            // if delivered by APC
+                            if      ($company_order[0] == 'APC' && $company_order[1] > 1) { $snd_APC_multipleBoxes[] = $company_order; }
+                            elseif  ($company_order[0] == 'APC' && $company_order[1] = 1) { $snd_APC_singleBoxes[] = $company_order; }
+                            elseif  ($company_order[0] == 'APC' && $company_order[1] = 0) { $snd_APC_uniqueBoxes[] = $company_order; }
                       }
-
                   fclose ($handle);
-
-                  // dd($product_list);
-                  // dd($snd_OP_singleBoxes);
                 }
 
               // $chunks = [];
-              $chunks = array_chunk($snd_OP_singleBoxes, 4);
-              // $chunks = $chunks->all();
-              
 
-              return view('snackboxes-multi-company')->with('product_list', $product_list)->with('chunks', $chunks);
+              // These 3 arrays need chunking into groups of four, so we can loop through them outputting 4 company orders per template.
+              $snd_OP_singleBoxes_chunks = ($snd_OP_singleBoxes) ? array_chunk($snd_OP_singleBoxes, 4) : 'None for this week';
+              $snd_DPD_singleBoxes_chunks = ($snd_DPD_singleBoxes) ? array_chunk($snd_DPD_singleBoxes, 4) : 'None for this week';
+              $snd_APC_singleBoxes_chunks = ($snd_APC_singleBoxes) ? array_chunk($snd_APC_singleBoxes, 4) : 'None for this week';
 
-        // Get week start, delivered by, no. of boxes (to split between), company name and columns of data to organise.
-        $company_orders; // This is the csv file we'll import.
+              // These 3 are for single box orders, which get grouped into 4's ready for the multicompany template.
+              session()->put('snackbox_OP_multicompany', $snd_OP_singleBoxes_chunks);
+              session()->put('snackbox_DPD_multicompany', $snd_DPD_singleBoxes_chunks);
+              session()->put('snackbox_APC_multicompany', $snd_APC_singleBoxes_chunks);
 
-        // This is the current array of product codes, which will vary from week to week but always match up to the columns after the company name (in $company_orders)
-        // $product_list; // This will also be imported from a seperate csv file.
+              // These 3 are for multiple box orders, which get a template of their own and the order split between the amount of boxes they require.
+              if (!empty($snd_OP_multipleBoxes))     { session()->put('snackbox_OP_singlecompany', $snd_OP_multipleBoxes);      } else { session()->put('snackbox_OP_singlecompany', 'None for this week'); };
+              if (!empty($snd_DPD_multipleBoxes))    { session()->put('snackbox_DPD_singlecompany', $snd_DPD_multipleBoxes);    } else { session()->put('snackbox_DPD_singlecompany', 'None for this week'); };
+              if (!empty($snd_APC_multipleBoxes))    { session()->put('snackbox_APC_singlecompany', $snd_APC_multipleBoxes);    } else { session()->put('snackbox_APC_singlecompany', 'None for this week'); };
 
-        // We know that any items coming after $company_orders[5+]
-        // $company_orders[0] = ID,
-        // $company_orders[1] = week_start,
-        // $company_orders[2] = delivered_by,
-        // $company_orders[3] = no of boxes (split between),
-        // $company_orders[4] = company_name
-        // are product codes directly correllating to the order of $product_list.
+              // These 3 boxes are for unique (drink only) orders, I have variables for OP and DPD but I may only need the APC one.
+              if (!empty($snd_OP_uniqueBoxes))      { session()->put('snackbox_OP_unique', $snd_OP_uniqueBoxes);        } else { session()->put('snackbox_OP_unique', 'None for this week'); };
+              if (!empty($snd_DPD_uniqueBoxes))     { session()->put('snackbox_DPD_unique', $snd_DPD_uniqueBoxes);      } else { session()->put('snackbox_DPD_unique', 'None for this week'); };
+              if (!empty($snd_APC_uniqueBoxes))     { session()->put('snackbox_APC_unique', $snd_APC_uniqueBoxes);      } else { session()->put('snackbox_APC_unique', 'None for this week'); };
 
-        // So we can create $product_list[0] => $company_orders[5] as a key value pair.
+              // This is for the latest product list, we'll be matching these values up to the orders for each of the above variables.
+              session()->put('snackbox_product_list', $product_list);
 
-        // Or is that unnecessary?  Instead we can have a key => value pair of product code => product name saved as $product_list
+              // dd(session()->all());
 
+              // This redirect was more for testing purposes as I want to redirect the user back to the upload snackbox and products page, with buttons to run/output each order option.
+              return redirect()->route('SnackboxOPMultiCompany');
 
-        // $products = uploaded csv file ($products[0] = key, $products[1 = value])
-        // $product_list = array_combine($products[0], $products[1]);
-        //
-        // foreach ($company_orders as $company_order)
-        // {
-        //      if ($company_order[2] == 'OP' && $company_order[3] > 1) {
-        //
-        //          $snd_OP_multipleBoxes .= $company_order;
-        //      }
-        //      elseif ($company_order[2] == 'OP' && $company_order[3] = 1) {
-        //
-        //          $snd_OP_singleBoxes .= $company_order;
-        //      }
-        //      elseif ($company_order[2] == 'OP' && $company_order[3] = 0) {
-        //
-        //          $snd_OP_uniqueBoxes .= $company_order;
-        //      }
-        //
-        // }
+              // This was also for testing purposes, so I could see the data being produced before exporting the results as an excel file.
+              // return view('snackboxes-multi-company')->with('product_list', $product_list)->with('chunks', $snd_OP_singleBoxes_chunks);
 
     }
 

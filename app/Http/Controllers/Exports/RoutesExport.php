@@ -46,19 +46,19 @@ class RoutesExport implements WithMultipleSheets
     public function sheets(): array
     {
         $correctOrderMonTue =   [
-                                        '14 - Sunday Route',
+                                        '14 - Sunday Route', 
                                         '13 - Thames Valley II',
-                                        '12 - Thames Valley I',
+                                        '12 - Thames Valley I', // Serviced II
                                         '11 - West Central',
                                         '10 - Michael',
                                         '09 - Gus',
                                         '08 - South London',
                                         '07 - Catalin',
-                                        '06 - Stratford',
-                                        '05 - City',
+                                        '06 - Stratford', // soon to be city
+                                        '05 - City', // soon to be stratford
                                         '04 - M25 North',
                                         '03 - M25 South',
-                                        '02 - Serviced II',
+                                        '02 - Serviced II', // Thames Valley II (West London Mo)
                                         '01 - Serviced I',
                                         '00 - Tuesday Route Serviced',
                                         '000 - Tuesday Route',
@@ -92,7 +92,7 @@ class RoutesExport implements WithMultipleSheets
 
                 $sheets[] = new RoutesCollection($routesolo, $this->week_starting);
             }
-
+            // dd($sheets);
             return $sheets;
 
         } else {

@@ -1,11 +1,5 @@
-@extends('welcome')
-@section('snackboxes-multi-company')
 
-<div>
-<h3> Display Single Snackboxes Multiple Companies </h3>
-
-
-
+<h3 colspan='3'>Single Snackboxes, Multiple Companies Template </h3><br>
 
 @foreach($chunks as $chunk)
 
@@ -21,16 +15,15 @@
 
     @foreach ($chunk as $key => $snackbox)
 
-
-    @php (array) $group[$i] = $snackbox @endphp
-    @php $i++ @endphp
+        @php (array) $group[$i] = $snackbox @endphp
+        @php $i++ @endphp
+        
     @endforeach
-
 
     <table>
         <thead>
             <tr>
-                <th> Packed By: ..................... </th>
+                <th colspan='3'> Packed By: ..................... </th>
                 <th></th>
             </tr>
             <tr>
@@ -88,13 +81,12 @@
                     (!empty($snackTwo)) ? $snackTotal += $snackTwo : $snackTotal += ($snackTwo = 0);
                     (!empty($snackThree)) ? $snackTotal += $snackThree : $snackTotal += ($snackThree = 0);
                     (!empty($snackFour)) ? $snackTotal += $snackFour : $snackTotal += ($snackFour = 0);
-
                 @endphp
 
 
                 @if ($snackTotal != 0)
 
-                    <tr>
+                    <tr bgcolor="#ddd">
                         <td>{{ $keyProductName }}</td>
                         @php unset($keyProductName) @endphp
                         <td>{{ $snackTotal }}</td>
@@ -110,34 +102,13 @@
 
                         <td>{{ $snackFour }}</td>
                         @php unset($snackFour); @endphp
+                        <td> [  ] </td>
                     </tr>
 
-                    @endif
+                @endif
             @endforeach
 
         </tbody>
     </table>
                 @php unset($group); @endphp
-        @endforeach
-</div>
-@endsection
-
-@section('routing_assets')
-<style>
-
-  h3.route_header {
-    margin_top: 30px;
-    margin_bottom: 80px;
-    padding_left: 50px;
-    padding_right: 50px;
-  }
-
-  .flex-center {
-    display: block;
-  }
-  tr:nth-child(even) td {
-     background: grey;
-  }
-
-</style>
-@endsection
+@endforeach

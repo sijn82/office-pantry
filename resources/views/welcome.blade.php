@@ -116,7 +116,7 @@
                     @yield('products')
                     @yield('companies')
                      <!-- <products></products> -->
-                     <example-component></example-component>
+                     <!-- <example-component></example-component> -->
                  </div>
             </div>
         </div>

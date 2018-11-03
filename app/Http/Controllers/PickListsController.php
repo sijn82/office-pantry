@@ -51,14 +51,43 @@ class PickListsController extends Controller
         return \Excel::download(new Exports\PicklistsExportFull($this->week_start), 'picklists-full' . $this->week_start . '.xlsx');
     }
 
-  public function export()
-  {
+    public function export()
+    {
 
     // return (new PicklistsExport)->download('invoices.xlsx');
     // return \Excel::export(new Export);
     return \Excel::download(new Exports\PicklistsExport($this->week_start), 'picklists' . $this->week_start . '.xlsx');
 
-  }
+    }
+    public function berry_export()
+    {
+
+    // return (new PicklistsExport)->download('invoices.xlsx');
+    // return \Excel::export(new Export);
+    return \Excel::download(new Exports\BerryPicklistsExport($this->week_start), 'berry-picklists' . $this->week_start . '.xlsx');
+
+    }
+
+    public function berry_totals()
+    {
+        // Grab the picklists for this week, after the routes have been run to update them.
+        $picklists_with_berries_monday = Picklist::where('week_start', $this->week_start)->where('seasonal_berries', '>', 0)->OrderBy('delivery_day')->orderBy('assigned_to', 'desc')->get();
+        $grouped_by_route_picklists_with_berries = $picklists_with_berries_monday->groupBy('assigned_to', 'desc');
+        // dd($picklists_with_berries);
+        // dd($grouped_by_route_picklists_with_berries);
+        
+        
+        // each distinct route out for delivery this week.
+       return view('exports.berry-picklists', [
+                   'week_start'         =>   $this->week_start,
+                   'routes'             =>   $grouped_by_route_picklists_with_berries
+               ]);
+
+        // dd($assigned_picklist_routes);
+
+
+    }
+
 
     /**
      * Display a listing of the resource.
