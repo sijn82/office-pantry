@@ -43,13 +43,13 @@
             <td></td>
         </tr>
 
-        @foreach ($route as $picklist)
+        @foreach ($route as $row => $picklist)
 
         @php
             $totalBerries += $picklist->seasonal_berries;
         @endphp
 
-        <tr style="background-color: #93DA38";>
+        <tr>
             <td></td>
             <td>{{ $picklist->company_name }}</td>
             <td>{{ $picklist->seasonal_berries }}</td>

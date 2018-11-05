@@ -75,12 +75,13 @@ class PickListsController extends Controller
         $grouped_by_route_picklists_with_berries = $picklists_with_berries_monday->groupBy('assigned_to', 'desc');
         // dd($picklists_with_berries);
         // dd($grouped_by_route_picklists_with_berries);
-        
-        
+
+
         // each distinct route out for delivery this week.
        return view('exports.berry-picklists', [
                    'week_start'         =>   $this->week_start,
-                   'routes'             =>   $grouped_by_route_picklists_with_berries
+                   'routes'             =>   $grouped_by_route_picklists_with_berries,
+                   'route_day'          =>   'Monday'
                ]);
 
         // dd($assigned_picklist_routes);
@@ -216,7 +217,7 @@ class PickListsController extends Controller
                     //                                         'Lloyds (London - 25 Gresham Street - FAO James Gamble / Maryn Shone / Ben Pryce)' => 'Lloyds (London - 25 Gresham Street)',
                     //                                         'Lloyds (London - Old Broad Street - FAO Jamie Mcreesh / Daniel Lee / Parul Patel)' => 'Lloyds (London - Old Broad Street)'
                     //                                     ];
-                    // 
+                    //
                     //       // If $newRoute->company_name doesn't match a Company route_name, check to see if this value matches a Company route_name exception.
                     //       // These are some of the rare cases where the route name is tailored for the delivery with an FAO attached.
                     //     if (array_search($newRoute->company_name, $company_route_name_exceptions)) {
@@ -231,9 +232,9 @@ class PickListsController extends Controller
                          { // i.e Awin would be but Awin Banana Box (rightly) wouldn't.
                                 $company_picklist_box_names = Company::where('route_name', $newRoute->company_name)->pluck('box_names')->all();
                                 var_dump($company_picklist_box_names);
-                                
+
                                 $company_picklist_box_names = empty($company_picklist_box_names) ? [[]] : $company_picklist_box_names;
-                                
+
                                 // now we need to check the company tables for any associated picklist boxes that match entries out for delivery this week
                                 foreach ($company_picklist_box_names[0] as $company_picklist_box_name) {
                                         echo $company_picklist_box_name . '<br>';

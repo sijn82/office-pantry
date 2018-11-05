@@ -47,7 +47,7 @@ Route::get('rejig-routing', 'RoutesController@updateRouteAndPosition');
 // Not sure this one will be working properly anymore now that I'm using grouped routing names rather than a mirror of the picklists. - Edit: Actually it looks like I was omnipotent, need to test it.
 Route::get('update-picklists-with-routes', 'PickListsController@updatePicklistWithRejiggedRoutes');
 Route::get('reorder-seasonal-berries', 'PickListsController@reorder_seasonal_berries');
-// Route::get('seasonal-berries-breakdown', 'PickListsController@berry_totals');
+Route::get('seasonal-berries-picklists', 'PickListsController@berry_totals');
 Route::get('seasonal-berries-breakdown', 'PickListsController@berry_export');
 
 // This is now defunct, will remove at some point when I clean the code up generally.

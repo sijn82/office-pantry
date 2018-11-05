@@ -42,7 +42,7 @@ class RoutesController extends Controller
     {
         // $this->week_start = week_start($this->week_start);
         // return (new Exports\RoutesExport($this->week_start))->download('routesheets.xlsx');
-        return dd(\Excel::download(new Exports\RoutesExport($this->week_start), 'routelists' . $this->week_start . '.xlsx'));
+        return \Excel::download(new Exports\RoutesExport($this->week_start), 'routelists' . $this->week_start . '.xlsx');
     }
 
 
