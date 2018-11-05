@@ -48,21 +48,21 @@ class FruitOrderingDocumentController extends Controller
     {
 
     }
-    
+
     public function reset()
     {
-        // This function is to strip out all the existing values from the FOD.  We have no need to keep them after processing with the current system, 
-        // and now the site is live we should be more concerned with using unnecessary rows in the database. 
-        
+        // This function is to strip out all the existing values from the FOD.  We have no need to keep them after processing with the current system,
+        // and now the site is live we should be more concerned with using unnecessary rows in the database.
+
         $message = 'FOD entries deleted.';
-        
+
         $fods = FruitOrderingDocument::all();
         // dd($routes);
         foreach ($fods as $fod)
         {
             $fod->delete();
         }
-        
+
         Log::channel('slack')->info($message);
 
     }
@@ -118,9 +118,10 @@ class FruitOrderingDocumentController extends Controller
                                                             'Gu (Noble Foods - FAO Ali Heal)' => 'Gu (Noble Foods)',
                                                             'Paddle (FAO Yago Cano)' => 'Paddle',
                                                             'Charlotte Tilbury - We Work (FAO Sophie Kendrick)' => 'Charlotte Tilbury - We Work',
+                                                            'Charlotte Tilbury (FAO Sophie Kendrick)' => 'Charlotte Tilbury',
                                                             'Juro (FAO Adrienne)' => 'Juro',
                                                             'Home Office Eaton House (FAO Mike Jarrett)' => 'Home Office Eaton House',
-                                                            
+
                                                        ];
 
                          // If $newRoute->company_name doesn't match a Company route_name, check to see if this value matches a Company route_name exception.
@@ -203,9 +204,9 @@ class FruitOrderingDocumentController extends Controller
       // if (($handle = fopen(public_path() . '/fod/fod-' . $this->week_start . '-inc-zeros-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
 
       // if (($handle = fopen(public_path() . '/fod/fod-' . $this->week_start . '-inc-zeros-wed-thur-fri-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
-      // 
+      //
       //   while (($data = fgetcsv ($handle, 1000, ',')) !== FALSE) {
-      // 
+      //
       //       $company_route_name_exceptions =    [
       //                                              'Legal and General London (FAO Simon Chong)' => 'Legal and General London',
       //                                              'London Business School (FAO Victoria Gilbert)' => 'London Business School',
@@ -222,20 +223,20 @@ class FruitOrderingDocumentController extends Controller
       //                                              'Paddle (FAO Yago Cano)' => 'Paddle',
       //                                              'Charlotte Tilbury (FAO Sophie Kendrick)' => 'Charlotte Tilbury - We Work',
       //                                          ];
-      // 
+      //
       //            // If $newRoute->company_name doesn't match a Company route_name, check to see if this value matches a Company route_name exception.
       //            // These are some of the rare cases where the route name is tailored for the delivery with an FAO attached.
       //       if (array_search($data[1], $company_route_name_exceptions)) {
       //                  // if it finds a matching value, it returns the associated key.
       //                  $data[1] = array_search($data[1], $company_route_name_exceptions);
       //       }
-      // 
+      //
       //       $company_name_encoded = json_encode($data[1]);
       //       $company_name_fixed = str_replace('\u00a0', ' ', $company_name_encoded);
       //       $company_name = json_decode($company_name_fixed);
-      // 
+      //
       //     echo $company_name . ' is ' . strlen($company_name) . ' characters long. <br>';
-      // 
+      //
       //     $fodData =  new FruitOrderingDocument();
       //     $fodData->week_start = $data[0];
       //     $fodData->company_name = trim($company_name);
@@ -282,7 +283,7 @@ class FruitOrderingDocumentController extends Controller
       //     // $fodData->snack_boxes = $data[41];
       //     $fodData->delivery_day = $data[42];
       //     $fodData->save();
-      // 
+      //
       //   }
       //   fclose ($handle);
       // }

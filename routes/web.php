@@ -24,7 +24,7 @@ Route::get('routes', function () {
     return view('routes');
 });
 Route::get('berry-picklists', function () {
-    return view('berry-picklists');
+    return view('exports.berry-picklists');
 });
 Route::get('import-file', function () {
     return view('import-file');

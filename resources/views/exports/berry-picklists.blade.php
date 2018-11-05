@@ -27,13 +27,13 @@
       </tr>
     </thead>
     <tbody>
-        
+
         @php
             // dd($routes);
         @endphp
-        
+
     @foreach ($routes as $key => $route)
-    
+
     @php
         $totalBerries = 0;
     @endphp
@@ -46,21 +46,15 @@
         @foreach ($route as $picklist)
 
         @php
-            $totalBerries += $picklist->seasonal_berries; 
-            $value = 1;
+            $totalBerries += $picklist->seasonal_berries;
         @endphp
-        
-        <tr>
+
+        <tr style="background-color: #93DA38";>
             <td></td>
-            @if ($value % 2 == 0)
-                <td style="background-color: #93DA38";>{{ $picklist->company_name }}</td>
-            @else
-                <td>{{ $picklist->company_name }}</td>
-             @endif
+            <td>{{ $picklist->company_name }}</td>
             <td>{{ $picklist->seasonal_berries }}</td>
             <td></td>
         </tr>
-        @php $value++; @endphp
         @endforeach
         <tr>
             <td></td>
