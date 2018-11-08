@@ -57,6 +57,20 @@ class SnackBoxController extends Controller
             return \Excel::download(new Exports\SnackboxAPCMultiCompanyExport, 'snackboxesDPDMultiCompany' . $this->week_start . '.xlsx');
         }
 
+        // Unique Box, Multiple Companies
+        public function download_snackbox_op_unique()
+        {
+            return \Excel::download(new Exports\SnackboxOPUniqueExport, 'snackboxesOPUnique' . $this->week_start . '.xlsx');
+        }
+        public function download_snackbox_dpd_unique()
+        {
+            return \Excel::download(new Exports\SnackboxDPDUniqueExport, 'snackboxesDPDUnique' . $this->week_start . '.xlsx');
+        }
+        public function download_snackbox_apc_unique()
+        {
+            return \Excel::download(new Exports\SnackboxAPCUniqueExport, 'snackboxesDPDUnique' . $this->week_start . '.xlsx');
+        }
+
     // This is an attempt to send the data for snacks and drinks to the templates without troubling a database for anything.
     // This is to allow the product list to be dynamic and not hard coded, otherwise weekly code changes would be required and the database table rebuilt each time.
 
