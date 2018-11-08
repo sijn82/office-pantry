@@ -36,11 +36,11 @@ class SnackBoxController extends Controller
         }
         public function download_snackbox_dpd_singlecompany()
         {
-            return \Excel::download(new Exports\SnackboxDPDSingleCompanyExport, 'snackboxesOPSingleCompany' . $this->week_start . '.xlsx');
+            return \Excel::download(new Exports\SnackboxDPDSingleCompanyExport, 'snackboxesDPDSingleCompany' . $this->week_start . '.xlsx');
         }
         public function download_snackbox_apc_singlecompany()
         {
-            return \Excel::download(new Exports\SnackboxAPCSingleCompanyExport, 'snackboxesOPSingleCompany' . $this->week_start . '.xlsx');
+            return \Excel::download(new Exports\SnackboxAPCSingleCompanyExport, 'snackboxesAPCSingleCompany' . $this->week_start . '.xlsx');
         }
 
         // Single Box, Multiple Companies
@@ -54,7 +54,7 @@ class SnackBoxController extends Controller
         }
         public function download_snackbox_apc_multicompany()
         {
-            return \Excel::download(new Exports\SnackboxAPCMultiCompanyExport, 'snackboxesDPDMultiCompany' . $this->week_start . '.xlsx');
+            return \Excel::download(new Exports\SnackboxAPCMultiCompanyExport, 'snackboxesAPCMultiCompany' . $this->week_start . '.xlsx');
         }
 
         // Unique Box, Multiple Companies
@@ -68,7 +68,7 @@ class SnackBoxController extends Controller
         }
         public function download_snackbox_apc_unique()
         {
-            return \Excel::download(new Exports\SnackboxAPCUniqueExport, 'snackboxesDPDUnique' . $this->week_start . '.xlsx');
+            return \Excel::download(new Exports\SnackboxAPCUniqueExport, 'snackboxesAPCUnique' . $this->week_start . '.xlsx');
         }
 
     // This is an attempt to send the data for snacks and drinks to the templates without troubling a database for anything.

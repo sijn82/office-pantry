@@ -56,6 +56,10 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('export-snackbox-dpd-singlecompany', 'SnackBoxController@download_snackbox_dpd_singlecompany')->name('SnackboxDPDSingleCompany');
     Route::get('export-snackbox-apc-singlecompany', 'SnackBoxController@download_snackbox_apc_singlecompany')->name('SnackboxAPCSingleCompany');
 
+    Route::get('export-snackbox-op-unique', 'SnackBoxController@download_snackbox_op_unique')->name('SnackboxOPUnique');
+    Route::get('export-snackbox-dpd-unique', 'SnackBoxController@download_snackbox_dpd_unique')->name('SnackboxDPDUnique');
+    Route::get('export-snackbox-apc-unique', 'SnackBoxController@download_snackbox_apc_unique')->name('SnackboxAPCUnique');
+
 });
 // Route::get('/import', 'ImportController@getImport')->name('import');
 // Route::post('/import_parse', 'ImportController@parseImport')->name('import_parse');
