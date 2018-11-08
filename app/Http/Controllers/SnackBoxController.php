@@ -179,10 +179,18 @@ class SnackBoxController extends Controller
               $snd_DPD_singleBoxes_chunks = (!empty($snd_DPD_singleBoxes)) ? array_chunk($snd_DPD_singleBoxes, 4) : 'None for this week';
               $snd_APC_singleBoxes_chunks = (!empty($snd_APC_singleBoxes)) ? array_chunk($snd_APC_singleBoxes, 4) : 'None for this week';
 
+              $snd_OP_UniqueBoxes_chunks = (!empty($snd_OP_uniqueBoxes)) ? array_chunk($snd_OP_uniqueBoxes, 4) : 'None for this week';
+              $snd_DPD_UniqueBoxes_chunks = (!empty($snd_DPD_uniqueBoxes)) ? array_chunk($snd_DPD_uniqueBoxes, 4) : 'None for this week';
+              $snd_APC_UniqueBoxes_chunks = (!empty($snd_APC_uniqueBoxes)) ? array_chunk($snd_APC_uniqueBoxes, 4) : 'None for this week';
+
               // These 3 are for single box orders, which get grouped into 4's ready for the multicompany template.
               session()->put('snackbox_OP_multicompany', $snd_OP_singleBoxes_chunks);
               session()->put('snackbox_DPD_multicompany', $snd_DPD_singleBoxes_chunks);
               session()->put('snackbox_APC_multicompany', $snd_APC_singleBoxes_chunks);
+
+              session()->put('snackbox_OP_unique', $snd_OP_UniqueBoxes_chunks);
+              session()->put('snackbox_DPD_unique', $snd_DPD_UniqueBoxes_chunks);
+              session()->put('snackbox_APC_unique', $snd_APC_UniqueBoxes_chunks);
 
               // These 3 are for multiple box orders, which get a template of their own and the order split between the amount of boxes they require.
               if (!empty($snd_OP_multipleBoxes))     { session()->put('snackbox_OP_singlecompany', $snd_OP_multipleBoxes);      } else { session()->put('snackbox_OP_singlecompany', 'None for this week'); };
