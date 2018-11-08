@@ -197,10 +197,10 @@ class SnackBoxController extends Controller
               if (!empty($snd_DPD_multipleBoxes))    { session()->put('snackbox_DPD_singlecompany', $snd_DPD_multipleBoxes);    } else { session()->put('snackbox_DPD_singlecompany', 'None for this week'); };
               if (!empty($snd_APC_multipleBoxes))    { session()->put('snackbox_APC_singlecompany', $snd_APC_multipleBoxes);    } else { session()->put('snackbox_APC_singlecompany', 'None for this week'); };
 
-              // These 3 boxes are for unique (drink only) orders, I have variables for OP and DPD but I may only need the APC one.
-              if (!empty($snd_OP_uniqueBoxes))      { session()->put('snackbox_OP_unique', $snd_OP_uniqueBoxes);        } else { session()->put('snackbox_OP_unique', 'None for this week'); };
-              if (!empty($snd_DPD_uniqueBoxes))     { session()->put('snackbox_DPD_unique', $snd_DPD_uniqueBoxes);      } else { session()->put('snackbox_DPD_unique', 'None for this week'); };
-              if (!empty($snd_APC_uniqueBoxes))     { session()->put('snackbox_APC_unique', $snd_APC_uniqueBoxes);      } else { session()->put('snackbox_APC_unique', 'None for this week'); };
+              // // These 3 boxes are for unique (drink only) orders, I have variables for OP and DPD but I may only need the APC one.
+              // if (!empty($snd_OP_uniqueBoxes))      { session()->put('snackbox_OP_unique', $snd_OP_uniqueBoxes);        } else { session()->put('snackbox_OP_unique', 'None for this week'); };
+              // if (!empty($snd_DPD_uniqueBoxes))     { session()->put('snackbox_DPD_unique', $snd_DPD_uniqueBoxes);      } else { session()->put('snackbox_DPD_unique', 'None for this week'); };
+              // if (!empty($snd_APC_uniqueBoxes))     { session()->put('snackbox_APC_unique', $snd_APC_uniqueBoxes);      } else { session()->put('snackbox_APC_unique', 'None for this week'); };
 
               // This is for the latest product list, we'll be matching these values up to the orders for each of the above variables.
               session()->put('snackbox_product_list', $product_list);
