@@ -6,10 +6,12 @@
       <tr>
           <th>Week Start</th>
           <th>Delivery Day</th>
+          <th>Packed By ?</th>
       </tr>
       <tr>
           <th>{{ $week_start }}</th>
           <th>{{ $route_day }}</th>
+          <th> ........................ </th>
       </tr>
       <tr>
           <th colspan="3"></th>
@@ -23,7 +25,9 @@
           <th>No. of Berries</th>
       </tr>
       <tr>
-          <th colspan="3"></th>
+          <th></th>
+          <th></th>
+          <th></th>
       </tr>
     </thead>
     <tbody>

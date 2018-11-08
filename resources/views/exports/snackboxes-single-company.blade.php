@@ -1,4 +1,3 @@
-<h3>Multiple Snackboxes, Single Company Template </h3><br>
 
 @foreach($chunks as $snackbox)
 
@@ -78,12 +77,17 @@
 
                         <td> {{ $snackOne }} {{-- Value of order, this is all the cell information that needs looping through with the $product_list --}}</td>
                         @php unset($snackOne); @endphp
-                        <td> [  ] </td>
+                        <td> [  ....  ] </td>
                     </tr>
 
                 @endif
             @endforeach
-
+                    <tr>
+                        <td colspan='5'></td>
+                    </tr>
+                    <tr>
+                        <td colspan='5'></td>
+                    </tr>
         </tbody>
     </table>
                 @php unset($NoOFBoxes); @endphp

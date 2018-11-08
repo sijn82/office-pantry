@@ -13,7 +13,7 @@ use App\WeekStart;
 
 
 
-
+set_time_limit(0);
 class SnackBoxController extends Controller
 {
         protected $week_start;
@@ -28,42 +28,32 @@ class SnackBoxController extends Controller
         }
         // There are a couple of options here, use the same function with a switch statement value based on the button pressed, or as I'm going to do for now, create several functions
         // one to handle each scenario.
+
+        // Single Company, Multiple Boxes
         public function download_snackbox_op_singlecompany()
         {
-            // $snackbox = session()->get('snackbox_OP_multicompany');
-            // $product_list = session()->get('snackbox_product_list');
             return \Excel::download(new Exports\SnackboxOPSingleCompanyExport, 'snackboxesOPSingleCompany' . $this->week_start . '.xlsx');
         }
         public function download_snackbox_dpd_singlecompany()
         {
-            // $snackbox = session()->get('snackbox_OP_multicompany');
-            // $product_list = session()->get('snackbox_product_list');
             return \Excel::download(new Exports\SnackboxDPDSingleCompanyExport, 'snackboxesOPSingleCompany' . $this->week_start . '.xlsx');
         }
         public function download_snackbox_apc_singlecompany()
         {
-            // $snackbox = session()->get('snackbox_OP_multicompany');
-            // $product_list = session()->get('snackbox_product_list');
             return \Excel::download(new Exports\SnackboxAPCSingleCompanyExport, 'snackboxesOPSingleCompany' . $this->week_start . '.xlsx');
         }
-        // There are a couple of options here, use the same function with a switch statement value based on the button pressed, or as I'm going to do for now, create several functions
-        // one to handle each scenario.
+
+        // Single Box, Multiple Companies
         public function download_snackbox_op_multicompany()
         {
-            // $snackbox = session()->get('snackbox_OP_multicompany');
-            // $product_list = session()->get('snackbox_product_list');
             return \Excel::download(new Exports\SnackboxOPMultiCompanyExport, 'snackboxesOPMultiCompany' . $this->week_start . '.xlsx');
         }
         public function download_snackbox_dpd_multicompany()
         {
-            // $snackbox = session()->get('snackbox_OP_multicompany');
-            // $product_list = session()->get('snackbox_product_list');
             return \Excel::download(new Exports\SnackboxDPDMultiCompanyExport, 'snackboxesDPDMultiCompany' . $this->week_start . '.xlsx');
         }
         public function download_snackbox_apc_multicompany()
         {
-            // $snackbox = session()->get('snackbox_OP_multicompany');
-            // $product_list = session()->get('snackbox_product_list');
             return \Excel::download(new Exports\SnackboxAPCMultiCompanyExport, 'snackboxesDPDMultiCompany' . $this->week_start . '.xlsx');
         }
 
@@ -152,18 +142,18 @@ class SnackBoxController extends Controller
 
                             // if delivered by Office Pantry
                             if      ($company_order[0] == 'OP' && $company_order[1] > 1) { $snd_OP_multipleBoxes[] = $company_order; }
-                            elseif  ($company_order[0] == 'OP' && $company_order[1] = 1) { $snd_OP_singleBoxes[] = $company_order; }
-                            elseif  ($company_order[0] == 'OP' && $company_order[1] = 0) { $snd_OP_uniqueBoxes[] = $company_order; }
+                            elseif  ($company_order[0] == 'OP' && $company_order[1] == 1) { $snd_OP_singleBoxes[] = $company_order; }
+                            elseif  ($company_order[0] == 'OP' && $company_order[1] == 0) { $snd_OP_uniqueBoxes[] = $company_order; }
 
                             // if delivered by DPD
                             if      ($company_order[0] == 'DPD' && $company_order[1] > 1) { $snd_DPD_multipleBoxes[] = $company_order; }
-                            elseif  ($company_order[0] == 'DPD' && $company_order[1] = 1) { $snd_DPD_singleBoxes[] = $company_order; }
-                            elseif  ($company_order[0] == 'DPD' && $company_order[1] = 0) { $snd_DPD_uniqueBoxes[] = $company_order; }
+                            elseif  ($company_order[0] == 'DPD' && $company_order[1] == 1) { $snd_DPD_singleBoxes[] = $company_order; }
+                            elseif  ($company_order[0] == 'DPD' && $company_order[1] == 0) { $snd_DPD_uniqueBoxes[] = $company_order; }
 
                             // if delivered by APC
                             if      ($company_order[0] == 'APC' && $company_order[1] > 1) { $snd_APC_multipleBoxes[] = $company_order; }
-                            elseif  ($company_order[0] == 'APC' && $company_order[1] = 1) { $snd_APC_singleBoxes[] = $company_order; }
-                            elseif  ($company_order[0] == 'APC' && $company_order[1] = 0) { $snd_APC_uniqueBoxes[] = $company_order; }
+                            elseif  ($company_order[0] == 'APC' && $company_order[1] == 1) { $snd_APC_singleBoxes[] = $company_order; }
+                            elseif  ($company_order[0] == 'APC' && $company_order[1] == 0) { $snd_APC_uniqueBoxes[] = $company_order; }
                       }
                   fclose ($handle);
                 }
@@ -171,9 +161,9 @@ class SnackBoxController extends Controller
               // $chunks = [];
 
               // These 3 arrays need chunking into groups of four, so we can loop through them outputting 4 company orders per template.
-              $snd_OP_singleBoxes_chunks = ($snd_OP_singleBoxes) ? array_chunk($snd_OP_singleBoxes, 4) : 'None for this week';
-              $snd_DPD_singleBoxes_chunks = ($snd_DPD_singleBoxes) ? array_chunk($snd_DPD_singleBoxes, 4) : 'None for this week';
-              $snd_APC_singleBoxes_chunks = ($snd_APC_singleBoxes) ? array_chunk($snd_APC_singleBoxes, 4) : 'None for this week';
+              $snd_OP_singleBoxes_chunks = (!empty($snd_OP_singleBoxes)) ? array_chunk($snd_OP_singleBoxes, 4) : 'None for this week';
+              $snd_DPD_singleBoxes_chunks = (!empty($snd_DPD_singleBoxes)) ? array_chunk($snd_DPD_singleBoxes, 4) : 'None for this week';
+              $snd_APC_singleBoxes_chunks = (!empty($snd_APC_singleBoxes)) ? array_chunk($snd_APC_singleBoxes, 4) : 'None for this week';
 
               // These 3 are for single box orders, which get grouped into 4's ready for the multicompany template.
               session()->put('snackbox_OP_multicompany', $snd_OP_singleBoxes_chunks);

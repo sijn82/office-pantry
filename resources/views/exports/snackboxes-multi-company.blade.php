@@ -1,5 +1,4 @@
 
-<h3 colspan='3'>Single Snackboxes, Multiple Companies Template </h3><br>
 
 @foreach($chunks as $chunk)
 
@@ -102,7 +101,7 @@
 
                         <td>{{ $snackFour }}</td>
                         @php unset($snackFour); @endphp
-                        <td> [  ] </td>
+                        <td> [  ....  ] </td>
                     </tr>
 
                 @endif

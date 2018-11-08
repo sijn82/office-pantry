@@ -453,31 +453,6 @@ class RoutesController extends Controller
 
                 while (($data = fgetcsv ($handle, 1000, ',')) !== FALSE) {
 
-                    // $company_route_name_exceptions =    [
-                    //                                         'Legal and General London (FAO Simon Chong)' => 'Legal and General London',
-                    //                                         'London Business School (FAO Victoria Gilbert)' => 'London Business School',
-                    //                                         'JP Morgan (FAO Sara Cordwell 15th Floor)' => 'JP Morgan',
-                    //                                         'JP Morgan II (FAO Sara Cordwell 15th Floor)' => 'JP Morgan II',
-                    //                                         'TI Media Limited (FAO Ruth Stanley)' => 'TI Media Limited',
-                    //                                         'Lloyds (Gatwick - FAO Katie Artlett)' => 'Lloyds (Gatwick)',
-                    //                                         'Lloyds (London - London Wall - FAO Elaine Charlery)' => 'Lloyds (London - London Wall)',
-                    //                                         'Lloyds (London - 10 Gresham Street – FAO Marytn Shone / Ben Pryce)' => 'Lloyds (London - 10 Gresham Street)',
-                    //                                         'Lloyds (London - 25 Gresham Street - FAO James Gamble / Maryn Shone / Ben Pryce)' => 'Lloyds (London - 25 Gresham Street)',
-                    //                                         'Lloyds (London - Old Broad Street - FAO Jamie Mcreesh / Daniel Lee / Parul Patel)' => 'Lloyds (London - Old Broad Street)',
-                    //                                         'BNP Paribas Basingstoke (FAO Stacy Scott/Jessica Howarth)' => 'BNP Paribas Basingstoke',
-                    //                                         'Gu (Noble Foods - FAO Ali Heal)' => 'Gu (Noble Foods)',
-                    //                                         'Paddle (FAO Yago Cano)' => 'Paddle',
-                    //                                         'Charlotte Tilbury - We Work (FAO Sophie Kendrick)' => 'Charlotte Tilbury - We Work',
-                    //                                         'Juro (FAO Adrienne)' => 'Juro',
-                    //                                    ];
-                    //
-                    //      // If $newRoute->company_name doesn't match a Company route_name, check to see if this value matches a Company route_name exception.
-                    //      // These are some of the rare cases where the route name is tailored for the delivery with an FAO attached.
-                    // if (array_search($data[0], $company_route_name_exceptions)) {
-                    //            // if it finds a matching value, it returns the associated key.
-                    //            $data[0] = array_search($data[0], $company_route_name_exceptions);
-                    // }
-
 
                         // The usual tidying up of data - this one only covers the company name.
                         $company_name_encoded = json_encode($data[0]);
