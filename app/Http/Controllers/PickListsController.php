@@ -386,27 +386,6 @@ class PickListsController extends Controller
         // Now iterate through the new FOD data
         foreach($fruitOrderingDocuments as $fruitOrderingDocument) {
 
-            // $company_box_name_exceptions =    [
-            //                                         'Legal and General London (FAO Simon Chong)' => 'Legal and General London',
-            //                                         'London Business School (FAO Victoria Gilbert)' => 'London Business School',
-            //                                         'JP Morgan (FAO Sara Cordwell 15th Floor)' => 'JP Morgan',
-            //                                         'JP Morgan II (FAO Sara Cordwell 15th Floor)' => 'JP Morgan II',
-            //                                         'TI Media Limited (FAO Ruth Stanley)' => 'TI Media Limited',
-            //                                         'Lloyds (Gatwick - FAO Katie Artlett)' => 'Lloyds (Gatwick)',
-            //                                         'Lloyds (London - London Wall - FAO Elaine Charlery)' => 'Lloyds (London - London Wall)',
-            //                                         'Lloyds (London - 10 Gresham Street – FAO Marytn Shone / Ben Pryce)' => 'Lloyds (London - 10 Gresham Street)',
-            //                                         'Lloyds (London - 25 Gresham Street - FAO James Gamble / Maryn Shone / Ben Pryce)' => 'Lloyds (London - 25 Gresham Street)',
-            //                                         'Lloyds (London - Old Broad Street - FAO Jamie Mcreesh / Daniel Lee / Parul Patel)' => 'Lloyds (London - Old Broad Street)'
-            //                                     ];
-            //
-            //   // If $fruitOrderingDocument->company_name doesn't match a Company route_name, check to see if this value matches a Company route_name exception.
-            //   // These are some of the rare cases where the route name is tailored for the delivery with an FAO attached.
-            // if (array_search($fruitOrderingDocument->company_name, $company_box_name_exceptions)) {
-            //         // if it finds a matching value, it returns the associated key.
-            //         $fruitOrderingDocument->company_name = array_search($fruitOrderingDocument->company_name, $company_box_name_exceptions);
-            //         // echo 'Found a matching entry in the exceptions array, updated box name to ' . $fruitOrderingDocument->company_name . '<br>';
-            // }
-
             // If Company entry in FOD matches a Company Name entry in Picklist and has at least one fruit box which needs picking.
             if (in_array(strtolower($fruitOrderingDocument->company_name),
                 array_map('strtolower', $picklist_company_names))

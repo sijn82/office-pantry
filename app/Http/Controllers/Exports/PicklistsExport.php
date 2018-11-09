@@ -57,8 +57,8 @@ WithMultipleSheets
                                         '09 - Gus',
                                         '08 - South London',
                                         '07 - Catalin',
-                                        '06 - City', // formerly Stratford
-                                        '05 - Stratford', // formerly City
+                                        '06 - Stratford', // formerly Stratford
+                                        '05 - City', // formerly City
                                         '04 - M25 North',
                                         '03 - M25 South',
                                         '02 - Serviced II',

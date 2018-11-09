@@ -178,16 +178,16 @@ class SnackBoxController extends Controller
               $snd_OP_singleBoxes_chunks = (!empty($snd_OP_singleBoxes)) ? array_chunk($snd_OP_singleBoxes, 4) : 'None for this week';
               $snd_DPD_singleBoxes_chunks = (!empty($snd_DPD_singleBoxes)) ? array_chunk($snd_DPD_singleBoxes, 4) : 'None for this week';
               $snd_APC_singleBoxes_chunks = (!empty($snd_APC_singleBoxes)) ? array_chunk($snd_APC_singleBoxes, 4) : 'None for this week';
-
+              // Unique boxes will use the same multi-company template, and also need chunking into groups of 4.
               $snd_OP_UniqueBoxes_chunks = (!empty($snd_OP_uniqueBoxes)) ? array_chunk($snd_OP_uniqueBoxes, 4) : 'None for this week';
               $snd_DPD_UniqueBoxes_chunks = (!empty($snd_DPD_uniqueBoxes)) ? array_chunk($snd_DPD_uniqueBoxes, 4) : 'None for this week';
               $snd_APC_UniqueBoxes_chunks = (!empty($snd_APC_uniqueBoxes)) ? array_chunk($snd_APC_uniqueBoxes, 4) : 'None for this week';
 
-              // These 3 are for single box orders, which get grouped into 4's ready for the multicompany template.
+              // Now the data has been chunked into groups of 4, we can add them to a session variable.
               session()->put('snackbox_OP_multicompany', $snd_OP_singleBoxes_chunks);
               session()->put('snackbox_DPD_multicompany', $snd_DPD_singleBoxes_chunks);
               session()->put('snackbox_APC_multicompany', $snd_APC_singleBoxes_chunks);
-
+              // And do the same with unique boxes.
               session()->put('snackbox_OP_unique', $snd_OP_UniqueBoxes_chunks);
               session()->put('snackbox_DPD_unique', $snd_DPD_UniqueBoxes_chunks);
               session()->put('snackbox_APC_unique', $snd_APC_UniqueBoxes_chunks);
@@ -196,11 +196,6 @@ class SnackBoxController extends Controller
               if (!empty($snd_OP_multipleBoxes))     { session()->put('snackbox_OP_singlecompany', $snd_OP_multipleBoxes);      } else { session()->put('snackbox_OP_singlecompany', 'None for this week'); };
               if (!empty($snd_DPD_multipleBoxes))    { session()->put('snackbox_DPD_singlecompany', $snd_DPD_multipleBoxes);    } else { session()->put('snackbox_DPD_singlecompany', 'None for this week'); };
               if (!empty($snd_APC_multipleBoxes))    { session()->put('snackbox_APC_singlecompany', $snd_APC_multipleBoxes);    } else { session()->put('snackbox_APC_singlecompany', 'None for this week'); };
-
-              // // These 3 boxes are for unique (drink only) orders, I have variables for OP and DPD but I may only need the APC one.
-              // if (!empty($snd_OP_uniqueBoxes))      { session()->put('snackbox_OP_unique', $snd_OP_uniqueBoxes);        } else { session()->put('snackbox_OP_unique', 'None for this week'); };
-              // if (!empty($snd_DPD_uniqueBoxes))     { session()->put('snackbox_DPD_unique', $snd_DPD_uniqueBoxes);      } else { session()->put('snackbox_DPD_unique', 'None for this week'); };
-              // if (!empty($snd_APC_uniqueBoxes))     { session()->put('snackbox_APC_unique', $snd_APC_uniqueBoxes);      } else { session()->put('snackbox_APC_unique', 'None for this week'); };
 
               // This is for the latest product list, we'll be matching these values up to the orders for each of the above variables.
               session()->put('snackbox_product_list', $product_list);

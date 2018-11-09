@@ -185,7 +185,7 @@ class RoutesController extends Controller
 
                       ]);
 
-                      $regular_rejig .= 'Entry for ' . $company_name  .  ' found for ' . $data[26] .  ' and has been updated to correct route i.e ' . $data[25] . ' <br>';
+                      $regular_rejig .= 'Entry for ' . $company_name  .  ' found for ' . $data[26] .  ' and has been updated to correct route i.e ' . $data[25] . " \n";
                       // break;
 
                       // Note: We also need to take care of the office pantry, park view dairy and choice organics entries which may need to appear on more than one route assigned_to/delivery_day.
@@ -240,9 +240,9 @@ class RoutesController extends Controller
                                 // Although as the dairy and office pantry are only totals generated from other entries we only need to worry about choice organics.
 
                                 if ('choice organics' == strtolower($company_name)) {
-                                  $newSpecialRoute->drinks = $data[22];
-                                  $newSpecialRoute->snacks = $data[23];
-                                  $newSpecialRoute->other = $data[24];
+                                      $newSpecialRoute->drinks = $data[22];
+                                      $newSpecialRoute->snacks = $data[23];
+                                      $newSpecialRoute->other = $data[24];
                                 }
 
                                 $newSpecialRoute->assigned_to = $data[25];
@@ -502,7 +502,7 @@ class RoutesController extends Controller
                                             'milk_1l_alt_cashew' => null,
                                             'milk_1l_alt_lactose_free_semi'	=> null,
                                       ]);
-                                      $regular_SDO_only .= 'Updated old entry ' . $company_name . ' / ' . $data[4] . ' by resetting fruit and milk totals. <br>';
+                                      $regular_SDO_only .= 'Updated old entry ' . $company_name . ' / ' . $data[4] . ' by resetting fruit and milk totals.' . " \n";
                                 }
 
                                 // Grab the routing data, update the snacks and drinks columns where company name and day of delivery match the updating data.

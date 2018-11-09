@@ -73476,7 +73476,7 @@ exports = module.exports = __webpack_require__(4)(false);
 
 
 // module
-exports.push([module.i, "\n.title-headers {\n  margin-top: 30px;\n}\n.input-group label {\n  margin-right: 30px;\n}\nform div {\n  margin-top: 10px;\n  margin-bottom: 10px;\n}\n", ""]);
+exports.push([module.i, "\n.title-headers {\n  margin-top: 30px;\n}\n.input-group label {\n  margin-right: 30px;\n}\nform div {\n  margin-top: 10px;\n  margin-bottom: 10px;\n}\n#buttonsToProcessSnackboxes div {\n  margin: 10px;\n}\n", ""]);
 
 // exports
 
@@ -73489,6 +73489,49 @@ exports.push([module.i, "\n.title-headers {\n  margin-top: 30px;\n}\n.input-grou
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -73594,7 +73637,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
     methods: {
-        newFileUpload: function newFileUpload(event) {
+        newProductCodesFileUpload: function newProductCodesFileUpload(event) {
             var _this = this;
 
             var fileReader = new FileReader();
@@ -73719,7 +73762,7 @@ var render = function() {
                 _c("input", {
                   staticClass: "form-control",
                   attrs: { type: "file", name: "products_and_codes" },
-                  on: { change: _vm.newFileUpload }
+                  on: { change: _vm.newProductCodesFileUpload }
                 })
               ]
             ),
@@ -73730,19 +73773,7 @@ var render = function() {
               )
             ]),
             _vm._v(" "),
-            _vm._m(3),
-            _vm._v(" "),
-            _c(
-              "div",
-              [
-                _c(
-                  "b-button",
-                  { attrs: { href: "api/auto_process_snackboxes" } },
-                  [_vm._v(" Refresh Product Codes ")]
-                )
-              ],
-              1
-            )
+            _vm._m(3)
           ],
           1
         ),
@@ -73814,22 +73845,102 @@ var render = function() {
               )
             ]),
             _vm._v(" "),
-            _vm._m(6),
-            _vm._v(" "),
-            _c(
-              "div",
-              [
-                _c(
-                  "b-button",
-                  { attrs: { href: "api/auto_process_snackboxes" } },
-                  [_vm._v(" Refresh Product Codes ")]
-                )
-              ],
-              1
-            )
+            _vm._m(6)
           ],
           1
-        )
+        ),
+        _vm._v(" "),
+        _c("div", { attrs: { id: "buttonsToProcessSnackboxes" } }, [
+          _c(
+            "div",
+            { attrs: { id: "saveToSessions" } },
+            [
+              _c("b-button", { attrs: { href: "auto_process_snackboxes" } }, [
+                _vm._v(" Save Data To Sessions ")
+              ]),
+              _vm._v(" "),
+              _c("b-form-text", [
+                _vm._v(
+                  "\n                            Run this process first, as it saves the uploaded data into session variables.  The data is destoyed after 30 mins of inactivity, but that should be more than enough ;).\n                        "
+                )
+              ])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { attrs: { id: "exportMultiCompanyButtons" } },
+            [
+              _c(
+                "b-button",
+                { attrs: { href: "export-snackbox-op-multicompany" } },
+                [_vm._v(" Export OP Multi Company ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "b-button",
+                { attrs: { href: "export-snackbox-dpd-multicompany" } },
+                [_vm._v(" Export DPD Multi Company ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "b-button",
+                { attrs: { href: "export-snackbox-apc-multicompany" } },
+                [_vm._v(" Export APC Multi Company ")]
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { attrs: { id: "exportSingleCompanyButtons" } },
+            [
+              _c(
+                "b-button",
+                { attrs: { href: "export-snackbox-op-singlecompany" } },
+                [_vm._v(" Export OP Single Company ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "b-button",
+                { attrs: { href: "export-snackbox-dpd-singlecompany" } },
+                [_vm._v(" Export DPD Single Company ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "b-button",
+                { attrs: { href: "export-snackbox-apc-singlecompany" } },
+                [_vm._v(" Export APC Single Company ")]
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { attrs: { id: "exportUniqueButtons" } },
+            [
+              _c("b-button", { attrs: { href: "export-snackbox-op-unique" } }, [
+                _vm._v(" Export OP Unique ")
+              ]),
+              _vm._v(" "),
+              _c(
+                "b-button",
+                { attrs: { href: "export-snackbox-dpd-unique" } },
+                [_vm._v(" Export DPD Unique ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "b-button",
+                { attrs: { href: "export-snackbox-apc-unique" } },
+                [_vm._v(" Export APC Unique ")]
+              )
+            ],
+            1
+          )
+        ])
       ])
     ])
   ])

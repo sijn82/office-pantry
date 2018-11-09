@@ -22,7 +22,7 @@
 
                             <div class="input-group input-group-md col-md-8 offset-md-2">
                                 <label><b>Upload Products/Codes CSV:</b></label>
-                                <input class="form-control" type="file" name="products_and_codes" @change="newFileUpload">
+                                <input class="form-control" type="file" name="products_and_codes" @change="newProductCodesFileUpload">
                             </div>
                             <b-form-text>
                                 If you need to change the file, click cancel on the currently held one before making the change, especially if you wish to select a file with the same name!
@@ -31,10 +31,10 @@
                             <div class="submit-button input-group input-group-md">
                                 <input class=" col-md-2 col-sm-3 offset-md-5 btn btn-success" type="submit" value="Upload Products and Codes CSV">
                             </div>
-                            <div>
-                                <b-button href="api/auto_process_snackboxes"> Refresh Product Codes </b-button>
-                                <!-- <b-button href="api/export-routing" variant="info"> Export Routes for Rerouting </b-button> -->
-                            </div>
+                            <!-- <div>
+                                <b-button href="auto_process_snackboxes"> Refresh Product Codes </b-button>
+                                 <b-button href="api/export-routing" variant="info"> Export Routes for Rerouting </b-button>
+                            </div> -->
                     </form>
                     <form class="" action="api/upload-snackbox-orders" enctype="multipart/form-data" method="post" name="upload-snackbox-orders-form" @submit.prevent="uploadSnackboxOrdersCSV">
 
@@ -60,11 +60,36 @@
                             <div class="submit-button input-group input-group-md">
                                 <input class=" col-md-2 col-sm-3 offset-md-5 btn btn-success" type="submit" value="Upload Snackbox Orders CSV">
                             </div>
-                            <div>
-                                <b-button href="api/auto_process_snackboxes"> Refresh Product Codes </b-button>
-                                <!-- <b-button href="api/export-routing" variant="info"> Export Routes for Rerouting </b-button> -->
-                            </div>
                     </form>
+                    <div id="buttonsToProcessSnackboxes">
+                        <div id="saveToSessions">
+                            <b-button href="auto_process_snackboxes"> Save Data To Sessions </b-button>
+                            <b-form-text>
+                                Run this process first, as it saves the uploaded data into session variables.  The data is destoyed after 30 mins of inactivity, but that should be more than enough ;).
+                            </b-form-text> 
+                        </div>
+                        <div id="exportMultiCompanyButtons">
+                            <b-button href="export-snackbox-op-multicompany"> Export OP Multi Company </b-button>
+
+                            <b-button href="export-snackbox-dpd-multicompany"> Export DPD Multi Company </b-button>
+
+                            <b-button href="export-snackbox-apc-multicompany"> Export APC Multi Company </b-button>
+                        </div>
+                        <div id="exportSingleCompanyButtons">
+                            <b-button href="export-snackbox-op-singlecompany"> Export OP Single Company </b-button>
+
+                            <b-button href="export-snackbox-dpd-singlecompany"> Export DPD Single Company </b-button>
+
+                            <b-button href="export-snackbox-apc-singlecompany"> Export APC Single Company </b-button>
+                        </div>
+                        <div id="exportUniqueButtons">
+                            <b-button href="export-snackbox-op-unique"> Export OP Unique </b-button>
+
+                            <b-button href="export-snackbox-dpd-unique"> Export DPD Unique </b-button>
+
+                            <b-button href="export-snackbox-apc-unique"> Export APC Unique </b-button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -81,6 +106,24 @@
     form div {
         margin-top: 10px;
         margin-bottom: 10px;
+    }
+    #buttonsToProcessSnackboxes {
+        div {
+            margin: 10px;
+        
+            #buttonsToProcessSnackboxes {
+                
+            }
+            #exportMultiCompanyButtons {
+            
+            }
+            #exportSingleCompanyButtons {
+            
+            }
+            #exportUniqueButtons {
+            
+            }
+        }
     }
 
 </style>
@@ -106,7 +149,7 @@ export default {
     },
 
     methods: {
-          newFileUpload(event) {
+          newProductCodesFileUpload(event) {
           let fileReader = new FileReader();
           fileReader.readAsDataURL(event.target.files[0])
               fileReader.onload = (event) => {
