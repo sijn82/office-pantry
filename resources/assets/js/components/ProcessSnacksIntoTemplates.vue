@@ -70,25 +70,25 @@
                         </div>
                         
                         <div id="exportMultiCompanyButtons">
-                            <b-button variant="primary" href="export-snackbox-op-multicompany"> Export OP Multi Company </b-button>
-                            <b-button variant="primary" href="export-snackbox-dpd-multicompany"> Export DPD Multi Company </b-button>
-                            <b-button variant="primary" href="export-snackbox-apc-multicompany"> Export APC Multi Company </b-button>
+                            <b-button :pressed.sync="op_multi" variant="outline-primary" href="export-snackbox-op-multicompany"> Export OP Multi Company </b-button>
+                            <b-button :pressed.sync="dpd_multi" variant="outline-primary" href="export-snackbox-dpd-multicompany"> Export DPD Multi Company </b-button>
+                            <b-button :pressed.sync="apc_multi" variant="outline-primary" href="export-snackbox-apc-multicompany"> Export APC Multi Company </b-button>
                             <b-form-text>
                                 This first row of buttons will use the multi-company, single box templates.
                             </b-form-text> 
                         </div>
                         <div id="exportSingleCompanyButtons">
-                            <b-button variant="info" href="export-snackbox-op-singlecompany"> Export OP Single Company </b-button>
-                            <b-button variant="info" href="export-snackbox-dpd-singlecompany"> Export DPD Single Company </b-button>
-                            <b-button variant="info" href="export-snackbox-apc-singlecompany"> Export APC Single Company </b-button>
+                            <b-button :pressed.sync="op_single" variant="outline-primary" href="export-snackbox-op-singlecompany"> Export OP Single Company </b-button>
+                            <b-button :pressed.sync="dpd_single" variant="outline-primary" href="export-snackbox-dpd-singlecompany"> Export DPD Single Company </b-button>
+                            <b-button :pressed.sync="apc_single" variant="outline-primary" href="export-snackbox-apc-singlecompany"> Export APC Single Company </b-button>
                             <b-form-text>
                                 This second row uses the single company, multiple boxes template.
                             </b-form-text> 
                         </div>
                         <div id="exportUniqueButtons">
                             <b-button :pressed.sync="op_unique" variant="outline-primary" href="export-snackbox-op-unique"> Export OP Unique </b-button>
-                            <b-button :pressed.sync="myToggle" variant="outline-primary" href="export-snackbox-dpd-unique"> Export DPD Unique </b-button>
-                            <b-button :pressed.sync="myToggle" variant="outline-primary" href="export-snackbox-apc-unique"> Export APC Unique </b-button>
+                            <b-button :pressed.sync="dpd_unique" variant="outline-primary" href="export-snackbox-dpd-unique"> Export DPD Unique </b-button>
+                            <b-button :pressed.sync="apc_unique" variant="outline-primary" href="export-snackbox-apc-unique"> Export APC Unique </b-button>
                             <b-form-text>
                                 This final row caters for unique orders, using the same multi-company template as the first row.
                             </b-form-text> 
@@ -149,8 +149,15 @@ export default {
                     {value: 'wed-thur-fri', text: 'Wednesday, Thursday & Friday'},
                 ],
             },
+            op_multi: false,
+            dpd_multi: false,
+            apc_multi: false,
+            op_single: false,
+            dpd_single: false,
+            apc_single: false,
             op_unique: false,
-            myToggle: false,
+            dpd_unique: false,
+            apc_unique: false,
 
         }
     },
