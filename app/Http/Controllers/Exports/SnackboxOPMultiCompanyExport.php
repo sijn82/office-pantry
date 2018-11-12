@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Exports;
 
 use Session;
+use Illuminate\Support\Facades\Log;
 use App\WeekStart;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 // use App\Http\Controllers\Exports;
+use Maatwebsite\Excel\Concerns\WithTitle;
 
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use PhpOffice\PhpSpreadsheet\Worksheet;
@@ -19,17 +21,30 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
 class SnackboxOPMultiCompanyExport
  // implements WithMultipleSheets
-  implements FromView, WithEvents, ShouldAutoSize //, WithMultipleSheets
+  implements FromView, WithEvents, ShouldAutoSize, WithTitle //, WithMultipleSheets
 {
     public function view(): View
    {
        $product_list = session()->get('snackbox_product_list');
        $snackboxes = session()->get('snackbox_OP_multicompany');
-
-       return view('exports.snackboxes-multi-company', [
-           'chunks'         =>   $snackboxes,
-           'product_list'   =>   $product_list
-       ]);
+       // dd(session()->all());
+        if ($snackboxes == 'None for this week') {
+            
+            Log::channel('slack')->info('Snackbox OP Multicompany - None for this week');
+            return view('none-for-this-week');
+       
+        } else {
+               
+            return view('exports.snackboxes-multi-company', [
+               'chunks'         =>   $snackboxes,
+               'product_list'   =>   $product_list
+            ]);
+        }
+   }
+   
+   public function title(): string
+   {
+       return 'OP MultiCompany';
    }
 
    /**

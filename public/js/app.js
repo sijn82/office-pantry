@@ -73893,15 +73893,9 @@ var render = function() {
                 "b-button",
                 {
                   attrs: {
-                    pressed: _vm.op_multi,
                     variant: "outline-primary",
                     href: "export-snackbox-op-multicompany",
                     target: "_blank"
-                  },
-                  on: {
-                    "update:pressed": function($event) {
-                      _vm.op_multi = $event
-                    }
                   }
                 },
                 [_vm._v(" Export OP Multi Company ")]
@@ -73911,14 +73905,8 @@ var render = function() {
                 "b-button",
                 {
                   attrs: {
-                    pressed: _vm.dpd_multi,
                     variant: "outline-primary",
                     href: "export-snackbox-dpd-multicompany"
-                  },
-                  on: {
-                    "update:pressed": function($event) {
-                      _vm.dpd_multi = $event
-                    }
                   }
                 },
                 [_vm._v(" Export DPD Multi Company ")]
@@ -73928,14 +73916,8 @@ var render = function() {
                 "b-button",
                 {
                   attrs: {
-                    pressed: _vm.apc_multi,
                     variant: "outline-primary",
                     href: "export-snackbox-apc-multicompany"
-                  },
-                  on: {
-                    "update:pressed": function($event) {
-                      _vm.apc_multi = $event
-                    }
                   }
                 },
                 [_vm._v(" Export APC Multi Company ")]
@@ -73958,14 +73940,8 @@ var render = function() {
                 "b-button",
                 {
                   attrs: {
-                    pressed: _vm.op_single,
                     variant: "outline-primary",
                     href: "export-snackbox-op-singlecompany"
-                  },
-                  on: {
-                    "update:pressed": function($event) {
-                      _vm.op_single = $event
-                    }
                   }
                 },
                 [_vm._v(" Export OP Single Company ")]
@@ -73975,14 +73951,8 @@ var render = function() {
                 "b-button",
                 {
                   attrs: {
-                    pressed: _vm.dpd_single,
                     variant: "outline-primary",
                     href: "export-snackbox-dpd-singlecompany"
-                  },
-                  on: {
-                    "update:pressed": function($event) {
-                      _vm.dpd_single = $event
-                    }
                   }
                 },
                 [_vm._v(" Export DPD Single Company ")]
@@ -73992,14 +73962,8 @@ var render = function() {
                 "b-button",
                 {
                   attrs: {
-                    pressed: _vm.apc_single,
                     variant: "outline-primary",
                     href: "export-snackbox-apc-singlecompany"
-                  },
-                  on: {
-                    "update:pressed": function($event) {
-                      _vm.apc_single = $event
-                    }
                   }
                 },
                 [_vm._v(" Export APC Single Company ")]
@@ -74022,14 +73986,8 @@ var render = function() {
                 "b-button",
                 {
                   attrs: {
-                    pressed: _vm.op_unique,
                     variant: "outline-primary",
                     href: "export-snackbox-op-unique"
-                  },
-                  on: {
-                    "update:pressed": function($event) {
-                      _vm.op_unique = $event
-                    }
                   }
                 },
                 [_vm._v(" Export OP Unique ")]
@@ -74039,14 +73997,8 @@ var render = function() {
                 "b-button",
                 {
                   attrs: {
-                    pressed: _vm.dpd_unique,
                     variant: "outline-primary",
                     href: "export-snackbox-dpd-unique"
-                  },
-                  on: {
-                    "update:pressed": function($event) {
-                      _vm.dpd_unique = $event
-                    }
                   }
                 },
                 [_vm._v(" Export DPD Unique ")]
@@ -74056,14 +74008,8 @@ var render = function() {
                 "b-button",
                 {
                   attrs: {
-                    pressed: _vm.apc_unique,
                     variant: "outline-primary",
                     href: "export-snackbox-apc-unique"
-                  },
-                  on: {
-                    "update:pressed": function($event) {
-                      _vm.apc_unique = $event
-                    }
                   }
                 },
                 [_vm._v(" Export APC Unique ")]
