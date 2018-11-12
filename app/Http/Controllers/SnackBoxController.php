@@ -200,10 +200,10 @@ class SnackBoxController extends Controller
               // This is for the latest product list, we'll be matching these values up to the orders for each of the above variables.
               session()->put('snackbox_product_list', $product_list);
 
-              // dd(session()->all());
-
+              dd(session()->all());
+              Log::channel('slack')->info('Snackbox data stored in sessions!');
               // This redirect was more for testing purposes as I want to redirect the user back to the upload snackbox and products page, with buttons to run/output each order option.
-              return redirect()->route('SnackboxOPMultiCompany');
+              return back();
 
               // This was also for testing purposes, so I could see the data being produced before exporting the results as an excel file.
               // return view('snackboxes-multi-company')->with('product_list', $product_list)->with('chunks', $snd_OP_singleBoxes_chunks);

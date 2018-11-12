@@ -121,6 +121,7 @@ class FruitOrderingDocumentController extends Controller
                                                             'Charlotte Tilbury (FAO Sophie Kendrick)' => 'Charlotte Tilbury',
                                                             'Juro (FAO Adrienne)' => 'Juro',
                                                             'Home Office Eaton House (FAO Mike Jarrett)' => 'Home Office Eaton House',
+                                                            'Euromoney Global Limited (FAO Claire Heath)' => 'Euromoney Global Limited',
 
                                                        ];
 

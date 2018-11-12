@@ -5,7 +5,7 @@
 
                     <div class="title-headers">
                         <h3> Upload Current Snackbox Product Codes</h3>
-                        <p><b> This section will allow the product codes to be refreshed and accurate to the latest snackbox orders. </b></p>
+                        <p><b> This section will allow the latest product codes to be married up and accurate to the latest snackbox orders. </b></p>
                     </div>
                     <form class="" action="api/upload-snackbox-product-codes" enctype="multipart/form-data" method="post" name="upload-products-and-codes-form" @submit.prevent="uploadSnackboxProductCodesCSV">
 
@@ -31,10 +31,6 @@
                             <div class="submit-button input-group input-group-md">
                                 <input class=" col-md-2 col-sm-3 offset-md-5 btn btn-success" type="submit" value="Upload Products and Codes CSV">
                             </div>
-                            <!-- <div>
-                                <b-button href="auto_process_snackboxes"> Refresh Product Codes </b-button>
-                                 <b-button href="api/export-routing" variant="info"> Export Routes for Rerouting </b-button>
-                            </div> -->
                     </form>
                     <form class="" action="api/upload-snackbox-orders" enctype="multipart/form-data" method="post" name="upload-snackbox-orders-form" @submit.prevent="uploadSnackboxOrdersCSV">
 
@@ -62,32 +58,40 @@
                             </div>
                     </form>
                     <div id="buttonsToProcessSnackboxes">
+                        <div class="title-headers">
+                            <h3> Process Snackboxes and Export as Excel Files </h3>
+                            <p><b> Each button will export a seperate file to your downloads folder. </b></p>
+                        </div>
                         <div id="saveToSessions">
                             <b-button href="auto_process_snackboxes"> Save Data To Sessions </b-button>
                             <b-form-text>
                                 Run this process first, as it saves the uploaded data into session variables.  The data is destoyed after 30 mins of inactivity, but that should be more than enough ;).
                             </b-form-text> 
                         </div>
+                        
                         <div id="exportMultiCompanyButtons">
-                            <b-button href="export-snackbox-op-multicompany"> Export OP Multi Company </b-button>
-
-                            <b-button href="export-snackbox-dpd-multicompany"> Export DPD Multi Company </b-button>
-
-                            <b-button href="export-snackbox-apc-multicompany"> Export APC Multi Company </b-button>
+                            <b-button variant="primary" href="export-snackbox-op-multicompany"> Export OP Multi Company </b-button>
+                            <b-button variant="primary" href="export-snackbox-dpd-multicompany"> Export DPD Multi Company </b-button>
+                            <b-button variant="primary" href="export-snackbox-apc-multicompany"> Export APC Multi Company </b-button>
+                            <b-form-text>
+                                This first row of buttons will use the multi-company, single box templates.
+                            </b-form-text> 
                         </div>
                         <div id="exportSingleCompanyButtons">
-                            <b-button href="export-snackbox-op-singlecompany"> Export OP Single Company </b-button>
-
-                            <b-button href="export-snackbox-dpd-singlecompany"> Export DPD Single Company </b-button>
-
-                            <b-button href="export-snackbox-apc-singlecompany"> Export APC Single Company </b-button>
+                            <b-button variant="info" href="export-snackbox-op-singlecompany"> Export OP Single Company </b-button>
+                            <b-button variant="info" href="export-snackbox-dpd-singlecompany"> Export DPD Single Company </b-button>
+                            <b-button variant="info" href="export-snackbox-apc-singlecompany"> Export APC Single Company </b-button>
+                            <b-form-text>
+                                This second row uses the single company, multiple boxes template.
+                            </b-form-text> 
                         </div>
                         <div id="exportUniqueButtons">
-                            <b-button href="export-snackbox-op-unique"> Export OP Unique </b-button>
-
-                            <b-button href="export-snackbox-dpd-unique"> Export DPD Unique </b-button>
-
-                            <b-button href="export-snackbox-apc-unique"> Export APC Unique </b-button>
+                            <b-button :pressed.sync="op_unique" variant="outline-primary" href="export-snackbox-op-unique"> Export OP Unique </b-button>
+                            <b-button :pressed.sync="myToggle" variant="outline-primary" href="export-snackbox-dpd-unique"> Export DPD Unique </b-button>
+                            <b-button :pressed.sync="myToggle" variant="outline-primary" href="export-snackbox-apc-unique"> Export APC Unique </b-button>
+                            <b-form-text>
+                                This final row caters for unique orders, using the same multi-company template as the first row.
+                            </b-form-text> 
                         </div>
                     </div>
                 </div>
@@ -108,6 +112,7 @@
         margin-bottom: 10px;
     }
     #buttonsToProcessSnackboxes {
+        margin-top: 20px;
         div {
             margin: 10px;
         
@@ -144,6 +149,8 @@ export default {
                     {value: 'wed-thur-fri', text: 'Wednesday, Thursday & Friday'},
                 ],
             },
+            op_unique: false,
+            myToggle: false,
 
         }
     },

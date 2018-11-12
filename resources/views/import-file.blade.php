@@ -6,6 +6,7 @@
     <import-fod-file success="{{ Session::get('picklist_success') }}"></import-fod-file>
     <import-snacks-n-drinks-file></import-snacks-n-drinks-file>
     <import-rejigged-routes-file></import-rejigged-routes-file>
+    <berry-picklist week_started="{{ $week_start[0]->current }}" delivery_days="{{ $week_start[0]->delivery_days }}"></berry-picklist>
 </div>
 @endsection
 

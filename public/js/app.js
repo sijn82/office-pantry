@@ -26970,6 +26970,7 @@ Vue.component('import-snacks-n-drinks-file', __webpack_require__(274));
 Vue.component('import-rejigged-routes-file', __webpack_require__(279));
 Vue.component('add-new-company', __webpack_require__(284));
 Vue.component('process-snacks-into-templates', __webpack_require__(289));
+Vue.component('berry-picklist', __webpack_require__(296));
 
 var app = new Vue({
     el: '#app'
@@ -73476,7 +73477,7 @@ exports = module.exports = __webpack_require__(4)(false);
 
 
 // module
-exports.push([module.i, "\n.title-headers {\n  margin-top: 30px;\n}\n.input-group label {\n  margin-right: 30px;\n}\nform div {\n  margin-top: 10px;\n  margin-bottom: 10px;\n}\n#buttonsToProcessSnackboxes div {\n  margin: 10px;\n}\n", ""]);
+exports.push([module.i, "\n.title-headers {\n  margin-top: 30px;\n}\n.input-group label {\n  margin-right: 30px;\n}\nform div {\n  margin-top: 10px;\n  margin-bottom: 10px;\n}\n#buttonsToProcessSnackboxes {\n  margin-top: 20px;\n}\n#buttonsToProcessSnackboxes div {\n    margin: 10px;\n}\n", ""]);
 
 // exports
 
@@ -73619,6 +73620,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -73630,7 +73636,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 delivery_days_orders: '',
                 products_and_codes: '',
                 options: [{ value: null, text: 'Please Select an Option', disabled: true }, { value: 'mon-tue', text: 'Monday & Tuesday' }, { value: 'wed-thur-fri', text: 'Wednesday, Thursday & Friday' }]
-            }
+            },
+            op_unique: false,
+            myToggle: false
 
         };
     },
@@ -73851,6 +73859,8 @@ var render = function() {
         ),
         _vm._v(" "),
         _c("div", { attrs: { id: "buttonsToProcessSnackboxes" } }, [
+          _vm._m(7),
+          _vm._v(" "),
           _c(
             "div",
             { attrs: { id: "saveToSessions" } },
@@ -73874,21 +73884,42 @@ var render = function() {
             [
               _c(
                 "b-button",
-                { attrs: { href: "export-snackbox-op-multicompany" } },
+                {
+                  attrs: {
+                    variant: "primary",
+                    href: "export-snackbox-op-multicompany"
+                  }
+                },
                 [_vm._v(" Export OP Multi Company ")]
               ),
               _vm._v(" "),
               _c(
                 "b-button",
-                { attrs: { href: "export-snackbox-dpd-multicompany" } },
+                {
+                  attrs: {
+                    variant: "primary",
+                    href: "export-snackbox-dpd-multicompany"
+                  }
+                },
                 [_vm._v(" Export DPD Multi Company ")]
               ),
               _vm._v(" "),
               _c(
                 "b-button",
-                { attrs: { href: "export-snackbox-apc-multicompany" } },
+                {
+                  attrs: {
+                    variant: "primary",
+                    href: "export-snackbox-apc-multicompany"
+                  }
+                },
                 [_vm._v(" Export APC Multi Company ")]
-              )
+              ),
+              _vm._v(" "),
+              _c("b-form-text", [
+                _vm._v(
+                  "\n                            This first row of buttons will use the multi-company, single box templates.\n                        "
+                )
+              ])
             ],
             1
           ),
@@ -73899,21 +73930,42 @@ var render = function() {
             [
               _c(
                 "b-button",
-                { attrs: { href: "export-snackbox-op-singlecompany" } },
+                {
+                  attrs: {
+                    variant: "info",
+                    href: "export-snackbox-op-singlecompany"
+                  }
+                },
                 [_vm._v(" Export OP Single Company ")]
               ),
               _vm._v(" "),
               _c(
                 "b-button",
-                { attrs: { href: "export-snackbox-dpd-singlecompany" } },
+                {
+                  attrs: {
+                    variant: "info",
+                    href: "export-snackbox-dpd-singlecompany"
+                  }
+                },
                 [_vm._v(" Export DPD Single Company ")]
               ),
               _vm._v(" "),
               _c(
                 "b-button",
-                { attrs: { href: "export-snackbox-apc-singlecompany" } },
+                {
+                  attrs: {
+                    variant: "info",
+                    href: "export-snackbox-apc-singlecompany"
+                  }
+                },
                 [_vm._v(" Export APC Single Company ")]
-              )
+              ),
+              _vm._v(" "),
+              _c("b-form-text", [
+                _vm._v(
+                  "\n                            This second row uses the single company, multiple boxes template.\n                        "
+                )
+              ])
             ],
             1
           ),
@@ -73922,21 +73974,62 @@ var render = function() {
             "div",
             { attrs: { id: "exportUniqueButtons" } },
             [
-              _c("b-button", { attrs: { href: "export-snackbox-op-unique" } }, [
-                _vm._v(" Export OP Unique ")
-              ]),
+              _c(
+                "b-button",
+                {
+                  attrs: {
+                    pressed: _vm.op_unique,
+                    variant: "outline-primary",
+                    href: "export-snackbox-op-unique"
+                  },
+                  on: {
+                    "update:pressed": function($event) {
+                      _vm.op_unique = $event
+                    }
+                  }
+                },
+                [_vm._v(" Export OP Unique ")]
+              ),
               _vm._v(" "),
               _c(
                 "b-button",
-                { attrs: { href: "export-snackbox-dpd-unique" } },
+                {
+                  attrs: {
+                    pressed: _vm.myToggle,
+                    variant: "outline-primary",
+                    href: "export-snackbox-dpd-unique"
+                  },
+                  on: {
+                    "update:pressed": function($event) {
+                      _vm.myToggle = $event
+                    }
+                  }
+                },
                 [_vm._v(" Export DPD Unique ")]
               ),
               _vm._v(" "),
               _c(
                 "b-button",
-                { attrs: { href: "export-snackbox-apc-unique" } },
+                {
+                  attrs: {
+                    pressed: _vm.myToggle,
+                    variant: "outline-primary",
+                    href: "export-snackbox-apc-unique"
+                  },
+                  on: {
+                    "update:pressed": function($event) {
+                      _vm.myToggle = $event
+                    }
+                  }
+                },
                 [_vm._v(" Export APC Unique ")]
-              )
+              ),
+              _vm._v(" "),
+              _c("b-form-text", [
+                _vm._v(
+                  "\n                            This final row caters for unique orders, using the same multi-company template as the first row.\n                        "
+                )
+              ])
             ],
             1
           )
@@ -73956,7 +74049,7 @@ var staticRenderFns = [
       _c("p", [
         _c("b", [
           _vm._v(
-            " This section will allow the product codes to be refreshed and accurate to the latest snackbox orders. "
+            " This section will allow the latest product codes to be married up and accurate to the latest snackbox orders. "
           )
         ])
       ])
@@ -74015,6 +74108,22 @@ var staticRenderFns = [
         })
       ]
     )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "title-headers" }, [
+      _c("h3", [_vm._v(" Process Snackboxes and Export as Excel Files ")]),
+      _vm._v(" "),
+      _c("p", [
+        _c("b", [
+          _vm._v(
+            " Each button will export a seperate file to your downloads folder. "
+          )
+        ])
+      ])
+    ])
   }
 ]
 render._withStripped = true
@@ -74031,6 +74140,227 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 295 */,
+/* 296 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(297)
+}
+var normalizeComponent = __webpack_require__(8)
+/* script */
+var __vue_script__ = __webpack_require__(299)
+/* template */
+var __vue_template__ = __webpack_require__(300)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/BerryPicklist.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-28d93e4e", Component.options)
+  } else {
+    hotAPI.reload("data-v-28d93e4e", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 297 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(298);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(7)("036da115", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-28d93e4e\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./BerryPicklist.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-28d93e4e\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./BerryPicklist.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 298 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(4)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.title-headers {\r\n    margin-top: 30px;\n}\n.current-values {\r\n    margin-bottom: 30px;\n}\r\n\r\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 299 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            week_start: this.week_started,
+            selected_delivery_days: this.delivery_days
+        };
+    },
+
+    props: ['week_started', 'delivery_days'],
+    mounted: function mounted() {
+        console.log('Component Berry Picklist mounted.');
+    }
+});
+
+/***/ }),
+/* 300 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c("h3", { staticClass: "title-headers" }, [_vm._v(" Berry Picklists ")]),
+      _vm._v(" "),
+      _c(
+        "b-container",
+        { staticClass: "current-values" },
+        [
+          _c(
+            "b-row",
+            [
+              _c("b-col", [
+                _c("b", [
+                  _vm._v(" Week Start: " + _vm._s(_vm.week_start) + " ")
+                ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "b-col",
+                [
+                  _c(
+                    "b-button",
+                    {
+                      attrs: {
+                        variant: "primary",
+                        href: "seasonal-berries-breakdown"
+                      }
+                    },
+                    [_vm._v(" Export Berry Picklists ")]
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("b-col", [
+                _c("b", [
+                  _vm._v(
+                    " Delivery Days: " +
+                      _vm._s(_vm.selected_delivery_days) +
+                      " "
+                  )
+                ])
+              ])
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-28d93e4e", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

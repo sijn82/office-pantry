@@ -49,6 +49,7 @@ Vue.component('import-snacks-n-drinks-file', require('./components/ImportSnacksN
 Vue.component('import-rejigged-routes-file', require('./components/ImportRejiggedRoutesFile.vue'));
 Vue.component('add-new-company', require('./components/AddNewCompany.vue'));
 Vue.component('process-snacks-into-templates', require('./components/ProcessSnacksIntoTemplates.vue'));
+Vue.component('berry-picklist', require('./components/BerryPicklist.vue'));
 
 const app = new Vue({
     el: '#app'

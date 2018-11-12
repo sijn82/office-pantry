@@ -71,8 +71,8 @@ class PickListsController extends Controller
     public function berry_totals()
     {
         // Grab the picklists for this week, after the routes have been run to update them.
-        $picklists_with_berries_monday = Picklist::where('week_start', $this->week_start)->where('seasonal_berries', '>', 0)->OrderBy('delivery_day')->orderBy('assigned_to', 'desc')->get();
-        $grouped_by_route_picklists_with_berries = $picklists_with_berries_monday->groupBy('assigned_to', 'desc');
+        $picklists_with_berries = Picklist::where('week_start', $this->week_start)->where('seasonal_berries', '>', 0)->OrderBy('delivery_day')->orderBy('assigned_to', 'desc')->get();
+        $grouped_by_route_picklists_with_berries = $picklists_with_berries->groupBy('assigned_to', 'desc');
         // dd($picklists_with_berries);
         // dd($grouped_by_route_picklists_with_berries);
 
