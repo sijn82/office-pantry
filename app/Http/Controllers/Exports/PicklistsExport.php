@@ -69,7 +69,7 @@ WithMultipleSheets
                                 ];
 
         $correctOrderWedThurFri =   [
-                                        '19 - Serviced London'
+                                        '19 - Serviced London',
                                         '20 - Pete',
                                         '21 - Piers',
                                         '22 - Gareth',

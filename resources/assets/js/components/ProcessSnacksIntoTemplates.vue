@@ -70,7 +70,7 @@
                         </div>
                         
                         <div id="exportMultiCompanyButtons">
-                            <b-button :pressed.sync="op_multi" variant="outline-primary" href="export-snackbox-op-multicompany"> Export OP Multi Company </b-button>
+                            <b-button :pressed.sync="op_multi" variant="outline-primary" href="export-snackbox-op-multicompany" target="_blank"> Export OP Multi Company </b-button>
                             <b-button :pressed.sync="dpd_multi" variant="outline-primary" href="export-snackbox-dpd-multicompany"> Export DPD Multi Company </b-button>
                             <b-button :pressed.sync="apc_multi" variant="outline-primary" href="export-snackbox-apc-multicompany"> Export APC Multi Company </b-button>
                             <b-form-text>

@@ -11,9 +11,15 @@
                         Hi boss!
                     </div>
                     <div class="card-body">
-                        <a href=" {{route('import-file') }}"> Import and Process Files </a>
+                        <ul>
+                            <li>
+                                <a href=" {{ route('import-file') }}"> Import and Process Files </a>
+                            </li>
+                            <li>
+                                <a href=" {{ route('import-products') }}"> Import and Process Snackboxes </a>
+                            </li>
+                        </ul>
                     </div>
-                    
                 </div>
             </div>
         </div>

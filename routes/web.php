@@ -29,9 +29,9 @@ Route::get('berry-picklists', function () {
 Route::get('import-file', function () {
     return view('import-file');
 });
-Route::get('import-products', function () {
+Route::get('import-products', ['as' => 'import-products', function () {
     return view('process-snackboxes');
-});
+}]);
 Route::get('companies/new', function () {
     return view('new-company');
 });
