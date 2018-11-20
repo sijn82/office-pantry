@@ -54,7 +54,7 @@ class FruitOrderingDocumentController extends Controller
         // This function is to strip out all the existing values from the FOD.  We have no need to keep them after processing with the current system,
         // and now the site is live we should be more concerned with using unnecessary rows in the database.
 
-        $message = 'FOD entries deleted.';
+        $message = 'FOD entries deleted. I hope you meant to do that!';
 
         $fods = FruitOrderingDocument::all();
         // dd($routes);

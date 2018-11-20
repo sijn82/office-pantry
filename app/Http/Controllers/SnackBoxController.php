@@ -174,6 +174,29 @@ class SnackBoxController extends Controller
 
               // $chunks = [];
 
+              // Now due to popular demand these company orders will be grouped into alphabetical order.
+
+              $alphabetise = function($a, $b)
+              {
+                  // This is using the new and sexy spaceship operator to compare company string names and return them in alphabetical order.
+                  $outcome = $a[2] <=> $b[2];
+                  // Combined with usort, some background php magic will return the (alpabetically prior) item.
+                  return $outcome;
+              };
+
+              // So long as the array isn't empty, let's alphabetise them.
+              if (!empty($snd_OP_multipleBoxes)) { usort($snd_OP_multipleBoxes, $alphabetise); };
+              if (!empty($snd_OP_singleBoxes)) { usort($snd_OP_singleBoxes, $alphabetise); };
+              if (!empty($snd_OP_uniqueBoxes)) { usort($snd_OP_uniqueBoxes, $alphabetise); };
+
+              if (!empty($snd_DPD_multipleBoxes)) { usort($snd_DPD_multipleBoxes, $alphabetise); };
+              if (!empty($snd_DPD_singleBoxes)) { usort($snd_DPD_singleBoxes, $alphabetise); };
+              if (!empty($snd_DPD_uniqueBoxes)) { usort($snd_DPD_uniqueBoxes, $alphabetise); };
+
+              if (!empty($snd_APC_multipleBoxes)) { usort($snd_APC_multipleBoxes, $alphabetise); };
+              if (!empty($snd_APC_singleBoxes)) { usort($snd_APC_singleBoxes, $alphabetise); };
+              if (!empty($snd_APC_uniqueBoxes)) { usort($snd_APC_uniqueBoxes, $alphabetise); };
+
               // These 3 arrays need chunking into groups of four, so we can loop through them outputting 4 company orders per template.
               $snd_OP_singleBoxes_chunks = (!empty($snd_OP_singleBoxes)) ? array_chunk($snd_OP_singleBoxes, 4) : 'None for this week';
               $snd_DPD_singleBoxes_chunks = (!empty($snd_DPD_singleBoxes)) ? array_chunk($snd_DPD_singleBoxes, 4) : 'None for this week';
@@ -203,7 +226,10 @@ class SnackBoxController extends Controller
               // dd(session()->all());
               Log::channel('slack')->info('Snackbox data stored in sessions!');
               // This redirect was more for testing purposes as I want to redirect the user back to the upload snackbox and products page, with buttons to run/output each order option.
-              return back();
+              // return back();
+
+              // Not sure why but just had to replace the above 'return back();' because it caused a redirect loop/time out?!  No idea why and I don't like the mystery.
+              return redirect()->back();
 
               // This was also for testing purposes, so I could see the data being produced before exporting the results as an excel file.
               // return view('snackboxes-multi-company')->with('product_list', $product_list)->with('chunks', $snd_OP_singleBoxes_chunks);

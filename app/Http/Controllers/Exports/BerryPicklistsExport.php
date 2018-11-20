@@ -132,9 +132,11 @@ WithEvents
             AfterSheet::class    => function(AfterSheet $event) {
                 // dd($event);
                 // Set Cell Range Variables
-                $cellRangeHeader    = 'A1:C1';  // Week Start & Delivery Day Titles (First Row)
-                $cellRangeSub       = 'A2:C2'; // Week Start & Delivery Day Values (Second Row)
-                $tableHeaders       = 'A5:C5'; // Table Headers of Route Name / Company Route (Picklist Box Name) / No. Of Berries.
+                $cellRangeHeader    = 'A1:D1';  // Week Start & Delivery Day Titles (First Row)
+                $cellRangeSub       = 'A2:B2'; // Week Start & Delivery Day Values (Second Row)
+                $event->sheet->getDelegate()->getStyle('D2')->getAlignment()->setVertical('bottom');
+                $event->sheet->getDelegate()->getStyle('D2')->getAlignment()->setHorizontal('center');
+                $tableHeaders       = 'A5:E5'; // Table Headers of Route Name / Company Route (Picklist Box Name) / No. Of Berries.
 
                 // Use Cell Range Variables to style headers on exported sheet.
                 $event->sheet->getDelegate()->getStyle($cellRangeHeader)->getFont()->setSize(14);
@@ -184,45 +186,66 @@ WithEvents
                     // dd($cellIterator);
                     $cellIterator->setIterateOnlyExistingCells(false); // Loop all cells, even if it is not set
                     $selectedRow = $row->getRowIndex();
-                    $chosenCells = 'A' . $selectedRow . ':C' . $selectedRow;
-                    $middleCells = 'B' . $selectedRow;
-                    // dd($chosenCells);
-
+                    $chosenCells = 'A' . $selectedRow . ':E' . $selectedRow;
+                    $middleCells = 'B' . $selectedRow . ':C' . $selectedRow;
+                    $numericalCells = 'C' . $selectedRow . ':E' . $selectedRow;
+                    $bCells = 'B' . $selectedRow;
+                    $cCells = 'C' . $selectedRow;
+                    $dCells = 'D' . $selectedRow;
+                    
+                    // Styling the numerical values to be centered rather than pushed to one side, this makes them more readable and less likely to be mis-read.
+                    $event->sheet->getDelegate()->getStyle($numericalCells)->getAlignment()->setHorizontal('center');
+                      
+                    // This could be cleaner. I'm sure there's a better way to handle the middle ranges, other than styling them individually like this but it works fine.   
                     $event->sheet->styleCells(
-                          $middleCells, // Cell Range
-                          [ // Styles Array
-                              'borders' => [
-                                  'left' => [
-                                      'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
-                                      'color' => ['argb' => 'EF5CC3'],
-                                  ],
-                                  'right' => [
-                                      'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
-                                      'color' => ['argb' => 'EF5CC3'],
-                                  ],
-                              ], // end of borders
-                              // 'fill' => [
-                              //             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                              //             'color' => [
-                              //               'argb' => 'D05AAC'
-                              //             ]
-                              // ] // end of fill
-                          ] // end of styles array
+                            $bCells, // Cell Range
+                            [ // Styles Array
+                                'borders' => [
+                                    'left' => [
+                                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
+                                        'color' => ['argb' => 'EF5CC3'],
+                                    ],
+                                    'right' => [
+                                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
+                                        'color' => ['argb' => 'EF5CC3'],
+                                    ],
+                                ], // end of borders
+                            ] // end of styles array
+                    ); // end of styleCells function parameters.
+                    $event->sheet->styleCells(
+                              $cCells, // Cell Range
+                              [ // Styles Array
+                                  'borders' => [
+                                      'left' => [
+                                          'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
+                                          'color' => ['argb' => 'EF5CC3'],
+                                      ],
+                                      'right' => [
+                                          'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
+                                          'color' => ['argb' => 'EF5CC3'],
+                                      ],
+                                  ], // end of borders
+                              ] // end of styles array
                       ); // end of styleCells function parameters.
+                      $event->sheet->styleCells(
+                                $dCells, // Cell Range
+                                [ // Styles Array
+                                    'borders' => [
+                                        'left' => [
+                                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
+                                            'color' => ['argb' => 'EF5CC3'],
+                                        ],
+                                        'right' => [
+                                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
+                                            'color' => ['argb' => 'EF5CC3'],
+                                        ],
+                                    ], // end of borders
+                                ] // end of styles array
+                        ); // end of styleCells function parameters.
+                        // End of middle column cells styling.
 
-                    $chosenCellsArray = $event->sheet->getDelegate()
-                        ->rangeToArray(
-                            $chosenCells,     // The worksheet range that we want to retrieve
-                            NULL,        // Value that should be returned for empty cells
-                            TRUE,        // Should formulas be calculated (the equivalent of getCalculatedValue() for each cell)
-                            TRUE,        // Should values be formatted (the equivalent of getFormattedValue() for each cell)
-                            TRUE         // Should the array be indexed by cell row and cell column
-                        );
-                        // $spreadsheet->getActiveSheet()->getCell('A' . )->setValue(NULL);
-
-
-                         if ( $event->sheet->getDelegate()->getCell('A' . $selectedRow)->getValue() != NULL )
-                         {
+                        if ( $event->sheet->getDelegate()->getCell('A' . $selectedRow)->getValue() != NULL )
+                        {
                              $event->sheet->styleCells(
                                    $chosenCells, // Cell Range
                                    [ // Styles Array
@@ -232,12 +255,6 @@ WithEvents
                                                'color' => ['argb' => 'EF5CC3'],
                                            ],
                                        ], // end of borders
-                                       // 'fill' => [
-                                       //             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                                       //             'color' => [
-                                       //               'argb' => 'D05AAC'
-                                       //             ]
-                                       // ] // end of fill
                                    ] // end of styles array
                                ); // end of styleCells function parameters.
                          }
