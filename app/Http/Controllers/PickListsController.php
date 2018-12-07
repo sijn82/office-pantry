@@ -296,13 +296,7 @@ class PickListsController extends Controller
                         $assuming_route_entry_has_no_fruitboxes_for_delivery .=  "Assuming " . $newRoute->company_name . " fruit boxes for delivery (" . $newRoute->fruit_boxes . ") won't be troubling the picklist team \n";
 
                             // Send feedback to slack on the results of each entry - grouped by the 4 main outcomes.
-                            $title = "*UPDATED PICKLISTS WITH REJIGGED ROUTES - RESULTS _for Week Commencing_* - $this->week_start";
-                            Log::channel('slack')->info($title);
-                            Log::channel('slack')->info($updated_regular_entry);
-                            Log::channel('slack')->info($associated_picklist_old_week_start);
-                            Log::channel('slack')->info($updated_associated_entry);
-                            Log::channel('slack')->info($unable_to_find_current_picklist);
-                            Log::channel('slack')->warning($assuming_route_entry_has_no_fruitboxes_for_delivery);
+
 
                 // I'm pretty confident I don't need this check anymore as the exceptions array has been moved to the fod import at the very beginning of the whole process.
                 // Currently this is just a repetiton of a check made at the beginning of this function.
@@ -354,6 +348,13 @@ class PickListsController extends Controller
                 // End of unnecessary, repetitive code checks.  I will comment it out for now and see if it has any unexpected, unwanted effects.  I'm aware that this is all being rewritten in the new year!
                 }
           } // end of - foreach($newRoutes as $newRoute)
+          $title = "*UPDATED PICKLISTS WITH REJIGGED ROUTES - RESULTS _for Week Commencing_* - $this->week_start";
+          Log::channel('slack')->info($title);
+          Log::channel('slack')->info($updated_regular_entry);
+          Log::channel('slack')->info($associated_picklist_old_week_start);
+          Log::channel('slack')->info($updated_associated_entry);
+          Log::channel('slack')->info($unable_to_find_current_picklist);
+          Log::channel('slack')->warning($assuming_route_entry_has_no_fruitboxes_for_delivery);
     }
 
     /**
