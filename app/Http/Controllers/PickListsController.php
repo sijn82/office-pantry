@@ -198,7 +198,7 @@ class PickListsController extends Controller
           $associated_picklist_old_week_start = "*Associated picklists without this weeks start date, not updating route or position* \n";
           $updated_associated_entry = "*Found associated company for same delivery drop, updating relevant picklists* \n";
           $unable_to_find_current_picklist = "*Couldn't find any picklists associated with this company, anable to action anything!* \n";
-          $assuming_route_entry_has_no_fruitboxes_for_delivery = "*These entries don't seem to have any fruitboxes for delivery, so no picklists to update.* \n"
+          $assuming_route_entry_has_no_fruitboxes_for_delivery = "*These entries don't seem to have any fruitboxes for delivery, so no picklists to update.* \n";
 
 
           // New Logic
@@ -355,7 +355,7 @@ class PickListsController extends Controller
                 }
           } // end of - foreach($newRoutes as $newRoute)
     }
-    
+
     /**
      * Update the specified resource in storage.
      *
