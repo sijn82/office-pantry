@@ -193,6 +193,14 @@ class PickListsController extends Controller
               // $picklist_company_names = array_map('trim', $picklist_company_names);
           // End of current logic.
 
+
+          $updated_regular_entry = "*Regular entry, found and updated picklists with current weekstart date* \n";
+          $associated_picklist_old_week_start = "*Associated picklists without this weeks start date, not updating route or position* \n";
+          $updated_associated_entry = "*Found associated company for same delivery drop, updating relevant picklists* \n";
+          $unable_to_find_current_picklist = "*Couldn't find any picklists associated with this company, anable to action anything!* \n";
+          $assuming_route_entry_has_no_fruitboxes_for_delivery = "*These entries don't seem to have any fruitboxes for delivery, so no picklists to update.* \n"
+
+
           // New Logic
               // This picklist company names could more accurately represent picklist box_names
               $picklists = PickList::where('week_start', $this->week_start)->get();
@@ -205,39 +213,19 @@ class PickListsController extends Controller
 
           foreach($newRoutes as $newRoute) {
 
-                    // $company_route_name_exceptions =    [
-                    //                                         'Legal and General London (FAO Simon Chong)' => 'Legal and General London',
-                    //                                         'London Business School (FAO Victoria Gilbert)' => 'London Business School',
-                    //                                         'JP Morgan (FAO Sara Cordwell 15th Floor)' => 'JP Morgan',
-                    //                                         'JP Morgan II (FAO Sara Cordwell 15th Floor)' => 'JP Morgan II',
-                    //                                         'TI Media Limited (FAO Ruth Stanley)' => 'TI Media Limited',
-                    //                                         'Lloyds (Gatwick - FAO Katie Artlett)' => 'Lloyds (Gatwick)',
-                    //                                         'Lloyds (London - London Wall - FAO Elaine Charlery)' => 'Lloyds (London - London Wall)',
-                    //                                         'Lloyds (London - 10 Gresham Street – FAO Marytn Shone / Ben Pryce)' => 'Lloyds (London - 10 Gresham Street)',
-                    //                                         'Lloyds (London - 25 Gresham Street - FAO James Gamble / Maryn Shone / Ben Pryce)' => 'Lloyds (London - 25 Gresham Street)',
-                    //                                         'Lloyds (London - Old Broad Street - FAO Jamie Mcreesh / Daniel Lee / Parul Patel)' => 'Lloyds (London - Old Broad Street)'
-                    //                                     ];
-                    //
-                    //       // If $newRoute->company_name doesn't match a Company route_name, check to see if this value matches a Company route_name exception.
-                    //       // These are some of the rare cases where the route name is tailored for the delivery with an FAO attached.
-                    //     if (array_search($newRoute->company_name, $company_route_name_exceptions)) {
-                    //             // if it finds a matching value, it returns the associated key.
-                    //             $newRoute->company_name = array_search($newRoute->company_name, $company_route_name_exceptions);
-                    //     }
-
                         // if the route name matches a route name in the company tables - this should be the case for most entries.
                         if (in_array(strtolower(trim($newRoute->company_name)),
                             array_map('strtolower', $company_route_names))
                             && ($newRoute->fruit_boxes > 0))
                          { // i.e Awin would be but Awin Banana Box (rightly) wouldn't.
                                 $company_picklist_box_names = Company::where('route_name', $newRoute->company_name)->pluck('box_names')->all();
-                                var_dump($company_picklist_box_names);
+                                // var_dump($company_picklist_box_names);
 
                                 $company_picklist_box_names = empty($company_picklist_box_names) ? [[]] : $company_picklist_box_names;
 
                                 // now we need to check the company tables for any associated picklist boxes that match entries out for delivery this week
                                 foreach ($company_picklist_box_names[0] as $company_picklist_box_name) {
-                                        echo $company_picklist_box_name . '<br>';
+                                        // echo $company_picklist_box_name . '<br>';
 
                                         // this is only checking that a picklist entry exists in the picklist table, not necessarily that it's out for delivery this week.  Should I add week_start?
                                         $currentPicklistEntry = PickList::where('company_name', trim($company_picklist_box_name))
@@ -257,11 +245,12 @@ class PickListsController extends Controller
                                                       'position_on_route' => $newRoute->position_on_route,
                                                     ]);
 
-                                                echo 'Updated <strong style="color: green";>' . $selectedCompany . ' on ' . $newRoute->delivery_day . '</strong>'
-                                                      . ' to be on ' . $newRoute->assigned_to . ' at position: ' . $newRoute->position_on_route . '<br>';
+                                                $updated_regular_entry .= 'Updated ' . $selectedCompany . ' on ' . $newRoute->delivery_day . ' to be on '
+                                                                            . $newRoute->assigned_to . ' at position: ' . $newRoute->position_on_route . " \n";
 
                                         } else {
-                                        echo  $company_picklist_box_name . ' hasn\'t been updated to this week ( ' . $this->week_start . ' ) and doesn\'t appear to be out for delivery on ' . $newRoute->delivery_day . ' this week.  Is it?<br>';
+                                                $associated_picklist_old_week_start .= "Found picklist entry " . $company_picklist_box_name . " on "
+                                                                                        . $newRoute->delivery_day . " but it doesn't appear to be on for this week?  Week start is out of date \n";
                                         }
                                 } // end of foreach - ($company_picklist_box_names[0] as $company_picklist_box_name)
 
@@ -270,7 +259,7 @@ class PickListsController extends Controller
                                 // so I'm CURRENTLY hardcoding this second check to ONLY loop through the optional extra array in $company_picklist_box_names[1].
                                 if (count($company_picklist_box_names) > 1) {
                                         foreach($company_picklist_box_names[1] as $company_picklist_box_name) {
-                                                echo $company_picklist_box_name . '<br>';
+                                                // echo $company_picklist_box_name . '<br>';
 
                                                 // this is only checking that a picklist entry exists in the picklist table, not necessarily that it's out for delivery this week.  Should I add week_start?
                                                 $currentPicklistEntry = PickList::where('company_name', trim($company_picklist_box_name))
@@ -290,11 +279,11 @@ class PickListsController extends Controller
                                                               'position_on_route' => $newRoute->position_on_route,
                                                         ]);
 
-                                                        echo 'Updated <strong style="color: green";>' . $selectedCompany . ' on ' . $newRoute->delivery_day . '</strong>'
-                                                                  . ' to be on ' . $newRoute->assigned_to . ' at position: ' . $newRoute->position_on_route . '<br>';
+                                                        $updated_associated_entry .= 'Updated associated ' . $selectedCompany . ' on ' . $newRoute->delivery_day . ' to be on '
+                                                                                    . $newRoute->assigned_to . ' at position: ' . $newRoute->position_on_route . " \n";
 
                                                 } else {
-                                                echo  $newRoute->company_name . ' out for delivery on ' . $newRoute->delivery_day . ' ( ' . $newRoute->week_start . ' ) is being treated as an old entry.  Is it?<br>';
+                                                $unable_to_find_current_picklist .=  $newRoute->company_name . ' out for delivery on ' . $newRoute->delivery_day . ' ( ' . $newRoute->week_start . " ) is being treated as an old entry.  Is it? \n";
                                                 }
                                         } // end of foreach - ($company_picklist_box_names[1] as $company_picklist_box_name)
                                 } // end of if - ($count($company_picklist_box_names) > 1)
@@ -304,54 +293,69 @@ class PickListsController extends Controller
                         // }// end of if/else (in_array($newRoute->company_name, $company_route_names))
 
                 } else {
-                        echo 'Couldn\'t locate route for ' . '<strong style="color: red";>' . $newRoute->company_name
-                            . ' - char: ' . strlen($newRoute->company_name) . '</strong> in Company (route_names) to access associated Company (box_names). Checking the exceptions array...<br>  Or fruit boxes for delivery (' . $newRoute->fruit_boxes . ') won\'t be troubling the picklist team<br>';
+                        $assuming_route_entry_has_no_fruitboxes_for_delivery .=  "Assuming " . $newRoute->company_name . " fruit boxes for delivery (" . $newRoute->fruit_boxes . ") won't be troubling the picklist team \n";
 
-                        // (If it does), then check the associated company->box_names
-                        $company_picklist_box_names = Company::where('route_name', $newRoute->company_name)->pluck('box_names')->all(); // Error:  Call to a member function where() on array
-                        if (count($company_picklist_box_names) !== 0) {
-                                foreach ($company_picklist_box_names[0] as $company_picklist_box_name) {
+                            // Send feedback to slack on the results of each entry - grouped by the 4 main outcomes.
+                            $title = "*UPDATED PICKLISTS WITH REJIGGED ROUTES - RESULTS _for Week Commencing_* - $this->week_start";
+                            Log::channel('slack')->info($title);
+                            Log::channel('slack')->info($updated_regular_entry);
+                            Log::channel('slack')->info($associated_picklist_old_week_start);
+                            Log::channel('slack')->info($updated_associated_entry);
+                            Log::channel('slack')->info($unable_to_find_current_picklist);
+                            Log::channel('slack')->warning($assuming_route_entry_has_no_fruitboxes_for_delivery);
 
-                                        // attempt to grab the valid week_start from an entry in the picklists for this week, if this fails we will output 'unavailable' further down.
-                                        $picklist_box_week_start = Picklist::where('company_name', $company_picklist_box_name)->where('week_start', $this->week_start)->pluck('week_start')->first();
-                                        // grab an array of the week days this compnay is expecting a delivery for this week.
-                                        $selected_picklist_box_delivery_day = Picklist::where('company_name', $company_picklist_box_name)->where('week_start', $this->week_start)->pluck('delivery_day')->all();
+                // I'm pretty confident I don't need this check anymore as the exceptions array has been moved to the fod import at the very beginning of the whole process.
+                // Currently this is just a repetiton of a check made at the beginning of this function.
+                // All that's really happening in this else statement, is catching the routes without a fruitbox so we can log them in slack.
 
-                                        var_dump($picklist_box_week_start);
-                                        var_dump($selected_picklist_box_delivery_day);
+                        // // (If it does), then check the associated company->box_names
+                        // $company_picklist_box_names = Company::where('route_name', $newRoute->company_name)->pluck('box_names')->all(); // Error:  Call to a member function where() on array
+                        // if (count($company_picklist_box_names) !== 0) {
+                        //         foreach ($company_picklist_box_names[0] as $company_picklist_box_name) {
+                        //
+                        //                 // attempt to grab the valid week_start from an entry in the picklists for this week, if this fails we will output 'unavailable' further down.
+                        //                 $picklist_box_week_start = Picklist::where('company_name', $company_picklist_box_name)->where('week_start', $this->week_start)->pluck('week_start')->first();
+                        //                 // grab an array of the week days this compnay is expecting a delivery for this week.
+                        //                 $selected_picklist_box_delivery_day = Picklist::where('company_name', $company_picklist_box_name)->where('week_start', $this->week_start)->pluck('delivery_day')->all();
+                        //
+                        //                 var_dump($picklist_box_week_start);
+                        //                 var_dump($selected_picklist_box_delivery_day);
+                        //
+                        //                 if(empty($picklist_box_week_start)) {
+                        //                   $picklist_box_week_start = ' unavailable ';
+                        //                 } else {
+                        //                   $picklist_box_week_start = (int) $picklist_box_week_start;
+                        //                 }
+                        //
+                        //
+                        //                 if (in_array($company_picklist_box_name, $picklist_box_names) // If company picklist name in list of picklist box names
+                        //                     && ($picklist_box_week_start == $this->week_start) // If picklist box name has been updated to this weeks start date
+                        //                     && (in_array($newRoute->delivery_day, $selected_picklist_box_delivery_day))) // And the picklist name is down for a delivery on this particular day of the week.
+                        //                 {
+                        //                     // if all checks are passed we have an entry to update with the new 'assigned_to' and 'position_on_route' values.
+                        //                         PickList::where('company_name', trim($company_picklist_box_name))->where('delivery_day', $newRoute->delivery_day)
+                        //                           ->update([
+                        //                             'assigned_to' => $newRoute->assigned_to,
+                        //                             'position_on_route' => $newRoute->position_on_route,
+                        //                         ]);
+                        //
+                        //                         echo 'Found and updated ' . '<strong style="color: green";>' . $company_picklist_box_name . '</strong> as an associated picklist to <strong style="color: green";>'
+                        //                     . $newRoute->company_name . '</strong> which is out for delivery (' . $newRoute->delivery_day . ' / ' . $picklist_box_week_start . ') <br>';
+                        //
+                        //                 } else {
+                        //                     echo 'Couldn\'t find picklist for ' . $newRoute->company_name . ', or company listed box name: ( ' . $company_picklist_box_name . ' )
+                        //                      was last updated on ( ' . $picklist_box_week_start . ' ) and is not due for a delivery on ' . $newRoute->delivery_day . ' this week (' . $this->week_start . '). <br>';
+                        //                 }
+                        //           } //end of foreach ($company_picklist_box_names[0] as $company_picklist_box_name)
+                        // } else {
+                        //     echo $newRoute->company_name . ' does not appear to have any associated picklists, are they snacks and/or drinks only? <br>';
+                        // } // end of if/else (count($company_picklist_box_names) !== 0)
 
-                                        if(empty($picklist_box_week_start)) {
-                                          $picklist_box_week_start = ' unavailable ';
-                                        } else {
-                                          $picklist_box_week_start = (int) $picklist_box_week_start;
-                                        }
-
-
-                                        if (in_array($company_picklist_box_name, $picklist_box_names) // If company picklist name in list of picklist box names
-                                            && ($picklist_box_week_start == $this->week_start) // If picklist box name has been updated to this weeks start date
-                                            && (in_array($newRoute->delivery_day, $selected_picklist_box_delivery_day))) // And the picklist name is down for a delivery on this particular day of the week.
-                                        {
-                                            // if all checks are passed we have an entry to update with the new 'assigned_to' and 'position_on_route' values.
-                                                PickList::where('company_name', trim($company_picklist_box_name))->where('delivery_day', $newRoute->delivery_day)
-                                                  ->update([
-                                                    'assigned_to' => $newRoute->assigned_to,
-                                                    'position_on_route' => $newRoute->position_on_route,
-                                                ]);
-
-                                                echo 'Found and updated ' . '<strong style="color: green";>' . $company_picklist_box_name . '</strong> as an associated picklist to <strong style="color: green";>'
-                                            . $newRoute->company_name . '</strong> which is out for delivery (' . $newRoute->delivery_day . ' / ' . $picklist_box_week_start . ') <br>';
-
-                                        } else {
-                                            echo 'Couldn\'t find picklist for ' . $newRoute->company_name . ', or company listed box name: ( ' . $company_picklist_box_name . ' )
-                                             was last updated on ( ' . $picklist_box_week_start . ' ) and is not due for a delivery on ' . $newRoute->delivery_day . ' this week (' . $this->week_start . '). <br>';
-                                        }
-                                  } //end of foreach ($company_picklist_box_names[0] as $company_picklist_box_name)
-                        } else {
-                            echo $newRoute->company_name . ' does not appear to have any associated picklists, are they snacks and/or drinks only? <br>';
-                        } // end of if/else (count($company_picklist_box_names) !== 0)
+                // End of unnecessary, repetitive code checks.  I will comment it out for now and see if it has any unexpected, unwanted effects.  I'm aware that this is all being rewritten in the new year!
                 }
           } // end of - foreach($newRoutes as $newRoute)
     }
+    
     /**
      * Update the specified resource in storage.
      *
