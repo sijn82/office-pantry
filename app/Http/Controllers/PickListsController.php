@@ -348,6 +348,7 @@ class PickListsController extends Controller
                 // End of unnecessary, repetitive code checks.  I will comment it out for now and see if it has any unexpected, unwanted effects.  I'm aware that this is all being rewritten in the new year!
                 }
           } // end of - foreach($newRoutes as $newRoute)
+
           $title = "*UPDATED PICKLISTS WITH REJIGGED ROUTES - RESULTS _for Week Commencing_* - $this->week_start";
           Log::channel('slack')->info($title);
           Log::channel('slack')->info($updated_regular_entry);
@@ -355,6 +356,8 @@ class PickListsController extends Controller
           Log::channel('slack')->info($updated_associated_entry);
           Log::channel('slack')->info($unable_to_find_current_picklist);
           Log::channel('slack')->warning($assuming_route_entry_has_no_fruitboxes_for_delivery);
+
+          return redirect()->route('import-file');
     }
 
     /**
