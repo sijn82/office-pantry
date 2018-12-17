@@ -111,6 +111,7 @@ class FruitOrderingDocumentController extends Controller
                                                             'TI Media Limited (FAO Ruth Stanley)' => 'TI Media Limited',
                                                             'Lloyds (Gatwick - FAO Katie Artlett)' => 'Lloyds (Gatwick)',
                                                             'Lloyds (London - London Wall - FAO Scott Kenward)' => 'Lloyds (London - London Wall)',
+                                                            'Lloyds Bank (Gresham Street - FAO Client Services Jo-Anne Mehew)' => 'Lloyds Bank (Gresham Street)'
                                                             'Lloyds (London - 10 Gresham Street – FAO Marytn Shone / Alex Linnell / Massir Thomson / Dawn Sugarman)' => 'Lloyds (London - 10 Gresham Street)',
                                                             'Lloyds (London - 25 Gresham Street - FAO Elaine Charlery)' => 'Lloyds (London - 25 Gresham Street)',
                                                             'Lloyds (London - Old Broad Street - FAO Jamie Mcreesh / Daniel Lee / Parul Patel)' => 'Lloyds (London - Old Broad Street)',
