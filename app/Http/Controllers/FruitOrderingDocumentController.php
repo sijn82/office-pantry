@@ -123,7 +123,7 @@ class FruitOrderingDocumentController extends Controller
                                                             'Juro (FAO Adrienne)' => 'Juro',
                                                             'Home Office Eaton House (FAO Mike Jarrett)' => 'Home Office Eaton House',
                                                             'Euromoney Global Limited (FAO Claire Heath)' => 'Euromoney Global Limited',
-                                                            'Euromoney (Fastmarkets Events - FAO Samantha Persson)',
+                                                            'Euromoney (Fastmarkets Events - FAO Samantha Persson)' => 'Euromoney (Fastmarkets Events)',
                                                             'Goldman Sachs (FAO Camilla Oliver)' => 'Goldman Sachs',
                                                             'Grey London Fruit (FAO Neil Reeves / Paul Scanlan)' => 'Grey London',
                                                        ];
