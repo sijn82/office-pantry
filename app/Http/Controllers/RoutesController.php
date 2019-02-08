@@ -665,7 +665,7 @@ class RoutesController extends Controller
                         } else {
                             // this else statement is hit if the route to be updated with drinks and snacks doesn't exist as a recognised name/day combo in the Routes table
                             // or if the company name provided doesn't match a company invoice_name or route_name in the Company table.
-                            $uh_oh_shit_happened = "Uh, oh? ' . $company_name . ' on ' . $data[4] . ' couldn\'t be added! \n";
+                            $uh_oh_shit_happened .= "Uh, oh? ' . $company_name . ' on ' . $data[4] . ' couldn\'t be added! \n";
                         } // end of - if (count($currentRoutingEntry) !== 0), elseif (in_array($company_name, $company_invoice_names) || in_array($company_name, $company_route_names)), else (uh oh!)
                 } // end of while (($data = fgetcsv ($handle, 1000, ',')) !== FALSE) {
         } // end of if (($handle = fopen(public_path() . '/drinks-n-snacks/drinksnsnacks-' . $this->week_start . '-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
@@ -836,49 +836,55 @@ class RoutesController extends Controller
                               $selectedRouteAddressInfo[0]->address = $selectedRouteAddressInfo[0]->route_summary_address;
                           }
 
-                                // this if statement is currently untested, there maybe some quirks to iron out.
-                                if (is_null($selectedPostCode)) { // if the postcode is null we can be pretty sure the rest of the fields hold incomplete data at best, update all the fields with company data.
+                            // this if statement is currently untested, there maybe some quirks to iron out.
+                            if (is_null($selectedPostCode)) { // if the postcode is null we can be pretty sure the rest of the fields hold incomplete data at best, update all the fields with company data.
 
-                                        Route::where('company_name', $selectedCompany)->where('delivery_day', $fruitOrderingDocument->delivery_day)
-                                          ->update([
+                                    Route::where('company_name', $selectedCompany)->where('delivery_day', $fruitOrderingDocument->delivery_day)
+                                      ->update([
 
-                                        //extra fields
-                                        'postcode' => $selectedRouteAddressInfo[0]->postcode,
-                                        'delivery_information' => $selectedRouteAddressInfo[0]->delivery_information,
-                                        'address' => $selectedRouteAddressInfo[0]->route_summary_address,    // Add company data here.
-                                        // plus the usual
-                                        'week_start' => $fruitOrderingDocument->week_start,
-                                        'fruit_crates' => $fruitOrderingDocument->fruit_crates,
-                                        'fruit_boxes' => $fruitOrderingDocument->fruit_boxes,
-                                        'milk_2l_semi_skimmed' => $fruitOrderingDocument->milk_2l_semi_skimmed,
-                                        'milk_2l_skimmed' => $fruitOrderingDocument->milk_2l_skimmed,
-                                        'milk_2l_whole' => $fruitOrderingDocument->milk_2l_whole,
-                                        'milk_1l_semi_skimmed' => $fruitOrderingDocument->milk_1l_semi_skimmed,
-                                        'milk_1l_skimmed' => $fruitOrderingDocument->milk_1l_skimmed,
-                                        'milk_1l_whole' => $fruitOrderingDocument->milk_1l_whole,
-                                        'milk_1l_alt_coconut' => $fruitOrderingDocument->milk_1l_alt_coconut,  // Not necessarily representative of actual figure as it includes the oat, rice and cashew (plus others?) totals.
-                                        'milk_1l_alt_unsweetened_almond' => $fruitOrderingDocument->milk_1l_alt_unsweetened_almond,
-                                        'milk_1l_alt_almond' => $fruitOrderingDocument->milk_1l_alt_almond,
-                                        'milk_1l_alt_unsweetened_soya' => $fruitOrderingDocument->milk_1l_alt_unsweetened_soya,
-                                        'milk_1l_alt_soya' => $fruitOrderingDocument->milk_1l_alt_soya,
-                                        'milk_1l_alt_oat' => null,  // This field is manually inputted for now.
-                                        'milk_1l_alt_rice' => null, // This field is manually inputted for now.
-                                        'milk_1l_alt_cashew' => null, // This field is manually inputted for now.
-                                        'milk_1l_alt_lactose_free_semi' => $fruitOrderingDocument->milk_1l_alt_lactose_free_semi,
+                                    //extra fields
+                                    'postcode' => $selectedRouteAddressInfo[0]->postcode,
+                                    'delivery_information' => $selectedRouteAddressInfo[0]->delivery_information,
+                                    'address' => $selectedRouteAddressInfo[0]->route_summary_address,    // Add company data here.
+                                    // plus the usual
+                                    'week_start' => $fruitOrderingDocument->week_start,
+                                    'fruit_crates' => $fruitOrderingDocument->fruit_crates,
+                                    'fruit_boxes' => $fruitOrderingDocument->fruit_boxes,
+                                    'milk_2l_semi_skimmed' => $fruitOrderingDocument->milk_2l_semi_skimmed,
+                                    'milk_2l_skimmed' => $fruitOrderingDocument->milk_2l_skimmed,
+                                    'milk_2l_whole' => $fruitOrderingDocument->milk_2l_whole,
+                                    'milk_1l_semi_skimmed' => $fruitOrderingDocument->milk_1l_semi_skimmed,
+                                    'milk_1l_skimmed' => $fruitOrderingDocument->milk_1l_skimmed,
+                                    'milk_1l_whole' => $fruitOrderingDocument->milk_1l_whole,
+                                    'milk_1l_alt_coconut' => $fruitOrderingDocument->milk_1l_alt_coconut,  // Not necessarily representative of actual figure as it includes the oat, rice and cashew (plus others?) totals.
+                                    'milk_1l_alt_unsweetened_almond' => $fruitOrderingDocument->milk_1l_alt_unsweetened_almond,
+                                    'milk_1l_alt_almond' => $fruitOrderingDocument->milk_1l_alt_almond,
+                                    'milk_1l_alt_unsweetened_soya' => $fruitOrderingDocument->milk_1l_alt_unsweetened_soya,
+                                    'milk_1l_alt_soya' => $fruitOrderingDocument->milk_1l_alt_soya,
+                                    'milk_1l_alt_oat' => null,  // This field is manually inputted for now.
+                                    'milk_1l_alt_rice' => null, // This field is manually inputted for now.
+                                    'milk_1l_alt_cashew' => null, // This field is manually inputted for now.
+                                    'milk_1l_alt_lactose_free_semi' => $fruitOrderingDocument->milk_1l_alt_lactose_free_semi,
 
-                                        // At least temporarily these two fields will be updated from a seperate file.
-                                         'drinks' => null,
-                                         'snacks' => null,
-                                         'other' => null,
+                                    // At least temporarily these two fields will be updated from a seperate file.
+                                     'drinks' => null,
+                                     'snacks' => null,
+                                     'other' => null,
 
 
-                                        // This is another column which will be manually updated (by Nick) when confirming/rearranging the routes.
-                                        // 'assigned_to' =
-                                      ]);
-                                      $updated_entry_needed_address .= '• Updated ' . $selectedCompany . " but needed address details. \n";
+                                    // This is another column which will be manually updated (by Nick) when confirming/rearranging the routes.
+                                    // 'assigned_to' =
+                                  ]);
+                                  $updated_entry_needed_address .= '• Updated ' . $selectedCompany . " but needed address details. \n";
 
                                   } else { // we have an address so lets just update the fields that typically change.
 
+                // -----  I think this is where we could/should have a check for the current week start variable matching up to the route entry current week start ----- //
+                // -----  I'm going to add it here but comment it out for now,
+                //        as I need to spend time on other tasks before studying the risks of breaking a function which currently, mostly works!  ----- //
+
+                //                  if($currentRoutingEntry[0]->week_start !== $this->week_start) {  // -----  We can update it with new value ----- //
+                
                                           Route::where('company_name', $selectedCompany)->where('delivery_day', $fruitOrderingDocument->delivery_day)
                                             ->update([
 
@@ -913,6 +919,57 @@ class RoutesController extends Controller
 
                                                 ]);
                                                 $updated_regular_entry .= '• Updated ' . $selectedCompany . " for a regular delivery. \n";
+                                                
+                                            // -----  Else a box for this route has already been added, we should add to the existing total  ----- //
+                                        // } else {
+                                        
+                                        // $new_fruitcrate_total = ($currentRoutingEntry[0]->fruit_crates + $fruitOrderingDocument->fruit_crates);
+                                        // $new_fruitbox_total = ($currentRoutingEntry[0]->fruit_boxes + $fruitOrderingDocument->fruit_boxes);
+                                        // $new_milk_2l_semi_skimmed_total = ($currentRoutingEntry[0]->milk_2l_semi_skimmed + $fruitOrderingDocument->milk_2l_semi_skimmed);
+                                        // $new_milk_2l_skimmed_total = ($currentRoutingEntry[0]->milk_2l_skimmed + $fruitOrderingDocument->milk_2l_skimmed);
+                                        // $new_milk_2l_whole_total = ($currentRoutingEntry[0]->milk_2l_whole + $fruitOrderingDocument->milk_2l_whole);
+                                        // $new_milk_1l_semi_skimmed_total = ($currentRoutingEntry[0]->milk_1l_semi_skimmed + $fruitOrderingDocument->milk_1l_semi_skimmed);
+                                        // $new_milk_1l_skimmed_total = ($currentRoutingEntry[0]->milk_1l_skimmed + $fruitOrderingDocument->milk_1l_skimmed);
+                                        // $new_milk_1l_whole_total = ($currentRoutingEntry[0]->milk_1l_whole + $fruitOrderingDocument->milk_1l_whole);
+                                        // $new_milk_1l_alt_coconut_total = ($currentRoutingEntry[0]->milk_1l_alt_coconut + $fruitOrderingDocument->milk_1l_alt_coconut);
+                                        // $new_milk_1l_alt_unsweetened_almond_total = ($currentRoutingEntry[0]->milk_1l_alt_unsweetened_almond + $fruitOrderingDocument->milk_1l_alt_unsweetened_almond);
+                                        // $new_milk_1l_alt_almond_total = ($currentRoutingEntry[0]->milk_1l_alt_almond + $fruitOrderingDocument->milk_1l_alt_almond);
+                                        // $new_milk_1l_alt_unsweetened_soya_total = ($currentRoutingEntry[0]->milk_1l_alt_unsweetened_soya + $fruitOrderingDocument->milk_1l_alt_unsweetened_soya);
+                                        // $new_milk_1l_alt_soya_total = ($currentRoutingEntry[0]->milk_1l_alt_soya + $fruitOrderingDocument->milk_1l_alt_soya);
+                                        // $new_milk_1l_alt_lactose_free_semi_total = ($currentRoutingEntry[0]->milk_1l_alt_lactose_free_semi + $fruitOrderingDocument->milk_1l_alt_lactose_free_semi);
+                                        // 
+                                        // Route::where('company_name', $selectedCompany)->where('delivery_day', $fruitOrderingDocument->delivery_day)
+                                        //   ->update([
+                                        // 
+                                        //           // These are only the fields which will likely change from one delivery to the next.
+                                        // 
+                                        //         'week_start' => $fruitOrderingDocument->week_start,
+                                        //         'fruit_crates' => $new_fruitcrate_total,
+                                        //         'fruit_boxes' => $new_fruitbox_total,
+                                        //         'milk_2l_semi_skimmed' => $new_milk_2l_semi_skimmed_total,
+                                        //         'milk_2l_skimmed' => $new_milk_2l_skimmed_total,
+                                        //         'milk_2l_whole' => $new_milk_2l_whole_total,
+                                        //         'milk_1l_semi_skimmed' => $new_milk_1l_semi_skimmed_total,
+                                        //         'milk_1l_skimmed' => $new_milk_1l_skimmed_total,
+                                        //         'milk_1l_whole' => $new_milk_1l_whole_total,
+                                        //         'milk_1l_alt_coconut' => $new_milk_1l_alt_coconut_total,  // Not necessarily representative of actual figure as it includes the oat, rice and cashew (plus others?) totals.
+                                        //         'milk_1l_alt_unsweetened_almond' => $new_milk_1l_alt_unsweetened_almond_total,
+                                        //         'milk_1l_alt_almond' => $new_milk_1l_alt_almond_total,
+                                        //         'milk_1l_alt_unsweetened_soya' => $new_milk_1l_alt_unsweetened_soya_total,
+                                        //         'milk_1l_alt_soya' => $new_milk_1l_alt_soya_total,
+                                        //         'milk_1l_alt_oat' => null, // This field is manually inputted for now.
+                                        //         'milk_1l_alt_rice' => null, // This field is manually inputted for now.
+                                        //         'milk_1l_alt_cashew' => null, // This field is manually inputted for now.
+                                        //         'milk_1l_alt_lactose_free_semi' => $new_milk_1l_alt_lactose_free_semi_total,
+                                        // 
+                                        //         // At least temporarily these two fields will be updated from a seperate file.
+                                        //         'drinks' => null,
+                                        //         'snacks' => null,
+                                        //         'other' => null,
+
+                                                
+                                    // } // -----  This is the end of the commented out upgrade code, which should fix the possiblilty of error but needs further reviewing before using.  ----- //
+                                                
                                   } // end of if statement which is currently untested,
 
                     } else { // End of if (count($currentRoutingEntry) !== 0)

@@ -15,6 +15,8 @@ use App\FruitOrderingDocument;
 use App\Company;
 // use App\Exports;
 
+use App\FruitBox;
+
 
 // Function index                                                                   Changes for picklist and routing
 
@@ -88,7 +90,13 @@ class PickListsController extends Controller
 
 
     }
-
+    
+    // public function fruitboxPicklists()
+    // {
+    //     $picklists = FruitBox::where('next_delivery', $this->week_start)->where('is_active', 'Active')->get();
+    // 
+    //     dd($picklists);
+    // }
 
     /**
      * Display a listing of the resource.
