@@ -128,6 +128,7 @@ class FruitOrderingDocumentController extends Controller
                                                             'Grey London Fruit (FAO Neil Reeves / Paul Scanlan)' => 'Grey London',
                                                             'HSBC PLC (FAO: Aneel Aftab)' => 'HSBC PLC',
                                                             'William Reed Business Media (FAO Lauren Gibbons)' => 'William Reed Business Media',
+                                                            '4th Floor Elizabeth House Limited (FAO Exponea/CERA)' => '4th Floor Elizabeth House Limited',
                                                        ];
 
                          // If $newRoute->company_name doesn't match a Company route_name, check to see if this value matches a Company route_name exception.
