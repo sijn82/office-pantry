@@ -75,6 +75,7 @@ class RoutesExport implements WithMultipleSheets
                                         '24 - Thursday Route Gareth',
                                         '24.5 - Thursday Route Jordan',
                                         '25 - Friday Route',
+                                        '26 - Friday Route 2',
                                         'TBC'
                                     ];
 
