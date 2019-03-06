@@ -46,36 +46,35 @@ class RoutesExport implements WithMultipleSheets
     public function sheets(): array
     {
         $correctOrderMonTue =   [       '1.15 - Float',
-                                        '14 - Filling In Route', 
-                                        '13 - Thames Valley II',
-                                        '12 - Thames Valley I', // Serviced II
-                                        '11 - West Central',
-                                        '10 - Michael',
-                                        '09 - Gus',
-                                        '08 - South London',
-                                        '07 - Catalin',
-                                        '06 - Stratford', // soon to be city
-                                        '05 - City', // soon to be stratford
-                                        '04 - M25 North',
-                                        '03 - M25 South',
-                                        '02 - Serviced II', // Thames Valley II (West London Mo)
-                                        '01 - Serviced I',
-                                        '00 - Tuesday Route Serviced',
-                                        '000 - Tuesday Route',
+                                        '1.14 - Filling in',
+                                        '1.13 - Thames Valley',
+                                        '1.12 - West London',
+                                        '1.11 - West Central',
+                                        '1.10 - W1-W2',
+                                        '1.09 - SW1',
+                                        '1.08 - South London',
+                                        '1.07 - City North',
+                                        '1.06 - Canary Wharf',
+                                        '1.05 - City South',
+                                        '1.04 - M25 North',
+                                        '1.03 - M25 South',
+                                        '1.02 - Serviced Thames',
+                                        '1.01 - Serviced London',
+                                        '2.02 - Tue Multidrop',
+                                        '2.01 - Tue Serviced',
                                         'TBC'
                                 ];
 
         $correctOrderWedThurFri =   [
-                                        'New Offices',
-                                        '19 - Serviced London',
-                                        '20 - Pete',
-                                        '21 - Piers',
-                                        '22 - Gareth',
-                                        '23 - M25 Wednesday',
-                                        '24 - Thursday Route Gareth',
-                                        '24.5 - Thursday Route Jordan',
-                                        '25 - Friday Route',
-                                        '26 - Friday Route 2',
+                                        '5.02 - Fri Multidrop',
+                                        '5.01 - Fri Serviced',
+                                        '4.02 - Thu Multidrop',
+                                        '4.01 - Thu Serviced',
+                                        '3.05 - Thames',
+                                        '3.04 - South & North',
+                                        '3.03 - West',
+                                        '3.02 - City',
+                                        '3.01 - Serviced London',
                                         'TBC'
                                     ];
 
