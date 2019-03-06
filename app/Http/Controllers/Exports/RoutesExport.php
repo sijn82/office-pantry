@@ -45,7 +45,8 @@ class RoutesExport implements WithMultipleSheets
      */
     public function sheets(): array
     {
-        $correctOrderMonTue =   [       '1.15 - Float',
+        $correctOrderMonTue =   [       
+                                        '1.15 - Float',
                                         '1.14 - Filling in',
                                         '1.13 - Thames Valley',
                                         '1.12 - West London',
@@ -65,16 +66,16 @@ class RoutesExport implements WithMultipleSheets
                                         'TBC'
                                 ];
 
-        $correctOrderWedThurFri =   [
-                                        '5.02 - Fri Multidrop',
-                                        '5.01 - Fri Serviced',
-                                        '4.02 - Thu Multidrop',
-                                        '4.01 - Thu Serviced',
+        $correctOrderWedThurFri =   [    
                                         '3.05 - Thames',
                                         '3.04 - South & North',
                                         '3.03 - West',
                                         '3.02 - City',
                                         '3.01 - Serviced London',
+                                        '4.02 - Thu Multidrop',
+                                        '4.01 - Thu Serviced',
+                                        '5.02 - Fri Multidrop',
+                                        '5.01 - Fri Serviced',
                                         'TBC'
                                     ];
 
