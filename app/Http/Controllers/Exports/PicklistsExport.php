@@ -66,7 +66,24 @@ WithMultipleSheets
                                         '1.01 - Serviced London',
                                         '2.02 - Tue Multidrop',
                                         '2.01 - Tue Serviced',
-                                        'TBC'
+                                        'TBC',
+                                        '000 - Tuesday Route',
+                                        '00 - Tuesday Route Serviced',
+                                        '14 - Filling In Route',
+                                        '13 - Thames Valley II',
+                                        '12 - Thames Valley I',
+                                        '11 - West Central',
+                                        '10 - Michael',
+                                        '09 - Gus',
+                                        '08 - South London',
+                                        '07 - Catalin',
+                                        '06 - Stratford',
+                                        '05 - City',
+                                        '04 - M25 North',
+                                        '03 - M25 South',
+                                        '02 - Serviced II',
+                                        '01 - Serviced I',
+
                                 ];
 
         $correctOrderWedThurFri =   [    
@@ -80,8 +97,16 @@ WithMultipleSheets
                                         '5.02 - Fri Multidrop',
                                         '5.01 - Fri Serviced',
                                         'TBC'
+                                        '26 - Friday Route 2',
+                                        '25 - Friday Route',
+                                        '24 - Thursday Route Gareth',
+                                        '24.5 - Thursday Route Jordan',
+                                        '23 - M25 Wednesday',
+                                        '22 - Gareth',
+                                        '21 - Piers',
+                                        '20 - Pete',
+                                        '19 - Serviced London',
                                     ];
-
         $picklistscollection = PickList::select('assigned_to')->distinct()->get();
         $sheets = [];
 
