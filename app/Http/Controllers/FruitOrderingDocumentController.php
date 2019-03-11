@@ -159,7 +159,7 @@ class FruitOrderingDocumentController extends Controller
                                                             '4th Floor Elizabeth House Limited (FAO Exponea/CERA)' => '4th Floor Elizabeth House Limited',
                                                             'Imprima iRooms Ltd (FAO Lidia Nakonechnaya)' => 'Imprima iRooms Ltd',
                                                             'HubHub UK (FAO Elena Malara)' => 'HubHub UK Ltd',
-                                                            'Fastmarkets (FAO Cherry Newman)', => 'Fastmarkets',
+                                                            'Fastmarkets (FAO Cherry Newman)' => 'Fastmarkets',
                                                        ];
 
                          // If $newRoute->company_name doesn't match a Company route_name, check to see if this value matches a Company route_name exception.
