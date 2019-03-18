@@ -161,6 +161,7 @@ class FruitOrderingDocumentController extends Controller
                                                             'HubHub UK (FAO Elena Malara)' => 'HubHub UK Ltd',
                                                             'Fastmarkets (FAO Cherry Newman)' => 'Fastmarkets',
                                                             'Jefferies International Limited (FAO Melanie Delpeuch)' => 'Jefferies International Limited',
+                                                            'SSCL (Empress State Building London - FAO Natalia Wielba)' => 'SSCL (Empress State Building London)',
                                                        ];
 
                          // If $newRoute->company_name doesn't match a Company route_name, check to see if this value matches a Company route_name exception.
