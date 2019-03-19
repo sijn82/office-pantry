@@ -24,8 +24,65 @@ class ProductsController extends Controller
     {
         //
         $products = Product::all();
-        return $products;
+        
+        return response()->json($products);
+        // return view ('products', ['products' => $products]);
     }
+    
+    public function search(Request $request)
+    {
+        $product_search = Product::where('name', 'LIKE', '%' . $request->keywords . '%')->get();
+        
+        return response()->json($product_search);
+    }
+    
+    
+    public function store(Request $request)
+    {    
+        $newProduct = new Product();
+        $newProduct->is_active = $request['company_data']['is_active'];
+        $newProduct->code = $request['company_data']['code'];
+        $newProduct->name = $request['company_data']['name'];
+        $newProduct->case_price = $request['company_data']['case_price'];
+        $newProduct->case_size = $request['company_data']['case_size'];
+        $newProduct->unit_cost = $request['company_data']['unit_cost'];
+        $newProduct->unit_price = $request['company_data']['unit_price'];
+        $newProduct->vat = $request['company_data']['vat'];
+        $newProduct->sales_nominal = $request['company_data']['sales_nominal'];
+        $newProduct->cost_nominal = $request['company_data']['cost_nominal'];
+        $newProduct->profit_margin = $request['company_data']['profit_margin'];
+        $newProduct->stock_level = $request['company_data']['stock_level'];
+        $newProduct->shortest_stock_date = $request['company_data']['shortest_stock_date'];
+        $newProduct->save();
+    }
+    
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        // dd($request);
+        Product::where('id', $id)->update([
+            'is_active' => request('is_active'),
+            'code' => request('code'),
+             'name' => request('name'),
+             'case_price' => request('case_price'),
+             'case_size' => request('case_size'),
+             'unit_cost' => request('unit_cost'),
+             'unit_price' => request('unit_price'),
+             'vat' => request('vat'),
+             'sales_nominal' => request('sales_nominal'),
+             'cost_nominal' => request('cost_nominal'),
+             'profit_margin' => request('profit_margin'),
+             'stock_level' => request('stock_level'),
+             'shortest_stock_date' => request('shortest_stock_date')
+        ]);
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -39,7 +96,7 @@ class ProductsController extends Controller
 
     public function import(Request $request)
     {
-        dd($request);
+        // dd($request);
 
         $file_mimes = array('text/x-comma-separated-values', 'text/comma-separated-values', 'application/octet-stream', 'application/vnd.ms-excel', 'application/x-csv', 'text/x-csv', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.msexcel', 'text/plain', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 
@@ -72,8 +129,8 @@ class ProductsController extends Controller
 
 
            $sheetData = $spreadsheet->getActiveSheet()->toArray();
-           dd($sheetData);
-           print_r($sheetData);
+           // dd($sheetData);
+           // print_r($sheetData);
 
        }
     }
@@ -84,7 +141,7 @@ class ProductsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function storeCSV(Request $request)
     {
         if (($handle = fopen(public_path() . '/product-import-test-noheaders.csv', 'r')) !== FALSE) {
 
@@ -102,6 +159,7 @@ class ProductsController extends Controller
             $productData->sales_nominal = $data[8];
             $productData->cost_nominal = $data[9];
             $productData->stock_level = $data[10];
+        //    $productData->shortest_stock_date = $data[11];
             $productData->save();
 
         }
@@ -110,16 +168,20 @@ class ProductsController extends Controller
         return redirect('/');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+    // /**
+    //  * Display the specified resource.
+    //  *
+    //  * @param  int  $id
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function show(Product $id)
+    // {
+    //     //
+    //     $product = $id;
+    // 
+    //     return ['product' => $product];
+    // }
+    
 
     /**
      * Show the form for editing the specified resource.
@@ -133,18 +195,6 @@ class ProductsController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
@@ -153,5 +203,6 @@ class ProductsController extends Controller
     public function destroy($id)
     {
         //
+        Product::destroy($id);
     }
 }

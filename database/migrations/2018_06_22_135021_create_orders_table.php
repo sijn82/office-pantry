@@ -14,13 +14,14 @@ class CreateOrdersTable extends Migration
     public function up()
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('order_id');
             $table->integer('company_id');
-            $table->integer('snackbox_id');
-            $table->integer('drinkbox_id');
-            $table->integer('fruitbox_id');
-            $table->integer('milkbox_id');
-            $table->integer('special_id');
+            $table->integer('fruitbox_id')->nullable();
+            $table->integer('milkbox_id')->nullable();
+            $table->integer('snackbox_id')->nullable();
+            $table->integer('drinkbox_id')->nullable();
+            $table->integer('special_id')->nullable();
+            $table->string('delivery_day');
             $table->timestamps();
         });
     }

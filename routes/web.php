@@ -17,9 +17,12 @@ Route::get('/', function () {
 Route::get('import-csv', function () {
     return view('importCSV');
 });
-Route::get('products', function () {
+Route::get('products', ['as' => 'products', function () {
     return view('products');
-});
+}]);
+Route::get('preferences', ['as' => 'preferences', function () {
+    return view('preferences');
+}]);
 Route::get('routes', function () {
     return view('routes');
 });
@@ -32,11 +35,29 @@ Route::get('import-file', function () {
 Route::get('import-products', ['as' => 'import-products', function () {
     return view('process-snackboxes');
 }]);
-Route::get('companies/new', function () {
+Route::get('companies/new', ['as' => 'new-company', function () {
     return view('new-company');
-});
+}]);
+Route::get('snackboxes/new', ['as' => 'snackboxes', function () {
+    return view('snackbox-creation');
+}]);
+Route::get('fruit-partners', ['as' => 'fruit-partners', function () {
+    return view('fruit-partners');
+}]);
+Route::get('assigned-routes', ['as' => 'assigned-routes', function () {
+    return view('assigned-routes');
+}]);
 
+// old system week start added to importing/exporting processes.
 Route::get('import-file', 'WeekStartController@show')->name('import-file')->middleware('auth:office');
+// new system week start added to exporting page <-- Not sure I really need to pass it like this though? Going to do it a little differently this time.
+Route::get('exporting', 'WeekStartController@showAndSet')->name('exporting')->middleware('auth:office');
+// l;ooks like we still need one of these to pull the templating elements in.
+Route::get('exporting', ['as' => 'exporting', function () {
+    return view('exporting');
+}]);
+
+
 // Route::get('import-products', 'SnackBoxController@upload_products_and_codes')->name('import-products')->middleware('auth:office');
 Route::get('display-routes', 'RoutesController@index');
 // Route::get('snackboxes-multi-company', 'SnackBoxController@index_OP');
@@ -67,7 +88,8 @@ Route::group(['middleware' => 'web'], function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+// I think was auto generated?  Or I'm going in a different direction, either way I can probably remove it at a later date.
+Route::get('/home', 'HomeController@showCompany')->name('home')->middleware('auth');
 
 Route::view('/', 'welcome');
 
@@ -82,6 +104,6 @@ Route::post('/login/warehouse', 'Auth\LoginController@warehouseLogin');
 Route::post('/register/office', 'Auth\RegisterController@createOffice');
 Route::post('/register/warehouse', 'Auth\RegisterController@createWarehouse');
 
-Route::view('/home', 'home')->middleware('auth');
-Route::view('/office', 'office')->middleware('auth:office');
+// Route::view('/home', 'home')->middleware('auth');
+Route::view('/office', 'office')->name('office')->middleware('auth:office');
 Route::view('/warehouse', 'warehouse')->middleware('auth:warehouse');

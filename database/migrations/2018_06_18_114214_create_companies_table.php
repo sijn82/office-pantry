@@ -31,16 +31,6 @@ class CreateCompaniesTable extends Migration
             $table->string('postcode')->nullable();
             $table->string('branding_theme')->nullable();
             $table->string('supplier')->nullable();
-            $table->string('delivery_monday')->nullable();
-            $table->string('delivery_tuesday')->nullable();
-            $table->string('delivery_wednesday')->nullable();
-            $table->string('delivery_thursday')->nullable();
-            $table->string('delivery_friday')->nullable();
-            $table->string('assigned_to_monday')->nullable();
-            $table->string('assigned_to_tuesday')->nullable();
-            $table->string('assigned_to_wednesday')->nullable();
-            $table->string('assigned_to_thursday')->nullable();
-            $table->string('assigned_to_friday')->nullable();
             $table->timestamps();
             // $table->integer('order_id'); // I'm not sure it makes much sense to have this in here?
                                             // Better to include the company_id in orders table.

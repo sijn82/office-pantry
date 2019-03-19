@@ -11,13 +11,17 @@ class User extends Authenticatable
     use Notifiable;
     use HasApiTokens;
 
+    protected $casts = [
+      'company_id' => 'array'
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'company_id'
     ];
 
     /**
@@ -28,4 +32,12 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+    
+    
+    public function companies()
+    {
+        return $this->belongsToMany('App\Company');
+    }
 }
+
+

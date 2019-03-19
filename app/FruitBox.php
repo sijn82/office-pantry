@@ -11,6 +11,12 @@ class FruitBox extends Model
 
         'is_active',
         'name',
+        'company_id',
+        'route_id',
+        'type',
+        'frequency',
+        'delivery_day',
+        'boxes_total',
         'deliciously_red_apples',
         'pink_lady_apples',
         'red_apples',
@@ -23,6 +29,14 @@ class FruitBox extends Model
         'lemons',
         'grapes',
         'seasonal_berries',
+        'oranges',
+        'cucumbers',
+        'mint',
+        'organic_lemons',
+        'kiwis',
+        'grapefruits',
+        'avocados',
+        'root_ginger',
 
     ];
 
@@ -34,4 +48,14 @@ class FruitBox extends Model
         protected $hidden = [
             // 'password', 'remember_token',
         ];
+
+        public function companies()
+        {
+            return $this->belongsTo(Company::class);
+        }
+        
+        public function fruit_partners()
+        {
+            return $this->belongsTo(FruitPartner::class);
+        }
 }

@@ -1,0 +1,91 @@
+<template>
+    <div class="col-sm-12">
+        <b-input-group id="company-searchbar" class="col-sm-12" size="lg" append=" Company Search">
+            <b-form-input type="text" v-model.lazy="keywords"></b-form-input>
+        </b-input-group>
+        <b-list-group v-if="results.length > 0">
+            <div class="col-sm-12" v-for="result in results">
+                <b-list-group-item class="d-flex justify-content-between align-items-center" button :key="result.id" @click="officeData(result.id)"> {{ result.invoice_name }}
+                    <b-badge variant="primary" pill> Get Data </b-badge>
+                </b-list-group-item>
+                <!-- <b-button :selected="result.id" @click="officeID(result.id)" type="submit" variant="success">Select</b-button> -->
+                <!-- <b-button :selected="result.id" @click="officeData(result.id)" type="submit" variant="success">Get Data</b-button> -->
+            </div>
+        </b-list-group>
+        <div v-if="this.company_data.fruitboxes != null">
+            <fruit-orders-admin :company="this.company_data.company" :fruitboxes="this.company_data.fruitboxes"></fruit-orders-admin>
+        </div>
+        <div v-if="this.company_data.milkboxes != null">
+            <milk-orders-admin :company="this.company_data.company" :milkboxes="this.company_data.milkboxes"></milk-orders-admin>
+        </div>
+        <div v-if="this.company_data.routes != null">
+            <routes-admin :routes="this.company_data.routes"></routes-admin>
+        </div>
+        <div v-if="this.company_data.snackboxes != null">
+            <snackboxes-admin :snackboxes="this.company_data.snackboxes"></snackboxes-admin>
+        </div>
+        <div v-if="this.company_data.drinkboxes != null">
+            <drink-orders-admin :drinkboxes="this.company_data.drinkboxes"></drink-orders-admin>
+        </div>
+        <div v-if="this.company_data.otherboxes != null">
+            <other-orders-admin :otherboxes="this.company_data.otherboxes"></other-orders-admin>
+        </div>
+        <!-- <div v-else>
+            <p>empty</p>
+        </div> -->
+    </div>
+</template>
+
+<style>
+
+</style>
+
+<script>
+export default {
+    props: ['fruitboxes', 'milkboxes', 'routes', 'company', 'snackboxes', 'otherboxes', 'drinkboxes'],
+    data() {
+        return {
+            keywords: null,
+            selected: '',
+            selected_results: null,
+            company_data: {
+                fruitboxes: null,
+                milkboxes: null,
+                routes: null,
+                companies: null,
+                snackboxes: null,
+            },
+            results: []
+        };
+    },
+
+    watch: {
+        keywords(after, before) {
+            this.fetch();
+        },
+
+    },
+
+    methods: {
+        fetch() {
+            axios.get('/api/companies/search', { params: { keywords: this.keywords }})
+                .then(response => this.results = response.data)
+                .catch(error => {});
+        },
+        // officeID(selected) {
+        //     axios.post('/api/companies/selected', { params: { company: selected }})
+        //         .then(response => console.log(selected))
+        //         .catch(error => {});
+        //
+        // },
+        officeData(id) {
+            axios.get('/api/companies/' + id)
+                .then(response => this.company_data = response.data, console.log(this.company_data.fruitboxes) )
+                .catch(error => {});
+        }
+    },
+    mounted() {
+        console.log(this.company_data);
+    }
+}
+</script>

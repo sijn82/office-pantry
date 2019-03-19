@@ -329,63 +329,64 @@ export default {
     }
   },
   methods: {
-      addSupplier () {
-          console.log(this.form.new_supplier);
-          let new_supplier = this.form.new_supplier;
-          this.suppliers.unshift( new_supplier );
-      },
+        addSupplier () {
+              console.log(this.form.new_supplier);
+              let new_supplier = this.form.new_supplier;
+              this.suppliers.unshift( new_supplier );
+        },
 
-    onSubmit (evt) {
-      evt.preventDefault();
-      let self = this;
-      // alert(JSON.stringify(this.form));
-      axios.post('/api/companies/add-new-company', {
-          company_data: self.form,
-          headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv'},
-          // user_id: self.userData.id // This hasn't been setup yet so proabably won't work yet?!
-      }).then(function (response) {
-          alert('Uploaded new company successfully!');
-          console.log(response.data);
-      }).catch(error => console.log(error));
-    },
-    onReset (evt) {
-      evt.preventDefault();
-      /* Reset our form values */
+        onSubmit (evt) {
+          evt.preventDefault();
+          let self = this;
+          // alert(JSON.stringify(this.form));
+          axios.post('/api/companies/add-new-company', {
+              company_data: self.form,
+              headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv'},
+              // user_id: self.userData.id // This hasn't been setup yet so proabably won't work yet?!
+          }).then(function (response) {
+              alert('Uploaded new company successfully!');
+              console.log(response.data);
+          }).catch(error => console.log(error));
+        },
 
-      this.form.invoice_name = '';
-      this.form.route_name = '';
-      this.form.box_names = {};
-          this.form.box_names.box_one = '';
-          this.form.box_names.box_two = '';
-          this.form.box_names.box_three = '';
-          this.form.box_names.box_four = '';
-      this.form.primary_contact = '';
-      this.form.primary_email = '';
-      this.form.secondary_contact = '';
-      this.form.secondary_email = '';
-      this.form.delivery_information = '';
-      this.form.route_summary_address = '';
-      this.form.address_line_1 = '';
-      this.form.address_line_2 = '';
-      this.form.city = '';
-      this.form.region = '';
-      this.form.postcode = '';
-      this.form.branding_theme = '';
-      this.supplier = '';
+        onReset (evt) {
+          evt.preventDefault();
+          /* Reset our form values */
+
+          this.form.invoice_name = '';
+          this.form.route_name = '';
+          this.form.box_names = {};
+              this.form.box_names.box_one = '';
+              this.form.box_names.box_two = '';
+              this.form.box_names.box_three = '';
+              this.form.box_names.box_four = '';
+          this.form.primary_contact = '';
+          this.form.primary_email = '';
+          this.form.secondary_contact = '';
+          this.form.secondary_email = '';
+          this.form.delivery_information = '';
+          this.form.route_summary_address = '';
+          this.form.address_line_1 = '';
+          this.form.address_line_2 = '';
+          this.form.city = '';
+          this.form.region = '';
+          this.form.postcode = '';
+          this.form.branding_theme = '';
+          this.supplier = '';
 
 
-      this.form.email = '';
-      this.form.name = '';
-      this.form.box_names = {};
-      this.form.payment = null;
-      this.form.checked = [];
-      /* Trick to reset/clear native browser form validation state */
-      this.toggle = false;
-      this.toggle_two = false;
-      this.toggle_three = false;
-      this.show = false;
-      this.$nextTick(() => { this.show = true });
-    }
+          this.form.email = '';
+          this.form.name = '';
+          this.form.box_names = {};
+          this.form.payment = null;
+          this.form.checked = [];
+          /* Trick to reset/clear native browser form validation state */
+          this.toggle = false;
+          this.toggle_two = false;
+          this.toggle_three = false;
+          this.show = false;
+          this.$nextTick(() => { this.show = true });
+        }
   }
 }
 </script>

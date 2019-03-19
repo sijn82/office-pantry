@@ -47,4 +47,13 @@ class Route extends Model
         protected $hidden = [
             // 'password', 'remember_token',
         ];
+        
+        public function companies()
+        {
+            return $this->belongsTo(Company::class);
+        }
+        public function routes()
+        {
+            return $this->belongsTo(AssignedRoute::class);
+        }
 }

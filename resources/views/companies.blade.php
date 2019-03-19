@@ -37,10 +37,12 @@
       </tr>
     </thead>
     <tbody>
+        
+        @php dd($companies); @endphp
     @foreach ($companies as $company)
 
         <tr>
-            <td>{{ $company->company_id }}</td>
+            <td>{{ $company->id }}</td>
             <td>{{ $company->is_active }}</td>
             <td>{{ $company->invoice_name }}</td>
             <td>{{ $company->route_name }}</td>

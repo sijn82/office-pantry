@@ -26,6 +26,9 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+        // $schedule->command('advance:odd')->weekly()->thursday()->at('18:17');
+        $schedule->command('advance:odd')->weekly();
+        // $schedule->command('advance:odd')->everyMinute();
     }
 
     /**

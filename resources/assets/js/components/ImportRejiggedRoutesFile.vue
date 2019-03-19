@@ -35,7 +35,8 @@
                             <div>
                                 <b-button href="api/rejig-routing"> Rejig Routes </b-button>
                                 <b-button href="api/update-picklists-with-routes"> Rejig Picklists </b-button>
-                                <b-button href="api/export-picklists" variant="info"> Export Picklists </b-button>
+                                <!-- <b-button href="api/export-picklists" variant="info"> Export Picklists </b-button> -->
+                                <b-button href="api/export-fruitbox-picklists" variant="info"> Export Fruitbox Picklists </b-button>
                             </div>
                     </form>
                 </div>
@@ -60,7 +61,7 @@
 
 <script>
 
-import axios from 'axios';
+import axios from 'axios'; // axios seems to be working fine elsewhere without needing to specifically import it each time.
 export default {
     data () {
         return {

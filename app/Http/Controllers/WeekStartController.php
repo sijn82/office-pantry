@@ -62,6 +62,13 @@ class WeekStartController extends Controller
         $week_start = WeekStart::get();
         return view('import-file', ['week_start' => $week_start]);
     }
+    
+    public function showAndSet()
+    {
+        $week_start = WeekStart::findOrFail(1);
+        return $week_start;
+        // return ['week_start' => $week_start->current, 'delivery_days' => $week_start->delivery_days];
+    }
 
     /**
      * Show the form for editing the specified resource.

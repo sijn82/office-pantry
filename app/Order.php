@@ -6,9 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    //
-    public function milk()
+    
+    
+    // 
+    // //
+    // public function company()
+    // {
+    //     return this->hasOne('App\Company');
+    // }
+    // 
+    public function fruitbox()
     {
-      return this->hasOne('App\MilkBox');
+        $active_orders = App\FruitBox::find(1);
     }
 }

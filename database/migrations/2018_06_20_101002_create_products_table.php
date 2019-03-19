@@ -16,16 +16,18 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->increments('id');
             $table->string('is_active');
-            $table->string('code');
-            $table->string('name');
-            $table->string('case_price');
-            $table->string('case_size');
-            $table->string('unit_cost');
-            $table->string('unit_price');
+            $table->string('code')->unique();
+            $table->string('name')->unique();
+            $table->decimal('case_price', 8, 2);
+            $table->integer('case_size');
+            $table->decimal('unit_cost', 8, 4);
+            $table->decimal('unit_price', 8, 2);
             $table->string('vat');
             $table->string('sales_nominal');
             $table->string('cost_nominal');
+            $table->decimal('profit_margin', 8, 4);
             $table->integer('stock_level');
+            $table->date('shortest_stock_date');
             $table->timestamps();
         });
     }

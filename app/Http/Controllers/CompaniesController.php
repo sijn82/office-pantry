@@ -26,6 +26,13 @@ class CompaniesController extends Controller
       // I'd like to name the file after the selected route being exported, ignoring multiples but will need to work on this later.
       return \Excel::download(new Exports\CompaniesExport, 'companies' . $week_start . '.xlsx');
     }
+    
+    public function search(Request $request)
+    {
+        $company_search = Company::where('invoice_name', 'LIKE', '%' . $request->keywords . '%')->get();
+        
+        return response()->json($company_search);
+    }
 
 
     /**
@@ -185,7 +192,7 @@ class CompaniesController extends Controller
      */
     public function show($id)
     {
-        //
+
     }
 
     /**

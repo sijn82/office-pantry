@@ -27,7 +27,10 @@
                             </div>
 
                     </form>
-                    <p><b>Current Value: {{ this.new_week_start }}</b></p>
+                    
+                    <!-- Really not happy with this v-for work around, I shouldn't need to pointlessly loop through the data in order to access its properties! -->
+                    <p v-for="week_start in $store.state.week_start"><b> Current Value: {{ week_start.current }} </b></p>
+                    
                     <form class="" action="/api/import-week-start-days" enctype="multipart/form-data" method="post" name="deliveryDaysSelect" @submit.prevent="uploadDeliveryDays">
 
                             <div class="input-group input-group-md col-md-8 offset-md-2">
@@ -44,8 +47,11 @@
                             <div class="submit-button input-group input-group-md">
                                 <input class=" col-md-2 col-sm-3 offset-md-5 btn btn-success" type="submit" value="Change Delivery Days">
                             </div>
-                    <p><b>Current Value: {{ this.delivery_days }}</b></p>
                     </form>
+                    
+                    <!-- Really not happy with this v-for work around, I shouldn't need to pointlessly loop through the data in order to access its properties! -->        
+                    <p v-for="week_start in $store.state.week_start"><b> Current Value: {{ week_start.delivery_days }} </b></p>
+                    
                 </div>
             </div>
         </div>
@@ -67,11 +73,6 @@
             margin-bottom: auto;
         }
     }
-    
-    // b-form-input[type=date]::-webkit-inner-spin-button,
-    // b-form-input[type=date]::-webkit-outer-spin-button {
-    //   -webkit-appearance: none;
-    //   margin: 0;
 
 </style>
 
@@ -92,17 +93,13 @@ export default {
                     {value: 'wed-thur-fri', text: 'Wednesday, Thursday & Friday'},
                 ],
             },
-            new_week_start: this.week_started,
+            //week_start: '',
+            new_week_start: '',
             updated_week_start: '',
         }
     },
-    props: ['week_started', 'delivery_days'],
+    // props: ['week_started', 'delivery_days'],
 
-    watch: {
-        // updated_week_start(){
-        //     console.log('it changed');
-        // }
-    },
     methods: {
           newFileUpload(event) {
           let fileReader = new FileReader();
@@ -139,6 +136,7 @@ export default {
 
     mounted() {
             console.log('Component Import Week Start mounted.');
+            this.$store.commit('getWeekStart');
         }
 }
 

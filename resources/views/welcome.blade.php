@@ -74,17 +74,20 @@
         @yield('routing-display-assets')
         @yield('company-assets')
         @yield('process-snackboxes-styling')
-        
+        @yield('snackbox-create-styling')
+        @yield('preferences-assets')
+        @yield('assigned-routes-styling')
+        @yield('exporting-styles')
     </head>
     <body>
         <div class="flex-center position-ref full-height">
             @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
-                        <a href="{{ url('/home') }}">Home</a>
+                        <a href="{{ url('/home') }}"> Home </a>
                     @else
-                        <a href="{{ route('login') }}">Login</a>
-                        <a href="{{ route('register') }}">Register</a>
+                        <a href="{{ route('login') }}"> Login </a>
+                        <a href="{{ route('register') }}"> Register </a>
                     @endauth
                 </div>
             @endif
@@ -95,11 +98,11 @@
                 </div>
 
                 <div class="links">
-                    <a href="{{ route('login/office') }}">Office Login</a>
-                    <a href="{{ route('login/warehouse') }}">Warehouse Login</a>
-                    <a href="https://laravel-news.com">Stocklist</a>
-                    <a href="https://forge.laravel.com">Invoices</a>
-                    <a href="https://github.com/laravel/laravel">Payments</a>
+                    <a href="{{ route('login/office') }}"> Office Login </a>
+                    <a href="{{ route('login/warehouse') }}"> Warehouse Login </a>
+                    <a href="{{ route('products') }}"> Products </a> <!-- Get rid of this before going live! -->
+                    <a href="https://forge.laravel.com"> Invoices </a>
+                    <a href="https://github.com/laravel/laravel"> Payments </a>
                 </div>
 
 
@@ -115,8 +118,11 @@
                     @yield('routes')
                     @yield('products')
                     @yield('companies')
-                     <!-- <products></products> -->
-                     <!-- <example-component></example-component> -->
+                    @yield('snackbox-create')
+                    @yield('preferences')
+                    @yield('fruit-partners')
+                    @yield('assigned-routes')
+                    @yield('export-excel')
                  </div>
             </div>
         </div>

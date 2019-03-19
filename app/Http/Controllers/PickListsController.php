@@ -61,6 +61,7 @@ class PickListsController extends Controller
     return \Excel::download(new Exports\PicklistsExport($this->week_start), 'picklists' . $this->week_start . '.xlsx');
 
     }
+    
     public function berry_export()
     {
 

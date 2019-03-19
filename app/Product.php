@@ -19,6 +19,7 @@ class Product extends Model
         'vat',
         'sales_nominal',
         'cost_nominal',
+        'profit_margin',
         'stock_level'
     ];
 

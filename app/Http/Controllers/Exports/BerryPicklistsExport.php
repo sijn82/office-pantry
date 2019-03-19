@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Exports;
 use App\PickList;
 use App\WeekStart;
 
+use App\FruitBox;
+use App\CompanyRoute;
+use App\AssignedRoute;
+
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\Exportable;
@@ -105,12 +109,56 @@ WithEvents
 
     public function view(): View
     {
-        $picklists_with_berries = Picklist::where('week_start', $this->week_starting)->where('seasonal_berries', '>', 0)->where('delivery_day', $this->route_day)->orderBy('assigned_to', 'desc')->get();
-        $grouped_by_route_picklists_with_berries = $picklists_with_berries->groupBy('assigned_to', 'desc');
+        // $picklists_with_berries = Picklist::where('week_start', $this->week_starting)->where('seasonal_berries', '>', 0)->where('delivery_day', $this->route_day)->orderBy('assigned_to', 'desc')->get();
+        
+        $fruitbox_with_berries = FruitBox::where('next_delivery', $this->week_starting)->where('is_active', 'Active')->where('fruit_partner_id', 1)->where('seasonal_berries', '>', 0)->where('delivery_day', $this->route_day)->get();
+        //dd($fruitbox_with_berries);
+        // Now that 'assigned_to' lives as an ID within the routes it needs to be merged together with assigned_routes,
+        // before taking the assigned_to value and pulling it into the fruitbox collection.  
+        // So first of all, we have to check each fruitbox for its associated route, then check that id for the associated route name.
+        foreach ($fruitbox_with_berries as $fruitbox) {
+            
+            $route = CompanyRoute::where('company_id', $fruitbox->company_id)->where('delivery_day', $fruitbox->delivery_day)->get();
+            // This is taken from the CompanyRoute table as an object property.
+             if (!empty($route[0])) {
+                
+                $position_on_route = $route[0]->position_on_route;
+                // This isn't using an object property but calling a relationship function declared in its model.
+                $assigned_to = $route[0]->assigned_route;
 
-        return view('exports.berry-picklists', [
+                if ($assigned_to) {
+                    // Now we need to push the route info into the fruitbox collection
+                    $fruitbox->assigned_to = $assigned_to->name;
+                    $fruitbox->position_on_route = $position_on_route;
+                } else {
+                    dd($route);
+                    dd($assigned_to);
+                }
+            } else {
+                dd($route);  
+            }
+
+            
+            //dd($fruitbox);
+        }
+        
+        // This groups the fruitboxes with berries into (an array of) their respective routes and orders each route by their position (on route).
+        $groupedAndSortedBerries = $fruitbox_with_berries->groupBy('assigned_to')->map(function($group){
+            return $group->sortBy('position_on_route');
+        }); 
+        
+        // $sorted = $grouped
+        
+        // dd($groupedAndSorted);
+        // dd($fruitbox_with_berries);
+        
+        // And replicate the 'order_by' assigned_to column to group them into routes.
+        
+        //$grouped_by_route_picklists_with_berries = $picklists_with_berries->groupBy('assigned_to', 'desc');
+
+        return view('exports.new-berry-picklists', [
                     'week_start'         =>   $this->week_starting,
-                    'routes'             =>   $grouped_by_route_picklists_with_berries,
+                    'routes'             =>   $groupedAndSortedBerries,
                     'route_day'          =>   $this->route_day
                 ]);
     }

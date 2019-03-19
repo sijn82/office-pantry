@@ -9,22 +9,22 @@ class MilkBox extends Model
     //
     protected $fillable = [
 
-      '1l_milk_alt_coconut',
-      '1l_milk_alt_unsweetened_almond',
-      '1l_milk_alt_almond',
-      '1l_milk_alt_unsweetened_soya',
-      '1l_milk_alt_soya',
-      '1l_milk_alt_lactose_free_semi',
-      '2l_semi_skimmed',
-      '2l_skimmed',
-      '2l_whole',
-      '1l_semi_skimmed',
-      '1l_skimmed',
-      '1l_whole',
+      'milk_1l_alt_coconut',
+      'milk_1l_alt_unsweetened_almond',
+      'milk_1l_alt_almond',
+      'milk_1l_alt_unsweetened_soya',
+      'milk_1l_alt_soya',
+      'milk_1l_alt_lactose_free_semi',
+      'semi_skimmed_2l',
+      'skimmed_2l',
+      'whole_2l',
+      'semi_skimmed_1l',
+      'skimmed_1l',
+      'whole_1l',
       'pint_semi_skimmed',
       'pint_whole',
-      '1l_organic_semi_skimmed',
-      '1l_organic_skimmed',
+      'organic_semi_skimmed_1l',
+      'organic_skimmed_1l',
 
     ];
 
@@ -36,4 +36,9 @@ class MilkBox extends Model
         protected $hidden = [
             // 'password', 'remember_token',
         ];
+        
+        public function companies()
+        {
+            return $this->belongsTo(Company::class);
+        }
 }

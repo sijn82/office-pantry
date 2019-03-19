@@ -45,7 +45,6 @@ class RoutesController extends Controller
         return \Excel::download(new Exports\RoutesExport($this->week_start), 'routelists' . $this->week_start . '.xlsx');
     }
 
-
     /**
      * Display a listing of the resource.
      *
@@ -90,6 +89,24 @@ class RoutesController extends Controller
     public function create()
     {
         //
+    }
+    // new system route update function
+    public function routeInfoUpdate(Request $request, $id)
+    {
+        // dd($id);
+        Route::where('id', $id)->update([
+            'company_id' => request('company_id'),
+            'is_active' => request('is_active'),
+            'previous_delivery_week_start' => request('previous_delivery_week_start'),
+            'next_delivery_week_start' => request('next_delivery_week_start'),
+            'company_name' => request('company_name'),
+            'delivery_day' => request('delivery_day'),
+            'assigned_to' => request('assigned_to'),
+            'position_on_route' => request('position_on_route'),
+            'postcode' => request('postcode'),
+            'address' => request('address'),
+            'delivery_information' => request('delivery_information'),
+        ]);
     }
 
     public function uploadRejiggedRoutes(Request $request)
@@ -884,7 +901,7 @@ class RoutesController extends Controller
                 //        as I need to spend time on other tasks before studying the risks of breaking a function which currently, mostly works!  ----- //
 
                 //                  if($currentRoutingEntry[0]->week_start !== $this->week_start) {  // -----  We can update it with new value ----- //
-                
+
                                           Route::where('company_name', $selectedCompany)->where('delivery_day', $fruitOrderingDocument->delivery_day)
                                             ->update([
 
@@ -919,10 +936,10 @@ class RoutesController extends Controller
 
                                                 ]);
                                                 $updated_regular_entry .= '• Updated ' . $selectedCompany . " for a regular delivery. \n";
-                                                
+
                                             // -----  Else a box for this route has already been added, we should add to the existing total  ----- //
                                         // } else {
-                                        
+
                                         // $new_fruitcrate_total = ($currentRoutingEntry[0]->fruit_crates + $fruitOrderingDocument->fruit_crates);
                                         // $new_fruitbox_total = ($currentRoutingEntry[0]->fruit_boxes + $fruitOrderingDocument->fruit_boxes);
                                         // $new_milk_2l_semi_skimmed_total = ($currentRoutingEntry[0]->milk_2l_semi_skimmed + $fruitOrderingDocument->milk_2l_semi_skimmed);
@@ -937,12 +954,12 @@ class RoutesController extends Controller
                                         // $new_milk_1l_alt_unsweetened_soya_total = ($currentRoutingEntry[0]->milk_1l_alt_unsweetened_soya + $fruitOrderingDocument->milk_1l_alt_unsweetened_soya);
                                         // $new_milk_1l_alt_soya_total = ($currentRoutingEntry[0]->milk_1l_alt_soya + $fruitOrderingDocument->milk_1l_alt_soya);
                                         // $new_milk_1l_alt_lactose_free_semi_total = ($currentRoutingEntry[0]->milk_1l_alt_lactose_free_semi + $fruitOrderingDocument->milk_1l_alt_lactose_free_semi);
-                                        // 
+                                        //
                                         // Route::where('company_name', $selectedCompany)->where('delivery_day', $fruitOrderingDocument->delivery_day)
                                         //   ->update([
-                                        // 
+                                        //
                                         //           // These are only the fields which will likely change from one delivery to the next.
-                                        // 
+                                        //
                                         //         'week_start' => $fruitOrderingDocument->week_start,
                                         //         'fruit_crates' => $new_fruitcrate_total,
                                         //         'fruit_boxes' => $new_fruitbox_total,
@@ -961,15 +978,15 @@ class RoutesController extends Controller
                                         //         'milk_1l_alt_rice' => null, // This field is manually inputted for now.
                                         //         'milk_1l_alt_cashew' => null, // This field is manually inputted for now.
                                         //         'milk_1l_alt_lactose_free_semi' => $new_milk_1l_alt_lactose_free_semi_total,
-                                        // 
+                                        //
                                         //         // At least temporarily these two fields will be updated from a seperate file.
                                         //         'drinks' => null,
                                         //         'snacks' => null,
                                         //         'other' => null,
 
-                                                
+
                                     // } // -----  This is the end of the commented out upgrade code, which should fix the possiblilty of error but needs further reviewing before using.  ----- //
-                                                
+
                                   } // end of if statement which is currently untested,
 
                     } else { // End of if (count($currentRoutingEntry) !== 0)
@@ -1264,6 +1281,7 @@ class RoutesController extends Controller
      */
     public function destroy($id)
     {
-
+        //dd($id);
+        Route::destroy($id);
     }
 }

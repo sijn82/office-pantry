@@ -1,7 +1,8 @@
 @extends('welcome')
 @section('products')
 <div>
-  <h1>Products should follow this sentence</h1>
-  <products></products>
+  <h1 style="padding-top:20px;"> Products </h1>
+  <add-new-product></add-new-product>
+  <products-list></products-list>
 </div>
 @endsection
