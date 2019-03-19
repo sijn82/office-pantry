@@ -73894,8 +73894,7 @@ var render = function() {
                 {
                   attrs: {
                     variant: "outline-primary",
-                    href: "export-snackbox-op-multicompany",
-                    target: "_blank"
+                    href: "export-snackbox-op-multicompany"
                   }
                 },
                 [_vm._v(" Export OP Multi Company ")]
@@ -74211,7 +74210,7 @@ exports = module.exports = __webpack_require__(4)(false);
 
 
 // module
-exports.push([module.i, "\n.title-headers {\r\n    margin-top: 30px;\n}\n.current-values {\r\n    margin-bottom: 30px;\n}\r\n\r\n", ""]);
+exports.push([module.i, "\n.title-headers {\n    margin-top: 30px;\n}\n.current-values {\n    margin-bottom: 30px;\n}\n\n", ""]);
 
 // exports
 
