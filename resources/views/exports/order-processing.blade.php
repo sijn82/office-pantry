@@ -32,9 +32,9 @@
       </tr>
     </thead>
     <tbody>
-        
+
     @php
-    
+
          $totalFruitCrates = 0;
          $totalFruitBoxes = 0;
          $totalMilk2lSemiSkimmed = 0;
@@ -52,19 +52,19 @@
          $totalMilk1lAltRice = 0;
          $totalMilk1lAltCashew = 0;
          $totalMilk1lAltLactoseFreeSemi = 0;
-        
-         
+
+
     @endphp
 
         @foreach ($routes as $route)
-        
+
         @php
-        
+
              $totalFruitCrates += $route->fruit_crates;
              $totalFruitBoxes += $route->fruit_boxes;
-        
+
             if ($route->milk == 'None for this week!') {
-            
+
                 $totalMilk2lSemiSkimmed += 0;
                 $totalMilk2lSkimmed += 0;
                 $totalMilk2lWhole += 0;
@@ -80,9 +80,9 @@
                 $totalMilk1lAltRice += 0;
                 $totalMilk1lAltCashew += 0;
                 $totalMilk1lAltLactoseFreeSemi += 0;
-            
+
             } else {
-            
+
                 $totalMilk2lSemiSkimmed += $route->milk[0]->semi_skimmed_2l;
                 $totalMilk2lSkimmed += $route->milk[0]->skimmed_2l;
                 $totalMilk2lWhole += $route->milk[0]->whole_2l;
@@ -98,10 +98,10 @@
                 $totalMilk1lAltRice += $route->milk[0]->milk_1l_alt_rice;
                 $totalMilk1lAltCashew += $route->milk[0]->milk_1l_alt_cashew;
                 $totalMilk1lAltLactoseFreeSemi += $route->milk[0]->milk_1l_alt_lactose_free_semi;
-        
+
             }
-    
-    @endphp        
+
+    @endphp
             <tr>
                 <!-- <td>{{ $route->next_delivery_week_start }}</td> -->
                 <td></td>
@@ -111,9 +111,9 @@
                 <td>{{ $route->delivery_information }}</td>
                 <td>{{ $route->fruit_crates }}</td>
                 <td>{{ $route->fruit_boxes }}</td>
-        
+
                 @if ($route->milk == 'None for this week!')
-            
+
                     <td> 0 </td>
                     <td> 0 </td>
                     <td> 0 </td>
@@ -129,9 +129,9 @@
                     <td> 0 </td>
                     <td> 0 </td>
                     <td> 0 </td>
-            
+
                 @else
-        
+
                     <td>{{ $route->milk[0]->semi_skimmed_2l }}</td>
                     <td>{{ $route->milk[0]->skimmed_2l }}</td>
                     <td>{{ $route->milk[0]->whole_2l }}</td>
@@ -147,18 +147,18 @@
                     <td>{{ $route->milk[0]->milk_1l_alt_rice }}</td>
                     <td>{{ $route->milk[0]->milk_1l_alt_cashew }}</td>
                     <td>{{ $route->milk[0]->milk_1l_alt_lactose_free_semi }}</td>
-        
+
                 @endif
-        
+
                 <td>{{ $route->drinks }}</td>
                 <td>{{ $route->snacks }}</td>
                 <td>{{ $route->other }}</td>
-                
+
                 <td>{{ $route->assigned_to }}</td>
                 <td>{{ $route->delivery_day }}</td>
                 <td>{{ $route->position_on_route }}</td>
             </tr>
-        
+
 
         @endforeach
 

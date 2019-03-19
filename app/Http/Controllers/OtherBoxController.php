@@ -41,10 +41,10 @@ class OtherBoxController extends Controller
         //
         // Because it generates a unique id based on the time we need to run this once per box only.
         $otherbox_id = request('details.company_id') . '-' . uniqid();
-        
+
          //dd(request('details.company_id'));
         foreach (request('order') as $item) {
-    
+
             $new_otherbox = new OtherBox();
             // These columns will be the same for each item created in this box
             $new_otherbox->otherbox_id = $otherbox_id;
@@ -64,14 +64,14 @@ class OtherBoxController extends Controller
             // For now this is everything, so let's save the new entry to the db.
             $new_otherbox->save();
         }
-        
+
         // Only worry about creating a route for the updated day if Office Pantry are delivering the box personally.
         if (request('details.delivered_by_id') === 1) {
-        
+
             // Now we've handled the order itself, we need to make sure there's a route to dispatch it on.  Well, if it's delivered by Office Pantry anyway.
             // If there is we're all done, if not, let's build a route.
             if (!count(CompanyRoute::where('company_id', request('details.company_id'))->where('delivery_day', request('details.delivery_day'))->get())) {
-                
+
                 // This is currently pulling info from the Company table, although I want to create a CompanyData table to replace this.
                 $companyDetails = Company::findOrFail(request('details.company_id'));
 
@@ -90,7 +90,7 @@ class OtherBoxController extends Controller
                 Log::channel('slack')->info($message);
             }
         } else {
-        
+
             $message = "Route on " . request('details.delivery_day') . " not necessary, delivered by " . request('details.delivered_by_id');
             Log::channel('slack')->info($message);
         }
@@ -125,7 +125,7 @@ class OtherBoxController extends Controller
      * @param  \App\OtherBox  $otherBox
      * @return \Illuminate\Http\Response
      */
-     
+
      public function update(Request $request)
      {
          //dd(request('snackbox_item_id'));
@@ -133,12 +133,12 @@ class OtherBoxController extends Controller
              'quantity' => request('otherbox_item_quantity'),
          ]);
      }
-     
+
      public function updateDetails(Request $request)
      {
 
          $otherbox = OtherBox::where('otherbox_id', request('otherbox_details.otherbox_id'))->get();
-         
+
          foreach ($otherbox as $otherbox_entry ) {
              // dd($otherbox_entry);
              $otherbox_entry->update([
@@ -151,14 +151,14 @@ class OtherBoxController extends Controller
                  'next_delivery_week' => request('otherbox_details.next_delivery_week'),
              ]);
          }
-         
+
          // Only worry about creating a route for the updated day if Office Pantry are delivering the box personally.
          if (request('otherbox_details.delivered_by_id') === 1) {
-         
+
              // Now we've handled the order itself, we need to make sure there's a route to dispatch it on.  Well, if it's delivered by Office Pantry anyway.
              // If there is we're all done, if not, let's build a route.
              if (!count(CompanyRoute::where('company_id', request('otherbox_details.company_id'))->where('delivery_day', request('otherbox_details.delivery_day'))->get())) {
-                 
+
                  // This is currently pulling info from the Company table, although I want to create a CompanyData table to replace this.
                  $companyDetails = Company::findOrFail(request('otherbox_details.company_id'));
 
@@ -178,7 +178,7 @@ class OtherBoxController extends Controller
                  Log::channel('slack')->info($message);
              }
          } else {
-         
+
              $message = "Route on " . request('otherbox_details.delivery_day') . " not necessary, delivered by " . request('otherbox_details.delivered_by_id');
              Log::channel('slack')->info($message);
          }
@@ -205,7 +205,7 @@ class OtherBoxController extends Controller
          $addProduct->unit_price = request('product.unit_price');
          $addProduct->save();
      }
-     
+
     /**
      * Remove the specified resource from storage.
      *

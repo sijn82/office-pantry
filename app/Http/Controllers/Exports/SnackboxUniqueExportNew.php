@@ -33,37 +33,37 @@ class SnackboxUniqueExportNew
     {
         $courier = session()->get('snackbox_courier');
         $this->courier = $courier;
-        
+
     }
-    
+
     public function view(): View
     {
         $currentWeekStart = Weekstart::findOrFail(1);
 
         $snackboxes = SnackBox::where('delivered_by', $this->courier)->where('next_delivery_week', $currentWeekStart->current)
                                 ->where('product_id', '!=', 0)->where('wholesale', '=', null)->where('type', '=', 'unique')->get();
-                                
-                                
+
+
         // Group the snackbox entries by snackbox_id to pull each order together
         $snackboxesGroupedById = $snackboxes->groupBy('snackbox_id');
 
         foreach ($snackboxesGroupedById as $snackbox) {
             $company_id = $snackbox[0]->company_id;
             $company = Company::findOrFail($company_id);
-           
+
             // As we know we need to display all the products contained within these 4 company orders, lets get a list of all id's which need processing.
             foreach ($snackbox as $snack) {
                 $product_ids_all[] = $snack->product_id;
             }
-            
+
             $snackbox['company_name'] = $company->route_name;
             $snackbox['delivered_by'] = $snackbox[0]->delivered_by;
        }
 
-        // Now we have them all we can strip out the duplicates, as we only want one row per product 
+        // Now we have them all we can strip out the duplicates, as we only want one row per product
         // and can search the orders for each product, displaying either the quantity in each box, or 0 if not included in that snackbox.
         $product_ids_unique = array_unique($product_ids_all);
-        
+
         // Now we have the product id's we can create a key value pair with the product names.
         // This will make it easier to display the product name on the template and changes the array key to the product id.
         foreach ($product_ids_unique as $product_id) {
@@ -74,15 +74,15 @@ class SnackboxUniqueExportNew
         // Group the snackboxes in chunks of 4 to match the template we wish to fill.
         $snd_unique_chunks = $snackboxesGroupedById->chunk(4);
 
-       
-       
+
+
         if (!count($snd_unique_chunks)) {
-           
+
             Log::channel('slack')->info('Snackbox OP Uniquecompany - None for this week');
             return view('none-for-this-week');
-      
+
         } else {
-                
+
             return view('exports.snackboxes-multi-company-new', [
                 'chunks'    =>  $snd_unique_chunks,
                 'products'  =>  $products,
@@ -90,7 +90,7 @@ class SnackboxUniqueExportNew
         }
     }
 
-   
+
    public function title(): string
    {
        return 'OP UniqueCompany';
@@ -164,12 +164,12 @@ class SnackboxUniqueExportNew
                              // The following 2 styles, centre the delivered_by text at the top, and the switch case below styles the cell(s) with the right colour.
                              $event->sheet->getDelegate()->getStyle($deliveredByRange)->getAlignment()->setHorizontal('center');
                              $event->sheet->getDelegate()->getStyle($deliveredByRange)->getAlignment()->setVertical('center');
-                             
+
                              // Look in this cell for delivered_by info, based on which of the 3 values it is, style the cell accordingly.  P.s Finally had a use case for a switch statement over if/else!
                              $delivered_by = $event->sheet->getDelegate()->getCell('D' . $selectedRow)->getValue();
                              // dd($delivered_by);
                              switch ($delivered_by) {
-                                 
+
                                  case "OP":
                                  $event->sheet->styleCells(
                                        'D' . $selectedRow, // Cell Range
@@ -177,7 +177,7 @@ class SnackboxUniqueExportNew
                                            'fill' => [
                                                        'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
                                                        'color' => [
-                                                         'argb' => 'e619e5' // desaturated fuchsia 
+                                                         'argb' => 'e619e5' // desaturated fuchsia
                                                        ]
                                            ] // end of fill
                                        ] // end of styles array

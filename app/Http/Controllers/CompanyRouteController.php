@@ -17,13 +17,13 @@ class CompanyRouteController extends Controller
        $this->week_start = $week_start[0]['current'];
        $this->delivery_days = $week_start[0]['delivery_days'];
     }
-    
+
     // new system route download export function call.
     public function download_new_routes()
     {
         return \Excel::download(new Exports\RoutesExportNew($this->week_start), 'routelists' . $this->week_start . '.xlsx');
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -103,7 +103,7 @@ class CompanyRouteController extends Controller
             'address' => request('address'),
             'delivery_information' => request('delivery_information'),
         ]);
-        
+
     }
 
     /**
