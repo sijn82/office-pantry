@@ -12,6 +12,9 @@
                 <!-- <b-button :selected="result.id" @click="officeData(result.id)" type="submit" variant="success">Get Data</b-button> -->
             </div>
         </b-list-group>
+        <div v-if="this.company_data.company != null">
+            <company-details-admin :company="this.company_data.company"></company-details-admin>
+        </div>
         <div v-if="this.company_data.fruitboxes != null">
             <fruit-orders-admin :company="this.company_data.company" :fruitboxes="this.company_data.fruitboxes"></fruit-orders-admin>
         </div>

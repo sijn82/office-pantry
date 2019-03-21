@@ -195,14 +195,20 @@
                 </b-form-group>
                 <!-- Existing Suppliers -->
                 <b-form-group id="existing-suppliers"
-                                label="Suppliers"
+                                label="Delivered By"
                                 label-for="supplier-options">
-                        <b-form-select id="supplier-options"
+                                    <b-form-select class="company-inputs" v-model="form.supplier_options" size="sm">
+                                        <template slot="first">
+                                                <option :value="null" disabled> Please select an option </option>
+                                        </template>
+                                        <option v-for="fruit_partner in $store.state.fruit_partners_list" :value="fruit_partner.id"> {{ fruit_partner.name }} </option>
+                                    </b-form-select>
+                        <!-- <b-form-select id="supplier-options"
                                       :options="suppliers"
                                       class="company-inputs"
                                       required
                                       v-model="form.supplier_options">
-                        </b-form-select>
+                        </b-form-select> -->
                         <!-- New Suppliers -->
                 <b-input-group id="new-suppliers"
                                 label="New Supplier">
@@ -387,6 +393,11 @@ export default {
           this.show = false;
           this.$nextTick(() => { this.show = true });
         }
+  },
+  
+  mounted() {
+
+       this.$store.commit('getFruitPartners');
   }
 }
 </script>

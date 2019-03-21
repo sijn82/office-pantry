@@ -37,8 +37,12 @@ class MilkBox extends Model
             // 'password', 'remember_token',
         ];
         
+        // public function companies()
+        // {
+        //     return $this->belongsTo(Company::class);
+        // }
         public function companies()
         {
-            return $this->belongsTo(Company::class);
+            return $this->belongsTo(CompanyDetails::class);
         }
 }

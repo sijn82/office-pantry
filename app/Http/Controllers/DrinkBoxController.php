@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\DrinkBox;
 use App\CompanyRoute;
-use App\Company;
+// use App\Company;
+use App\CompanyDetails;
 
 class DrinkBoxController extends Controller
 {
@@ -73,7 +74,8 @@ class DrinkBoxController extends Controller
             if (!count(CompanyRoute::where('company_id', request('details.company_id'))->where('delivery_day', request('details.delivery_day'))->get())) {
                 
                 // This is currently pulling info from the Company table, although I want to create a CompanyData table to replace this.
-                $companyDetails = Company::findOrFail(request('details.company_id'));
+                // $companyDetails = Company::findOrFail(request('details.company_id'));
+                $companyDetails = CompanyDetails::findOrFail(request('details.company_id'));
 
                 // We need to create a new entry.
                 $newRoute = new CompanyRoute();
@@ -161,7 +163,8 @@ class DrinkBoxController extends Controller
              if (!count(CompanyRoute::where('company_id', request('drinkbox_details.company_id'))->where('delivery_day', request('drinkbox_details.delivery_day'))->get())) {
                  
                  // This is currently pulling info from the Company table, although I want to create a CompanyData table to replace this.
-                 $companyDetails = Company::findOrFail(request('drinkbox_details.company_id'));
+                 // $companyDetails = Company::findOrFail(request('drinkbox_details.company_id'));
+                 $companyDetails = CompanyDetails::findOrFail(request('drinkbox_details.company_id'));
 
                  // We need to create a new entry.
                  $newRoute = new CompanyRoute();

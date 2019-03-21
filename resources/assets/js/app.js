@@ -37,10 +37,10 @@ import { store } from './vuex/store';
      'passport-personal-access-tokens',
      require('./components/passport/PersonalAccessTokens.vue')
  );
- 
+
  // Temporary file
 Vue.component('import-test-file', require('./components/ImportTestFile.vue'));
- 
+
 
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
 Vue.component('picklists', require('./components/Picklists.vue'));
@@ -50,7 +50,7 @@ Vue.component('update-week-start', require('./components/UpdateWeekStart.vue'));
 Vue.component('import-fod-file', require('./components/ImportFodFile.vue'));
 Vue.component('import-snacks-n-drinks-file', require('./components/ImportSnacksNDrinksFile.vue'));
 Vue.component('import-rejigged-routes-file', require('./components/ImportRejiggedRoutesFile.vue'));
-Vue.component('add-new-company', require('./components/AddNewCompany.vue'));
+// Vue.component('add-new-company', require('./components/AddNewCompany.vue')); // This is now outdated and replaced, going to use new component.
 Vue.component('process-snacks-into-templates', require('./components/ProcessSnacksIntoTemplates.vue'));
 Vue.component('berry-picklist', require('./components/BerryPicklist.vue'));
 
@@ -108,6 +108,8 @@ Vue.component('add-new-preference', require('./components/admin/preferences/AddN
 Vue.component('allergy', require('./components/admin/preferences/Allergy.vue'));
 Vue.component('additional-info', require('./components/admin/preferences/AdditionalInfo.vue'));
 // Company Related
+Vue.component('add-new-company', require('./components/admin/company/AddNewCompany.vue'));
+Vue.component('company-details-admin', require('./components/admin/company/CompanyDetailsAdmin.vue'));
 Vue.component('search-companies', require('./components/admin/SearchCompanies.vue'));
 Vue.component('select-company', require('./components/admin/SelectCompany.vue'));
 // System Related

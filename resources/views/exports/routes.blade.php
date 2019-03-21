@@ -24,7 +24,7 @@
           <th>Milk 1l Alt Cashew</th>
           <th>Milk 1l Alt Lactose Free Semi</th>
           <th>Drinks</th>
-          <th>Snacks</th>
+          <th>Boxes</th>
           <th>Other</th>
           <th>Assigned To</th>
           <th>Delivery Day</th>

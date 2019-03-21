@@ -17,7 +17,7 @@ class SnackBox extends Model
         'no_of_boxes',
         'type',
         // Company Info
-        'company_id',
+        'company_details_id',
         'delivery_day',
         'frequency',
         'previous_delivery_week',
@@ -28,9 +28,13 @@ class SnackBox extends Model
         'quantity'
     ];
     
+    // public function companies()
+    // {
+    //     return $this->belongsTo(Company::class);
+    // }
     public function companies()
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(CompanyDetails::class);
     }
     
 }

@@ -11,7 +11,7 @@ class FruitBox extends Model
 
         'is_active',
         'name',
-        'company_id',
+        'company_details_id',
         'route_id',
         'type',
         'frequency',
@@ -49,9 +49,13 @@ class FruitBox extends Model
             // 'password', 'remember_token',
         ];
 
+        // public function companies()
+        // {
+        //     return $this->belongsTo(Company::class);
+        // }
         public function companies()
         {
-            return $this->belongsTo(Company::class);
+            return $this->belongsTo(CompanyDetails::class);
         }
         
         public function fruit_partners()

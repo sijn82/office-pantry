@@ -15,7 +15,7 @@ class AddCompanyIdToUsers extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             //
-            $table->integer('company_id')->after('password')->nullable();
+            $table->integer('company_details_id')->after('password')->nullable();
         });
     }
 

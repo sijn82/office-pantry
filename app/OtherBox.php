@@ -15,7 +15,7 @@ class OtherBox extends Model
         'no_of_boxes',
         'type',
         // Company Info
-        'company_id',
+        'company_details_id',
         'delivery_day',
         'frequency',
         'previous_delivery_week',
@@ -28,8 +28,12 @@ class OtherBox extends Model
         'unit_price',
     ];
     
+    // public function companies()
+    // {
+    //     return $this->belongsTo(Company::class);
+    // }
     public function companies()
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(CompanyDetails::class);
     }
 }

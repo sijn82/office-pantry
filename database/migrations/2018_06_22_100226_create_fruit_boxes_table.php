@@ -17,7 +17,7 @@ class CreateFruitBoxesTable extends Migration
             $table->increments('id');
             $table->string('is_active')->default('Active');
             $table->string('name');
-            $table->integer('company_id');
+            $table->integer('company_details_id');
             $table->integer('route_id'); // not sure i need this, i'm certainly not using it currently!
             $table->string('type');
             $table->string('frequency');

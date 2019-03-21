@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\FruitBox;
-use App\Company;
+// use App\Company;
+use App\CompanyDetails;
 use App\CompanyRoute;
 use App\FruitPartner;
 use App\WeekStart;
@@ -172,7 +173,8 @@ class FruitBoxController extends Controller
                 $currentWeekStart = Weekstart::findOrFail(1);
 
                 // A route might not exist yet but when the company was set up a route name was inputted, so let's use that.
-                $companyDetails = Company::findOrFail($request['company_data']['company_id']);
+                // $companyDetails = Company::findOrFail($request['company_data']['company_id']);
+                $companyDetails = CompanyDetails::findOrFail($request['company_data']['company_id']);
 
                 // We need to create a new entry.
                 $newRoute = new CompanyRoute();
@@ -311,7 +313,8 @@ class FruitBoxController extends Controller
             // If we're here, a route wasn't found for the new delivery day, and we've confirmed it's an Office Pantry delivery, so we'd better make one.
             // A route might not exist yet but when the company was set up a route name was inputted, so let's use that.
             
-            $companyDetails = Company::findOrFail($request['company_id']);
+            // $companyDetails = Company::findOrFail($request['company_id']);
+            $companyDetails = CompanyDetails::findOrFail($request['company_id']);
 
             // We need to create a new entry.
             $newRoute = new CompanyRoute();

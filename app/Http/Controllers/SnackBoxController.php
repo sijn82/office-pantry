@@ -12,7 +12,8 @@ use App\SnackBox;
 use App\WeekStart;
 use App\Product;
 use App\Preference;
-use App\Company;
+// use App\Company;
+use Appz\CompanyDetails;
 use App\CompanyRoute;
 
 

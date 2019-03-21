@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Preference;
-use App\Company;
+// use App\Company;
+use App\CompanyDetails;
 use App\Allergy;
 use App\AdditionalInfo;
 // for use with random test function

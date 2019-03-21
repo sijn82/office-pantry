@@ -9,7 +9,7 @@ class CompanyRoute extends Model
     //
     protected $fillable = [
         'is_active',
-        'company_id',
+        'company_details_id',
         'route_name',
         'postcode',
         'address',
@@ -33,9 +33,13 @@ class CompanyRoute extends Model
               // 'password', 'remember_token',
           ];
           
+          // public function companies()
+          // {
+          //     return $this->belongsTo(Company::class);
+          // }
           public function companies()
           {
-              return $this->belongsTo(Company::class);
+              return $this->belongsTo(CompanyDetails::class);
           }
           public function assigned_route()
           {

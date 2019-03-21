@@ -15,7 +15,7 @@ class CreateTableCompanyPreferences extends Migration
     {
         Schema::create('company_preferences', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('company_id');
+            $table->integer('company_details_id');
             $table->string('snackbox_likes')->nullable();
             $table->string('snackbox_dislikes')->nullable();
             $table->string('snackbox_essentials')->nullable();

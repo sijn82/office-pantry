@@ -7,9 +7,26 @@ use Illuminate\Support\Facades\Log;
 use App\OtherBox;
 use App\CompanyRoute;
 use App\Company;
+use App\WeekStart;
 
 class OtherBoxController extends Controller
 {
+    protected $week_start;
+    protected $delivery_days;
+
+    public function __construct()
+    {
+        $week_start = WeekStart::all()->toArray();
+        $this->week_start = $week_start[0]['current'];
+        $this->delivery_days = $week_start[0]['delivery_days'];
+    }
+
+    public function download_otherboxes()
+    {
+
+        return \Excel::download(new Exports\OtherBoxesExportNew, 'otherboxes-all' . $this->week_start . '.xlsx');
+    }
+
     /**
      * Display a listing of the resource.
      *

@@ -16,7 +16,7 @@ class CreateCompanyRoutesTable extends Migration
         Schema::create('company_routes', function (Blueprint $table) {
             $table->increments('id');
             $table->string('is_active');
-            $table->integer('company_id');
+            $table->integer('company_details_id');
             $table->string('route_name');
             $table->string('postcode');
             $table->longtext('address');

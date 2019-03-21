@@ -1,35 +1,35 @@
 <table>
     <thead>
-      <tr>
-          <th>Week Start</th>
-          <th>Company Name</th>
-          <th>Postcode</th>
-          <th>Address</th>
-          <th>Delivery Information</th>
-          <th>Fruit Crate</th>
-          <th>Fruit Boxes</th>
-          <th>Milk 2l Semi-Skimmed</th>
-          <th>Milk 2l Skimmed</th>
-          <th>Milk 2l Whole</th>
-          <th>Milk 1l Semi-Skimmed</th>
-          <th>Milk 1l Skimmed</th>
-          <th>Milk 1l Whole</th>
-          <th>Milk 1l Alt Coconut</th>
-          <th>Milk 1l Alt Unsweetened Almond</th>
-          <th>Milk 1l Alt Almond</th>
-          <th>Milk 1l Alt Unsweetened Soya</th>
-          <th>Milk 1l Alt Soya</th>
-          <th>Milk 1l Alt Oat</th>
-          <th>Milk 1l Alt Rice</th>
-          <th>Milk 1l Alt Cashew</th>
-          <th>Milk 1l Alt Lactose Free Semi</th>
-          <th>Drinks</th>
-          <th>Snacks</th>
-          <th>Other</th>
-          <th>Assigned To</th>
-          <th>Delivery Day</th>
-          <th>Position On Route</th>
-      </tr>
+        <tr>
+              <th> Week Start </th>
+              <th> Company Name </th>
+              <th> Postcode </th>
+              <th> Address </th>
+              <th> Delivery Information </th>
+              <th> Fruit Crate </th>
+              <th> Fruit Boxes </th>
+              <th> Milk 2l Semi-Skimmed </th>
+              <th> Milk 2l Skimmed </th>
+              <th> Milk 2l Whole </th>
+              <th> Milk 1l Semi-Skimmed </th>
+              <th> Milk 1l Skimmed </th>
+              <th> Milk 1l Whole </th>
+              <th> Milk 1l Alt Coconut </th>
+              <th> Milk 1l Alt Unsweetened Almond </th>
+              <th> Milk 1l Alt Almond </th>
+              <th> Milk 1l Alt Unsweetened Soya </th>
+              <th> Milk 1l Alt Soya </th>
+              <th> Milk 1l Alt Oat </th>
+              <th> Milk 1l Alt Rice </th>
+              <th> Milk 1l Alt Cashew </th>
+              <th> Milk 1l Alt Lactose Free Semi </th>
+              <th> Drinks </th>
+              <th> Boxes </th>
+              <th> Other </th>
+              <th> Assigned To </th>
+              <th> Delivery Day </th>
+              <th> Position On Route </th>
+        </tr>
     </thead>
     <tbody>
 

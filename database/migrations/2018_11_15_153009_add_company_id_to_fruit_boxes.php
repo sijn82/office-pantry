@@ -15,7 +15,7 @@ class AddCompanyIdToFruitBoxes extends Migration
     {
         Schema::table('fruit_boxes', function (Blueprint $table) {
             //
-            $table->integer('company_id')->after('name')->nullable();
+            $table->integer('company_details_id')->after('name')->nullable();
         });
     }
 

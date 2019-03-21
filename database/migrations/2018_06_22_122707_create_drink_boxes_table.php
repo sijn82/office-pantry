@@ -22,7 +22,7 @@ class CreateDrinkBoxesTable extends Migration
             $table->integer('no_of_boxes');
             // $table->'type',
             // Company Info
-            $table->integer('company_id');
+            $table->integer('company_details_id');
             $table->string('delivery_day');
             $table->string('frequency');
             $table->string('week_in_month');

@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Company;
+// use App\Company;
+use App\CompanyDetails;
 use App\User;
 use App\FruitBox;
 use App\MilkBox;
@@ -37,10 +38,11 @@ class OfficeDashboardController extends Controller
     //     return view('home');
     // }
 
-    public function show(Company $id)
+    public function show(CompanyDetails $company)
     {
-            $fruitboxes = $id->fruitbox;
-            
+            //dd($company);
+            $fruitboxes = $company->fruitbox;
+            //dd($fruitboxes);
             // $fruitpartner->name will break if there's a box retrieved without a fruitpartner
             // but this shouldn't be an issue if a placeholder fruitpartner is given when the box is created, 
             // should the actual fruitpartner not be known at that point.
@@ -53,7 +55,7 @@ class OfficeDashboardController extends Controller
                 $fruitbox->fruit_partner_name = $fruitpartner_name;
             }
             // dd($fruitboxes);
-            $milkboxes = $id->milkbox;
+            $milkboxes = $company->milkbox;
             
             // $fruitpartner->name will break if there's a box retrieved without a fruitpartner
             // but this shouldn't be an issue if a placeholder fruitpartner is given when the box is created, 
@@ -67,26 +69,26 @@ class OfficeDashboardController extends Controller
                 $milkbox->fruit_partner_name = $fruitpartner_name;
             }
             
-            $routes = $id->company_routes;
+            $routes = $company->company_routes;
             
             // This starts off as a list of snackbox items but we want them grouped by the snackbox_id, so we need to do that either in the snackbox-admin component or here.
             // Let's try doing it here first.
-            $snackbox_items = $id->snackboxes;
+            $snackbox_items = $company->snackboxes;
             $snackboxes = $snackbox_items->groupBy('snackbox_id');
             // And now do the same with Drinks
-            $drinkbox_items = $id->drinkboxes;
+            $drinkbox_items = $company->drinkboxes;
             $drinkboxes = $drinkbox_items->groupBy('drinkbox_id');
             // and Other
-            $otherbox_items = $id->otherboxes;
+            $otherbox_items = $company->otherboxes;
             $otherboxes = $otherbox_items->groupBy('otherbox_id');
             
             //dd($drinkboxes);
             
-            $preferences = $id->preference;
-            $allergies = $id->allergy;
+            $preferences = $company->preference;
+            $allergies = $company->allergy;
 
         // return view('companies', ['companies' => $company, 'fruitboxes' => $fruitboxes, 'milkboxes' => $milkboxes, 'routes' => $routes]);
-        return [    'company' => $id, 'fruitboxes' => $fruitboxes, 'milkboxes' => $milkboxes, 'routes' => $routes,
+        return [    'company' => $company, 'fruitboxes' => $fruitboxes, 'milkboxes' => $milkboxes, 'routes' => $routes,
                     'snackboxes' => $snackboxes, 'drinkboxes' => $drinkboxes, 'otherboxes' => $otherboxes,
                     'preferences' => $preferences, 'allergies' => $allergies
                 ];
@@ -120,7 +122,8 @@ class OfficeDashboardController extends Controller
         // dd($companies);
         $company_id = $request['params']['company'];
 
-        $company = Company::find($company_id);
+        // $company = Company::find($company_id);
+        $company = CompanyDetails::find($company_id);
 
         if (empty($company)) {
              $company = ['name' => 'None Selected'];

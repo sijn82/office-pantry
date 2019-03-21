@@ -97,6 +97,8 @@ Route::get('reorder-seasonal-berries', 'PickListsController@reorder_seasonal_ber
 Route::get('seasonal-berries-picklists', 'PickListsController@berry_totals');
 Route::get('seasonal-berries-breakdown', 'PickListsController@berry_export');
 
+
+Route::get('otherbox-export', 'OtherBoxController@download_otherboxes');
 // This is now defunct, will remove at some point when I clean the code up generally.
 // Route::get('strip-picklists-company-name', 'PickListsController@stripu00a0FromPicklistsCompanyName');
 
@@ -155,11 +157,14 @@ Route::get('import-companies', 'CompaniesController@store');
 Route::get('import-route-summary-delivery-info', 'CompaniesController@updateRouteSummaryAddressAndDeliveryInfo');
 //
 
-Route::post('companies/add-new-company', 'CompaniesController@create');
-Route::get('companies/search', 'CompaniesController@search');
+// Route::post('companies/add-new-company', 'CompaniesController@create'); Old Add Company Path
+Route::post('company-details/add-new-company', 'CompanyDetailsController@store');
+Route::put('company-details/update/{company_details_id}', 'CompanyDetailsController@update');
+// Route::get('companies/search', 'CompaniesController@search');
+Route::get('companies/search', 'CompanyDetailsController@search');
 Route::post('companies/selected', 'OfficeDashboardController@showSelectedCompanyData');
 Route::get('companies/selected', 'OfficeDashboardController@showSelectedCompanyData');
-Route::get('companies/{id}', 'OfficeDashboardController@show');
+Route::get('companies/{company}', 'OfficeDashboardController@show');
 
 // To be useful at a later date when more of the process has been implimented.
 Route::get('importProduct', 'ProductsController@storeCSV');

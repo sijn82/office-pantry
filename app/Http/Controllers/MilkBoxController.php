@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\MilkBox;
-use App\Company;
+// use App\Company;
+use App\CompanyDetails;
 use App\WeekStart;
 use App\CompanyRoute;
 use App\FruitPartner;
@@ -78,14 +79,16 @@ class MilkBoxController extends Controller
                 $newMilkbox->milk_1l_alt_lactose_free_semi = $request['company_data']['lactose_free_semi_skimmed_1l'];
                 $newMilkbox->save();
 
-                $companyDetails = Company::findOrFail($request['company_data']['company_id']);
+                // $companyDetails = Company::findOrFail($request['company_data']['company_id']);
+                $companyDetails = CompanyDetails::findOrFail($request['company_data']['company_id']);
 
                 $message = "Milkbox for " . $companyDetails->route_name . " on $delivery_day saved.";
                 Log::channel('slack')->info($message);
 
             } else {
 
-                $companyDetails = Company::findOrFail($request['company_data']['company_id']);
+                // $companyDetails = Company::findOrFail($request['company_data']['company_id']);
+                $companyDetails = CompanyDetails::findOrFail($request['company_data']['company_id']);
 
                 $message = "Milkbox for " . $companyDetails->route_name . " on $delivery_day saved.";
                 Log::channel('slack')->info($message);
@@ -98,7 +101,8 @@ class MilkBoxController extends Controller
                 $currentWeekStart = Weekstart::findOrFail(1);
 
                 // A route might not exist yet but when the company was set up a route name was inputted, so let's use that.
-                $companyDetails = Company::findOrFail($request['company_data']['company_id']);
+                // $companyDetails = Company::findOrFail($request['company_data']['company_id']);
+                $companyDetails = CompanyDetails::findOrFail($request['company_data']['company_id']);
 
                 // We need to create a new entry.
                 $newRoute = new CompanyRoute();
@@ -225,7 +229,8 @@ class MilkBoxController extends Controller
         if (count(CompanyRoute::where('company_id', request('company_id'))->where('delivery_day', request('delivery_day'))->get())) {
             
             // We have nothing else we need to do.
-            $company = Company::findOrFail(request('company_id'));
+            // $company = Company::findOrFail(request('company_id'));
+            $company = CompanyDetails::findOrFail(request('company_id'));
             // But to log the change for our records.
             $route = CompanyRoute::where('company_id', request('company_id'))->where('delivery_day', request('delivery_day'))->get();
             // ^^^ Not true, we should be checking if the route is active already because if not we'll need to change that status to get pulled into the routes for exporting etc.
@@ -249,7 +254,8 @@ class MilkBoxController extends Controller
             // If we're here, a route wasn't found for the new delivery day, and we've confirmed it's an Office Pantry delivery, so we'd better make one.
             // A route might not exist yet but when the company was set up a route name was inputted, so let's use that.
             
-            $companyDetails = Company::findOrFail($request['company_id']);
+            // $companyDetails = Company::findOrFail($request['company_id']);
+            $companyDetails = CompanyDetails::findOrFail($request['company_id']);
 
             // We need to create a new entry.
             $newRoute = new CompanyRoute();
