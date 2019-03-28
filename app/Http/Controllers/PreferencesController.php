@@ -16,11 +16,11 @@ class PreferencesController extends Controller
     // using this random function to test sections of snackbox standard updater in isolation.
     public function random() {
         
-        $company_id = 55;
+        $company_details_id = 1;
         
         // ----- Select a random item from list of likes ----- //
         
-        $likes = Preference::where('company_id', $company_id)->where('snackbox_likes', '!=', null)->pluck('snackbox_likes')->toArray();
+        $likes = Preference::where('company_details_id', $company_details_id)->where('snackbox_likes', '!=', null)->pluck('snackbox_likes')->toArray();
         
         $key = array_rand($likes, 1);
         // 
@@ -31,8 +31,8 @@ class PreferencesController extends Controller
         
         // ----- Remove any items from list of likes that are not in stock ----- //
         
-        $likes = Preference::where('company_id', $company_id)->where('snackbox_likes', '!=', null)->pluck('snackbox_likes')->toArray();
-        $dislikes = Preference::where('company_id', $company_id)->where('snackbox_dislikes', '!=', null)->pluck('snackbox_dislikes')->toArray();
+        $likes = Preference::where('company_details_id', $company_details_id)->where('snackbox_likes', '!=', null)->pluck('snackbox_likes')->toArray();
+        $dislikes = Preference::where('company_details_id', $company_details_id)->where('snackbox_dislikes', '!=', null)->pluck('snackbox_dislikes')->toArray();
         
          // dd($likes);
         
@@ -64,7 +64,7 @@ class PreferencesController extends Controller
         $preference = 'snackbox_' . $request['preference']['preference_category'];
         
         $newPreference = new Preference();
-        $newPreference->company_id = $request['preference']['company_id'];
+        $newPreference->company_details_id = $request['preference']['company_details_id'];
         $newPreference->$preference = $request['preference']['product_name'];
         
         if ($request['preference']['preference_category'] == 'essentials') {
@@ -74,7 +74,7 @@ class PreferencesController extends Controller
         $newPreference->save();
         
         // Ok, now I need to work out how to return the right field each time, this'll either be as easy as my first idea, or a right bitch to do...
-        return [ 'preference' => Preference::where('company_id', $request['preference']['company_id'])->where($preference, $request['preference']['product_name'])->get(), 'category' => $preference ]; 
+        return [ 'preference' => Preference::where('company_details_id', $request['preference']['company_details_id'])->where($preference, $request['preference']['product_name'])->get(), 'category' => $preference ]; 
         
     }
     
@@ -87,9 +87,9 @@ class PreferencesController extends Controller
         // $allergies = [];
         // $additional_notes = [];
         
-        $preferences = Preference::where('company_id', $request->id)->get();
-        $allergies = Allergy::where('company_id', $request->id)->get();
-        $additional_notes = AdditionalInfo::where('company_id', $request->id)->get();
+        $preferences = Preference::where('company_details_id', $request->id)->get();
+        $allergies = Allergy::where('company_details_id', $request->id)->get();
+        $additional_notes = AdditionalInfo::where('company_details_id', $request->id)->get();
         
         foreach ( $preferences as $preference ) {
             

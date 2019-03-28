@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Exports;
 
 use App\WeekStart;
 use App\OtherBox;
+use App\CompanyRoute;
+use App\CompanyDetails;
+use App\AssignedRoute;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -17,12 +20,11 @@ use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Sheet;
 
-class OtherBoxesExportNew implements
+class OtherBoxesCompanyRouteExportNew implements
 WithMultipleSheets
 {
     public function __construct()
     {
-        
         $week_start = WeekStart::all()->toArray();
         $this->week_start = $week_start[0]['current'];
         $this->delivery_days = $week_start[0]['delivery_days'];
@@ -41,7 +43,7 @@ WithMultipleSheets
             
             foreach ($mon_tues as $day) {
                     // Each distinct assigned_to (route) calls the FruitboxPicklistCollection Class below.
-                    $sheets[] = new OtherBoxPicklistCollection($day, $this->week_start);
+                    $sheets[] = new OtherBoxCompanyRouteCollection($day, $this->week_start);
             }
                 return $sheets;
                 
@@ -49,7 +51,7 @@ WithMultipleSheets
             
             foreach ($wed_thur_fri as $day) {
                     // Each distinct assigned_to (route) calls the FruitboxPicklistCollection Class below.
-                    $sheets[] = new OtherBoxPicklistCollection($day, $this->week_start);
+                    $sheets[] = new OtherBoxCompanyRouteCollection($day, $this->week_start);
             }
                 return $sheets;
         }
@@ -57,18 +59,17 @@ WithMultipleSheets
 
 }
 
-class OtherBoxPicklistCollection implements
+class OtherBoxCompanyRouteCollection implements
 FromView,
 WithTitle,
-ShouldAutoSize,
+ShouldAutoSize
 // WithHeadings,
-WithEvents
+//WithEvents
 {
-    public function __construct($day)
+    public function __construct($day, $week_start)
     {
         $this->day = $day;
-        
-        dd($this->day);
+        $this->week_start = $week_start;
     }
     
     public function view(): View
@@ -77,24 +78,46 @@ WithEvents
         $currentWeekStart = Weekstart::findOrFail(1);
         
         // Other than a valid week start, all we need to know is what day we're processing and that the orders are 'Active'.
-        $otherboxes = OtherBox::where('is_active', 'Active')->where('next_delivery_week', $currentWeekStart->current)->where('delivery_day', $day)->get();
+        $otherboxes = OtherBox::where('is_active', 'Active')->where('next_delivery_week', $this->week_start)->where('delivery_day', $this->day)->where('delivered_by_id', 1)->get();
         
-        foreach ($otherboxes as $otherbox_items) {
+        // dd($otherboxes);
+        // Rather than grouping the boxes by otherbox_id we actually want to know how many of a product we need to buy, so let's group them by product_id instead.
+        $groupedByOtherboxId = $otherboxes->groupBy('otherbox_id');
+
+        // dd($groupedByProductId);
         
-            // For each order we have a company ID but for the export file we need the actual name.
-            // $company_name = CompanyDetails::where('id', $otherbox->company_details_id)
+        foreach ($groupedByOtherboxId as $otherbox) {
+            //dd($otherbox);
+            foreach ($otherbox as $item) {
+            
+                $route = CompanyRoute::where('company_details_id', $item->company_details_id)->where('delivery_day', $item->delivery_day)->get();
+                $company = CompanyDetails::findOrFail($item->company_details_id);
+                
+                 if (isset($route[0]->assigned_route_id)) {
+                    $assigned_route_id = $route[0]->assigned_route_id;
+                    $assigned_route = AssignedRoute::findOrFail($assigned_route_id);
+                 } else {
+                     dd($item);
+                 }
+                
+                $item->company_name = $company->route_name;
+                $item->route = $assigned_route->name;
+            }
         }
+        //dd($groupedByOtherboxId);
         
-        return view('exports.otherbox-items', [
-                    'week_start'            =>   $this->week_starting,
-                    'other_items'            =>  $otherboxes,
-                    'out_for_delivery_day'  =>   $this->day
+        // dd($products);
+
+        return view('exports.new-otherbox-items-and-routes', [
+                    'week_start'            =>  $this->week_start,
+                    'otherboxes'            =>  $otherboxes,
+                    'out_for_delivery_day'  =>  $this->day
                 ]);
     }
     
     public function title(): string
     {
-    
+        return $this->day;
     }
     
     public function registerEvents(): array

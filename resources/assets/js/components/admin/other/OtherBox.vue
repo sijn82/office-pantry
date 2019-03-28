@@ -36,7 +36,7 @@
                         </b-form-select>
                     </div>
                     <div v-else>
-                        <p> {{ otherbox[0].delivered_by_id }} </p>
+                        <p> {{ otherbox[0].fruit_partner_name }} </p>
                     </div>
                 </b-col>
                 <b-col>

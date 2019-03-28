@@ -15,7 +15,7 @@ class DeliveryDayToFruitboxes extends Migration
     {
         Schema::table('fruit_boxes', function (Blueprint $table) {
             //
-            $table->string('delivery_day')->after('company_id')->nullable();
+            $table->string('delivery_day')->after('company_details_id')->nullable();
         });
     }
 

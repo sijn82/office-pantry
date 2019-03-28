@@ -15,7 +15,7 @@ class AddRouteIdToFruitBoxes extends Migration
     {
         Schema::table('fruit_boxes', function (Blueprint $table) {
             //
-            $table->integer('route_id')->after('company_id')->nullable();
+            $table->integer('route_id')->after('company_details_id')->nullable();
         });
     }
 

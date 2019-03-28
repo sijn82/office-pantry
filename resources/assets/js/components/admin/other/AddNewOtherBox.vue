@@ -130,7 +130,7 @@
             return {
                 createOtherbox: false,
                 order: 'empty',
-                company_id: 0,
+                company_details_id: 0, //  Not sure this is being used anymore?
                  // total_start: 0,
                 delivered_by: null,
                 // delivered_by_options: ['DPD', 'APC', 'OP'],
@@ -172,7 +172,7 @@
                     details: { 
                         delivered_by_id: this.delivered_by, 
                         no_of_boxes: this.no_of_boxes, 
-                        company_id: this.selected_company,
+                        company_details_id: this.selected_company,
                         delivery_day: this.delivery_day, 
                         frequency: this.frequency, 
                         week_in_month: this.week_in_month, 

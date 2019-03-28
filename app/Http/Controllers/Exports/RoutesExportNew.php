@@ -200,7 +200,7 @@ WithEvents
             // ---------- Fruit Deliveries ---------- //
 
             // For each route in the routes table, we check the associated Company ID for a FruitBox - that's Active, On Delivery For This Week and on this Delivery Day.
-            $fruitboxesForDelivery = FruitBox::where('company_id', $routeInfoSolo->company_id)->where('next_delivery', $currentWeekStart->current)
+            $fruitboxesForDelivery = FruitBox::where('company_details_id', $routeInfoSolo->company_details_id)->where('next_delivery', $currentWeekStart->current)
                                                 ->where('delivery_day', $routeInfoSolo->delivery_day)->where('is_active', 'Active')->get();
             // Set variable value.
             $fruitbox_totals = 0;
@@ -227,7 +227,7 @@ WithEvents
             // ---------- Milk Deliveries ---------- //
 
             // For each route in the routes table, we check the associated Company ID for a MilkBox - that's Active, On Delivery For This Week and on this Delivery Day.
-            $milkboxesForDelivery = MilkBox::where('company_id', $routeInfoSolo->company_id)->where('next_delivery_week_start', $currentWeekStart->current)
+            $milkboxesForDelivery = MilkBox::where('company_details_id', $routeInfoSolo->company_details_id)->where('next_delivery_week_start', $currentWeekStart->current)
                                            ->where('delivery_day', $routeInfoSolo->delivery_day)->where('is_active', 'Active')->get();
 
             // Unlike FruitBoxes there shouldn't be any more than one entry, so totalling isn't necessary - however there may be no milk on the route.
@@ -249,7 +249,7 @@ WithEvents
             $other_items_list = '';
             
             // This will grab each entry in the snackbox, not each specific snackbox (i.e we only need to grab one entry per snackbox_id)
-            $snackboxesForDelivery = SnackBox::where('company_id', $routeInfoSolo->company_id)->where('next_delivery_week', $currentWeekStart->current)
+            $snackboxesForDelivery = SnackBox::where('company_details_id', $routeInfoSolo->company_details_id)->where('next_delivery_week', $currentWeekStart->current)
                                              ->where('delivery_day', $routeInfoSolo->delivery_day)->where('is_active', 'Active')
                                              ->where('delivered_by', 'OP')->get();
                                              
@@ -266,7 +266,7 @@ WithEvents
             
             // Time to do the same with drinks, however this will need to be handled slightly differently as the drinks are sold in cases,
             // so the box total here really reflects the number of cases, or in other words, each individual entry in the box.                         
-            $drinkboxesForDelivery = DrinkBox::where('company_id', $routeInfoSolo->company_id)->where('next_delivery_week', $currentWeekStart->current)
+            $drinkboxesForDelivery = DrinkBox::where('company_details_id', $routeInfoSolo->company_details_id)->where('next_delivery_week', $currentWeekStart->current)
                                              ->where('delivery_day', $routeInfoSolo->delivery_day)->where('is_active', 'Active')->get();
             // We still want to group them.                     
             $drinkboxesGroupedById = $drinkboxesForDelivery->groupBy('drinkbox_id');
@@ -281,7 +281,7 @@ WithEvents
             $routeInfoSolo->drinks = $drinkbox_total;                             
             
             // Finally we have the other category, which is a mishmash of items.  Each entry needs to display its name and quantity.                    
-            $otherboxesForDelivery = OtherBox::where('company_id', $routeInfoSolo->company_id)->where('next_delivery_week', $currentWeekStart->current)
+            $otherboxesForDelivery = OtherBox::where('company_details_id', $routeInfoSolo->company_details_id)->where('next_delivery_week', $currentWeekStart->current)
                                              ->where('delivery_day', $routeInfoSolo->delivery_day)->where('is_active', 'Active')->get();                     
             
             // We still want to group them.                     
@@ -304,7 +304,7 @@ WithEvents
             // ----- For Debugging Purposes ----- //
             
             // A nice little way to check a specific result for testing purposes.  I can comment it out for now but may reuse again in the near future.
-            // if ($routeInfoSolo->company_id == 55 && $routeInfoSolo->delivery_day == 'Monday') {
+            // if ($routeInfoSolo->company_details_id == 55 && $routeInfoSolo->delivery_day == 'Monday') {
             //     dd($routeInfoSolo);
             // }
             

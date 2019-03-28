@@ -1,6 +1,6 @@
 <template lang="html">
     <div>
-        <ul class="milkbox">
+        <!-- <ul> -->
             <div id="edit-save-buttons">
                 <h4> {{ milkbox.delivery_day }}</h4> <p> {{ milkbox.is_active }} </p>
                 <b-button variant="primary" @click="showDetails()"> Details </b-button>
@@ -11,30 +11,21 @@
                 <b-row id="top-details" :class="milkbox.is_active" sm="12" class="b-row-padding">
                     <b-col>
                         <label><b> Milkbox ID </b></label>
-                        <div v-if="editing">
-                            <b-form-input v-model="milkbox.id"></b-form-input>
-                        </div>
-                        <div v-else>
+                        <div>
                             <p> {{ milkbox.id }} </p>
                         </div>
                     </b-col>
                     <b-col>
                         <label><b> Company ID </b></label>
-                        <div v-if="editing">
-                            <b-form-input v-model="milkbox.company_id"></b-form-input>
-                        </div>
-                        <div v-else>
-                            <p> {{ milkbox.company_id }} </p>
+                        <div>
+                            <p> {{ milkbox.company_details_id }} </p>
                         </div>
                     </b-col>
                     <b-col>
                         <label><b> Milkbox Fruit Partner </b></label>
                         <div v-if="editing">
                             <b-form-select v-model="milkbox.fruit_partner_id"> 
-                                <template slot="first">
-                                    <option :value="milkbox.fruit_partner_id" disabled> {{ milkbox.fruit_partner_name }} </option>
-                                </template>
-                                <option @click.once="changeName(fruit_partner.name)" v-for="fruit_partner in $store.state.fruit_partners_list" :value="fruit_partner.id"> {{ fruit_partner.name }} </option>
+                                <option v-for="fruit_partner in $store.state.fruit_partners_list" :value="fruit_partner.id"> {{ fruit_partner.name }} </option>
                             </b-form-select>
                             <p> Selected: {{ milkbox.fruit_partner_id }} </p>
                         </div>
@@ -112,71 +103,7 @@
                         </div>
                     </b-col>
                 </b-row>
-
-                <b-row :class="milkbox.is_active" class="b-row-padding" sm="12">
-                    <b-col class="col-sm-4">
-                         <label><b> 1L Milk Alt Coconut </b></label>
-                         <div v-if="editing">
-                             <b-form-input v-model="milkbox.milk_1l_alt_coconut" type="number"></b-form-input>
-                         </div>
-                         <div v-else>
-                             <p> {{ milkbox.milk_1l_alt_coconut }} </p>
-                        </div>
-                    </b-col>
-
-                    <b-col class="col-sm-4">
-                         <label><b> 1L Unsweetened Almond </b></label>
-                         <div v-if="editing">
-                             <b-form-input v-model="milkbox.milk_1l_alt_unsweetened_almond" type="number"></b-form-input>
-                         </div>
-                         <div v-else>
-                             <p> {{ milkbox.milk_1l_alt_unsweetened_almond }} </p>
-                        </div>
-                    </b-col>
-
-                    <b-col class="col-sm-4">
-                        <label><b> 1L Almond </b></label>
-                        <div v-if="editing">
-                            <b-form-input v-model="milkbox.milk_1l_alt_almond" type="number"></b-form-input>
-                        </div>
-                        <div v-else>
-                            <p> {{ milkbox.milk_1l_alt_almond }} </p>
-                        </div>
-                    </b-col>
-                </b-row>
-
-                <b-row :class="milkbox.is_active" class="b-row-padding" sm="12">
-                    <b-col class="col-sm-4">
-                        <label><b> 1L Unsweetened Soya </b></label>
-                        <div v-if="editing">
-                            <b-form-input v-model="milkbox.milk_1l_alt_unsweetened_soya" type="number"></b-form-input>
-                        </div>
-                        <div v-else>
-                            <p> {{ milkbox.milk_1l_alt_unsweetened_soya }} </p>
-                        </div>
-                    </b-col>
-
-                    <b-col class="col-sm-4">
-                        <label><b> 1L Soya </b></label>
-                        <div v-if="editing">
-                            <b-form-input v-model="milkbox.milk_1l_alt_soya" type="number"></b-form-input>
-                        </div>
-                        <div v-else>
-                            <p> {{ milkbox.milk_1l_alt_soya }} </p>
-                        </div>
-                    </b-col>
-
-                    <b-col class="col-sm-4">
-                        <label><b> 1L Lactose Free Semi </b></label>
-                        <div v-if="editing">
-                            <b-form-input v-model="milkbox.milk_1l_alt_lactose_free_semi" type="number"></b-form-input>
-                        </div>
-                        <div v-else>
-                            <p> {{ milkbox.milk_1l_alt_lactose_free_semi }} </p>
-                        </div>
-                    </b-col>
-                </b-row>
-
+                <!-- Regular 2L Milk Options -->
                 <b-row :class="milkbox.is_active" class="b-row-padding" sm="12">
                     <b-col class="col-sm-4">
                         <label><b> 2L Semi Skimmed </b></label>
@@ -208,8 +135,8 @@
                         </div>
                     </b-col>
                 </b-row>
-
-                <b-row id="bottom-details" :class="milkbox.is_active" class="b-row-padding" sm="12">
+                <!-- Regular 1L Milk Options -->
+                <b-row :class="milkbox.is_active" class="b-row-padding" sm="12">
                     <b-col class="col-sm-4">
                         <label><b> 1L Semi Skimmed </b></label>
                         <div v-if="editing">
@@ -240,8 +167,105 @@
                         </div>
                     </b-col>
                 </b-row>
+                <!-- Alternative Milk Options -->
+                <b-row :class="milkbox.is_active" class="b-row-padding" sm="12">
+                    <b-col class="col-sm-4">
+                         <label><b> 1L Milk Alt Coconut </b></label>
+                         <div v-if="editing">
+                             <b-form-input v-model="milkbox.milk_1l_alt_coconut" type="number"></b-form-input>
+                         </div>
+                         <div v-else>
+                             <p> {{ milkbox.milk_1l_alt_coconut }} </p>
+                        </div>
+                    </b-col>
+
+                    <b-col class="col-sm-4">
+                         <label><b> 1L Unsweetened Almond </b></label>
+                         <div v-if="editing">
+                             <b-form-input v-model="milkbox.milk_1l_alt_unsweetened_almond" type="number"></b-form-input>
+                         </div>
+                         <div v-else>
+                             <p> {{ milkbox.milk_1l_alt_unsweetened_almond }} </p>
+                        </div>
+                    </b-col>
+
+                    <b-col class="col-sm-4">
+                        <label><b> 1L Almond </b></label>
+                        <div v-if="editing">
+                            <b-form-input v-model="milkbox.milk_1l_alt_almond" type="number"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ milkbox.milk_1l_alt_almond }} </p>
+                        </div>
+                    </b-col>
+                </b-row>
+                <!-- Alternative Milk Options (Pt2) -->
+                <b-row :class="milkbox.is_active" class="b-row-padding" sm="12">
+                    <b-col class="col-sm-4">
+                        <label><b> 1L Unsweetened Soya </b></label>
+                        <div v-if="editing">
+                            <b-form-input v-model="milkbox.milk_1l_alt_unsweetened_soya" type="number"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ milkbox.milk_1l_alt_unsweetened_soya }} </p>
+                        </div>
+                    </b-col>
+
+                    <b-col class="col-sm-4">
+                        <label><b> 1L Soya </b></label>
+                        <div v-if="editing">
+                            <b-form-input v-model="milkbox.milk_1l_alt_soya" type="number"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ milkbox.milk_1l_alt_soya }} </p>
+                        </div>
+                    </b-col>
+                    
+                    <b-col class="col-sm-4">
+                        <label><b> 1L Oat </b></label>
+                        <div v-if="editing">
+                            <b-form-input v-model="milkbox.milk_1l_alt_oat" type="number"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ milkbox.milk_1l_alt_oat }} </p>
+                        </div>
+                    </b-col>
+                </b-row>
+                <!-- Alternative Milk Options (Pt3) -->
+                <b-row id="bottom-details" :class="milkbox.is_active" class="b-row-padding" sm="12">
+                    
+                    <b-col class="col-sm-4">
+                        <label><b> 1L Rice </b></label>
+                        <div v-if="editing">
+                            <b-form-input v-model="milkbox.milk_1l_alt_rice" type="number"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ milkbox.milk_1l_alt_rice }} </p>
+                        </div>
+                    </b-col>
+                    
+                    <b-col class="col-sm-4">
+                        <label><b> 1L Cashew </b></label>
+                        <div v-if="editing">
+                            <b-form-input v-model="milkbox.milk_1l_alt_cashew" type="number"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ milkbox.milk_1l_alt_cashew }} </p>
+                        </div>
+                    </b-col>
+                    
+                    <b-col class="col-sm-4">
+                        <label><b> 1L Lactose Free Semi </b></label>
+                        <div v-if="editing">
+                            <b-form-input v-model="milkbox.milk_1l_alt_lactose_free_semi" type="number"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ milkbox.milk_1l_alt_lactose_free_semi }} </p>
+                        </div>
+                    </b-col>
+                </b-row>
             </div>
-        </ul>
+        <!-- </ul> -->
     </div>
 </template>
 
@@ -289,24 +313,28 @@ export default {
                 id: milkbox.id,
                 is_active: milkbox.is_active,
                 fruit_partner_id: milkbox.fruit_partner_id,
-                company_id: milkbox.company_id,
+                company_details_id: milkbox.company_details_id,
                 route_id: milkbox.route_id,
                 next_delivery_week_start: milkbox.next_delivery_week_start,
                 delivery_day: milkbox.delivery_day,
                 frequency: milkbox.frequency,
                 week_in_month: milkbox.week_in_month,
-                milk_1l_alt_coconut: milkbox.milk_1l_alt_coconut,
-                milk_1l_alt_unsweetened_almond: milkbox.milk_1l_alt_unsweetened_almond,
-                milk_1l_alt_almond: milkbox.milk_1l_alt_almond,
-                milk_1l_alt_unsweetened_soya: milkbox.milk_1l_alt_unsweetened_soya,
-                milk_1l_alt_soya: milkbox.milk_1l_alt_soya,
-                milk_1l_alt_lactose_free_semi: milkbox.milk_1l_alt_lactose_free_semi,
                 semi_skimmed_2l: milkbox.semi_skimmed_2l,
                 skimmed_2l: milkbox.skimmed_2l,
                 whole_2l: milkbox.whole_2l,
                 semi_skimmed_1l: milkbox.semi_skimmed_1l,
                 skimmed_1l: milkbox.skimmed_1l,
                 whole_1l: milkbox.whole_1l,
+                milk_1l_alt_coconut: milkbox.milk_1l_alt_coconut,
+                milk_1l_alt_unsweetened_almond: milkbox.milk_1l_alt_unsweetened_almond,
+                milk_1l_alt_almond: milkbox.milk_1l_alt_almond,
+                milk_1l_alt_unsweetened_soya: milkbox.milk_1l_alt_unsweetened_soya,
+                milk_1l_alt_soya: milkbox.milk_1l_alt_soya,
+                milk_1l_alt_oat: milkbox.milk_1l_alt_oat,
+                milk_1l_alt_rice: milkbox.milk_1l_alt_rice,
+                milk_1l_alt_cashew: milkbox.milk_1l_alt_cashew,
+                milk_1l_alt_lactose_free_semi: milkbox.milk_1l_alt_lactose_free_semi,
+                
             }).then (response => {
                 console.log(response);
             }).catch(error => console.log(error));

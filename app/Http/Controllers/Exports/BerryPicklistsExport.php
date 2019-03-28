@@ -118,7 +118,7 @@ WithEvents
         // So first of all, we have to check each fruitbox for its associated route, then check that id for the associated route name.
         foreach ($fruitbox_with_berries as $fruitbox) {
             
-            $route = CompanyRoute::where('company_id', $fruitbox->company_id)->where('delivery_day', $fruitbox->delivery_day)->get();
+            $route = CompanyRoute::where('company_details_id', $fruitbox->company_details_id)->where('delivery_day', $fruitbox->delivery_day)->get();
             // This is taken from the CompanyRoute table as an object property.
              if (!empty($route[0])) {
                 

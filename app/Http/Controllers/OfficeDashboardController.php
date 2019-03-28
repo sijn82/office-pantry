@@ -32,7 +32,7 @@ class OfficeDashboardController extends Controller
     //  *
     //  * @return \Illuminate\Http\Response
     //  */
-    // public function index()
+    // public function index()+
     // {
     //     dd(Auth::user());
     //     return view('home');
@@ -75,13 +75,28 @@ class OfficeDashboardController extends Controller
             // Let's try doing it here first.
             $snackbox_items = $company->snackboxes;
             $snackboxes = $snackbox_items->groupBy('snackbox_id');
-            // And now do the same with Drinks
+            // While snackboxes are using the hardcoded options we don't need to add the fruitpartner name along with the id.  If/when this changes the foreach loop will be needed too.
+            
+            
+            // And now do the same with Drinks but include the fruitpartner name.
             $drinkbox_items = $company->drinkboxes;
             $drinkboxes = $drinkbox_items->groupBy('drinkbox_id');
+            
+            foreach ($drinkboxes as $drinkbox) {
+                $fruitpartner_id = $drinkbox[0]->delivered_by_id;
+                $fruitpartner = FruitPartner::find($fruitpartner_id);
+                $drinkbox[0]->fruit_partner_name = $fruitpartner->name;
+            }
+            
             // and Other
             $otherbox_items = $company->otherboxes;
             $otherboxes = $otherbox_items->groupBy('otherbox_id');
             
+            foreach ($otherboxes as $otherbox) {
+                $fruitpartner_id = $otherbox[0]->delivered_by_id;
+                $fruitpartner = FruitPartner::find($fruitpartner_id);
+                $otherbox[0]->fruit_partner_name = $fruitpartner->name;
+            }
             //dd($drinkboxes);
             
             $preferences = $company->preference;
@@ -120,10 +135,10 @@ class OfficeDashboardController extends Controller
         // dd($request);
         // $companies = $user->companies;
         // dd($companies);
-        $company_id = $request['params']['company'];
+        $company_details_id = $request['params']['company'];
 
         // $company = Company::find($company_id);
-        $company = CompanyDetails::find($company_id);
+        $company = CompanyDetails::find($company_details_id);
 
         if (empty($company)) {
              $company = ['name' => 'None Selected'];

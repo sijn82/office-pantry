@@ -13,7 +13,7 @@
 
         <div v-if="this.fruitboxes.length"> {{ fruitbox.company_name }}
 
-            <fruitbox v-for="fruitbox in this.fruitboxes" :key="fruitbox.id" :fruitbox="fruitbox"></fruitbox>
+            <fruitbox class="fruitbox" v-for="fruitbox in this.fruitboxes" :key="fruitbox.id" :fruitbox="fruitbox"></fruitbox>
 
         </div>
         <div v-else>
@@ -29,6 +29,14 @@
         text-align: center;
 
     }
+    #fruitboxes::before {
+        content: ""; /* This is necessary for the pseudo element to work. */
+        display: block; /* This will put the pseudo element on its own line. */
+        margin: 0 auto; /* This will center the border. */
+        width: 70%; /* Change this to whatever width you want. */
+        padding-bottom: 20px; /* This creates some space between the element and the border. */
+        border-top: 1px solid #636b6f; /* This creates the border. Replace black with whatever color you want. */
+    }
     #edit-save-buttons {
         padding-bottom: 10px;
         h4 {
@@ -38,7 +46,13 @@
     .add-new-close {
         margin-bottom: 20px;
     }
-
+    .fruitbox {
+        padding-top: 20px;
+        padding-left: 0;
+        li {
+        list-style: none;
+        }
+    }
     #fruit-details {
         .b-row-padding {
             padding-bottom: 5px;

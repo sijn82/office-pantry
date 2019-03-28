@@ -93,6 +93,13 @@ class SnackBoxController extends Controller
 
             return \Excel::download(new Exports\SnackboxUniqueExportNew, 'snackboxesAPCUnique' . $this->week_start . '.xlsx');
         }
+        // Wholesale
+        public function download_snackbox_wholesale_op_singlecompany()
+        {
+            session()->put('snackbox_courier', 'OP');
+
+            return \Excel::download(new Exports\SnackboxWholesaleSingleCompanyExportNew, 'snackboxesWholesaleOPSingleCompany' . $this->week_start . '.xlsx');
+        }
 
     // This is an attempt to send the data for snacks and drinks to the templates without troubling a database for anything.
     // This is to allow the product list to be dynamic and not hard coded, otherwise weekly code changes would be required and the database table rebuilt each time.
@@ -315,7 +322,7 @@ class SnackBoxController extends Controller
     {
         // dd($request);
         // dd($request->order);
-        $snackbox_id = $request->company_id . "-" . uniqid();
+        $snackbox_id = $request->company_details_id . "-" . uniqid();
         $courier = $request->details[0];
         $box_number = $request->details[1];
         $type = $request->details[2];
@@ -337,7 +344,7 @@ class SnackBoxController extends Controller
                 $new_snackbox->delivered_by = $courier;
                 $new_snackbox->no_of_boxes = $box_number;
                 $new_snackbox->type = $type;
-                $new_snackbox->company_id = $request->company_id;
+                $new_snackbox->company_details_id = $request->company_details_id;
                 $new_snackbox->delivery_day = $delivery_day;
                 $new_snackbox->frequency = $frequency;
                 $new_snackbox->week_in_month = $week_in_month;
@@ -363,7 +370,7 @@ class SnackBoxController extends Controller
             $new_snackbox->delivered_by = $courier;
             $new_snackbox->no_of_boxes = $box_number;
             $new_snackbox->type = $type;
-            $new_snackbox->company_id = $request->company_id;
+            $new_snackbox->company_details_id = $request->company_details_id;
             $new_snackbox->delivery_day = $delivery_day;
             $new_snackbox->frequency = $frequency;
             $new_snackbox->week_in_month = $week_in_month;
@@ -376,18 +383,55 @@ class SnackBoxController extends Controller
 
             // Now we've handled the order itself, we need to make sure there's a route to dispatch it on.  Well, if it's delivered by Office Pantry anyway.
             // If there is we're all done, if not, let's build a route.
-            if (!count(CompanyRoute::where('company_id', $request['company_id'])->where('delivery_day', $delivery_day)->get())) {
+            if (!count(CompanyRoute::where('company_details_id', $request['company_details_id'])->where('delivery_day', $delivery_day)->get())) {
 
-                $companyDetails = Company::findOrFail($request['company_id']);
-
+                // $companyDetails = Company::findOrFail($request['company_details_id']);
+                $companyDetails = CompanyDetails::findOrFail($request['company_details_id']);
+                
+                $assigned_route_tbc_monday = AssignedRoute::where('name', 'TBC (Monday)')->get();
+                $assigned_route_tbc_tuesday = AssignedRoute::where('name', 'TBC (Tuesday)')->get();
+                $assigned_route_tbc_wednesday = AssignedRoute::where('name', 'TBC (Wednesday)')->get();
+                $assigned_route_tbc_thursday = AssignedRoute::where('name', 'TBC (Thursday)')->get();
+                $assigned_route_tbc_friday = AssignedRoute::where('name', 'TBC (Friday)')->get();
+                
+                switch (request('delivery_day')) {
+                    case 'Monday':
+                        $assigned_route_id = $assigned_route_tbc_monday[0]->id;
+                        break;
+                    case 'Tuesday':
+                        $assigned_route_id = $assigned_route_tbc_tuesday[0]->id;
+                        break;
+                    case 'Wednesday':
+                        $assigned_route_id = $assigned_route_tbc_wednesday[0]->id;
+                        break;
+                    case 'Thursday':
+                        $assigned_route_id = $assigned_route_tbc_thursday[0]->id;
+                        break;
+                    case 'Friday':
+                        $assigned_route_id = $assigned_route_tbc_friday[0]->id;
+                        break;
+                }
+                
                 // We need to create a new entry.
                 $newRoute = new CompanyRoute();
                 // $newRoute->is_active = 'Active'; // Currently hard coded but this is also the default.
-                $newRoute->company_id = $request['company_id'];
+                $newRoute->company_details_id = $request['company_details_id'];
                 $newRoute->route_name = $companyDetails->route_name;
-                $newRoute->postcode = $companyDetails->postcode;
-                $newRoute->address = $companyDetails->route_summary_address;
+                $newRoute->postcode = $companyDetails->route_postcode;
+                
+                //  Route Summary Address isn't a field in the new model, instead I need to grab all route fields and combine them into the summary address.
+                // $newRoute->address = $companyDetails->route_summary_address;
+                
+                // An if empty check is being made on the optional fields so that we don't unnecessarily add ', ' to the end of an empty field.
+                $newRoute->address = $companyDetails->route_address_line_1 . ', '
+                                    . $companyDetails->route_address_line_2 . ', '
+                                    . $companyDetails->route_address_line_3 . ', '
+                                    . $companyDetails->route_city . ', '
+                                    . $companyDetails->route_region . ', '
+                                    . $companyDetails->route_postcode;
+                
                 $newRoute->delivery_information = $companyDetails->delivery_information;
+                $newRoute->assigned_route_id = $assigned_route_id;
                 $newRoute->delivery_day = $delivery_day;
                 $newRoute->save();
 
@@ -446,19 +490,56 @@ class SnackBoxController extends Controller
 
             // Now we've handled the order itself, we need to make sure there's a route to dispatch it on.  Well, if it's delivered by Office Pantry anyway.
             // If there is we're all done, if not, let's build a route.
-            if (!count(CompanyRoute::where('company_id', request('snackbox_details.company_id'))->where('delivery_day', request('snackbox_details.delivery_day'))->get())) {
+            if (!count(CompanyRoute::where('company_details_id', request('snackbox_details.company_details_id'))->where('delivery_day', request('snackbox_details.delivery_day'))->get())) {
 
                 // This is currently pulling info from the Company table, although I want to create a CompanyData table to replace this.
-                $companyDetails = Company::findOrFail(request('snackbox_details.company_id'));
-
+                // $companyDetails = Company::findOrFail(request('snackbox_details.company_id'));
+                $companyDetails = CompanyDetails::findOrFail(request('snackbox_details.company_details_id'));
+                
+                $assigned_route_tbc_monday = AssignedRoute::where('name', 'TBC (Monday)')->get();
+                $assigned_route_tbc_tuesday = AssignedRoute::where('name', 'TBC (Tuesday)')->get();
+                $assigned_route_tbc_wednesday = AssignedRoute::where('name', 'TBC (Wednesday)')->get();
+                $assigned_route_tbc_thursday = AssignedRoute::where('name', 'TBC (Thursday)')->get();
+                $assigned_route_tbc_friday = AssignedRoute::where('name', 'TBC (Friday)')->get();
+                
+                switch (request('delivery_day')) {
+                    case 'Monday':
+                        $assigned_route_id = $assigned_route_tbc_monday[0]->id;
+                        break;
+                    case 'Tuesday':
+                        $assigned_route_id = $assigned_route_tbc_tuesday[0]->id;
+                        break;
+                    case 'Wednesday':
+                        $assigned_route_id = $assigned_route_tbc_wednesday[0]->id;
+                        break;
+                    case 'Thursday':
+                        $assigned_route_id = $assigned_route_tbc_thursday[0]->id;
+                        break;
+                    case 'Friday':
+                        $assigned_route_id = $assigned_route_tbc_friday[0]->id;
+                        break;
+                }
+                
                 // We need to create a new entry.
                 $newRoute = new CompanyRoute();
                 // $newRoute->is_active = 'Active'; // Currently hard coded but this is also the default.
-                $newRoute->company_id = request('snackbox_details.company_id');
+                $newRoute->company_details_id = request('snackbox_details.company_details_id');
                 $newRoute->route_name = $companyDetails->route_name;
-                $newRoute->postcode = $companyDetails->postcode;
-                $newRoute->address = $companyDetails->route_summary_address;
+                $newRoute->postcode = $companyDetails->route_postcode;
+                
+                //  Route Summary Address isn't a field in the new model, instead I need to grab all route fields and combine them into the summary address.
+                // $newRoute->address = $companyDetails->route_summary_address;
+                
+                // An if empty check is being made on the optional fields so that we don't unnecessarily add ', ' to the end of an empty field.
+                $newRoute->address = $companyDetails->route_address_line_1 . ', '
+                                    . $companyDetails->route_address_line_2 . ', '
+                                    . $companyDetails->route_address_line_3 . ', '
+                                    . $companyDetails->route_city . ', '
+                                    . $companyDetails->route_region . ', '
+                                    . $companyDetails->route_postcode;
+                
                 $newRoute->delivery_information = $companyDetails->delivery_information;
+                $newRoute->assigned_route_id = $assigned_route_id;
                 $newRoute->delivery_day = request('snackbox_details.delivery_day');
                 $newRoute->save();
 
@@ -482,7 +563,7 @@ class SnackBoxController extends Controller
         $addProduct->delivered_by = request('snackbox_details.delivered_by');
         $addProduct->no_of_boxes = request('snackbox_details.no_of_boxes');
         $addProduct->type = request('snackbox_details.type');
-        $addProduct->company_id = request('snackbox_details.company_id');
+        $addProduct->company_details_id = request('snackbox_details.company_details_id');
         $addProduct->delivery_day = request('snackbox_details.delivery_day');
         $addProduct->frequency = request('snackbox_details.frequency');
         $addProduct->week_in_month = request('snackbox_details.week_in_month');
@@ -549,7 +630,7 @@ class SnackBoxController extends Controller
                     $delivered_by_recovered = $snack->delivered_by;
                     $delivery_date_recovered = $snack->delivery_day;
                     $no_of_boxes_recovered = $snack->no_of_boxes;
-                    $company_id_recovered = $snack->company_id;
+                    $company_details_id_recovered = $snack->company_details_id;
                     $frequency_recovered = $snack->frequency;
                     $week_in_month_recovered = $snack->week_in_month;
                     $previous_delivery_week_recovered = $snack->previous_delivery_week;
@@ -562,8 +643,8 @@ class SnackBoxController extends Controller
                 }
 
                 // Moved this further up to keep it out of a second (unnecessary for this query) foreach.
-                $likes = Preference::where('company_id', $snack->company_id)->where('snackbox_likes', '!=', null)->pluck('snackbox_likes')->toArray();
-                $dislikes = Preference::where('company_id', $snack->company_id)->where('snackbox_dislikes', '!=', null)->pluck('snackbox_dislikes')->toArray();
+                $likes = Preference::where('company_details_id', $snack->company_details_id)->where('snackbox_likes', '!=', null)->pluck('snackbox_likes')->toArray();
+                $dislikes = Preference::where('company_details_id', $snack->company_details_id)->where('snackbox_dislikes', '!=', null)->pluck('snackbox_dislikes')->toArray();
 
                 // There's no point including any 'liked' items in this array if we don't have any of them in stock,
                 // so let's check the name in Products and see what the stock level looks like.
@@ -589,8 +670,8 @@ class SnackBoxController extends Controller
                 foreach ($request['order'] as $new_standard_snack) {
                     // dd($new_standard_snack);
                     // I think this is a good place to put the likes and dislikes company check.
-                    // $likes = Preference::where('id', $snack->company_id)->select('snackbox_likes')->get();
-                    // $dislikes = Preference::where('id', $snack->company_id)->select('snackbox_dislikes')->get();
+                    // $likes = Preference::where('id', $snack->company_details_id)->select('snackbox_likes')->get();
+                    // $dislikes = Preference::where('id', $snack->company_details_id)->select('snackbox_dislikes')->get();
 
 
                     if (in_array($new_standard_snack['name'], $dislikes)
@@ -633,7 +714,7 @@ class SnackBoxController extends Controller
                     $new_snackbox->no_of_boxes = $no_of_boxes_recovered;
                     $new_snackbox->type = $request['type'][0];
                     // Company Info
-                    $new_snackbox->company_id = $company_id_recovered;
+                    $new_snackbox->company_details_id = $company_details_id_recovered;
                     $new_snackbox->delivery_day = $delivery_date_recovered;
                     $new_snackbox->frequency = $frequency_recovered;
                     $new_snackbox->week_in_month = $week_in_month_recovered;

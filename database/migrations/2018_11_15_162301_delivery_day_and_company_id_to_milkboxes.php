@@ -16,7 +16,7 @@ class DeliveryDayAndCompanyIdToMilkboxes extends Migration
         Schema::table('milk_boxes', function (Blueprint $table) {
             //
             $table->integer('company_details_id')->after('id')->nullable();
-            $table->string('delivery_day')->after('company_id')->nullable();
+            $table->string('delivery_day')->after('company_details_id')->nullable();
         });
     }
 

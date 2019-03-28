@@ -20,10 +20,10 @@ class AllergyController extends Controller
     
         $allergy = new Allergy();
         $allergy->allergy = $request['new_allergy']['name'];
-        $allergy->company_id = $request['new_allergy']['company'];
+        $allergy->company_details_id = $request['new_allergy']['company'];
         $allergy->save();
         
-        return Allergy::where('company_id', $request['new_allergy']['company'])->where('allergy', $request['new_allergy']['name'])->get();
+        return Allergy::where('company_details_id', $request['new_allergy']['company'])->where('allergy', $request['new_allergy']['name'])->get();
     }
     
     public function destroy($id) {

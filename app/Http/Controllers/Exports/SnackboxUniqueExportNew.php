@@ -48,8 +48,8 @@ class SnackboxUniqueExportNew
         $snackboxesGroupedById = $snackboxes->groupBy('snackbox_id');
 
         foreach ($snackboxesGroupedById as $snackbox) {
-            $company_id = $snackbox[0]->company_id;
-            $company = Company::findOrFail($company_id);
+            $company_details_id = $snackbox[0]->company_details_id;
+            $company = Company::findOrFail($company_details_id);
 
             // As we know we need to display all the products contained within these 4 company orders, lets get a list of all id's which need processing.
             foreach ($snackbox as $snack) {

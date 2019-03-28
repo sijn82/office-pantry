@@ -1,6 +1,6 @@
 <template lang="html">
     <div>
-        <ul class="fruitbox">
+        <!-- <ul> -->
             <div id="edit-save-buttons">
                 <h4> {{ fruitbox.name }} </h4>
                 <p> {{ fruitbox.delivery_day }} - {{ fruitbox.is_active }} </p>
@@ -12,31 +12,21 @@
                 <b-row id="top-details" :class="fruitbox.is_active" sm="12" class="b-row-padding">
                     <b-col class="col-sm-4">
                         <label><b> Fruitbox ID </b></label>
-                        <div v-if="editing">
-                            <b-form-input v-model="fruitbox.id"></b-form-input>
-                        </div>
-                        <div v-else>
+                        <div>
                             <p> {{ fruitbox.id }} </p>
                         </div>
                     </b-col>
                     <b-col class="col-sm-4">
                         <label><b> Fruitbox Company ID </b></label>
-                        <div v-if="editing">
-                            <b-form-input v-model="fruitbox.company_id"></b-form-input>
-                        </div>
-                        <div v-else>
-                            <p> {{ fruitbox.company_id }} </p>
+                        <div>
+                            <p> {{ fruitbox.company_details_id }} </p>
                         </div>
                     </b-col>
                     <b-col class="col-sm-4">
                         <label><b> Fruitbox Fruit Partner </b></label>
                         <div v-if="editing">
                             <b-form-select v-model="fruitbox.fruit_partner_id"> 
-                                <template slot="first">
-                                    <!-- <option :value="fruitbox.fruit_partner_id" disabled> </option> -->
-                                    <option :value="fruitbox.fruit_partner_id" disabled> {{ fruitbox.fruit_partner_name }} </option>
-                                </template>
-                                <option @click.once="changeName(fruit_partner.name)" v-for="fruit_partner in $store.state.fruit_partners_list" :value="fruit_partner.id"> {{ fruit_partner.name }} </option>
+                                <option v-for="fruit_partner in $store.state.fruit_partners_list" :value="fruit_partner.id"> {{ fruit_partner.name }} </option>
                             </b-form-select>
                             <p> Selected: {{ fruitbox.fruit_partner_id }} </p>
                         </div>
@@ -360,7 +350,7 @@
                 </b-row>
 
             </div>
-        </ul>
+        <!-- </ul> -->
     </div>
 </template>
 
@@ -417,7 +407,7 @@ export default {
                 is_active: fruitbox.is_active,
                 fruit_partner_id: fruitbox.fruit_partner_id,
                 name: fruitbox.name,
-                company_id: fruitbox.company_id,
+                company_details_id: fruitbox.company_details_id,
                 route_id: fruitbox.route_id,
                 delivery_day: fruitbox.delivery_day,
                 frequency: fruitbox.frequency,

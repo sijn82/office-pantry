@@ -42,8 +42,8 @@ class SnackboxMultiCompanyExportNew
         $snackboxesGroupedById = $snackboxes->groupBy('snackbox_id');
 
         foreach ($snackboxesGroupedById as $snackbox) {
-            $company_id = $snackbox[0]->company_id;
-            $company = Company::findOrFail($company_id);
+            $company_details_id = $snackbox[0]->company_details_id;
+            $company = CompanyDetails::findOrFail($company_details_id);
            
             // As we know we need to display all the products contained within these 4 company orders, lets get a list of all id's which need processing.
             foreach ($snackbox as $snack) {
@@ -53,16 +53,18 @@ class SnackboxMultiCompanyExportNew
             $snackbox['company_name'] = $company->route_name;
             $snackbox['delivered_by'] = $snackbox[0]->delivered_by;
        }
-
-        // Now we have them all we can strip out the duplicates, as we only want one row per product 
-        // and can search the orders for each product, displaying either the quantity in each box, or 0 if not included in that snackbox.
-        $product_ids_unique = array_unique($product_ids_all);
         
-        // Now we have the product id's we can create a key value pair with the product names.
-        // This will make it easier to display the product name on the template and changes the array key to the product id.
-        foreach ($product_ids_unique as $product_id) {
-            $product = Product::findOrFail($product_id);
-            $products[$product_id] = $product->name;
+        // Edit - However should there be no results this next step throws an error. So let's check if $product_ids_all has anything in it.
+        if (!empty($product_ids_all)) {
+            
+            $product_ids_unique = array_unique($product_ids_all);
+            
+            // Now we have the product id's we can create a key value pair with the product names.
+            // This will make it easier to display the product name on the template and changes the array key to the product id.
+            foreach ($product_ids_unique as $product_id) {
+                $product = Product::findOrFail($product_id);
+                $products[$product_id] = $product->name;
+            }
         }
 
         // Group the snackboxes in chunks of 4 to match the template we wish to fill.

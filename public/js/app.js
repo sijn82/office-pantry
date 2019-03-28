@@ -77133,16 +77133,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -77191,7 +77181,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 is_active: fruitbox.is_active,
                 fruit_partner_id: fruitbox.fruit_partner_id,
                 name: fruitbox.name,
-                company_id: fruitbox.company_id,
+                company_details_id: fruitbox.company_details_id,
                 route_id: fruitbox.route_id,
                 delivery_day: fruitbox.delivery_day,
                 frequency: fruitbox.frequency,
@@ -77255,1140 +77245,1056 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("ul", { staticClass: "fruitbox" }, [
-      _c(
-        "div",
-        { attrs: { id: "edit-save-buttons" } },
-        [
-          _c("h4", [_vm._v(" " + _vm._s(_vm.fruitbox.name) + " ")]),
-          _vm._v(" "),
-          _c("p", [
-            _vm._v(
-              " " +
-                _vm._s(_vm.fruitbox.delivery_day) +
-                " - " +
-                _vm._s(_vm.fruitbox.is_active) +
-                " "
-            )
-          ]),
-          _vm._v(" "),
-          _c(
-            "b-button",
-            {
-              attrs: { variant: "primary" },
-              on: {
-                click: function($event) {
-                  _vm.showDetails()
-                }
+    _c(
+      "div",
+      { attrs: { id: "edit-save-buttons" } },
+      [
+        _c("h4", [_vm._v(" " + _vm._s(_vm.fruitbox.name) + " ")]),
+        _vm._v(" "),
+        _c("p", [
+          _vm._v(
+            " " +
+              _vm._s(_vm.fruitbox.delivery_day) +
+              " - " +
+              _vm._s(_vm.fruitbox.is_active) +
+              " "
+          )
+        ]),
+        _vm._v(" "),
+        _c(
+          "b-button",
+          {
+            attrs: { variant: "primary" },
+            on: {
+              click: function($event) {
+                _vm.showDetails()
               }
-            },
-            [_vm._v(" Details ")]
-          ),
-          _vm._v(" "),
-          _c(
-            "b-button",
-            {
-              attrs: { variant: "warning" },
-              on: {
-                click: function($event) {
-                  _vm.enableEdit()
-                }
-              }
-            },
-            [_vm._v(" Edit ")]
-          ),
-          _vm._v(" "),
-          _vm.editing
-            ? _c(
-                "b-button",
-                {
-                  staticClass: "btn btn-success",
-                  on: {
-                    click: function($event) {
-                      _vm.updateFruitOrder(_vm.fruitbox)
-                    }
-                  }
-                },
-                [_vm._v(" Save ")]
-              )
-            : _vm._e()
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          directives: [
-            {
-              name: "show",
-              rawName: "v-show",
-              value: _vm.details,
-              expression: "details"
             }
-          ],
-          attrs: { id: "fruit-details" }
-        },
-        [
-          _c(
-            "b-row",
-            {
-              staticClass: "b-row-padding",
-              class: _vm.fruitbox.is_active,
-              attrs: { id: "top-details", sm: "12" }
-            },
-            [
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Fruitbox ID ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          model: {
-                            value: _vm.fruitbox.id,
-                            callback: function($$v) {
-                              _vm.$set(_vm.fruitbox, "id", $$v)
-                            },
-                            expression: "fruitbox.id"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [_vm._v(" " + _vm._s(_vm.fruitbox.id) + " ")])
-                    ])
-              ]),
+          },
+          [_vm._v(" Details ")]
+        ),
+        _vm._v(" "),
+        _c(
+          "b-button",
+          {
+            attrs: { variant: "warning" },
+            on: {
+              click: function($event) {
+                _vm.enableEdit()
+              }
+            }
+          },
+          [_vm._v(" Edit ")]
+        ),
+        _vm._v(" "),
+        _vm.editing
+          ? _c(
+              "b-button",
+              {
+                staticClass: "btn btn-success",
+                on: {
+                  click: function($event) {
+                    _vm.updateFruitOrder(_vm.fruitbox)
+                  }
+                }
+              },
+              [_vm._v(" Save ")]
+            )
+          : _vm._e()
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.details,
+            expression: "details"
+          }
+        ],
+        attrs: { id: "fruit-details" }
+      },
+      [
+        _c(
+          "b-row",
+          {
+            staticClass: "b-row-padding",
+            class: _vm.fruitbox.is_active,
+            attrs: { id: "top-details", sm: "12" }
+          },
+          [
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Fruitbox ID ")])]),
               _vm._v(" "),
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Fruitbox Company ID ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          model: {
-                            value: _vm.fruitbox.company_id,
-                            callback: function($$v) {
-                              _vm.$set(_vm.fruitbox, "company_id", $$v)
-                            },
-                            expression: "fruitbox.company_id"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(" " + _vm._s(_vm.fruitbox.company_id) + " ")
-                      ])
-                    ])
-              ]),
+              _c("div", [
+                _c("p", [_vm._v(" " + _vm._s(_vm.fruitbox.id) + " ")])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Fruitbox Company ID ")])]),
               _vm._v(" "),
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Fruitbox Fruit Partner ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c(
-                          "b-form-select",
-                          {
-                            model: {
-                              value: _vm.fruitbox.fruit_partner_id,
-                              callback: function($$v) {
-                                _vm.$set(_vm.fruitbox, "fruit_partner_id", $$v)
-                              },
-                              expression: "fruitbox.fruit_partner_id"
-                            }
-                          },
-                          [
-                            _c("template", { slot: "first" }, [
-                              _c(
-                                "option",
-                                {
-                                  attrs: { disabled: "" },
-                                  domProps: {
-                                    value: _vm.fruitbox.fruit_partner_id
-                                  }
-                                },
-                                [
-                                  _vm._v(
-                                    " " +
-                                      _vm._s(_vm.fruitbox.fruit_partner_name) +
-                                      " "
-                                  )
-                                ]
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _vm._l(
-                              _vm.$store.state.fruit_partners_list,
-                              function(fruit_partner) {
-                                return _c(
-                                  "option",
-                                  {
-                                    domProps: { value: fruit_partner.id },
-                                    on: {
-                                      "~click": function($event) {
-                                        _vm.changeName(fruit_partner.name)
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _vm._v(
-                                      " " + _vm._s(fruit_partner.name) + " "
-                                    )
-                                  ]
-                                )
-                              }
-                            )
-                          ],
-                          2
-                        ),
-                        _vm._v(" "),
-                        _c("p", [
-                          _vm._v(
-                            " Selected: " +
-                              _vm._s(_vm.fruitbox.fruit_partner_id) +
-                              " "
+              _c("div", [
+                _c("p", [
+                  _vm._v(" " + _vm._s(_vm.fruitbox.company_details_id) + " ")
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Fruitbox Fruit Partner ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c(
+                        "b-form-select",
+                        {
+                          model: {
+                            value: _vm.fruitbox.fruit_partner_id,
+                            callback: function($$v) {
+                              _vm.$set(_vm.fruitbox, "fruit_partner_id", $$v)
+                            },
+                            expression: "fruitbox.fruit_partner_id"
+                          }
+                        },
+                        _vm._l(_vm.$store.state.fruit_partners_list, function(
+                          fruit_partner
+                        ) {
+                          return _c(
+                            "option",
+                            { domProps: { value: fruit_partner.id } },
+                            [_vm._v(" " + _vm._s(fruit_partner.name) + " ")]
                           )
-                        ])
-                      ],
-                      1
-                    )
-                  : _c("div", [
+                        })
+                      ),
+                      _vm._v(" "),
                       _c("p", [
                         _vm._v(
-                          "  " + _vm._s(_vm.fruitbox.fruit_partner_name) + " "
-                        )
-                      ])
-                    ])
-              ])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "b-row",
-            {
-              staticClass: "b-row-padding",
-              class: _vm.fruitbox.is_active,
-              attrs: { sm: "12" }
-            },
-            [
-              _c("b-col", [
-                _c("label", [_c("b", [_vm._v(" Fruitbox Name ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          model: {
-                            value: _vm.fruitbox.name,
-                            callback: function($$v) {
-                              _vm.$set(_vm.fruitbox, "name", $$v)
-                            },
-                            expression: "fruitbox.name"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [_vm._v(" " + _vm._s(_vm.fruitbox.name) + " ")])
-                    ])
-              ]),
-              _vm._v(" "),
-              _c("b-col", [
-                _c("label", [_c("b", [_vm._v(" Fruitbox Status ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c(
-                          "b-form-select",
-                          {
-                            model: {
-                              value: _vm.fruitbox.is_active,
-                              callback: function($$v) {
-                                _vm.$set(_vm.fruitbox, "is_active", $$v)
-                              },
-                              expression: "fruitbox.is_active"
-                            }
-                          },
-                          [
-                            _c("option", { attrs: { value: "Active" } }, [
-                              _vm._v(" Active ")
-                            ]),
-                            _vm._v(" "),
-                            _c("option", { attrs: { value: "Inactive" } }, [
-                              _vm._v(" Inactive ")
-                            ])
-                          ]
-                        )
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(" " + _vm._s(_vm.fruitbox.is_active) + " ")
-                      ])
-                    ])
-              ]),
-              _vm._v(" "),
-              _c("b-col", [
-                _c("label", [_c("b", [_vm._v(" Delivery Day ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c(
-                          "b-form-select",
-                          {
-                            model: {
-                              value: _vm.fruitbox.delivery_day,
-                              callback: function($$v) {
-                                _vm.$set(_vm.fruitbox, "delivery_day", $$v)
-                              },
-                              expression: "fruitbox.delivery_day"
-                            }
-                          },
-                          [
-                            _c("option", [_vm._v("Monday")]),
-                            _vm._v(" "),
-                            _c("option", [_vm._v("Tuesday")]),
-                            _vm._v(" "),
-                            _c("option", [_vm._v("Wednesday")]),
-                            _vm._v(" "),
-                            _c("option", [_vm._v("Thursday")]),
-                            _vm._v(" "),
-                            _c("option", [_vm._v("Friday")])
-                          ]
-                        )
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(" " + _vm._s(_vm.fruitbox.delivery_day) + " ")
-                      ])
-                    ])
-              ])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "b-row",
-            {
-              staticClass: "b-row-padding",
-              class: _vm.fruitbox.is_active,
-              attrs: { sm: "12" }
-            },
-            [
-              _c("b-col", [
-                _c("label", [_c("b", [_vm._v(" Frequency ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c(
-                          "b-form-select",
-                          {
-                            attrs: { options: _vm.frequency, type: "number" },
-                            model: {
-                              value: _vm.fruitbox.frequency,
-                              callback: function($$v) {
-                                _vm.$set(_vm.fruitbox, "frequency", $$v)
-                              },
-                              expression: "fruitbox.frequency"
-                            }
-                          },
-                          [
-                            _c("template", { slot: "first" }, [
-                              _c(
-                                "option",
-                                {
-                                  attrs: { disabled: "" },
-                                  domProps: { value: null }
-                                },
-                                [_vm._v("-- Please select an option --")]
-                              )
-                            ])
-                          ],
-                          2
-                        )
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(" " + _vm._s(_vm.fruitbox.frequency) + " ")
-                      ])
-                    ])
-              ]),
-              _vm._v(" "),
-              _vm.fruitbox.frequency == "Monthly"
-                ? _c("b-col", [
-                    _c("label", [_c("b", [_vm._v(" Week In Month ")])]),
-                    _vm._v(" "),
-                    _vm.editing
-                      ? _c(
-                          "div",
-                          [
-                            _c(
-                              "b-form-select",
-                              {
-                                attrs: {
-                                  options: _vm.week_in_month,
-                                  type: "number"
-                                },
-                                model: {
-                                  value: _vm.fruitbox.week_in_month,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.fruitbox, "week_in_month", $$v)
-                                  },
-                                  expression: "fruitbox.week_in_month"
-                                }
-                              },
-                              [
-                                _c("template", { slot: "first" }, [
-                                  _c(
-                                    "option",
-                                    {
-                                      attrs: { disabled: "" },
-                                      domProps: { value: null }
-                                    },
-                                    [_vm._v("-- Please select an option --")]
-                                  )
-                                ])
-                              ],
-                              2
-                            )
-                          ],
-                          1
-                        )
-                      : _c("div", [
-                          _c("p", [
-                            _vm._v(
-                              " " + _vm._s(_vm.fruitbox.week_in_month) + " "
-                            )
-                          ])
-                        ])
-                  ])
-                : _vm._e(),
-              _vm._v(" "),
-              _c("b-col", [
-                _c("label", [_c("b", [_vm._v(" Next Delivery ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "date" },
-                          model: {
-                            value: _vm.fruitbox.next_delivery,
-                            callback: function($$v) {
-                              _vm.$set(_vm.fruitbox, "next_delivery", $$v)
-                            },
-                            expression: "fruitbox.next_delivery"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(" " + _vm._s(_vm.fruitbox.next_delivery) + " ")
-                      ])
-                    ])
-              ]),
-              _vm._v(" "),
-              _c("b-col", [
-                _c("label", [_c("b", [_vm._v(" Fruitbox Total ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.fruitbox.fruitbox_total,
-                            callback: function($$v) {
-                              _vm.$set(_vm.fruitbox, "fruitbox_total", $$v)
-                            },
-                            expression: "fruitbox.fruitbox_total"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(" " + _vm._s(_vm.fruitbox.fruitbox_total) + " ")
-                      ])
-                    ])
-              ])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "b-row",
-            {
-              staticClass: "b-row-padding",
-              class: _vm.fruitbox.is_active,
-              attrs: { sm: "12" }
-            },
-            [
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Deliciously Red Apples ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.fruitbox.deliciously_red_apples,
-                            callback: function($$v) {
-                              _vm.$set(
-                                _vm.fruitbox,
-                                "deliciously_red_apples",
-                                $$v
-                              )
-                            },
-                            expression: "fruitbox.deliciously_red_apples"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(
-                          " " +
-                            _vm._s(_vm.fruitbox.deliciously_red_apples) +
+                          " Selected: " +
+                            _vm._s(_vm.fruitbox.fruit_partner_id) +
                             " "
                         )
                       ])
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(
+                        "  " + _vm._s(_vm.fruitbox.fruit_partner_name) + " "
+                      )
                     ])
-              ]),
+                  ])
+            ])
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "b-row",
+          {
+            staticClass: "b-row-padding",
+            class: _vm.fruitbox.is_active,
+            attrs: { sm: "12" }
+          },
+          [
+            _c("b-col", [
+              _c("label", [_c("b", [_vm._v(" Fruitbox Name ")])]),
               _vm._v(" "),
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Pink Lady Apples ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        model: {
+                          value: _vm.fruitbox.name,
+                          callback: function($$v) {
+                            _vm.$set(_vm.fruitbox, "name", $$v)
+                          },
+                          expression: "fruitbox.name"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [_vm._v(" " + _vm._s(_vm.fruitbox.name) + " ")])
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", [
+              _c("label", [_c("b", [_vm._v(" Fruitbox Status ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c(
+                        "b-form-select",
+                        {
                           model: {
-                            value: _vm.fruitbox.pink_lady_apples,
+                            value: _vm.fruitbox.is_active,
                             callback: function($$v) {
-                              _vm.$set(_vm.fruitbox, "pink_lady_apples", $$v)
+                              _vm.$set(_vm.fruitbox, "is_active", $$v)
                             },
-                            expression: "fruitbox.pink_lady_apples"
+                            expression: "fruitbox.is_active"
                           }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(
-                          " " + _vm._s(_vm.fruitbox.pink_lady_apples) + " "
-                        )
+                        },
+                        [
+                          _c("option", { attrs: { value: "Active" } }, [
+                            _vm._v(" Active ")
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { attrs: { value: "Inactive" } }, [
+                            _vm._v(" Inactive ")
+                          ])
+                        ]
+                      )
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.fruitbox.is_active) + " ")
+                    ])
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", [
+              _c("label", [_c("b", [_vm._v(" Delivery Day ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c(
+                        "b-form-select",
+                        {
+                          model: {
+                            value: _vm.fruitbox.delivery_day,
+                            callback: function($$v) {
+                              _vm.$set(_vm.fruitbox, "delivery_day", $$v)
+                            },
+                            expression: "fruitbox.delivery_day"
+                          }
+                        },
+                        [
+                          _c("option", [_vm._v("Monday")]),
+                          _vm._v(" "),
+                          _c("option", [_vm._v("Tuesday")]),
+                          _vm._v(" "),
+                          _c("option", [_vm._v("Wednesday")]),
+                          _vm._v(" "),
+                          _c("option", [_vm._v("Thursday")]),
+                          _vm._v(" "),
+                          _c("option", [_vm._v("Friday")])
+                        ]
+                      )
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.fruitbox.delivery_day) + " ")
+                    ])
+                  ])
+            ])
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "b-row",
+          {
+            staticClass: "b-row-padding",
+            class: _vm.fruitbox.is_active,
+            attrs: { sm: "12" }
+          },
+          [
+            _c("b-col", [
+              _c("label", [_c("b", [_vm._v(" Frequency ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c(
+                        "b-form-select",
+                        {
+                          attrs: { options: _vm.frequency, type: "number" },
+                          model: {
+                            value: _vm.fruitbox.frequency,
+                            callback: function($$v) {
+                              _vm.$set(_vm.fruitbox, "frequency", $$v)
+                            },
+                            expression: "fruitbox.frequency"
+                          }
+                        },
+                        [
+                          _c("template", { slot: "first" }, [
+                            _c(
+                              "option",
+                              {
+                                attrs: { disabled: "" },
+                                domProps: { value: null }
+                              },
+                              [_vm._v("-- Please select an option --")]
+                            )
+                          ])
+                        ],
+                        2
+                      )
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.fruitbox.frequency) + " ")
+                    ])
+                  ])
+            ]),
+            _vm._v(" "),
+            _vm.fruitbox.frequency == "Monthly"
+              ? _c("b-col", [
+                  _c("label", [_c("b", [_vm._v(" Week In Month ")])]),
+                  _vm._v(" "),
+                  _vm.editing
+                    ? _c(
+                        "div",
+                        [
+                          _c(
+                            "b-form-select",
+                            {
+                              attrs: {
+                                options: _vm.week_in_month,
+                                type: "number"
+                              },
+                              model: {
+                                value: _vm.fruitbox.week_in_month,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.fruitbox, "week_in_month", $$v)
+                                },
+                                expression: "fruitbox.week_in_month"
+                              }
+                            },
+                            [
+                              _c("template", { slot: "first" }, [
+                                _c(
+                                  "option",
+                                  {
+                                    attrs: { disabled: "" },
+                                    domProps: { value: null }
+                                  },
+                                  [_vm._v("-- Please select an option --")]
+                                )
+                              ])
+                            ],
+                            2
+                          )
+                        ],
+                        1
+                      )
+                    : _c("div", [
+                        _c("p", [
+                          _vm._v(" " + _vm._s(_vm.fruitbox.week_in_month) + " ")
+                        ])
                       ])
-                    ])
-              ]),
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _c("b-col", [
+              _c("label", [_c("b", [_vm._v(" Next Delivery ")])]),
               _vm._v(" "),
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Red Apples ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.fruitbox.red_apples,
-                            callback: function($$v) {
-                              _vm.$set(_vm.fruitbox, "red_apples", $$v)
-                            },
-                            expression: "fruitbox.red_apples"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(" " + _vm._s(_vm.fruitbox.red_apples) + " ")
-                      ])
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "date" },
+                        model: {
+                          value: _vm.fruitbox.next_delivery,
+                          callback: function($$v) {
+                            _vm.$set(_vm.fruitbox, "next_delivery", $$v)
+                          },
+                          expression: "fruitbox.next_delivery"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.fruitbox.next_delivery) + " ")
                     ])
-              ])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "b-row",
-            {
-              staticClass: "b-row-padding",
-              class: _vm.fruitbox.is_active,
-              attrs: { sm: "12" }
-            },
-            [
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Green Apples ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.fruitbox.green_apples,
-                            callback: function($$v) {
-                              _vm.$set(_vm.fruitbox, "green_apples", $$v)
-                            },
-                            expression: "fruitbox.green_apples"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(" " + _vm._s(_vm.fruitbox.green_apples) + " ")
-                      ])
-                    ])
-              ]),
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", [
+              _c("label", [_c("b", [_vm._v(" Fruitbox Total ")])]),
               _vm._v(" "),
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Satsumas ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.fruitbox.satsumas,
-                            callback: function($$v) {
-                              _vm.$set(_vm.fruitbox, "satsumas", $$v)
-                            },
-                            expression: "fruitbox.satsumas"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(" " + _vm._s(_vm.fruitbox.satsumas) + " ")
-                      ])
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.fruitbox.fruitbox_total,
+                          callback: function($$v) {
+                            _vm.$set(_vm.fruitbox, "fruitbox_total", $$v)
+                          },
+                          expression: "fruitbox.fruitbox_total"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.fruitbox.fruitbox_total) + " ")
                     ])
-              ]),
+                  ])
+            ])
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "b-row",
+          {
+            staticClass: "b-row-padding",
+            class: _vm.fruitbox.is_active,
+            attrs: { sm: "12" }
+          },
+          [
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Deliciously Red Apples ")])]),
               _vm._v(" "),
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Pears ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.fruitbox.pears,
-                            callback: function($$v) {
-                              _vm.$set(_vm.fruitbox, "pears", $$v)
-                            },
-                            expression: "fruitbox.pears"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [_vm._v(" " + _vm._s(_vm.fruitbox.pears) + " ")])
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.fruitbox.deliciously_red_apples,
+                          callback: function($$v) {
+                            _vm.$set(
+                              _vm.fruitbox,
+                              "deliciously_red_apples",
+                              $$v
+                            )
+                          },
+                          expression: "fruitbox.deliciously_red_apples"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(
+                        " " + _vm._s(_vm.fruitbox.deliciously_red_apples) + " "
+                      )
                     ])
-              ])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "b-row",
-            {
-              staticClass: "b-row-padding",
-              class: _vm.fruitbox.is_active,
-              attrs: { sm: "12" }
-            },
-            [
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Bananas ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.fruitbox.bananas,
-                            callback: function($$v) {
-                              _vm.$set(_vm.fruitbox, "bananas", $$v)
-                            },
-                            expression: "fruitbox.bananas"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(" " + _vm._s(_vm.fruitbox.bananas) + " ")
-                      ])
-                    ])
-              ]),
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Pink Lady Apples ")])]),
               _vm._v(" "),
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Nectarines ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.fruitbox.nectarines,
-                            callback: function($$v) {
-                              _vm.$set(_vm.fruitbox, "nectarines", $$v)
-                            },
-                            expression: "fruitbox.nectarines"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(" " + _vm._s(_vm.fruitbox.nectarines) + " ")
-                      ])
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.fruitbox.pink_lady_apples,
+                          callback: function($$v) {
+                            _vm.$set(_vm.fruitbox, "pink_lady_apples", $$v)
+                          },
+                          expression: "fruitbox.pink_lady_apples"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.fruitbox.pink_lady_apples) + " ")
                     ])
-              ]),
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Red Apples ")])]),
               _vm._v(" "),
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Limes ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.fruitbox.limes,
-                            callback: function($$v) {
-                              _vm.$set(_vm.fruitbox, "limes", $$v)
-                            },
-                            expression: "fruitbox.limes"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [_vm._v(" " + _vm._s(_vm.fruitbox.limes) + " ")])
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.fruitbox.red_apples,
+                          callback: function($$v) {
+                            _vm.$set(_vm.fruitbox, "red_apples", $$v)
+                          },
+                          expression: "fruitbox.red_apples"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.fruitbox.red_apples) + " ")
                     ])
-              ])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "b-row",
-            {
-              staticClass: "b-row-padding",
-              class: _vm.fruitbox.is_active,
-              attrs: { sm: "12" }
-            },
-            [
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Lemons ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.fruitbox.lemons,
-                            callback: function($$v) {
-                              _vm.$set(_vm.fruitbox, "lemons", $$v)
-                            },
-                            expression: "fruitbox.lemons"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [_vm._v(" " + _vm._s(_vm.fruitbox.lemons) + " ")])
-                    ])
-              ]),
+                  ])
+            ])
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "b-row",
+          {
+            staticClass: "b-row-padding",
+            class: _vm.fruitbox.is_active,
+            attrs: { sm: "12" }
+          },
+          [
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Green Apples ")])]),
               _vm._v(" "),
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Grapes ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.fruitbox.grapes,
-                            callback: function($$v) {
-                              _vm.$set(_vm.fruitbox, "grapes", $$v)
-                            },
-                            expression: "fruitbox.grapes"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [_vm._v(" " + _vm._s(_vm.fruitbox.grapes) + " ")])
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.fruitbox.green_apples,
+                          callback: function($$v) {
+                            _vm.$set(_vm.fruitbox, "green_apples", $$v)
+                          },
+                          expression: "fruitbox.green_apples"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.fruitbox.green_apples) + " ")
                     ])
-              ]),
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Satsumas ")])]),
               _vm._v(" "),
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Seasonal Berries ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.fruitbox.seasonal_berries,
-                            callback: function($$v) {
-                              _vm.$set(_vm.fruitbox, "seasonal_berries", $$v)
-                            },
-                            expression: "fruitbox.seasonal_berries"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(
-                          " " + _vm._s(_vm.fruitbox.seasonal_berries) + " "
-                        )
-                      ])
-                    ])
-              ])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "b-row",
-            {
-              staticClass: "b-row-padding",
-              class: _vm.fruitbox.is_active,
-              attrs: { sm: "12" }
-            },
-            [
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Oranges ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.fruitbox.oranges,
-                            callback: function($$v) {
-                              _vm.$set(_vm.fruitbox, "oranges", $$v)
-                            },
-                            expression: "fruitbox.oranges"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(" " + _vm._s(_vm.fruitbox.oranges) + " ")
-                      ])
-                    ])
-              ]),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.fruitbox.satsumas,
+                          callback: function($$v) {
+                            _vm.$set(_vm.fruitbox, "satsumas", $$v)
+                          },
+                          expression: "fruitbox.satsumas"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [_vm._v(" " + _vm._s(_vm.fruitbox.satsumas) + " ")])
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Pears ")])]),
               _vm._v(" "),
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Cucumbers ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.fruitbox.cucumbers,
-                            callback: function($$v) {
-                              _vm.$set(_vm.fruitbox, "cucumbers", $$v)
-                            },
-                            expression: "fruitbox.cucumbers"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(" " + _vm._s(_vm.fruitbox.cucumbers) + " ")
-                      ])
-                    ])
-              ]),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.fruitbox.pears,
+                          callback: function($$v) {
+                            _vm.$set(_vm.fruitbox, "pears", $$v)
+                          },
+                          expression: "fruitbox.pears"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [_vm._v(" " + _vm._s(_vm.fruitbox.pears) + " ")])
+                  ])
+            ])
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "b-row",
+          {
+            staticClass: "b-row-padding",
+            class: _vm.fruitbox.is_active,
+            attrs: { sm: "12" }
+          },
+          [
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Bananas ")])]),
               _vm._v(" "),
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Mint ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.fruitbox.mint,
-                            callback: function($$v) {
-                              _vm.$set(_vm.fruitbox, "mint", $$v)
-                            },
-                            expression: "fruitbox.mint"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [_vm._v(" " + _vm._s(_vm.fruitbox.mint) + " ")])
-                    ])
-              ])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "b-row",
-            {
-              staticClass: "b-row-padding",
-              class: _vm.fruitbox.is_active,
-              attrs: { sm: "12" }
-            },
-            [
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Organic Lemons ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.fruitbox.organic_lemons,
-                            callback: function($$v) {
-                              _vm.$set(_vm.fruitbox, "organic_lemons", $$v)
-                            },
-                            expression: "fruitbox.organic_lemons"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(" " + _vm._s(_vm.fruitbox.organic_lemons) + " ")
-                      ])
-                    ])
-              ]),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.fruitbox.bananas,
+                          callback: function($$v) {
+                            _vm.$set(_vm.fruitbox, "bananas", $$v)
+                          },
+                          expression: "fruitbox.bananas"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [_vm._v(" " + _vm._s(_vm.fruitbox.bananas) + " ")])
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Nectarines ")])]),
               _vm._v(" "),
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Kiwis ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.fruitbox.kiwis,
-                            callback: function($$v) {
-                              _vm.$set(_vm.fruitbox, "kiwis", $$v)
-                            },
-                            expression: "fruitbox.kiwis"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [_vm._v(" " + _vm._s(_vm.fruitbox.kiwis) + " ")])
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.fruitbox.nectarines,
+                          callback: function($$v) {
+                            _vm.$set(_vm.fruitbox, "nectarines", $$v)
+                          },
+                          expression: "fruitbox.nectarines"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.fruitbox.nectarines) + " ")
                     ])
-              ]),
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Limes ")])]),
               _vm._v(" "),
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Grapefruits ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.fruitbox.grapefruits,
-                            callback: function($$v) {
-                              _vm.$set(_vm.fruitbox, "grapefruits", $$v)
-                            },
-                            expression: "fruitbox.grapefruits"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(" " + _vm._s(_vm.fruitbox.grapefruits) + " ")
-                      ])
-                    ])
-              ])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "b-row",
-            {
-              staticClass: "b-row-padding",
-              class: _vm.fruitbox.is_active,
-              attrs: { id: "bottom-details", sm: "12" }
-            },
-            [
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Avocados ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.fruitbox.avocados,
-                            callback: function($$v) {
-                              _vm.$set(_vm.fruitbox, "avocados", $$v)
-                            },
-                            expression: "fruitbox.avocados"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(" " + _vm._s(_vm.fruitbox.avocados) + " ")
-                      ])
-                    ])
-              ]),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.fruitbox.limes,
+                          callback: function($$v) {
+                            _vm.$set(_vm.fruitbox, "limes", $$v)
+                          },
+                          expression: "fruitbox.limes"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [_vm._v(" " + _vm._s(_vm.fruitbox.limes) + " ")])
+                  ])
+            ])
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "b-row",
+          {
+            staticClass: "b-row-padding",
+            class: _vm.fruitbox.is_active,
+            attrs: { sm: "12" }
+          },
+          [
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Lemons ")])]),
               _vm._v(" "),
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Root Ginger ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.fruitbox.root_ginger,
-                            callback: function($$v) {
-                              _vm.$set(_vm.fruitbox, "root_ginger", $$v)
-                            },
-                            expression: "fruitbox.root_ginger"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(" " + _vm._s(_vm.fruitbox.root_ginger) + " ")
-                      ])
-                    ])
-              ]),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.fruitbox.lemons,
+                          callback: function($$v) {
+                            _vm.$set(_vm.fruitbox, "lemons", $$v)
+                          },
+                          expression: "fruitbox.lemons"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [_vm._v(" " + _vm._s(_vm.fruitbox.lemons) + " ")])
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Grapes ")])]),
               _vm._v(" "),
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" TBC ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.fruitbox.tbc,
-                            callback: function($$v) {
-                              _vm.$set(_vm.fruitbox, "tbc", $$v)
-                            },
-                            expression: "fruitbox.tbc"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [_vm._v(" " + _vm._s(_vm.fruitbox.tbc) + " ")])
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.fruitbox.grapes,
+                          callback: function($$v) {
+                            _vm.$set(_vm.fruitbox, "grapes", $$v)
+                          },
+                          expression: "fruitbox.grapes"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [_vm._v(" " + _vm._s(_vm.fruitbox.grapes) + " ")])
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Seasonal Berries ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.fruitbox.seasonal_berries,
+                          callback: function($$v) {
+                            _vm.$set(_vm.fruitbox, "seasonal_berries", $$v)
+                          },
+                          expression: "fruitbox.seasonal_berries"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.fruitbox.seasonal_berries) + " ")
                     ])
-              ])
-            ],
-            1
-          )
-        ],
-        1
-      )
-    ])
+                  ])
+            ])
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "b-row",
+          {
+            staticClass: "b-row-padding",
+            class: _vm.fruitbox.is_active,
+            attrs: { sm: "12" }
+          },
+          [
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Oranges ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.fruitbox.oranges,
+                          callback: function($$v) {
+                            _vm.$set(_vm.fruitbox, "oranges", $$v)
+                          },
+                          expression: "fruitbox.oranges"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [_vm._v(" " + _vm._s(_vm.fruitbox.oranges) + " ")])
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Cucumbers ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.fruitbox.cucumbers,
+                          callback: function($$v) {
+                            _vm.$set(_vm.fruitbox, "cucumbers", $$v)
+                          },
+                          expression: "fruitbox.cucumbers"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.fruitbox.cucumbers) + " ")
+                    ])
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Mint ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.fruitbox.mint,
+                          callback: function($$v) {
+                            _vm.$set(_vm.fruitbox, "mint", $$v)
+                          },
+                          expression: "fruitbox.mint"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [_vm._v(" " + _vm._s(_vm.fruitbox.mint) + " ")])
+                  ])
+            ])
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "b-row",
+          {
+            staticClass: "b-row-padding",
+            class: _vm.fruitbox.is_active,
+            attrs: { sm: "12" }
+          },
+          [
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Organic Lemons ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.fruitbox.organic_lemons,
+                          callback: function($$v) {
+                            _vm.$set(_vm.fruitbox, "organic_lemons", $$v)
+                          },
+                          expression: "fruitbox.organic_lemons"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.fruitbox.organic_lemons) + " ")
+                    ])
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Kiwis ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.fruitbox.kiwis,
+                          callback: function($$v) {
+                            _vm.$set(_vm.fruitbox, "kiwis", $$v)
+                          },
+                          expression: "fruitbox.kiwis"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [_vm._v(" " + _vm._s(_vm.fruitbox.kiwis) + " ")])
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Grapefruits ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.fruitbox.grapefruits,
+                          callback: function($$v) {
+                            _vm.$set(_vm.fruitbox, "grapefruits", $$v)
+                          },
+                          expression: "fruitbox.grapefruits"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.fruitbox.grapefruits) + " ")
+                    ])
+                  ])
+            ])
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "b-row",
+          {
+            staticClass: "b-row-padding",
+            class: _vm.fruitbox.is_active,
+            attrs: { id: "bottom-details", sm: "12" }
+          },
+          [
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Avocados ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.fruitbox.avocados,
+                          callback: function($$v) {
+                            _vm.$set(_vm.fruitbox, "avocados", $$v)
+                          },
+                          expression: "fruitbox.avocados"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [_vm._v(" " + _vm._s(_vm.fruitbox.avocados) + " ")])
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Root Ginger ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.fruitbox.root_ginger,
+                          callback: function($$v) {
+                            _vm.$set(_vm.fruitbox, "root_ginger", $$v)
+                          },
+                          expression: "fruitbox.root_ginger"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.fruitbox.root_ginger) + " ")
+                    ])
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" TBC ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.fruitbox.tbc,
+                          callback: function($$v) {
+                            _vm.$set(_vm.fruitbox, "tbc", $$v)
+                          },
+                          expression: "fruitbox.tbc"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [_vm._v(" " + _vm._s(_vm.fruitbox.tbc) + " ")])
+                  ])
+            ])
+          ],
+          1
+        )
+      ],
+      1
+    )
   ])
 }
 var staticRenderFns = []
@@ -78487,7 +78393,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "\n#fruitboxes {\n  margin-top: 20px;\n  text-align: center;\n}\n#edit-save-buttons {\n  padding-bottom: 10px;\n}\n#edit-save-buttons h4 {\n    display: inline;\n}\n.add-new-close {\n  margin-bottom: 20px;\n}\n#fruit-details .b-row-padding {\n  padding-bottom: 5px;\n}\n#top-details {\n  padding-top: 10px;\n  border-top-left-radius: 10px;\n  border-top-right-radius: 10px;\n}\n#bottom-details {\n  padding-bottom: 30px;\n  border-bottom-left-radius: 10px;\n  border-bottom-right-radius: 10px;\n}\n.Active {\n  background-color: rgba(116, 244, 66, 0.5);\n}\n.Inactive {\n  background-color: rgba(201, 16, 16, 0.5);\n}\n.fruitbox {\n  padding-left: 0;\n}\n.fruitbox li {\n    list-style: none;\n}\n.fruitbox:after {\n  content: \"\";\n  /* This is necessary for the pseudo element to work. */\n  display: block;\n  /* This will put the pseudo element on its own line. */\n  margin: 0 auto;\n  /* This will center the border. */\n  width: 70%;\n  /* Change this to whatever width you want. */\n  padding-top: 20px;\n  /* This creates some space between the element and the border. */\n  border-bottom: 1px solid #636b6f;\n  /* This creates the border. Replace black with whatever color you want. */\n}\n", ""]);
+exports.push([module.i, "\n#fruitboxes {\n  margin-top: 20px;\n  text-align: center;\n}\n#fruitboxes::before {\n  content: \"\";\n  /* This is necessary for the pseudo element to work. */\n  display: block;\n  /* This will put the pseudo element on its own line. */\n  margin: 0 auto;\n  /* This will center the border. */\n  width: 70%;\n  /* Change this to whatever width you want. */\n  padding-bottom: 20px;\n  /* This creates some space between the element and the border. */\n  border-top: 1px solid #636b6f;\n  /* This creates the border. Replace black with whatever color you want. */\n}\n#edit-save-buttons {\n  padding-bottom: 10px;\n}\n#edit-save-buttons h4 {\n    display: inline;\n}\n.add-new-close {\n  margin-bottom: 20px;\n}\n.fruitbox {\n  padding-top: 20px;\n  padding-left: 0;\n}\n.fruitbox li {\n    list-style: none;\n}\n#fruit-details .b-row-padding {\n  padding-bottom: 5px;\n}\n#top-details {\n  padding-top: 10px;\n  border-top-left-radius: 10px;\n  border-top-right-radius: 10px;\n}\n#bottom-details {\n  padding-bottom: 30px;\n  border-bottom-left-radius: 10px;\n  border-bottom-right-radius: 10px;\n}\n.Active {\n  background-color: rgba(116, 244, 66, 0.5);\n}\n.Inactive {\n  background-color: rgba(201, 16, 16, 0.5);\n}\n.fruitbox {\n  padding-left: 0;\n}\n.fruitbox li {\n    list-style: none;\n}\n.fruitbox:after {\n  content: \"\";\n  /* This is necessary for the pseudo element to work. */\n  display: block;\n  /* This will put the pseudo element on its own line. */\n  margin: 0 auto;\n  /* This will center the border. */\n  width: 70%;\n  /* Change this to whatever width you want. */\n  padding-top: 20px;\n  /* This creates some space between the element and the border. */\n  border-bottom: 1px solid #636b6f;\n  /* This creates the border. Replace black with whatever color you want. */\n}\n", ""]);
 
 // exports
 
@@ -78498,6 +78404,20 @@ exports.push([module.i, "\n#fruitboxes {\n  margin-top: 20px;\n  text-align: cen
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -78782,6 +78702,7 @@ var render = function() {
             _vm._l(this.fruitboxes, function(fruitbox) {
               return _c("fruitbox", {
                 key: fruitbox.id,
+                staticClass: "fruitbox",
                 attrs: { fruitbox: fruitbox }
               })
             })
@@ -79114,7 +79035,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 is_active: 'Active',
                 fruit_partner_id: 1, // By default this will be 'Office Pantry', I could change this to 'Please Select' but figure Office Pantry is still the main distributor.
                 name: '',
-                company_id: null, // If this is created by Frosh, how are they going to select the company to attach the order to?  A typed filter of a long list may be the best way.
+                company_details_id: null, // If this is created by Frosh, how are they going to select the company to attach the order to?  A typed filter of a long list may be the best way.
                 route_id: null, // This will also need a way to filter from all possible routes, however once a company has been confirmed, the options could easily fit on a dropdown.
                 delivery_day: '', // According to the docs this must be an array reference, however it seems to me this is happening anyway?  Interesting...
                 type: null, // Whilst not currently in use, this will determine between standard, berries and tailored, with tailored being the only one which can be edited (probably).
@@ -79183,7 +79104,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             evt.preventDefault();
             /* Reset our form values */
             this.form.name = '';
-            this.form.company_id = null;
+            this.form.company_details_id = null;
             this.form.route_id = null;
             this.form.delivery_day = '';
             this.form.type = null;
@@ -79381,11 +79302,11 @@ var render = function() {
                             required: ""
                           },
                           model: {
-                            value: _vm.form.company_id,
+                            value: _vm.form.company_details_id,
                             callback: function($$v) {
-                              _vm.$set(_vm.form, "company_id", $$v)
+                              _vm.$set(_vm.form, "company_details_id", $$v)
                             },
-                            expression: "form.company_id"
+                            expression: "form.company_details_id"
                           }
                         },
                         [
@@ -79410,11 +79331,11 @@ var render = function() {
                             required: ""
                           },
                           model: {
-                            value: _vm.form.company_id,
+                            value: _vm.form.company_details_id,
                             callback: function($$v) {
-                              _vm.$set(_vm.form, "company_id", $$v)
+                              _vm.$set(_vm.form, "company_details_id", $$v)
                             },
-                            expression: "form.company_id"
+                            expression: "form.company_details_id"
                           }
                         },
                         [
@@ -79434,7 +79355,9 @@ var render = function() {
                   _vm._v(" "),
                   _c("p", { staticStyle: { "padding-top": "10px" } }, [
                     _vm._v(
-                      " Selected Company: " + _vm._s(_vm.form.company_id) + " "
+                      " Selected Company: " +
+                        _vm._s(_vm.form.company_details_id) +
+                        " "
                     )
                   ])
                 ],
@@ -81085,6 +81008,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -81124,24 +81071,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 id: milkbox.id,
                 is_active: milkbox.is_active,
                 fruit_partner_id: milkbox.fruit_partner_id,
-                company_id: milkbox.company_id,
+                company_details_id: milkbox.company_details_id,
                 route_id: milkbox.route_id,
                 next_delivery_week_start: milkbox.next_delivery_week_start,
                 delivery_day: milkbox.delivery_day,
                 frequency: milkbox.frequency,
                 week_in_month: milkbox.week_in_month,
-                milk_1l_alt_coconut: milkbox.milk_1l_alt_coconut,
-                milk_1l_alt_unsweetened_almond: milkbox.milk_1l_alt_unsweetened_almond,
-                milk_1l_alt_almond: milkbox.milk_1l_alt_almond,
-                milk_1l_alt_unsweetened_soya: milkbox.milk_1l_alt_unsweetened_soya,
-                milk_1l_alt_soya: milkbox.milk_1l_alt_soya,
-                milk_1l_alt_lactose_free_semi: milkbox.milk_1l_alt_lactose_free_semi,
                 semi_skimmed_2l: milkbox.semi_skimmed_2l,
                 skimmed_2l: milkbox.skimmed_2l,
                 whole_2l: milkbox.whole_2l,
                 semi_skimmed_1l: milkbox.semi_skimmed_1l,
                 skimmed_1l: milkbox.skimmed_1l,
-                whole_1l: milkbox.whole_1l
+                whole_1l: milkbox.whole_1l,
+                milk_1l_alt_coconut: milkbox.milk_1l_alt_coconut,
+                milk_1l_alt_unsweetened_almond: milkbox.milk_1l_alt_unsweetened_almond,
+                milk_1l_alt_almond: milkbox.milk_1l_alt_almond,
+                milk_1l_alt_unsweetened_soya: milkbox.milk_1l_alt_unsweetened_soya,
+                milk_1l_alt_soya: milkbox.milk_1l_alt_soya,
+                milk_1l_alt_oat: milkbox.milk_1l_alt_oat,
+                milk_1l_alt_rice: milkbox.milk_1l_alt_rice,
+                milk_1l_alt_cashew: milkbox.milk_1l_alt_cashew,
+                milk_1l_alt_lactose_free_semi: milkbox.milk_1l_alt_lactose_free_semi
+
             }).then(function (response) {
                 console.log(response);
             }).catch(function (error) {
@@ -81166,832 +81117,840 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("ul", { staticClass: "milkbox" }, [
-      _c(
-        "div",
-        { attrs: { id: "edit-save-buttons" } },
-        [
-          _c("h4", [_vm._v(" " + _vm._s(_vm.milkbox.delivery_day))]),
-          _vm._v(" "),
-          _c("p", [_vm._v(" " + _vm._s(_vm.milkbox.is_active) + " ")]),
-          _vm._v(" "),
-          _c(
-            "b-button",
-            {
-              attrs: { variant: "primary" },
-              on: {
-                click: function($event) {
-                  _vm.showDetails()
-                }
+    _c(
+      "div",
+      { attrs: { id: "edit-save-buttons" } },
+      [
+        _c("h4", [_vm._v(" " + _vm._s(_vm.milkbox.delivery_day))]),
+        _vm._v(" "),
+        _c("p", [_vm._v(" " + _vm._s(_vm.milkbox.is_active) + " ")]),
+        _vm._v(" "),
+        _c(
+          "b-button",
+          {
+            attrs: { variant: "primary" },
+            on: {
+              click: function($event) {
+                _vm.showDetails()
               }
-            },
-            [_vm._v(" Details ")]
-          ),
-          _vm._v(" "),
-          _c(
-            "b-button",
-            {
-              attrs: { variant: "warning" },
-              on: {
-                click: function($event) {
-                  _vm.enableEdit()
-                }
-              }
-            },
-            [_vm._v(" Edit ")]
-          ),
-          _vm._v(" "),
-          _vm.editing
-            ? _c(
-                "b-button",
-                {
-                  staticClass: "btn btn-success",
-                  on: {
-                    click: function($event) {
-                      _vm.updateMilkOrder(_vm.milkbox)
-                    }
-                  }
-                },
-                [_vm._v(" Save ")]
-              )
-            : _vm._e()
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          directives: [
-            {
-              name: "show",
-              rawName: "v-show",
-              value: _vm.details,
-              expression: "details"
             }
-          ],
-          attrs: { id: "milk-details" }
-        },
-        [
-          _c(
-            "b-row",
-            {
-              staticClass: "b-row-padding",
-              class: _vm.milkbox.is_active,
-              attrs: { id: "top-details", sm: "12" }
-            },
-            [
-              _c("b-col", [
-                _c("label", [_c("b", [_vm._v(" Milkbox ID ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          model: {
-                            value: _vm.milkbox.id,
-                            callback: function($$v) {
-                              _vm.$set(_vm.milkbox, "id", $$v)
-                            },
-                            expression: "milkbox.id"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [_vm._v(" " + _vm._s(_vm.milkbox.id) + " ")])
-                    ])
-              ]),
+          },
+          [_vm._v(" Details ")]
+        ),
+        _vm._v(" "),
+        _c(
+          "b-button",
+          {
+            attrs: { variant: "warning" },
+            on: {
+              click: function($event) {
+                _vm.enableEdit()
+              }
+            }
+          },
+          [_vm._v(" Edit ")]
+        ),
+        _vm._v(" "),
+        _vm.editing
+          ? _c(
+              "b-button",
+              {
+                staticClass: "btn btn-success",
+                on: {
+                  click: function($event) {
+                    _vm.updateMilkOrder(_vm.milkbox)
+                  }
+                }
+              },
+              [_vm._v(" Save ")]
+            )
+          : _vm._e()
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.details,
+            expression: "details"
+          }
+        ],
+        attrs: { id: "milk-details" }
+      },
+      [
+        _c(
+          "b-row",
+          {
+            staticClass: "b-row-padding",
+            class: _vm.milkbox.is_active,
+            attrs: { id: "top-details", sm: "12" }
+          },
+          [
+            _c("b-col", [
+              _c("label", [_c("b", [_vm._v(" Milkbox ID ")])]),
               _vm._v(" "),
-              _c("b-col", [
-                _c("label", [_c("b", [_vm._v(" Company ID ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          model: {
-                            value: _vm.milkbox.company_id,
-                            callback: function($$v) {
-                              _vm.$set(_vm.milkbox, "company_id", $$v)
-                            },
-                            expression: "milkbox.company_id"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(" " + _vm._s(_vm.milkbox.company_id) + " ")
-                      ])
-                    ])
-              ]),
+              _c("div", [_c("p", [_vm._v(" " + _vm._s(_vm.milkbox.id) + " ")])])
+            ]),
+            _vm._v(" "),
+            _c("b-col", [
+              _c("label", [_c("b", [_vm._v(" Company ID ")])]),
               _vm._v(" "),
-              _c("b-col", [
-                _c("label", [_c("b", [_vm._v(" Milkbox Fruit Partner ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c(
-                          "b-form-select",
-                          {
-                            model: {
-                              value: _vm.milkbox.fruit_partner_id,
-                              callback: function($$v) {
-                                _vm.$set(_vm.milkbox, "fruit_partner_id", $$v)
-                              },
-                              expression: "milkbox.fruit_partner_id"
-                            }
-                          },
-                          [
-                            _c("template", { slot: "first" }, [
-                              _c(
-                                "option",
-                                {
-                                  attrs: { disabled: "" },
-                                  domProps: {
-                                    value: _vm.milkbox.fruit_partner_id
-                                  }
-                                },
-                                [
-                                  _vm._v(
-                                    " " +
-                                      _vm._s(_vm.milkbox.fruit_partner_name) +
-                                      " "
-                                  )
-                                ]
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _vm._l(
-                              _vm.$store.state.fruit_partners_list,
-                              function(fruit_partner) {
-                                return _c(
-                                  "option",
-                                  {
-                                    domProps: { value: fruit_partner.id },
-                                    on: {
-                                      "~click": function($event) {
-                                        _vm.changeName(fruit_partner.name)
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _vm._v(
-                                      " " + _vm._s(fruit_partner.name) + " "
-                                    )
-                                  ]
-                                )
-                              }
-                            )
-                          ],
-                          2
-                        ),
-                        _vm._v(" "),
-                        _c("p", [
-                          _vm._v(
-                            " Selected: " +
-                              _vm._s(_vm.milkbox.fruit_partner_id) +
-                              " "
+              _c("div", [
+                _c("p", [
+                  _vm._v(" " + _vm._s(_vm.milkbox.company_details_id) + " ")
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", [
+              _c("label", [_c("b", [_vm._v(" Milkbox Fruit Partner ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c(
+                        "b-form-select",
+                        {
+                          model: {
+                            value: _vm.milkbox.fruit_partner_id,
+                            callback: function($$v) {
+                              _vm.$set(_vm.milkbox, "fruit_partner_id", $$v)
+                            },
+                            expression: "milkbox.fruit_partner_id"
+                          }
+                        },
+                        _vm._l(_vm.$store.state.fruit_partners_list, function(
+                          fruit_partner
+                        ) {
+                          return _c(
+                            "option",
+                            { domProps: { value: fruit_partner.id } },
+                            [_vm._v(" " + _vm._s(fruit_partner.name) + " ")]
                           )
-                        ])
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(
-                          "  " + _vm._s(_vm.milkbox.fruit_partner_name) + " "
-                        )
-                      ])
-                    ])
-              ]),
-              _vm._v(" "),
-              _c("b-col", [
-                _c("label", [_c("b", [_vm._v(" Next Delivery ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "date" },
-                          model: {
-                            value: _vm.milkbox.next_delivery_week_start,
-                            callback: function($$v) {
-                              _vm.$set(
-                                _vm.milkbox,
-                                "next_delivery_week_start",
-                                $$v
-                              )
-                            },
-                            expression: "milkbox.next_delivery_week_start"
-                          }
                         })
-                      ],
-                      1
-                    )
-                  : _c("div", [
+                      ),
+                      _vm._v(" "),
                       _c("p", [
                         _vm._v(
-                          " " +
-                            _vm._s(_vm.milkbox.next_delivery_week_start) +
+                          " Selected: " +
+                            _vm._s(_vm.milkbox.fruit_partner_id) +
                             " "
                         )
                       ])
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(
+                        "  " + _vm._s(_vm.milkbox.fruit_partner_name) + " "
+                      )
                     ])
-              ])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "b-row",
-            {
-              staticClass: "b-row-padding",
-              class: _vm.milkbox.is_active,
-              attrs: { sm: "12" }
-            },
-            [
-              _c("b-col", [
-                _c("label", [_c("b", [_vm._v(" Milkbox Status ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c(
-                          "b-form-select",
-                          {
-                            model: {
-                              value: _vm.milkbox.is_active,
-                              callback: function($$v) {
-                                _vm.$set(_vm.milkbox, "is_active", $$v)
-                              },
-                              expression: "milkbox.is_active"
-                            }
-                          },
-                          [
-                            _c("option", { attrs: { value: "Active" } }, [
-                              _vm._v(" Active ")
-                            ]),
-                            _vm._v(" "),
-                            _c("option", { attrs: { value: "Inactive" } }, [
-                              _vm._v(" Inactive ")
-                            ])
-                          ]
-                        )
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(" " + _vm._s(_vm.milkbox.is_active) + " ")
-                      ])
-                    ])
-              ]),
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", [
+              _c("label", [_c("b", [_vm._v(" Next Delivery ")])]),
               _vm._v(" "),
-              _c("b-col", [
-                _c("label", [_c("b", [_vm._v(" Delivery Day ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c(
-                          "b-form-select",
-                          {
-                            model: {
-                              value: _vm.milkbox.delivery_day,
-                              callback: function($$v) {
-                                _vm.$set(_vm.milkbox, "delivery_day", $$v)
-                              },
-                              expression: "milkbox.delivery_day"
-                            }
-                          },
-                          [
-                            _c("option", [_vm._v("Monday")]),
-                            _vm._v(" "),
-                            _c("option", [_vm._v("Tuesday")]),
-                            _vm._v(" "),
-                            _c("option", [_vm._v("Wednesday")]),
-                            _vm._v(" "),
-                            _c("option", [_vm._v("Thursday")]),
-                            _vm._v(" "),
-                            _c("option", [_vm._v("Friday")])
-                          ]
-                        )
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(" " + _vm._s(_vm.milkbox.delivery_day) + " ")
-                      ])
-                    ])
-              ]),
-              _vm._v(" "),
-              _c("b-col", [
-                _c("label", [_c("b", [_vm._v(" Frequency ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c(
-                          "b-form-select",
-                          {
-                            attrs: { options: _vm.frequency, type: "number" },
-                            model: {
-                              value: _vm.milkbox.frequency,
-                              callback: function($$v) {
-                                _vm.$set(_vm.milkbox, "frequency", $$v)
-                              },
-                              expression: "milkbox.frequency"
-                            }
-                          },
-                          [
-                            _c("template", { slot: "first" }, [
-                              _c(
-                                "option",
-                                {
-                                  attrs: { disabled: "" },
-                                  domProps: { value: null }
-                                },
-                                [_vm._v("-- Please select an option --")]
-                              )
-                            ])
-                          ],
-                          2
-                        )
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(" " + _vm._s(_vm.milkbox.frequency) + " ")
-                      ])
-                    ])
-              ]),
-              _vm._v(" "),
-              _vm.milkbox.frequency == "Monthly"
-                ? _c("b-col", [
-                    _c("label", [_c("b", [_vm._v(" Week In Month ")])]),
-                    _vm._v(" "),
-                    _vm.editing
-                      ? _c(
-                          "div",
-                          [
-                            _c(
-                              "b-form-select",
-                              {
-                                attrs: {
-                                  options: _vm.week_in_month,
-                                  type: "number"
-                                },
-                                model: {
-                                  value: _vm.milkbox.week_in_month,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.milkbox, "week_in_month", $$v)
-                                  },
-                                  expression: "milkbox.week_in_month"
-                                }
-                              },
-                              [
-                                _c("template", { slot: "first" }, [
-                                  _c(
-                                    "option",
-                                    {
-                                      attrs: { disabled: "" },
-                                      domProps: { value: null }
-                                    },
-                                    [_vm._v("-- Please select an option --")]
-                                  )
-                                ])
-                              ],
-                              2
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "date" },
+                        model: {
+                          value: _vm.milkbox.next_delivery_week_start,
+                          callback: function($$v) {
+                            _vm.$set(
+                              _vm.milkbox,
+                              "next_delivery_week_start",
+                              $$v
                             )
-                          ],
-                          1
-                        )
-                      : _c("div", [
-                          _c("p", [
-                            _vm._v(
-                              " " + _vm._s(_vm.milkbox.week_in_month) + " "
+                          },
+                          expression: "milkbox.next_delivery_week_start"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(
+                        " " + _vm._s(_vm.milkbox.next_delivery_week_start) + " "
+                      )
+                    ])
+                  ])
+            ])
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "b-row",
+          {
+            staticClass: "b-row-padding",
+            class: _vm.milkbox.is_active,
+            attrs: { sm: "12" }
+          },
+          [
+            _c("b-col", [
+              _c("label", [_c("b", [_vm._v(" Milkbox Status ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c(
+                        "b-form-select",
+                        {
+                          model: {
+                            value: _vm.milkbox.is_active,
+                            callback: function($$v) {
+                              _vm.$set(_vm.milkbox, "is_active", $$v)
+                            },
+                            expression: "milkbox.is_active"
+                          }
+                        },
+                        [
+                          _c("option", { attrs: { value: "Active" } }, [
+                            _vm._v(" Active ")
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { attrs: { value: "Inactive" } }, [
+                            _vm._v(" Inactive ")
+                          ])
+                        ]
+                      )
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [_vm._v(" " + _vm._s(_vm.milkbox.is_active) + " ")])
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", [
+              _c("label", [_c("b", [_vm._v(" Delivery Day ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c(
+                        "b-form-select",
+                        {
+                          model: {
+                            value: _vm.milkbox.delivery_day,
+                            callback: function($$v) {
+                              _vm.$set(_vm.milkbox, "delivery_day", $$v)
+                            },
+                            expression: "milkbox.delivery_day"
+                          }
+                        },
+                        [
+                          _c("option", [_vm._v("Monday")]),
+                          _vm._v(" "),
+                          _c("option", [_vm._v("Tuesday")]),
+                          _vm._v(" "),
+                          _c("option", [_vm._v("Wednesday")]),
+                          _vm._v(" "),
+                          _c("option", [_vm._v("Thursday")]),
+                          _vm._v(" "),
+                          _c("option", [_vm._v("Friday")])
+                        ]
+                      )
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.milkbox.delivery_day) + " ")
+                    ])
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", [
+              _c("label", [_c("b", [_vm._v(" Frequency ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c(
+                        "b-form-select",
+                        {
+                          attrs: { options: _vm.frequency, type: "number" },
+                          model: {
+                            value: _vm.milkbox.frequency,
+                            callback: function($$v) {
+                              _vm.$set(_vm.milkbox, "frequency", $$v)
+                            },
+                            expression: "milkbox.frequency"
+                          }
+                        },
+                        [
+                          _c("template", { slot: "first" }, [
+                            _c(
+                              "option",
+                              {
+                                attrs: { disabled: "" },
+                                domProps: { value: null }
+                              },
+                              [_vm._v("-- Please select an option --")]
                             )
                           ])
-                        ])
+                        ],
+                        2
+                      )
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [_vm._v(" " + _vm._s(_vm.milkbox.frequency) + " ")])
                   ])
-                : _vm._e()
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "b-row",
-            {
-              staticClass: "b-row-padding",
-              class: _vm.milkbox.is_active,
-              attrs: { sm: "12" }
-            },
-            [
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" 1L Milk Alt Coconut ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.milkbox.milk_1l_alt_coconut,
-                            callback: function($$v) {
-                              _vm.$set(_vm.milkbox, "milk_1l_alt_coconut", $$v)
+            ]),
+            _vm._v(" "),
+            _vm.milkbox.frequency == "Monthly"
+              ? _c("b-col", [
+                  _c("label", [_c("b", [_vm._v(" Week In Month ")])]),
+                  _vm._v(" "),
+                  _vm.editing
+                    ? _c(
+                        "div",
+                        [
+                          _c(
+                            "b-form-select",
+                            {
+                              attrs: {
+                                options: _vm.week_in_month,
+                                type: "number"
+                              },
+                              model: {
+                                value: _vm.milkbox.week_in_month,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.milkbox, "week_in_month", $$v)
+                                },
+                                expression: "milkbox.week_in_month"
+                              }
                             },
-                            expression: "milkbox.milk_1l_alt_coconut"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(
-                          " " + _vm._s(_vm.milkbox.milk_1l_alt_coconut) + " "
-                        )
+                            [
+                              _c("template", { slot: "first" }, [
+                                _c(
+                                  "option",
+                                  {
+                                    attrs: { disabled: "" },
+                                    domProps: { value: null }
+                                  },
+                                  [_vm._v("-- Please select an option --")]
+                                )
+                              ])
+                            ],
+                            2
+                          )
+                        ],
+                        1
+                      )
+                    : _c("div", [
+                        _c("p", [
+                          _vm._v(" " + _vm._s(_vm.milkbox.week_in_month) + " ")
+                        ])
                       ])
-                    ])
-              ]),
+                ])
+              : _vm._e()
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "b-row",
+          {
+            staticClass: "b-row-padding",
+            class: _vm.milkbox.is_active,
+            attrs: { sm: "12" }
+          },
+          [
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" 2L Semi Skimmed ")])]),
               _vm._v(" "),
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" 1L Unsweetened Almond ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.milkbox.milk_1l_alt_unsweetened_almond,
-                            callback: function($$v) {
-                              _vm.$set(
-                                _vm.milkbox,
-                                "milk_1l_alt_unsweetened_almond",
-                                $$v
-                              )
-                            },
-                            expression: "milkbox.milk_1l_alt_unsweetened_almond"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(
-                          " " +
-                            _vm._s(_vm.milkbox.milk_1l_alt_unsweetened_almond) +
-                            " "
-                        )
-                      ])
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.milkbox.semi_skimmed_2l,
+                          callback: function($$v) {
+                            _vm.$set(_vm.milkbox, "semi_skimmed_2l", $$v)
+                          },
+                          expression: "milkbox.semi_skimmed_2l"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.milkbox.semi_skimmed_2l) + " ")
                     ])
-              ]),
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" 2L Skimmed ")])]),
               _vm._v(" "),
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" 1L Almond ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.milkbox.milk_1l_alt_almond,
-                            callback: function($$v) {
-                              _vm.$set(_vm.milkbox, "milk_1l_alt_almond", $$v)
-                            },
-                            expression: "milkbox.milk_1l_alt_almond"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(
-                          " " + _vm._s(_vm.milkbox.milk_1l_alt_almond) + " "
-                        )
-                      ])
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.milkbox.skimmed_2l,
+                          callback: function($$v) {
+                            _vm.$set(_vm.milkbox, "skimmed_2l", $$v)
+                          },
+                          expression: "milkbox.skimmed_2l"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.milkbox.skimmed_2l) + " ")
                     ])
-              ])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "b-row",
-            {
-              staticClass: "b-row-padding",
-              class: _vm.milkbox.is_active,
-              attrs: { sm: "12" }
-            },
-            [
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" 1L Unsweetened Soya ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.milkbox.milk_1l_alt_unsweetened_soya,
-                            callback: function($$v) {
-                              _vm.$set(
-                                _vm.milkbox,
-                                "milk_1l_alt_unsweetened_soya",
-                                $$v
-                              )
-                            },
-                            expression: "milkbox.milk_1l_alt_unsweetened_soya"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(
-                          " " +
-                            _vm._s(_vm.milkbox.milk_1l_alt_unsweetened_soya) +
-                            " "
-                        )
-                      ])
-                    ])
-              ]),
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" 2L Whole ")])]),
               _vm._v(" "),
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" 1L Soya ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.milkbox.milk_1l_alt_soya,
-                            callback: function($$v) {
-                              _vm.$set(_vm.milkbox, "milk_1l_alt_soya", $$v)
-                            },
-                            expression: "milkbox.milk_1l_alt_soya"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(" " + _vm._s(_vm.milkbox.milk_1l_alt_soya) + " ")
-                      ])
-                    ])
-              ]),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.milkbox.whole_2l,
+                          callback: function($$v) {
+                            _vm.$set(_vm.milkbox, "whole_2l", $$v)
+                          },
+                          expression: "milkbox.whole_2l"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [_vm._v(" " + _vm._s(_vm.milkbox.whole_2l) + " ")])
+                  ])
+            ])
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "b-row",
+          {
+            staticClass: "b-row-padding",
+            class: _vm.milkbox.is_active,
+            attrs: { sm: "12" }
+          },
+          [
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" 1L Semi Skimmed ")])]),
               _vm._v(" "),
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" 1L Lactose Free Semi ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.milkbox.milk_1l_alt_lactose_free_semi,
-                            callback: function($$v) {
-                              _vm.$set(
-                                _vm.milkbox,
-                                "milk_1l_alt_lactose_free_semi",
-                                $$v
-                              )
-                            },
-                            expression: "milkbox.milk_1l_alt_lactose_free_semi"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(
-                          " " +
-                            _vm._s(_vm.milkbox.milk_1l_alt_lactose_free_semi) +
-                            " "
-                        )
-                      ])
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.milkbox.semi_skimmed_1l,
+                          callback: function($$v) {
+                            _vm.$set(_vm.milkbox, "semi_skimmed_1l", $$v)
+                          },
+                          expression: "milkbox.semi_skimmed_1l"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.milkbox.semi_skimmed_1l) + " ")
                     ])
-              ])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "b-row",
-            {
-              staticClass: "b-row-padding",
-              class: _vm.milkbox.is_active,
-              attrs: { sm: "12" }
-            },
-            [
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" 2L Semi Skimmed ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.milkbox.semi_skimmed_2l,
-                            callback: function($$v) {
-                              _vm.$set(_vm.milkbox, "semi_skimmed_2l", $$v)
-                            },
-                            expression: "milkbox.semi_skimmed_2l"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(" " + _vm._s(_vm.milkbox.semi_skimmed_2l) + " ")
-                      ])
-                    ])
-              ]),
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" 1L Skimmed ")])]),
               _vm._v(" "),
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" 2L Skimmed ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.milkbox.skimmed_2l,
-                            callback: function($$v) {
-                              _vm.$set(_vm.milkbox, "skimmed_2l", $$v)
-                            },
-                            expression: "milkbox.skimmed_2l"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(" " + _vm._s(_vm.milkbox.skimmed_2l) + " ")
-                      ])
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.milkbox.skimmed_1l,
+                          callback: function($$v) {
+                            _vm.$set(_vm.milkbox, "skimmed_1l", $$v)
+                          },
+                          expression: "milkbox.skimmed_1l"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.milkbox.skimmed_1l) + " ")
                     ])
-              ]),
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" 1L Whole ")])]),
               _vm._v(" "),
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" 2L Whole ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.milkbox.whole_2l,
-                            callback: function($$v) {
-                              _vm.$set(_vm.milkbox, "whole_2l", $$v)
-                            },
-                            expression: "milkbox.whole_2l"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(" " + _vm._s(_vm.milkbox.whole_2l) + " ")
-                      ])
-                    ])
-              ])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "b-row",
-            {
-              staticClass: "b-row-padding",
-              class: _vm.milkbox.is_active,
-              attrs: { id: "bottom-details", sm: "12" }
-            },
-            [
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" 1L Semi Skimmed ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.milkbox.semi_skimmed_1l,
-                            callback: function($$v) {
-                              _vm.$set(_vm.milkbox, "semi_skimmed_1l", $$v)
-                            },
-                            expression: "milkbox.semi_skimmed_1l"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(" " + _vm._s(_vm.milkbox.semi_skimmed_1l) + " ")
-                      ])
-                    ])
-              ]),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.milkbox.whole_1l,
+                          callback: function($$v) {
+                            _vm.$set(_vm.milkbox, "whole_1l", $$v)
+                          },
+                          expression: "milkbox.whole_1l"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [_vm._v(" " + _vm._s(_vm.milkbox.whole_1l) + " ")])
+                  ])
+            ])
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "b-row",
+          {
+            staticClass: "b-row-padding",
+            class: _vm.milkbox.is_active,
+            attrs: { sm: "12" }
+          },
+          [
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" 1L Milk Alt Coconut ")])]),
               _vm._v(" "),
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" 1L Skimmed ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.milkbox.skimmed_1l,
-                            callback: function($$v) {
-                              _vm.$set(_vm.milkbox, "skimmed_1l", $$v)
-                            },
-                            expression: "milkbox.skimmed_1l"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(" " + _vm._s(_vm.milkbox.skimmed_1l) + " ")
-                      ])
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.milkbox.milk_1l_alt_coconut,
+                          callback: function($$v) {
+                            _vm.$set(_vm.milkbox, "milk_1l_alt_coconut", $$v)
+                          },
+                          expression: "milkbox.milk_1l_alt_coconut"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(
+                        " " + _vm._s(_vm.milkbox.milk_1l_alt_coconut) + " "
+                      )
                     ])
-              ]),
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" 1L Unsweetened Almond ")])]),
               _vm._v(" "),
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" 1L Whole ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.milkbox.whole_1l,
-                            callback: function($$v) {
-                              _vm.$set(_vm.milkbox, "whole_1l", $$v)
-                            },
-                            expression: "milkbox.whole_1l"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(" " + _vm._s(_vm.milkbox.whole_1l) + " ")
-                      ])
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.milkbox.milk_1l_alt_unsweetened_almond,
+                          callback: function($$v) {
+                            _vm.$set(
+                              _vm.milkbox,
+                              "milk_1l_alt_unsweetened_almond",
+                              $$v
+                            )
+                          },
+                          expression: "milkbox.milk_1l_alt_unsweetened_almond"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(
+                        " " +
+                          _vm._s(_vm.milkbox.milk_1l_alt_unsweetened_almond) +
+                          " "
+                      )
                     ])
-              ])
-            ],
-            1
-          )
-        ],
-        1
-      )
-    ])
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" 1L Almond ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.milkbox.milk_1l_alt_almond,
+                          callback: function($$v) {
+                            _vm.$set(_vm.milkbox, "milk_1l_alt_almond", $$v)
+                          },
+                          expression: "milkbox.milk_1l_alt_almond"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.milkbox.milk_1l_alt_almond) + " ")
+                    ])
+                  ])
+            ])
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "b-row",
+          {
+            staticClass: "b-row-padding",
+            class: _vm.milkbox.is_active,
+            attrs: { sm: "12" }
+          },
+          [
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" 1L Unsweetened Soya ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.milkbox.milk_1l_alt_unsweetened_soya,
+                          callback: function($$v) {
+                            _vm.$set(
+                              _vm.milkbox,
+                              "milk_1l_alt_unsweetened_soya",
+                              $$v
+                            )
+                          },
+                          expression: "milkbox.milk_1l_alt_unsweetened_soya"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(
+                        " " +
+                          _vm._s(_vm.milkbox.milk_1l_alt_unsweetened_soya) +
+                          " "
+                      )
+                    ])
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" 1L Soya ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.milkbox.milk_1l_alt_soya,
+                          callback: function($$v) {
+                            _vm.$set(_vm.milkbox, "milk_1l_alt_soya", $$v)
+                          },
+                          expression: "milkbox.milk_1l_alt_soya"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.milkbox.milk_1l_alt_soya) + " ")
+                    ])
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" 1L Oat ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.milkbox.milk_1l_alt_oat,
+                          callback: function($$v) {
+                            _vm.$set(_vm.milkbox, "milk_1l_alt_oat", $$v)
+                          },
+                          expression: "milkbox.milk_1l_alt_oat"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.milkbox.milk_1l_alt_oat) + " ")
+                    ])
+                  ])
+            ])
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "b-row",
+          {
+            staticClass: "b-row-padding",
+            class: _vm.milkbox.is_active,
+            attrs: { id: "bottom-details", sm: "12" }
+          },
+          [
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" 1L Rice ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.milkbox.milk_1l_alt_rice,
+                          callback: function($$v) {
+                            _vm.$set(_vm.milkbox, "milk_1l_alt_rice", $$v)
+                          },
+                          expression: "milkbox.milk_1l_alt_rice"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.milkbox.milk_1l_alt_rice) + " ")
+                    ])
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" 1L Cashew ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.milkbox.milk_1l_alt_cashew,
+                          callback: function($$v) {
+                            _vm.$set(_vm.milkbox, "milk_1l_alt_cashew", $$v)
+                          },
+                          expression: "milkbox.milk_1l_alt_cashew"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.milkbox.milk_1l_alt_cashew) + " ")
+                    ])
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" 1L Lactose Free Semi ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.milkbox.milk_1l_alt_lactose_free_semi,
+                          callback: function($$v) {
+                            _vm.$set(
+                              _vm.milkbox,
+                              "milk_1l_alt_lactose_free_semi",
+                              $$v
+                            )
+                          },
+                          expression: "milkbox.milk_1l_alt_lactose_free_semi"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(
+                        " " +
+                          _vm._s(_vm.milkbox.milk_1l_alt_lactose_free_semi) +
+                          " "
+                      )
+                    ])
+                  ])
+            ])
+          ],
+          1
+        )
+      ],
+      1
+    )
   ])
 }
 var staticRenderFns = []
@@ -82090,7 +82049,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "\n#milkboxes {\n  margin-top: 20px;\n  text-align: center;\n}\n#edit-save-buttons {\n  padding-bottom: 10px;\n}\n#milk-details .b-row-padding {\n  padding-bottom: 5px;\n}\n#top-details {\n  padding-top: 10px;\n  border-top-left-radius: 10px;\n  border-top-right-radius: 10px;\n}\n#bottom-details {\n  padding-bottom: 30px;\n  border-bottom-left-radius: 10px;\n  border-bottom-right-radius: 10px;\n}\n.add-new-close {\n  margin-bottom: 20px;\n}\n.Active {\n  background-color: rgba(116, 244, 66, 0.5);\n}\n.Inactive {\n  background-color: rgba(201, 16, 16, 0.5);\n}\n.milkbox {\n  padding-left: 0;\n}\n.milkbox li {\n    list-style: none;\n}\n.milkbox:after {\n  content: \"\";\n  /* This is necessary for the pseudo element to work. */\n  display: block;\n  /* This will put the pseudo element on its own line. */\n  margin: 0 auto;\n  /* This will center the border. */\n  width: 70%;\n  /* Change this to whatever width you want. */\n  padding-top: 20px;\n  /* This creates some space between the element and the border. */\n  border-bottom: 1px solid #636b6f;\n  /* This creates the border. Replace black with whatever color you want. */\n}\n", ""]);
+exports.push([module.i, "\n#milkboxes {\n  margin-top: 20px;\n  text-align: center;\n}\n#milkboxes::before {\n  content: \"\";\n  /* This is necessary for the pseudo element to work. */\n  display: block;\n  /* This will put the pseudo element on its own line. */\n  margin: 0 auto;\n  /* This will center the border. */\n  width: 70%;\n  /* Change this to whatever width you want. */\n  padding-bottom: 20px;\n  /* This creates some space between the element and the border. */\n  border-top: 1px solid #636b6f;\n  /* This creates the border. Replace black with whatever color you want. */\n}\n#edit-save-buttons {\n  padding-bottom: 10px;\n}\n#milk-details .b-row-padding {\n  padding-bottom: 5px;\n}\n#top-details {\n  padding-top: 10px;\n  border-top-left-radius: 10px;\n  border-top-right-radius: 10px;\n}\n#bottom-details {\n  padding-bottom: 30px;\n  border-bottom-left-radius: 10px;\n  border-bottom-right-radius: 10px;\n}\n.add-new-close {\n  margin-bottom: 20px;\n}\n.Active {\n  background-color: rgba(116, 244, 66, 0.5);\n}\n.Inactive {\n  background-color: rgba(201, 16, 16, 0.5);\n}\n.milkbox {\n  padding-top: 20px;\n  padding-left: 0;\n}\n.milkbox li {\n    list-style: none;\n}\n.milkbox:after {\n  content: \"\";\n  /* This is necessary for the pseudo element to work. */\n  display: block;\n  /* This will put the pseudo element on its own line. */\n  margin: 0 auto;\n  /* This will center the border. */\n  width: 70%;\n  /* Change this to whatever width you want. */\n  padding-top: 20px;\n  /* This creates some space between the element and the border. */\n  border-bottom: 1px solid #636b6f;\n  /* This creates the border. Replace black with whatever color you want. */\n}\n", ""]);
 
 // exports
 
@@ -82101,239 +82060,6 @@ exports.push([module.i, "\n#milkboxes {\n  margin-top: 20px;\n  text-align: cent
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -82587,6 +82313,7 @@ var render = function() {
             _vm._l(this.milkboxes, function(milkbox) {
               return _c("milkbox", {
                 key: milkbox.id,
+                staticClass: "milkbox",
                 attrs: { milkbox: milkbox }
               })
             })
@@ -82887,7 +82614,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             form: {
                 is_active: 'Active',
                 fruit_partner_id: 1,
-                company_id: null, // If this is created by Frosh, how are they going to select the company to attach the order to?  A typed filter of a long list may be the best way.
+                company_details_id: null, // If this is created by Frosh, how are they going to select the company to attach the order to?  A typed filter of a long list may be the best way.
                 route_id: null, // This will also need a way to filter from all possible routes, however once a company has been confirmed, the options could easily fit on a dropdown.
                 delivery_day: '', // According to the docs this must be an array reference, however it seems to me this is happening anyway?  Interesting...
                 type: null, // Whilst not currently in use, this will determine between standard, berries and tailored, with tailored being the only one which can be edited (probably).
@@ -82940,7 +82667,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             evt.preventDefault();
             /* Reset our form values */
 
-            this.form.company_id = null;
+            this.form.company_details_id = null;
             this.form.route_id = null;
             this.form.delivery_day = '';
             this.form.frequency = '';
@@ -83099,11 +82826,11 @@ var render = function() {
                             required: ""
                           },
                           model: {
-                            value: _vm.form.company_id,
+                            value: _vm.form.company_details_id,
                             callback: function($$v) {
-                              _vm.$set(_vm.form, "company_id", $$v)
+                              _vm.$set(_vm.form, "company_details_id", $$v)
                             },
-                            expression: "form.company_id"
+                            expression: "form.company_details_id"
                           }
                         },
                         [
@@ -83128,11 +82855,11 @@ var render = function() {
                             required: ""
                           },
                           model: {
-                            value: _vm.form.company_id,
+                            value: _vm.form.company_details_id,
                             callback: function($$v) {
-                              _vm.$set(_vm.form, "company_id", $$v)
+                              _vm.$set(_vm.form, "company_details_id", $$v)
                             },
-                            expression: "form.company_id"
+                            expression: "form.company_details_id"
                           }
                         },
                         [
@@ -83152,7 +82879,9 @@ var render = function() {
                   _vm._v(" "),
                   _c("p", { staticStyle: { "padding-top": "10px" } }, [
                     _vm._v(
-                      " Selected Company: " + _vm._s(_vm.form.company_id) + " "
+                      " Selected Company: " +
+                        _vm._s(_vm.form.company_details_id) +
+                        " "
                     )
                   ])
                 ],
@@ -83992,7 +83721,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             console.log(route.id);
             axios.put('api/company-route/update/' + route.id, {
                 id: route.id,
-                company_id: route.company_id,
+                company_details_id: route.company_details_id,
                 is_active: route.is_active,
                 fruit_crates: route.fruit_crates,
                 fruit_boxes: route.fruit_boxes,
@@ -84001,7 +83730,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 drinks: route.drinks,
                 other: route.other,
                 delivery_day: route.delivery_day,
-                assigned_route: route.assigned_route,
+                assigned_route_id: route.assigned_route_id,
                 position_on_route: route.position_on_route,
                 postcode: route.postcode,
                 address: route.address,
@@ -84037,585 +83766,572 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("ul", { staticClass: "routes" }, [
-      _c(
-        "div",
-        { attrs: { id: "edit-save-buttons" } },
-        [
-          _c("h4", [_vm._v(" " + _vm._s(_vm.route.route_name) + " ")]),
-          _vm._v(" "),
-          _c("p", [
-            _vm._v(
-              " " +
-                _vm._s(_vm.route.delivery_day) +
-                " - " +
-                _vm._s(_vm.route.is_active) +
-                " "
-            )
-          ]),
-          _vm._v(" "),
-          _c(
-            "b-button",
-            {
-              attrs: { variant: "primary" },
-              on: {
-                click: function($event) {
-                  _vm.showDetails()
-                }
-              }
-            },
-            [_vm._v(" Details ")]
-          ),
-          _vm._v(" "),
-          _c(
-            "b-button",
-            {
-              attrs: { variant: "warning" },
-              on: {
-                click: function($event) {
-                  _vm.enableEdit()
-                }
-              }
-            },
-            [_vm._v(" Edit ")]
-          ),
-          _vm._v(" "),
-          _vm.editing
-            ? _c(
-                "b-button",
-                {
-                  staticClass: "btn btn-success",
-                  on: {
-                    click: function($event) {
-                      _vm.updateRouteInfo(_vm.route)
-                    }
-                  }
-                },
-                [_vm._v(" Save ")]
-              )
-            : _vm._e(),
-          _vm._v(" "),
-          _vm.editing
-            ? _c(
-                "b-button",
-                {
-                  attrs: { variant: "danger" },
-                  on: {
-                    click: function($event) {
-                      _vm.deleteRoute(_vm.route)
-                    }
-                  }
-                },
-                [_vm._v(" Delete ")]
-              )
-            : _vm._e()
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          directives: [
-            {
-              name: "show",
-              rawName: "v-show",
-              value: _vm.details,
-              expression: "details"
-            }
-          ],
-          attrs: { id: "route-details" }
-        },
-        [
-          _c(
-            "b-row",
-            {
-              staticClass: "b-row-padding",
-              class: _vm.route.is_active,
-              attrs: { id: "top-details", sm: "12" }
-            },
-            [
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Route ID ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          model: {
-                            value: _vm.route.id,
-                            callback: function($$v) {
-                              _vm.$set(_vm.route, "id", $$v)
-                            },
-                            expression: "route.id"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [_vm._v(" " + _vm._s(_vm.route.id) + " ")])
-                    ])
-              ]),
-              _vm._v(" "),
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Company ID ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          model: {
-                            value: _vm.route.company_id,
-                            callback: function($$v) {
-                              _vm.$set(_vm.route, "company_id", $$v)
-                            },
-                            expression: "route.company_id"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(" " + _vm._s(_vm.route.company_id) + " ")
-                      ])
-                    ])
-              ]),
-              _vm._v(" "),
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Route Status ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c(
-                          "b-form-select",
-                          {
-                            model: {
-                              value: _vm.route.is_active,
-                              callback: function($$v) {
-                                _vm.$set(_vm.route, "is_active", $$v)
-                              },
-                              expression: "route.is_active"
-                            }
-                          },
-                          [
-                            _c("option", { attrs: { value: "Active" } }, [
-                              _vm._v(" Active ")
-                            ]),
-                            _vm._v(" "),
-                            _c("option", { attrs: { value: "Inactive" } }, [
-                              _vm._v(" Inactive ")
-                            ])
-                          ]
-                        )
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [_vm._v(" " + _vm._s(_vm.route.is_active) + " ")])
-                    ])
-              ])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "b-row",
-            {
-              staticClass: "b-row-padding",
-              class: _vm.route.is_active,
-              attrs: { sm: "12" }
-            },
-            [
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Route Name ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          model: {
-                            value: _vm.route.route_name,
-                            callback: function($$v) {
-                              _vm.$set(_vm.route, "route_name", $$v)
-                            },
-                            expression: "route.route_name"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(" " + _vm._s(_vm.route.route_name) + " ")
-                      ])
-                    ])
-              ]),
-              _vm._v(" "),
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Fruit Crates ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.route.fruit_crates,
-                            callback: function($$v) {
-                              _vm.$set(_vm.route, "fruit_crates", $$v)
-                            },
-                            expression: "route.fruit_crates"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(" " + _vm._s(_vm.route.fruit_crates) + " ")
-                      ])
-                    ])
-              ]),
-              _vm._v(" "),
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Fruit Boxes ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.route.fruit_boxes,
-                            callback: function($$v) {
-                              _vm.$set(_vm.route, "fruit_boxes", $$v)
-                            },
-                            expression: "route.fruit_boxes"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(" " + _vm._s(_vm.route.fruit_boxes) + " ")
-                      ])
-                    ])
-              ])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "b-row",
-            {
-              staticClass: "b-row-padding",
-              class: _vm.route.is_active,
-              attrs: { sm: "12" }
-            },
-            [
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Snacks ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.route.snacks,
-                            callback: function($$v) {
-                              _vm.$set(_vm.route, "snacks", $$v)
-                            },
-                            expression: "route.snacks"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [_vm._v(" " + _vm._s(_vm.route.snacks) + " ")])
-                    ])
-              ]),
-              _vm._v(" "),
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Drinks ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.route.drinks,
-                            callback: function($$v) {
-                              _vm.$set(_vm.route, "drinks", $$v)
-                            },
-                            expression: "route.drinks"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [_vm._v(" " + _vm._s(_vm.route.drinks) + " ")])
-                    ])
-              ]),
-              _vm._v(" "),
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Other ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-textarea", {
-                          attrs: { rows: "3", "max-rows": "6" },
-                          model: {
-                            value: _vm.route.other,
-                            callback: function($$v) {
-                              _vm.$set(_vm.route, "other", $$v)
-                            },
-                            expression: "route.other"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [_vm._v(" " + _vm._s(_vm.route.other) + " ")])
-                    ])
-              ])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "b-row",
-            {
-              staticClass: "b-row-padding",
-              class: _vm.route.is_active,
-              attrs: { sm: "12" }
-            },
-            [
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Delivery Day ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c(
-                          "b-form-select",
-                          {
-                            model: {
-                              value: _vm.route.delivery_day,
-                              callback: function($$v) {
-                                _vm.$set(_vm.route, "delivery_day", $$v)
-                              },
-                              expression: "route.delivery_day"
-                            }
-                          },
-                          [
-                            _c("option", [_vm._v("Monday")]),
-                            _vm._v(" "),
-                            _c("option", [_vm._v("Tuesday")]),
-                            _vm._v(" "),
-                            _c("option", [_vm._v("Wednesday")]),
-                            _vm._v(" "),
-                            _c("option", [_vm._v("Thursday")]),
-                            _vm._v(" "),
-                            _c("option", [_vm._v("Friday")])
-                          ]
-                        )
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(" " + _vm._s(_vm.route.delivery_day) + " ")
-                      ])
-                    ])
-              ]),
-              _vm._v(" "),
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Assigned Route ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c(
-                          "b-form-select",
-                          {
-                            model: {
-                              value: _vm.route.assigned_route,
-                              callback: function($$v) {
-                                _vm.$set(_vm.route, "assigned_route", $$v)
-                              },
-                              expression: "route.assigned_route"
-                            }
-                          },
-                          _vm._l(
-                            _vm.$store.state.assigned_routes_list,
-                            function(assigned_route) {
-                              return _c(
-                                "option",
-                                { domProps: { value: assigned_route.id } },
-                                [
-                                  _vm._v(
-                                    " " + _vm._s(assigned_route.name) + " "
-                                  )
-                                ]
-                              )
-                            }
-                          )
-                        )
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(" " + _vm._s(_vm.route.assigned_route_id) + " ")
-                      ])
-                    ])
-              ]),
-              _vm._v(" "),
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Position On Route ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "number" },
-                          model: {
-                            value: _vm.route.position_on_route,
-                            callback: function($$v) {
-                              _vm.$set(_vm.route, "position_on_route", $$v)
-                            },
-                            expression: "route.position_on_route"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(" " + _vm._s(_vm.route.position_on_route) + " ")
-                      ])
-                    ])
-              ])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "b-row",
-            {
-              staticClass: "b-row-padding",
-              class: _vm.route.is_active,
-              attrs: { id: "bottom-details", sm: "12" }
-            },
-            [
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Postcode ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-input", {
-                          attrs: { type: "text" },
-                          model: {
-                            value: _vm.route.postcode,
-                            callback: function($$v) {
-                              _vm.$set(_vm.route, "postcode", $$v)
-                            },
-                            expression: "route.postcode"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [_vm._v(" " + _vm._s(_vm.route.postcode) + " ")])
-                    ])
-              ]),
-              _vm._v(" "),
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Address ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-textarea", {
-                          attrs: { type: "text", rows: "3", "max-rows": "6" },
-                          model: {
-                            value: _vm.route.address,
-                            callback: function($$v) {
-                              _vm.$set(_vm.route, "address", $$v)
-                            },
-                            expression: "route.address"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [_vm._v(" " + _vm._s(_vm.route.address) + " ")])
-                    ])
-              ]),
-              _vm._v(" "),
-              _c("b-col", { staticClass: "col-sm-4" }, [
-                _c("label", [_c("b", [_vm._v(" Delivery Information ")])]),
-                _vm._v(" "),
-                _vm.editing
-                  ? _c(
-                      "div",
-                      [
-                        _c("b-form-textarea", {
-                          attrs: { type: "text", rows: "3", "max-rows": "6" },
-                          model: {
-                            value: _vm.route.delivery_information,
-                            callback: function($$v) {
-                              _vm.$set(_vm.route, "delivery_information", $$v)
-                            },
-                            expression: "route.delivery_information"
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  : _c("div", [
-                      _c("p", [
-                        _vm._v(
-                          " " + _vm._s(_vm.route.delivery_information) + " "
-                        )
-                      ])
-                    ])
-              ])
-            ],
-            1
+  return _c("div", { staticClass: "routes" }, [
+    _c(
+      "div",
+      { attrs: { id: "edit-save-buttons" } },
+      [
+        _c("h4", [_vm._v(" " + _vm._s(_vm.route.route_name) + " ")]),
+        _vm._v(" "),
+        _c("p", [
+          _vm._v(
+            " " +
+              _vm._s(_vm.route.delivery_day) +
+              " - " +
+              _vm._s(_vm.route.is_active) +
+              " "
           )
+        ]),
+        _vm._v(" "),
+        _c(
+          "b-button",
+          {
+            attrs: { variant: "primary" },
+            on: {
+              click: function($event) {
+                _vm.showDetails()
+              }
+            }
+          },
+          [_vm._v(" Details ")]
+        ),
+        _vm._v(" "),
+        _c(
+          "b-button",
+          {
+            attrs: { variant: "warning" },
+            on: {
+              click: function($event) {
+                _vm.enableEdit()
+              }
+            }
+          },
+          [_vm._v(" Edit ")]
+        ),
+        _vm._v(" "),
+        _vm.editing
+          ? _c(
+              "b-button",
+              {
+                staticClass: "btn btn-success",
+                on: {
+                  click: function($event) {
+                    _vm.updateRouteInfo(_vm.route)
+                  }
+                }
+              },
+              [_vm._v(" Save ")]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.editing
+          ? _c(
+              "b-button",
+              {
+                attrs: { variant: "danger" },
+                on: {
+                  click: function($event) {
+                    _vm.deleteRoute(_vm.route)
+                  }
+                }
+              },
+              [_vm._v(" Delete ")]
+            )
+          : _vm._e()
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.details,
+            expression: "details"
+          }
         ],
-        1
-      )
-    ])
+        attrs: { id: "route-details" }
+      },
+      [
+        _c(
+          "b-row",
+          {
+            staticClass: "b-row-padding",
+            class: _vm.route.is_active,
+            attrs: { id: "top-details", sm: "12" }
+          },
+          [
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Route ID ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        model: {
+                          value: _vm.route.id,
+                          callback: function($$v) {
+                            _vm.$set(_vm.route, "id", $$v)
+                          },
+                          expression: "route.id"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [_vm._v(" " + _vm._s(_vm.route.id) + " ")])
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Company ID ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        model: {
+                          value: _vm.route.company_details_id,
+                          callback: function($$v) {
+                            _vm.$set(_vm.route, "company_details_id", $$v)
+                          },
+                          expression: "route.company_details_id"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.route.company_details_id) + " ")
+                    ])
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Route Status ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c(
+                        "b-form-select",
+                        {
+                          model: {
+                            value: _vm.route.is_active,
+                            callback: function($$v) {
+                              _vm.$set(_vm.route, "is_active", $$v)
+                            },
+                            expression: "route.is_active"
+                          }
+                        },
+                        [
+                          _c("option", { attrs: { value: "Active" } }, [
+                            _vm._v(" Active ")
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { attrs: { value: "Inactive" } }, [
+                            _vm._v(" Inactive ")
+                          ])
+                        ]
+                      )
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [_vm._v(" " + _vm._s(_vm.route.is_active) + " ")])
+                  ])
+            ])
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "b-row",
+          {
+            staticClass: "b-row-padding",
+            class: _vm.route.is_active,
+            attrs: { sm: "12" }
+          },
+          [
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Route Name ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        model: {
+                          value: _vm.route.route_name,
+                          callback: function($$v) {
+                            _vm.$set(_vm.route, "route_name", $$v)
+                          },
+                          expression: "route.route_name"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [_vm._v(" " + _vm._s(_vm.route.route_name) + " ")])
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Fruit Crates ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.route.fruit_crates,
+                          callback: function($$v) {
+                            _vm.$set(_vm.route, "fruit_crates", $$v)
+                          },
+                          expression: "route.fruit_crates"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.route.fruit_crates) + " ")
+                    ])
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Fruit Boxes ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.route.fruit_boxes,
+                          callback: function($$v) {
+                            _vm.$set(_vm.route, "fruit_boxes", $$v)
+                          },
+                          expression: "route.fruit_boxes"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [_vm._v(" " + _vm._s(_vm.route.fruit_boxes) + " ")])
+                  ])
+            ])
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "b-row",
+          {
+            staticClass: "b-row-padding",
+            class: _vm.route.is_active,
+            attrs: { sm: "12" }
+          },
+          [
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Snacks ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.route.snacks,
+                          callback: function($$v) {
+                            _vm.$set(_vm.route, "snacks", $$v)
+                          },
+                          expression: "route.snacks"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [_vm._v(" " + _vm._s(_vm.route.snacks) + " ")])
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Drinks ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.route.drinks,
+                          callback: function($$v) {
+                            _vm.$set(_vm.route, "drinks", $$v)
+                          },
+                          expression: "route.drinks"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [_vm._v(" " + _vm._s(_vm.route.drinks) + " ")])
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Other ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-textarea", {
+                        attrs: { rows: "3", "max-rows": "6" },
+                        model: {
+                          value: _vm.route.other,
+                          callback: function($$v) {
+                            _vm.$set(_vm.route, "other", $$v)
+                          },
+                          expression: "route.other"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [_vm._v(" " + _vm._s(_vm.route.other) + " ")])
+                  ])
+            ])
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "b-row",
+          {
+            staticClass: "b-row-padding",
+            class: _vm.route.is_active,
+            attrs: { sm: "12" }
+          },
+          [
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Delivery Day ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c(
+                        "b-form-select",
+                        {
+                          model: {
+                            value: _vm.route.delivery_day,
+                            callback: function($$v) {
+                              _vm.$set(_vm.route, "delivery_day", $$v)
+                            },
+                            expression: "route.delivery_day"
+                          }
+                        },
+                        [
+                          _c("option", [_vm._v("Monday")]),
+                          _vm._v(" "),
+                          _c("option", [_vm._v("Tuesday")]),
+                          _vm._v(" "),
+                          _c("option", [_vm._v("Wednesday")]),
+                          _vm._v(" "),
+                          _c("option", [_vm._v("Thursday")]),
+                          _vm._v(" "),
+                          _c("option", [_vm._v("Friday")])
+                        ]
+                      )
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.route.delivery_day) + " ")
+                    ])
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Assigned Route ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c(
+                        "b-form-select",
+                        {
+                          model: {
+                            value: _vm.route.assigned_route_id,
+                            callback: function($$v) {
+                              _vm.$set(_vm.route, "assigned_route_id", $$v)
+                            },
+                            expression: "route.assigned_route_id"
+                          }
+                        },
+                        _vm._l(_vm.$store.state.assigned_routes_list, function(
+                          assigned_route
+                        ) {
+                          return _c(
+                            "option",
+                            { domProps: { value: assigned_route.id } },
+                            [_vm._v(" " + _vm._s(assigned_route.name) + " ")]
+                          )
+                        })
+                      )
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.route.assigned_route_id) + " ")
+                    ])
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Position On Route ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.route.position_on_route,
+                          callback: function($$v) {
+                            _vm.$set(_vm.route, "position_on_route", $$v)
+                          },
+                          expression: "route.position_on_route"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.route.position_on_route) + " ")
+                    ])
+                  ])
+            ])
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "b-row",
+          {
+            staticClass: "b-row-padding",
+            class: _vm.route.is_active,
+            attrs: { id: "bottom-details", sm: "12" }
+          },
+          [
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Postcode ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "text" },
+                        model: {
+                          value: _vm.route.postcode,
+                          callback: function($$v) {
+                            _vm.$set(_vm.route, "postcode", $$v)
+                          },
+                          expression: "route.postcode"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [_vm._v(" " + _vm._s(_vm.route.postcode) + " ")])
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Address ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-textarea", {
+                        attrs: { type: "text", rows: "3", "max-rows": "6" },
+                        model: {
+                          value: _vm.route.address,
+                          callback: function($$v) {
+                            _vm.$set(_vm.route, "address", $$v)
+                          },
+                          expression: "route.address"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [_vm._v(" " + _vm._s(_vm.route.address) + " ")])
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Delivery Information ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-textarea", {
+                        attrs: { type: "text", rows: "3", "max-rows": "6" },
+                        model: {
+                          value: _vm.route.delivery_information,
+                          callback: function($$v) {
+                            _vm.$set(_vm.route, "delivery_information", $$v)
+                          },
+                          expression: "route.delivery_information"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.route.delivery_information) + " ")
+                    ])
+                  ])
+            ])
+          ],
+          1
+        )
+      ],
+      1
+    )
   ])
 }
 var staticRenderFns = []
@@ -84714,7 +84430,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "\n#routes {\n    margin-top: 20px;\n    text-align: center;\n}\n.routes {\npadding-left: 0;\n}\n.routes:after {\n    content: \"\"; /* This is necessary for the pseudo element to work. */\n    display: block; /* This will put the pseudo element on its own line. */\n    margin: 0 auto; /* This will center the border. */\n    width: 70%; /* Change this to whatever width you want. */\n    padding-top: 20px; /* This creates some space between the element and the border. */\n    border-bottom: 1px solid #636b6f; /* This creates the border. Replace black with whatever color you want. */\n}\n\n", ""]);
+exports.push([module.i, "\n#routes {\n    margin-top: 20px;\n    text-align: center;\n}\n#routes::before {\n    content: \"\"; /* This is necessary for the pseudo element to work. */\n    display: block; /* This will put the pseudo element on its own line. */\n    margin: 0 auto; /* This will center the border. */\n    width: 70%; /* Change this to whatever width you want. */\n    padding-bottom: 20px; /* This creates some space between the element and the border. */\n    border-top: 1px solid #636b6f; /* This creates the border. Replace black with whatever color you want. */\n}\n /* named box for clarity as it's offering the same styling as the fruit, milk, snack, drink and otherboxes. */\n.routebox { \n    padding-top: 20px;\n    padding-left: 0;\nli {\n    list-style: none;\n}\n}\n.routes {\npadding-left: 0;\n}\n.routes:after {\n    content: \"\"; /* This is necessary for the pseudo element to work. */\n    display: block; /* This will put the pseudo element on its own line. */\n    margin: 0 auto; /* This will center the border. */\n    width: 70%; /* Change this to whatever width you want. */\n    padding-top: 20px; /* This creates some space between the element and the border. */\n    border-bottom: 1px solid #636b6f; /* This creates the border. Replace black with whatever color you want. */\n}\n\n", ""]);
 
 // exports
 
@@ -84725,6 +84441,22 @@ exports.push([module.i, "\n#routes {\n    margin-top: 20px;\n    text-align: cen
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -84795,6 +84527,7 @@ var render = function() {
             _vm._l(this.routes, function(route) {
               return _c("company-route", {
                 key: route.id,
+                staticClass: "routebox",
                 attrs: { route: route }
               })
             })
@@ -86997,7 +86730,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "\n#snackboxes {\n  margin-top: 20px;\n  text-align: center;\n}\n#edit-save-buttons {\n  padding-bottom: 10px;\n}\n#edit-save-buttons h4 {\n    display: inline;\n}\n.Active {\n  background-color: rgba(116, 244, 66, 0.5);\n}\n.Inactive {\n  background-color: rgba(201, 16, 16, 0.5);\n}\n.snackbox {\n  padding-top: 20px;\n  padding-left: 0;\n}\n.snackbox li {\n    list-style: none;\n}\n.snackbox:after {\n  content: \"\";\n  /* This is necessary for the pseudo element to work. */\n  display: block;\n  /* This will put the pseudo element on its own line. */\n  margin: 0 auto;\n  /* This will center the border. */\n  width: 70%;\n  /* Change this to whatever width you want. */\n  padding-top: 20px;\n  /* This creates some space between the element and the border. */\n  border-bottom: 1px solid #636b6f;\n  /* This creates the border. Replace black with whatever color you want. */\n}\n", ""]);
+exports.push([module.i, "\n#snackboxes {\n  margin-top: 20px;\n  text-align: center;\n}\n#snackboxes::before {\n  content: \"\";\n  /* This is necessary for the pseudo element to work. */\n  display: block;\n  /* This will put the pseudo element on its own line. */\n  margin: 0 auto;\n  /* This will center the border. */\n  width: 70%;\n  /* Change this to whatever width you want. */\n  padding-bottom: 20px;\n  /* This creates some space between the element and the border. */\n  border-top: 1px solid #636b6f;\n  /* This creates the border. Replace black with whatever color you want. */\n}\n#edit-save-buttons {\n  padding-bottom: 10px;\n}\n#edit-save-buttons h4 {\n    display: inline;\n}\n.Active {\n  background-color: rgba(116, 244, 66, 0.5);\n}\n.Inactive {\n  background-color: rgba(201, 16, 16, 0.5);\n}\n.snackbox {\n  padding-top: 20px;\n  padding-left: 0;\n}\n.snackbox li {\n    list-style: none;\n}\n.snackbox:after {\n  content: \"\";\n  /* This is necessary for the pseudo element to work. */\n  display: block;\n  /* This will put the pseudo element on its own line. */\n  margin: 0 auto;\n  /* This will center the border. */\n  width: 70%;\n  /* Change this to whatever width you want. */\n  padding-top: 20px;\n  /* This creates some space between the element and the border. */\n  border-bottom: 1px solid #636b6f;\n  /* This creates the border. Replace black with whatever color you want. */\n}\n", ""]);
 
 // exports
 
@@ -87008,6 +86741,14 @@ exports.push([module.i, "\n#snackboxes {\n  margin-top: 20px;\n  text-align: cen
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -87486,8 +87227,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         creatingWholesaleSnackbox: function creatingWholesaleSnackbox() {
             if (this.createWholesaleSnackbox == true) {
                 this.createWholesaleSnackbox = false;
+                this.type = null;
             } else {
                 this.createWholesaleSnackbox = true;
+                this.addNewType('wholesale');
+                this.type = 'wholesale';
             }
         },
 
@@ -87502,7 +87246,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         saveCompanySnackbox: function saveCompanySnackbox() {
 
             axios.post('/api/snackboxes/save', {
-                company_id: this.selected_company,
+                company_details_id: this.selected_company,
                 details: [this.delivered_by, this.no_of_boxes, this.type, this.delivery_day, this.frequency, this.week_in_month, this.next_delivery_week],
                 order: this.$store.state.snackbox,
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv' }
@@ -87737,24 +87481,26 @@ var render = function() {
         "b-row",
         { staticClass: "order-options" },
         [
-          _c(
-            "b-col",
-            [
-              _c("label", [_vm._v(" No. of Boxes ")]),
-              _vm._v(" "),
-              _c("b-form-input", {
-                attrs: { type: "number", size: "sm" },
-                model: {
-                  value: _vm.no_of_boxes,
-                  callback: function($$v) {
-                    _vm.no_of_boxes = $$v
-                  },
-                  expression: "no_of_boxes"
-                }
-              })
-            ],
-            1
-          ),
+          !_vm.createWholesaleSnackbox
+            ? _c(
+                "b-col",
+                [
+                  _c("label", [_vm._v(" No. of Boxes ")]),
+                  _vm._v(" "),
+                  _c("b-form-input", {
+                    attrs: { type: "number", size: "sm" },
+                    model: {
+                      value: _vm.no_of_boxes,
+                      callback: function($$v) {
+                        _vm.no_of_boxes = $$v
+                      },
+                      expression: "no_of_boxes"
+                    }
+                  })
+                ],
+                1
+              )
+            : _vm._e(),
           _vm._v(" "),
           _c(
             "b-col",
@@ -88865,36 +88611,9 @@ var render = function() {
                     : _c("div", [
                         _c("p", [
                           _vm._v(
-                            " " + _vm._s(_vm.drinkbox[0].delivered_by_id) + " "
-                          )
-                        ])
-                      ])
-                ]),
-                _vm._v(" "),
-                _c("b-col", [
-                  _c("label", [_c("b", [_vm._v(" No. Of Boxes ")])]),
-                  _vm._v(" "),
-                  _vm.editing
-                    ? _c(
-                        "div",
-                        [
-                          _c("b-form-input", {
-                            attrs: { type: "number" },
-                            model: {
-                              value: _vm.drinkbox[0].no_of_boxes,
-                              callback: function($$v) {
-                                _vm.$set(_vm.drinkbox[0], "no_of_boxes", $$v)
-                              },
-                              expression: "drinkbox[0].no_of_boxes"
-                            }
-                          })
-                        ],
-                        1
-                      )
-                    : _c("div", [
-                        _c("p", [
-                          _vm._v(
-                            " " + _vm._s(_vm.drinkbox[0].no_of_boxes) + " "
+                            " " +
+                              _vm._s(_vm.drinkbox[0].fruit_partner_name) +
+                              " "
                           )
                         ])
                       ])
@@ -89329,7 +89048,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "\n#drinkboxes[data-v-3edcf83f] {\n  margin-top: 20px;\n  text-align: center;\n}\n", ""]);
+exports.push([module.i, "\n#drinkboxes[data-v-3edcf83f] {\n  margin-top: 20px;\n  text-align: center;\n}\n#drinkboxes[data-v-3edcf83f]::before {\n  content: \"\";\n  /* This is necessary for the pseudo element to work. */\n  display: block;\n  /* This will put the pseudo element on its own line. */\n  margin: 0 auto;\n  /* This will center the border. */\n  width: 70%;\n  /* Change this to whatever width you want. */\n  padding-bottom: 20px;\n  /* This creates some space between the element and the border. */\n  border-top: 1px solid #636b6f;\n  /* This creates the border. Replace black with whatever color you want. */\n}\n.drinkbox[data-v-3edcf83f] {\n  padding-top: 20px;\n  padding-left: 0;\n}\n.drinkbox li[data-v-3edcf83f] {\n    list-style: none;\n}\n.drinkbox[data-v-3edcf83f]:after {\n  content: \"\";\n  /* This is necessary for the pseudo element to work. */\n  display: block;\n  /* This will put the pseudo element on its own line. */\n  margin: 0 auto;\n  /* This will center the border. */\n  width: 70%;\n  /* Change this to whatever width you want. */\n  padding-top: 20px;\n  /* This creates some space between the element and the border. */\n  border-bottom: 1px solid #636b6f;\n  /* This creates the border. Replace black with whatever color you want. */\n}\n", ""]);
 
 // exports
 
@@ -89340,6 +89059,29 @@ exports.push([module.i, "\n#drinkboxes[data-v-3edcf83f] {\n  margin-top: 20px;\n
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -89713,7 +89455,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             createDrinkbox: false,
             order: 'empty',
-            company_id: 0,
+            company_details_id: 0,
             // total_start: 0,
             delivered_by: null,
             // delivered_by_options: ['DPD', 'APC', 'OP'], // This will be removed when I add the fruitpartners dropdown.
@@ -89750,8 +89492,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             axios.post('/api/drinkboxes/save', {
                 details: {
                     delivered_by_id: this.delivered_by,
-                    no_of_boxes: this.no_of_boxes,
-                    company_id: this.selected_company,
+                    // no_of_boxes: this.no_of_boxes, 
+                    company_details_id: this.selected_company,
                     delivery_day: this.delivery_day,
                     frequency: this.frequency,
                     week_in_month: this.week_in_month,
@@ -89846,25 +89588,6 @@ var render = function() {
               "b-row",
               { staticClass: "order-options" },
               [
-                _c(
-                  "b-col",
-                  [
-                    _c("label", [_vm._v(" No. of Boxes ")]),
-                    _vm._v(" "),
-                    _c("b-form-input", {
-                      attrs: { type: "number", size: "sm" },
-                      model: {
-                        value: _vm.no_of_boxes,
-                        callback: function($$v) {
-                          _vm.no_of_boxes = $$v
-                        },
-                        expression: "no_of_boxes"
-                      }
-                    })
-                  ],
-                  1
-                ),
-                _vm._v(" "),
                 _c(
                   "b-col",
                   [
@@ -90059,7 +89782,7 @@ var render = function() {
                 "b-row",
                 [
                   _c("b-col", [_c("h4", [_vm._v(" Product Name ")])]),
-                  _c("b-col", [_c("h4", [_vm._v(" Quantity ")])]),
+                  _c("b-col", [_c("h4", [_vm._v(" Quantity (Cases) ")])]),
                   _c("b-col", [_c("h4", [_vm._v(" Price ")])]),
                   _c("b-col")
                 ],
@@ -90965,7 +90688,9 @@ var render = function() {
                     : _c("div", [
                         _c("p", [
                           _vm._v(
-                            " " + _vm._s(_vm.otherbox[0].delivered_by_id) + " "
+                            " " +
+                              _vm._s(_vm.otherbox[0].fruit_partner_name) +
+                              " "
                           )
                         ])
                       ])
@@ -91429,7 +91154,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "\n#otherboxes[data-v-4c693d60] {\n  margin-top: 20px;\n  text-align: center;\n}\n", ""]);
+exports.push([module.i, "\n#otherboxes[data-v-4c693d60] {\n  margin-top: 20px;\n  text-align: center;\n}\n#otherboxes[data-v-4c693d60]::before {\n  content: \"\";\n  /* This is necessary for the pseudo element to work. */\n  display: block;\n  /* This will put the pseudo element on its own line. */\n  margin: 0 auto;\n  /* This will center the border. */\n  width: 70%;\n  /* Change this to whatever width you want. */\n  padding-bottom: 20px;\n  /* This creates some space between the element and the border. */\n  border-top: 1px solid #636b6f;\n  /* This creates the border. Replace black with whatever color you want. */\n}\n.otherbox[data-v-4c693d60] {\n  padding-top: 20px;\n  padding-left: 0;\n}\n.otherbox li[data-v-4c693d60] {\n    list-style: none;\n}\n.otherbox[data-v-4c693d60]:after {\n  content: \"\";\n  /* This is necessary for the pseudo element to work. */\n  display: block;\n  /* This will put the pseudo element on its own line. */\n  margin: 0 auto;\n  /* This will center the border. */\n  width: 70%;\n  /* Change this to whatever width you want. */\n  padding-top: 20px;\n  /* This creates some space between the element and the border. */\n  border-bottom: 1px solid #636b6f;\n  /* This creates the border. Replace black with whatever color you want. */\n}\n", ""]);
 
 // exports
 
@@ -91440,6 +91165,29 @@ exports.push([module.i, "\n#otherboxes[data-v-4c693d60] {\n  margin-top: 20px;\n
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -91813,7 +91561,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             createOtherbox: false,
             order: 'empty',
-            company_id: 0,
+            company_details_id: 0, //  Not sure this is being used anymore?
             // total_start: 0,
             delivered_by: null,
             // delivered_by_options: ['DPD', 'APC', 'OP'],
@@ -91857,7 +91605,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 details: {
                     delivered_by_id: this.delivered_by,
                     no_of_boxes: this.no_of_boxes,
-                    company_id: this.selected_company,
+                    company_details_id: this.selected_company,
                     delivery_day: this.delivery_day,
                     frequency: this.frequency,
                     week_in_month: this.week_in_month,
@@ -92739,7 +92487,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("b-col", [
-                !_vm.createWholesaleSnackbox
+                !_vm.createWholesaleSnackbox && !_vm.createDrinkbox
                   ? _c("div", [
                       _c(
                         "h4",
@@ -92770,7 +92518,7 @@ var render = function() {
                     ])
                   : _vm._e(),
                 _vm._v(" "),
-                _vm.createWholesaleSnackbox
+                _vm.createWholesaleSnackbox || _vm.createDrinkbox
                   ? _c("div", [
                       _c(
                         "h4",
@@ -92950,7 +92698,7 @@ var render = function() {
                       )
                     : _vm._e(),
                   _vm._v(" "),
-                  _vm.createSnackbox || _vm.createDrinkbox || _vm.createOtherbox
+                  _vm.createSnackbox || _vm.createOtherbox
                     ? _c(
                         "div",
                         [
@@ -92976,7 +92724,7 @@ var render = function() {
                         1
                       )
                     : _vm.createWholesaleSnackbox ||
-                      _vm.createWholesaleDrinkbox ||
+                      _vm.createDrinkbox ||
                       _vm.createWholesaleOtherbox
                       ? _c(
                           "div",
@@ -97730,7 +97478,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "\nlabel[data-v-3428ae5e] {\n  font-weight: bold;\n}\n.text-align-center[data-v-3428ae5e] {\n  text-align: center;\n}\n.margin-top-20[data-v-3428ae5e] {\n  margin-top: 20px;\n}\n", ""]);
+exports.push([module.i, "\nlabel[data-v-3428ae5e] {\n  font-weight: bold;\n}\n.text-align-center[data-v-3428ae5e] {\n  text-align: center;\n}\n.margin-top-20[data-v-3428ae5e] {\n  margin-top: 20px;\n}\n.margin-left-10[data-v-3428ae5e] {\n  margin-left: 10px;\n}\n.companybox[data-v-3428ae5e] {\n  padding-top: 20px;\n  padding-left: 0;\n}\n.companybox li[data-v-3428ae5e] {\n    list-style: none;\n}\n.companybox[data-v-3428ae5e]:after {\n  content: \"\";\n  /* This is necessary for the pseudo element to work. */\n  display: block;\n  /* This will put the pseudo element on its own line. */\n  margin: 0 auto;\n  /* This will center the border. */\n  width: 70%;\n  /* Change this to whatever width you want. */\n  padding-top: 20px;\n  /* This creates some space between the element and the border. */\n  border-bottom: 1px solid #636b6f;\n  /* This creates the border. Replace black with whatever color you want. */\n}\n", ""]);
 
 // exports
 
@@ -98065,6 +97813,34 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['company'],
@@ -98072,13 +97848,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             edit: false,
             payment_options: [{ text: 'Please select an option', value: null }, 'BACS', 'GoCardless', 'GoCardless In Advance', 'Invoiced In Advance', 'Monthly Invoice', 'Monthly Invoice GoCardless', 'Paypal (Stripe)', 'Paypal In Advance (Stripe)', 'Standing Order', 'TBC'],
-            model_options: ['Free', 'Honesty Box']
+            model_options: ['Free', 'Honesty Box'],
+            status: ['Active', 'Inactive']
         };
     },
 
     methods: {
         editing: function editing() {
-            if (this.edit === 'true') {
+            if (this.edit === true) {
                 this.edit = false;
             } else {
                 this.edit = true;
@@ -98144,10 +97921,11 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
+    { staticClass: "companybox" },
     [
       _c(
         "b-container",
-        { staticClass: "text-align-center" },
+        { staticClass: "text-align-center margin-top-20" },
         [
           _c("h3", [_vm._v(" Company Details ")]),
           _vm._v(" "),
@@ -98171,6 +97949,20 @@ var render = function() {
                             }
                           },
                           [_vm._v(" Update ")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "b-button",
+                          {
+                            staticClass: "margin-left-10",
+                            attrs: { variant: "warning" },
+                            on: {
+                              click: function($event) {
+                                _vm.editing()
+                              }
+                            }
+                          },
+                          [_vm._v(" Cancel ")]
                         )
                       ],
                       1
@@ -98237,6 +98029,33 @@ var render = function() {
                   : _c("div", [
                       _c("p", [
                         _vm._v(" " + _vm._s(_vm.company.invoice_name) + " ")
+                      ])
+                    ])
+              ]),
+              _vm._v(" "),
+              _c("b-col", [
+                _c("label", [_vm._v(" Status ")]),
+                _vm._v(" "),
+                _vm.edit
+                  ? _c(
+                      "div",
+                      [
+                        _c("b-form-select", {
+                          attrs: { options: _vm.status },
+                          model: {
+                            value: _vm.company.is_active,
+                            callback: function($$v) {
+                              _vm.$set(_vm.company, "is_active", $$v)
+                            },
+                            expression: "company.is_active"
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  : _c("div", [
+                      _c("p", [
+                        _vm._v(" " + _vm._s(_vm.company.is_active) + " ")
                       ])
                     ])
               ]),
@@ -99910,6 +99729,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -99987,9 +99827,7 @@ var render = function() {
           _c("b-col", [
             _c("div", { attrs: { id: "buttonsToProcessSnackboxes" } }, [
               _c("div", { staticClass: "title-headers" }, [
-                _c("h3", [
-                  _vm._v(" Process Snackboxes and Export as Excel Files ")
-                ]),
+                _c("h3", [_vm._v(" Process Snackbox Orders into Picklists ")]),
                 _vm._v(" "),
                 _c("p", [
                   _c("b", [
@@ -100039,7 +99877,7 @@ var render = function() {
                   _vm._v(" "),
                   _c("b-form-text", [
                     _vm._v(
-                      "\n                      This first row of buttons will use the multi-company, single box templates.\n                    "
+                      "\n                        This first row of buttons will use the multi-company, single box templates.\n                    "
                     )
                   ])
                 ],
@@ -100085,7 +99923,7 @@ var render = function() {
                   _vm._v(" "),
                   _c("b-form-text", [
                     _vm._v(
-                      "\n                      This second row uses the single company, multiple boxes template.\n                    "
+                      "\n                        This second row uses the single company, multiple boxes template.\n                    "
                     )
                   ])
                 ],
@@ -100094,17 +99932,22 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "div",
-                { attrs: { id: "exportUniqueButtons" } },
                 [
+                  _c("h4", [
+                    _vm._v(
+                      " Process Otherbox Orders into Checklists or Picklists "
+                    )
+                  ]),
+                  _vm._v(" "),
                   _c(
                     "b-button",
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "export-snackbox-op-unique"
+                        href: "export-otherbox-checklist-op"
                       }
                     },
-                    [_vm._v(" Export OP Unique ")]
+                    [_vm._v(" Export OP Otherboxes (Checklist) ")]
                   ),
                   _vm._v(" "),
                   _c(
@@ -100112,10 +99955,10 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "export-snackbox-dpd-unique"
+                        href: "export-otherbox-checklist-op-weekly-total"
                       }
                     },
-                    [_vm._v(" Export DPD Unique ")]
+                    [_vm._v(" Export OP Otherboxes (Checklist) Weekly Total ")]
                   ),
                   _vm._v(" "),
                   _c(
@@ -100123,15 +99966,67 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "export-snackbox-apc-unique"
+                        href: "export-otherbox-op-multicompany"
                       }
                     },
-                    [_vm._v(" Export APC Unique ")]
+                    [_vm._v(" Export OP Otherboxes ")]
                   ),
                   _vm._v(" "),
                   _c("b-form-text", [
                     _vm._v(
-                      "\n                      This final row caters for unique orders, using the same multi-company template as the first row.\n                    "
+                      "\n                        The checklist is for use when checking deliveries as they arrive, the other for adding to routes (pallets).\n                    "
+                    )
+                  ])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { attrs: { id: "exportWholesaleButtons" } },
+                [
+                  _c("h4", [
+                    _vm._v(
+                      " Process Wholesale (Snackbox, Drinkbox & Otherbox) Orders into Picklists "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "b-button",
+                    {
+                      attrs: {
+                        variant: "outline-primary",
+                        href: "export-wholesale-snackbox-op-singlecompany"
+                      }
+                    },
+                    [_vm._v(" Export OP Snackboxes ")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-button",
+                    {
+                      attrs: {
+                        variant: "outline-primary",
+                        href: "export-wholesale-drinkbox-op-multicompany"
+                      }
+                    },
+                    [_vm._v(" Export OP Drinkboxes ")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-button",
+                    {
+                      attrs: {
+                        variant: "outline-primary",
+                        href: "export-wholesale-otherbox-op-multicompany"
+                      }
+                    },
+                    [_vm._v(" Export OP Otherboxes ")]
+                  ),
+                  _vm._v(" "),
+                  _c("b-form-text", [
+                    _vm._v(
+                      "\n                        I can't remember whether we need the wholesale otherbox option but keeping button here for now.\n                    "
                     )
                   ])
                 ],

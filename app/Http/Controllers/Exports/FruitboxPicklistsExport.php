@@ -139,7 +139,7 @@ WithEvents
             // Ok, time to change the '->where('assigned_to' $this->picklistsolo)', to look for the id instead after translating the $this->picklistsolo name from AssignedRoutes.
             $assigned_route = AssignedRoute::where('name', $this->picklistsolo)->get();
             // For each route in the routes table, we check the associated Company ID for a FruitBox - that's Active, On Delivery For This Week and on this Delivery Day.
-            $routesForFruitbox = CompanyRoute::where('company_id', $fruitbox->company_id)->where('delivery_day', $fruitbox->delivery_day)->where('is_active', 'Active')->where('assigned_route_id', $assigned_route[0]->id)->get();
+            $routesForFruitbox = CompanyRoute::where('company_details_id', $fruitbox->company_details_id)->where('delivery_day', $fruitbox->delivery_day)->where('is_active', 'Active')->where('assigned_route_id', $assigned_route[0]->id)->get();
 
             if (count($routesForFruitbox)) {
                 $fruitbox['assigned_to'] = $routesForFruitbox[0]->assigned_to;
@@ -154,7 +154,7 @@ WithEvents
         // ----- End of This needs changing to replace the 'Route' check with a 'CompanyRoute' check and to replace the '->where('assigned_to' $this->picklist)' reliance. ----- //
             
             // A nice little way to check a specific result for testing purposes.  I can comment it out for now but may reuse again in the near future.
-            // if ($routeInfoSolo->company_id == 1) {
+            // if ($routeInfoSolo->company_details_id == 1) {
             //     dd($routeInfoSolo);
             // }
             

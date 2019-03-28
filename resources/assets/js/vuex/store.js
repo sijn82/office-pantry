@@ -41,7 +41,7 @@ export const store = new Vuex.Store({
             allergies: [],
             additional_notes: [],
         }, // And this one for the same reason.
-        
+
     },
     getters: {
         week_start: state => { return state.week_start[0] },
@@ -63,7 +63,7 @@ export const store = new Vuex.Store({
         addDrinkboxToStore (state, product) {
             state.drinkbox.push(product);
         },
-        
+
         addPreferenceToStore (state, preference) {
             console.log(preference);
             if (preference.category == 'snackbox_likes') {
@@ -184,7 +184,7 @@ export const store = new Vuex.Store({
         // Currently selected product/company variables for saving data to.
         selectedProduct (state, product) {
             console.log(product);
-            
+
             state.selectedProduct.id = product.id;
             state.selectedProduct.name = product.name;
             state.selectedProduct.code = product.code;

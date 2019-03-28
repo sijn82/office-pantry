@@ -1,4 +1,4 @@
-<?php
+details_<?php
 
 namespace App\Http\Controllers;
 
@@ -343,7 +343,7 @@ class OrderController extends Controller
             // ---------- Fruit Deliveries ---------- //
 
             // For each route in the routes table, we check the associated Company ID for a FruitBox - that's Active, On Delivery For This Week and on this Delivery Day.
-            $fruitboxesForDelivery = FruitBox::where('company_id', $routeInfoSolo->company_id)->where('next_delivery', $currentWeekStart->current)
+            $fruitboxesForDelivery = FruitBox::where('company_details_id', $routeInfoSolo->company_details_id)->where('next_delivery', $currentWeekStart->current)
                                                 ->where('delivery_day', $routeInfoSolo->delivery_day)->where('is_active', 'Active')->get();
             // Set variable value.
             $fruitbox_totals = 0;
@@ -369,7 +369,7 @@ class OrderController extends Controller
             // ---------- Milk Deliveries ---------- //
 
             // For each route in the routes table, we check the associated Company ID for a MilkBox - that's Active, On Delivery For This Week and on this Delivery Day.
-            $milkboxesForDelivery = MilkBox::where('company_id', $routeInfoSolo->company_id)->where('next_delivery_week_start', $currentWeekStart->current)
+            $milkboxesForDelivery = MilkBox::where('company_details_id', $routeInfoSolo->company_details_id)->where('next_delivery_week_start', $currentWeekStart->current)
                                             ->where('delivery_day', $routeInfoSolo->delivery_day)->where('is_active', 'Active')->get();
 
             // Unlike FruitBoxes there shouldn't be any more than one entry, so totalling isn't necessary - however there may be no milk on the route.
@@ -383,7 +383,7 @@ class OrderController extends Controller
             $routeInfoSolo['milk'] = $milkboxesForDelivery;
 
             // A nice little way to check a specific result for testing purposes.  I can comment it out for now but may reuse again in the near future.
-            // if ($routeInfoSolo->company_id == 1) {
+            // if ($routeInfoSolo->company_details_id == 1) {
             //     dd($routeInfoSolo);
             // }
 

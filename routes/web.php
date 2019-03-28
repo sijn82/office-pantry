@@ -80,6 +80,13 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('export-snackbox-op-unique', 'SnackBoxController@download_snackbox_op_unique')->name('SnackboxOPUnique');
     Route::get('export-snackbox-dpd-unique', 'SnackBoxController@download_snackbox_dpd_unique')->name('SnackboxDPDUnique');
     Route::get('export-snackbox-apc-unique', 'SnackBoxController@download_snackbox_apc_unique')->name('SnackboxAPCUnique');
+    
+    Route::get('export-otherbox-checklist-op', 'OtherBoxController@download_otherbox_checklist_op');
+    Route::get('export-otherbox-checklist-op-weekly-total', 'OtherBoxController@download_otherbox_checklist_weekly_total_op');
+    Route::get('export-otherbox-op-multicompany', 'OtherBoxController@download_otherbox_op_multicompany');
+    
+    Route::get('export-wholesale-drinkbox-op-multicompany', 'DrinkBoxController@download_drinkbox_wholesale_op_multicompany');
+    Route::get('export-wholesale-snackbox-op-singlecompany', 'SnackBoxController@download_snackbox_wholesale_op_singlecompany')->name('SnackboxWholesaleOPSingleCompany');
 
 });
 // Route::get('/import', 'ImportController@getImport')->name('import');

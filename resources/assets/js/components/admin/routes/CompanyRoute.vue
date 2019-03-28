@@ -1,6 +1,6 @@
 <template lang="html">
-    <div>
-        <ul class="routes">
+    <div class="routes">
+        <!-- <ul> -->
             <div id="edit-save-buttons">
                 <h4> {{ route.route_name }} </h4>
                 <p> {{ route.delivery_day }} - {{ route.is_active }} </p>
@@ -23,10 +23,10 @@
                     <b-col class="col-sm-4">
                         <label><b> Company ID </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="route.company_id"></b-form-input>
+                            <b-form-input v-model="route.company_details_id"></b-form-input>
                         </div>
                         <div v-else>
-                            <p> {{ route.company_id }} </p>
+                            <p> {{ route.company_details_id }} </p>
                         </div>
                     </b-col>
                     <b-col class="col-sm-4">
@@ -122,7 +122,7 @@
                     <b-col class="col-sm-4">
                         <label><b> Assigned Route </b></label>
                         <div v-if="editing">
-                            <b-form-select v-model="route.assigned_route">
+                            <b-form-select v-model="route.assigned_route_id">
                                 <option v-for="assigned_route in $store.state.assigned_routes_list" :value="assigned_route.id"> {{ assigned_route.name }} </option>
                             </b-form-select>
                         </div>
@@ -171,7 +171,7 @@
                     </b-col>
                 </b-row>
             </div>
-        </ul>
+        <!-- </ul> -->
     </div>
 </template>
 
@@ -212,7 +212,7 @@ export default {
             console.log(route.id);
             axios.put('api/company-route/update/' + route.id, {
                 id: route.id,
-                company_id: route.company_id,
+                company_details_id: route.company_details_id,
                 is_active: route.is_active,
                 fruit_crates: route.fruit_crates,
                 fruit_boxes: route.fruit_boxes,
@@ -221,7 +221,7 @@ export default {
                 drinks: route.drinks,
                 other: route.other,
                 delivery_day: route.delivery_day,
-                assigned_route: route.assigned_route,
+                assigned_route_id: route.assigned_route_id,
                 position_on_route: route.position_on_route,
                 postcode: route.postcode,
                 address: route.address,

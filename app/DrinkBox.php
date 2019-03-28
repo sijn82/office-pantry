@@ -12,7 +12,7 @@ class DrinkBox extends Model
         'drinkbox_id',
         'is_active',
         'delivered_by_id',
-        'no_of_boxes',
+        // 'no_of_boxes', <-- as this is for wholesale only, we don't actually need a 'no. of boxes' field, but commenting out for now in case i'm wrong, or find a new purpose.
         'type',
         // Company Info
         'company_details_id',

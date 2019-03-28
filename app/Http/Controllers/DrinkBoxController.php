@@ -6,11 +6,30 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\DrinkBox;
 use App\CompanyRoute;
+use App\WeekStart;
 // use App\Company;
 use App\CompanyDetails;
 
 class DrinkBoxController extends Controller
 {
+    protected $week_start;
+
+    public function __construct()
+    {
+        // $this->week_start = 170918;
+        $week_start = WeekStart::all()->toArray();
+        $this->week_start = $week_start[0]['current'];
+        $this->delivery_days = $week_start[0]['delivery_days'];
+
+    }
+    
+    public function download_drinkbox_wholesale_op_multicompany()
+    {
+        session()->put('drinkbox_courier', '1');
+
+        return \Excel::download(new Exports\DrinkboxWholesaleExport, 'drinkboxesWholesaleOPMultiCompany' . $this->week_start . '.xlsx');
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -41,17 +60,17 @@ class DrinkBoxController extends Controller
     {
     
         // Because it generates a unique id based on the time we need to run this once per box only.
-        $drinkbox_id = request('details.company_id') . '-' . uniqid();
+        $drinkbox_id = request('details.company_details_id') . '-' . uniqid();
         
-        // dd(request('details.company_id'));
+        // dd(request('details.company_details_id'));
         foreach (request('order') as $item) {
     
             $new_drinkbox = new DrinkBox();
             // These columns will be the same for each item created in this box
             $new_drinkbox->drinkbox_id = $drinkbox_id;
             $new_drinkbox->delivered_by_id = request('details.delivered_by_id');
-            $new_drinkbox->no_of_boxes = request('details.no_of_boxes');
-            $new_drinkbox->company_id = request('details.company_id');
+            // $new_drinkbox->no_of_boxes = request('details.no_of_boxes');
+            $new_drinkbox->company_details_id = request('details.company_details_id');
             $new_drinkbox->delivery_day = request('details.delivery_day');
             $new_drinkbox->frequency = request('details.frequency');
             $new_drinkbox->week_in_month = request('details.week_in_month');
@@ -71,20 +90,56 @@ class DrinkBoxController extends Controller
         
             // Now we've handled the order itself, we need to make sure there's a route to dispatch it on.  Well, if it's delivered by Office Pantry anyway.
             // If there is we're all done, if not, let's build a route.
-            if (!count(CompanyRoute::where('company_id', request('details.company_id'))->where('delivery_day', request('details.delivery_day'))->get())) {
+            if (!count(CompanyRoute::where('company_details_id', request('details.company_details_id'))->where('delivery_day', request('details.delivery_day'))->get())) {
                 
                 // This is currently pulling info from the Company table, although I want to create a CompanyData table to replace this.
                 // $companyDetails = Company::findOrFail(request('details.company_id'));
-                $companyDetails = CompanyDetails::findOrFail(request('details.company_id'));
-
+                $companyDetails = CompanyDetails::findOrFail(request('details.company_details_id'));
+                
+                $assigned_route_tbc_monday = AssignedRoute::where('name', 'TBC (Monday)')->get();
+                $assigned_route_tbc_tuesday = AssignedRoute::where('name', 'TBC (Tuesday)')->get();
+                $assigned_route_tbc_wednesday = AssignedRoute::where('name', 'TBC (Wednesday)')->get();
+                $assigned_route_tbc_thursday = AssignedRoute::where('name', 'TBC (Thursday)')->get();
+                $assigned_route_tbc_friday = AssignedRoute::where('name', 'TBC (Friday)')->get();
+                
+                switch (request('delivery_day')) {
+                    case 'Monday':
+                        $assigned_route_id = $assigned_route_tbc_monday[0]->id;
+                        break;
+                    case 'Tuesday':
+                        $assigned_route_id = $assigned_route_tbc_tuesday[0]->id;
+                        break;
+                    case 'Wednesday':
+                        $assigned_route_id = $assigned_route_tbc_wednesday[0]->id;
+                        break;
+                    case 'Thursday':
+                        $assigned_route_id = $assigned_route_tbc_thursday[0]->id;
+                        break;
+                    case 'Friday':
+                        $assigned_route_id = $assigned_route_tbc_friday[0]->id;
+                        break;
+                }
+                
                 // We need to create a new entry.
                 $newRoute = new CompanyRoute();
                 // $newRoute->is_active = 'Active'; // Currently hard coded but this is also the default.
-                $newRoute->company_id = request('details.company_id');
+                $newRoute->company_details_id = request('details.company_details_id');
                 $newRoute->route_name = $companyDetails->route_name;
-                $newRoute->postcode = $companyDetails->postcode;
-                $newRoute->address = $companyDetails->route_summary_address;
+                $newRoute->postcode = $companyDetails->route_postcode;
+                
+                //  Route Summary Address isn't a field in the new model, instead I need to grab all route fields and combine them into the summary address.
+                // $newRoute->address = $companyDetails->route_summary_address;
+                
+                // An if empty check is being made on the optional fields so that we don't unnecessarily add ', ' to the end of an empty field.
+                $newRoute->address = $companyDetails->route_address_line_1 . ', '
+                                    . $companyDetails->route_address_line_2 . ', '
+                                    . $companyDetails->route_address_line_3 . ', '
+                                    . $companyDetails->route_city . ', '
+                                    . $companyDetails->route_region . ', '
+                                    . $companyDetails->route_postcode;
+                
                 $newRoute->delivery_information = $companyDetails->delivery_information;
+                $newRoute->assigned_route_id = $assigned_route_id;
                 $newRoute->delivery_day = request('details.delivery_day');
                 $newRoute->save();
 
@@ -147,7 +202,7 @@ class DrinkBoxController extends Controller
              $drinkbox_entry->update([
                  'is_active' => request('drinkbox_details.is_active'),
                  'delivered_by_id' => request('drinkbox_details.delivered_by_id'),
-                 'no_of_boxes' => request('drinkbox_details.no_of_boxes'),
+                 // 'no_of_boxes' => request('drinkbox_details.no_of_boxes'),
                  'delivery_day' => request('drinkbox_details.delivery_day'),
                  'frequency' => request('drinkbox_details.frequency'),
                  'week_in_month' => request('drinkbox_details.week_in_month'),
@@ -160,20 +215,56 @@ class DrinkBoxController extends Controller
          
              // Now we've handled the order itself, we need to make sure there's a route to dispatch it on.  Well, if it's delivered by Office Pantry anyway.
              // If there is we're all done, if not, let's build a route.
-             if (!count(CompanyRoute::where('company_id', request('drinkbox_details.company_id'))->where('delivery_day', request('drinkbox_details.delivery_day'))->get())) {
+             if (!count(CompanyRoute::where('company_details_id', request('drinkbox_details.company_details_id'))->where('delivery_day', request('drinkbox_details.delivery_day'))->get())) {
                  
                  // This is currently pulling info from the Company table, although I want to create a CompanyData table to replace this.
                  // $companyDetails = Company::findOrFail(request('drinkbox_details.company_id'));
-                 $companyDetails = CompanyDetails::findOrFail(request('drinkbox_details.company_id'));
-
+                 $companyDetails = CompanyDetails::findOrFail(request('drinkbox_details.company_details_id'));
+                 
+                 $assigned_route_tbc_monday = AssignedRoute::where('name', 'TBC (Monday)')->get();
+                 $assigned_route_tbc_tuesday = AssignedRoute::where('name', 'TBC (Tuesday)')->get();
+                 $assigned_route_tbc_wednesday = AssignedRoute::where('name', 'TBC (Wednesday)')->get();
+                 $assigned_route_tbc_thursday = AssignedRoute::where('name', 'TBC (Thursday)')->get();
+                 $assigned_route_tbc_friday = AssignedRoute::where('name', 'TBC (Friday)')->get();
+                 
+                 switch (request('delivery_day')) {
+                     case 'Monday':
+                         $assigned_route_id = $assigned_route_tbc_monday[0]->id;
+                         break;
+                     case 'Tuesday':
+                         $assigned_route_id = $assigned_route_tbc_tuesday[0]->id;
+                         break;
+                     case 'Wednesday':
+                         $assigned_route_id = $assigned_route_tbc_wednesday[0]->id;
+                         break;
+                     case 'Thursday':
+                         $assigned_route_id = $assigned_route_tbc_thursday[0]->id;
+                         break;
+                     case 'Friday':
+                         $assigned_route_id = $assigned_route_tbc_friday[0]->id;
+                         break;
+                 }
+                 
                  // We need to create a new entry.
                  $newRoute = new CompanyRoute();
                  // $newRoute->is_active = 'Active'; // Currently hard coded but this is also the default.
-                 $newRoute->company_id = request('drinkbox_details.company_id');
+                 $newRoute->company_details_id = request('drinkbox_details.company_details_id');
                  $newRoute->route_name = $companyDetails->route_name;
-                 $newRoute->postcode = $companyDetails->postcode;
-                 $newRoute->address = $companyDetails->route_summary_address;
+                 $newRoute->postcode = $companyDetails->route_postcode;
+                 
+                 //  Route Summary Address isn't a field in the new model, instead I need to grab all route fields and combine them into the summary address.
+                 // $newRoute->address = $companyDetails->route_summary_address;
+                 
+                 // An if empty check is being made on the optional fields so that we don't unnecessarily add ', ' to the end of an empty field.
+                 $newRoute->address = $companyDetails->route_address_line_1 . ', '
+                                     . $companyDetails->route_address_line_2 . ', '
+                                     . $companyDetails->route_address_line_3 . ', '
+                                     . $companyDetails->route_city . ', '
+                                     . $companyDetails->route_region . ', '
+                                     . $companyDetails->route_postcode;
+                 
                  $newRoute->delivery_information = $companyDetails->delivery_information;
+                 $newRoute->assigned_route_id = $assigned_route_id;
                  $newRoute->delivery_day = request('drinkbox_details.delivery_day');
                  $newRoute->save();
 
@@ -195,8 +286,8 @@ class DrinkBoxController extends Controller
          $addProduct->drinkbox_id = request('drinkbox_details.drinkbox_id');
          $addProduct->is_active = request('drinkbox_details.is_active');
          $addProduct->delivered_by_id = request('drinkbox_details.delivered_by_id');
-         $addProduct->no_of_boxes = request('drinkbox_details.no_of_boxes');
-         $addProduct->company_id = request('drinkbox_details.company_id');
+         // $addProduct->no_of_boxes = request('drinkbox_details.no_of_boxes');
+         $addProduct->company_details_id = request('drinkbox_details.company_details_id');
          $addProduct->delivery_day = request('drinkbox_details.delivery_day');
          $addProduct->frequency = request('drinkbox_details.frequency');
          $addProduct->week_in_month = request('drinkbox_details.week_in_month');

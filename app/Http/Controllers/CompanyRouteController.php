@@ -88,7 +88,7 @@ class CompanyRouteController extends Controller
     {
         // dd($request);
         CompanyRoute::where('id', request('id'))->update([
-            //'company_id' => request('company_id'),  <--- This will not be changing, or I can't think of a justifable reason why?
+            //'company_details_id' => request('company_details_id'),  <--- This will not be changing, or I can't think of a justifable reason why?
             'is_active' => request('is_active'),
             'fruit_crates' => request('fruit_crates'),
             'fruit_boxes' => request('fruit_boxes'),
@@ -97,7 +97,7 @@ class CompanyRouteController extends Controller
             'drinks' => request('drinks'),
             'other' => request('other'),
             'delivery_day' => request('delivery_day'),
-            'assigned_route_id' => request('assigned_route'),
+            'assigned_route_id' => request('assigned_route_id'),
             'position_on_route' => request('position_on_route'),
             'postcode' => request('postcode'),
             'address' => request('address'),

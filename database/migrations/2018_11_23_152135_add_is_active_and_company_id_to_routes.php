@@ -16,7 +16,7 @@ class AddIsActiveAndCompanyIdToRoutes extends Migration
         Schema::table('routes', function (Blueprint $table) {
             //
             $table->string('is_active')->after('id')->default('Active');
-            $table->integer('company_id')->after('week_start'); // When we get rid of the week_start (if we do entirely?) this will break.
+            $table->integer('company_details_id')->after('week_start'); // When we get rid of the week_start (if we do entirely?) this will break.
         });
     }
 

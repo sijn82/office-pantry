@@ -12,11 +12,11 @@ class AdditionalInfoController extends Controller
     {
         // dd($request);
         $new_info = new AdditionalInfo();
-        $new_info->company_id = $request['additional_info']['company'];
+        $new_info->company_details_id = $request['additional_info']['company'];
         $new_info->additional_info = $request['additional_info']['info'];
         $new_info->save();
         
-        return AdditionalInfo::where('company_id', $request['additional_info']['company'])->where('additional_info', $request['additional_info']['info'])->get();
+        return AdditionalInfo::where('company_details_id', $request['additional_info']['company'])->where('additional_info', $request['additional_info']['info'])->get();
     }
     
     public function destroy($id) {

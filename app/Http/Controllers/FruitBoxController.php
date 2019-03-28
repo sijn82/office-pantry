@@ -8,6 +8,7 @@ use App\CompanyDetails;
 use App\CompanyRoute;
 use App\FruitPartner;
 use App\WeekStart;
+use App\AssignedRoute;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -47,7 +48,7 @@ class FruitBoxController extends Controller
         };
 
         foreach ($fruitboxes as $fruitbox) {
-            $route = CompanyRoute::where('company_id', $fruitbox->company_id)->where('delivery_day', $fruitbox->delivery_day)->get();
+            $route = CompanyRoute::where('company_details_id', $fruitbox->company_details_id)->where('delivery_day', $fruitbox->delivery_day)->get();
             // dd($route);
 
             if (count($route) > 0) {
@@ -66,7 +67,7 @@ class FruitBoxController extends Controller
 
             } else {
 
-                echo 'No matching Route Id for ' . $fruitbox->name . ' ( ' . $fruitbox->company_id . ' ) on ' . $fruitbox->delivery_day . '<br/>';
+                echo 'No matching Route Id for ' . $fruitbox->name . ' ( ' . $fruitbox->company_details_id . ' ) on ' . $fruitbox->delivery_day . '<br/>';
             }
 
         }
@@ -124,7 +125,7 @@ class FruitBoxController extends Controller
                 // $newFruitbox->is_active = 'Active'; // Currently hard coded but this is also the default.
                 $newFruitbox->fruit_partner_id = $request['company_data']['fruit_partner_id'];
                 $newFruitbox->name = $request['company_data']['name'];
-                $newFruitbox->company_id = $request['company_data']['company_id'];
+                $newFruitbox->company_details_id = $request['company_data']['company_details_id'];
                 $newFruitbox->route_id = $request['company_data']['route_id'];
                 $newFruitbox->type = $request['company_data']['type'];
                 $newFruitbox->next_delivery = $request['company_data']['first_delivery'];
@@ -167,26 +168,60 @@ class FruitBoxController extends Controller
 
 
             // Once the Fruitbox has been created we need to check for an existing route on the given delivery day, or create a new one for populating.
-            if (count(CompanyRoute::where('company_id', $request['company_data']['company_id'])->where('delivery_day', $delivery_day)->get()) == 0) {
+            if (count(CompanyRoute::where('company_details_id', $request['company_data']['company_details_id'])->where('delivery_day', $delivery_day)->get()) == 0) {
 
                 // Let's grab the current weekstart, we don't really need it but this will give us the week the company started with us.  Which might be nice to know.
                 $currentWeekStart = Weekstart::findOrFail(1);
 
                 // A route might not exist yet but when the company was set up a route name was inputted, so let's use that.
                 // $companyDetails = Company::findOrFail($request['company_data']['company_id']);
-                $companyDetails = CompanyDetails::findOrFail($request['company_data']['company_id']);
-
+                $companyDetails = CompanyDetails::findOrFail($request['company_data']['company_details_id']);    
+                
+                $assigned_route_tbc_monday = AssignedRoute::where('name', 'TBC (Monday)')->get();
+                $assigned_route_tbc_tuesday = AssignedRoute::where('name', 'TBC (Tuesday)')->get();
+                $assigned_route_tbc_wednesday = AssignedRoute::where('name', 'TBC (Wednesday)')->get();
+                $assigned_route_tbc_thursday = AssignedRoute::where('name', 'TBC (Thursday)')->get();
+                $assigned_route_tbc_friday = AssignedRoute::where('name', 'TBC (Friday)')->get();
+                
+                switch ($delivery_day) {
+                    case 'Monday':
+                        $assigned_route_id = $assigned_route_tbc_monday[0]->id;
+                        break;
+                    case 'Tuesday':
+                        $assigned_route_id = $assigned_route_tbc_tuesday[0]->id;
+                        break;
+                    case 'Wednesday':
+                        $assigned_route_id = $assigned_route_tbc_wednesday[0]->id;
+                        break;
+                    case 'Thursday':
+                        $assigned_route_id = $assigned_route_tbc_thursday[0]->id;
+                        break;
+                    case 'Friday':
+                        $assigned_route_id = $assigned_route_tbc_friday[0]->id;
+                        break;
+                }
+                
                 // We need to create a new entry.
                 $newRoute = new CompanyRoute();
                 // $newRoute->is_active = 'Active'; // Currently hard coded but this is also the default.
                 // $newRoute->week_start = $currentWeekStart->current;
                 // $newRoute->previous_delivery_week_start = null // This doesn't need to be here as there will never be a previous delivery for a new route (obvs) but I'm noting all fields in new route table here, for now.
                 // $newRoute->next_delivery_week_start = $request['company_data']['first_delivery'];
-                $newRoute->company_id = $request['company_data']['company_id'];
+                $newRoute->company_details_id = $request['company_data']['company_details_id'];
                 $newRoute->route_name = $companyDetails->route_name;
-                $newRoute->postcode = $companyDetails->postcode;
-                $newRoute->address = $companyDetails->route_summary_address;
+                $newRoute->postcode = $companyDetails->route_postcode;
+                //  Route Summary Address isn't a field in the new model, instead I need to grab all route fields and combine them into the summary address.
+                // $newRoute->address = $companyDetails->route_summary_address;
+                
+                $newRoute->address = $companyDetails->route_address_line_1 . ', '
+                                    . $companyDetails->route_address_line_2 . ', '
+                                    . $companyDetails->route_address_line_3 . ', '
+                                    . $companyDetails->route_city . ', '
+                                    . $companyDetails->route_region . ', '
+                                    . $companyDetails->route_postcode;
+                
                 $newRoute->delivery_information = $companyDetails->delivery_information;
+                $newRoute->assigned_route_id = $assigned_route_id;
                 $newRoute->delivery_day = $delivery_day;
                 // $newRoute->assigned_to = 'TBC'; // Another one hardcoded here but is also the default (database value).
                 // $newRoute->position_on_route = null; // Until it's on a route we can't know its position, this will always start off as null.
@@ -243,7 +278,7 @@ class FruitBoxController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // dd($request);
+         //dd($request);
         
         // Whatever happens, we want to update the fruitbox entry, so lets get that done first.
         
@@ -252,7 +287,7 @@ class FruitBoxController extends Controller
             'is_active' => request('is_active'),
             'fruit_partner_id' => request('fruit_partner_id'),
             'name' => request('name'),
-            //'company_id' => request('company_id'),
+            //'company_details_id' => request('company_details_id'),
             //'route_id' => request('route_id'),
             'type' => request('type'),
             'next_delivery' => request('next_delivery'),
@@ -286,12 +321,12 @@ class FruitBoxController extends Controller
         // If we've changed the delivery day for example this could easily lead us to having an order but not a route to deliver it on.
 
         // Grab the updated info delivery day, check we have a deliverable route in place.  If we do, we're all sorted.
-        if (count(CompanyRoute::where('company_id', request('company_id'))->where('delivery_day', request('delivery_day'))->get())) {
+        if (count(CompanyRoute::where('company_details_id', request('company_details_id'))->where('delivery_day', request('delivery_day'))->get())) {
             
             // We have nothing else we need to do. 
             
             // ^^^ Not true, we should be checking if the route is active already because if not we'll need to change that status to get pulled into the routes for exporting etc.
-            $route = CompanyRoute::where('company_id', request('company_id'))->where('delivery_day', request('delivery_day'))->get();
+            $route = CompanyRoute::where('company_details_id', request('company_details_id'))->where('delivery_day', request('delivery_day'))->get();
             
             if ($route[0]->is_active == 'Active') {
                 
@@ -314,21 +349,57 @@ class FruitBoxController extends Controller
             // A route might not exist yet but when the company was set up a route name was inputted, so let's use that.
             
             // $companyDetails = Company::findOrFail($request['company_id']);
-            $companyDetails = CompanyDetails::findOrFail($request['company_id']);
-
+            $companyDetails = CompanyDetails::findOrFail($request['company_details_id']);
+            
+            $assigned_route_tbc_monday = AssignedRoute::where('name', 'TBC (Monday)')->get();
+            $assigned_route_tbc_tuesday = AssignedRoute::where('name', 'TBC (Tuesday)')->get();
+            $assigned_route_tbc_wednesday = AssignedRoute::where('name', 'TBC (Wednesday)')->get();
+            $assigned_route_tbc_thursday = AssignedRoute::where('name', 'TBC (Thursday)')->get();
+            $assigned_route_tbc_friday = AssignedRoute::where('name', 'TBC (Friday)')->get();
+            
+            switch (request('delivery_day')) {
+                case 'Monday':
+                    $assigned_route_id = $assigned_route_tbc_monday[0]->id;
+                    break;
+                case 'Tuesday':
+                    $assigned_route_id = $assigned_route_tbc_tuesday[0]->id;
+                    break;
+                case 'Wednesday':
+                    $assigned_route_id = $assigned_route_tbc_wednesday[0]->id;
+                    break;
+                case 'Thursday':
+                    $assigned_route_id = $assigned_route_tbc_thursday[0]->id;
+                    break;
+                case 'Friday':
+                    $assigned_route_id = $assigned_route_tbc_friday[0]->id;
+                    break;
+            }
+            
+            //dd($companyDetails);
             // We need to create a new entry.
             $newRoute = new CompanyRoute();
             // $newRoute->is_active = 'Active'; // Currently hard coded but this is also the default.
-            $newRoute->company_id = $request['company_id'];
+            $newRoute->company_details_id = $request['company_details_id'];
             $newRoute->route_name = $companyDetails->route_name;
-            $newRoute->postcode = $companyDetails->postcode;
-            $newRoute->address = $companyDetails->route_summary_address;
+            $newRoute->postcode = $companyDetails->route_postcode;
+            
+            //  Route Summary Address isn't a field in the new model, instead I need to grab all route fields and combine them into the summary address.
+            // $newRoute->address = $companyDetails->route_summary_address;
+
+            // An if empty check is being made on the optional fields so that we don't unnecessarily add ', ' to the end of an empty field.
+            $newRoute->address = $companyDetails->route_address_line_1 . ', '
+                                . $companyDetails->route_address_line_2 . ', '
+                                . $companyDetails->route_address_line_3 . ', '
+                                . $companyDetails->route_city . ', '
+                                . $companyDetails->route_region . ', '
+                                . $companyDetails->route_postcode;
+                                
             $newRoute->delivery_information = $companyDetails->delivery_information;
-            $newRoute->delivery_day = $request['delivery_day'];
+            $newRoute->assigned_route_id = $assigned_route_id;
+            $newRoute->delivery_day = request('delivery_day');  
             $newRoute->save();
-
-
-            $message = "Route $newRoute->company_name on " . $request['delivery_day'] . " saved.";
+            
+            $message = "Route $newRoute->route_name on " . request('delivery_day') . " saved.";
             Log::channel('slack')->info($message);
             
         } else {

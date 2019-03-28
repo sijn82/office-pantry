@@ -21,10 +21,10 @@
                     </b-col>
                 </b-row>
                 <b-row class="order-options">
-                    <b-col>
+                    <!-- <b-col>
                         <label> No. of Boxes </label>
                         <b-form-input type="number" v-model="no_of_boxes" size="sm"></b-form-input>
-                    </b-col>
+                    </b-col> -->
                     <b-col>
                         <label> Next Delivery Week Start </label>
                         <b-form-input type="date" v-model="next_delivery_week" size="sm"></b-form-input>
@@ -67,7 +67,7 @@
         </div>
         
         <div class="order-selections" v-if="createDrinkbox">
-            <b-row><b-col><h4> Product Name </h4></b-col><b-col><h4> Quantity </h4></b-col><b-col><h4> Price </h4></b-col><b-col>  </b-col></b-row>
+            <b-row><b-col><h4> Product Name </h4></b-col><b-col><h4> Quantity (Cases) </h4></b-col><b-col><h4> Price </h4></b-col><b-col>  </b-col></b-row>
             <div v-for="drink in $store.state.drinkbox">
                  <b-row>
                      <b-col>
@@ -130,7 +130,7 @@
             return {
                 createDrinkbox: false,
                 order: 'empty',
-                company_id: 0,
+                company_details_id: 0,
                  // total_start: 0,
                 delivered_by: null,
                 // delivered_by_options: ['DPD', 'APC', 'OP'], // This will be removed when I add the fruitpartners dropdown.
@@ -167,8 +167,8 @@
                 axios.post('/api/drinkboxes/save', {
                     details: { 
                         delivered_by_id: this.delivered_by, 
-                        no_of_boxes: this.no_of_boxes, 
-                        company_id: this.selected_company,
+                        // no_of_boxes: this.no_of_boxes, 
+                        company_details_id: this.selected_company,
                         delivery_day: this.delivery_day, 
                         frequency: this.frequency, 
                         week_in_month: this.week_in_month, 

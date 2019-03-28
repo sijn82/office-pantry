@@ -16,7 +16,7 @@ class AddRouteIdToMilkBoxes extends Migration
         Schema::table('milk_boxes', function (Blueprint $table) {
             //
             $table->string('is_active')->after('id')->nullable();
-            $table->integer('route_id')->after('company_id')->nullable();
+            $table->integer('route_id')->after('company_details_id')->nullable();
         });
     }
 

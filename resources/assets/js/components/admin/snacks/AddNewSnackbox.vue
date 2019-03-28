@@ -34,7 +34,7 @@
             </b-col>
         </b-row>
         <b-row class="order-options">
-            <b-col>
+            <b-col v-if="!createWholesaleSnackbox">
                 <label> No. of Boxes </label>
                 <b-form-input type="number" v-model="no_of_boxes" size="sm"></b-form-input>
             </b-col>
@@ -204,8 +204,11 @@ export default {
         creatingWholesaleSnackbox() {
             if (this.createWholesaleSnackbox == true) {
               this.createWholesaleSnackbox = false;
+              this.type = null;
             } else {
               this.createWholesaleSnackbox = true;
+              this.addNewType('wholesale');
+              this.type = 'wholesale';
             }
         },
         // addProductToOrder($event) {
@@ -219,7 +222,7 @@ export default {
         saveCompanySnackbox() {
 
             axios.post('/api/snackboxes/save', {
-                company_id: this.selected_company,
+                company_details_id: this.selected_company,
                 details: [ this.delivered_by, this.no_of_boxes, this.type, this.delivery_day, this.frequency, this.week_in_month, this.next_delivery_week ],
                 order: this.$store.state.snackbox,
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv'},

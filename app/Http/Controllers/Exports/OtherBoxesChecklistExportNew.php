@@ -17,12 +17,11 @@ use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Sheet;
 
-class OtherBoxesExportNew implements
+class OtherBoxesChecklistExportNew implements
 WithMultipleSheets
 {
     public function __construct()
     {
-        
         $week_start = WeekStart::all()->toArray();
         $this->week_start = $week_start[0]['current'];
         $this->delivery_days = $week_start[0]['delivery_days'];
@@ -41,7 +40,7 @@ WithMultipleSheets
             
             foreach ($mon_tues as $day) {
                     // Each distinct assigned_to (route) calls the FruitboxPicklistCollection Class below.
-                    $sheets[] = new OtherBoxPicklistCollection($day, $this->week_start);
+                    $sheets[] = new OtherBoxChecklistCollection($day, $this->week_start);
             }
                 return $sheets;
                 
@@ -49,7 +48,7 @@ WithMultipleSheets
             
             foreach ($wed_thur_fri as $day) {
                     // Each distinct assigned_to (route) calls the FruitboxPicklistCollection Class below.
-                    $sheets[] = new OtherBoxPicklistCollection($day, $this->week_start);
+                    $sheets[] = new OtherBoxChecklistCollection($day, $this->week_start);
             }
                 return $sheets;
         }
@@ -57,18 +56,19 @@ WithMultipleSheets
 
 }
 
-class OtherBoxPicklistCollection implements
+class OtherBoxChecklistCollection implements
 FromView,
 WithTitle,
-ShouldAutoSize,
+ShouldAutoSize
 // WithHeadings,
-WithEvents
+//WithEvents
 {
-    public function __construct($day)
+    public function __construct($day, $week_start)
     {
         $this->day = $day;
+        $this->week_start = $week_start;
         
-        dd($this->day);
+        //dd($this->day);
     }
     
     public function view(): View
@@ -77,24 +77,42 @@ WithEvents
         $currentWeekStart = Weekstart::findOrFail(1);
         
         // Other than a valid week start, all we need to know is what day we're processing and that the orders are 'Active'.
-        $otherboxes = OtherBox::where('is_active', 'Active')->where('next_delivery_week', $currentWeekStart->current)->where('delivery_day', $day)->get();
+        $otherboxes = OtherBox::where('is_active', 'Active')->where('next_delivery_week', $this->week_start)->where('delivery_day', $this->day)->get();
         
-        foreach ($otherboxes as $otherbox_items) {
+        // dd($otherboxes);
+        // Rather than grouping the boxes by otherbox_id we actually want to know how many of a product we need to buy, so let's group them by product_id instead.
+        $groupedByProductId = $otherboxes->groupBy('product_id');
+
+        // dd($groupedByProductId);
+        $products = [];
         
-            // For each order we have a company ID but for the export file we need the actual name.
-            // $company_name = CompanyDetails::where('id', $otherbox->company_details_id)
+        foreach ($groupedByProductId as $otherbox) {
+
+            $product = (object) [];
+            $product->name = $otherbox[0]->name;
+            $quantity = 0;
+            
+            foreach ($otherbox as $item) {
+                $quantity += $item->quantity;
+            }
+            
+            $product->quantity = $quantity;
+            
+            $products[] = $product;
         }
         
-        return view('exports.otherbox-items', [
-                    'week_start'            =>   $this->week_starting,
-                    'other_items'            =>  $otherboxes,
+        // dd($products);
+
+        return view('exports.new-otherbox-items-checklist', [
+                    'week_start'            =>   $this->week_start,
+                    'products'            =>  $products,
                     'out_for_delivery_day'  =>   $this->day
                 ]);
     }
     
     public function title(): string
     {
-    
+        return $this->day;
     }
     
     public function registerEvents(): array

@@ -29,17 +29,17 @@
                     <p> Selected Delivery Day(s): {{ form.delivery_day }} </p> <!-- According to the docs this must be an array reference, however it seems to me this is happening anyway?  Interesting... -->
                     <!-- Company Select -->
                 <b-form-group id="fruitbox-company-select" label="Select Company For Fruitbox: ">
-                    <b-form-select v-model="form.company_id" v-if="user_associated_companies != undefined" :options="user_associated_companies" required>
+                    <b-form-select v-model="form.company_details_id" v-if="user_associated_companies != undefined" :options="user_associated_companies" required>
                         <template slot="first">
                             <option :value="null" disabled>-- Please select an option --</option>
                         </template>
                     </b-form-select>
-                    <b-form-select v-model="form.company_id" :options="company_selected" v-else required>
+                    <b-form-select v-model="form.company_details_id" :options="company_selected" v-else required>
                         <template slot="first">
                             <option :value="null" disabled>-- Please select an option --</option>
                         </template>
                     </b-form-select>
-                    <p style="padding-top:10px;"> Selected Company: {{ form.company_id }} </p>
+                    <p style="padding-top:10px;"> Selected Company: {{ form.company_details_id }} </p>
                 </b-form-group>
                 <!-- Type of Box -->
                 <b-form-group id="fruitbox-type" label="Select Fruitbox Type: ">
@@ -203,7 +203,7 @@ export default {
                     is_active: 'Active',
                     fruit_partner_id: 1, // By default this will be 'Office Pantry', I could change this to 'Please Select' but figure Office Pantry is still the main distributor.
                     name: '',
-                    company_id: null, // If this is created by Frosh, how are they going to select the company to attach the order to?  A typed filter of a long list may be the best way.
+                    company_details_id: null, // If this is created by Frosh, how are they going to select the company to attach the order to?  A typed filter of a long list may be the best way.
                     route_id: null, // This will also need a way to filter from all possible routes, however once a company has been confirmed, the options could easily fit on a dropdown.
                     delivery_day: '',  // According to the docs this must be an array reference, however it seems to me this is happening anyway?  Interesting...
                     type: null, // Whilst not currently in use, this will determine between standard, berries and tailored, with tailored being the only one which can be edited (probably).
@@ -271,7 +271,7 @@ export default {
               evt.preventDefault();
               /* Reset our form values */
               this.form.name = '';
-              this.form.company_id = null;
+              this.form.company_details_id = null;
               this.form.route_id = null;
               this.form.delivery_day = '';
               this.form.type = null;

@@ -1,11 +1,12 @@
 <template lang="html">
-    <div>
-        <b-container class="text-align-center">
+    <div class="companybox">
+        <b-container class="text-align-center margin-top-20">
             <h3> Company Details </h3>
             <b-row class="margin-top-20">
                 <b-col>
                     <div v-if="edit">
                         <b-button type="submit" variant="success" @click="updateCompanyDetails(company)"> Update </b-button>
+                        <b-button class="margin-left-10" variant="warning" @click="editing()"> Cancel </b-button>
                     </div>
                     <div v-else>
                         <b-button variant="warning" @click="editing()"> Edit </b-button>
@@ -26,6 +27,15 @@
                     </div>
                     <div v-else>
                         <p> {{ company.invoice_name }} </p>
+                    </div>
+                </b-col>
+                <b-col>
+                    <label> Status </label>
+                    <div v-if="edit">
+                        <b-form-select v-model="company.is_active" :options="status"></b-form-select>
+                    </div>
+                    <div v-else>
+                        <p> {{ company.is_active }} </p>
                     </div>
                 </b-col>
                 <b-col>
@@ -319,6 +329,24 @@
     .margin-top-20 {
         margin-top: 20px;
     }
+    .margin-left-10 {
+        margin-left: 10px;
+    }
+    .companybox {
+        padding-top: 20px;
+        padding-left: 0;
+        li {
+        list-style: none;
+        }
+    }
+    .companybox:after {
+        content: ""; /* This is necessary for the pseudo element to work. */
+        display: block; /* This will put the pseudo element on its own line. */
+        margin: 0 auto; /* This will center the border. */
+        width: 70%; /* Change this to whatever width you want. */
+        padding-top: 20px; /* This creates some space between the element and the border. */
+        border-bottom: 1px solid #636b6f; /* This creates the border. Replace black with whatever color you want. */
+    }
     
 </style>
 
@@ -335,11 +363,12 @@ export default {
               'Standing Order', 'TBC'
             ],
             model_options: ['Free', 'Honesty Box'],
+            status: ['Active', 'Inactive'],
         }
     },
     methods: {
         editing () {
-            if (this.edit === 'true') {
+            if (this.edit === true) {
                 this.edit = false;
             } else {
                 this.edit = true;
