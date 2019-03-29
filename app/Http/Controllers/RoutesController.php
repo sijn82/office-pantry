@@ -1062,8 +1062,12 @@ class RoutesController extends Controller
                             // echo $fruitOrderingDocument->company_name . ' was found in '; var_dump($company_box_name);
                             // $selected_company = Company::where('box_names', 'LIKE', '%' . $company_box_name[0] . '%')->get();
                             $selected_company = Company::where('box_names', 'LIKE', '%' . $fruitOrderingDocument->company_name . '%')->get();  // Grab the company details where fod entry matches a listed box name
-                            Log::channel('slack')->info($fruitOrderingDocument->company_name);
-                            Log::channel('slack')->info($selected_company );
+                            
+                            //----- Extra debugging messages for Laravel Logs, commenting out for now but can bring back again if needed. -----//
+                                // Log::channel('slack')->info($fruitOrderingDocument->company_name);
+                                // Log::channel('slack')->info($selected_company );
+                            //----- End of debugging extras -----//
+                            
                             // Grab route entry, if the selected company has a declared route name which matches a known route
                             $selected_route_entry = Route::where('company_name', $selected_company[0]->route_name)->where('delivery_day', $fruitOrderingDocument->delivery_day)->get();
                              // var_dump(empty($selected_route_entry[0]->week_start));
