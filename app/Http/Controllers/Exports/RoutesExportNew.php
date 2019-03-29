@@ -197,6 +197,7 @@ WithEvents
 
         foreach ($routeInfoAll as $routeInfoSolo)
         {
+            //dd($routeInfoSolo);
             // ---------- Fruit Deliveries ---------- //
 
             // For each route in the routes table, we check the associated Company ID for a FruitBox - that's Active, On Delivery For This Week and on this Delivery Day.
@@ -297,7 +298,18 @@ WithEvents
                 }
             }
             //dd($other_items_list);
+            
+            // As it stands this is only temporarily held in the $routeInfoSolo variable, as nothing is saved to the database.
+            // If I save it here, then we'll have data saved to the CompanyRoute tables, which will be overwritten everytime this export route function is called.
+            // The issue with this is that the cell will appear to be updatable on the office dashboard but in reality the exported route won't keep the values.
+            
+            // I'm thinking it should save the info here but have another function (and button) which can be run to specifically override the information held.
+            // It'll still need to run most of this code, just without the parts like this one which will try to override the data.
             $routeInfoSolo->other = $other_items_list;
+            
+            CompanyRoute::where('id', $routeInfoSolo->id)->update([
+                'other' => $other_items_list,
+            ]);
 
             // ------------ End of Snacks, Drinks & Other ------------ //
             
@@ -307,11 +319,13 @@ WithEvents
             // if ($routeInfoSolo->company_details_id == 55 && $routeInfoSolo->delivery_day == 'Monday') {
             //     dd($routeInfoSolo);
             // }
-            
+            //    dd($routeInfoSolo);
             // ----- End Of For Debugging Purposes ----- //
 
             // Now we've added the entries we need to the route, we can build an array of collections and send it to the 'order-processing' template for outputting.
             // Although if they don't have anything scheduled for delivery we can ignore them this week.
+            
+            // I think this check needs to account for snacks, drinks and other now that i've completed the addition of them to the previous steps.
             if ($routeInfoSolo->milk == 'None for this week!' && $routeInfoSolo->fruit == 'None for this week!') {
             } else {
                 // Otherwise we can add them here.
