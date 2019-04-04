@@ -32,31 +32,46 @@ WithMultipleSheets
     
     public function sheets(): array
     {
-        $sheets = [];
-        
+        // Set variables for combined days and our exportable $sheets array.
         $mon_tues = ['Monday', 'Tuesday']; 
         $wed_thur_fri = ['Wednesday', 'Thursday', 'Friday'];
-        // Now we need to decide how many tabs we want to split the data onto.  
-        // I'm thinking for the volume of orders, splitting it by the day of the week should be sufficient.
+        $sheets = [];
         
-        if ($this->delivery_days == 'mon-tue') {
-            
-            foreach ($mon_tues as $day) {
-                    // Each distinct assigned_to (route) calls the FruitboxPicklistCollection Class below.
-                    $sheets[] = new OtherBoxCompanyRouteCollection($day, $this->week_start);
-            }
+        // Switch statement to handle day selection exports, passing through a string into the other class still registers as the expected $route_day.
+        switch ($this->delivery_days) {
+            case 'mon-tue':
+                foreach ($mon_tues as $route_day) {
+                    $sheets[] = new OtherBoxCompanyRouteCollection($route_day, $this->week_start);
+                }
+                break;
+            case 'wed-thur-fri':
+                foreach ($wed_thur_fri as $route_day) {
+                    $sheets[] = new OtherBoxCompanyRouteCollection($route_day, $this->week_start);
+                }
                 return $sheets;
-                
-        } else {
-            
-            foreach ($wed_thur_fri as $day) {
-                    // Each distinct assigned_to (route) calls the FruitboxPicklistCollection Class below.
-                    $sheets[] = new OtherBoxCompanyRouteCollection($day, $this->week_start);
-            }
+                break;
+            case 'mon':
+                $sheets[] = new OtherBoxCompanyRouteCollection('Monday', $this->week_start);
                 return $sheets;
+                break;
+            case 'tue':
+                $sheets[] = new OtherBoxCompanyRouteCollection('Tuesday', $this->week_start);
+                return $sheets;
+                break;
+            case 'wed':
+                $sheets[] = new OtherBoxCompanyRouteCollection('Wednesday', $this->week_start);
+                return $sheets;
+                break;
+            case 'thur':
+                $sheets[] = new OtherBoxCompanyRouteCollection('Thursday', $this->week_start);
+                return $sheets;
+                break;
+            case 'fri':
+                $sheets[] = new OtherBoxCompanyRouteCollection('Friday', $this->week_start);
+                return $sheets;
+                break;
         }
     }
-
 }
 
 class OtherBoxCompanyRouteCollection implements
@@ -75,7 +90,7 @@ ShouldAutoSize
     public function view(): View
     {
         // First we need to check for orders that are due for delivery this week.  We can compare their next delivery date with the current week start date.
-        $currentWeekStart = Weekstart::findOrFail(1);
+        //$currentWeekStart = Weekstart::findOrFail(1); <-- Replaced by passing the variable from OtherBoxesCompanyRouteExportNew class and constructing it.
         
         // Other than a valid week start, all we need to know is what day we're processing and that the orders are 'Active'.
         $otherboxes = OtherBox::where('is_active', 'Active')->where('next_delivery_week', $this->week_start)->where('delivery_day', $this->day)->where('delivered_by_id', 1)->get();

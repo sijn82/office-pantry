@@ -17,46 +17,6 @@ use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Sheet;
 
-// class OtherBoxesWeeklyTotalChecklistExportNew implements
-// WithMultipleSheets
-// {
-//     public function __construct()
-//     {
-// 
-//         $week_start = WeekStart::all()->toArray();
-//         $this->week_start = $week_start[0]['current'];
-//         $this->delivery_days = $week_start[0]['delivery_days'];
-//     }
-// 
-//     public function sheets(): array
-//     {
-//         $sheets = [];
-// 
-//         $mon_tues = ['Monday', 'Tuesday']; 
-//         $wed_thur_fri = ['Wednesday', 'Thursday', 'Friday'];
-//         // Now we need to decide how many tabs we want to split the data onto.  
-//         // I'm thinking for the volume of orders, splitting it by the day of the week should be sufficient.
-// 
-//         if ($this->delivery_days == 'mon-tue') {
-// 
-//             foreach ($mon_tues as $day) {
-//                     // Each distinct assigned_to (route) calls the FruitboxPicklistCollection Class below.
-//                     $sheets[] = new OtherBoxWeeklyTotalChecklistCollection($this->week_start);
-//             }
-//                 return $sheets;
-// 
-//         } else {
-// 
-//             foreach ($wed_thur_fri as $day) {
-//                     // Each distinct assigned_to (route) calls the FruitboxPicklistCollection Class below.
-//                     $sheets[] = new OtherBoxWeeklyTotalChecklistCollection($this->week_start);
-//             }
-//                 return $sheets;
-//         }
-//     }
-// 
-// }
-
 class OtherBoxesWeeklyTotalChecklistExportNew implements
 FromView,
 WithTitle,

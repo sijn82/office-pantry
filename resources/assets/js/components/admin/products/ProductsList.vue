@@ -52,7 +52,8 @@
                                         :createSnackbox="createSnackbox"
                                         :createWholesaleSnackbox="createWholesaleSnackbox"
                                         :createOtherbox="createOtherbox" 
-                                        :createDrinkbox="createDrinkbox" 
+                                        :createDrinkbox="createDrinkbox"
+                                        :type="type" 
                                         :product="product">
                             </product>
                         <!-- </div> -->
@@ -95,7 +96,7 @@
 import axios from 'axios';
 
 export default {
-    props: ['route', 'createSnackbox', 'createWholesaleSnackbox', 'createOtherbox', 'createDrinkbox', 'product', 'quantity'],
+    props: ['route', 'createSnackbox', 'createWholesaleSnackbox', 'createOtherbox', 'createDrinkbox', 'type', 'product', 'quantity'],
     data() {
         return {
             products: [],

@@ -52,7 +52,7 @@ class ProductsController extends Controller
         $newProduct->cost_nominal = $request['company_data']['cost_nominal'];
         $newProduct->profit_margin = $request['company_data']['profit_margin'];
         $newProduct->stock_level = $request['company_data']['stock_level'];
-        $newProduct->shortest_stock_date = $request['company_data']['shortest_stock_date'];
+        //$newProduct->shortest_stock_date = $request['company_data']['shortest_stock_date']; <-- I think it's highly unlikely we'll have this info to hand when adding the product to the system.
         $newProduct->save();
     }
     

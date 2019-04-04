@@ -34,7 +34,7 @@ WithMultipleSheets
     protected $week_start;
     protected $delivery_days;
 
-    public function __construct( $week_starting)
+    public function __construct($week_starting)
     {
         $this->week_starting = $week_starting;
 
@@ -52,44 +52,80 @@ WithMultipleSheets
      */
     public function sheets(): array
     {
-        // This grabs all the current delivery routes for monday and tuesday, ordering the list by their tab order position.
-        $OrderedRoutesMonTue = AssignedRoute::whereIn('delivery_day', ['Monday', 'Tuesday'])->orderBy('tab_order', 'desc')->get();
-        // Now we only need their names, so let's just put them into a lovely array...
-        foreach ($OrderedRoutesMonTue as $route) {
-            // ... called $correctOrderMonTue
-            $correctOrderMonTue[] = $route->name;
-        }
-        
-        // This grabs all the current delivery routes for wednesday, thursday and friday, ordering the list by their tab order position.
-        $OrderedRoutesWedThurFri = AssignedRoute::whereIn('delivery_day', ['Wednesday', 'Thursday', 'Friday'])->orderBy('tab_order', 'desc')->get();
-        // Now we only need their names, so lets just put them into a lovely array...
-        foreach ($OrderedRoutesWedThurFri as $route) {
-            // ... called $correctOrderMonTue
-            $correctOrderWedThurFri[] = $route->name;
-        }
-        
         $sheets = [];
-
-        // Great, now let's check the delivery days we want to process this time and grab the array of those routes.
-        // At the moment there are only two options but should we change to daily printouts, a switch statement would probably make more sense.
         
-        if ($this->delivery_days == 'mon-tue') {
-            
-            foreach ($correctOrderMonTue as $picklistsolo) {
-                    // Each distinct assigned_to (route) calls the FruitboxPicklistCollection Class below.
-                    $sheets[] = new FruitboxPicklistCollection($picklistsolo, $this->week_starting);
-            }
+        switch ($this->delivery_days) {
+            case 'mon-tue':
+                $orderedRoutesAll = AssignedRoute::whereIn('delivery_day', ['Monday', 'Tuesday'])->orderBy('tab_order', 'desc')->get();
+                foreach ($orderedRoutesAll as $route) {
+                    $orderedRoutes[] = $route->name;
+                }
+                foreach ($orderedRoutes as $assigned_route) {
+                    $sheets[] = new FruitboxPicklistCollection($assigned_route, $this->week_start);
+                }
+                break;
+            case 'wed-thur-fri':
+                $orderedRoutesAll = AssignedRoute::whereIn('delivery_day', ['Wednesday', 'Thursday', 'Friday'])->orderBy('tab_order', 'desc')->get();
+                foreach ($orderedRoutesAll as $route) {
+                    $orderedRoutes[] = $route->name;
+                }
+                foreach ($orderedRoutes as $assigned_route) {
+                    $sheets[] = new FruitboxPicklistCollection($assigned_route, $this->week_start);
+                }
                 return $sheets;
-                
-        } else {
-            
-            foreach ($correctOrderWedThurFri as $picklistsolo) {
-                    // Each distinct assigned_to (route) calls the FruitboxPicklistCollection Class below.
-                    $sheets[] = new FruitboxPicklistCollection($picklistsolo, $this->week_starting);
-            }
-            
+                break;
+            case 'mon':
+                $orderedRoutesAll = AssignedRoute::where('delivery_day', 'Monday')->orderBy('tab_order', 'desc')->get();
+                foreach ($orderedRoutesAll as $route) {
+                    $orderedRoutes[] = $route->name;
+                }
+                foreach ($orderedRoutes as $assigned_route) {
+                    $sheets[] = new FruitboxPicklistCollection($assigned_route, $this->week_start);
+                }    
                 return $sheets;
-        }
+                break;
+            case 'tue':
+                $orderedRoutesAll = AssignedRoute::where('delivery_day', 'Tuesday')->orderBy('tab_order', 'desc')->get();
+                foreach ($orderedRoutesAll as $route) {
+                    $orderedRoutes[] = $route->name;
+                }
+                foreach ($orderedRoutes as $assigned_route) {
+                    $sheets[] = new FruitboxPicklistCollection($assigned_route, $this->week_start);
+                }    
+                return $sheets;
+                break;
+            case 'wed':
+                $orderedRoutesAll = AssignedRoute::where('delivery_day', 'Wednesday')->orderBy('tab_order', 'desc')->get();
+                foreach ($orderedRoutesAll as $route) {
+                    $orderedRoutes[] = $route->name;
+                }
+                foreach ($orderedRoutes as $assigned_route) {
+                    $sheets[] = new FruitboxPicklistCollection($assigned_route, $this->week_start);
+                }    
+                return $sheets;
+                break;
+            case 'thur':
+                $orderedRoutesAll = AssignedRoute::where('delivery_day', 'Thursday')->orderBy('tab_order', 'desc')->get();
+                foreach ($orderedRoutesAll as $route) {
+                    $orderedRoutes[] = $route->name;
+                }
+                foreach ($orderedRoutes as $assigned_route) {
+                    $sheets[] = new FruitboxPicklistCollection($assigned_route, $this->week_start);
+                }    
+                return $sheets;
+                break;
+            case 'fri':
+                $orderedRoutesAll = AssignedRoute::where('delivery_day', 'Friday')->orderBy('tab_order', 'desc')->get();
+                foreach ($orderedRoutesAll as $route) {
+                    $orderedRoutes[] = $route->name;
+                }
+                foreach ($orderedRoutes as $assigned_route) {
+                    $sheets[] = new FruitboxPicklistCollection($assigned_route, $this->week_start);
+                }    
+                return $sheets;
+                break;
+        }  // End of switch statement
+
     }
 
 } // End of FruitboxPicklistsExport class
@@ -107,7 +143,7 @@ WithEvents
     public function __construct($picklistsolo, $week_starting)
     {
         $this->picklistsolo = $picklistsolo;
-        $this->week_starting = $week_starting;
+        $this->week_start = $week_starting;
     }
     
     // This is the old way, when the picklists were their own table in the db rather than several relational tables.
@@ -125,10 +161,10 @@ WithEvents
         // ---------- Fruit Deliveries ---------- //
         
         // First we need to check for orders that are due for delivery this week.  We can compare their next delivery date with the current week start date.
-        $currentWeekStart = Weekstart::findOrFail(1);
+        // $currentWeekStart = Weekstart::findOrFail(1);
 
         // If it matches, it's on for delivery this week and delivered/packed by office pantry.
-        $fruitboxesForDelivery = FruitBox::where('next_delivery', $currentWeekStart->current)->where('is_active', 'Active')->where('fruit_partner_id', 1)->get();
+        $fruitboxesForDelivery = FruitBox::where('next_delivery', $this->week_start)->where('is_active', 'Active')->where('fruit_partner_id', 1)->get();
 
         foreach ($fruitboxesForDelivery as $fruitbox)
         {
@@ -139,7 +175,8 @@ WithEvents
             // Ok, time to change the '->where('assigned_to' $this->picklistsolo)', to look for the id instead after translating the $this->picklistsolo name from AssignedRoutes.
             $assigned_route = AssignedRoute::where('name', $this->picklistsolo)->get();
             // For each route in the routes table, we check the associated Company ID for a FruitBox - that's Active, On Delivery For This Week and on this Delivery Day.
-            $routesForFruitbox = CompanyRoute::where('company_details_id', $fruitbox->company_details_id)->where('delivery_day', $fruitbox->delivery_day)->where('is_active', 'Active')->where('assigned_route_id', $assigned_route[0]->id)->get();
+            $routesForFruitbox = CompanyRoute::where('company_details_id', $fruitbox->company_details_id)->where('delivery_day', $fruitbox->delivery_day)
+                                             ->where('is_active', 'Active')->where('assigned_route_id', $assigned_route[0]->id)->get();
 
             if (count($routesForFruitbox)) {
                 $fruitbox['assigned_to'] = $routesForFruitbox[0]->assigned_to;

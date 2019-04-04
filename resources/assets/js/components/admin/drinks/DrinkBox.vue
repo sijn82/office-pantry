@@ -39,15 +39,15 @@
                         <p> {{ drinkbox[0].fruit_partner_name }} </p>
                     </div>
                 </b-col>
-                <!-- <b-col>
-                    <label><b> No. Of Boxes </b></label>
+                <b-col>
+                    <label><b> Type </b></label>
                     <div v-if="editing">
-                        <b-form-input v-model="drinkbox[0].no_of_boxes" type="number"></b-form-input>
+                        <b-form-select v-model="drinkbox[0].type" :options="type_options"></b-form-select>
                     </div>
                     <div v-else>
-                        <p> {{ drinkbox[0].no_of_boxes }} </p>
+                        <p> {{ drinkbox[0].type }} </p>
                     </div>
-                </b-col> -->
+                </b-col>
             </b-row>
             
             <b-row :class="drinkbox[0].is_active">
@@ -179,6 +179,7 @@
                 quantity: 0,
                 editing: false,
                 details: false,
+                type: ['Regular', 'Unique'],
                 days_of_week: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
                 frequency_options: ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'],
                 week_in_month_options: ['First', 'Second', 'Third', 'Forth', 'Last'],

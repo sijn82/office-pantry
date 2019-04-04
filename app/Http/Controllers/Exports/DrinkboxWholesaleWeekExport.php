@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Exports;
 
-use Session;
-use Illuminate\Support\Facades\Log;
-
 use App\WeekStart;
-use App\Company;
+use App\DrinkBox;
+use App\FruitPartner;
 use App\CompanyDetails;
-use App\SnackBox;
 use App\Product;
 
+use Session;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
+// use App\Http\Controllers\Exports;
 use Maatwebsite\Excel\Concerns\WithTitle;
 
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
@@ -24,109 +24,54 @@ use Maatwebsite\Excel\Events\AfterSheet;
 
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class SnackboxMultiCompanyExportNew implements
-WithMultipleSheets
-{
-    public function __construct()
-    {    
-        $week_start = WeekStart::all()->toArray();
-        $this->week_start = $week_start[0]['current'];
-        $this->delivery_days = $week_start[0]['delivery_days'];
-    }
-    
-    public function sheets(): array
-    {
-        // Set variables for combined days and our exportable $sheets array.
-        $mon_tues = ['Monday', 'Tuesday']; 
-        $wed_thur_fri = ['Wednesday', 'Thursday', 'Friday'];
-        $sheets = [];
-        // dd('got this far...');
-        // Switch statement to handle day selection exports, passing through a string into the other class still registers as the expected $route_day.
-        switch ($this->delivery_days) {
-            case 'mon-tue':
-                foreach ($mon_tues as $route_day) {
-                    $sheets[] = new SnackboxMultiCompanyCollectionExportNew($route_day, $this->week_start);
-                }
-                return $sheets;
-                break;
-            case 'wed-thur-fri':
-                foreach ($wed_thur_fri as $route_day) {
-                    $sheets[] = new SnackboxMultiCompanyCollectionExportNew($route_day, $this->week_start);
-                }
-                return $sheets;
-                break;
-            case 'mon':
-                $sheets[] = new SnackboxMultiCompanyCollectionExportNew('Monday', $this->week_start);
-                return $sheets;
-                break;
-            case 'tue':
-                $sheets[] = new SnackboxMultiCompanyCollectionExportNew('Tuesday', $this->week_start);
-                return $sheets;
-                break;
-            case 'wed':
-                $sheets[] = new SnackboxMultiCompanyCollectionExportNew('Wednesday', $this->week_start);
-                return $sheets;
-                break;
-            case 'thur':
-                $sheets[] = new SnackboxMultiCompanyCollectionExportNew('Thursday', $this->week_start);
-                return $sheets;
-                break;
-            case 'fri':
-                $sheets[] = new SnackboxMultiCompanyCollectionExportNew('Friday', $this->week_start);
-                return $sheets;
-                break;
-        }
-    }
-}
-
-class SnackboxMultiCompanyCollectionExportNew
+class DrinkboxWholesaleWeekExport
  // implements WithMultipleSheets
   implements FromView, WithEvents, ShouldAutoSize, WithTitle //, WithMultipleSheets
 {
     protected $courier;
 
-    public function __construct($export_day, $week_start)
+    public function __construct()
     {
-        //dd('got this far...');
-        $courier = session()->get('snackbox_courier');
+        $courier = session()->get('drinkbox_courier');
         $this->courier = $courier;
         
-        $this->day = $export_day;
-        $this->week_start = $week_start;
+        $week_start = WeekStart::all()->toArray();
+        $this->week_start = $week_start[0]['current'];
     }
-    
-    public function view(): View
-   {
-        // First we need to grab the current week start for orders being processed.
-        //$currentWeekStart = Weekstart::findOrFail(1);
-    
-        // It would be nice if I could make the 'delivered_by' variable a conditional passed by the button pressed. 
-        // If it was I could use the same function to process OP/APC/DPD and any others in future.
-        // Though for right now let's hard code it and get the rest of the logic in place.
-        $snackboxes = SnackBox::where('delivered_by', $this->courier)->where('next_delivery_week', $this->week_start)->where('delivery_day', $this->day)->where('no_of_boxes', '=', 1)
-                                ->where('product_id', '!=', 0)->whereNotIn('type', ['wholesale', 'unique'])->get();
-       
-        // Group the snackbox entries by snackbox_id to pull each order together
-        $snackboxesGroupedById = $snackboxes->groupBy('snackbox_id');
 
-        foreach ($snackboxesGroupedById as $snackbox) {
-            $company_details_id = $snackbox[0]->company_details_id;
-            $company = CompanyDetails::findOrFail($company_details_id);
-           
-            // As we know we need to display all the products contained within these 4 company orders, lets get a list of all id's which need processing.
-            foreach ($snackbox as $snack) {
-                $product_ids_all[] = $snack->product_id;
-            }
-            
-            $snackbox['company_name'] = $company->route_name;
-            $snackbox['delivered_by'] = $snackbox[0]->delivered_by;
-       }
+    public function view(): View
+    {
+        // $currentWeekStart = Weekstart::findOrFail(1);
+
+        $drinkboxes = DrinkBox::where('delivered_by_id', $this->courier)->where('next_delivery_week', $this->week_start)
+                                ->where('product_id', '!=', 0)->get();
+        //dd($drinkboxes);
         
-        // Edit - However should there be no results this next step throws an error. So let's check if $product_ids_all has anything in it.
+        $fruitpartner = FruitPartner::findOrFail($this->courier);
+        
+        // Group the snackbox entries by snackbox_id to pull each order together
+        $drinkboxesGroupedById = $drinkboxes->groupBy('drinkbox_id');
+
+        foreach ($drinkboxesGroupedById as $drinkbox) {
+            // Use the company id to grab the company details
+            $company_details_id = $drinkbox[0]->company_details_id;
+            $company = CompanyDetails::findOrFail($company_details_id);            
+
+            // As we know we need to display all the products contained within these 4 company orders, lets get a list of all id's which need processing.
+            foreach ($drinkbox as $drink) {
+                $product_ids_all[] = $drink->product_id;
+            }
+
+            $drinkbox['company_name'] = $company->route_name;
+            $drinkbox['delivered_by'] = $fruitpartner->name;
+       }
+
+        // Now we have them all we can strip out the duplicates, as we only want one row per product
+        // and can search the orders for each product, displaying either the quantity in each box, or 0 if not included in that snackbox.
+        
         if (!empty($product_ids_all)) {
-            
             $product_ids_unique = array_unique($product_ids_all);
-            
+
             // Now we have the product id's we can create a key value pair with the product names.
             // This will make it easier to display the product name on the template and changes the array key to the product id.
             foreach ($product_ids_unique as $product_id) {
@@ -136,27 +81,30 @@ class SnackboxMultiCompanyCollectionExportNew
         }
 
         // Group the snackboxes in chunks of 4 to match the template we wish to fill.
-        $snd_OP_singleBoxes_chunks = $snackboxesGroupedById->chunk(4);
+        $drink_chunks = $drinkboxesGroupedById->chunk(4);
 
-        // This count check hasn't been tested for when it returns false.
-        if (!count($snd_OP_singleBoxes_chunks)) {
-            
-            Log::channel('slack')->info('Snackbox OP Multicompany - None for this week');
+        //dd($drink_chunks);
+
+        if (!count($drink_chunks)) {
+
+            Log::channel('slack')->info('OP Drinkboxes - None for this week');
             return view('none-for-this-week');
-       
+
         } else {
-               
-            return view('exports.snackboxes-multi-company-new', [
-               'chunks'         =>  $snd_OP_singleBoxes_chunks,
-               'products'    =>  $products,
+
+            return view('exports.drinkboxes-multi-company-new', [
+                'chunks'    =>  $drink_chunks,
+                'products'  =>  $products,
             ]);
         }
-   }
-   
+    }
+
+
    public function title(): string
    {
-       return 'OP MultiCompany';
+       return 'OP Drinks - ' . $this->week_start;
    }
+
 
    /**
     * @return array
@@ -225,20 +173,20 @@ class SnackboxMultiCompanyCollectionExportNew
                              // The following 2 styles, centre the delivered_by text at the top, and the switch case below styles the cell(s) with the right colour.
                              $event->sheet->getDelegate()->getStyle($deliveredByRange)->getAlignment()->setHorizontal('center');
                              $event->sheet->getDelegate()->getStyle($deliveredByRange)->getAlignment()->setVertical('center');
-                             
+
                              // Look in this cell for delivered_by info, based on which of the 3 values it is, style the cell accordingly.  P.s Finally had a use case for a switch statement over if/else!
                              $delivered_by = $event->sheet->getDelegate()->getCell('D' . $selectedRow)->getValue();
                              // dd($delivered_by);
                              switch ($delivered_by) {
-                                 
-                                 case "OP":
+
+                                 case "Office Pantry":
                                  $event->sheet->styleCells(
                                        'D' . $selectedRow, // Cell Range
                                        [ // Styles Array
                                            'fill' => [
                                                        'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
                                                        'color' => [
-                                                         'argb' => 'e619e5' // desaturated fuchsia 
+                                                         'argb' => 'e619e5' // desaturated fuchsia
                                                        ]
                                            ] // end of fill
                                        ] // end of styles array

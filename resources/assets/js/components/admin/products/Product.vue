@@ -6,15 +6,15 @@
                 <b-row>
                     <b-col> <h4> {{ product.name }} </h4> </b-col>
                     <b-col> 
-                        <div v-if="!createWholesaleSnackbox && !createDrinkbox">
+                        <div v-if="!createWholesaleSnackbox && !createDrinkbox || createDrinkbox && type === 'Unique' || 'monthly-special'">
                             <h4 :class="{
                                             'none-in-stock' : matchNumberToColour(product.stock_level),
                                             'some-in-stock' : !matchNumberToColour(product.stock_level),
                                             'a-few-in-stock' : !matchNumberToColour(product.stock_level) && product.stock_level <= 20}">
-                                            Units: {{ product.stock_level }} / {{ product.is_active }} 
+                                            Units: {{ computed_quantity_units }} / {{ product.is_active }} 
                             </h4>
                         </div>
-                        <div v-if="createWholesaleSnackbox || createDrinkbox">
+                        <div v-if="createWholesaleSnackbox || createDrinkbox && type === 'Regular'">
                             <h4 :class="{
                                             'none-in-stock' : matchNumberToColour(product.stock_level),
                                             'some-in-stock' : !matchNumberToColour(product.stock_level),
@@ -32,12 +32,12 @@
                         <b-button size="sm" v-if="createWholesaleSnackbox" variant="outline-success" @click="addProductToSnackbox(product, quantity)"> Add To Wholesale Snackbox </b-button>
                         <b-button size="sm" v-if="createOtherbox" variant="outline-success" @click="addProductToOtherbox(product, quantity)"> Add To Otherbox </b-button>
                         <b-button size="sm" v-if="createDrinkbox" variant="outline-success" @click="addProductToDrinkbox(product, quantity)"> Add To Drinkbox </b-button>
-                        <div v-if="createSnackbox || createOtherbox">
+                        <div v-if="createSnackbox || createOtherbox || createDrinkbox && type === 'Unique' || 'monthly-special'">
                             <b-input-group append="Unit(s)">
                                 <b-form-input size="sm" v-model="quantity" class="quantity-input" type="number"></b-form-input>
                             </b-input-group>
                         </div>
-                        <div v-else-if="createWholesaleSnackbox || createDrinkbox || createWholesaleOtherbox">
+                        <div v-else-if="createWholesaleSnackbox || createDrinkbox && type === 'Regular' || createWholesaleOtherbox">
                             <b-input-group append="Case(s)">
                                 <b-form-input size="sm" v-model="quantity" class="quantity-input" type="number"></b-form-input>
                             </b-input-group>
@@ -185,24 +185,9 @@
 
 <script>
 export default {
-    props: ['product', 'route', 'createSnackbox', 'createWholesaleSnackbox', 'createOtherbox', 'createDrinkbox'],
+    props: ['product', 'route', 'createSnackbox', 'createWholesaleSnackbox', 'createOtherbox', 'createWholesaleOtherbox', 'createDrinkbox', 'type'],
     data () {
         return {
-            // product: {
-            //     id: '',
-            //     is_active: '',
-            //     code: '',
-            //     name: '',
-            //     case_price: 0.00,
-            //     case_size: 0,
-            //     unit_cost: 0,
-            //     unit_price: 0.00,
-            //     vat: null,
-            //     sales_nominal: null,
-            //     cost_nominal: null,
-            //     profit_margin: '',
-            //     stock_level: 0,
-            // },
             editing: false,
             details: false,
             quantity: 0,
@@ -219,6 +204,9 @@ export default {
         number_of_cases: function () {
             
             return Math.floor(this.product.stock_level / this.product.case_size)
+        }, 
+        computed_quantity_units: function () {
+            return this.product.stock_level - this.quantity
         }
     
     },

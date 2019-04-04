@@ -1,4 +1,4 @@
-details_<?php
+<?php
 
 namespace App\Http\Controllers;
 
@@ -52,7 +52,12 @@ class OrderController extends Controller
                 
         
     }
-
+    
+    // I think this 'public static function advanceNextOrderDeliveryDate()' might be the only function in here that's actually still in use.  
+    // Which is quite funny as I have no idea whether it's still updating successfully since I don't actually know 
+    // when it would ATTEMPT TO UPDATE THE ORDERS, OR WHAT HAPPENS WHEN IT CAN'T?!
+    // But it's on the 'to do list', sob...
+    
     public static function advanceNextOrderDeliveryDate()
     {
         // ---------- Test Area ---------- //
@@ -319,7 +324,9 @@ class OrderController extends Controller
 
             // This may be easier to leave as a manual date field where we select a date when they need a delivery.
     }
-
+    
+    // This looks like the earlier form of a full routing function, I think when I created the CompanyRoutes Contoller I copied and continued this development there.
+    
     public function addOrdersToRoutes()
     {
 

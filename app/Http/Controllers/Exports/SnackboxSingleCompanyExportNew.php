@@ -22,17 +22,76 @@ use Maatwebsite\Excel\Events\AfterSheet;
 
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class SnackboxSingleCompanyExportNew
+class SnackboxSingleCompanyExportNew implements
+WithMultipleSheets
+{
+    public function __construct()
+    {
+        
+        $week_start = WeekStart::all()->toArray();
+        $this->week_start = $week_start[0]['current'];
+        $this->delivery_days = $week_start[0]['delivery_days'];
+    }
+    
+    public function sheets(): array
+    {
+        // Set variables for combined days and our exportable $sheets array.
+        $mon_tues = ['Monday', 'Tuesday']; 
+        $wed_thur_fri = ['Wednesday', 'Thursday', 'Friday'];
+        $sheets = [];
+        // dd('got this far...');
+        // Switch statement to handle day selection exports, passing through a string into the other class still registers as the expected $route_day.
+        switch ($this->delivery_days) {
+            case 'mon-tue':
+                foreach ($mon_tues as $route_day) {
+                    $sheets[] = new SnackboxSingleCompanyCollectionExportNew($route_day, $this->week_start);
+                }
+                return $sheets;
+                break;
+            case 'wed-thur-fri':
+                foreach ($wed_thur_fri as $route_day) {
+                    $sheets[] = new SnackboxSingleCompanyCollectionExportNew($route_day, $this->week_start);
+                }
+                return $sheets;
+                break;
+            case 'mon':
+                $sheets[] = new SnackboxSingleCompanyCollectionExportNew('Monday', $this->week_start);
+                return $sheets;
+                break;
+            case 'tue':
+                $sheets[] = new SnackboxSingleCompanyCollectionExportNew('Tuesday', $this->week_start);
+                return $sheets;
+                break;
+            case 'wed':
+                $sheets[] = new SnackboxSingleCompanyCollectionExportNew('Wednesday', $this->week_start);
+                return $sheets;
+                break;
+            case 'thur':
+                $sheets[] = new SnackboxSingleCompanyCollectionExportNew('Thursday', $this->week_start);
+                return $sheets;
+                break;
+            case 'fri':
+                $sheets[] = new SnackboxSingleCompanyCollectionExportNew('Friday', $this->week_start);
+                return $sheets;
+                break;
+        }
+    }
+}
+
+class SnackboxSingleCompanyCollectionExportNew
  // implements WithMultipleSheets
   implements FromView, WithEvents, ShouldAutoSize, WithTitle //, WithMultipleSheets
 {
     protected $courier;
 
-    public function __construct()
+    public function __construct($export_day, $week_start)
     {
+        //dd('got this far...');
         $courier = session()->get('snackbox_courier');
         $this->courier = $courier;
-            //dd($this->courier);
+        
+        $this->day = $export_day;
+        $this->week_start = $week_start;
     }
 
     public function view(): View
@@ -41,19 +100,24 @@ class SnackboxSingleCompanyExportNew
        // $snackboxes = session()->get('snackbox_OP_singlecompany');
        
        // First we need to grab the current week start for orders being processed.
-       $currentWeekStart = Weekstart::findOrFail(1);
+       // $currentWeekStart = Weekstart::findOrFail(1);
        
        // It would be nice if I could make the 'delivered_by' variable a conditional passed by the button pressed. 
        // If it was I could use the same function to process OP/APC/DPD and any others in future.
        // Though for right now let's hard code it and get the rest of the logic in place.
-       $snackboxes = SnackBox::where('delivered_by', $this->courier)->where('next_delivery_week', $currentWeekStart->current)->where('no_of_boxes', '>', 1)
-                                ->where('product_id', '!=', 0)->where('wholesale', '=', null)->where('type', '!=', 'unique')->get();
+       
+      // dd('got this far...');
+       
+       $snackboxes = SnackBox::where('delivered_by', $this->courier)->where('next_delivery_week', $this->week_start)->where('delivery_day', $this->day)->where('no_of_boxes', '>', 1)
+                             ->where('product_id', '!=', 0)->whereNotIn('type', ['wholesale', 'unique'])->get();
+                             
        //dd($snackboxes);
+       
        $snackboxesGroupedById = $snackboxes->groupBy('snackbox_id');
        
        foreach ($snackboxesGroupedById as $snackbox) {
            $company_details_id = $snackbox[0]->company_details_id;
-           $company = CompanyDetails::findOrFail($company_details_id);
+           $company = CompanyDetails::findOrFail($company_details_id); // <-- if the company id can't be found, a 404 page is thrown.  Very confusing to debug first time around!
            
            $snackbox['company_name'] = $company->route_name;
            $snackbox['delivered_by'] = $snackbox[0]->delivered_by;
@@ -65,7 +129,7 @@ class SnackboxSingleCompanyExportNew
        
        if (!count($snackboxesGroupedById)) {
            
-           dd('This got me where I wanted.');
+          // dd('This got me where I wanted.');
            
            Log::channel('slack')->info('Snackbox OP Singlecompany - None for this week');
            return view('none-for-this-week');

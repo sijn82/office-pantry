@@ -173,6 +173,7 @@ Route::get('importFruitBox', 'FruitBoxController@store');
 // New system exporting functions, now moved to their new homes but still partially incomplete (DO NOT EXPECT THEM TO RUN RIGHT NOW!)
 Route::get('export-fruitbox-picklists', 'FruitBoxController@fruitbox_export');
 Route::get('export-routing', 'CompanyRouteController@download_new_routes');
+Route::get('export-routing-override', 'CompanyRouteController@download_new_routes_override');
 
 // Export excel data for picklists and routing.
 Route::get('export-picklists', 'PickListsController@export');

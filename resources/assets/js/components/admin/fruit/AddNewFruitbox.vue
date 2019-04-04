@@ -43,7 +43,7 @@
                 </b-form-group>
                 <!-- Type of Box -->
                 <b-form-group id="fruitbox-type" label="Select Fruitbox Type: ">
-                    <b-form-select v-model="form.type" :options="types" required>
+                    <b-form-select v-model="form.type" :options="types" @change="selectType" required>
                         <template slot="first">
                             <option :value="null" disabled>-- Please select an option --</option>
                         </template>
@@ -234,7 +234,7 @@ export default {
                     tbc: 0,
 
                 },
-                types: ['Standard', 'Berry', 'Tailored'],
+                types: ['Standard', 'Berry', 'Seasonal', 'Tailored'],
                 frequency: ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'],
                 week_in_month: ['First', 'Second', 'Third', 'Forth', 'Last'],
                 company_selected: [{
@@ -252,6 +252,43 @@ export default {
         },
 
         methods: {
+            
+            selectType: function (type) {
+                console.log(type);
+                switch (type) {
+                    case 'Standard':
+                        this.form.red_apples = 6;
+                        this.form.green_apples = 3;
+                        this.form.satsumas = 10;
+                        this.form.pears = 3;
+                        this.form.bananas = 16;
+                        this.form.nectarines = 12;
+                        this.form.grapes = 0;
+                        this.form.seasonal_berries = 0;
+                        break;
+                    case 'Seasonal':
+                        this.form.red_apples = 5;
+                        this.form.green_apples = 2;
+                        this.form.satsumas = 9;
+                        this.form.pears = 3;
+                        this.form.bananas = 12;
+                        this.form.nectarines = 9;
+                        this.form.grapes = 1;
+                        this.form.seasonal_berries = 2;
+                        break;
+                    case 'Tailored':
+                    case 'Berry':
+                        this.form.red_apples = 0;
+                        this.form.green_apples = 0;
+                        this.form.satsumas = 0;
+                        this.form.pears = 0;
+                        this.form.bananas = 10;
+                        this.form.nectarines = 0;
+                        this.form.grapes = 0;
+                        this.form.seasonal_berries = 0;
+                        break;    
+                }
+            },
 
             onSubmit (evt) {
               evt.preventDefault();

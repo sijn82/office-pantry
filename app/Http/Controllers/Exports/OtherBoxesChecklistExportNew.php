@@ -29,31 +29,46 @@ WithMultipleSheets
     
     public function sheets(): array
     {
-        $sheets = [];
-        
+        // Set variables for combined days and our exportable $sheets array.
         $mon_tues = ['Monday', 'Tuesday']; 
         $wed_thur_fri = ['Wednesday', 'Thursday', 'Friday'];
-        // Now we need to decide how many tabs we want to split the data onto.  
-        // I'm thinking for the volume of orders, splitting it by the day of the week should be sufficient.
+        $sheets = [];
         
-        if ($this->delivery_days == 'mon-tue') {
-            
-            foreach ($mon_tues as $day) {
-                    // Each distinct assigned_to (route) calls the FruitboxPicklistCollection Class below.
-                    $sheets[] = new OtherBoxChecklistCollection($day, $this->week_start);
-            }
+        // Switch statement to handle day selection exports, passing through a string into the other class still registers as the expected $route_day.
+        switch ($this->delivery_days) {
+            case 'mon-tue':
+                foreach ($mon_tues as $route_day) {
+                    $sheets[] = new OtherBoxChecklistCollection($route_day, $this->week_start);
+                }
+                break;
+            case 'wed-thur-fri':
+                foreach ($wed_thur_fri as $route_day) {
+                    $sheets[] = new OtherBoxChecklistCollection($route_day, $this->week_start);
+                }
                 return $sheets;
-                
-        } else {
-            
-            foreach ($wed_thur_fri as $day) {
-                    // Each distinct assigned_to (route) calls the FruitboxPicklistCollection Class below.
-                    $sheets[] = new OtherBoxChecklistCollection($day, $this->week_start);
-            }
+                break;
+            case 'mon':
+                $sheets[] = new OtherBoxChecklistCollection('Monday', $this->week_start);
                 return $sheets;
+                break;
+            case 'tue':
+                $sheets[] = new OtherBoxChecklistCollection('Tuesday', $this->week_start);
+                return $sheets;
+                break;
+            case 'wed':
+                $sheets[] = new OtherBoxChecklistCollection('Wednesday', $this->week_start);
+                return $sheets;
+                break;
+            case 'thur':
+                $sheets[] = new OtherBoxChecklistCollection('Thursday', $this->week_start);
+                return $sheets;
+                break;
+            case 'fri':
+                $sheets[] = new OtherBoxChecklistCollection('Friday', $this->week_start);
+                return $sheets;
+                break;
         }
     }
-
 }
 
 class OtherBoxChecklistCollection implements
@@ -63,9 +78,9 @@ ShouldAutoSize
 // WithHeadings,
 //WithEvents
 {
-    public function __construct($day, $week_start)
+    public function __construct($route_day, $week_start)
     {
-        $this->day = $day;
+        $this->day = $route_day;
         $this->week_start = $week_start;
         
         //dd($this->day);

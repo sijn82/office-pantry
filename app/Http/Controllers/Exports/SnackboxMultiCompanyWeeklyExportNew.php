@@ -24,86 +24,32 @@ use Maatwebsite\Excel\Events\AfterSheet;
 
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class SnackboxMultiCompanyExportNew implements
-WithMultipleSheets
-{
-    public function __construct()
-    {    
-        $week_start = WeekStart::all()->toArray();
-        $this->week_start = $week_start[0]['current'];
-        $this->delivery_days = $week_start[0]['delivery_days'];
-    }
-    
-    public function sheets(): array
-    {
-        // Set variables for combined days and our exportable $sheets array.
-        $mon_tues = ['Monday', 'Tuesday']; 
-        $wed_thur_fri = ['Wednesday', 'Thursday', 'Friday'];
-        $sheets = [];
-        // dd('got this far...');
-        // Switch statement to handle day selection exports, passing through a string into the other class still registers as the expected $route_day.
-        switch ($this->delivery_days) {
-            case 'mon-tue':
-                foreach ($mon_tues as $route_day) {
-                    $sheets[] = new SnackboxMultiCompanyCollectionExportNew($route_day, $this->week_start);
-                }
-                return $sheets;
-                break;
-            case 'wed-thur-fri':
-                foreach ($wed_thur_fri as $route_day) {
-                    $sheets[] = new SnackboxMultiCompanyCollectionExportNew($route_day, $this->week_start);
-                }
-                return $sheets;
-                break;
-            case 'mon':
-                $sheets[] = new SnackboxMultiCompanyCollectionExportNew('Monday', $this->week_start);
-                return $sheets;
-                break;
-            case 'tue':
-                $sheets[] = new SnackboxMultiCompanyCollectionExportNew('Tuesday', $this->week_start);
-                return $sheets;
-                break;
-            case 'wed':
-                $sheets[] = new SnackboxMultiCompanyCollectionExportNew('Wednesday', $this->week_start);
-                return $sheets;
-                break;
-            case 'thur':
-                $sheets[] = new SnackboxMultiCompanyCollectionExportNew('Thursday', $this->week_start);
-                return $sheets;
-                break;
-            case 'fri':
-                $sheets[] = new SnackboxMultiCompanyCollectionExportNew('Friday', $this->week_start);
-                return $sheets;
-                break;
-        }
-    }
-}
-
-class SnackboxMultiCompanyCollectionExportNew
+class SnackboxMultiCompanyWeeklyExportNew
  // implements WithMultipleSheets
   implements FromView, WithEvents, ShouldAutoSize, WithTitle //, WithMultipleSheets
 {
     protected $courier;
 
-    public function __construct($export_day, $week_start)
+    public function __construct()
     {
         //dd('got this far...');
         $courier = session()->get('snackbox_courier');
         $this->courier = $courier;
         
-        $this->day = $export_day;
-        $this->week_start = $week_start;
+        $week_start = WeekStart::all()->toArray();
+        $this->week_start = $week_start[0]['current'];
+        $this->delivery_days = $week_start[0]['delivery_days'];
     }
     
     public function view(): View
    {
         // First we need to grab the current week start for orders being processed.
-        //$currentWeekStart = Weekstart::findOrFail(1);
+        // $currentWeekStart = Weekstart::findOrFail(1);
     
         // It would be nice if I could make the 'delivered_by' variable a conditional passed by the button pressed. 
         // If it was I could use the same function to process OP/APC/DPD and any others in future.
         // Though for right now let's hard code it and get the rest of the logic in place.
-        $snackboxes = SnackBox::where('delivered_by', $this->courier)->where('next_delivery_week', $this->week_start)->where('delivery_day', $this->day)->where('no_of_boxes', '=', 1)
+        $snackboxes = SnackBox::where('delivered_by', $this->courier)->where('next_delivery_week', $this->week_start)->where('no_of_boxes', '=', 1)
                                 ->where('product_id', '!=', 0)->whereNotIn('type', ['wholesale', 'unique'])->get();
        
         // Group the snackbox entries by snackbox_id to pull each order together
@@ -147,7 +93,7 @@ class SnackboxMultiCompanyCollectionExportNew
         } else {
                
             return view('exports.snackboxes-multi-company-new', [
-               'chunks'         =>  $snd_OP_singleBoxes_chunks,
+               'chunks'      =>  $snd_OP_singleBoxes_chunks,
                'products'    =>  $products,
             ]);
         }

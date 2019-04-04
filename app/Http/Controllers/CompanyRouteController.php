@@ -23,6 +23,12 @@ class CompanyRouteController extends Controller
     {
         return \Excel::download(new Exports\RoutesExportNew($this->week_start), 'routelists' . $this->week_start . '.xlsx');
     }
+    
+    // new system route download export function call.
+    public function download_new_routes_override()
+    {
+        return \Excel::download(new Exports\RoutesExportNewOverride($this->week_start), 'routelists-override' . $this->week_start . '.xlsx');
+    }
 
     /**
      * Display a listing of the resource.

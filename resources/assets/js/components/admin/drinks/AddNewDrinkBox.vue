@@ -21,10 +21,10 @@
                     </b-col>
                 </b-row>
                 <b-row class="order-options">
-                    <!-- <b-col>
-                        <label> No. of Boxes </label>
-                        <b-form-input type="number" v-model="no_of_boxes" size="sm"></b-form-input>
-                    </b-col> -->
+                    <b-col>
+                        <label> Type </label>
+                        <b-form-select v-model="type" size="sm" :options="type_options"></b-form-select>
+                    </b-col>
                     <b-col>
                         <label> Next Delivery Week Start </label>
                         <b-form-input type="date" v-model="next_delivery_week" size="sm"></b-form-input>
@@ -67,7 +67,7 @@
         </div>
         
         <div class="order-selections" v-if="createDrinkbox">
-            <b-row><b-col><h4> Product Name </h4></b-col><b-col><h4> Quantity (Cases) </h4></b-col><b-col><h4> Price </h4></b-col><b-col>  </b-col></b-row>
+            <b-row><b-col><h4> Product Name </h4></b-col><b-col><div v-if="type === 'Regular'"><h4> Quantity (Cases) </h4></div><div v-else><h4> Quantity (Units) </h4></div></b-col><b-col><h4> Price </h4></b-col><b-col>  </b-col></b-row>
             <div v-for="drink in $store.state.drinkbox">
                  <b-row>
                      <b-col>
@@ -92,7 +92,7 @@
         The button above changes the state of the createDrinkbox data variable,
         offering an additional 'add to drinkbox' button to each product. -->
         <div v-if="createDrinkbox">
-            <products-list :createDrinkbox="createDrinkbox"></products-list>
+            <products-list :createDrinkbox="createDrinkbox" :type="type"></products-list>
         </div>
         <div class="margin-top-20" v-else>
             <p><b> Click on the 'Create Drinkbox' button above to add products. </b></p>
@@ -131,7 +131,9 @@
                 createDrinkbox: false,
                 order: 'empty',
                 company_details_id: 0,
-                 // total_start: 0,
+                //total_start: 0,
+                type: 'Regular',
+                type_options: ['Regular', 'Unique', {value: 'monthly-special', text: 'Monthly Special'}],
                 delivered_by: null,
                 // delivered_by_options: ['DPD', 'APC', 'OP'], // This will be removed when I add the fruitpartners dropdown.
                 delivery_day: null,
@@ -167,7 +169,7 @@
                 axios.post('/api/drinkboxes/save', {
                     details: { 
                         delivered_by_id: this.delivered_by, 
-                        // no_of_boxes: this.no_of_boxes, 
+                        type: this.type, 
                         company_details_id: this.selected_company,
                         delivery_day: this.delivery_day, 
                         frequency: this.frequency, 

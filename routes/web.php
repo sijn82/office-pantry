@@ -67,28 +67,82 @@ Route::get('companies', 'CompaniesController@index');
 
 // Route::get('products', 'ProductsController@index');
 Route::group(['middleware' => 'web'], function () {
-    Route::get('auto_process_snackboxes', 'SnackBoxController@auto_process_snackboxes');
-
-    Route::get('export-snackbox-op-multicompany', 'SnackBoxController@download_snackbox_op_multicompany')->name('SnackboxOPMultiCompany');
-    Route::get('export-snackbox-dpd-multicompany', 'SnackBoxController@download_snackbox_dpd_multicompany')->name('SnackboxDPDMultiCompany');
-    Route::get('export-snackbox-apc-multicompany', 'SnackBoxController@download_snackbox_apc_multicompany')->name('SnackboxAPCMultiCompany');
-
-    Route::get('export-snackbox-op-singlecompany', 'SnackBoxController@download_snackbox_op_singlecompany')->name('SnackboxOPSingleCompany');
-    Route::get('export-snackbox-dpd-singlecompany', 'SnackBoxController@download_snackbox_dpd_singlecompany')->name('SnackboxDPDSingleCompany');
-    Route::get('export-snackbox-apc-singlecompany', 'SnackBoxController@download_snackbox_apc_singlecompany')->name('SnackboxAPCSingleCompany');
-
-    Route::get('export-snackbox-op-unique', 'SnackBoxController@download_snackbox_op_unique')->name('SnackboxOPUnique');
-    Route::get('export-snackbox-dpd-unique', 'SnackBoxController@download_snackbox_dpd_unique')->name('SnackboxDPDUnique');
-    Route::get('export-snackbox-apc-unique', 'SnackBoxController@download_snackbox_apc_unique')->name('SnackboxAPCUnique');
     
-    Route::get('export-otherbox-checklist-op', 'OtherBoxController@download_otherbox_checklist_op');
-    Route::get('export-otherbox-checklist-op-weekly-total', 'OtherBoxController@download_otherbox_checklist_weekly_total_op');
-    Route::get('export-otherbox-op-multicompany', 'OtherBoxController@download_otherbox_op_multicompany');
+    //----- Old system Processing and Export for Snackboxes -----//
+        Route::get('auto_process_snackboxes', 'SnackBoxController@auto_process_snackboxes');
+    //----- End of Old system Processing and Export for Snackboxes -----//
     
-    Route::get('export-wholesale-drinkbox-op-multicompany', 'DrinkBoxController@download_drinkbox_wholesale_op_multicompany');
-    Route::get('export-wholesale-snackbox-op-singlecompany', 'SnackBoxController@download_snackbox_wholesale_op_singlecompany')->name('SnackboxWholesaleOPSingleCompany');
-
+    //----- Snackbox Exports for Companies Receiving 1 Box Only -----//
+        // These are for exporting the full week of orders
+        Route::get('export-snackbox-weekly-op-multicompany', 'SnackBoxController@download_snackbox_weekly_op_multicompany')->name('SnackboxOPMultiCompany');
+        Route::get('export-snackbox-weekly-dpd-multicompany', 'SnackBoxController@download_snackbox_weekly_dpd_multicompany')->name('SnackboxDPDMultiCompany');
+        Route::get('export-snackbox-weekly-apc-multicompany', 'SnackBoxController@download_snackbox_weekly_apc_multicompany')->name('SnackboxAPCMultiCompany');
+        // Whereas these will only export the selected days
+        Route::get('export-snackbox-op-multicompany', 'SnackBoxController@download_snackbox_op_multicompany')->name('SnackboxOPMultiCompany');
+        Route::get('export-snackbox-dpd-multicompany', 'SnackBoxController@download_snackbox_dpd_multicompany')->name('SnackboxDPDMultiCompany');
+        Route::get('export-snackbox-apc-multicompany', 'SnackBoxController@download_snackbox_apc_multicompany')->name('SnackboxAPCMultiCompany');
+    //----- End of Snackbox Exports for Companies Receiving 1 Box Only -----//
+    
+    //----- Snackbox Exports for Companies Receiving Multiple Boxes -----//
+        // These are for exporting the full week of orders
+        Route::get('export-snackbox-weekly-op-singlecompany', 'SnackBoxController@download_snackbox_weekly_op_singlecompany');
+        Route::get('export-snackbox-weekly-dpd-singlecompany', 'SnackBoxController@download_snackbox_weekly_dpd_singlecompany');
+        Route::get('export-snackbox-weekly-apc-singlecompany', 'SnackBoxController@download_snackbox_weekly_apc_singlecompany');
+        // Whereas these will only export the selected days
+        Route::get('export-snackbox-op-singlecompany', 'SnackBoxController@download_snackbox_op_singlecompany');
+        Route::get('export-snackbox-dpd-singlecompany', 'SnackBoxController@download_snackbox_dpd_singlecompany');
+        Route::get('export-snackbox-apc-singlecompany', 'SnackBoxController@download_snackbox_apc_singlecompany');
+    //----- End of Snackbox Exports for Companies Receiving Multiple Boxes -----//
+    
+    //----- Unique Snackboxes for special items such as peanut butter, himalayan salt and cereal etc -----//
+        // Companies receiving two or more boxes with the same contents
+        Route::get('export-snackbox-unique-op-singlecompany', 'SnackBoxController@download_snackbox_unique_op_singlecompany');
+        Route::get('export-snackbox-unique-dpd-singlecompany', 'SnackBoxController@download_snackbox_unique_dpd_singlecompany');
+        Route::get('export-snackbox-unique-apc-singlecompany', 'SnackBoxController@download_snackbox_unique_apc_singlecompany');
+        // Companies just receiving one box of any snackbox_id, with type 'unique'.
+        Route::get('export-snackbox-unique-op-multicompany', 'SnackBoxController@download_snackbox_unique_op_multicompany');
+        Route::get('export-snackbox-unique-dpd-multicompany', 'SnackBoxController@download_snackbox_unique_dpd_multicompany');
+        Route::get('export-snackbox-unique-apc-multicompany', 'SnackBoxController@download_snackbox_unique_apc_multicompany');
+    
+    //----- End of Unique Snackboxes for special items such as peanut butter, himalayan salt and cereal etc -----//
+    
+    //----- These Unique routes were previously used to handle drink orders, now fulfilled by the drinkbox controller -----//
+        // Route::get('export-snackbox-op-unique', 'SnackBoxController@download_snackbox_op_unique')->name('SnackboxOPUnique');
+        // Route::get('export-snackbox-dpd-unique', 'SnackBoxController@download_snackbox_dpd_unique')->name('SnackboxDPDUnique');
+        // Route::get('export-snackbox-apc-unique', 'SnackBoxController@download_snackbox_apc_unique')->name('SnackboxAPCUnique');
+    //----- Unique was previously used to handle drink orders, now fulfilled by the drinkbox controller -----//
+    
+    //----- Otherbox Exports -----//
+        Route::get('export-otherbox-op-multicompany', 'OtherBoxController@download_otherbox_op_multicompany');
+        Route::get('export-otherbox-checklist-op', 'OtherBoxController@download_otherbox_checklist_op');
+        Route::get('export-otherbox-checklist-op-weekly-total', 'OtherBoxController@download_otherbox_checklist_weekly_total_op');
+    //----- End of Otherbox Exports -----//
+    
+    //----- These handle the exporting of Wholesale Items for Snackboxes & Drinkboxes* (* - Always Wholesale) -----//
+        // Selected Delivery Day Exports
+        Route::get('export-wholesale-drinkbox-op-multicompany', 'DrinkBoxController@download_drinkbox_wholesale_op_multicompany');
+        Route::get('export-wholesale-snackbox-op-singlecompany', 'SnackBoxController@download_snackbox_wholesale_op_singlecompany')->name('SnackboxWholesaleOPSingleCompany');
+        // Weekly Export
+        Route::get('export-wholesale-weekly-drinkbox-op-multicompany', 'DrinkBoxController@download_drinkbox_wholesale_weekly_op_multicompany');
+        Route::get('export-wholesale-weekly-snackbox-op-singlecompany', 'SnackBoxController@download_snackbox_wholesale_weekly_op_singlecompany');
+    //----- End of exporting Wholesale Items for Snackboxes & Drinkboxes* (* - Always Wholesale) -----//
+    
+    //----- Finally, hopefully, maybe? Mystery Special Items -----//
+    
+        // As they could be any of the main product groups, I'm going to resolve processing for these in the orders controller.
+        
+        // Selected Delivery Day Exports
+        Route::get('export-monthly-special-op', 'MonthlySpecialController@download_monthly_special_op');
+        Route::get('export-monthly-special-dpd', 'MonthlySpecialController@download_monthly_special_dpd');
+        Route::get('export-monthly-special-apc', 'MonthlySpecialController@download_monthly_special_apc');
+        // Weekly Exports
+        Route::get('export-monthly-special-op-weekly', 'MonthlySpecialController@download_monthly_special_op_weekly');
+        Route::get('export-monthly-special-dpd-weekly', 'MonthlySpecialController@download_monthly_special_dpd_weekly');
+        Route::get('export-monthly-special-apc-weekly', 'MonthlySpecialController@download_monthly_special_apc_weekly');
+        
+    //----- End of Finally, hopefully, maybe? Mystery Special Items -----//
 });
+
 // Route::get('/import', 'ImportController@getImport')->name('import');
 // Route::post('/import_parse', 'ImportController@parseImport')->name('import_parse');
 // Route::post('/import_process', 'ImportController@processImport')->name('import_process');

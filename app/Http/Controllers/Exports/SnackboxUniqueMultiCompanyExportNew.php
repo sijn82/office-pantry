@@ -24,7 +24,7 @@ use Maatwebsite\Excel\Events\AfterSheet;
 
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class SnackboxMultiCompanyExportNew implements
+class SnackboxUniqueMultiCompanyExportNew implements
 WithMultipleSheets
 {
     public function __construct()
@@ -45,41 +45,41 @@ WithMultipleSheets
         switch ($this->delivery_days) {
             case 'mon-tue':
                 foreach ($mon_tues as $route_day) {
-                    $sheets[] = new SnackboxMultiCompanyCollectionExportNew($route_day, $this->week_start);
+                    $sheets[] = new SnackboxUniqueMultiCompanyCollectionExportNew($route_day, $this->week_start);
                 }
                 return $sheets;
                 break;
             case 'wed-thur-fri':
                 foreach ($wed_thur_fri as $route_day) {
-                    $sheets[] = new SnackboxMultiCompanyCollectionExportNew($route_day, $this->week_start);
+                    $sheets[] = new SnackboxUniqueMultiCompanyCollectionExportNew($route_day, $this->week_start);
                 }
                 return $sheets;
                 break;
             case 'mon':
-                $sheets[] = new SnackboxMultiCompanyCollectionExportNew('Monday', $this->week_start);
+                $sheets[] = new SnackboxUniqueMultiCompanyCollectionExportNew('Monday', $this->week_start);
                 return $sheets;
                 break;
             case 'tue':
-                $sheets[] = new SnackboxMultiCompanyCollectionExportNew('Tuesday', $this->week_start);
+                $sheets[] = new SnackboxUniqueMultiCompanyCollectionExportNew('Tuesday', $this->week_start);
                 return $sheets;
                 break;
             case 'wed':
-                $sheets[] = new SnackboxMultiCompanyCollectionExportNew('Wednesday', $this->week_start);
+                $sheets[] = new SnackboxUniqueMultiCompanyCollectionExportNew('Wednesday', $this->week_start);
                 return $sheets;
                 break;
             case 'thur':
-                $sheets[] = new SnackboxMultiCompanyCollectionExportNew('Thursday', $this->week_start);
+                $sheets[] = new SnackboxUniqueMultiCompanyCollectionExportNew('Thursday', $this->week_start);
                 return $sheets;
                 break;
             case 'fri':
-                $sheets[] = new SnackboxMultiCompanyCollectionExportNew('Friday', $this->week_start);
+                $sheets[] = new SnackboxUniqueMultiCompanyCollectionExportNew('Friday', $this->week_start);
                 return $sheets;
                 break;
         }
     }
 }
 
-class SnackboxMultiCompanyCollectionExportNew
+class SnackboxUniqueMultiCompanyCollectionExportNew
  // implements WithMultipleSheets
   implements FromView, WithEvents, ShouldAutoSize, WithTitle //, WithMultipleSheets
 {
@@ -104,7 +104,7 @@ class SnackboxMultiCompanyCollectionExportNew
         // If it was I could use the same function to process OP/APC/DPD and any others in future.
         // Though for right now let's hard code it and get the rest of the logic in place.
         $snackboxes = SnackBox::where('delivered_by', $this->courier)->where('next_delivery_week', $this->week_start)->where('delivery_day', $this->day)->where('no_of_boxes', '=', 1)
-                                ->where('product_id', '!=', 0)->whereNotIn('type', ['wholesale', 'unique'])->get();
+                                ->where('product_id', '!=', 0)->where('type', 'unique')->get();
        
         // Group the snackbox entries by snackbox_id to pull each order together
         $snackboxesGroupedById = $snackboxes->groupBy('snackbox_id');
@@ -141,7 +141,7 @@ class SnackboxMultiCompanyCollectionExportNew
         // This count check hasn't been tested for when it returns false.
         if (!count($snd_OP_singleBoxes_chunks)) {
             
-            Log::channel('slack')->info('Snackbox OP Multicompany - None for this week');
+            Log::channel('slack')->info('Snackbox OP Unique Multicompany - None for this week');
             return view('none-for-this-week');
        
         } else {
@@ -155,7 +155,7 @@ class SnackboxMultiCompanyCollectionExportNew
    
    public function title(): string
    {
-       return 'OP MultiCompany';
+       return 'OP Unique Snackbox';
    }
 
    /**

@@ -24,16 +24,74 @@ use Maatwebsite\Excel\Events\AfterSheet;
 
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class DrinkboxWholesaleExport
+
+class DrinkboxWholesaleExport implements WithMultipleSheets
+{
+    public function __construct()
+    {
+        $week_start = WeekStart::all()->toArray();
+        $this->week_start = $week_start[0]['current'];
+        $this->delivery_days = $week_start[0]['delivery_days'];
+    }
+    
+    public function sheets(): array
+    {
+        // Set variables for combined days and our exportable $sheets array.
+        $mon_tues = ['Monday', 'Tuesday']; 
+        $wed_thur_fri = ['Wednesday', 'Thursday', 'Friday'];
+        $sheets = [];
+        
+        // Switch statement to handle day selection exports, passing through a string into the other class still registers as the expected $route_day.
+        switch ($this->delivery_days) {
+            case 'mon-tue':
+                foreach ($monTues as $route_day) {
+                    $sheets[] = new DrinkboxWholesaleExportCollection($route_day, $this->week_start);
+                }
+                break;
+            case 'wed-thur-fri':
+                foreach ($wedThurFri as $route_day) {
+                    $sheets[] = new DrinkboxWholesaleExportCollection($route_day, $this->week_start);
+                }
+                return $sheets;
+                break;
+            case 'mon':
+                $sheets[] = new DrinkboxWholesaleExportCollection('Monday', $this->week_start);
+                return $sheets;
+                break;
+            case 'tue':
+                $sheets[] = new DrinkboxWholesaleExportCollection('Tuesday', $this->week_start);
+                return $sheets;
+                break;
+            case 'wed':
+                $sheets[] = new DrinkboxWholesaleExportCollection('Wednesday', $this->week_start);
+                return $sheets;
+                break;
+            case 'thur':
+                $sheets[] = new DrinkboxWholesaleExportCollection('Thursday', $this->week_start);
+                return $sheets;
+                break;
+            case 'fri':
+                $sheets[] = new DrinkboxWholesaleExportCollection('Friday', $this->week_start);
+                return $sheets;
+                break;
+        }
+    }
+}
+
+
+class DrinkboxWholesaleExportCollection
  // implements WithMultipleSheets
   implements FromView, WithEvents, ShouldAutoSize, WithTitle //, WithMultipleSheets
 {
     protected $courier;
 
-    public function __construct()
+    public function __construct($export_day, $week_start)
     {
         $courier = session()->get('drinkbox_courier');
         $this->courier = $courier;
+        
+        $this->day = $export_day;
+        $this->week_start = $week_start;
         
         //dd($this->courier);
     }
@@ -42,8 +100,8 @@ class DrinkboxWholesaleExport
     {
         $currentWeekStart = Weekstart::findOrFail(1);
 
-        $drinkboxes = DrinkBox::where('delivered_by_id', $this->courier)->where('next_delivery_week', $currentWeekStart->current)
-                                ->where('product_id', '!=', 0)->get();
+        $drinkboxes = DrinkBox::where('delivered_by_id', $this->courier)->where('next_delivery_week', $this->week_start)
+                                ->where('product_id', '!=', 0)->where('delivery_day', $this->day)->get();
         //dd($drinkboxes);
         
         $fruitpartner = FruitPartner::findOrFail($this->courier);
@@ -101,7 +159,7 @@ class DrinkboxWholesaleExport
 
    public function title(): string
    {
-       return 'OP Drinks Company';
+       return 'OP Drinks - '. $this->day;
    }
 
 
@@ -143,7 +201,7 @@ class DrinkboxWholesaleExport
                      $selectedRow = $row->getRowIndex();
                      $chosenCells = 'A' . $selectedRow . ':F' . $selectedRow;
                      $fullCellRange = 'A' . $selectedRow . ':G' . $selectedRow;
-                     $deliveredByRange = 'D' . $selectedRow;
+                     $deliveredByRange = 'C' . $selectedRow;
                      $centeredCellRange =  'B' . $selectedRow . ':G' . $selectedRow;
                      $middleCells = ['B' . $selectedRow, 'C' . $selectedRow, 'D' . $selectedRow, 'E' . $selectedRow, 'F' . $selectedRow];
                      // dd($chosenCells);
@@ -174,13 +232,13 @@ class DrinkboxWholesaleExport
                              $event->sheet->getDelegate()->getStyle($deliveredByRange)->getAlignment()->setVertical('center');
 
                              // Look in this cell for delivered_by info, based on which of the 3 values it is, style the cell accordingly.  P.s Finally had a use case for a switch statement over if/else!
-                             $delivered_by = $event->sheet->getDelegate()->getCell('D' . $selectedRow)->getValue();
+                             $delivered_by = $event->sheet->getDelegate()->getCell('C' . $selectedRow)->getValue();
                              // dd($delivered_by);
                              switch ($delivered_by) {
 
                                  case "Office Pantry":
                                  $event->sheet->styleCells(
-                                       'D' . $selectedRow, // Cell Range
+                                       'C' . $selectedRow, // Cell Range
                                        [ // Styles Array
                                            'fill' => [
                                                        'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
@@ -193,7 +251,7 @@ class DrinkboxWholesaleExport
                                    break;
                                    case "DPD":
                                    $event->sheet->styleCells(
-                                         'D' . $selectedRow, // Cell Range
+                                         'C' . $selectedRow, // Cell Range
                                          [ // Styles Array
                                              'fill' => [
                                                          'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
@@ -206,7 +264,7 @@ class DrinkboxWholesaleExport
                                      break;
                                      case "APC":
                                      $event->sheet->styleCells(
-                                           'D' . $selectedRow, // Cell Range
+                                           'C' . $selectedRow, // Cell Range
                                            [ // Styles Array
                                                'fill' => [
                                                            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,

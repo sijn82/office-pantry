@@ -104,93 +104,270 @@
     @endphp
             <tr>
                 <!-- <td>{{ $route->next_delivery_week_start }}</td> -->
-                <td></td>
-                <td>{{ $route->company_name }}</td>
+                <td>{{ $route->week_start }}</td>
+                <td>{{ $route->route_name }}</td>
                 <td>{{ $route->postcode }}</td>
                 <td>{{ $route->address }}</td>
                 <td>{{ $route->delivery_information }}</td>
-                <td>{{ $route->fruit_crates }}</td>
-                <td>{{ $route->fruit_boxes }}</td>
+                
+                @if ($route->fruit_crates === 0)
+                    <td>  </td>
+                @else
+                    <td>{{ $route->fruit_crates }}</td>
+                @endif
+                
+                @if ($route->fruit_boxes === 0)
+                    <td>  </td>
+                @else
+                    <td>{{ $route->fruit_boxes }}</td>
+                @endif
 
                 @if ($route->milk == 'None for this week!')
 
-                    <td> 0 </td>
-                    <td> 0 </td>
-                    <td> 0 </td>
-                    <td> 0 </td>
-                    <td> 0 </td>
-                    <td> 0 </td>
-                    <td> 0 </td>
-                    <td> 0 </td>
-                    <td> 0 </td>
-                    <td> 0 </td>
-                    <td> 0 </td>
-                    <td> 0 </td>
-                    <td> 0 </td>
-                    <td> 0 </td>
-                    <td> 0 </td>
+                    <td>  </td>
+                    <td>  </td>
+                    <td>  </td>
+                    <td>  </td>
+                    <td>  </td>
+                    <td>  </td>
+                    <td>  </td>
+                    <td>  </td>
+                    <td>  </td>
+                    <td>  </td>
+                    <td>  </td>
+                    <td>  </td>
+                    <td>  </td>
+                    <td>  </td>
+                    <td>  </td>
 
                 @else
-
-                    <td>{{ $route->milk[0]->semi_skimmed_2l }}</td>
-                    <td>{{ $route->milk[0]->skimmed_2l }}</td>
-                    <td>{{ $route->milk[0]->whole_2l }}</td>
-                    <td>{{ $route->milk[0]->semi_skimmed_1l }}</td>
-                    <td>{{ $route->milk[0]->skimmed_1l }}</td>
-                    <td>{{ $route->milk[0]->whole_1l }}</td>
-                    <td>{{ $route->milk[0]->milk_1l_alt_coconut }}</td>
-                    <td>{{ $route->milk[0]->milk_1l_alt_unsweetened_almond }}</td>
-                    <td>{{ $route->milk[0]->milk_1l_alt_almond }}</td>
-                    <td>{{ $route->milk[0]->milk_1l_alt_unsweetened_soya }}</td>
-                    <td>{{ $route->milk[0]->milk_1l_alt_soya }}</td>
-                    <td>{{ $route->milk[0]->milk_1l_alt_oat }}</td>
-                    <td>{{ $route->milk[0]->milk_1l_alt_rice }}</td>
-                    <td>{{ $route->milk[0]->milk_1l_alt_cashew }}</td>
-                    <td>{{ $route->milk[0]->milk_1l_alt_lactose_free_semi }}</td>
+                    @if ($route->milk[0]->semi_skimmed_2l === 0)
+                        <td>  </td>
+                    @else
+                        <td>{{ $route->milk[0]->semi_skimmed_2l }}</td>
+                    @endif
+                    @if ($route->milk[0]->skimmed_2l === 0)
+                        <td>  </td>
+                    @else
+                        <td>{{ $route->milk[0]->skimmed_2l }}</td>
+                    @endif
+                    @if ($route->milk[0]->whole_2l === 0)
+                        <td>  </td>
+                    @else
+                        <td>{{ $route->milk[0]->whole_2l }}</td>
+                    @endif
+                    @if ($route->milk[0]->semi_skimmed_1l === 0)
+                        <td>  </td>
+                    @else
+                        <td>{{ $route->milk[0]->semi_skimmed_1l }}</td>
+                    @endif
+                    @if ($route->milk[0]->skimmed_1l === 0)
+                        <td>  </td>
+                    @else
+                        <td>{{ $route->milk[0]->skimmed_1l }}</td>
+                    @endif
+                    @if ($route->milk[0]->whole_1l === 0)
+                        <td>  </td>
+                    @else
+                        <td>{{ $route->milk[0]->whole_1l }}</td>
+                    @endif
+                    @if ($route->milk[0]->milk_1l_alt_coconut === 0)
+                        <td>  </td>
+                    @else
+                        <td>{{ $route->milk[0]->milk_1l_alt_coconut }}</td>
+                    @endif
+                    @if ($route->milk[0]->milk_1l_alt_unsweetened_almond === 0)
+                        <td>  </td>
+                    @else
+                        <td>{{ $route->milk[0]->milk_1l_alt_unsweetened_almond }}</td>
+                    @endif
+                    @if ($route->milk[0]->milk_1l_alt_almond === 0)
+                        <td>  </td>
+                    @else
+                        <td>{{ $route->milk[0]->milk_1l_alt_almond }}</td>
+                    @endif
+                    @if ($route->milk[0]->milk_1l_alt_unsweetened_soya === 0)
+                        <td>  </td>
+                    @else
+                        <td>{{ $route->milk[0]->milk_1l_alt_unsweetened_soya }}</td>
+                    @endif
+                    @if ($route->milk[0]->milk_1l_alt_soya === 0)
+                        <td>  </td>
+                    @else
+                        <td>{{ $route->milk[0]->milk_1l_alt_soya }}</td>
+                    @endif
+                    @if ($route->milk[0]->milk_1l_alt_oat === 0)
+                        <td>  </td>
+                    @else
+                        <td>{{ $route->milk[0]->milk_1l_alt_oat }}</td>
+                    @endif
+                    @if ($route->milk[0]->milk_1l_alt_rice === 0)
+                        <td>  </td>
+                    @else
+                        <td>{{ $route->milk[0]->milk_1l_alt_rice }}</td>
+                    @endif
+                    @if ($route->milk[0]->milk_1l_alt_cashew === 0)
+                        <td>  </td>
+                    @else
+                        <td>{{ $route->milk[0]->milk_1l_alt_cashew }}</td>
+                    @endif
+                    @if ($route->milk[0]->milk_1l_alt_lactose_free_semi === 0)
+                        <td>  </td>
+                    @else
+                        <td>{{ $route->milk[0]->milk_1l_alt_lactose_free_semi }}</td>
+                    @endif
 
                 @endif
-
-                <td>{{ $route->drinks }}</td>
-                <td>{{ $route->snacks }}</td>
-                <td>{{ $route->other }}</td>
-
-                <td>{{ $route->assigned_to }}</td>
+                @if ($route->drinks === 0)
+                    <td>  </td>
+                @else
+                    <td>{{ $route->drinks }}</td>
+                @endif
+                @if ($route->snacks === 0)
+                    <td>  </td>
+                @else
+                    <td>{{ $route->snacks }}</td>
+                @endif
+                @if ($route->other === 'None for this week!')
+                    <td>  </td>
+                @else
+                    <td>{{ $route->other }}</td>
+                @endif
+                
+                <td>{{ $route->assigned_route_name }}</td>
                 <td>{{ $route->delivery_day }}</td>
                 <td>{{ $route->position_on_route }}</td>
             </tr>
 
 
         @endforeach
-
         <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>{{ $totalFruitCrates }}</td>
-            <td>{{ $totalFruitBoxes }}</td>
-            <td>{{ $totalMilk2lSemiSkimmed }}</td>
-            <td>{{ $totalMilk2lSkimmed }}</td>
-            <td>{{ $totalMilk2lWhole }}</td>
-            <td>{{ $totalMilk1lSemiSkimmed }}</td>
-            <td>{{ $totalMilk1lSkimmed }}</td>
-            <td>{{ $totalMilk1lWhole }}</td>
-            <td>{{ $totalMilk1lAltCoconut }}</td>
-            <td>{{ $totalMilk1lAltUnsweetenedAlmond }}</td>
-            <td>{{ $totalMilk1lAltAlmond }}</td>
-            <td>{{ $totalMilk1lAltUnsweetenedSoya }}</td>
-            <td>{{ $totalMilk1lAltSoya }}</td>
-            <td>{{ $totalMilk1lAltOat }}</td>
-            <td>{{ $totalMilk1lAltRice }}</td>
-            <td>{{ $totalMilk1lAltCashew }}</td>
-            <td>{{ $totalMilk1lAltLactoseFreeSemi }}</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>  </td>
+            <td>  </td>
+            <td>  </td>
+            <td>  </td>
+            <td>  </td>
+            <td>  </td>
+            <td>  </td>
+            <td>  </td>
+            <td>  </td>
+            <td>  </td>
+            <td>  </td>
+            <td>  </td>
+            <td>  </td>
+            <td>  </td>
+            <td>  </td>
+            <td>  </td>
+            <td>  </td>
+            <td>  </td>
+            <td>  </td>
+            <td>  </td>
+            <td>  </td>
+            <td>  </td>
+            <td>  </td>
+            <td>  </td>
+            <td>  </td>
+            <td>  </td>
+            <td>  </td>
+            <td>  </td>
+        </tr>
+        <tr>
+            <td>  </td>
+            <td>  </td>
+            <td>  </td>
+            <td>  </td>
+            <td> Route Totals: </td>
+            @if ($totalFruitCrates === 0)
+                <td>  </td>
+            @else
+                <td>{{ $totalFruitCrates }}</td>
+            @endif
+            @if ($totalFruitBoxes === 0)
+                <td>  </td>
+            @else
+                <td>{{ $totalFruitBoxes }}</td>
+            @endif
+            @if ($totalMilk2lSemiSkimmed === 0)
+                <td>  </td>
+            @else
+                <td>{{ $totalMilk2lSemiSkimmed }}</td>
+            @endif
+            @if ($totalMilk2lSkimmed === 0)
+                <td>  </td>
+            @else
+                <td>{{ $totalMilk2lSkimmed }}</td>
+            @endif
+            @if ($totalMilk2lWhole === 0)
+                <td>  </td>
+            @else
+                <td>{{ $totalMilk2lWhole }}</td>
+            @endif
+            @if ($totalMilk1lSemiSkimmed === 0)
+                <td>  </td>
+            @else
+                <td>{{ $totalMilk1lSemiSkimmed }}</td>
+            @endif
+            @if ($totalMilk1lSkimmed === 0)
+                <td>  </td>
+            @else
+                <td>{{ $totalMilk1lSkimmed }}</td>
+            @endif
+            @if ($totalMilk1lWhole === 0)
+                <td>  </td>
+            @else
+                <td>{{ $totalMilk1lWhole }}</td>
+            @endif
+            @if ($totalMilk1lAltCoconut === 0)
+                <td>  </td>
+            @else
+                <td>{{ $totalMilk1lAltCoconut }}</td>
+            @endif
+            @if ($totalMilk1lAltUnsweetenedAlmond === 0)
+                <td>  </td>
+            @else
+                <td>{{ $totalMilk1lAltUnsweetenedAlmond }}</td>
+            @endif
+            @if ($totalMilk1lAltAlmond === 0)
+                <td>  </td>
+            @else
+                <td>{{ $totalMilk1lAltAlmond }}</td>
+            @endif
+            @if ($totalMilk1lAltUnsweetenedSoya === 0)
+                <td>  </td>
+            @else
+                <td>{{ $totalMilk1lAltUnsweetenedSoya }}</td>
+            @endif
+            @if ($totalMilk1lAltSoya === 0)
+                <td>  </td>
+            @else
+                <td>{{ $totalMilk1lAltSoya }}</td>
+            @endif
+            @if ($totalMilk1lAltOat === 0)
+                <td>  </td>
+            @else
+                <td>{{ $totalMilk1lAltOat }}</td>
+            @endif
+            @if ($totalMilk1lAltRice === 0)
+                <td>  </td>
+            @else
+                <td>{{ $totalMilk1lAltRice }}</td>
+            @endif
+            @if ($totalMilk1lAltCashew === 0)
+                <td>  </td>
+            @else
+                <td>{{ $totalMilk1lAltCashew }}</td>
+            @endif
+            @if ($totalMilk1lAltLactoseFreeSemi === 0)
+                <td>  </td>
+            @else
+                <td>{{ $totalMilk1lAltLactoseFreeSemi }}</td>
+            @endif
+            <td>  </td>
+            <td>  </td>
+            <td>  </td>
+            <td>  </td>
+            <td>  </td>
+            <td>  </td>
         </tr>
 
     </tbody>

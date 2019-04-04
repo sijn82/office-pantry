@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\DrinkBox;
 use App\CompanyRoute;
+use App\AssignedRoute;
 use App\WeekStart;
 // use App\Company;
 use App\CompanyDetails;
@@ -28,6 +29,13 @@ class DrinkBoxController extends Controller
         session()->put('drinkbox_courier', '1');
 
         return \Excel::download(new Exports\DrinkboxWholesaleExport, 'drinkboxesWholesaleOPMultiCompany' . $this->week_start . '.xlsx');
+    }
+    
+    public function download_drinkbox_wholesale_weekly_op_multicompany()
+    {
+        session()->put('drinkbox_courier', '1');
+
+        return \Excel::download(new Exports\DrinkboxWholesaleWeekExport, 'drinkboxes-Weekly-WholesaleOPMultiCompany' . $this->week_start . '.xlsx');
     }
     
     /**
@@ -69,7 +77,7 @@ class DrinkBoxController extends Controller
             // These columns will be the same for each item created in this box
             $new_drinkbox->drinkbox_id = $drinkbox_id;
             $new_drinkbox->delivered_by_id = request('details.delivered_by_id');
-            // $new_drinkbox->no_of_boxes = request('details.no_of_boxes');
+            $new_drinkbox->type = request('details.type');
             $new_drinkbox->company_details_id = request('details.company_details_id');
             $new_drinkbox->delivery_day = request('details.delivery_day');
             $new_drinkbox->frequency = request('details.frequency');
@@ -102,7 +110,7 @@ class DrinkBoxController extends Controller
                 $assigned_route_tbc_thursday = AssignedRoute::where('name', 'TBC (Thursday)')->get();
                 $assigned_route_tbc_friday = AssignedRoute::where('name', 'TBC (Friday)')->get();
                 
-                switch (request('delivery_day')) {
+                switch (request('details.delivery_day')) {
                     case 'Monday':
                         $assigned_route_id = $assigned_route_tbc_monday[0]->id;
                         break;
@@ -202,7 +210,7 @@ class DrinkBoxController extends Controller
              $drinkbox_entry->update([
                  'is_active' => request('drinkbox_details.is_active'),
                  'delivered_by_id' => request('drinkbox_details.delivered_by_id'),
-                 // 'no_of_boxes' => request('drinkbox_details.no_of_boxes'),
+                 'type' => request('drinkbox_details.type'),
                  'delivery_day' => request('drinkbox_details.delivery_day'),
                  'frequency' => request('drinkbox_details.frequency'),
                  'week_in_month' => request('drinkbox_details.week_in_month'),
@@ -286,7 +294,7 @@ class DrinkBoxController extends Controller
          $addProduct->drinkbox_id = request('drinkbox_details.drinkbox_id');
          $addProduct->is_active = request('drinkbox_details.is_active');
          $addProduct->delivered_by_id = request('drinkbox_details.delivered_by_id');
-         // $addProduct->no_of_boxes = request('drinkbox_details.no_of_boxes');
+         $addProduct->type = request('drinkbox_details.type');
          $addProduct->company_details_id = request('drinkbox_details.company_details_id');
          $addProduct->delivery_day = request('drinkbox_details.delivery_day');
          $addProduct->frequency = request('drinkbox_details.frequency');

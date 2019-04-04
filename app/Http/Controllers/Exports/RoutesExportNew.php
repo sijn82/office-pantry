@@ -53,69 +53,126 @@ class RoutesExportNew implements WithMultipleSheets
      */
     public function sheets(): array
     {
-        // This grabs all the current delivery routes for monday and tuesday, ordering the list by their tab order position.
-        $OrderedRoutesMonTue = AssignedRoute::whereIn('delivery_day', ['Monday', 'Tuesday'])->orderBy('tab_order', 'desc')->get();
-        // Now we only need their names, so let's just put them into a lovely array...
-        foreach ($OrderedRoutesMonTue as $route) {
-            // ... called $correctOrderMonTue
-            $correctOrderMonTue[] = $route->name;
-        }
+        //----- Old Way To Queue Up And Process Routes - Commenting Out To Test New Way ------//
         
-        // This grabs all the current delivery routes for wednesday, thursday and friday, ordering the list by their tab order position.
-        $OrderedRoutesWedThurFri = AssignedRoute::whereIn('delivery_day', ['Wednesday', 'Thursday', 'Friday'])->orderBy('tab_order', 'desc')->get();
-        // Now we only need their names, so lets just put them into a lovely array...
-        foreach ($OrderedRoutesWedThurFri as $route) {
-            // ... called $correctOrderMonTue
-            $correctOrderWedThurFri[] = $route->name;
-        }
+            // // This grabs all the current delivery routes for monday and tuesday, ordering the list by their tab order position.
+            // $OrderedRoutesMonTue = AssignedRoute::whereIn('delivery_day', ['Monday', 'Tuesday'])->orderBy('tab_order', 'desc')->get();
+            // // Now we only need their names, so let's just put them into a lovely array...
+            // foreach ($OrderedRoutesMonTue as $route) {
+            //     // ... called $correctOrderMonTue
+            //     $correctOrderMonTue[] = $route->name;
+            // }
+            // 
+            // // This grabs all the current delivery routes for wednesday, thursday and friday, ordering the list by their tab order position.
+            // $OrderedRoutesWedThurFri = AssignedRoute::whereIn('delivery_day', ['Wednesday', 'Thursday', 'Friday'])->orderBy('tab_order', 'desc')->get();
+            // // Now we only need their names, so lets just put them into a lovely array...
+            // foreach ($OrderedRoutesWedThurFri as $route) {
+            //     // ... called $correctOrderMonTue
+            //     $correctOrderWedThurFri[] = $route->name;
+            // }
+            
+        //----- End of Old Way To Queue Up And Process Routes - Commenting Out To Test New Way ------//
         
         $sheets = [];
         
         // Great, now let's check the delivery days we want to process this time and grab the array of those routes.
         // At the moment there are only two options but should we change to daily printouts, a switch statement would probably make more sense.
         
-        if ($this->delivery_days == 'mon-tue') {
+        //----- Old Way To Queue Up And Process Routes - Commenting Out To Test New Way -----//
+        
+            // if ($this->delivery_days == 'mon-tue') {
+            // 
+            //     foreach ($correctOrderMonTue as $routesolo) {
+            //         $sheets[] = new RoutesCollectionNew($routesolo, $this->week_starting);
+            //     }
+            //     return $sheets;
+            // 
+            // } else {
+            // 
+            //     foreach ($correctOrderWedThurFri as $routesolo) {
+            //         $sheets[] = new RoutesCollectionNew($routesolo, $this->week_starting);
+            //     }
+            //     return $sheets;
+            // }
 
-            foreach ($correctOrderMonTue as $routesolo) {
-                $sheets[] = new RoutesCollectionNew($routesolo, $this->week_starting);
+        //----- End of Old Way To Queue Up And Process Routes - Commenting Out To Test New Way -----//
+
+        //----- How would this look as as switch case with each day of the week as an option too, let's find out! -----//
+        
+            switch ($this->delivery_days) {
+                case 'mon-tue':
+                    $orderedRoutesAll = AssignedRoute::whereIn('delivery_day', ['Monday', 'Tuesday'])->orderBy('tab_order', 'desc')->get();
+                    foreach ($orderedRoutesAll as $route) {
+                        $orderedRoutes[] = $route->name;
+                    }
+                    foreach ($orderedRoutes as $assigned_route) {
+                        $sheets[] = new RoutesCollectionNew($assigned_route, $this->week_starting);
+                    }
+                    break;
+                case 'wed-thur-fri':
+                    $orderedRoutesAll = AssignedRoute::whereIn('delivery_day', ['Wednesday', 'Thursday', 'Friday'])->orderBy('tab_order', 'desc')->get();
+                    foreach ($orderedRoutesAll as $route) {
+                        $orderedRoutes[] = $route->name;
+                    }
+                    foreach ($orderedRoutes as $assigned_route) {
+                        $sheets[] = new RoutesCollectionNew($assigned_route, $this->week_starting);
+                    }
+                    return $sheets;
+                    break;
+                case 'mon':
+                    $orderedRoutesAll = AssignedRoute::where('delivery_day', 'Monday')->orderBy('tab_order', 'desc')->get();
+                    foreach ($orderedRoutesAll as $route) {
+                        $orderedRoutes[] = $route->name;
+                    }
+                    foreach ($orderedRoutes as $assigned_route) {
+                        $sheets[] = new RoutesCollectionNew($assigned_route, $this->week_starting);
+                    }    
+                    return $sheets;
+                    break;
+                case 'tue':
+                    $orderedRoutesAll = AssignedRoute::where('delivery_day', 'Tuesday')->orderBy('tab_order', 'desc')->get();
+                    foreach ($orderedRoutesAll as $route) {
+                        $orderedRoutes[] = $route->name;
+                    }
+                    foreach ($orderedRoutes as $assigned_route) {
+                        $sheets[] = new RoutesCollectionNew($assigned_route, $this->week_starting);
+                    }    
+                    return $sheets;
+                    break;
+                case 'wed':
+                    $orderedRoutesAll = AssignedRoute::where('delivery_day', 'Wednesday')->orderBy('tab_order', 'desc')->get();
+                    foreach ($orderedRoutesAll as $route) {
+                        $orderedRoutes[] = $route->name;
+                    }
+                    foreach ($orderedRoutes as $assigned_route) {
+                        $sheets[] = new RoutesCollectionNew($assigned_route, $this->week_starting);
+                    }    
+                    return $sheets;
+                    break;
+                case 'thur':
+                    $orderedRoutesAll = AssignedRoute::where('delivery_day', 'Thursday')->orderBy('tab_order', 'desc')->get();
+                    foreach ($orderedRoutesAll as $route) {
+                        $orderedRoutes[] = $route->name;
+                    }
+                    foreach ($orderedRoutes as $assigned_route) {
+                        $sheets[] = new RoutesCollectionNew($assigned_route, $this->week_starting);
+                    }    
+                    return $sheets;
+                    break;
+                case 'fri':
+                    $orderedRoutesAll = AssignedRoute::where('delivery_day', 'Friday')->orderBy('tab_order', 'desc')->get();
+                    foreach ($orderedRoutesAll as $route) {
+                        $orderedRoutes[] = $route->name;
+                    }
+                    foreach ($orderedRoutes as $assigned_route) {
+                        $sheets[] = new RoutesCollectionNew($assigned_route, $this->week_starting);
+                    }    
+                    return $sheets;
+                    break;
             }
-            return $sheets;
-
-        } else {
-
-            foreach ($correctOrderWedThurFri as $routesolo) {
-                $sheets[] = new RoutesCollectionNew($routesolo, $this->week_starting);
-            }
-            return $sheets;
-        }
-
-
-
-        // dd($routescollection);
-
-        // $reorderedRoutesCollection = array_replace($correctOrder, $routescollection);
-        // dd($reorderedRoutesCollection);
-
-
-        // foreach ($routescollection as $routesolo) {
-        //
-        //     $sheets[] = new RoutesCollection($routesolo->assigned_to, $this->week_starting);
-        // }
-
-        // foreach ($correctOrderMonTue as $routesolo) {
-        //
-        //     $sheets[] = new RoutesCollection($routesolo, $this->week_starting);
-        // }
-        //
-        // return $sheets;
+        
+        //----- End of switch case experiment -----//
     }
-
-    // public function collection()
-    // {
-    //     // I wonder how easily this could run through the assigned_to routes printing off a list of each, for each day?
-    //     // return Route::where('assigned_to', 'Catalin')->where('delivery_day', 'Monday')->where('week_start', '90718');
-    //     return Route::where('week_start', '300718')->orderBy('assigned_to', 'asc')->orderBy('position_on_route', 'asc');
-    // }
 
 } // End of - class RoutesExport implements WithMultipleSheets
 
@@ -198,11 +255,12 @@ WithEvents
         foreach ($routeInfoAll as $routeInfoSolo)
         {
             //dd($routeInfoSolo);
+            
             // ---------- Fruit Deliveries ---------- //
 
             // For each route in the routes table, we check the associated Company ID for a FruitBox - that's Active, On Delivery For This Week and on this Delivery Day.
             $fruitboxesForDelivery = FruitBox::where('company_details_id', $routeInfoSolo->company_details_id)->where('next_delivery', $currentWeekStart->current)
-                                                ->where('delivery_day', $routeInfoSolo->delivery_day)->where('is_active', 'Active')->get();
+                                                ->where('delivery_day', $routeInfoSolo->delivery_day)->where('is_active', 'Active')->where('fruit_partner_id', 1)->get();
             // Set variable value.
             $fruitbox_totals = 0;
 
@@ -229,7 +287,7 @@ WithEvents
 
             // For each route in the routes table, we check the associated Company ID for a MilkBox - that's Active, On Delivery For This Week and on this Delivery Day.
             $milkboxesForDelivery = MilkBox::where('company_details_id', $routeInfoSolo->company_details_id)->where('next_delivery_week_start', $currentWeekStart->current)
-                                           ->where('delivery_day', $routeInfoSolo->delivery_day)->where('is_active', 'Active')->get();
+                                           ->where('delivery_day', $routeInfoSolo->delivery_day)->where('is_active', 'Active')->where('fruit_partner_id', 1)->get();
 
             // Unlike FruitBoxes there shouldn't be any more than one entry, so totalling isn't necessary - however there may be no milk on the route.
             // If this is the case we need to set the milk totals to 0 for all the options, either here or in the template.  For now I'm going with another 'None For This Week!'.
@@ -249,6 +307,8 @@ WithEvents
             $drinkbox_total = 0;
             $other_items_list = '';
             
+            //----- Snackbox Processing Pt1 - Regular Boxes and Wholesale -----//
+            
             // This will grab each entry in the snackbox, not each specific snackbox (i.e we only need to grab one entry per snackbox_id)
             $snackboxesForDelivery = SnackBox::where('company_details_id', $routeInfoSolo->company_details_id)->where('next_delivery_week', $currentWeekStart->current)
                                              ->where('delivery_day', $routeInfoSolo->delivery_day)->where('is_active', 'Active')
@@ -259,31 +319,135 @@ WithEvents
             
             // If there happened to be two snackboxes out for delivery on the same route, this would still keep an accurate number of boxes.
             foreach ($snackboxesGroupedById as $snackbox) {
-            
+                
+                // By default we want to treat wholesale orders differently to a mixed snackbox
+                if ($snackbox[0]->type === 'wholesale') {
+                    foreach ($snackbox as $snackbox_item) {
+                        // For each item in the wholesale box we want to treat each quantity as another box
+                        $snackbox_total += $snackbox_item->quantity;
+                    }
+                }
+                
                 $snackbox_total += $snackbox[0]->no_of_boxes;
             }
-            // Now we save the (possibly combined) total
+            
+            //----- End of Snackbox Processing Pt1 - Regular Boxes and Wholesale -----//
+            
+            //----- Snackbox Processing Pt2 - Unique Drinkboxes (Adding Unique Drinkboxes to the Box Total shared with Snackboxes on Routing) -----//
+                
+            $unique_drinkboxes = Drinkbox::where('company_details_id', $routeInfoSolo->company_details_id)->where('next_delivery_week', $currentWeekStart->current)
+                                         ->where('delivery_day', $routeInfoSolo->delivery_day)->where('is_active', 'Active')->where('delivered_by_id', 1)
+                                         ->where('type', 'Unique')->get();
+                
+                //dd($unique_drinkboxes);
+                
+            $uniqueDrinkboxesGroupedById = $unique_drinkboxes->groupBy('drinkbox_id');
+            
+            // The collection of all possible drink boxes, as drinkbox.                         
+            foreach ($uniqueDrinkboxesGroupedById as $drink_box) {
+                
+                $unique_box_totals = 0;
+                $unique_total = 0;
+                
+                // Each drinkbox order as item.
+                foreach ($drink_box as $item) {
+                    
+                    // We can only use $item->quantity if it's set, so let's check for that, first.
+                    if (isset($item->quantity)) {
+                        $unique_total += $item->quantity;
+                    }
+                }
+    
+                // If we have at least one item, we need to determine how many boxes the order will fit in.
+                // As a general rule, we're going for 8 items per box.
+                
+                // First let's make sure there's an item to be packed into a box.
+                if ($unique_total > 0) {
+                    // If there is, we can devide that number by 8, but ensure we always round up to the nearest whole number.
+                    // This means 4 items will round up to 1 box, 15 (and 16) becomes 2 etc.
+                    $unique_box_totals = ceil($unique_total / 8);
+                    
+                }
+    
+            }
+            
+            // If we have any unique drinks, such as coffee, etc we want to add this to the box totals rather than drinks,
+            // so let's check we have a value to add, and if so, add it here.
+            if (isset($unique_box_totals)) {
+                $snackbox_total += $unique_box_totals;
+            }
+                
+            //----- End of Snackbox Processing Pt2 - Unique Drinkboxes (Adding Unique Drinkboxes to the Box Total shared with Snackboxes on Routing) -----//
+            
+            //---------- Saving Snack, Drink and Other route info to CompanyRoute, and overriding function discussion ----------//
+            
+                // As it stands this is only temporarily held in the $routeInfoSolo variable, as nothing is saved to the database.
+                // If I save it here, then we'll have data saved to the CompanyRoute tables, which will be overwritten everytime this export route function is called.
+                // The issue with this is that the cell will appear to be updatable on the office dashboard but in reality the exported route won't keep the values.
+                
+                // I'm thinking it should save the info here but have another function (and button) which can be run to specifically override the information held.
+                // It'll still need to run most of this code, just without the parts like this one which will try to override the data.
+            
+            //---------- End of saving Snack, Drink and Other route info to CompanyRoute, and overriding function discussion ----------//
+            
+            if (empty($snackbox_total)) {
+                
+                // We don't actually need to do anything here, snacks (boxes) are already set to 0, 
+                // so let's just check if the value is still 0 at the end.
+                
+            } else {
+                        
+                // And on the database entry for the route too.
+                CompanyRoute::where('id', $routeInfoSolo->id)->update([
+                    'snacks' => $snackbox_total,
+                ]);
+            }
+            
+            // Now we save the (possibly combined) total to the route export, even if the total is still 0 we need this value added to check later.
             $routeInfoSolo->snacks = $snackbox_total;
+            
+            //----- Regular Drinkboxes -----//
             
             // Time to do the same with drinks, however this will need to be handled slightly differently as the drinks are sold in cases,
             // so the box total here really reflects the number of cases, or in other words, each individual entry in the box.                         
             $drinkboxesForDelivery = DrinkBox::where('company_details_id', $routeInfoSolo->company_details_id)->where('next_delivery_week', $currentWeekStart->current)
-                                             ->where('delivery_day', $routeInfoSolo->delivery_day)->where('is_active', 'Active')->get();
-            // We still want to group them.                     
+                                             ->where('delivery_day', $routeInfoSolo->delivery_day)->where('is_active', 'Active')->where('delivered_by_id', 1)
+                                             ->where('type', 'Regular')->get();
+                                             
+            // We still want to group them.
             $drinkboxesGroupedById = $drinkboxesForDelivery->groupBy('drinkbox_id');
             
             foreach ($drinkboxesGroupedById as $drinkbox) {
                 // But now we need to go down another level and get to the items themselves, in order to loop through.
                 foreach ($drinkbox as $drink) {
-                    $drinkbox_total += $drink->no_of_boxes;
+                    $drinkbox_total += $drink->quantity;
                 }
+                
             }
+            
+            if (empty($drinkbox_total)) {
+                
+                // We don't actually need to do anything here, drinks are already set to 0, 
+                // so let's just check if the value is still 0 at the end.
+                
+            } else {  
+                
+                // As well as to the db.
+                CompanyRoute::where('id', $routeInfoSolo->id)->update([
+                    'drinks' => $drinkbox_total,
+                ]);
+            }         
+            
             // And save this total to the route.
-            $routeInfoSolo->drinks = $drinkbox_total;                             
+            $routeInfoSolo->drinks = $drinkbox_total;
+            
+            //----- End of Drinkboxes -----//
+            
+            //----- Otherbox processing -----//      
             
             // Finally we have the other category, which is a mishmash of items.  Each entry needs to display its name and quantity.                    
             $otherboxesForDelivery = OtherBox::where('company_details_id', $routeInfoSolo->company_details_id)->where('next_delivery_week', $currentWeekStart->current)
-                                             ->where('delivery_day', $routeInfoSolo->delivery_day)->where('is_active', 'Active')->get();                     
+                                             ->where('delivery_day', $routeInfoSolo->delivery_day)->where('is_active', 'Active')->where('delivered_by_id', 1)->get();                     
             
             // We still want to group them.                     
             $otherboxesGroupedById = $otherboxesForDelivery->groupBy('otherbox_id');
@@ -297,49 +461,72 @@ WithEvents
                     $other_items_list .= $other_item->quantity . ' x ' . $other_item->name . ', ';
                 }
             }
-            //dd($other_items_list);
             
-            // As it stands this is only temporarily held in the $routeInfoSolo variable, as nothing is saved to the database.
-            // If I save it here, then we'll have data saved to the CompanyRoute tables, which will be overwritten everytime this export route function is called.
-            // The issue with this is that the cell will appear to be updatable on the office dashboard but in reality the exported route won't keep the values.
+            if (empty($other_items_list)) {
+                // Let's set the variable to a predetermined string I can check on at the end,
+                // before deciding whether to add it to the exported routes or not.
+                $other_items_list = 'None for this week!';
+                
+            } else {
+                
+                // all finally to the db.
+                CompanyRoute::where('id', $routeInfoSolo->id)->update([
+                    'other' => $other_items_list,
+                ]);
+            }
             
-            // I'm thinking it should save the info here but have another function (and button) which can be run to specifically override the information held.
-            // It'll still need to run most of this code, just without the parts like this one which will try to override the data.
+            // Same again with other
             $routeInfoSolo->other = $other_items_list;
             
-            CompanyRoute::where('id', $routeInfoSolo->id)->update([
-                'other' => $other_items_list,
-            ]);
+            //----- End of Otherbox Processing -----//
 
             // ------------ End of Snacks, Drinks & Other ------------ //
             
             // ----- For Debugging Purposes ----- //
             
             // A nice little way to check a specific result for testing purposes.  I can comment it out for now but may reuse again in the near future.
-            // if ($routeInfoSolo->company_details_id == 55 && $routeInfoSolo->delivery_day == 'Monday') {
+            
+            // if ($routeInfoSolo->company_details_id == 965 && $routeInfoSolo->delivery_day == 'Monday') {
             //     dd($routeInfoSolo);
             // }
-            //    dd($routeInfoSolo);
+            
+              // dd($routeInfoSolo);
+              
             // ----- End Of For Debugging Purposes ----- //
 
             // Now we've added the entries we need to the route, we can build an array of collections and send it to the 'order-processing' template for outputting.
             // Although if they don't have anything scheduled for delivery we can ignore them this week.
             
-            // I think this check needs to account for snacks, drinks and other now that i've completed the addition of them to the previous steps.
-            if ($routeInfoSolo->milk == 'None for this week!' && $routeInfoSolo->fruit == 'None for this week!') {
+            // I think this check needs to account for snacks, drinks and other now that i've completed the addition of them to the previous steps. <--  EDIT: Done!
+            if (    $routeInfoSolo->fruit === 'None for this week!' 
+                 && $routeInfoSolo->milk === 'None for this week!' 
+                 && $routeInfoSolo->snacks === 0 
+                 && $routeInfoSolo->drinks === 0 
+                 && $routeInfoSolo->other === 'None for this week!' 
+            ) {
+            
+                // If we're here then fingers crossed the route doesn't need processing this week!  
+                // Because, err, I'm not currently going to do anything else with it here.
+                // I could send the route to a slack channel, but even I won't be checking that one.
+                     
             } else {
                 // Otherwise we can add them here.
+                // Let's also add the week start to each entry we're putting into the routes so it can display before each entry to mimic existing routes.
+                $routeInfoSolo->week_start = $currentWeekStart->current;
+                // And we can also check the assigned route id and replace it with the written name, for labels, etc.
+                $assigned_route = AssignedRoute::findOrFail($routeInfoSolo->assigned_route_id);
+                $routeInfoSolo->assigned_route_name = $assigned_route->name;
                 $routesAndOrders[] = $routeInfoSolo;
             }
 
-            // dd($routeInfoAll);
-            // dd($routesAndOrders);
-
-        }
+        }  // end of foreach ($routeInfoAll as $routeInfoSolo)
+        
         if (empty($routesAndOrders)) {
             
             $routesAndOrders = [];
+            
         } else {
+            
             $reorder_by_position = function($a, $b)
             {
                 // // This is using the new and sexy spaceship operator to compare company string names and return them in alphabetical order.
@@ -360,10 +547,7 @@ WithEvents
             'routes' => $routesAndOrders
         //    'assigned_route' => $assigned_route // I don't think this is actually being used for anything.  Holding on to it for now as a reminder to that chain of thought.
         ]);
-        
-        // return view('exports.routes', [
-        //     'routes' => Route::all()->where('week_start', $this->week_starting)->where('assigned_to', $this->routesolo)->sortBy('position_on_route')
-        // ]);
+
     }
 
    /**

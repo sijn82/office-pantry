@@ -21,8 +21,8 @@
     <table>
         <thead>
             <tr>
-                <th colspan='3'> Packed By: ..................... </th>
-                <th colspan='3'> {{ $group[0]['delivered_by'] }}{{-- This will be where we show the delivered_by value before unsetting it. --}} </th>
+                <th colspan='2'> Packed By: ..................... </th>
+                <th colspan='4'> {{ $group[0]['delivered_by'] }}{{-- This will be where we show the delivered_by value before unsetting it. --}} </th>
             </tr>
             <tr>
                 <th></th>

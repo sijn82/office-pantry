@@ -23,7 +23,7 @@ use Maatwebsite\Excel\Events\AfterSheet;
 
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class SnackboxWholesaleSingleCompanyExportNew
+class SnackboxWeeklyWholesaleSingleCompanyExportNew
  // implements WithMultipleSheets
   implements FromView, WithEvents, ShouldAutoSize, WithTitle //, WithMultipleSheets
 {
@@ -33,7 +33,9 @@ class SnackboxWholesaleSingleCompanyExportNew
     {
         $courier = session()->get('snackbox_courier');
         $this->courier = $courier;
-            //dd($this->courier);
+
+        $currentWeekStart = Weekstart::findOrFail(1);
+        $this->week_start = $currentWeekStart->current;
     }
 
     public function view(): View
@@ -42,14 +44,14 @@ class SnackboxWholesaleSingleCompanyExportNew
         // $snackboxes = session()->get('snackbox_OP_singlecompany');
        
         // First we need to grab the current week start for orders being processed.
-        $currentWeekStart = Weekstart::findOrFail(1);
+        //$currentWeekStart = Weekstart::findOrFail(1);
        
         // It would be nice if I could make the 'delivered_by' variable a conditional passed by the button pressed. 
         // If it was I could use the same function to process OP/APC/DPD and any others in future.
         // Though for right now let's hard code it and get the rest of the logic in place.
        
         // Edit: This is now done, as you can see = I'm the best!
-        $snackboxes = SnackBox::where('delivered_by', $this->courier)->where('next_delivery_week', $currentWeekStart->current)
+        $snackboxes = SnackBox::where('delivered_by', $this->courier)->where('next_delivery_week', $this->week_start)
                                 ->where('product_id', '!=', 0)->where('type', '=', 'wholesale')->get();
         //dd($snackboxes);
         $snackboxesGroupedById = $snackboxes->groupBy('snackbox_id');

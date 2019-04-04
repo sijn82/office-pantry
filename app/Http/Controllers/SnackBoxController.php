@@ -13,8 +13,9 @@ use App\WeekStart;
 use App\Product;
 use App\Preference;
 // use App\Company;
-use Appz\CompanyDetails;
+use App\CompanyDetails;
 use App\CompanyRoute;
+use App\AssignedRoute;
 
 
 
@@ -31,74 +32,190 @@ class SnackBoxController extends Controller
             $this->delivery_days = $week_start[0]['delivery_days'];
 
         }
+        
+        // public function snackbox_test () {
+        //     // dd('well this worked fine? what\'s going on?!!');
+        //     session()->put('snackbox_courier', 'OP');
+        // 
+        //     return \Excel::download(new Exports\SnackboxSingleCompanyExportNew, 'snackboxesOPSingleCompany-' . $this->delivery_days . '-' . $this->week_start . '.xlsx');
+        // }
+        
         // There are a couple of options here, use the same function with a switch statement value based on the button pressed, or as I'm going to do for now, create several functions
         // one to handle each scenario.
 
-        // Single Company, Multiple Boxes
-        public function download_snackbox_op_singlecompany()
-        {
-            session()->put('snackbox_courier', 'OP');
+        //----- Single Company, Multiple Boxes -----//
+        
+            // - Weekly Export Results
+            
+            public function download_snackbox_weekly_op_singlecompany()
+            {
+                session()->put('snackbox_courier', 'OP');
 
-            return \Excel::download(new Exports\SnackboxSingleCompanyExportNew, 'snackboxesOPSingleCompany' . $this->week_start . '.xlsx');
-        }
-        public function download_snackbox_dpd_singlecompany()
-        {
-            session()->put('snackbox_courier', 'DPD');
+                return \Excel::download(new Exports\SnackboxSingleCompanyWeeklyExportNew, 'snackboxesOPSingleCompany-' . $this->week_start . '.xlsx');
+            }
+            public function download_snackbox_weekly_dpd_singlecompany()
+            {
+                session()->put('snackbox_courier', 'DPD');
 
-            return \Excel::download(new Exports\SnackboxSingleCompanyExport, 'snackboxesDPDSingleCompany' . $this->week_start . '.xlsx');
-        }
-        public function download_snackbox_apc_singlecompany()
-        {
-            session()->put('snackbox_courier', 'APC');
+                return \Excel::download(new Exports\SnackboxSingleCompanyWeeklyExportNew, 'snackboxesDPDSingleCompany-' . $this->week_start . '.xlsx');
+            }
+            public function download_snackbox_weekly_apc_singlecompany()
+            {
+                session()->put('snackbox_courier', 'APC');
 
-            return \Excel::download(new Exports\SnackboxSingleCompanyExport, 'snackboxesAPCSingleCompany' . $this->week_start . '.xlsx');
-        }
+                return \Excel::download(new Exports\SnackboxSingleCompanyWeeklyExportNew, 'snackboxesAPCSingleCompany-' . $this->week_start . '.xlsx');
+            }
+        
+            // Selected Day(s) Export Results
+            
+            public function download_snackbox_op_singlecompany()
+            {
+                session()->put('snackbox_courier', 'OP');
 
-        // Single Box, Multiple Companies
-        public function download_snackbox_op_multicompany()
-        {
-            session()->put('snackbox_courier', 'OP');
+                return \Excel::download(new Exports\SnackboxSingleCompanyExportNew, 'snackboxesOPSingleCompany-' . $this->delivery_days . '-' . $this->week_start . '.xlsx');
+            }
+            public function download_snackbox_dpd_singlecompany()
+            {
+                session()->put('snackbox_courier', 'DPD');
 
-            return \Excel::download(new Exports\SnackboxMultiCompanyExportNew, 'snackboxesOPMultiCompany' . $this->week_start . '.xlsx');
-        }
-        public function download_snackbox_dpd_multicompany()
-        {
-            session()->put('snackbox_courier', 'DPD');
+                return \Excel::download(new Exports\SnackboxSingleCompanyExportNew, 'snackboxesDPDSingleCompany-' . $this->delivery_days . '-' . $this->week_start . '.xlsx');
+            }
+            public function download_snackbox_apc_singlecompany()
+            {
+                session()->put('snackbox_courier', 'APC');
 
-            return \Excel::download(new Exports\SnackboxMultiCompanyExportNew, 'snackboxesDPDMultiCompany' . $this->week_start . '.xlsx');
-        }
-        public function download_snackbox_apc_multicompany()
-        {
-            session()->put('snackbox_courier', 'APC');
+                return \Excel::download(new Exports\SnackboxSingleCompanyExportNew, 'snackboxesAPCSingleCompany-' . $this->delivery_days . '-' . $this->week_start . '.xlsx');
+            }
+        
+        //----- End of Single Company, Multiple Boxes -----//
+        
+        //----- Multiple Companies, Single Box -----//
+        
+            // - Weekly Export Results
+            
+            public function download_snackbox_weekly_op_multicompany()
+            {
+                session()->put('snackbox_courier', 'OP');
 
-            return \Excel::download(new Exports\SnackboxMultiCompanyExportNew, 'snackboxesAPCMultiCompany' . $this->week_start . '.xlsx');
-        }
+                return \Excel::download(new Exports\SnackboxMultiCompanyWeeklyExportNew, 'snackboxesOPMultiCompany-' . $this->week_start . '.xlsx');
+            }
+            public function download_snackbox_weekly_dpd_multicompany()
+            {
+                session()->put('snackbox_courier', 'DPD');
 
-        // Unique Box, Multiple Companies
-        public function download_snackbox_op_unique()
-        {
-            session()->put('snackbox_courier', 'OP');
+                return \Excel::download(new Exports\SnackboxMultiCompanyWeeklyExportNew, 'snackboxesDPDMultiCompany-' . $this->week_start . '.xlsx');
+            }
+            public function download_snackbox_weekly_apc_multicompany()
+            {
+                session()->put('snackbox_courier', 'APC');
 
-            return \Excel::download(new Exports\SnackboxUniqueExportNew, 'snackboxesOPUnique' . $this->week_start . '.xlsx');
-        }
-        public function download_snackbox_dpd_unique()
-        {
-            session()->put('snackbox_courier', 'DPD');
+                return \Excel::download(new Exports\SnackboxMultiCompanyWeeklyExportNew, 'snackboxesAPCMultiCompany-' . $this->week_start . '.xlsx');
+            }
+        
+            // Selected Day(s) Export Results
+            
+            public function download_snackbox_op_multicompany()
+            {
+                session()->put('snackbox_courier', 'OP');
 
-            return \Excel::download(new Exports\SnackboxUniqueExportNew, 'snackboxesDPDUnique' . $this->week_start . '.xlsx');
-        }
-        public function download_snackbox_apc_unique()
-        {
-            session()->put('snackbox_courier', 'APC');
+                return \Excel::download(new Exports\SnackboxMultiCompanyExportNew, 'snackboxesOPMultiCompany-' . $this->delivery_days . '-' . $this->week_start . '.xlsx');
+            }
+            public function download_snackbox_dpd_multicompany()
+            {
+                session()->put('snackbox_courier', 'DPD');
 
-            return \Excel::download(new Exports\SnackboxUniqueExportNew, 'snackboxesAPCUnique' . $this->week_start . '.xlsx');
-        }
-        // Wholesale
+                return \Excel::download(new Exports\SnackboxMultiCompanyExportNew, 'snackboxesDPDMultiCompany-' . $this->delivery_days . '-' . $this->week_start . '.xlsx');
+            }
+            public function download_snackbox_apc_multicompany()
+            {
+                session()->put('snackbox_courier', 'APC');
+
+                return \Excel::download(new Exports\SnackboxMultiCompanyExportNew, 'snackboxesAPCMultiCompany-' . $this->delivery_days . '-' . $this->week_start . '.xlsx');
+            }
+        
+        //----- End of Multiple Companies, Single Box -----//
+
+        //----- Unique Box, Multiple Companies -----//
+        
+            // These are used for companies who receive unique items held in stock which need a picklist creating such as peanut butter, himalayan salt and cereal etc.
+            // The following 3 functions are for companies receiving one box.
+            public function download_snackbox_unique_op_multicompany()
+            {
+                session()->put('snackbox_courier', 'OP');
+
+                return \Excel::download(new Exports\SnackboxUniqueMultiCompanyExportNew, 'snackboxes-Unique-OP-MultiCompany-' . $this->delivery_days . '-' . $this->week_start . '.xlsx');
+            }
+            public function download_snackbox_unique_dpd_multicompany()
+            {
+                session()->put('snackbox_courier', 'DPD');
+
+                return \Excel::download(new Exports\SnackboxUniqueMultiCompanyExportNew, 'snackboxes-Unique-DPD-MultiCompany-' . $this->delivery_days . '-' . $this->week_start . '.xlsx');
+            }
+            public function download_snackbox_unique_apc_multicompany()
+            {
+                session()->put('snackbox_courier', 'APC');
+
+                return \Excel::download(new Exports\SnackboxUniqueMultiCompanyExportNew, 'snackboxes-Unique-APC-MultiCompany-' . $this->delivery_days . '-' . $this->week_start . '.xlsx');
+            }
+            
+            // Whereas these 3 are for companies receiving more than one box - they will be used rarely but need to be possible if needed.
+            
+            public function download_snackbox_unique_op_singlecompany()
+            {
+                session()->put('snackbox_courier', 'OP');
+
+                return \Excel::download(new Exports\SnackboxUniqueSingleCompanyExportNew, 'snackboxes-Unique-OP-SingleCompany-' . $this->delivery_days . '-' . $this->week_start . '.xlsx');
+            }
+            public function download_snackbox_unique_dpd_singlecompany()
+            {
+                session()->put('snackbox_courier', 'DPD');
+
+                return \Excel::download(new Exports\SnackboxUniqueSingleCompanyExportNew, 'snackboxes-Unique-DPD-SingleCompany-' . $this->delivery_days . '-' . $this->week_start . '.xlsx');
+            }
+            public function download_snackbox_unique_apc_singlecompany()
+            {
+                session()->put('snackbox_courier', 'APC');
+
+                return \Excel::download(new Exports\SnackboxUniqueSingleCompanyExportNew, 'snackboxes-Unique-APC-SingleCompany-' . $this->delivery_days . '-' . $this->week_start . '.xlsx');
+            }
+        
+            // These will no longer be used in the new system - replaced by drinkbox.
+            
+                // public function download_snackbox_op_unique()
+                // {
+                //     session()->put('snackbox_courier', 'OP');
+                // 
+                //     return \Excel::download(new Exports\SnackboxUniqueExportNew, 'snackboxesOPUnique' . $this->week_start . '.xlsx');
+                // }
+                // public function download_snackbox_dpd_unique()
+                // {
+                //     session()->put('snackbox_courier', 'DPD');
+                // 
+                //     return \Excel::download(new Exports\SnackboxUniqueExportNew, 'snackboxesDPDUnique' . $this->week_start . '.xlsx');
+                // }
+                // public function download_snackbox_apc_unique()
+                // {
+                //     session()->put('snackbox_courier', 'APC');
+                // 
+                //     return \Excel::download(new Exports\SnackboxUniqueExportNew, 'snackboxesAPCUnique' . $this->week_start . '.xlsx');
+                // }
+                
+            // End of ones replaced by drinkbox
+            
+        //----- End of Unique Box, Multiple Companies -----//
+            
+        // Snackbox Wholesale Exports
         public function download_snackbox_wholesale_op_singlecompany()
         {
             session()->put('snackbox_courier', 'OP');
 
-            return \Excel::download(new Exports\SnackboxWholesaleSingleCompanyExportNew, 'snackboxesWholesaleOPSingleCompany' . $this->week_start . '.xlsx');
+            return \Excel::download(new Exports\SnackboxWholesaleExport, 'snackboxesWholesaleOP-' . $this->delivery_days . '-' . $this->week_start . '.xlsx');
+        }
+        public function download_snackbox_wholesale_weekly_op_singlecompany()
+        {
+            session()->put('snackbox_courier', 'OP');
+
+            return \Excel::download(new Exports\SnackboxWeeklyWholesaleSingleCompanyExportNew, 'snackboxes-weekly-WholesaleOPSingleCompany' . $this->week_start . '.xlsx');
         }
 
     // This is an attempt to send the data for snacks and drinks to the templates without troubling a database for anything.
@@ -357,6 +474,18 @@ class SnackBoxController extends Controller
                 $new_snackbox->quantity = $item['quantity'];
                 $new_snackbox->unit_price = $item['unit_price'];
                 $new_snackbox->save();
+                
+                // Now we need to sort out the stock levels for these order items, keeping them in check and hopefully 100% accurate!
+                //  If these order items get cancelled for any reason, we must remember to add them back in too!!
+                
+                // First let's grab the product
+                $product = Product::findOrFail($item['id']);
+                // Then it's current stock level, and deduct the order quantity as the new stock level.
+                $new_stock_level = $product->stock_level - $item['quantity'];
+                // Finally saving the new stocklevel to the database.
+                Product::where('id', $item['id'])->update([
+                    'stock_level' => $new_stock_level,
+                ]);
 
             }
         } else {
@@ -394,7 +523,7 @@ class SnackBoxController extends Controller
                 $assigned_route_tbc_thursday = AssignedRoute::where('name', 'TBC (Thursday)')->get();
                 $assigned_route_tbc_friday = AssignedRoute::where('name', 'TBC (Friday)')->get();
                 
-                switch (request('delivery_day')) {
+                switch ($delivery_day) {
                     case 'Monday':
                         $assigned_route_id = $assigned_route_tbc_monday[0]->id;
                         break;

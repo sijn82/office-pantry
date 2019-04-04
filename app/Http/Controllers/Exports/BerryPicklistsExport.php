@@ -56,30 +56,64 @@ WithMultipleSheets
         $monTues = ['Monday', 'Tuesday'];
         $wedThurFri = ['Wednesday', 'Thursday', 'Friday'];
         $sheets = [];
+        
+            //----- Commenting this out to test the new switch alternative replaces and improves upon the existing statement -----//
 
-
-            if ($this->delivery_days == 'mon-tue') {
-
-                foreach ($monTues as $route_day) {
-
-                    // Each distinct assigned_to (route) calls the PicklistCollection Class below.
-                    $sheets[] = new BerryPicklistCollection($route_day, $this->week_starting);
+                // if ($this->delivery_days == 'mon-tue') {
+                //     foreach ($monTues as $route_day) {
+                //         // Each distinct assigned_to (route) calls the PicklistCollection Class below.
+                //         $sheets[] = new BerryPicklistCollection($route_day, $this->week_starting);
+                //     }
+                //     return $sheets;
+                // } elseif ($this->delivery_days === 'wed-thur-fri') {
+                //     foreach ($wedThurFri as $route_day) {
+                //         // Each distinct assigned_to (route) calls the PicklistCollection Class below.
+                //         $sheets[] = new BerryPicklistCollection($route_day, $this->week_starting);
+                //     }
+                //     return $sheets;
+                // }
+                
+            //----- End of commented out code for testing purposes -----//
+            
+            //----- How would this look as as switch case with each day of the week as an option too, let's find out! -----//
+            
+                switch ($this->delivery_days) {
+                    case 'mon-tue':
+                        foreach ($monTues as $route_day) {
+                            $sheets[] = new BerryPicklistCollection($route_day, $this->week_starting);
+                        }
+                        break;
+                    case 'wed-thur-fri':
+                        foreach ($wedThurFri as $route_day) {
+                            $sheets[] = new BerryPicklistCollection($route_day, $this->week_starting);
+                        }
+                        return $sheets;
+                        break;
+                    case 'mon':
+                        $sheets[] = new BerryPicklistCollection('Monday', $this->week_starting);
+                        return $sheets;
+                        break;
+                    case 'tue':
+                        $sheets[] = new BerryPicklistCollection('Tuesday', $this->week_starting);
+                        return $sheets;
+                        break;
+                    case 'wed':
+                        $sheets[] = new BerryPicklistCollection('Wednesday', $this->week_starting);
+                        return $sheets;
+                        break;
+                    case 'thur':
+                        $sheets[] = new BerryPicklistCollection('Thursday', $this->week_starting);
+                        return $sheets;
+                        break;
+                    case 'fri':
+                        $sheets[] = new BerryPicklistCollection('Friday', $this->week_starting);
+                        return $sheets;
+                        break;
                 }
-
-                return $sheets;
-
-            } else {
-
-                foreach ($wedThurFri as $route_day) {
-
-                    // Each distinct assigned_to (route) calls the PicklistCollection Class below.
-                    $sheets[] = new BerryPicklistCollection($route_day, $this->week_starting);
-                }
-
-                return $sheets;
-
-            }
+            
+            //----- End of switch case experiment -----//
     }
+    
 
 }
 

@@ -72152,7 +72152,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             form: {
                 week_start: '',
                 delivery_days: null,
-                options: [{ value: null, text: 'Please Select an Option', disabled: true }, { value: 'mon-tue', text: 'Monday & Tuesday' }, { value: 'wed-thur-fri', text: 'Wednesday, Thursday & Friday' }]
+                options: [{ value: null, text: 'Please Select an Option', disabled: true }, { value: 'mon-tue', text: 'Monday & Tuesday' }, { value: 'wed-thur-fri', text: 'Wednesday, Thursday & Friday' }, { value: 'mon', text: 'Monday' }, { value: 'tue', text: 'Tuesday' }, { value: 'wed', text: 'Wednesday' }, { value: 'thur', text: 'Thursday' }, { value: 'fri', text: 'Friday' }]
             },
             //week_start: '',
             new_week_start: '',
@@ -79066,7 +79066,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 tbc: 0
 
             },
-            types: ['Standard', 'Berry', 'Tailored'],
+            types: ['Standard', 'Berry', 'Seasonal', 'Tailored'],
             frequency: ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'],
             week_in_month: ['First', 'Second', 'Third', 'Forth', 'Last'],
             company_selected: [{
@@ -79085,6 +79085,44 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     methods: {
+
+        selectType: function selectType(type) {
+            console.log(type);
+            switch (type) {
+                case 'Standard':
+                    this.form.red_apples = 6;
+                    this.form.green_apples = 3;
+                    this.form.satsumas = 10;
+                    this.form.pears = 3;
+                    this.form.bananas = 16;
+                    this.form.nectarines = 12;
+                    this.form.grapes = 0;
+                    this.form.seasonal_berries = 0;
+                    break;
+                case 'Seasonal':
+                    this.form.red_apples = 5;
+                    this.form.green_apples = 2;
+                    this.form.satsumas = 9;
+                    this.form.pears = 3;
+                    this.form.bananas = 12;
+                    this.form.nectarines = 9;
+                    this.form.grapes = 1;
+                    this.form.seasonal_berries = 2;
+                    break;
+                case 'Tailored':
+                case 'Berry':
+                    this.form.red_apples = 0;
+                    this.form.green_apples = 0;
+                    this.form.satsumas = 0;
+                    this.form.pears = 0;
+                    this.form.bananas = 10;
+                    this.form.nectarines = 0;
+                    this.form.grapes = 0;
+                    this.form.seasonal_berries = 0;
+                    break;
+            }
+        },
+
         onSubmit: function onSubmit(evt) {
             evt.preventDefault();
             var self = this;
@@ -79377,6 +79415,7 @@ var render = function() {
                     "b-form-select",
                     {
                       attrs: { options: _vm.types, required: "" },
+                      on: { change: _vm.selectType },
                       model: {
                         value: _vm.form.type,
                         callback: function($$v) {
@@ -88378,6 +88417,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             quantity: 0,
             editing: false,
             details: false,
+            type: ['Regular', 'Unique'],
             days_of_week: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
             frequency_options: ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'],
             week_in_month_options: ['First', 'Second', 'Third', 'Forth', 'Last']
@@ -88615,6 +88655,33 @@ var render = function() {
                               _vm._s(_vm.drinkbox[0].fruit_partner_name) +
                               " "
                           )
+                        ])
+                      ])
+                ]),
+                _vm._v(" "),
+                _c("b-col", [
+                  _c("label", [_c("b", [_vm._v(" Type ")])]),
+                  _vm._v(" "),
+                  _vm.editing
+                    ? _c(
+                        "div",
+                        [
+                          _c("b-form-select", {
+                            attrs: { options: _vm.type_options },
+                            model: {
+                              value: _vm.drinkbox[0].type,
+                              callback: function($$v) {
+                                _vm.$set(_vm.drinkbox[0], "type", $$v)
+                              },
+                              expression: "drinkbox[0].type"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    : _c("div", [
+                        _c("p", [
+                          _vm._v(" " + _vm._s(_vm.drinkbox[0].type) + " ")
                         ])
                       ])
                 ])
@@ -89456,7 +89523,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             createDrinkbox: false,
             order: 'empty',
             company_details_id: 0,
-            // total_start: 0,
+            //total_start: 0,
+            type: 'Regular',
+            type_options: ['Regular', 'Unique', { value: 'monthly-special', text: 'Monthly Special' }],
             delivered_by: null,
             // delivered_by_options: ['DPD', 'APC', 'OP'], // This will be removed when I add the fruitpartners dropdown.
             delivery_day: null,
@@ -89492,7 +89561,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             axios.post('/api/drinkboxes/save', {
                 details: {
                     delivered_by_id: this.delivered_by,
-                    // no_of_boxes: this.no_of_boxes, 
+                    type: this.type,
                     company_details_id: this.selected_company,
                     delivery_day: this.delivery_day,
                     frequency: this.frequency,
@@ -89588,6 +89657,25 @@ var render = function() {
               "b-row",
               { staticClass: "order-options" },
               [
+                _c(
+                  "b-col",
+                  [
+                    _c("label", [_vm._v(" Type ")]),
+                    _vm._v(" "),
+                    _c("b-form-select", {
+                      attrs: { size: "sm", options: _vm.type_options },
+                      model: {
+                        value: _vm.type,
+                        callback: function($$v) {
+                          _vm.type = $$v
+                        },
+                        expression: "type"
+                      }
+                    })
+                  ],
+                  1
+                ),
+                _vm._v(" "),
                 _c(
                   "b-col",
                   [
@@ -89782,7 +89870,11 @@ var render = function() {
                 "b-row",
                 [
                   _c("b-col", [_c("h4", [_vm._v(" Product Name ")])]),
-                  _c("b-col", [_c("h4", [_vm._v(" Quantity (Cases) ")])]),
+                  _c("b-col", [
+                    _vm.type === "Regular"
+                      ? _c("div", [_c("h4", [_vm._v(" Quantity (Cases) ")])])
+                      : _c("div", [_c("h4", [_vm._v(" Quantity (Units) ")])])
+                  ]),
                   _c("b-col", [_c("h4", [_vm._v(" Price ")])]),
                   _c("b-col")
                 ],
@@ -89874,7 +89966,7 @@ var render = function() {
             "div",
             [
               _c("products-list", {
-                attrs: { createDrinkbox: _vm.createDrinkbox }
+                attrs: { createDrinkbox: _vm.createDrinkbox, type: _vm.type }
               })
             ],
             1
@@ -92324,24 +92416,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['product', 'route', 'createSnackbox', 'createWholesaleSnackbox', 'createOtherbox', 'createDrinkbox'],
+    props: ['product', 'route', 'createSnackbox', 'createWholesaleSnackbox', 'createOtherbox', 'createWholesaleOtherbox', 'createDrinkbox', 'type'],
     data: function data() {
         return {
-            // product: {
-            //     id: '',
-            //     is_active: '',
-            //     code: '',
-            //     name: '',
-            //     case_price: 0.00,
-            //     case_size: 0,
-            //     unit_cost: 0,
-            //     unit_price: 0.00,
-            //     vat: null,
-            //     sales_nominal: null,
-            //     cost_nominal: null,
-            //     profit_margin: '',
-            //     stock_level: 0,
-            // },
             editing: false,
             details: false,
             quantity: 0,
@@ -92359,6 +92436,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         number_of_cases: function number_of_cases() {
 
             return Math.floor(this.product.stock_level / this.product.case_size);
+        },
+        computed_quantity_units: function computed_quantity_units() {
+            return this.product.stock_level - this.quantity;
         }
 
     },
@@ -92487,7 +92567,9 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("b-col", [
-                !_vm.createWholesaleSnackbox && !_vm.createDrinkbox
+                (!_vm.createWholesaleSnackbox && !_vm.createDrinkbox) ||
+                (_vm.createDrinkbox && _vm.type === "Unique") ||
+                "monthly-special"
                   ? _c("div", [
                       _c(
                         "h4",
@@ -92508,7 +92590,7 @@ var render = function() {
                         [
                           _vm._v(
                             "\n                                        Units: " +
-                              _vm._s(_vm.product.stock_level) +
+                              _vm._s(_vm.computed_quantity_units) +
                               " / " +
                               _vm._s(_vm.product.is_active) +
                               " \n                        "
@@ -92518,7 +92600,8 @@ var render = function() {
                     ])
                   : _vm._e(),
                 _vm._v(" "),
-                _vm.createWholesaleSnackbox || _vm.createDrinkbox
+                _vm.createWholesaleSnackbox ||
+                (_vm.createDrinkbox && _vm.type === "Regular")
                   ? _c("div", [
                       _c(
                         "h4",
@@ -92698,7 +92781,10 @@ var render = function() {
                       )
                     : _vm._e(),
                   _vm._v(" "),
-                  _vm.createSnackbox || _vm.createOtherbox
+                  _vm.createSnackbox ||
+                  _vm.createOtherbox ||
+                  (_vm.createDrinkbox && _vm.type === "Unique") ||
+                  "monthly-special"
                     ? _c(
                         "div",
                         [
@@ -92724,7 +92810,7 @@ var render = function() {
                         1
                       )
                     : _vm.createWholesaleSnackbox ||
-                      _vm.createDrinkbox ||
+                      (_vm.createDrinkbox && _vm.type === "Regular") ||
                       _vm.createWholesaleOtherbox
                       ? _c(
                           "div",
@@ -93326,12 +93412,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['route', 'createSnackbox', 'createWholesaleSnackbox', 'createOtherbox', 'createDrinkbox', 'product', 'quantity'],
+    props: ['route', 'createSnackbox', 'createWholesaleSnackbox', 'createOtherbox', 'createDrinkbox', 'type', 'product', 'quantity'],
     data: function data() {
         return {
             products: [],
@@ -93581,6 +93668,7 @@ var render = function() {
                               _vm.createWholesaleSnackbox,
                             createOtherbox: _vm.createOtherbox,
                             createDrinkbox: _vm.createDrinkbox,
+                            type: _vm.type,
                             product: product
                           },
                           on: {
@@ -99637,7 +99725,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "\n.margin-30[data-v-bf8615f2] {\n  margin: 30px;\n}\n.padding-top-20[data-v-bf8615f2] {\n  padding-top: 20px;\n}\n#buttonsToProcessSnackboxes[data-v-bf8615f2] {\n  margin-top: 20px;\n}\n#buttonsToProcessSnackboxes div[data-v-bf8615f2] {\n    margin: 10px;\n}\n", ""]);
+exports.push([module.i, "\n.margin-30[data-v-bf8615f2] {\n  margin: 30px;\n}\n.padding-top-20[data-v-bf8615f2] {\n  padding-top: 20px;\n}\n.warning-font-red[data-v-bf8615f2] {\n  color: red;\n}\n.margin-height-10[data-v-bf8615f2] {\n  margin: 10px 0;\n}\n#buttonsToProcessSnackboxes[data-v-bf8615f2] {\n  margin-top: 20px;\n}\n#buttonsToProcessSnackboxes div[data-v-bf8615f2] {\n    margin: 10px;\n}\n", ""]);
 
 // exports
 
@@ -99648,6 +99736,55 @@ exports.push([module.i, "\n.margin-30[data-v-bf8615f2] {\n  margin: 30px;\n}\n.p
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -99822,6 +99959,60 @@ var render = function() {
       ),
       _vm._v(" "),
       _c(
+        "div",
+        { staticClass: "padding-top-20" },
+        [
+          _c("h4", [_vm._v(" Override Box Totals ")]),
+          _vm._v(" "),
+          _c("b-form-text", { staticClass: "margin-height-10" }, [
+            _vm._v(
+              " Only run this override if you've manually adjusted the 'boxes' and/or 'drinks' column in the company routes and wish to fudge a new total. "
+            )
+          ]),
+          _vm._v(" "),
+          _c(
+            "b-row",
+            [
+              _c("b-col"),
+              _vm._v(" "),
+              _c("b-col"),
+              _vm._v(" "),
+              _c(
+                "b-col",
+                [
+                  _c(
+                    "b-button",
+                    {
+                      attrs: {
+                        href: "api/export-routing-override",
+                        variant: "outline-danger"
+                      }
+                    },
+                    [_vm._v(" Export Routes (Override) ")]
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("b-col"),
+              _vm._v(" "),
+              _c("b-col")
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("b-form-text", { staticClass: "margin-height-10" }, [
+            _vm._v(" Make sure you "),
+            _c("b", { staticClass: "warning-font-red" }, [
+              _vm._v(" run the regular routes button first ")
+            ]),
+            _vm._v(" to get an accurate total for the other routes! ")
+          ])
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
         "b-row",
         [
           _c("b-col", [
@@ -99842,6 +100033,49 @@ var render = function() {
                 "div",
                 { attrs: { id: "exportMultiCompanyButtons" } },
                 [
+                  _c("h4", [_vm._v(" Companies Receiving One Box Only ")]),
+                  _vm._v(" "),
+                  _c("b-form-text", { staticClass: "margin-height-10" }, [
+                    _vm._v(" Export the full week ")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "b-button",
+                    {
+                      attrs: {
+                        variant: "outline-primary",
+                        href: "export-snackbox-weekly-op-multicompany"
+                      }
+                    },
+                    [_vm._v(" Export OP (Weekly) ")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-button",
+                    {
+                      attrs: {
+                        variant: "outline-primary",
+                        href: "export-snackbox-weekly-dpd-multicompany"
+                      }
+                    },
+                    [_vm._v(" Export DPD (Weekly) ")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-button",
+                    {
+                      attrs: {
+                        variant: "outline-primary",
+                        href: "export-snackbox-weekly-apc-multicompany"
+                      }
+                    },
+                    [_vm._v(" Export APC (Weekly) ")]
+                  ),
+                  _vm._v(" "),
+                  _c("b-form-text", { staticClass: "margin-height-10" }, [
+                    _vm._v(" Only export the selected delivery days ")
+                  ]),
+                  _vm._v(" "),
                   _c(
                     "b-button",
                     {
@@ -99850,7 +100084,7 @@ var render = function() {
                         href: "export-snackbox-op-multicompany"
                       }
                     },
-                    [_vm._v(" Export OP Multi Company ")]
+                    [_vm._v(" Export OP (Selected Days) ")]
                   ),
                   _vm._v(" "),
                   _c(
@@ -99861,7 +100095,7 @@ var render = function() {
                         href: "export-snackbox-dpd-multicompany"
                       }
                     },
-                    [_vm._v(" Export DPD Multi Company ")]
+                    [_vm._v(" Export DPD (Selected Days) ")]
                   ),
                   _vm._v(" "),
                   _c(
@@ -99872,14 +100106,8 @@ var render = function() {
                         href: "export-snackbox-apc-multicompany"
                       }
                     },
-                    [_vm._v(" Export APC Multi Company ")]
-                  ),
-                  _vm._v(" "),
-                  _c("b-form-text", [
-                    _vm._v(
-                      "\n                        This first row of buttons will use the multi-company, single box templates.\n                    "
-                    )
-                  ])
+                    [_vm._v(" Export APC (Selected Days) ")]
+                  )
                 ],
                 1
               ),
@@ -99888,6 +100116,49 @@ var render = function() {
                 "div",
                 { attrs: { id: "exportSingleCompanyButtons" } },
                 [
+                  _c("h4", [_vm._v(" Companies Receiving Multiple Boxes ")]),
+                  _vm._v(" "),
+                  _c("b-form-text", { staticClass: "margin-height-10" }, [
+                    _vm._v(" Export the full week ")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "b-button",
+                    {
+                      attrs: {
+                        variant: "outline-primary",
+                        href: "export-snackbox-weekly-op-singlecompany"
+                      }
+                    },
+                    [_vm._v(" Export OP (Weekly) ")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-button",
+                    {
+                      attrs: {
+                        variant: "outline-primary",
+                        href: "export-snackbox-weekly-dpd-singlecompany"
+                      }
+                    },
+                    [_vm._v(" Export DPD (Weekly) ")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-button",
+                    {
+                      attrs: {
+                        variant: "outline-primary",
+                        href: "export-snackbox-weekly-apc-singlecompany"
+                      }
+                    },
+                    [_vm._v(" Export APC (Weekly) ")]
+                  ),
+                  _vm._v(" "),
+                  _c("b-form-text", { staticClass: "margin-height-10" }, [
+                    _vm._v(" Only export the selected delivery days ")
+                  ]),
+                  _vm._v(" "),
                   _c(
                     "b-button",
                     {
@@ -99896,7 +100167,7 @@ var render = function() {
                         href: "export-snackbox-op-singlecompany"
                       }
                     },
-                    [_vm._v(" Export OP Single Company ")]
+                    [_vm._v(" Export OP (Selected Days) ")]
                   ),
                   _vm._v(" "),
                   _c(
@@ -99907,7 +100178,7 @@ var render = function() {
                         href: "export-snackbox-dpd-singlecompany"
                       }
                     },
-                    [_vm._v(" Export DPD Single Company ")]
+                    [_vm._v(" Export DPD (Selected Days) ")]
                   ),
                   _vm._v(" "),
                   _c(
@@ -99918,14 +100189,94 @@ var render = function() {
                         href: "export-snackbox-apc-singlecompany"
                       }
                     },
-                    [_vm._v(" Export APC Single Company ")]
+                    [_vm._v(" Export APC (Selected Days) ")]
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                [
+                  _c("h4", [_vm._v(" Unique Snackbox Items ")]),
+                  _vm._v(" "),
+                  _c("h6", [
+                    _vm._v(" (Peanut Butter, Himalayan Salt, Cereal etc) ")
+                  ]),
+                  _vm._v(" "),
+                  _c("b-form-text", { staticClass: "margin-height-10" }, [
+                    _vm._v(" Companies Receiving Multiple Boxes ")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "b-button",
+                    {
+                      attrs: {
+                        variant: "outline-secondary",
+                        href: "export-snackbox-unique-op-singlecompany"
+                      }
+                    },
+                    [_vm._v(" Export OP (Selected Days) ")]
                   ),
                   _vm._v(" "),
-                  _c("b-form-text", [
-                    _vm._v(
-                      "\n                        This second row uses the single company, multiple boxes template.\n                    "
-                    )
-                  ])
+                  _c(
+                    "b-button",
+                    {
+                      attrs: {
+                        variant: "outline-secondary",
+                        href: "export-snackbox-unique-dpd-singlecompany"
+                      }
+                    },
+                    [_vm._v(" Export DPD (Selected Days) ")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-button",
+                    {
+                      attrs: {
+                        variant: "outline-secondary",
+                        href: "export-snackbox-unique-apc-singlecompany"
+                      }
+                    },
+                    [_vm._v(" Export APC ")]
+                  ),
+                  _vm._v(" "),
+                  _c("b-form-text", { staticClass: "margin-height-10" }, [
+                    _vm._v(" Companies Receiving One Box Only ")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "b-button",
+                    {
+                      attrs: {
+                        variant: "outline-secondary",
+                        href: "export-snackbox-unique-op-multicompany"
+                      }
+                    },
+                    [_vm._v(" Export OP (Selected Days) ")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-button",
+                    {
+                      attrs: {
+                        variant: "outline-secondary",
+                        href: "export-snackbox-unique-dpd-multicompany"
+                      }
+                    },
+                    [_vm._v(" Export DPD (Selected Days) ")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-button",
+                    {
+                      attrs: {
+                        variant: "outline-secondary",
+                        href: "export-snackbox-unique-apc-multicompany"
+                      }
+                    },
+                    [_vm._v(" Export APC (Selected Days) ")]
+                  )
                 ],
                 1
               ),
@@ -99991,6 +100342,37 @@ var render = function() {
                     )
                   ]),
                   _vm._v(" "),
+                  _c("b-form-text", { staticClass: "margin-height-10" }, [
+                    _vm._v(" Export the full week ")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "b-button",
+                    {
+                      attrs: {
+                        variant: "outline-primary",
+                        href:
+                          "export-wholesale-weekly-snackbox-op-singlecompany"
+                      }
+                    },
+                    [_vm._v(" Export OP Snackboxes (Weekly) ")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-button",
+                    {
+                      attrs: {
+                        variant: "outline-primary",
+                        href: "export-wholesale-weekly-drinkbox-op-multicompany"
+                      }
+                    },
+                    [_vm._v(" Export OP Drinkboxes (Weekly) ")]
+                  ),
+                  _vm._v(" "),
+                  _c("b-form-text", { staticClass: "margin-height-10" }, [
+                    _vm._v(" Only export the selected delivery days ")
+                  ]),
+                  _vm._v(" "),
                   _c(
                     "b-button",
                     {
@@ -99999,7 +100381,7 @@ var render = function() {
                         href: "export-wholesale-snackbox-op-singlecompany"
                       }
                     },
-                    [_vm._v(" Export OP Snackboxes ")]
+                    [_vm._v(" Export OP Snackboxes (Selected Days) ")]
                   ),
                   _vm._v(" "),
                   _c(
@@ -100010,25 +100392,97 @@ var render = function() {
                         href: "export-wholesale-drinkbox-op-multicompany"
                       }
                     },
-                    [_vm._v(" Export OP Drinkboxes ")]
+                    [_vm._v(" Export OP Drinkboxes (Selected Days) ")]
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { attrs: { id: "exportMonthlySpecialButtons" } },
+                [
+                  _c("h4", [_vm._v(" Process Monthly Special Items ")]),
+                  _vm._v(" "),
+                  _c("h6", [
+                    _vm._v(
+                      " Whether it's a Snack, Drink, Other (or a combination) they all get processed here! "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("b-form-text", { staticClass: "margin-height-10" }, [
+                    _vm._v(" Export the full week ")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "b-button",
+                    {
+                      attrs: {
+                        variant: "outline-warning",
+                        href: "export-monthly-special-op-weekly"
+                      }
+                    },
+                    [_vm._v(" Export OP (Weekly) ")]
                   ),
                   _vm._v(" "),
                   _c(
                     "b-button",
                     {
                       attrs: {
-                        variant: "outline-primary",
-                        href: "export-wholesale-otherbox-op-multicompany"
+                        variant: "outline-warning",
+                        href: "export-monthly-special-dpd-weekly"
                       }
                     },
-                    [_vm._v(" Export OP Otherboxes ")]
+                    [_vm._v(" Export DPD (Weekly) ")]
                   ),
                   _vm._v(" "),
-                  _c("b-form-text", [
-                    _vm._v(
-                      "\n                        I can't remember whether we need the wholesale otherbox option but keeping button here for now.\n                    "
-                    )
-                  ])
+                  _c(
+                    "b-button",
+                    {
+                      attrs: {
+                        variant: "outline-warning",
+                        href: "export-monthly-special-apc-weekly"
+                      }
+                    },
+                    [_vm._v(" Export APC (Weekly) ")]
+                  ),
+                  _vm._v(" "),
+                  _c("b-form-text", { staticClass: "margin-height-10" }, [
+                    _vm._v(" Only export the selected delivery days ")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "b-button",
+                    {
+                      attrs: {
+                        variant: "outline-warning",
+                        href: "export-monthly-special-op"
+                      }
+                    },
+                    [_vm._v(" Export OP (Selected Days) ")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-button",
+                    {
+                      attrs: {
+                        variant: "outline-warning",
+                        href: "export-monthly-special-dpd"
+                      }
+                    },
+                    [_vm._v(" Export DPD (Selected Days) ")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-button",
+                    {
+                      attrs: {
+                        variant: "outline-warning",
+                        href: "export-monthly-special-apc"
+                      }
+                    },
+                    [_vm._v(" Export APC (Selected Days) ")]
+                  )
                 ],
                 1
               )
