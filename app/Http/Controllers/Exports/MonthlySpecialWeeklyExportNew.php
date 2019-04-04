@@ -77,18 +77,34 @@ ShouldAutoSize
         $monthly_special_snacks_grouped = $monthly_special_snacks->groupBy('snackbox_id');
         //dd($monthly_special_snacks_grouped);
         
-        foreach ($monthly_special_snacks_grouped as $key => $monthly_special_snackbox) {
-            $companydata = explode('-', $key);
-            $company_id = $companydata[0];
-            dd($monthly_special_snackbox);
-        }
+        // foreach ($monthly_special_snacks_grouped as $key => $monthly_special_snackbox) {
+        //     $companydata = explode('-', $key);
+        //     $company_id = $companydata[0];
+        //     dd($monthly_special_snackbox);
+        // }
         
         $monthly_special_drinks_grouped = $monthly_special_drinks->groupBy('drinkbox_id');
         $monthly_special_other_grouped = $monthly_special_other->groupBy('otherbox_id');
         
         $monthly_specials[] = [$monthly_special_snacks_grouped, $monthly_special_drinks_grouped, $monthly_special_other_grouped];
         
-        dd($monthly_specials);
+        // dd($monthly_specials);
+        
+        foreach ($monthly_specials as $monthly_special) {
+            foreach ($monthly_special as $key => $order_group ) {
+                //dd($order_group);
+                foreach ($order_group as $key => $order) {
+                    $companydata = explode('-', $key);
+                    // We now have the company id
+                    $company_id = $companydata[0];
+                    //dd($company_id);
+                    $company_orders[$company_id][] = $order;
+                    //dd($order);
+                }
+            }
+        }
+        
+        dd($company_orders);
         
         // dd($monthly_special_snacks_grouped);
         
