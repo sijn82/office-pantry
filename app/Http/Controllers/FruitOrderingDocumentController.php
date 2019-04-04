@@ -160,7 +160,7 @@ class FruitOrderingDocumentController extends Controller
                                                             'Imprima iRooms Ltd (FAO Lidia Nakonechnaya)' => 'Imprima iRooms Ltd',
                                                             'HubHub UK (FAO Elena Malara)' => 'HubHub UK Ltd',
                                                             'Fastmarkets (FAO Cherry Newman)' => 'Fastmarkets',
-                                                            'Jefferies International Limited (FAO Melanie Delpeuch)' => 'Jefferies International Limited',
+                                                            'Jefferies International Limited (FAO Venera Borisova)' => 'Jefferies International Limited',
                                                             'SSCL (Empress State Building London - FAO Natalia Wielba)' => 'SSCL (Empress State Building London)',
                                                        ];
 
