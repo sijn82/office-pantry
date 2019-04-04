@@ -48,8 +48,8 @@ class FruitOrderingDocumentController extends Controller
     {
 
     }
-    
-    
+
+
     public function csv_tester(Request $request)
     {
         $request_mime_fix = str_replace('data:application/vnd.ms-excel;base64,','',$request->test_csv);
@@ -57,22 +57,22 @@ class FruitOrderingDocumentController extends Controller
         $requestcsv = base64_decode($request_mime_fix);
         // however it now has some unwated unicode characters i.e the 'no break space' - (U+00A0) and use json_encode to make them visible
         $csv_data_with_unicode_characters = json_encode($requestcsv);
-        
+
         // dd($csv_data_with_unicode_characters);
         // now they're no longer hidden characters, we can strip them out of the data
         $csv_data_fixed = str_replace('\u00a0', ' ', $csv_data_with_unicode_characters);
         // and return the file ready for storage
         $ready_csv = json_decode($csv_data_fixed);
         // dd($ready_csv);
-        
+
         Storage::put('public/test-file.csv', $ready_csv);
-        
+
         if (($handle = fopen('../storage/app/public/test-file.csv', 'r')) !== FALSE) {
                while (($data = fgetcsv ($handle,',')) !== FALSE) {
 
                    // this is just to test the data a little before we risk putting stuff automatically into the database.
                    echo $data[0] . ' is ' . strlen($data[0]) . ' characters long and ' . json_encode($data[1]) . ' is also ' . strlen($data[1]) . '<br>';
-                   
+
                }
            }
     }
@@ -162,6 +162,7 @@ class FruitOrderingDocumentController extends Controller
                                                             'Fastmarkets (FAO Cherry Newman)' => 'Fastmarkets',
                                                             'Jefferies International Limited (FAO Venera Borisova)' => 'Jefferies International Limited',
                                                             'SSCL (Empress State Building London - FAO Natalia Wielba)' => 'SSCL (Empress State Building London)',
+                                                            'Punter Southall Group (FAO Sejal Patel)' => 'Punter Southall Group',
                                                        ];
 
                          // If $newRoute->company_name doesn't match a Company route_name, check to see if this value matches a Company route_name exception.
