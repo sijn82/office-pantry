@@ -147,7 +147,7 @@ class FruitOrderingDocumentController extends Controller
                                                             'Gu (Noble Foods - FAO Ali Heal)' => 'Gu (Noble Foods)',
                                                             'Paddle (FAO Yago Cano)' => 'Paddle',
                                                             'Charlotte Tilbury - We Work (FAO Sophie Kendrick)' => 'Charlotte Tilbury - We Work',
-                                                            'Charlotte Tilbury (FAO Sophie Kendrick)' => 'Charlotte Tilbury',
+                                                            'Charlotte Tilbury Brook Green (FAO Sophie Kendrick)' => 'Charlotte Tilbury Brook Green',
                                                             'Juro (FAO Adrienne)' => 'Juro',
                                                             'Home Office Eaton House (FAO Mike Jarrett)' => 'Home Office Eaton House',
                                                             'Euromoney Global Limited (FAO Claire Heath)' => 'Euromoney Global Limited',
