@@ -16,6 +16,15 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+//Invoicing
+Route::get('weekly_invoicing', 'InvoicingController@weekly_invoicing');
+
+// Office Pantry Products
+Route::put('products/office-pantry-products/update/{id}', 'OfficePantryProductsController@update');
+Route::get('products/office-pantry-products/show', 'OfficePantryProductsController@show'); // Might do this differently tomorrow morning.
+
+
 Route::get('random', 'PreferencesController@random');
 
 Route::put('fruitbox/{id}', 'FruitBoxController@update');

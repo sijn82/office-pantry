@@ -123,6 +123,7 @@
                     @yield('fruit-partners')
                     @yield('assigned-routes')
                     @yield('export-excel')
+                    @yield('products/office-pantry-products')
                  </div>
             </div>
         </div>

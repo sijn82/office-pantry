@@ -95,4 +95,10 @@ class CompanyDetails extends Model
     {
         return $this->hasMany(AdditionalInfo::class);
     }
+    
+    // This is a test to see if I can pull a list of relationships into 1 statement request
+    public function invoicing_data()
+    {
+        return $this->morphTo();
+    }
 }

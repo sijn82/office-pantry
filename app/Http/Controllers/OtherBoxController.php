@@ -77,6 +77,7 @@ class OtherBoxController extends Controller
             $new_otherbox->otherbox_id = $otherbox_id;
             $new_otherbox->delivered_by_id = request('details.delivered_by_id');
             $new_otherbox->no_of_boxes = request('details.no_of_boxes');
+            $new_otherbox->type = request('details.type');
             $new_otherbox->company_details_id = request('details.company_details_id');
             $new_otherbox->delivery_day = request('details.delivery_day');
             $new_otherbox->frequency = request('details.frequency');
@@ -208,6 +209,7 @@ class OtherBoxController extends Controller
                  'is_active' => request('otherbox_details.is_active'),
                  'delivered_by_id' => request('otherbox_details.delivered_by_id'),
                  'no_of_boxes' => request('otherbox_details.no_of_boxes'),
+                 'type' => request('otherbox_details.type'),
                  'delivery_day' => request('otherbox_details.delivery_day'),
                  'frequency' => request('otherbox_details.frequency'),
                  'week_in_month' => request('otherbox_details.week_in_month'),
@@ -291,6 +293,7 @@ class OtherBoxController extends Controller
          $addProduct->is_active = request('otherbox_details.is_active');
          $addProduct->delivered_by_id = request('otherbox_details.delivered_by_id');
          $addProduct->no_of_boxes = request('otherbox_details.no_of_boxes');
+         $addProduct->type = request('otherbox_details.type');
          $addProduct->company_details_id = request('otherbox_details.company_details_id');
          $addProduct->delivery_day = request('otherbox_details.delivery_day');
          $addProduct->frequency = request('otherbox_details.frequency');

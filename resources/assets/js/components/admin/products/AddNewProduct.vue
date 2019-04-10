@@ -36,7 +36,7 @@
                             <!-- Product Case Size -->
                             <label> Product Case Size </label>
                             <b-form-input v-model="form.case_size" type="number"></b-form-input>
-                            <p class="selected-option"> Product Profit Margin: {{ form.profit_margin = (form.unit_price - form.unit_cost) / form.unit_cost * 100 }} % </p>
+                            <p class="selected-option"> Product Profit Margin: {{ form.profit_margin = (form.unit_price - form.unit_cost) / form.unit_price * 100 }} % </p>
                         </b-col>
                         <b-col class="col-sm-4" id="product-unit-price">
                             <!-- Product Unit Price -->

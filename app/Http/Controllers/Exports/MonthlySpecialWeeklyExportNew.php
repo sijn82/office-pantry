@@ -54,117 +54,64 @@ ShouldAutoSize
     {
         // Ok let's start again...
         
-        // I can group each box type by its ID
-        
-        // Then if I explode the id before the '-', I can grab the associated company_details_id.
-        
-        
-        
-        
-        //$monthly_specials = [];
+        // Grab the Mystery Boxes
         
         $monthly_special_snacks = SnackBox::where('next_delivery_week', $this->week_start)->where('type', 'monthly-special')->where('product_id', '!=', 0)->get();
-        //dd($monthly_special_snacks);
+
         $monthly_special_drinks = DrinkBox::where('next_delivery_week', $this->week_start)->where('type', 'monthly-special')->where('product_id', '!=', 0)->get();
     
         $monthly_special_other = OtherBox::where('next_delivery_week', $this->week_start)->where('type', 'monthly-special')->where('product_id', '!=', 0)->get();
-    
-        // Hmmn... actually let's think about this:
         
-        // This combines the collection into an array of 3 arrays.  I'm not sure this is the right format to process them?
-        // $monthly_specials_all = array_merge($monthly_specials, [$monthly_special_snacks, $monthly_special_drinks, $monthly_special_other]);
+        // I can group each box type by its ID
         
         $monthly_special_snacks_grouped = $monthly_special_snacks->groupBy('snackbox_id');
-        //dd($monthly_special_snacks_grouped);
-        
-        // foreach ($monthly_special_snacks_grouped as $key => $monthly_special_snackbox) {
-        //     $companydata = explode('-', $key);
-        //     $company_id = $companydata[0];
-        //     dd($monthly_special_snackbox);
-        // }
-        
         $monthly_special_drinks_grouped = $monthly_special_drinks->groupBy('drinkbox_id');
         $monthly_special_other_grouped = $monthly_special_other->groupBy('otherbox_id');
         
+        // And shove it together as one multi-dimensional array
+        
         $monthly_specials[] = [$monthly_special_snacks_grouped, $monthly_special_drinks_grouped, $monthly_special_other_grouped];
         
-        // dd($monthly_specials);
+        // Now it's time to try and shuffle the data around into something we can loop through in the template
+        // There's a lot of foreaching necessary to get down into the nitty gritty, where we can do something...
         
         foreach ($monthly_specials as $monthly_special) {
-            foreach ($monthly_special as $key => $order_group ) {
-                //dd($order_group);
+            foreach ($monthly_special as $order_group ) {
                 foreach ($order_group as $key => $order) {
+                    
+                    // If I now explode the id before the '-', I can grab the associated company_details_id.
+                    // I knew this would be useful eventually, but ... wow, I couldn't have done it without you.
                     $companydata = explode('-', $key);
                     // We now have the company id
                     $company_id = $companydata[0];
-                    //dd($company_id);
-                    $company_orders[$company_id][] = $order;
-                    //dd($order);
+                    
+                    // Now i'm getting most of what I want but the id also needs to be converted into the associated company details name.
+                    $company = CompanyDetails::findOrFail($company_id);
+                    $company_name = $company->route_name;
+                    
+                    foreach ($order as $item) {
+                        //dd($item->delivery_day);
+                        $route = CompanyRoute::where('company_details_id', $company_id)->where('delivery_day', $item->delivery_day)->get();
+                        $assigned_route = AssignedRoute::where('id', $route[0]->assigned_route_id)->get();
+                        $item->assigned_route_name = $assigned_route[0]->name;
+                    }
+                    
+                    // If I put the name here, I can spit it out once and then list the products in the lines below.
+                    $monthly_specials_all[$company_name][] = $order;
+                    // dd($order);
                 }
             }
         }
         
-        dd($company_orders);
-        
-        // dd($monthly_special_snacks_grouped);
-        
-        $monthly_specials_all = array_merge($monthly_specials, [$monthly_special_snacks_grouped, $monthly_special_drinks_grouped, $monthly_special_other_grouped]);
-        
-        dd($monthly_specials_all);
-        //$monthly_specials_grouped_by_company_details_id = [];
-        
-        if (isset($monthly_special_box_type[0]->snackbox_id)) {
-            $monthly_special_box_type_grouped_by_id = $monthly_special_box_type->groupBy('snackbox_id');
-        
-        //    dd($monthly_special_box_type_grouped_by_id);
-        } elseif (isset($monthly_special_box_type[0]->drinkbox_id)) {
-            $monthly_special_box_type_grouped_by_id = $monthly_special_box_type->groupBy('drinkbox_id');
-        //    dd($monthly_special_box_type_grouped_by_id);
-        } elseif (isset($monthly_special_box_type[0]->otherbox_id)) {
-            $monthly_special_box_type_grouped_by_id = $monthly_special_box_type->groupBy('otherbox_id');
-        //    dd($monthly_special_box_type_grouped_by_id);
-        } else {
-            dd('this check isn\'t going to work.');
-        }
-        
-        
-        foreach ($monthly_specials_all as $monthly_special_box_type) {
-            
-            $monthly_specials_grouped_by_company_details_id[] = $monthly_special_box_type->groupBy('company_details_id');
-            
-            //dd($monthly_special_box_type->groupBy('company_details_id'));
-            
-
-        }
-        
-        foreach ($monthly_specials_grouped_by_company_details_id as $group) {
-            $monthly_specials_combined = array_merge($monthly_specials_combined, $group);
-        }
-        
-        dd($monthly_specials_combined);
-        dd($monthly_specials_grouped_by_company_details_id);
-        
-        $monthly_special_snacks_group_company_id = $monthly_special_snacks->groupBy('company_details_id');
-    
-        //dd($monthly_special_snacks_group_company_id);
-    
-        $monthly_special_drinks_group_company_id = $monthly_special_drinks->groupBy('company_details_id');
-        
-        dd($monthly_special_drinks_group_company_id);
-        
-        $monthly_special_other_group_company_id = $monthly_special_other->groupBy('company_details_id');
-    
-        // I want to check each model for orders, there may be more than one but typically at least one of these variables will be empty. 
-    
-    
     
         return view('exports.monthly-special-picklists', [
-            'picklists' => $monthly_specials_all
+            'monthly_specials_all' => $monthly_specials_all,
+            'week_start' => $this->week_start
         ]);
     }
     
     public function title(): string
     {
-        return 'OP Drinks - ' . $this->week_start;
+        return 'OP Monthly Specials ' . $this->week_start;
     }
 }

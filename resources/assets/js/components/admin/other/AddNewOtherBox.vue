@@ -26,6 +26,10 @@
                         <b-form-input type="number" v-model="no_of_boxes" size="sm"></b-form-input>
                     </b-col>
                     <b-col>
+                        <label> Type </label>
+                        <b-form-select v-model="type" :options="type_options" size="sm"></b-form-select>
+                    </b-col>
+                    <b-col>
                         <label> Next Delivery Week Start </label>
                         <b-form-input type="date" v-model="next_delivery_week" size="sm"></b-form-input>
                     </b-col>
@@ -135,6 +139,8 @@
                 delivered_by: null,
                 // delivered_by_options: ['DPD', 'APC', 'OP'],
                 delivery_day: null,
+                type: null,
+                type_options: [{value: null, text: 'Regular'}, {value: 'monthly-special', text: 'Monthly Special'}],
                 delivery_day_options: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
                 frequency: null,
                 frequency_options: ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'],
@@ -171,7 +177,8 @@
                 axios.post('/api/otherboxes/save', {
                     details: { 
                         delivered_by_id: this.delivered_by, 
-                        no_of_boxes: this.no_of_boxes, 
+                        no_of_boxes: this.no_of_boxes,
+                        type: this.type,
                         company_details_id: this.selected_company,
                         delivery_day: this.delivery_day, 
                         frequency: this.frequency, 

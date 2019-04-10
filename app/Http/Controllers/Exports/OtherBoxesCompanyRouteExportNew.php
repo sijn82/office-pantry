@@ -43,6 +43,7 @@ WithMultipleSheets
                 foreach ($mon_tues as $route_day) {
                     $sheets[] = new OtherBoxCompanyRouteCollection($route_day, $this->week_start);
                 }
+                return $sheets;
                 break;
             case 'wed-thur-fri':
                 foreach ($wed_thur_fri as $route_day) {

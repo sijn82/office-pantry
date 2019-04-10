@@ -101,6 +101,9 @@ Vue.component('product', require('./components/admin/products/Product.vue'));
 Vue.component('products-list', require('./components/admin/products/ProductsList.vue'));
 Vue.component('add-new-product', require('./components/admin/products/AddNewProduct.vue'));
 Vue.component('select-product', require('./components/admin/products/SelectProduct.vue'));
+// Office Pantry Products Related
+Vue.component('office-pantry-product-list', require('./components/admin/products/OfficePantryProductList.vue'));
+Vue.component('office-pantry-product', require('./components/admin/products/OfficePantryProduct.vue'));
 // Preference & Allergy Related
 Vue.component('preference', require('./components/admin/preferences/Preference.vue'));
 Vue.component('preferences', require('./components/admin/preferences/Preferences.vue'));
