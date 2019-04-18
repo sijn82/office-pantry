@@ -317,7 +317,7 @@
                     </b-col>
                 </b-row>
 
-                <b-row id="bottom-details" :class="fruitbox.is_active" class="b-row-padding" sm="12">
+                <b-row :class="fruitbox.is_active" class="b-row-padding" sm="12">
                     <b-col class="col-sm-4">
                         <label><b> Avocados </b></label>
                         <div v-if="editing">
@@ -339,16 +339,28 @@
                     </b-col>
 
                     <b-col class="col-sm-4">
-                        <label><b> TBC </b></label>
+                        <label><b> Tailoring Fee </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="fruitbox.tbc" type="number"></b-form-input>
+                            <b-form-input v-model="fruitbox.tailoring_fee" type="number"></b-form-input>
                         </div>
                         <div v-else>
-                            <p> {{ fruitbox.tbc }} </p>
+                            <p> {{ fruitbox.tailoring_fee }} </p>
                         </div>
                     </b-col>
                 </b-row>
-
+                <b-row id="bottom-details" :class="fruitbox.is_active">
+                    <b-col></b-col>
+                    <b-col class="col-sm-4">
+                        <label><b> Discount Multiple </b></label>
+                        <div v-if="editing">
+                            <b-form-select v-model="fruitbox.discount_multiple" :options="discountable_options"></b-form-select>
+                        </div>
+                        <div v-else>
+                            <p> {{ fruitbox.discount_multiple }} </p>
+                        </div>
+                    </b-col>
+                    <b-col></b-col>
+                </b-row>
             </div>
         <!-- </ul> -->
     </div>
@@ -368,6 +380,7 @@ export default {
             fruit_partner_name: '',
             frequency: ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'],
             week_in_month: ['First', 'Second', 'Third', 'Forth', 'Last'],
+            discountable_options: ['Yes', 'No'],
             editing: false,
             details: false,
             addnew: false,
@@ -434,7 +447,8 @@ export default {
                 grapefruits: fruitbox.grapefruits,
                 avocados: fruitbox.avocados,
                 root_ginger: fruitbox.root_ginger,
-                tbc: fruitbox.tbc,
+                tailoring_fee: fruitbox.tailoring_fee,
+                discount_multiple: fruitbox.discount_multiple,
             }).then (response => {
                 console.log(response);
             }).catch(error => console.log(error));

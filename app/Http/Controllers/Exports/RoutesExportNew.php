@@ -239,7 +239,7 @@ WithEvents
         $fruitboxesForDelivery = FruitBox::where('next_delivery', $currentWeekStart->current)->where('is_active', 'Active')->get();
 
         // Now the same for milk, and yes I called the same field, with the same purpose something different each time.  I shouldn't be allowed to wield this much power.
-        $milkboxesForDelivery = MilkBox::where('next_delivery_week_start', $currentWeekStart->current)->where('is_active', 'Active')->get();
+        $milkboxesForDelivery = MilkBox::where('next_delivery', $currentWeekStart->current)->where('is_active', 'Active')->get();
 
         // Let's grab all the routes. (old approach)
         //$routeInfoAll = Route::where('assigned_to', $this->routesolo)->where('is_active', 'Active')->get();
@@ -286,7 +286,7 @@ WithEvents
             // ---------- Milk Deliveries ---------- //
 
             // For each route in the routes table, we check the associated Company ID for a MilkBox - that's Active, On Delivery For This Week and on this Delivery Day.
-            $milkboxesForDelivery = MilkBox::where('company_details_id', $routeInfoSolo->company_details_id)->where('next_delivery_week_start', $currentWeekStart->current)
+            $milkboxesForDelivery = MilkBox::where('company_details_id', $routeInfoSolo->company_details_id)->where('next_delivery', $currentWeekStart->current)
                                            ->where('delivery_day', $routeInfoSolo->delivery_day)->where('is_active', 'Active')->where('fruit_partner_id', 1)->get();
 
             // Unlike FruitBoxes there shouldn't be any more than one entry, so totalling isn't necessary - however there may be no milk on the route.

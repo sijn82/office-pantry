@@ -59,7 +59,7 @@ class MilkBoxController extends Controller
                 $newMilkbox->fruit_partner_id = $request['company_data']['fruit_partner_id'];
                 $newMilkbox->company_details_id = $request['company_data']['company_details_id'];
                 $newMilkbox->route_id = $request['company_data']['route_id']; // Not using this for anything.
-                $newMilkbox->next_delivery_week_start = $request['company_data']['first_delivery'];
+                $newMilkbox->next_delivery = $request['company_data']['first_delivery'];
                 $newMilkbox->frequency = $request['company_data']['frequency'];
                 $newMilkbox->week_in_month = $request['company_data']['week_in_month'];
                 $newMilkbox->delivery_day = $delivery_day;
@@ -139,7 +139,7 @@ class MilkBoxController extends Controller
                 // $newRoute->is_active = 'Active'; // Currently hard coded but this is also the default.
                 // $newRoute->week_start = $currentWeekStart->current;
                 // $newRoute->previous_delivery_week_start = null // This doesn't need to be here as there will never be a previous delivery for a new route (obvs) but I'm noting all fields in new route table here, for now.
-                // $newRoute->next_delivery_week_start = $request['company_data']['first_delivery'];
+                // $newRoute->next_delivery = $request['company_data']['first_delivery'];
                 $newRoute->company_details_id = $request['company_data']['company_details_id'];
                 $newRoute->route_name = $companyDetails->route_name;
                 $newRoute->postcode = $companyDetails->route_postcode;
@@ -249,7 +249,7 @@ class MilkBoxController extends Controller
             // 'company_details_id' => request('company_details_id'); But is this going to change? No, it's not going to change.
             // 'route_id' => request('route_id');  Is this going to change either?  Nope, well not in this part of the function anyway.
             // 'previous_delivery_week_start' => request('previous_delivery_week');
-            'next_delivery_week_start' => request('next_delivery_week_start'), // Being able to change this is actually very important!
+            'next_delivery' => request('next_delivery'), // Being able to change this is actually very important!
             'delivery_day' => request('delivery_day'),
             'frequency' => request('frequency'),
             'week_in_month' => request('week_in_month'),  // This is an optional field only necessary if the frequency is monthly, or potentially bespoke.

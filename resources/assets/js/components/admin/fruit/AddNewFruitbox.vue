@@ -159,8 +159,14 @@
                             <b-form-input v-model="form.root_ginger" type="number"></b-form-input>
                         </b-col>
                         <b-col class="col-sm-4">
-                            <label> TBC </label>
-                            <b-form-input v-model="form.tbc" type="number"></b-form-input>
+                            <label> Tailoring Fee </label>
+                            <b-form-input v-model="form.tailoring_fee" type="number"></b-form-input>
+                        </b-col>
+                    </b-row>
+                    <b-row>
+                        <b-col>
+                            <label> Discount Multiple </label>
+                            <b-form-select v-model="form.discount_multiple" :options="discountable_options"></b-form-select>
                         </b-col>
                     </b-row>
                 </b-form-group>
@@ -231,12 +237,14 @@ export default {
                     grapefruits: 0,
                     avocados: 0,
                     root_ginger: 0,
-                    tbc: 0,
+                    tailoring_fee: 0,
+                    discount_multiple: 'Yes',
 
                 },
                 types: ['Standard', 'Berry', 'Seasonal', 'Tailored'],
                 frequency: ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'],
                 week_in_month: ['First', 'Second', 'Third', 'Forth', 'Last'],
+                discountable_options: ['Yes', 'No'],
                 company_selected: [{
                     value: this.company.id,
                     text: this.company.route_name
@@ -335,7 +343,7 @@ export default {
               this.form.grapefruits = 0;
               this.form.avocados = 0;
               this.form.root_ginger = 0;
-              this.form.tbc = 0;
+              this.form.tailoring_fee = 0;
 
             }
         },

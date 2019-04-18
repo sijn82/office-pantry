@@ -153,6 +153,8 @@ class FruitBoxController extends Controller
                 $newFruitbox->grapefruits = $request['company_data']['grapefruits'];
                 $newFruitbox->avocados = $request['company_data']['avocados'];
                 $newFruitbox->root_ginger = $request['company_data']['root_ginger'];
+                $newFruitbox->tailoring_fee = $request['company_data']['tailoring_fee'];
+                $newFruitbox->discount_multiple = $request['company_data']['discount_multiple'];
                 $newFruitbox->save();
 
                 $message = "Fruitbox $newFruitbox->name on $delivery_day saved.";
@@ -280,8 +282,20 @@ class FruitBoxController extends Controller
     {
          //dd($request);
         
-        // Whatever happens, we want to update the fruitbox entry, so lets get that done first.
+        // Whatever happens, we want to update the fruitbox entry, so lets get that done first. <-- EDIT: NOT ANY MORE!
         
+        //----- New logic to try and handle accurate invoicing regardless of when boxes are updated and invoiced. -----//
+        
+            // Now whenever a box is updated we need to compare the 'invoiced_at' (doesn't currently exist) date with the 'updated_at' date.
+            // If the 'invoiced_at' date matches the 'updated_at' date we can go ahead and update the current entry, moving the existing details (copy), into the archive table for posterity.
+            // Changing the archived box status to 'inactive'.
+            
+            // Alternatively should the 'updated_at' column not match up with the 'invoiced_at' date,
+            // we need to save a copy to the archive table but keep its status as 'active' because we still need to invoice it during the next invoicing period.
+            // HOWEVER, this also requires the updated box to be advanced to the next delivery date, SO THAT IT ISN'T INVOICED TWICE!!
+        
+        //----- End of - New logic to try and handle accurate invoicing regardless of when boxes are updated and invoiced. -----//
+         // dd($request);
         FruitBox::where('id', $id)->update([
             // 'id' => request('id'), // this shouldn't change so I could delete it but nahh...
             'is_active' => request('is_active'),
@@ -289,7 +303,7 @@ class FruitBoxController extends Controller
             'name' => request('name'),
             //'company_details_id' => request('company_details_id'),
             //'route_id' => request('route_id'),
-            'type' => request('type'),
+            // 'type' => request('type'), // I'm not currently offering an update to box type, instead a new box should be created.
             'next_delivery' => request('next_delivery'),
             'delivery_day' => request('delivery_day'),
             'frequency' => request('frequency'),
@@ -315,6 +329,8 @@ class FruitBoxController extends Controller
             'grapefruits' => request('grapefruits'),
             'avocados' => request('avocados'),
             'root_ginger' => request('root_ginger'),
+            'tailoring_fee' => request('tailoring_fee'),
+            'discount_multiple' => request('discount_multiple'),
         ]);
         
         // When making an update to the fruitbox, we need to check there's still a route for its delivery.

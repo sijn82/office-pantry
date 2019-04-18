@@ -36,10 +36,10 @@
                     <b-col>
                         <label><b> Next Delivery </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="milkbox.next_delivery_week_start" type="date"></b-form-input>
+                            <b-form-input v-model="milkbox.next_delivery" type="date"></b-form-input>
                         </div>
                         <div v-else>
-                            <p> {{ milkbox.next_delivery_week_start }} </p>
+                            <p> {{ milkbox.next_delivery }} </p>
                         </div>
                     </b-col>
                 </b-row>
@@ -315,7 +315,7 @@ export default {
                 fruit_partner_id: milkbox.fruit_partner_id,
                 company_details_id: milkbox.company_details_id,
                 route_id: milkbox.route_id,
-                next_delivery_week_start: milkbox.next_delivery_week_start,
+                next_delivery: milkbox.next_delivery,
                 delivery_day: milkbox.delivery_day,
                 frequency: milkbox.frequency,
                 week_in_month: milkbox.week_in_month,

@@ -77136,6 +77136,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -77145,6 +77157,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             fruit_partner_name: '',
             frequency: ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'],
             week_in_month: ['First', 'Second', 'Third', 'Forth', 'Last'],
+            discountable_options: ['Yes', 'No'],
             editing: false,
             details: false,
             addnew: false
@@ -77211,7 +77224,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 grapefruits: fruitbox.grapefruits,
                 avocados: fruitbox.avocados,
                 root_ginger: fruitbox.root_ginger,
-                tbc: fruitbox.tbc
+                tailoring_fee: fruitbox.tailoring_fee,
+                discount_multiple: fruitbox.discount_multiple
             }).then(function (response) {
                 console.log(response);
             }).catch(function (error) {
@@ -78213,7 +78227,7 @@ var render = function() {
           {
             staticClass: "b-row-padding",
             class: _vm.fruitbox.is_active,
-            attrs: { id: "bottom-details", sm: "12" }
+            attrs: { sm: "12" }
           },
           [
             _c("b-col", { staticClass: "col-sm-4" }, [
@@ -78269,7 +78283,7 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("b-col", { staticClass: "col-sm-4" }, [
-              _c("label", [_c("b", [_vm._v(" TBC ")])]),
+              _c("label", [_c("b", [_vm._v(" Tailoring Fee ")])]),
               _vm._v(" "),
               _vm.editing
                 ? _c(
@@ -78278,20 +78292,60 @@ var render = function() {
                       _c("b-form-input", {
                         attrs: { type: "number" },
                         model: {
-                          value: _vm.fruitbox.tbc,
+                          value: _vm.fruitbox.tailoring_fee,
                           callback: function($$v) {
-                            _vm.$set(_vm.fruitbox, "tbc", $$v)
+                            _vm.$set(_vm.fruitbox, "tailoring_fee", $$v)
                           },
-                          expression: "fruitbox.tbc"
+                          expression: "fruitbox.tailoring_fee"
                         }
                       })
                     ],
                     1
                   )
                 : _c("div", [
-                    _c("p", [_vm._v(" " + _vm._s(_vm.fruitbox.tbc) + " ")])
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.fruitbox.tailoring_fee) + " ")
+                    ])
                   ])
             ])
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "b-row",
+          { class: _vm.fruitbox.is_active, attrs: { id: "bottom-details" } },
+          [
+            _c("b-col"),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Discount Multiple ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-select", {
+                        attrs: { options: _vm.discountable_options },
+                        model: {
+                          value: _vm.fruitbox.discount_multiple,
+                          callback: function($$v) {
+                            _vm.$set(_vm.fruitbox, "discount_multiple", $$v)
+                          },
+                          expression: "fruitbox.discount_multiple"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.fruitbox.discount_multiple) + " ")
+                    ])
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col")
           ],
           1
         )
@@ -79027,6 +79081,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -79066,12 +79126,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 grapefruits: 0,
                 avocados: 0,
                 root_ginger: 0,
-                tbc: 0
+                tailoring_fee: 0,
+                discount_multiple: 'Yes'
 
             },
             types: ['Standard', 'Berry', 'Seasonal', 'Tailored'],
             frequency: ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'],
             week_in_month: ['First', 'Second', 'Third', 'Forth', 'Last'],
+            discountable_options: ['Yes', 'No'],
             company_selected: [{
                 value: this.company.id,
                 text: this.company.route_name
@@ -79172,7 +79234,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.form.grapefruits = 0;
             this.form.avocados = 0;
             this.form.root_ginger = 0;
-            this.form.tbc = 0;
+            this.form.tailoring_fee = 0;
         }
     },
     mounted: function mounted() {
@@ -80002,16 +80064,41 @@ var render = function() {
                         "b-col",
                         { staticClass: "col-sm-4" },
                         [
-                          _c("label", [_vm._v(" TBC ")]),
+                          _c("label", [_vm._v(" Tailoring Fee ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
                             attrs: { type: "number" },
                             model: {
-                              value: _vm.form.tbc,
+                              value: _vm.form.tailoring_fee,
                               callback: function($$v) {
-                                _vm.$set(_vm.form, "tbc", $$v)
+                                _vm.$set(_vm.form, "tailoring_fee", $$v)
                               },
-                              expression: "form.tbc"
+                              expression: "form.tailoring_fee"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-row",
+                    [
+                      _c(
+                        "b-col",
+                        [
+                          _c("label", [_vm._v(" Discount Multiple ")]),
+                          _vm._v(" "),
+                          _c("b-form-select", {
+                            attrs: { options: _vm.discountable_options },
+                            model: {
+                              value: _vm.form.discount_multiple,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "discount_multiple", $$v)
+                              },
+                              expression: "form.discount_multiple"
                             }
                           })
                         ],
@@ -81115,7 +81202,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 fruit_partner_id: milkbox.fruit_partner_id,
                 company_details_id: milkbox.company_details_id,
                 route_id: milkbox.route_id,
-                next_delivery_week_start: milkbox.next_delivery_week_start,
+                next_delivery: milkbox.next_delivery,
                 delivery_day: milkbox.delivery_day,
                 frequency: milkbox.frequency,
                 week_in_month: milkbox.week_in_month,
@@ -81307,15 +81394,11 @@ var render = function() {
                       _c("b-form-input", {
                         attrs: { type: "date" },
                         model: {
-                          value: _vm.milkbox.next_delivery_week_start,
+                          value: _vm.milkbox.next_delivery,
                           callback: function($$v) {
-                            _vm.$set(
-                              _vm.milkbox,
-                              "next_delivery_week_start",
-                              $$v
-                            )
+                            _vm.$set(_vm.milkbox, "next_delivery", $$v)
                           },
-                          expression: "milkbox.next_delivery_week_start"
+                          expression: "milkbox.next_delivery"
                         }
                       })
                     ],
@@ -81323,9 +81406,7 @@ var render = function() {
                   )
                 : _c("div", [
                     _c("p", [
-                      _vm._v(
-                        " " + _vm._s(_vm.milkbox.next_delivery_week_start) + " "
-                      )
+                      _vm._v(" " + _vm._s(_vm.milkbox.next_delivery) + " ")
                     ])
                   ])
             ])
@@ -82198,7 +82279,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 fruit_partner_id: '',
                 company_id: '',
                 route_id: '',
-                next_delivery_week_start: '',
+                next_delivery: '',
                 delivery_day: '',
                 frequency: '',
                 week_in_month: '',
@@ -82262,7 +82343,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 fruit_partner_id: milkbox.fruit_partner_id,
                 company_id: milkbox.company_id,
                 route_id: milkbox.route_id,
-                next_delivery_week_start: milkbox.next_delivery_week_start,
+                next_delivery: milkbox.next_delivery,
                 delivery_day: milkbox.delivery_day,
                 frequency: milkbox.frequency,
                 week_in_month: milkbox.week_in_month,

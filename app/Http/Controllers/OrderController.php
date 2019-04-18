@@ -130,22 +130,22 @@ class OrderController extends Controller
                     // If the 'next_delivery' date (value) has passed, we probably need to update it.
                     // This check will also help to prevent the next_delivery date being increased before that (particular) delivery has been sent.
 
-                    if ($milkbox->next_delivery_week_start < Carbon::now()) {
+                    if ($milkbox->next_delivery < Carbon::now()) {
 
-                        // echo $milkbox->name . '\'s next delivery was outdated but has been changed from ' . $milkbox->next_delivery_week_start . " to ";
+                        // echo $milkbox->name . '\'s next delivery was outdated but has been changed from ' . $milkbox->next_delivery . " to ";
 
-                        $lastDelivery = $milkbox->next_delivery_week_start;
+                        $lastDelivery = $milkbox->next_delivery;
 
                         // This will pull the current fruitbox next_delivery(_week_start) into Carbon where we can increase its value by 1 week.
-                        $milkbox->next_delivery_week_start = Carbon::parse($milkbox->next_delivery_week_start)->addWeek(1);
+                        $milkbox->next_delivery = Carbon::parse($milkbox->next_delivery)->addWeek(1);
 
                         // Now we can update the next_delivery_week_value, using the id to identify the correct entry.
                         MilkBox::where('id', $milkbox->id)->update([
-                            'previous_delivery_week_start' => $lastDelivery,
-                            'next_delivery_week_start' => $milkbox->next_delivery_week_start,
+                            'previous_delivery' => $lastDelivery,
+                            'next_delivery' => $milkbox->next_delivery,
                         ]);
 
-                        // echo $milkbox->next_delivery_week_start . "<br/>";
+                        // echo $milkbox->next_delivery . "<br/>";
                     }
                 }
 
@@ -198,22 +198,22 @@ class OrderController extends Controller
                 // If the 'next_delivery' date (value) has passed, we probably need to update it.
                 // This check will also help to prevent the next_delivery date being increased before that (particular) delivery has been sent.
 
-                if ($milkbox->next_delivery_week_start < Carbon::now()) {
+                if ($milkbox->next_delivery < Carbon::now()) {
 
-                    // echo $milkbox->name . '\'s next delivery was outdated but has been changed from ' . $milkbox->next_delivery_week_start . " to ";
+                    // echo $milkbox->name . '\'s next delivery was outdated but has been changed from ' . $milkbox->next_delivery . " to ";
 
-                    $lastDelivery = $milkbox->next_delivery_week_start;
+                    $lastDelivery = $milkbox->next_delivery;
 
                     // This will pull the current milkbox next_delivery(_week_start) into Carbon where we can increase its value by 2 week.
-                    $milkbox->next_delivery_week_start = Carbon::parse($milkbox->next_delivery_week_start)->addWeek(2);
+                    $milkbox->next_delivery = Carbon::parse($milkbox->next_delivery)->addWeek(2);
 
                     // Now we can update the next_delivery_week_value, using the id to identify the correct entry.
                     MilkBox::where('id', $milkbox->id)->update([
                         'previous_delivery_week_start' => $lastDelivery,
-                        'next_delivery_week_start' => $milkbox->next_delivery_week_start,
+                        'next_delivery' => $milkbox->next_delivery,
                     ]);
 
-                    // echo $fruitbox->next_delivery_week_start . "<br/>";
+                    // echo $fruitbox->next_delivery . "<br/>";
                 }
             }
         // ---------- End of Fortnightly ---------- //
@@ -283,11 +283,11 @@ class OrderController extends Controller
                 // If the 'next_delivery' date (value) has passed, we probably need to update it.
                 // This check will also help to prevent the next_delivery date being increased before that (particular) delivery has been sent.
 
-                if ($milkbox->next_delivery_week_start < Carbon::now()) {
+                if ($milkbox->next_delivery < Carbon::now()) {
 
-                    // echo $milkbox->name . '\'s next delivery was outdated but has been changed from ' . $milkbox->next_delivery_week_start . " to ";
+                    // echo $milkbox->name . '\'s next delivery was outdated but has been changed from ' . $milkbox->next_delivery . " to ";
 
-                    $lastDelivery = $milkbox->next_delivery_week_start;
+                    $lastDelivery = $milkbox->next_delivery;
 
                     // This will pull the current milkbox next_delivery(_week_start) into Carbon where we can increase its value by a given monday in the following month.
                     // Even if the monday remains the same this will still vary more than just progressing forward 4 weeks.
@@ -297,7 +297,7 @@ class OrderController extends Controller
 
                     // This will check the month of the last delivery and then advance by one month,
                     // before saving that month as a string to be parsed later in $mondayOfMonth variable.
-                    $month = Carbon::parse($milkbox->next_delivery_week_start)->addMonth()->englishMonth;
+                    $month = Carbon::parse($milkbox->next_delivery)->addMonth()->englishMonth;
 
                     // Create new instance of Carbon to use as the primer for $carbon::parse() below.
                     $carbon = new Carbon;
@@ -308,15 +308,15 @@ class OrderController extends Controller
                     $mondayOfMonth = $carbon::parse($week . ' monday of ' . $month);
 
                     // Set the newly parsed delivery date.
-                    $milkbox->next_delivery_week_start = $mondayOfMonth;
+                    $milkbox->next_delivery = $mondayOfMonth;
 
                     // Now we can update the next_delivery_week_value, using the id to identify the correct entry.
                     MilkBox::where('id', $milkbox->id)->update([
-                        'previous_delivery_week_start' => $lastDelivery,
-                        'next_delivery_week_start' => $milkbox->next_delivery_week_start,
+                        'previous_delivery' => $lastDelivery,
+                        'next_delivery' => $milkbox->next_delivery,
                     ]);
 
-                    // echo $milkbox->next_delivery_week_start . "<br/>";
+                    // echo $milkbox->next_delivery . "<br/>";
                 }
             }
 
@@ -337,7 +337,7 @@ class OrderController extends Controller
         $fruitboxesForDelivery = FruitBox::where('next_delivery', $currentWeekStart->current)->where('is_active', 'Active')->get();
 
         // Now the same for milk, and yes I called the same field, with the same purpose something different each time.  I shouldn't be allowed to wield this much power.
-        $milkboxesForDelivery = MilkBox::where('next_delivery_week_start', $currentWeekStart->current)->where('is_active', 'Active')->get();
+        $milkboxesForDelivery = MilkBox::where('next_delivery', $currentWeekStart->current)->where('is_active', 'Active')->get();
 
         // Let's grab all the routes.
         $routeInfoAll = CompanyRoute::all();
@@ -376,7 +376,7 @@ class OrderController extends Controller
             // ---------- Milk Deliveries ---------- //
 
             // For each route in the routes table, we check the associated Company ID for a MilkBox - that's Active, On Delivery For This Week and on this Delivery Day.
-            $milkboxesForDelivery = MilkBox::where('company_details_id', $routeInfoSolo->company_details_id)->where('next_delivery_week_start', $currentWeekStart->current)
+            $milkboxesForDelivery = MilkBox::where('company_details_id', $routeInfoSolo->company_details_id)->where('next_delivery', $currentWeekStart->current)
                                             ->where('delivery_day', $routeInfoSolo->delivery_day)->where('is_active', 'Active')->get();
 
             // Unlike FruitBoxes there shouldn't be any more than one entry, so totalling isn't necessary - however there may be no milk on the route.

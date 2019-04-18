@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFruitBoxesTable extends Migration
+class CreateFruitBoxArchivesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,15 @@ class CreateFruitBoxesTable extends Migration
      */
     public function up()
     {
-        Schema::create('fruit_boxes', function (Blueprint $table) {
+        Schema::create('fruit_box_archives', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('is_active')->default('Active');
+            $table->string('is_active');
             $table->string('name');
             $table->integer('company_details_id');
             $table->integer('route_id'); // not sure i need this, i'm certainly not using it currently!
             $table->string('type');
+            $table->date('previous_delivery');
+            $table->date('next_delivery');
             $table->string('frequency');
             $table->string('delivery_day');
             $table->integer('boxes_total');
@@ -45,10 +47,9 @@ class CreateFruitBoxesTable extends Migration
             $table->integer('root_ginger');
             $table->integer('tailoring_fee');
             $table->string('discount_multiple');
-            $table->date('invoiced_at');
+            $table->date('invoiced_at'); // This is a new field to hopefully keep track of when orders have been processed.
             $table->timestamps();
         });
-
     }
 
     /**
@@ -58,6 +59,6 @@ class CreateFruitBoxesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('fruit_boxes');
+        Schema::dropIfExists('fruit_box_archives');
     }
 }

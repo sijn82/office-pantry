@@ -4,11 +4,15 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class FruitBox extends Model
+class FruitBoxArchive extends Model
 {
-    //
+    // This table is going to be used to store old fruitboxes once they've been updated.
+    // An update is any change other than the next_delivery date.
+    // If they have an invoice address == to the update address, they've been invoice and can be set to 'inactive' status.
+    // If the update address is newer than the invoice address, we need to keep them 'active' and ready to pull them into the next invoice.
+    
     protected $fillable = [
-
+        
         'is_active',
         'name',
         'company_details_id',
@@ -42,29 +46,15 @@ class FruitBox extends Model
         'tailoring_fee',
         'discount_multiple',
         'invoiced_at',
-
     ];
-
-        /**
-         * The attributes that should be hidden for arrays.
-         *
-         * @var array
-         */
-        protected $hidden = [
-            // 'password', 'remember_token',
-        ];
-
-        // public function companies()
-        // {
-        //     return $this->belongsTo(Company::class);
-        // }
-        public function companies()
-        {
-            return $this->belongsTo(CompanyDetails::class);
-        }
-        
-        public function fruit_partners()
-        {
-            return $this->belongsTo(FruitPartner::class);
-        }
+    
+    public function companies()
+    {
+        return $this->belongsTo(CompanyDetails::class);
+    }
+    
+    public function fruit_partners()
+    {
+        return $this->belongsTo(FruitPartner::class);
+    }
 }

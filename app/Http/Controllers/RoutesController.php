@@ -97,8 +97,8 @@ class RoutesController extends Controller
         Route::where('id', $id)->update([
             'company_id' => request('company_id'),
             'is_active' => request('is_active'),
-            'previous_delivery_week_start' => request('previous_delivery_week_start'),
-            'next_delivery_week_start' => request('next_delivery_week_start'),
+            // 'previous_delivery_week_start' => request('previous_delivery_week_start'),
+            // 'next_delivery_week_start' => request('next_delivery_week_start'),
             'company_name' => request('company_name'),
             'delivery_day' => request('delivery_day'),
             'assigned_to' => request('assigned_to'),
