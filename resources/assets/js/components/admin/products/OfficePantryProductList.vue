@@ -73,7 +73,12 @@
                   alert('Changed Office Pantry Product Pricing Successfully!');
                  // location.reload(true); // This refreshes the browser and pulls the updated variables from the database into the vue component.
                   console.log(response.data);
-              }).catch(error => console.log(error));
+              }).catch(error => {
+                   console.log(error),
+                   // Sadly it fails while trying to add empty fields to the database, this never gets called... dumb error catcher.
+                   // Sorry error catcher I know the fault ultimately lies with my understanding of the situation, not you.
+                   alert('Nope you done it wrong - ' . error);
+              });
             },
 
             onReset (evt) {

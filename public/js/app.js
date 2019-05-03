@@ -86138,6 +86138,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['snackbox'],
@@ -86395,7 +86404,38 @@ var render = function() {
                           )
                         ])
                       ])
-                ])
+                ]),
+                _vm._v(" "),
+                _vm.snackbox[0].type !== "wholesale"
+                  ? _c("b-col", [
+                      _c("label", [_c("b", [_vm._v(" Snack Cap ")])]),
+                      _vm._v(" "),
+                      _vm.editing
+                        ? _c(
+                            "div",
+                            [
+                              _c("b-form-input", {
+                                attrs: { type: "number" },
+                                model: {
+                                  value: _vm.snackbox[0].snack_cap,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.snackbox[0], "snack_cap", $$v)
+                                  },
+                                  expression: "snackbox[0].snack_cap"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        : _c("div", [
+                            _c("p", [
+                              _vm._v(
+                                " " + _vm._s(_vm.snackbox[0].snack_cap) + " "
+                              )
+                            ])
+                          ])
+                    ])
+                  : _vm._e()
               ],
               1
             ),
@@ -87290,6 +87330,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['addProductToSnackbox', 'product', 'quantity'],
@@ -87299,6 +87345,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             createWholesaleSnackbox: false,
             order: 'empty',
             company_id: 0,
+            snack_cap: null,
             // total_start: 0,
             delivered_by: null,
             delivered_by_options: ['DPD', 'APC', 'OP'],
@@ -87333,6 +87380,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             // console.log(total_cost);
             return total_cost;
+        },
+        snack_cap_state: function snack_cap_state() {
+            return this.snack_cap !== null ? true : false;
         }
     },
     methods: {
@@ -87370,7 +87420,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             axios.post('/api/snackboxes/save', {
                 company_details_id: this.selected_company,
-                details: [this.delivered_by, this.no_of_boxes, this.type, this.delivery_day, this.frequency, this.week_in_month, this.next_delivery_week],
+                details: {
+                    delivered_by: this.delivered_by,
+                    no_of_boxes: this.no_of_boxes,
+                    snack_cap: this.snack_cap,
+                    type: this.type,
+                    delivery_day: this.delivery_day,
+                    frequency: this.frequency,
+                    week_in_month: this.week_in_month,
+                    next_delivery_week: this.next_delivery_week
+                },
                 order: this.$store.state.snackbox,
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv' }
             }).then(function (response) {
@@ -87595,7 +87654,39 @@ var render = function() {
               _c("p", [_vm._v(" ID: " + _vm._s(_vm.selected_company) + " ")])
             ],
             1
-          )
+          ),
+          _vm._v(" "),
+          !_vm.createWholesaleSnackbox
+            ? _c(
+                "b-col",
+                [
+                  _c("label", [_vm._v(" Snack Cap ")]),
+                  _vm._v(" "),
+                  _c("b-input", {
+                    attrs: {
+                      type: "number",
+                      size: "sm",
+                      placeholder: "Please enter a snack cap...",
+                      state: _vm.snack_cap_state
+                    },
+                    model: {
+                      value: _vm.snack_cap,
+                      callback: function($$v) {
+                        _vm.snack_cap = $$v
+                      },
+                      expression: "snack_cap"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("b-form-invalid-feedback", [
+                    _vm._v(
+                      " This is a required field, £0 would make the box free! "
+                    )
+                  ])
+                ],
+                1
+              )
+            : _vm._e()
         ],
         1
       ),
@@ -94934,7 +95025,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 // location.reload(true); // This refreshes the browser and pulls the updated variables from the database into the vue component.
                 console.log(response.data);
             }).catch(function (error) {
-                return console.log(error);
+                console.log(error),
+                // Sadly it fails while trying to add empty fields to the database, this never gets called... dumb error catcher.
+                // Sorry error catcher I know the fault ultimately lies with my understanding of the situation, not you.
+                alert('Nope you done it wrong - '.error);
             });
         },
         onReset: function onReset(evt) {

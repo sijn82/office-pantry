@@ -218,7 +218,7 @@ class PickListsController extends Controller
               $company_route_names = Company::pluck('route_name')->all(); // Moving this declaration to the top of function so the call only needs to be made once.
           // End of new logic.
 
-          $newRoutes = Route::where('week_start', $this->week_start)->get();
+          $newRoutes = Route::where('week_start', $this->week_start)->get(); // <-- I think this should also have the delivery days stipulated to prevent unnecessary messages populating the log messages.
 
           foreach($newRoutes as $newRoute) {
 

@@ -440,13 +440,14 @@ class SnackBoxController extends Controller
         // dd($request);
         // dd($request->order);
         $snackbox_id = $request->company_details_id . "-" . uniqid();
-        $courier = $request->details[0];
-        $box_number = $request->details[1];
-        $type = $request->details[2];
-        $delivery_day = $request->details[3];
-        $frequency = $request->details[4];
-        $week_in_month = $request->details[5];
-        $next_delivery_week_start = $request->details[6];
+        $courier = request('details.delivered_by');
+        $box_number = request('details.no_of_boxes');
+        $snack_cap = request('details.snack_cap');
+        $type = request('details.type');
+        $delivery_day = request('details.delivery_day');
+        $frequency = request('details.frequency');
+        $week_in_month = request('details.week_in_month');
+        $next_delivery_week_start = request('details.next_delivery_week');
 
         if (!empty($request->order)) {
 
@@ -460,6 +461,7 @@ class SnackBoxController extends Controller
                 $new_snackbox->snackbox_id = $snackbox_id;
                 $new_snackbox->delivered_by = $courier;
                 $new_snackbox->no_of_boxes = $box_number;
+                $new_snackbox->snack_cap = $snack_cap;
                 $new_snackbox->type = $type;
                 $new_snackbox->company_details_id = $request->company_details_id;
                 $new_snackbox->delivery_day = $delivery_day;
@@ -498,6 +500,7 @@ class SnackBoxController extends Controller
             $new_snackbox->snackbox_id = $snackbox_id;
             $new_snackbox->delivered_by = $courier;
             $new_snackbox->no_of_boxes = $box_number;
+            $new_snackbox->snack_cap = $snack_cap;
             $new_snackbox->type = $type;
             $new_snackbox->company_details_id = $request->company_details_id;
             $new_snackbox->delivery_day = $delivery_day;
@@ -606,6 +609,7 @@ class SnackBoxController extends Controller
                 'is_active' => request('snackbox_details.is_active'),
                 'delivered_by' => request('snackbox_details.delivered_by'),
                 'no_of_boxes' => request('snackbox_details.no_of_boxes'),
+                'snack_cap' => request('snackbox_details.snack_cap'),
                 'type' => request('snackbox_details.type'),
                 'delivery_day' => request('snackbox_details.delivery_day'),
                 'frequency' => request('snackbox_details.frequency'),
@@ -691,6 +695,7 @@ class SnackBoxController extends Controller
         $addProduct->is_active = request('snackbox_details.is_active');
         $addProduct->delivered_by = request('snackbox_details.delivered_by');
         $addProduct->no_of_boxes = request('snackbox_details.no_of_boxes');
+        $addProduct->snack_cap = request('snackbox_details.snack_cap');
         $addProduct->type = request('snackbox_details.type');
         $addProduct->company_details_id = request('snackbox_details.company_details_id');
         $addProduct->delivery_day = request('snackbox_details.delivery_day');
@@ -727,7 +732,7 @@ class SnackBoxController extends Controller
         //
     }
 
-    // ----- This is the beginning of new system snackbox functions ----- //
+    // ----- This is the beginning of new system snackbox functions ----- // <-- EDIT: YOU SURE ABOUT THAT BUDDY?
 
     /**
      * Update the specified resource in storage.
@@ -759,6 +764,7 @@ class SnackBoxController extends Controller
                     $delivered_by_recovered = $snack->delivered_by;
                     $delivery_date_recovered = $snack->delivery_day;
                     $no_of_boxes_recovered = $snack->no_of_boxes;
+                    $snack_cap_recovered = $snack->snack_cap;
                     $company_details_id_recovered = $snack->company_details_id;
                     $frequency_recovered = $snack->frequency;
                     $week_in_month_recovered = $snack->week_in_month;
@@ -841,6 +847,7 @@ class SnackBoxController extends Controller
                     $new_snackbox->snackbox_id = $snackbox_id['snackbox_id'];
                     $new_snackbox->delivered_by = $delivered_by_recovered;
                     $new_snackbox->no_of_boxes = $no_of_boxes_recovered;
+                    $new_snackbox->snack_cap = $snack_cap;
                     $new_snackbox->type = $request['type'][0];
                     // Company Info
                     $new_snackbox->company_details_id = $company_details_id_recovered;

@@ -57,6 +57,15 @@
                         <p> {{ snackbox[0].no_of_boxes }} </p>
                     </div>
                 </b-col>
+                <b-col v-if="snackbox[0].type !== 'wholesale'">
+                    <label><b> Snack Cap </b></label>
+                    <div v-if="editing">
+                        <b-form-input v-model="snackbox[0].snack_cap" type="number"></b-form-input>
+                    </div>
+                    <div v-else>
+                        <p> {{ snackbox[0].snack_cap }} </p>
+                    </div>
+                </b-col>
             </b-row>
             
             <b-row :class="snackbox[0].is_active">

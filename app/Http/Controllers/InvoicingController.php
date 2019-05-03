@@ -25,13 +25,17 @@ use App\FruitPartner;
 
 // Date/Time Library
 use Carbon\Carbon;
+use Carbon\CarbonImmutable;
+
+// Allow Log messages to Slack
+use Illuminate\Support\Facades\Log;
 
 class InvoicingController extends Controller
 {
-            //---------- Set some variables ----------// - 122
-            //---------- Fruitbox ----------// - 221
-            //---------- Milkbox ----------// - 1036
-            //---------- Snackbox ----------// - 1323
+            //---------- Set some variables ----------// - 125
+            //---------- Fruitbox ----------// - 224
+            //---------- Milkbox ----------// - 1039
+            //---------- Snackbox ----------// - 1326
             //---------- Drinkbox ----------//
             //---------- Otherbox ----------//
 
@@ -116,16 +120,43 @@ class InvoicingController extends Controller
                     $fruitbox_x7_plus_fruit_partner = OfficePantryProducts::findOrFail(20);
             //----- End of OP Products -----//
 
-            //----- This'll hold all of our invoices into an array of custom built objects -----//
-                $sales_invoices = [];
-            //----- End of - This'll hold all of our invoices into an array of custom built objects -----//
+            //---------- Snackbox Functions ----------//
+
+                function apply_deduction($item, $per_product_deduction) {
+                    return $item = ( $item - $per_product_deduction );
+
+                }
+
+            //---------- End of Snackbox Functions ----------//
+
+
 
         // Now each $company should just have the orders which need invoicing attached.
         foreach ($companies as $company) {
 
             // Each box type needs to be processed slightly differently, so we need 5 dedicated foreach loops.
 
+            //---------- Unset Some Variables ----------//
+
+                unset($sales_invoices);
+                unset($snackbox_invoice_pt1);
+                unset($sales_invoice_group);
+                unset($drinkbox_invoice_pt1);
+                unset($otherbox_invoice_pt1);
+                unset($snackboxes_ready_for_invoicing);
+                unset($drinkboxes_ready_for_invoicing);
+                unset($otherboxes_ready_for_invoicing);
+                unset($grouped_invoice);
+                unset($grouped_totals_ready_for_invoicing);
+
+
+            //---------- End of Unset Some Variables ----------//
+
                                                             //---------- Set some variables ----------//
+
+                //----- This'll hold all of our invoices into an array of custom built objects -----//
+                    $sales_invoices = [];
+                //----- End of - This'll hold all of our invoices into an array of custom built objects -----//
 
                 //----- Fruitbox Variables -----//
                     //----- OP -----//
@@ -224,6 +255,7 @@ class InvoicingController extends Controller
 
                 //----- Snackbox Variables -----//
                     $snackbox_invoice_pt1 = (object) [];
+                    $sales_invoice_group = (object) [];
                 //----- Snackbox Variables -----//
 
                 //----- Drinkbox Variables -----//
@@ -1338,30 +1370,58 @@ class InvoicingController extends Controller
 
                                                                 //---------- Snackbox ----------//
 
-            //---------- Snackbox Functions ----------//
-
-                function apply_deduction($item, $per_product_deduction) {
-                    return $item = ( $item - $per_product_deduction );
-
-                }
-                //dd(apply_deduction(12, 4));
-
-            //---------- End of Snackbox Functions ----------//
-
-
-
             // At its most basic we just want to group the snackbox entries by snackbox_id
             $snackboxes = $company->snackboxes->groupBy('snackbox_id');
             // dd($snackboxes);
 
+            // Grouping by snack cap would mean adding the various number of boxes up.
+            // I also think the the current process totalling up the product values and dividing by the snack cap would need revising.
+            // Probably better just finding a way to group the orders afterwards.
+            // $snackboxes = $company->snackboxes->groupBy('snack_cap');
+
+            //---------- Actually instead of grouping them by snackbox_id ----------//
+
+                // What I could do for invoicing, is to group them up by 'snack_cap',
+                // this could then result in 2 invoice rows (vat/zero rated),
+                // for each snack_cap value and the quantity of boxes purchased.
+                // This would work for mixed boxes anyway, but what would I do about wholesale that doin't have a snack_cap?
+                // Goddamit, there's always a downside to any/all of these ideas?
+                // Do we even want them listed like that vat/zero rated, or more like a drinks/other invoice?
+                // Probably the latter, so I'll need to handle them differently anyway.
+
+            //---------- End of Actually instead of grouping them by snackbox_id ----------//
+
+
             foreach ($snackboxes as $snackbox) {
                 // I only need to get this value once, so moving it up one foreach statement.
                 $snack_cap = $snackbox[0]->snack_cap;
+                $no_of_boxes = $snackbox[0]->no_of_boxes;
+                $type = $snackbox[0]->type;
+                // Hmmn, are these actually just behaving the same as unsetting the variables each time?
+                // I don't think I need them for their original use and if I only want them to unset, shouldn't I just do that to make it clearer?
+
+                // $snackbox_items_total_inc_vat = [];
+                // $snackbox_items_minus_vat = [];
+                // $snackbox_items_vat = [];
+                // $snackbox_items_zero_rated = [];
+                // $all_snackbox_items = [];
+
+                // Let's see if I still get the same results... EDIT: Yep.
+                unset($snackbox_items_total_inc_vat);
+                unset($snackbox_items_minus_vat);
+                unset($snackbox_items_vat);
+                unset($snackbox_items_zero_rated);
+                unset($all_snackbox_items);
+                unset($snackbox_items_total_inc_vat_with_snack_cap_deduction_applied);
+                unset($snackbox_items_zero_rated_with_snack_cap_deduction_applied);
+
                 $snackbox_items_total_inc_vat = [];
                 $snackbox_items_minus_vat = [];
                 $snackbox_items_vat = [];
                 $snackbox_items_zero_rated = [];
                 $all_snackbox_items = [];
+                $snackbox_items_total_inc_vat_with_snack_cap_deduction_applied = [];
+                $snackbox_items_zero_rated_with_snack_cap_deduction_applied = [];
 
                 // and add up all vat registered and all zero rated items into two totals,
                 foreach ($snackbox as $snackbox_item) {
@@ -1383,6 +1443,7 @@ class InvoicingController extends Controller
                     } // end of if ($snackbox_item->product_id != null)
                 } // end of foreach ($snackbox as $snackbox_item)
 
+
                 // Now we've made separate totals of vat registered and zero rated items, we need them back together for some of this.
                 $all_snackbox_items = array_merge( $snackbox_items_zero_rated, $snackbox_items_total_inc_vat );
                 // Now I need to work out the natural total of products (before snack_cap) to work out how much to deduct from each product.
@@ -1390,37 +1451,60 @@ class InvoicingController extends Controller
                 $snackbox_total_before_snack_cap = array_sum($all_snackbox_items);
                 // And add up how many products are contained in each.
                 $number_of_items_in_snackbox = count($all_snackbox_items);
-                // Now we deduct the snack_cap limit to find out how much the box is over that value, dividing the total by the number of products, to get a per product deduction.
-                $per_product_deduction = ( $snackbox_total_before_snack_cap - $snack_cap ) / $number_of_items_in_snackbox;
 
-                // OK, now let's loop through the prices applying the discount
-                foreach ($snackbox_items_total_inc_vat as $item) {
+                // How should I treat wholesale snackboxes?  Thinking the process should be the same except for snack cap deductions.
+                // If I can contain all the changes to a simple if/else statement, it'll keep it more readable.
 
-                    $snackbox_items_total_inc_vat_with_snack_cap_deduction_applied[] = apply_deduction($item, $per_product_deduction);
+                // if ($snack_cap !== null) { // <-- Should i check snack_cap or type === 'wholesale'?
+                if ($type !== strtolower('wholesale')) { // <-- Going to use type for now, as I haven't prevented misuse of snack_cap yet.
+
+                    // Now we deduct the snack_cap limit to find out how much the box is over that value, dividing the total by the number of products, to get a per product deduction.
+                    $per_product_deduction = ( $snackbox_total_before_snack_cap - $snack_cap ) / $number_of_items_in_snackbox;
+
+                    // OK, now let's loop through the prices applying the discount
+                    foreach ($snackbox_items_total_inc_vat as $item) {
+
+                        $snackbox_items_total_inc_vat_with_snack_cap_deduction_applied[] = apply_deduction($item, $per_product_deduction);
+                    }
+                    // and the same with zero rated items
+                    foreach ($snackbox_items_zero_rated as $item) {
+
+                        $snackbox_items_zero_rated_with_snack_cap_deduction_applied[] = apply_deduction($item, $per_product_deduction);
+                    }
+
+                    // Now we have the snackbox items discounted to their snack_cap limit, we can work out the vat
+
+                    // So let's get the sum total(s)
+                    $snacks_with_vat_and_discount_total = array_sum($snackbox_items_total_inc_vat_with_snack_cap_deduction_applied);
+                    $snacks_zero_rated_total = array_sum($snackbox_items_zero_rated_with_snack_cap_deduction_applied);
+
+                    // Ah, so fun story - don't forget to unset these arrays before the next order!!
+                    // unset($snackbox_items_total_inc_vat_with_snack_cap_deduction_applied);
+                    // unset($snackbox_items_zero_rated_with_snack_cap_deduction_applied);
+
+                } else {
+                    // These are exempt of Snack Caps, so we can just use the variables prior to the deductions.
+                    // I'm allowing the now slightly misleading variable names, to keep the next 20 lines reusable.
+                    // Or I could rename the variable to something more suitable?
+                    $snacks_with_vat_and_discount_total = array_sum($snackbox_items_total_inc_vat);
+                    $snacks_zero_rated_total = array_sum($snackbox_items_zero_rated);
                 }
-                // and the same with zero rated items
-                foreach ($snackbox_items_zero_rated as $item) {
 
-                    $snackbox_items_zero_rated_with_snack_cap_deduction_applied[] = apply_deduction($item, $per_product_deduction);
-                }
+                    // and work out the total minus vat aka 'unit_amount'
+                    $snacks_with_discount_minus_vat_total = ($snacks_with_vat_and_discount_total / 1.2);
+                    // before grabbing the vat amount aka 'tax_amount'
+                    $snacks_with_discount_vat_total = ($snacks_with_discount_minus_vat_total * 0.2);
 
-                // Now we have the snackbox items discounted to their snack_cap limit, we can work out the vat
+                    // Create the 1st stage of the snackbox invoice
+                    $snackbox_pt1 = new $snackbox_invoice_pt1();
+                    $snackbox_pt1->snack_cap = $snack_cap;
+                    $snackbox_pt1->no_of_boxes = $no_of_boxes;
+                    $snackbox_pt1->snack_total_minus_vat = $snacks_with_discount_minus_vat_total;
+                    $snackbox_pt1->snack_total_vat = $snacks_with_discount_vat_total;
+                    $snackbox_pt1->snack_total_zero_registered = $snacks_zero_rated_total;
+                    $snackbox_pt1->snackbox_total_cost = ($snacks_with_discount_minus_vat_total + $snacks_with_discount_vat_total + $snacks_zero_rated_total);
+                    $snackboxes_ready_for_invoicing[] = $snackbox_pt1;
 
-                // So let's get the sum total
-                $snacks_with_vat_and_discount_total = array_sum($snackbox_items_total_inc_vat_with_snack_cap_deduction_applied);
-                // and work out the total minus vat aka 'unit_amount'
-                $snacks_with_discount_minus_vat_total = ($snacks_with_vat_and_discount_total / 1.2);
-                // before grabbing the vat amount aka 'tax_amount'
-                $snacks_with_discount_vat_total = ($snacks_with_discount_minus_vat_total * 0.2);
-
-                $snacks_zero_rated_total = array_sum($snackbox_items_zero_rated_with_snack_cap_deduction_applied);
-
-                $snackbox_pt1 = new $snackbox_invoice_pt1();
-                $snackbox_pt1->snack_total_minus_vat = $snacks_with_discount_minus_vat_total;
-                $snackbox_pt1->snack_total_vat = $snacks_with_discount_vat_total;
-                $snackbox_pt1->snack_total_zero_registered = $snacks_zero_rated_total;
-                $snackbox_pt1->snackbox_total_cost = ($snacks_with_discount_minus_vat_total + $snacks_with_discount_vat_total + $snacks_zero_rated_total);
-                $snackboxes_ready_for_invoicing[] = $snackbox_pt1;
             } // end of foreach ($company->snackboxes as $snackbox)
 
             // Ok, now I have an array of objects holding snackbox information.
@@ -1434,8 +1518,12 @@ class InvoicingController extends Controller
                 // Mixed snackboxes get a snack cap discount applied.  What would happen if the snack cap wasn't applied, would it default to 0 and run fine, or null and break?
                 // Also what would happen if the snackbox is wholesale, does it need to be processed differently?
 
-            //---------- WHAT TO DO ABOUT SNACK_CAP-LESS BOXES? END OF WHAT TO DO ABOUT WHOLESALE? ----------//
-            //---------- END OF WHEN TO APPLY THE BULK DISCOUNTS ----------//
+                // EDIT: A SNACKCAP OF ZERO WOULD DISCOUNT THE SNACKBOX TO FREE, ZIP, NADA!  Not a good idea, unless we want to invoice them for a free box?
+                // The if ($snack_cap !== null) should cover the wholesale side of things?  TESTING WILL PROVE DEFINITIVELY. <-- Already changed for if ($type !== 'wholesale')
+
+            //---------- END OF WHAT TO DO ABOUT SNACK_CAP-LESS BOXES? END OF WHAT TO DO ABOUT WHOLESALE? ----------//
+
+            //---------- WHEN TO APPLY THE BULK DISCOUNTS ----------//
 
                 // Right then, some customers will only be getting snackboxes, so I can't leave the £100 and £300 additional discounts to the drinkbox section,
                 // (or otherbox for that matter), so I'm thinking I should go ahead and process the rest of their possible boxes before applying discounts and building invoices.
@@ -1463,7 +1551,27 @@ class InvoicingController extends Controller
                     $drinks_total[] = ($product->unit_price * $drinkbox_item->quantity);
                     // Save each drinkbox entry as on object to process later, after we've applied all possible discounts to price.
                     $drinkbox_pt1 = new $drinkbox_invoice_pt1();
-                    $drinkbox_pt1->unit_amount = $product->unit_price;
+                    $drinkbox_pt1->description = $product->name;
+                    $drinkbox_pt1->sales_nominal = $product->sales_nominal;
+
+                    if ($product->vat === 'Yes') {
+
+                        $drinkbox_pt1->unit_amount = ($product->unit_price / 1.2);
+                        $drinkbox_pt1->tax_amount = ($drinkbox_pt1->unit_amount * 0.2);
+
+                    } elseif ($product->vat === 'No') {
+
+                        $drinkbox_pt1->unit_amount = $product->unit_price;
+                        $drinkbox_pt1->tax_amount = 0;
+
+                    } else {
+                        // Nothing should get here but I could log anything that does just in case.
+                        $uh_oh_shit_happened = 'Drinkbox item vat status - ' . $drinkbox_item->vat . ' for ' . $drinkbox_item->name
+                                                . ' was neither yes, or no? Company - ' . $company->invoice_name . ' invoicing screwed up.';
+
+                        Log::channel('slack')->alert($uh_oh_shit_happened);
+                    }
+
                     $drinkbox_pt1->vat = $product->vat;
                     $drinkbox_pt1->quantity = $drinkbox_item->quantity;
                     $drinkboxes_ready_for_invoicing[] = $drinkbox_pt1;
@@ -1472,9 +1580,9 @@ class InvoicingController extends Controller
             } // end of foreach ($company->drinkboxes as $drinkbox)
 
             // dd($drinkboxes_ready_for_invoicing);
-            dd($drinks_total);
+            // dd($drinks_total);
             $drinks_grand_total = array_sum($drinks_total);
-            dd($drinks_grand_total);
+            // dd($drinks_grand_total);
             //----- End of Drinkbox -----//
 
             //----- Otherbox -----//
@@ -1486,32 +1594,497 @@ class InvoicingController extends Controller
                     $other_total[] = ($product->unit_price * $otherbox_item->quantity);
 
                     $otherbox_pt1 = new $otherbox_invoice_pt1();
-                    $otherbox_pt1->unit_amount = $product->unit_price;
+                    $otherbox_pt1->description = $product->name;
+                    $otherbox_pt1->sales_nominal = $product->sales_nominal;
+
+                    if ($product->vat === 'Yes') {
+
+                        $otherbox_pt1->unit_amount = ($product->unit_price / 1.2);
+                        $otherbox_pt1->tax_amount = ($otherbox_pt1->unit_amount * 0.2);
+
+                    } elseif ($product->vat === 'No') {
+
+                        $otherbox_pt1->unit_amount = $product->unit_price;
+                        $otherbox_pt1->tax_amount = 0;
+
+                    } else {
+                        // Nothing should get here but I could log anything that does just in case.
+                        $uh_oh_shit_happened = 'Otherbox item vat status - ' . $otherbox_pt1->vat . ' for ' . $otherbox_pt1->name
+                                                . ' was neither yes, or no? Company - ' . $company->invoice_name . ' invoicing screwed up.';
+
+                        Log::channel('slack')->alert($uh_oh_shit_happened);
+                    }
+
                     $otherbox_pt1->vat = $product->vat;
                     $otherbox_pt1->quantity = $otherbox_item->quantity;
                     $otherboxes_ready_for_invoicing[] = $otherbox_pt1;
                 }
 
-                $other_grand_total = array_sum($other_total);
-                dd($other_grand_total);
             } // end of foreach ($company->otherbox as $otherbox)
+
+            $other_grand_total = array_sum($other_total);
+            // dd($other_grand_total);
 
             //----- End of Otherbox -----//
 
             //----- Final Checks For Qualifying Discounts -----//
 
+            // Could move this to join the other variable declarations at the top, should I keep it.
+            $company_invoice_discountable_total = 0;
+            // $snackbox_grand_total = 0;
+
+            foreach ($snackboxes_ready_for_invoicing as $snackbox) {
+
+                $snackbox_grand_total_array[] = $snackbox->snackbox_total_cost;
+
+            }
+
+            $snackbox_grand_total = array_sum($snackbox_grand_total_array);
+
+            if ($company->discount_snacks === 'True') {
+
+                $company_invoice_discountable_total += $snackbox_grand_total;
+            }
+            if ($company->discount_drinks === 'True') {
+
+                $company_invoice_discountable_total += $drinks_grand_total;
+            }
+            if ($company->discount_other === 'True') {
+
+                $company_invoice_discountable_total += $other_grand_total;
+            }
+
+            // This should be holding the total of discountable orders this week
+            // Checking this total is enough to qualify, is easy.
+            // However we then need to make sure we only apply the discount to items that qualify.
+            // I.e we must make sure not to discount otherbox items if they're not entitled to otherbox discounts.
+            // dd($company_invoice_discountable_total);
+
+            // I'm pretty sure this'll work but some testing will prove i'm right, hopefully. EDIT: Looks good!
+            if ($company_invoice_discountable_total >= 20) { // <-- Will need to change this value to an actual discount threshold i.e £300(15%)
+
+                // Then they're entitled to 15% off their orders which are eligible for discount.
+                dump('15% discount!');
+                //----- Snacks -----//
+                if ($company->discount_snacks === 'True') {
+
+                    foreach($snackboxes_ready_for_invoicing as $snackbox) {
+                        // dd($snackbox);
+                    //    dump($snackbox->snack_total_minus_vat);
+
+                        $snackbox->snack_total_minus_vat = ($snackbox->snack_total_minus_vat * 0.85 );
+                        $snackbox->snack_total_vat = ($snackbox->snack_total_vat * 0.85 );
+                        $snackbox->snack_total_zero_registered = ($snackbox->snack_total_zero_registered * 0.85 );
+
+                    //    dump($snackbox->snack_total_minus_vat);
+                        // dd($snackbox);
+                    }
+                }
+                //----- Drinks -----//
+                if ($company->discount_drinks === 'True') {
+
+                    foreach($drinkboxes_ready_for_invoicing as $drinkbox_item) {
+
+                    //    dump($drinkbox_item);
+
+                        //---------- This is where i'm up to - need to do do something with vat for vat registered drinks ----------//
+
+                        // Ok before working out vat etc, we need to apply the 15% discount to get an updated total.
+                        // The only two other details i'm pulling in here are, vat('Yes' or 'No') and quantity.
+                        $drinkbox_item->unit_amount = ($drinkbox_item->unit_amount * 0.85 );
+
+                        if ($drinkbox_item->vat === 'Yes') {
+
+                            // We need to work out the vat deducted total of the discounted amount (per item).
+                            $drinkbox_item->unit_amount = ($drinkbox_item->unit_amount / 1.2);
+                            // And the total of vat incurred
+                            $drinkbox_item->tax_amount = ($drinkbox_item->unit_amount * 0.2);
+                            // $drinkbox_item->tax_type = '20% (VAT on Income)';
+
+                        } elseif ($drinkbox_item->vat === 'No') {
+                            // we don't actually need to work anything out here, just hard code the two fields invoicing wants instead.
+                            $drinkbox_item->tax_amount = 0;
+                            // $drinkbox_item->tax_type = 'Zero Rated Income';
+
+                        } else {
+                            // Nothing should get here but I could log anything that does just in case.
+                            $uh_oh_shit_happened = 'Drinkbox item vat status - ' . $drinkbox_item->vat . ' for ' . $drinkbox_item->name
+                                                    . ' was neither yes, or no? Company - ' . $company->invoice_name . ' invoicing screwed up.';
+
+                            Log::channel('slack')->alert($uh_oh_shit_happened);
+                        }
+                    //    dump($drinkbox_item);
+                    }
+                }
+                //----- Other -----//
+                if ($company->discount_other === 'True') {
+
+                    foreach($otherboxes_ready_for_invoicing as $otherbox_item) {
+
+                    //    dump($otherbox_item);
+
+                        // Ok before working out vat etc, we need to apply the 15% discount to get an updated total.
+                        // The only two other details i'm pulling in here are, vat('Yes' or 'No') and quantity.
+                        $otherbox_item->unit_amount = ($otherbox_item->unit_amount * 0.85 );
+
+                        if ($otherbox_item->vat === 'Yes') {
+
+                            // We need to work out the vat deducted total of the discounted amount (per item).
+                            $otherbox_item->unit_amount = ($otherbox_item->unit_amount / 1.2);
+                            // And the total of vat incurred
+                            $otherbox_item->tax_amount = ($otherbox_item->unit_amount * 0.2);
+                            $otherbox_item->tax_type = '20% (VAT on Income)';
+
+                        } elseif ($otherbox_item->vat === 'No') {
+                            // we don't actually need to work anything out here, just hard code the two fields invoicing wants instead.
+                            $otherbox_item->tax_amount = 0;
+                            $otherbox_item->tax_type = 'Zero Rated Income';
+
+                        } else {
+                            // Nothing should get here but I could log anything that does just in case.
+                            $uh_oh_shit_happened = 'Otherbox item vat status - ' . $otherbox_item->vat . ' for ' . $otherbox_item->name
+                                                    . ' was neither yes, or no? Company - ' . $company->invoice_name . ' invoicing screwed up.';
+
+                            Log::channel('slack')->alert($uh_oh_shit_happened);
+                        }
+                    //    dump($otherbox_item);
+                    }
+                }
+
+            } elseif ($company_invoice_discountable_total >= 10) { // <-- Will need to change this value to an actual discount threshold i.e £100(10%)
+
+                // Then they're entitled to 10% off their orders which are eligible for discount.
+                dump('10% discount!');
+                //----- Snacks -----//
+                if ($company->discount_snacks === 'True') {
+
+                    foreach($snackboxes_ready_for_invoicing as $snackbox) {
+                        // dd($snackbox);
+                    //    dump($snackbox->snack_total_minus_vat);
+
+                        $snackbox->snack_total_minus_vat = ($snackbox->snack_total_minus_vat * 0.9 );
+                        $snackbox->snack_total_vat = ($snackbox->snack_total_vat * 0.9 );
+                        $snackbox->snack_total_zero_registered = ($snackbox->snack_total_zero_registered * 0.9 );
+
+                    //    dump($snackbox->snack_total_minus_vat);
+                        // dd($snackbox);
+                    }
+                }
+                //----- Drinks -----//
+                if ($company->discount_drinks === 'True') {
+
+                    foreach($drinkboxes_ready_for_invoicing as $drinkbox_item) {
+
+                    //    dump($drinkbox_item);
+
+                        //---------- This is where i'm up to - need to do do something with vat for vat registered drinks ----------//
+
+                        // Ok before working out vat etc, we need to apply the 15% discount to get an updated total.
+                        // The only two other details i'm pulling in here are, vat('Yes' or 'No') and quantity.
+                        $drinkbox_item->unit_amount = ($drinkbox_item->unit_amount * 0.9 );
+
+                        if ($drinkbox_item->vat === 'Yes') {
+
+                            // We need to work out the vat deducted total of the discounted amount (per item).
+                            $drinkbox_item->unit_amount = ($drinkbox_item->unit_amount / 1.2);
+                            // And the total of vat incurred
+                            $drinkbox_item->tax_amount = ($drinkbox_item->unit_amount * 0.2);
+                            // Actually, I shouldn't add the tax type here as this would only include the value on company invoices who are eligible for discount.
+                            // $drinkbox_item->tax_type = '20% (VAT on Income)';
+
+                        } elseif ($drinkbox_item->vat === 'No') {
+                            // we don't actually need to work anything out here, just hard code the two fields invoicing wants instead.
+                            $drinkbox_item->tax_amount = 0;
+                            // Same reason as above here - commenting it out for now.
+                            // $drinkbox_item->tax_type = 'Zero Rated Income';
+
+                        } else {
+                            // Nothing should get here but I could log anything that does just in case.
+                            $uh_oh_shit_happened = 'Drinkbox item vat status - ' . $drinkbox_item->vat . ' for ' . $drinkbox_item->name
+                                                    . ' was neither yes, or no? Company - ' . $company->invoice_name . ' invoicing screwed up.';
+
+                            Log::channel('slack')->alert($uh_oh_shit_happened);
+                        }
+                    //    dump($drinkbox_item);
+                    }
+                }
+                //----- Other -----//
+                if ($company->discount_other === 'True') {
+
+                    foreach($otherboxes_ready_for_invoicing as $otherbox_item) {
+
+                    //    dump($otherbox_item);
+
+                        // Ok before working out vat etc, we need to apply the 15% discount to get an updated total.
+                        // The only two other details i'm pulling in here are, vat('Yes' or 'No') and quantity.
+                        $otherbox_item->unit_amount = ($otherbox_item->unit_amount * 0.9 );
+
+                        if ($otherbox_item->vat === 'Yes') {
+
+                            // We need to work out the vat deducted total of the discounted amount (per item).
+                            $otherbox_item->unit_amount = ($otherbox_item->unit_amount / 1.2);
+                            // And the total of vat incurred
+                            $otherbox_item->tax_amount = ($otherbox_item->unit_amount * 0.2);
+                            $otherbox_item->tax_type = '20% (VAT on Income)';
+
+                        } elseif ($otherbox_item->vat === 'No') {
+                            // we don't actually need to work anything out here, just hard code the two fields invoicing wants instead.
+                            $otherbox_item->tax_amount = 0;
+                            $otherbox_item->tax_type = 'Zero Rated Income';
+
+                        } else {
+                            // Nothing should get here but I could log anything that does just in case.
+                            $uh_oh_shit_happened = 'Otherbox item vat status - ' . $otherbox_item->vat . ' for ' . $otherbox_item->name
+                                                    . ' was neither yes, or no? Company - ' . $company->invoice_name . ' invoicing screwed up.';
+
+                            Log::channel('slack')->alert($uh_oh_shit_happened);
+                        }
+                    //    dump($otherbox_item);
+                    }
+                }
+            } // End of - elseif ($company_invoice_discountable_total >= 10) & consequently end of - if ($company_invoice_discountable_total >= 20)
+
+                // Final checks go here <-- EDIT: WHAT WAS I WANTING TO CHECK HERE? HAVE I DONE IT ALL NOW, OR IS IT A GENERIC FINAL CHECKS CALL?
+
             //----- End of Final Checks For Qualifying Discounts -----//
 
+            //----- Merge orders for invoicing -----//
+
+            // This foreach is to group the orders by their snack cap,
+            // so I can re-evaluate their values ONE LAST TIME before committing them to an invoice.
+
+            foreach ($snackboxes_ready_for_invoicing as $invoice) {
+
+                $grouped_invoice[$invoice->snack_cap][] = $invoice;
+            }
+
+
+            foreach ($grouped_invoice as $key => $group) {
+
+                // Let's ensure we reset the values for each snack cap group.
+                $group_total = new $sales_invoice_group();
+                $group_total->no_of_boxes = 0;
+                $group_total->box_total = 0;
+                $group_total->snack_total_minus_vat = 0;
+                $group_total->snack_total_vat = 0;
+                $group_total->snack_total_zero_registered = 0;
+
+                // We need to know how many boxes there are of this snack cap (in total)
+                // to work out each ratio of product values to get accurate accounts.
+
+                foreach ($group as $invoice) {
+                    $group_total->box_total += $invoice->no_of_boxes;
+                }
+
+                foreach ($group as $invoice) {
+                    // By dividing the number of boxes with these products in, out of all the boxes (in this snack cap category),
+                    // we can work out the ratio to multiply these numbers by.
+                    $group_ratio = ($invoice->no_of_boxes / $group_total->box_total);
+                    // Now we can use it to tweak the values again.
+                    $group_total->snack_cap = $invoice->snack_cap;
+                    $group_total->snack_total_minus_vat += ($invoice->snack_total_minus_vat * $group_ratio);
+                    $group_total->snack_total_vat += ($invoice->snack_total_vat * $group_ratio);
+                    $group_total->snack_total_zero_registered += ($invoice->snack_total_zero_registered * $group_ratio);
+                    $group_total->no_of_boxes += $invoice->no_of_boxes;
+
+                }
+                $grouped_totals_ready_for_invoicing[] = $group_total;
+            }
+
+            // Now we have the invoices grouped by snack cap and the values have been ratioed by number of boxes with those product lines
+            // We can create two new invoice lines ready for further details.  The first is vat inclusive items, the second one's for zero rated items.
+            // Let's put them into invoices and never speak about snackboxes, snack caps and discounts ever again.
+
+            foreach ($grouped_totals_ready_for_invoicing as $snackbox_group) {
+
+                // OK, so for each of these entries I want to check whether they have zero rated &/or 20% VAT rated products,
+                // creating an invoice entry for each if they do.
+
+                // Snackboxes with vat registered products
+                if ($snackbox_group->snack_total_minus_vat > 0) {
+
+                    $sales_invoice = new $sales_invoice();
+
+                    $sales_invoice->description = 'Snacks';
+                    $sales_invoice->quantity = $snackbox_group->no_of_boxes;
+                    $sales_invoice->account_code = '4010';
+                    $sales_invoice->unit_amount = $snackbox_group->snack_total_minus_vat;
+                    $sales_invoice->tax_amount = $snackbox_group->snack_total_vat;
+                    $sales_invoice->tax_type = '20% (VAT on Income)';
+
+                    $sales_invoices[] = $sales_invoice;
+                }
+                // Snackboxes with zero rated products
+                if ($snackbox_group->snack_total_zero_registered > 0) {
+
+                    $sales_invoice = new $sales_invoice();
+
+                    $sales_invoice->description = 'Snacks';
+                    $sales_invoice->quantity = $snackbox_group->no_of_boxes;
+                    $sales_invoice->account_code = '4010';
+                    $sales_invoice->unit_amount = $snackbox_group->snack_total_zero_registered;
+                    $sales_invoice->tax_amount = 0;
+                    $sales_invoice->tax_type = 'Zero Rated Income';
+
+                    $sales_invoices[] = $sales_invoice;
+                }
+            }
+
+            // dd($drinkboxes_ready_for_invoicing);
+
+            // Right, time for any last details which will vary between invoice lines for this company.
+            if (isset($drinkboxes_ready_for_invoicing)) {
+                foreach ($drinkboxes_ready_for_invoicing as $drinkbox_item) {
+
+                    if ($drinkbox_item->vat === 'Yes') {
+                        $drinkbox_item->tax_type = '20% (VAT on Income)';
+
+                    } elseif ($drinkbox_item->vat === 'No') {
+                        $drinkbox_item->tax_type = 'Zero Rated Income';
+
+                    } else {
+
+                        $uh_oh_shit_happened = 'Now I\'ve really no idea how we got here? SHIT HAPPENED on line 1889 of the Invoicing Controller!';
+                        Log::channel('slack')->alert($uh_oh_shit_happened);
+                    }
+                    // Mostly as a way for me to know what box type these items are supposed to be in.
+                    $drinkbox_item->box_type = 'Drinkbox';
+                    $sales_invoices[] = $drinkbox_item;
+                }
+            }
+
+            if (isset($otherboxes_ready_for_invoicing)) {
+                foreach ($otherboxes_ready_for_invoicing as $otherbox_item) {
+
+                    if ($otherbox_item->vat === 'Yes') {
+                        $otherbox_item->tax_type = '20% (VAT on Income)';
+
+                    } elseif ($otherbox_item->vat === 'No') {
+                        $otherbox_item->tax_type = 'Zero Rated Income';
+                    } else {
+
+                        $uh_oh_shit_happened = 'Now I\'ve really no idea how we got here? SHIT HAPPENED on line 1889 of the Invoicing Controller!';
+                        Log::channel('slack')->alert($uh_oh_shit_happened);
+                    }
+                    // Mostly as a way for me to know what box type these items are supposed to be in.
+                    $otherbox_item->box_type = 'Otherbox';
+                    $sales_invoices[] = $otherbox_item;
+                }
+            }
+
+
+            // This should now hold all the fruitbox, milkbox, snackbox, drinkbox and otherbox invoices,
+            // for ONE company.  Now I can add the delivery information, branding theme etc which remains the same for any item sold to that company.
+
+             // dd($sales_invoices);
+            //  dd($company);
+
+             // Could put this elsewhere but it's here for now to make it easy to find, while I sort it out.
+             // $order_total = 0;
+
+             foreach ($sales_invoices as $sales_invoice) {
+
+                 if ($company->surcharge !== null) {
+                    // dump($sales_invoice);
+                    $order_total[] = (($sales_invoice->unit_amount + $sales_invoice->tax_amount) * $sales_invoice->quantity);
+
+                 }
+
+                 $sales_invoice->invoice_name = $company->invoice_name;
+                 $sales_invoice->email_address = $company->primary_email; // <-- THIS NEEDS CHANGING FOR THE INVOICE EMAIL ADDRESS ONCE I'VE ADDED IT TO COMPANY DETAILS!
+
+                 // Let's try to get an invoice address first, if this is null, then we'll just use the route address instead.
+                 // If we don't have a route address then we probably shouldn't be invoicing them anyway!
+
+                 if ($company->invoice_address_line_1 !== null) {
+
+                     $sales_invoice->po_address_line_1 = $company->invoice_address_line_1;
+                     $sales_invoice->po_address_line_2 = $company->invoice_address_line_2;
+                     $sales_invoice->po_city = $company->invoice_city;
+                     $sales_invoice->po_region = $company->invoice_region;
+                     $sales_invoice->po_post_code = $company->invoice_postcode;
+
+                 } else {
+
+                     $sales_invoice->po_address_line_1 = $company->route_address_line_1;
+                     $sales_invoice->po_address_line_2 = $company->route_address_line_2;
+                     $sales_invoice->po_city = $company->route_city;
+                     $sales_invoice->po_region = $company->route_region;
+                     $sales_invoice->po_post_code = $company->route_postcode;
+
+                 }
+
+                 $sales_invoice->branding_theme = $company->branding_theme;
+
+                 $completed_sales_invoices[] = $sales_invoice;
+             }
+             // NEED TO FIX THE LAST COMPANY INVOICE OVERWRITING ALL THE OTHERS FOR THE INVOICING INFO.
+
+             unset($sales_invoices);
+
+             // dd($completed_sales_invoices);
+             // dd($order_total);
+
+            //----- End of merge orders for invoicing -----//
+
             //----- Generate Outstanding Invoices For Snacks, Drinks & Other -----//
+
+                // Generate final invoices here
 
             //----- End of Generate Outstanding Invoices For Snacks, Drinks & Other -----//
 
         } // end of foreach ($companies as $company)
 
+        // dd($completed_sales_invoices);
+
         //----- Time To Loop Through Invoices Inserting Remaining Fields -----//
 
             // Now we (should) have all the invoices we need to process this week
-            // All that remains is to add 'invoice_number',
+            // All that remains is to add 'invoice_number', 'invoice_date' and 'due_date'
+            // - Invoice Number is sequential, and effectively begins at yy-mm-dd-001 each time invoicing is run.
+            // Which is why I figured I should get all the invoices made, to then loop through at the end - aka here.
+
+            // Let's set the dates
+
+            // Let's grab today's (relative to when invoice function is run) date without any formatting, to maximise its reuse.
+            $date = CarbonImmutable::now('Europe/London');
+            // The invoice date is the week start (monday) of the invoicing week.
+            $week_start = $date->startOfWeek()->format('d/m/Y');
+            // Invoice date is just the day the invoice function is run.
+            $invoice_date = $date->format('ymd');
+            // Date Xero will take the payments.
+            $due_date = $date->addDay()->format('d/m/Y');
+            // The counter starts every run of invoices at the invoice date + 001.
+            $counter = 0;
+
+            // The due date is typically the next day after uploading the invoice export to xero.
+            // I will however be adding the ability to change this to a longer time period.  Either through a drop down of days or a numerical input.
+            // For now though, I'm going to hardcode it to the day after the invoice date.
+
+            dump($date->format('d/m/Y'));
+            dump($invoice_date);
+            dump($week_start);
+            // dd($due_date);
+
+            foreach ($completed_sales_invoices as $sales_invoice) {
+            //    foreach ($sales_invoices as $sales_invoice) {
+                    $counter++;
+                    $sales_invoice->invoice_number = $invoice_date . str_pad($counter, 3, 0, STR_PAD_LEFT);
+                    $sales_invoice->invoice_date = $week_start;
+                    $sales_invoice->due_date = $due_date;
+            //    }
+            }
+
+            // dd($completed_sales_invoices);
+            //---------- Quick Fudge To Export The Results To A Template ----------//
+
+                return view('exports.invoice-results', [
+                    'invoices' => $completed_sales_invoices
+                ]);
+
+            //---------- End Of Quick Fudge To Export The Results To A Template ----------//
+
+            // Loop through and insert the last 3 fields here
 
         //----- End of Time To Loop Through Invoices Inserting Remaining Fields -----//
 

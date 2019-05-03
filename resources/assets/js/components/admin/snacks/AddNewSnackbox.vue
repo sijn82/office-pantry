@@ -32,6 +32,12 @@
                 <select-company v-on:selected-company="companySelected"></select-company>
                 <p> ID: {{ selected_company }} </p>
             </b-col>
+            <b-col v-if="!createWholesaleSnackbox">
+                <label> Snack Cap </label>
+                <b-input type="number" v-model="snack_cap" size="sm" placeholder="Please enter a snack cap..." :state="snack_cap_state"></b-input>
+                <!-- ':state' and 'b-form-invalid-feedback' has been an interesting diversion but without 'required' to enforce it, kinda pointless for now. -->
+                <b-form-invalid-feedback> This is a required field, £0 would make the box free! </b-form-invalid-feedback>
+            </b-col>
         </b-row>
         <b-row class="order-options">
             <b-col v-if="!createWholesaleSnackbox">
@@ -153,6 +159,7 @@ export default {
             createWholesaleSnackbox: false,
             order: 'empty',
             company_id: 0,
+            snack_cap: null,
              // total_start: 0,
             delivered_by: null,
             delivered_by_options: ['DPD', 'APC', 'OP'],
@@ -186,6 +193,9 @@ export default {
 
             // console.log(total_cost);
             return total_cost;
+        },
+        snack_cap_state() {
+            return this.snack_cap !== null ? true : false
         }
     },
     methods: {
@@ -223,7 +233,16 @@ export default {
 
             axios.post('/api/snackboxes/save', {
                 company_details_id: this.selected_company,
-                details: [ this.delivered_by, this.no_of_boxes, this.type, this.delivery_day, this.frequency, this.week_in_month, this.next_delivery_week ],
+                details: { 
+                    delivered_by: this.delivered_by, 
+                    no_of_boxes: this.no_of_boxes, 
+                    snack_cap: this.snack_cap, 
+                    type: this.type, 
+                    delivery_day: this.delivery_day, 
+                    frequency: this.frequency, 
+                    week_in_month: this.week_in_month, 
+                    next_delivery_week: this.next_delivery_week 
+                },
                 order: this.$store.state.snackbox,
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv'},
             }).then( function (response) {
