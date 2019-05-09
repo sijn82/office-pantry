@@ -163,6 +163,8 @@ class FruitOrderingDocumentController extends Controller
                                                             'Jefferies International Limited (FAO Venera Borisova)' => 'Jefferies International Limited',
                                                             'SSCL (Empress State Building London - FAO Natalia Wielba)' => 'SSCL (Empress State Building London)',
                                                             'Punter Southall Group (FAO Sejal Patel)' => 'Punter Southall Group',
+                                                            'L&Q (FAO Zoe Rush (Counties 4th Floor))' => 'L&Q',
+                                                            'KNOTEL (FAO Martha MacGregor)' => 'KNOTEL',
                                                        ];
 
                          // If $newRoute->company_name doesn't match a Company route_name, check to see if this value matches a Company route_name exception.
