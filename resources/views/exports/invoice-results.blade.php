@@ -22,7 +22,7 @@
     </thead>
     <tbody>
         @php
-            //dd($invoices);
+        //    dd($invoices);
         @endphp
         
         @foreach ($invoices as $invoice)
@@ -50,7 +50,13 @@
                 <td> {{ $invoice->invoice_number }} </td>
                 <td> {{ $invoice->invoice_date }} </td>
                 <td> {{ $invoice->due_date }} </td>
+                @php
+                //    dd($invoice);
+                @endphp
             </tr>
         @endforeach
     </tbody>
+    @php
+    //    dd($invoices);
+    @endphp
 </table>

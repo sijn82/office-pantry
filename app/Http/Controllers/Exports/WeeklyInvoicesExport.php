@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Exports;
 
 // Processing Week
 use App\WeekStart;
@@ -30,31 +30,30 @@ use Carbon\CarbonImmutable;
 // Allow Log messages to Slack
 use Illuminate\Support\Facades\Log;
 
-class InvoicingController extends Controller
+// use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+// use Maatwebsite\Excel\Concerns\Exportable;
+use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Concerns\FromView;
+use Maatwebsite\Excel\Concerns\WithTitle;
+// use Maatwebsite\Excel\Concerns\WithEvents;
+// use Maatwebsite\Excel\Events\AfterSheet;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Sheet;
+
+class WeeklyInvoicesExport implements
+FromView,
+ShouldAutoSize,
+WithTitle
 {
-            //---------- Set some variables ----------// - 125
-            //---------- Fruitbox ----------// - 224
-            //---------- Milkbox ----------// - 1039
-            //---------- Snackbox ----------// - 1326
-            //---------- Drinkbox ----------//
-            //---------- Otherbox ----------//
 
     public function __construct()
     {
         $week_start = WeekStart::findOrFail(1);
         $this->week_start = $week_start->current;
-
     }
 
-    public function weekly_invoicing_export()
-    {
-        return \Excel::download(new Exports\WeeklyInvoicesExport(), 'weekly_invoicing-' . $this->week_start . '.csv');
-    }
-
-    // This weekly_invoicing function has been moved to Exports folder and now results in a csv file.
-    // See funtion above.
-
-    public function weekly_invoicing()
+    public function view(): View
     {
         // We want to run through each company, looking for orders processed this week.
 
@@ -65,13 +64,23 @@ class InvoicingController extends Controller
         // Actually this is more like what I want, if I want to pull all connected orders together first.
         // It first checks that the company is active(ly receiving orders), then that the associated orders are also active and due to (or have) receive(d) an order this processing week.
 
+        // We also want a record of when these entries were invoiced.  So at the same time we deactivate the box, we can add the Invoice Date.
+        // The question is whether we want this to be its own button/function, or actioned automatically?
+        // Personally I feel a confirmation button might be a good idea, the only question is how to prevent admins forgetting this part 
+        // and how I'd fix it if they did?
+        
+        // EDIT: THIS DOESN'T LIMIT THE INVOICING TO WEEKLY ORDERS ONLY YET. IT'S JUST GOING TO GRAB ALL ORDERS FOR THE WEEK START DATE!!
+        // I NEED TO FILTER BY BRANDING THEMES.  EXCLUDING MONTHLY ORDERS WHICH WILL BE HANDLED BY A MONTHLY INVOICES EXPORT FUNCTION.
+        
         $companies = CompanyDetails::where('is_active', 'Active')->with([
             'fruitbox' => function ($query) {
                 $query->where('is_active', 'Active')->where('next_delivery', $this->week_start);
             },
+            
             // Now we need to check the fruitbox archives for any boxes that have been updated before invoicing,
             // their status will remain active as there is still work to be done with these box details.
             // If the status is inactive, this means the box was invoiced prior to being updated and is now only needed for our records.
+            
             'fruitbox_archive' => function ($query) {
                 $query->where('is_active', 'Active')->where('next_delivery', $this->week_start);
             },
@@ -1669,7 +1678,7 @@ class InvoicingController extends Controller
             if ($company_invoice_discountable_total >= 20) { // <-- Will need to change this value to an actual discount threshold i.e £300(15%)
 
                 // Then they're entitled to 15% off their orders which are eligible for discount.
-                dump('15% discount!');
+                // dump('15% discount!');
                 //----- Snacks -----//
                 if ($company->discount_snacks === 'True') {
 
@@ -1759,7 +1768,7 @@ class InvoicingController extends Controller
             } elseif ($company_invoice_discountable_total >= 10) { // <-- Will need to change this value to an actual discount threshold i.e £100(10%)
 
                 // Then they're entitled to 10% off their orders which are eligible for discount.
-                dump('10% discount!');
+                // dump('10% discount!');
                 //----- Snacks -----//
                 if ($company->discount_snacks === 'True') {
 
@@ -2047,54 +2056,51 @@ class InvoicingController extends Controller
 
         //----- Time To Loop Through Invoices Inserting Remaining Fields -----//
 
-            // Now we (should) have all the invoices we need to process this week
-            // All that remains is to add 'invoice_number', 'invoice_date' and 'due_date'
-            // - Invoice Number is sequential, and effectively begins at yy-mm-dd-001 each time invoicing is run.
-            // Which is why I figured I should get all the invoices made, to then loop through at the end - aka here.
+        // Now we (should) have all the invoices we need to process this week
+        // All that remains is to add 'invoice_number', 'invoice_date' and 'due_date'
+        // - Invoice Number is sequential, and effectively begins at yy-mm-dd-001 each time invoicing is run.
+        // Which is why I figured I should get all the invoices made, to then loop through at the end - aka here.
 
-            // Let's set the dates
+        // Let's set the dates
 
-            // Let's grab today's (relative to when invoice function is run) date without any formatting, to maximise its reuse.
-            $date = CarbonImmutable::now('Europe/London');
-            // The invoice date is the week start (monday) of the invoicing week.
-            $week_start = $date->startOfWeek()->format('d/m/Y');
-            // Invoice date is just the day the invoice function is run.
-            $invoice_date = $date->format('ymd');
-            // Date Xero will take the payments.
-            $due_date = $date->addDay()->format('d/m/Y');
-            // The counter starts every run of invoices at the invoice date + 001.
-            $counter = 0;
+        // Let's grab today's (relative to when invoice function is run) date without any formatting, to maximise its reuse.
+        $date = CarbonImmutable::now('Europe/London');
+        // The invoice date is the week start (monday) of the invoicing week.
+        $week_start = $date->startOfWeek()->format('d/m/Y');
+        // Invoice date is just the day the invoice function is run.
+        $invoice_date = $date->format('ymd');
+        // Date Xero will take the payments.
+        $due_date = $date->addDay()->format('d/m/Y');
+        // The counter starts every run of invoices at the invoice date + 001.
+        $counter = 0;
 
-            // The due date is typically the next day after uploading the invoice export to xero.
-            // I will however be adding the ability to change this to a longer time period.  Either through a drop down of days or a numerical input.
-            // For now though, I'm going to hardcode it to the day after the invoice date.
+        // The due date is typically the next day after uploading the invoice export to xero.
+        // I will however be adding the ability to change this to a longer time period.  Either through a drop down of days or a numerical input.
+        // For now though, I'm going to hardcode it to the day after the invoice date.
 
-            dump($date->format('d/m/Y'));
-            dump($invoice_date);
-            dump($week_start);
-            // dd($due_date);
+        // dump($date->format('d/m/Y'));
+        // dump($invoice_date);
+        // dump($week_start);
+        // dd($due_date);
 
-            foreach ($completed_sales_invoices as $sales_invoice) {
-            //    foreach ($sales_invoices as $sales_invoice) {
-                    $counter++;
-                    $sales_invoice->invoice_number = $invoice_date . str_pad($counter, 3, 0, STR_PAD_LEFT);
-                    $sales_invoice->invoice_date = $week_start;
-                    $sales_invoice->due_date = $due_date;
-            //    }
-            }
+        foreach ($completed_sales_invoices as $sales_invoice) {
+            
+                $counter++;
+                $sales_invoice->invoice_number = $invoice_date . str_pad($counter, 3, 0, STR_PAD_LEFT);
+                $sales_invoice->invoice_date = $week_start;
+                $sales_invoice->due_date = $due_date;
+        }
+        
+        // dd($completed_sales_invoices);
+        return view('exports.invoice-results', [
+            'invoices' => $completed_sales_invoices
+        ]);
+        
+    } // end of view():
+        
+    public function title(): string
+    {
+        return $this->week_start;
+    }
 
-            // dd($completed_sales_invoices);
-            //---------- Quick Fudge To Export The Results To A Template ----------//
-
-                return view('exports.invoice-results', [
-                    'invoices' => $completed_sales_invoices
-                ]);
-
-            //---------- End Of Quick Fudge To Export The Results To A Template ----------//
-
-            // Loop through and insert the last 3 fields here
-
-        //----- End of Time To Loop Through Invoices Inserting Remaining Fields -----//
-
-    } // end of public function weekly_invoicing
-} // end of class InvoicingController extends Controller
+} // end of invoices export class

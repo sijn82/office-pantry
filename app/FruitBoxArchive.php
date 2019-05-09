@@ -11,18 +11,23 @@ class FruitBoxArchive extends Model
     // If they have an invoice address == to the update address, they've been invoice and can be set to 'inactive' status.
     // If the update address is newer than the invoice address, we need to keep them 'active' and ready to pull them into the next invoice.
     
+    protected $primaryKey = 'fruitbox_id';
+    
     protected $fillable = [
         
+        'fruitbox_id',
         'is_active',
+        'fruit_partner_id',
         'name',
         'company_details_id',
-        'route_id',
+        //'route_id',
         'type',
         'previous_delivery',
         'next_delivery',
         'frequency',
+        'week_in_month',
         'delivery_day',
-        'boxes_total',
+        'fruitbox_total',
         'deliciously_red_apples',
         'pink_lady_apples',
         'red_apples',

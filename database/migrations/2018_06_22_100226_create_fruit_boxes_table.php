@@ -15,14 +15,18 @@ class CreateFruitBoxesTable extends Migration
     {
         Schema::create('fruit_boxes', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('is_active')->default('Active');
+            $table->string('is_active');
+            $table->integer('fruit_partner_id');
             $table->string('name');
             $table->integer('company_details_id');
-            $table->integer('route_id'); // not sure i need this, i'm certainly not using it currently!
+            // $table->integer('route_id'); // not sure i need this, i'm certainly not using it currently!
             $table->string('type');
+            $table->date('previous_delivery');
+            $table->date('next_delivery');
             $table->string('frequency');
+            $table->string('week_in_month');
             $table->string('delivery_day');
-            $table->integer('boxes_total');
+            $table->integer('fruitbox_total');
             $table->integer('deliciously_red_apples');
             $table->integer('pink_lady_apples');
             $table->integer('red_apples');
@@ -45,10 +49,9 @@ class CreateFruitBoxesTable extends Migration
             $table->integer('root_ginger');
             $table->integer('tailoring_fee');
             $table->string('discount_multiple');
-            $table->date('invoiced_at');
+            $table->date('invoiced_at'); // This is a new field to hopefully keep track of when orders have been processed.
             $table->timestamps();
         });
-
     }
 
     /**

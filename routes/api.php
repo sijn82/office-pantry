@@ -18,7 +18,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 //Invoicing
-Route::get('weekly_invoicing', 'InvoicingController@weekly_invoicing');
+Route::get('weekly_invoicing', 'InvoicingController@weekly_invoicing_export');
 
 // Office Pantry Products
 Route::put('products/office-pantry-products/update/{id}', 'OfficePantryProductsController@update');

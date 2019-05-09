@@ -16,15 +16,17 @@ class CreateFruitBoxArchivesTable extends Migration
         Schema::create('fruit_box_archives', function (Blueprint $table) {
             $table->increments('id');
             $table->string('is_active');
+            $table->integer('fruit_partner_id');
             $table->string('name');
             $table->integer('company_details_id');
-            $table->integer('route_id'); // not sure i need this, i'm certainly not using it currently!
+            // $table->integer('route_id'); // not sure i need this, i'm certainly not using it currently!
             $table->string('type');
             $table->date('previous_delivery');
             $table->date('next_delivery');
             $table->string('frequency');
+            $table->string('week_in_month');
             $table->string('delivery_day');
-            $table->integer('boxes_total');
+            $table->integer('fruitbox_total');
             $table->integer('deliciously_red_apples');
             $table->integer('pink_lady_apples');
             $table->integer('red_apples');
