@@ -24,6 +24,9 @@ Route::get('weekly_invoicing', 'InvoicingController@weekly_invoicing_export');
 Route::put('products/office-pantry-products/update/{id}', 'OfficePantryProductsController@update');
 Route::get('products/office-pantry-products/show', 'OfficePantryProductsController@show'); // Might do this differently tomorrow morning.
 
+// Archived Boxes
+Route::put('archived-fruitbox/destroy/{id}', 'ArchivedFruitBoxController@deleteArchivedFruitBox');
+Route::put('archived-fruitbox/update/{id}', 'ArchivedFruitBoxController@updateArchivedFruitBox');
 
 Route::get('random', 'PreferencesController@random');
 

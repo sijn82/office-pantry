@@ -72,7 +72,8 @@ WithTitle
         // EDIT: THIS DOESN'T LIMIT THE INVOICING TO WEEKLY ORDERS ONLY YET. IT'S JUST GOING TO GRAB ALL ORDERS FOR THE WEEK START DATE!!
         // I NEED TO FILTER BY BRANDING THEMES.  EXCLUDING MONTHLY ORDERS WHICH WILL BE HANDLED BY A MONTHLY INVOICES EXPORT FUNCTION.
         
-        $companies = CompanyDetails::where('is_active', 'Active')->with([
+        // These options passed into the whereIn clause are (or should hopefully be) all the weekly payment orders for invoicing.
+        $companies = CompanyDetails::where('is_active', 'Active')->whereIn('branding_theme', ['BACS', 'GoCardless', 'Paypal (Stripe)', 'Weekly Standing Order'])->with([
             'fruitbox' => function ($query) {
                 $query->where('is_active', 'Active')->where('next_delivery', $this->week_start);
             },
@@ -104,7 +105,8 @@ WithTitle
             }
             // , and finally the otherbox archive check will go here.
             ])->get();
-
+            
+            // dd($companies);
             // Moved this out of the foreach loop as we only need to set these variables once.
 
             //----- OP Products -----//
@@ -2070,7 +2072,7 @@ WithTitle
         // Invoice date is just the day the invoice function is run.
         $invoice_date = $date->format('ymd');
         // Date Xero will take the payments.
-        $due_date = $date->addDay()->format('d/m/Y');
+        $due_date = $date->addDay(0)->format('d/m/Y');
         // The counter starts every run of invoices at the invoice date + 001.
         $counter = 0;
 

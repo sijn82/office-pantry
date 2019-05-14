@@ -33,6 +33,13 @@
         <div v-if="this.company_data.otherboxes != null">
             <other-orders-admin :otherboxes="this.company_data.otherboxes"></other-orders-admin>
         </div>
+        <div class="archive-header" v-if="this.company_data.archived_fruitboxes != null || this.company_data.archived_milkboxes != null">
+            <h2> Archived Orders (Awaiting Invoice) </h2>
+        </div>
+        
+        <div v-if="this.company_data.archived_fruitboxes != null">
+            <archived-fruit-orders-admin :company="this.company_data.company" :archived_fruitboxes="this.company_data.archived_fruitboxes"></archived-fruit-orders-admin>
+        </div>
         <!-- <div v-else>
             <p>empty</p>
         </div> -->
@@ -40,12 +47,16 @@
 </template>
 
 <style>
-
+    .archive-header {
+        text-align: center;
+        font-weight: 400;
+        margin: 20px 0;
+    }
 </style>
 
 <script>
 export default {
-    props: ['fruitboxes', 'milkboxes', 'routes', 'company', 'snackboxes', 'otherboxes', 'drinkboxes'],
+    props: ['fruitboxes', 'milkboxes', 'routes', 'company', 'snackboxes', 'otherboxes', 'drinkboxes', 'archived_fruitboxes'],
     data() {
         return {
             keywords: null,

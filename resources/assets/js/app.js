@@ -71,6 +71,9 @@ Vue.component('fruitbox', require('./components/admin/fruit/FruitBox.vue'));
 Vue.component('fruit-orders-admin', require('./components/admin/fruit/FruitOrdersAdmin.vue'));
 Vue.component('add-new-fruitbox', require('./components/admin/fruit/AddNewFruitbox.vue'));
 Vue.component('add-new-fruitpartner', require('./components/admin/fruit/AddNewFruitPartner.vue'));
+// Fruitbox Archive Related
+Vue.component('archived-fruitbox', require('./components/admin/fruit/ArchivedFruitBox.vue'));
+Vue.component('archived-fruit-orders-admin', require('./components/admin/fruit/ArchivedFruitOrdersAdmin.vue'));
 // Milkbox Related
 Vue.component('milkbox', require('./components/admin/milk/MilkBox.vue'));
 Vue.component('milk-orders-admin', require('./components/admin/milk/MilkOrdersAdmin.vue'));

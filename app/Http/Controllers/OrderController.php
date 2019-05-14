@@ -56,7 +56,7 @@ class OrderController extends Controller
     // I think this 'public static function advanceNextOrderDeliveryDate()' might be the only function in here that's actually still in use.  
     // Which is quite funny as I have no idea whether it's still updating successfully since I don't actually know 
     // when it would ATTEMPT TO UPDATE THE ORDERS, OR WHAT HAPPENS WHEN IT CAN'T?!
-    // But it's on the 'to do list', sob...
+    // But it's on the 'to do list', sob... EDIT: QUICK TEST TO AUTOMATE AGAIN ON 13/05/19 15:30, timezone changed to Europe/London.
     
     public static function advanceNextOrderDeliveryDate()
     {
@@ -209,7 +209,7 @@ class OrderController extends Controller
 
                     // Now we can update the next_delivery_week_value, using the id to identify the correct entry.
                     MilkBox::where('id', $milkbox->id)->update([
-                        'previous_delivery_week_start' => $lastDelivery,
+                        'previous_delivery' => $lastDelivery,
                         'next_delivery' => $milkbox->next_delivery,
                     ]);
 

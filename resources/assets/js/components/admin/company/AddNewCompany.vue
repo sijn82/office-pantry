@@ -225,7 +225,7 @@ export default {
               { text: 'Please select an option', value: null },
               'BACS', 'GoCardless', 'GoCardless In Advance', 'Invoiced In Advance',
               'Monthly Invoice', 'Monthly Invoice GoCardless', 'Paypal (Stripe)', 'Paypal In Advance (Stripe)',
-              'Standing Order', 'TBC'
+              'Weekly Standing Order', 'Monthly Standing Order', 'Weekly Standing Order In Advance', 'Monthly Standing Order In Advance', 'TBC'
             ],
             model_options: ['Free', 'Honesty Box'],
         }
@@ -236,8 +236,8 @@ export default {
             let self = this;
             // alert(JSON.stringify(this.form));
             axios.post('/api/company-details/add-new-company', {
-              company_details: {   
-        
+              company_details: {
+
                   invoice_name: self.form.invoice_name,
                   route_name: self.form.route_name,
                   primary_contact_name: self.form.primary_contact_name,
@@ -265,7 +265,7 @@ export default {
                   surcharge: self.form.surcharge,
                   supplier_id: self.form.supplier_id,
                   model: self.form.model,
-              
+
               },
               headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv'},
               // user_id: self.userData.id // This hasn't been setup yet so probably won't work, ...yet?!

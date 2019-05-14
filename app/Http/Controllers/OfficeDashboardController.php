@@ -101,11 +101,21 @@ class OfficeDashboardController extends Controller
             
             $preferences = $company->preference;
             $allergies = $company->allergy;
+            
+            $archived_fruitboxes = $company->fruitbox_archive()->where('is_active', 'Active')->get();
+            
+            foreach ($archived_fruitboxes as $archived_fruitbox) {
+                $fruitpartner_id = $archived_fruitbox['fruit_partner_id'];
+                $fruitpartner = FruitPartner::find($fruitpartner_id);
+                // dd($fruitpartner);
+                $fruitpartner_name = $fruitpartner->name;
+                $archived_fruitbox->fruit_partner_name = $fruitpartner_name;
+            }
 
         // return view('companies', ['companies' => $company, 'fruitboxes' => $fruitboxes, 'milkboxes' => $milkboxes, 'routes' => $routes]);
         return [    'company' => $company, 'fruitboxes' => $fruitboxes, 'milkboxes' => $milkboxes, 'routes' => $routes,
                     'snackboxes' => $snackboxes, 'drinkboxes' => $drinkboxes, 'otherboxes' => $otherboxes,
-                    'preferences' => $preferences, 'allergies' => $allergies
+                    'preferences' => $preferences, 'allergies' => $allergies, 'archived_fruitboxes' => $archived_fruitboxes
                 ];
     }
 
