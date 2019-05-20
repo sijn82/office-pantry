@@ -50,6 +50,9 @@ Route::get('assigned-routes', ['as' => 'assigned-routes', function () {
 Route::get('office-pantry-products', ['as' => 'office-pantry-products', function () {
     return view('office-pantry-products');
 }]);
+Route::get('invoicing', ['as' => 'invoicing', function () {
+    return view('invoicing');
+}]);
 
 // old system week start added to importing/exporting processes.
 Route::get('import-file', 'WeekStartController@show')->name('import-file')->middleware('auth:office');

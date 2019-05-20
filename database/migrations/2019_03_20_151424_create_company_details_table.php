@@ -59,6 +59,8 @@ class CreateCompanyDetailsTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('company_user');
+        Schema::dropIfExists('company_details_user');
         Schema::dropIfExists('company_details');
     }
 }

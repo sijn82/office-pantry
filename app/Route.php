@@ -35,8 +35,8 @@ class Route extends Model
       'snacks',
       'other',
       'assigned_to',
-      'position_on_route',
       'delivery_day',
+      'position_on_route',
     ];
 
         /**

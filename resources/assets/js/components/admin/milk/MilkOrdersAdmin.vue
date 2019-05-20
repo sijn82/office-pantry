@@ -11,7 +11,8 @@
             <b-button variant="primary" @click="addNew()"> Add New Milkbox </b-button>
         </div>
 
-        <div v-if="this.milkboxes.length"> {{ milkbox.company_name }}
+        <div v-if="this.milkboxes.length"> 
+            <!-- {{ milkbox.company_name }} -->
 
             <milkbox class="milkbox" v-for="milkbox in this.milkboxes" :milkbox="milkbox" :key="milkbox.id"></milkbox>
 
@@ -88,33 +89,33 @@ export default {
     props: ['milkboxes', 'company'],
     data () {
         return {
-            milkbox: {
-                id: '',
-                is_active: '',
-                fruit_partner_id: '',
-                company_id: '',
-                route_id: '',
-                next_delivery: '',
-                delivery_day: '',
-                frequency: '',
-                week_in_month: '',
-                milk_1l_alt_coconut: '',
-                milk_1l_alt_unsweetened_almond: '',
-                milk_1l_alt_almond: '',
-                milk_1l_alt_unsweetened_soya: '',
-                milk_1l_alt_soya: '',
-                milk_1l_alt_lactose_free_semi: '',
-                semi_skimmed_2l: '',
-                skimmed_2l: '',
-                whole_2l: '',
-                semi_skimmed_1l: '',
-                skimmed_1l: '',
-                whole_1l: '',
+            // milkbox: { // Pretty sure I don't need this object defined, as it's passed via a prop and no longer displayed in this component!
+                // id: '',
+                // is_active: '',
+                // fruit_partner_id: '',
+                // company_id: '',
+                // route_id: '',
+                // next_delivery: '',
+                // delivery_day: '',
+                // frequency: '',
+                // week_in_month: '',
+                // milk_1l_alt_coconut: '',
+                // milk_1l_alt_unsweetened_almond: '',
+                // milk_1l_alt_almond: '',
+                // milk_1l_alt_unsweetened_soya: '',
+                // milk_1l_alt_soya: '',
+                // milk_1l_alt_lactose_free_semi: '',
+                // semi_skimmed_2l: '',
+                // skimmed_2l: '',
+                // whole_2l: '',
+                // semi_skimmed_1l: '',
+                // skimmed_1l: '',
+                // whole_1l: '',
                 // pint_semi_skimmed: '',
                 // pint_whole: '',
                 // organic_semi_skimmed_1l: '',
                 // organic_skimmed_1l: '',
-            },
+            // },
             fruit_partner_name: '',
             frequency: ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'],
             week_in_month: ['First', 'Second', 'Third', 'Forth', 'Last'],
@@ -150,36 +151,36 @@ export default {
                 this.details = true;
             }
         },
-        updateMilkOrder(milkbox) {
-            this.editing = false;
-            console.log(milkbox);
-            console.log(milkbox.id);
-            axios.put('api/milkbox/' + milkbox.id, {
-                id: milkbox.id,
-                is_active: milkbox.is_active,
-                fruit_partner_id: milkbox.fruit_partner_id,
-                company_id: milkbox.company_id,
-                route_id: milkbox.route_id,
-                next_delivery: milkbox.next_delivery,
-                delivery_day: milkbox.delivery_day,
-                frequency: milkbox.frequency,
-                week_in_month: milkbox.week_in_month,
-                milk_1l_alt_coconut: milkbox.milk_1l_alt_coconut,
-                milk_1l_alt_unsweetened_almond: milkbox.milk_1l_alt_unsweetened_almond,
-                milk_1l_alt_almond: milkbox.milk_1l_alt_almond,
-                milk_1l_alt_unsweetened_soya: milkbox.milk_1l_alt_unsweetened_soya,
-                milk_1l_alt_soya: milkbox.milk_1l_alt_soya,
-                milk_1l_alt_lactose_free_semi: milkbox.milk_1l_alt_lactose_free_semi,
-                semi_skimmed_2l: milkbox.semi_skimmed_2l,
-                skimmed_2l: milkbox.skimmed_2l,
-                whole_2l: milkbox.whole_2l,
-                semi_skimmed_1l: milkbox.semi_skimmed_1l,
-                skimmed_1l: milkbox.skimmed_1l,
-                whole_1l: milkbox.whole_1l,
-            }).then (response => {
-                console.log(response);
-            }).catch(error => console.log(error));
-        },
+        // updateMilkOrder(milkbox) { // This is also doing diddly squat!
+        //     this.editing = false;
+        //     console.log(milkbox);
+        //     console.log(milkbox.id);
+        //     axios.put('api/milkbox/' + milkbox.id, {
+        //         id: milkbox.id,
+        //         is_active: milkbox.is_active,
+        //         fruit_partner_id: milkbox.fruit_partner_id,
+        //         company_id: milkbox.company_id,
+        //         route_id: milkbox.route_id,
+        //         next_delivery: milkbox.next_delivery,
+        //         delivery_day: milkbox.delivery_day,
+        //         frequency: milkbox.frequency,
+        //         week_in_month: milkbox.week_in_month,
+        //         milk_1l_alt_coconut: milkbox.milk_1l_alt_coconut,
+        //         milk_1l_alt_unsweetened_almond: milkbox.milk_1l_alt_unsweetened_almond,
+        //         milk_1l_alt_almond: milkbox.milk_1l_alt_almond,
+        //         milk_1l_alt_unsweetened_soya: milkbox.milk_1l_alt_unsweetened_soya,
+        //         milk_1l_alt_soya: milkbox.milk_1l_alt_soya,
+        //         milk_1l_alt_lactose_free_semi: milkbox.milk_1l_alt_lactose_free_semi,
+        //         semi_skimmed_2l: milkbox.semi_skimmed_2l,
+        //         skimmed_2l: milkbox.skimmed_2l,
+        //         whole_2l: milkbox.whole_2l,
+        //         semi_skimmed_1l: milkbox.semi_skimmed_1l,
+        //         skimmed_1l: milkbox.skimmed_1l,
+        //         whole_1l: milkbox.whole_1l,
+        //     }).then (response => {
+        //         console.log(response);
+        //     }).catch(error => console.log(error));
+        // },
         changeName(name) {
             return this.fruitbox.fruit_partner_name = name;
         }

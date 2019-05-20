@@ -37882,7 +37882,7 @@ var OBSERVER_CONFIG = {
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(80);
-module.exports = __webpack_require__(515);
+module.exports = __webpack_require__(520);
 
 
 /***/ }),
@@ -38007,6 +38007,7 @@ Vue.component('search-companies', __webpack_require__(500));
 Vue.component('select-company', __webpack_require__(505));
 // System Related
 Vue.component('exporting', __webpack_require__(510));
+Vue.component('invoice-options', __webpack_require__(515));
 
 // This works which is great but I should move this somewhere else, maybe somewhere I can add further directives and their associated functions?
 function debounce(fn) {
@@ -83426,6 +83427,100 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -83477,6 +83572,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 semi_skimmed_1l: milkbox.semi_skimmed_1l,
                 skimmed_1l: milkbox.skimmed_1l,
                 whole_1l: milkbox.whole_1l,
+                organic_semi_skimmed_2l: milkbox.organic_semi_skimmed_2l,
+                organic_skimmed_2l: milkbox.organic_skimmed_2l,
+                organic_whole_2l: milkbox.organic_whole_2l,
+                organic_semi_skimmed_1l: milkbox.organic_semi_skimmed_1l,
+                organic_skimmed_1l: milkbox.organic_skimmed_1l,
+                organic_whole_1l: milkbox.organic_whole_1l,
                 milk_1l_alt_coconut: milkbox.milk_1l_alt_coconut,
                 milk_1l_alt_unsweetened_almond: milkbox.milk_1l_alt_unsweetened_almond,
                 milk_1l_alt_almond: milkbox.milk_1l_alt_almond,
@@ -83862,6 +83963,17 @@ var render = function() {
             class: _vm.milkbox.is_active,
             attrs: { sm: "12" }
           },
+          [_c("b-col", [_c("h6", [_vm._v(" Regular 2l Milk Options ")])])],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "b-row",
+          {
+            staticClass: "b-row-padding",
+            class: _vm.milkbox.is_active,
+            attrs: { sm: "12" }
+          },
           [
             _c("b-col", { staticClass: "col-sm-4" }, [
               _c("label", [_c("b", [_vm._v(" 2L Semi Skimmed ")])]),
@@ -83952,6 +84064,17 @@ var render = function() {
             class: _vm.milkbox.is_active,
             attrs: { sm: "12" }
           },
+          [_c("b-col", [_c("h6", [_vm._v(" Regular 1l Milk Options ")])])],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "b-row",
+          {
+            staticClass: "b-row-padding",
+            class: _vm.milkbox.is_active,
+            attrs: { sm: "12" }
+          },
           [
             _c("b-col", { staticClass: "col-sm-4" }, [
               _c("label", [_c("b", [_vm._v(" 1L Semi Skimmed ")])]),
@@ -84032,6 +84155,235 @@ var render = function() {
                   ])
             ])
           ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "b-row",
+          {
+            staticClass: "b-row-padding",
+            class: _vm.milkbox.is_active,
+            attrs: { sm: "12" }
+          },
+          [_c("b-col", [_c("h6", [_vm._v(" Organic 2l Milk Options ")])])],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "b-row",
+          {
+            staticClass: "b-row-padding",
+            class: _vm.milkbox.is_active,
+            attrs: { sm: "12" }
+          },
+          [
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Organic 2L Semi Skimmed ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.milkbox.organic_semi_skimmed_2l,
+                          callback: function($$v) {
+                            _vm.$set(
+                              _vm.milkbox,
+                              "organic_semi_skimmed_2l",
+                              $$v
+                            )
+                          },
+                          expression: "milkbox.organic_semi_skimmed_2l"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(
+                        " " + _vm._s(_vm.milkbox.organic_semi_skimmed_2l) + " "
+                      )
+                    ])
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Organic 2L Skimmed ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.milkbox.organic_skimmed_2l,
+                          callback: function($$v) {
+                            _vm.$set(_vm.milkbox, "organic_skimmed_2l", $$v)
+                          },
+                          expression: "milkbox.organic_skimmed_2l"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.milkbox.organic_skimmed_2l) + " ")
+                    ])
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Organic 2L Whole ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.milkbox.organic_whole_2l,
+                          callback: function($$v) {
+                            _vm.$set(_vm.milkbox, "organic_whole_2l", $$v)
+                          },
+                          expression: "milkbox.organic_whole_2l"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.milkbox.organic_whole_2l) + " ")
+                    ])
+                  ])
+            ])
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "b-row",
+          {
+            staticClass: "b-row-padding",
+            class: _vm.milkbox.is_active,
+            attrs: { sm: "12" }
+          },
+          [_c("b-col", [_c("h6", [_vm._v(" Organic 1l Milk Options ")])])],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "b-row",
+          {
+            staticClass: "b-row-padding",
+            class: _vm.milkbox.is_active,
+            attrs: { sm: "12" }
+          },
+          [
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Organic 1L Semi Skimmed ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.milkbox.organic_semi_skimmed_1l,
+                          callback: function($$v) {
+                            _vm.$set(
+                              _vm.milkbox,
+                              "organic_semi_skimmed_1l",
+                              $$v
+                            )
+                          },
+                          expression: "milkbox.organic_semi_skimmed_1l"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(
+                        " " + _vm._s(_vm.milkbox.organic_semi_skimmed_1l) + " "
+                      )
+                    ])
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Organic 1L Skimmed ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.milkbox.organic_skimmed_1l,
+                          callback: function($$v) {
+                            _vm.$set(_vm.milkbox, "organic_skimmed_1l", $$v)
+                          },
+                          expression: "milkbox.organic_skimmed_1l"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.milkbox.organic_skimmed_1l) + " ")
+                    ])
+                  ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", { staticClass: "col-sm-4" }, [
+              _c("label", [_c("b", [_vm._v(" Organic 1L Whole ")])]),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-input", {
+                        attrs: { type: "number" },
+                        model: {
+                          value: _vm.milkbox.organic_whole_1l,
+                          callback: function($$v) {
+                            _vm.$set(_vm.milkbox, "organic_whole_1l", $$v)
+                          },
+                          expression: "milkbox.organic_whole_1l"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [
+                      _vm._v(" " + _vm._s(_vm.milkbox.organic_whole_1l) + " ")
+                    ])
+                  ])
+            ])
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "b-row",
+          {
+            staticClass: "b-row-padding",
+            class: _vm.milkbox.is_active,
+            attrs: { sm: "12" }
+          },
+          [_c("b-col", [_c("h6", [_vm._v(" Alternative 1l Milk Options ")])])],
           1
         ),
         _vm._v(" "),
@@ -84533,38 +84885,39 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['milkboxes', 'company'],
     data: function data() {
         return {
-            milkbox: {
-                id: '',
-                is_active: '',
-                fruit_partner_id: '',
-                company_id: '',
-                route_id: '',
-                next_delivery: '',
-                delivery_day: '',
-                frequency: '',
-                week_in_month: '',
-                milk_1l_alt_coconut: '',
-                milk_1l_alt_unsweetened_almond: '',
-                milk_1l_alt_almond: '',
-                milk_1l_alt_unsweetened_soya: '',
-                milk_1l_alt_soya: '',
-                milk_1l_alt_lactose_free_semi: '',
-                semi_skimmed_2l: '',
-                skimmed_2l: '',
-                whole_2l: '',
-                semi_skimmed_1l: '',
-                skimmed_1l: '',
-                whole_1l: ''
-                // pint_semi_skimmed: '',
-                // pint_whole: '',
-                // organic_semi_skimmed_1l: '',
-                // organic_skimmed_1l: '',
-            },
+            // milkbox: { // Pretty sure I don't need this object defined, as it's passed via a prop and no longer displayed in this component!
+            // id: '',
+            // is_active: '',
+            // fruit_partner_id: '',
+            // company_id: '',
+            // route_id: '',
+            // next_delivery: '',
+            // delivery_day: '',
+            // frequency: '',
+            // week_in_month: '',
+            // milk_1l_alt_coconut: '',
+            // milk_1l_alt_unsweetened_almond: '',
+            // milk_1l_alt_almond: '',
+            // milk_1l_alt_unsweetened_soya: '',
+            // milk_1l_alt_soya: '',
+            // milk_1l_alt_lactose_free_semi: '',
+            // semi_skimmed_2l: '',
+            // skimmed_2l: '',
+            // whole_2l: '',
+            // semi_skimmed_1l: '',
+            // skimmed_1l: '',
+            // whole_1l: '',
+            // pint_semi_skimmed: '',
+            // pint_whole: '',
+            // organic_semi_skimmed_1l: '',
+            // organic_skimmed_1l: '',
+            // },
             fruit_partner_name: '',
             frequency: ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'],
             week_in_month: ['First', 'Second', 'Third', 'Forth', 'Last'],
@@ -84598,38 +84951,37 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 this.details = true;
             }
         },
-        updateMilkOrder: function updateMilkOrder(milkbox) {
-            this.editing = false;
-            console.log(milkbox);
-            console.log(milkbox.id);
-            axios.put('api/milkbox/' + milkbox.id, {
-                id: milkbox.id,
-                is_active: milkbox.is_active,
-                fruit_partner_id: milkbox.fruit_partner_id,
-                company_id: milkbox.company_id,
-                route_id: milkbox.route_id,
-                next_delivery: milkbox.next_delivery,
-                delivery_day: milkbox.delivery_day,
-                frequency: milkbox.frequency,
-                week_in_month: milkbox.week_in_month,
-                milk_1l_alt_coconut: milkbox.milk_1l_alt_coconut,
-                milk_1l_alt_unsweetened_almond: milkbox.milk_1l_alt_unsweetened_almond,
-                milk_1l_alt_almond: milkbox.milk_1l_alt_almond,
-                milk_1l_alt_unsweetened_soya: milkbox.milk_1l_alt_unsweetened_soya,
-                milk_1l_alt_soya: milkbox.milk_1l_alt_soya,
-                milk_1l_alt_lactose_free_semi: milkbox.milk_1l_alt_lactose_free_semi,
-                semi_skimmed_2l: milkbox.semi_skimmed_2l,
-                skimmed_2l: milkbox.skimmed_2l,
-                whole_2l: milkbox.whole_2l,
-                semi_skimmed_1l: milkbox.semi_skimmed_1l,
-                skimmed_1l: milkbox.skimmed_1l,
-                whole_1l: milkbox.whole_1l
-            }).then(function (response) {
-                console.log(response);
-            }).catch(function (error) {
-                return console.log(error);
-            });
-        },
+
+        // updateMilkOrder(milkbox) { // This is also doing diddly squat!
+        //     this.editing = false;
+        //     console.log(milkbox);
+        //     console.log(milkbox.id);
+        //     axios.put('api/milkbox/' + milkbox.id, {
+        //         id: milkbox.id,
+        //         is_active: milkbox.is_active,
+        //         fruit_partner_id: milkbox.fruit_partner_id,
+        //         company_id: milkbox.company_id,
+        //         route_id: milkbox.route_id,
+        //         next_delivery: milkbox.next_delivery,
+        //         delivery_day: milkbox.delivery_day,
+        //         frequency: milkbox.frequency,
+        //         week_in_month: milkbox.week_in_month,
+        //         milk_1l_alt_coconut: milkbox.milk_1l_alt_coconut,
+        //         milk_1l_alt_unsweetened_almond: milkbox.milk_1l_alt_unsweetened_almond,
+        //         milk_1l_alt_almond: milkbox.milk_1l_alt_almond,
+        //         milk_1l_alt_unsweetened_soya: milkbox.milk_1l_alt_unsweetened_soya,
+        //         milk_1l_alt_soya: milkbox.milk_1l_alt_soya,
+        //         milk_1l_alt_lactose_free_semi: milkbox.milk_1l_alt_lactose_free_semi,
+        //         semi_skimmed_2l: milkbox.semi_skimmed_2l,
+        //         skimmed_2l: milkbox.skimmed_2l,
+        //         whole_2l: milkbox.whole_2l,
+        //         semi_skimmed_1l: milkbox.semi_skimmed_1l,
+        //         skimmed_1l: milkbox.skimmed_1l,
+        //         whole_1l: milkbox.whole_1l,
+        //     }).then (response => {
+        //         console.log(response);
+        //     }).catch(error => console.log(error));
+        // },
         changeName: function changeName(name) {
             return this.fruitbox.fruit_partner_name = name;
         }
@@ -84696,17 +85048,13 @@ var render = function() {
     this.milkboxes.length
       ? _c(
           "div",
-          [
-            _vm._v(" " + _vm._s(_vm.milkbox.company_name) + "\n\n        "),
-            _vm._l(this.milkboxes, function(milkbox) {
-              return _c("milkbox", {
-                key: milkbox.id,
-                staticClass: "milkbox",
-                attrs: { milkbox: milkbox }
-              })
+          _vm._l(this.milkboxes, function(milkbox) {
+            return _c("milkbox", {
+              key: milkbox.id,
+              staticClass: "milkbox",
+              attrs: { milkbox: milkbox }
             })
-          ],
-          2
+          })
         )
       : _c("div", [_vm._m(0)])
   ])
@@ -84818,7 +85166,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "\n#milkbox-breakdown label {\n    padding-top: 10px;\n}\n#new-milkbox-form:after {\n    content: \"\"; /* This is necessary for the pseudo element to work. */\n    display: block; /* This will put the pseudo element on its own line. */\n    margin: 0 auto; /* This will center the border. */\n    width: 70%; /* Change this to whatever width you want. */\n    padding-top: 30px; /* This creates some space between the element and the border. */\n    margin-bottom: 30px; /*  */\n    border-bottom: 1px solid #636b6f; /* This creates the border. Replace black with whatever color you want. */\n}\n\n\n", ""]);
+exports.push([module.i, "\nh6 {\n    margin-top: 16px;\n    font-weight: bold;\n}\n#milkbox-breakdown label {\n    padding-top: 10px;\n}\n#new-milkbox-form:after {\n    content: \"\"; /* This is necessary for the pseudo element to work. */\n    display: block; /* This will put the pseudo element on its own line. */\n    margin: 0 auto; /* This will center the border. */\n    width: 70%; /* Change this to whatever width you want. */\n    padding-top: 30px; /* This creates some space between the element and the border. */\n    margin-bottom: 30px; /*  */\n    border-bottom: 1px solid #636b6f; /* This creates the border. Replace black with whatever color you want. */\n}\n\n\n", ""]);
 
 // exports
 
@@ -84829,6 +85177,62 @@ exports.push([module.i, "\n#milkbox-breakdown label {\n    padding-top: 10px;\n}
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -85009,18 +85413,31 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 first_delivery: null, // This will be necessary to get the first delivery scheduled and for the frequency field to begin incrementing.
                 frequency: null, // Also new to the system, this will determine between daily, weekly, fortnightly and monthly, or bespoke.  This may then be connected to the cron/events when checking if a company is due for orders.
                 week_in_month: null,
+                // Regular 2l milk
                 semi_skimmed_2l: 0,
                 skimmed_2l: 0,
                 whole_2l: 0,
+                // Regular 1l milk
                 semi_skimmed_1l: 0,
                 skimmed_1l: 0,
                 whole_1l: 0,
+                // Organic 2l milk
+                organic_semi_skimmed_2l: 0,
+                organic_skimmed_2l: 0,
+                organic_whole_2l: 0,
+                // Organic 1l milk
+                organic_semi_skimmed_1l: 0,
+                organic_skimmed_1l: 0,
+                organic_whole_1l: 0,
+                // Alternative milk
                 coconut_1l: 0,
                 unsweetened_almond_1l: 0,
                 almond_1l: 0,
+                // Alt pt2
                 unsweetened_soya_1l: 0,
                 soya_1l: 0,
                 oat_1l: 0,
+                // Alt pt3
                 rice_1l: 0,
                 cashew_1l: 0,
                 lactose_free_semi_skimmed_1l: 0
@@ -85065,6 +85482,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.form.semi_skimmed_1l = 0;
             this.form.skimmed_1l = 0;
             this.form.whole_1l = 0;
+            this.form.organic_semi_skimmed_2l = 0;
+            this.form.organic_skimmed_2l = 0;
+            this.form.organic_whole_2l = 0;
+            this.form.organic_semi_skimmed_1l = 0;
+            this.form.organic_skimmed_1l = 0;
+            this.form.organic_whole_1l = 0;
             this.form.coconut_1l = 0;
             this.form.unsweetened_almond_1l = 0;
             this.form.almond_1l = 0;
@@ -85418,6 +85841,16 @@ var render = function() {
                 [
                   _c(
                     "b-row",
+                    [
+                      _c("b-col", [
+                        _c("h6", [_vm._v(" Regular 2l Milk Options ")])
+                      ])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-row",
                     { attrs: { sm: "12" } },
                     [
                       _c(
@@ -85485,6 +85918,16 @@ var render = function() {
                   _vm._v(" "),
                   _c(
                     "b-row",
+                    [
+                      _c("b-col", [
+                        _c("h6", [_vm._v(" Regular 1l Milk Options ")])
+                      ])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-row",
                     { attrs: { sm: "12" } },
                     [
                       _c(
@@ -85546,6 +85989,178 @@ var render = function() {
                         ],
                         1
                       )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-row",
+                    [
+                      _c("b-col", [
+                        _c("h6", [_vm._v(" Organic 2l Milk Options ")])
+                      ])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-row",
+                    { attrs: { sm: "12" } },
+                    [
+                      _c(
+                        "b-col",
+                        { staticClass: "col-sm-4" },
+                        [
+                          _c("label", [_vm._v(" Organic 2L Semi-Skimmed ")]),
+                          _vm._v(" "),
+                          _c("b-form-input", {
+                            attrs: { type: "number" },
+                            model: {
+                              value: _vm.form.organic_semi_skimmed_2l,
+                              callback: function($$v) {
+                                _vm.$set(
+                                  _vm.form,
+                                  "organic_semi_skimmed_2l",
+                                  $$v
+                                )
+                              },
+                              expression: "form.organic_semi_skimmed_2l"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-col",
+                        { staticClass: "col-sm-4" },
+                        [
+                          _c("label", [_vm._v(" Organic 2L Skimmed ")]),
+                          _vm._v(" "),
+                          _c("b-form-input", {
+                            attrs: { type: "number" },
+                            model: {
+                              value: _vm.form.organic_skimmed_2l,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "organic_skimmed_2l", $$v)
+                              },
+                              expression: "form.organic_skimmed_2l"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-col",
+                        { staticClass: "col-sm-4" },
+                        [
+                          _c("label", [_vm._v(" Organic 2L Whole ")]),
+                          _vm._v(" "),
+                          _c("b-form-input", {
+                            attrs: { type: "number" },
+                            model: {
+                              value: _vm.form.organic_whole_2l,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "organic_whole_2l", $$v)
+                              },
+                              expression: "form.organic_whole_2l"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-row",
+                    [
+                      _c("b-col", [
+                        _c("h6", [_vm._v(" Organic 1l Milk Options ")])
+                      ])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-row",
+                    { attrs: { sm: "12" } },
+                    [
+                      _c(
+                        "b-col",
+                        { staticClass: "col-sm-4" },
+                        [
+                          _c("label", [_vm._v(" Organic 1L Semi-Skimmed ")]),
+                          _vm._v(" "),
+                          _c("b-form-input", {
+                            attrs: { type: "number" },
+                            model: {
+                              value: _vm.form.organic_semi_skimmed_1l,
+                              callback: function($$v) {
+                                _vm.$set(
+                                  _vm.form,
+                                  "organic_semi_skimmed_1l",
+                                  $$v
+                                )
+                              },
+                              expression: "form.organic_semi_skimmed_1l"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-col",
+                        { staticClass: "col-sm-4" },
+                        [
+                          _c("label", [_vm._v(" Organic 1L Skimmed ")]),
+                          _vm._v(" "),
+                          _c("b-form-input", {
+                            attrs: { type: "number" },
+                            model: {
+                              value: _vm.form.organic_skimmed_1l,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "organic_skimmed_1l", $$v)
+                              },
+                              expression: "form.organic_skimmed_1l"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-col",
+                        { staticClass: "col-sm-4" },
+                        [
+                          _c("label", [_vm._v(" Organic 1L Whole ")]),
+                          _vm._v(" "),
+                          _c("b-form-input", {
+                            attrs: { type: "number" },
+                            model: {
+                              value: _vm.form.organic_whole_1l,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "organic_whole_1l", $$v)
+                              },
+                              expression: "form.organic_whole_1l"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-row",
+                    [
+                      _c("b-col", [
+                        _c("h6", [_vm._v(" Alternative 1l Milk Options ")])
+                      ])
                     ],
                     1
                   ),
@@ -94102,8 +94717,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             delivered_by: null,
             // delivered_by_options: ['DPD', 'APC', 'OP'],
             delivery_day: null,
-            type: null,
-            type_options: [{ value: null, text: 'Regular' }, { value: 'monthly-special', text: 'Monthly Special' }],
+            type: 'regular',
+            type_options: [{ value: 'regular', text: 'Regular' }, { value: 'monthly-special', text: 'Monthly Special' }],
             delivery_day_options: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
             frequency: null,
             frequency_options: ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'],
@@ -96773,10 +97388,7 @@ var render = function() {
                           _c(
                             "b-form-select",
                             {
-                              attrs: {
-                                options: _vm.cost_nominal,
-                                required: ""
-                              },
+                              attrs: { options: _vm.cost_nominal },
                               model: {
                                 value: _vm.form.cost_nominal,
                                 callback: function($$v) {
@@ -103641,6 +104253,198 @@ if (false) {
 
 /***/ }),
 /* 515 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(516)
+}
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(518)
+/* template */
+var __vue_template__ = __webpack_require__(519)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-3edbefa8"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/admin/InvoiceOptions.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-3edbefa8", Component.options)
+  } else {
+    hotAPI.reload("data-v-3edbefa8", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 516 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(517);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("ca22ad12", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3edbefa8\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./InvoiceOptions.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3edbefa8\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./InvoiceOptions.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 517 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/***/ }),
+/* 518 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({});
+
+/***/ }),
+/* 519 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    {},
+    [
+      _c("h4", [_vm._v(" Invoice Options ")]),
+      _vm._v(" "),
+      _c(
+        "b-row",
+        [
+          _c(
+            "b-col",
+            [
+              _c(
+                "b-button",
+                {
+                  attrs: {
+                    href: "api/weekly-invoicing",
+                    variant: "outline-primary"
+                  }
+                },
+                [_vm._v(" Export Weekly Invoicing ")]
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-col",
+            [
+              _c(
+                "b-button",
+                {
+                  attrs: {
+                    href: "api/confirm-weekly-invoicing",
+                    variant: "outline-primary"
+                  }
+                },
+                [_vm._v(" Confirm Weekly Invoicing ")]
+              ),
+              _vm._v(" "),
+              _c("b-form-text", [
+                _vm._v(
+                  " If you're happy with the exported invoice, click here to confirm and add an invoiced_at date to each entry. "
+                )
+              ])
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-3edbefa8", module.exports)
+  }
+}
+
+/***/ }),
+/* 520 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

@@ -17,10 +17,12 @@ class DrinkBoxController extends Controller
 
     public function __construct()
     {
-        // $this->week_start = 170918;
-        $week_start = WeekStart::all()->toArray();
-        $this->week_start = $week_start[0]['current'];
-        $this->delivery_days = $week_start[0]['delivery_days'];
+        $week_start = WeekStart::first();
+        
+        if ($week_start !== null) {
+            $this->week_start = $week_start->current;
+            $this->delivery_days = $week_start->delivery_days;
+        }
 
     }
     

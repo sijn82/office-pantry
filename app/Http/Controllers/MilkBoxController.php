@@ -48,45 +48,53 @@ class MilkBoxController extends Controller
         // It allows for the same box name to be on different routes, on different days for example which is important.
         // It also allows for a single day to be easily paused, or tailored.
 
-        foreach ($request['company_data']['delivery_day'] as $delivery_day)
+        foreach (request('company_data.delivery_day') as $delivery_day)
         {
             // Instead of creating a validation rule to check for unique name/day combo's we can make a quick db call, and skip creation if we already have a result.
-            if (count(MilkBox::where('company_details_id', $request['company_data']['company_details_id'])->Where('delivery_day', $delivery_day)->get()) == 0)
+            if (count(MilkBox::where('company_details_id', request('company_data.company_details_id'))->where('delivery_day', $delivery_day)->get()) == 0)
             {
 
                 $newMilkbox = new MilkBox();
                 // $newFruitbox->is_active = 'Active'; // Currently hard coded but this is also the default.
-                $newMilkbox->fruit_partner_id = $request['company_data']['fruit_partner_id'];
-                $newMilkbox->company_details_id = $request['company_data']['company_details_id'];
-                $newMilkbox->route_id = $request['company_data']['route_id']; // Not using this for anything.
-                $newMilkbox->next_delivery = $request['company_data']['first_delivery'];
-                $newMilkbox->frequency = $request['company_data']['frequency'];
-                $newMilkbox->week_in_month = $request['company_data']['week_in_month'];
+                $newMilkbox->fruit_partner_id = request('company_data.fruit_partner_id');
+                $newMilkbox->company_details_id = request('company_data.company_details_id');
+                //$newMilkbox->route_id = request('company_data.route_id'); // Not using this for anything.
+                $newMilkbox->next_delivery = request('company_data.first_delivery');
+                $newMilkbox->frequency = request('company_data.frequency');
+                $newMilkbox->week_in_month = request('company_data.week_in_month');
                 $newMilkbox->delivery_day = $delivery_day;
                 // Milk 2l
-                $newMilkbox->semi_skimmed_2l = $request['company_data']['semi_skimmed_2l'];
-                $newMilkbox->skimmed_2l = $request['company_data']['skimmed_2l'];
-                $newMilkbox->whole_2l = $request['company_data']['whole_2l'];
+                $newMilkbox->semi_skimmed_2l = request('company_data.semi_skimmed_2l');
+                $newMilkbox->skimmed_2l = request('company_data.skimmed_2l');
+                $newMilkbox->whole_2l = request('company_data.whole_2l');
                 // Milk 1l
-                $newMilkbox->semi_skimmed_1l = $request['company_data']['semi_skimmed_1l'];
-                $newMilkbox->skimmed_1l = $request['company_data']['skimmed_1l'];
-                $newMilkbox->whole_1l = $request['company_data']['whole_1l'];
+                $newMilkbox->semi_skimmed_1l = request('company_data.semi_skimmed_1l');
+                $newMilkbox->skimmed_1l = request('company_data.skimmed_1l');
+                $newMilkbox->whole_1l = request('company_data.whole_1l');
+                // Organic Milk 2l
+                $newMilkbox->organic_semi_skimmed_2l = request('company_data.organic_semi_skimmed_2l');
+                $newMilkbox->organic_skimmed_2l = request('company_data.organic_skimmed_2l');
+                $newMilkbox->organic_whole_2l = request('company_data.organic_whole_2l');
+                // Organic Milk 1l
+                $newMilkbox->organic_semi_skimmed_1l = request('company_data.organic_semi_skimmed_1l');
+                $newMilkbox->organic_skimmed_1l = request('company_data.organic_skimmed_1l');
+                $newMilkbox->organic_whole_1l = request('company_data.organic_whole_1l');
                 // Milk Alternatives
-                $newMilkbox->milk_1l_alt_coconut = $request['company_data']['coconut_1l'];
-                $newMilkbox->milk_1l_alt_unsweetened_almond = $request['company_data']['unsweetened_almond_1l'];
-                $newMilkbox->milk_1l_alt_almond = $request['company_data']['almond_1l'];
+                $newMilkbox->milk_1l_alt_coconut = request('company_data.coconut_1l');
+                $newMilkbox->milk_1l_alt_unsweetened_almond = request('company_data.unsweetened_almond_1l');
+                $newMilkbox->milk_1l_alt_almond = request('company_data.almond_1l');
                 // Milk Alternatives (Pt2)
-                $newMilkbox->milk_1l_alt_unsweetened_soya = $request['company_data']['unsweetened_soya_1l'];
-                $newMilkbox->milk_1l_alt_soya = $request['company_data']['soya_1l'];
-                $newMilkbox->milk_1l_alt_oat = $request['company_data']['oat_1l'];
+                $newMilkbox->milk_1l_alt_unsweetened_soya = request('company_data.unsweetened_soya_1l');
+                $newMilkbox->milk_1l_alt_soya = request('company_data.soya_1l');
+                $newMilkbox->milk_1l_alt_oat = request('company_data.oat_1l');
                 // Milk Alternatives (Pt3)
-                $newMilkbox->milk_1l_alt_rice = $request['company_data']['rice_1l'];
-                $newMilkbox->milk_1l_alt_cashew = $request['company_data']['cashew_1l'];
-                $newMilkbox->milk_1l_alt_lactose_free_semi = $request['company_data']['lactose_free_semi_skimmed_1l'];
+                $newMilkbox->milk_1l_alt_rice = request('company_data.rice_1l');
+                $newMilkbox->milk_1l_alt_cashew = request('company_data.cashew_1l');
+                $newMilkbox->milk_1l_alt_lactose_free_semi = request('company_data.lactose_free_semi_skimmed_1l');
                 $newMilkbox->save();
 
                 // $companyDetails = Company::findOrFail($request['company_data']['company_id']);
-                $companyDetails = CompanyDetails::findOrFail($request['company_data']['company_details_id']);
+                $companyDetails = CompanyDetails::findOrFail(request('company_data.company_details_id'));
 
                 $message = "Milkbox for " . $companyDetails->route_name . " on $delivery_day saved.";
                 Log::channel('slack')->info($message);
@@ -94,21 +102,21 @@ class MilkBoxController extends Controller
             } else {
 
                 // $companyDetails = Company::findOrFail($request['company_data']['company_id']);
-                $companyDetails = CompanyDetails::findOrFail($request['company_data']['company_details_id']);
+                $companyDetails = CompanyDetails::findOrFail(request('company_data.company_details_id'));
 
                 $message = "Milkbox for " . $companyDetails->route_name . " on $delivery_day saved.";
                 Log::channel('slack')->info($message);
             }
 
             // Once the Milkbox has been created we need to check for an existing route on the given delivery day, or create a new one for populating.
-            if (count(CompanyRoute::where('company_details_id', $request['company_data']['company_details_id'])->where('delivery_day', $delivery_day)->get()) == 0) {
+            if (count(CompanyRoute::where('company_details_id', request('company_data.company_details_id'))->where('delivery_day', $delivery_day)->get()) == 0) {
 
                 // Let's grab the current weekstart, we don't really need it but this will give us the week the company started with us.  Which might be nice to know.
                 $currentWeekStart = Weekstart::findOrFail(1);
 
                 // A route might not exist yet but when the company was set up a route name was inputted, so let's use that.
                 // $companyDetails = Company::findOrFail($request['company_data']['company_id']);
-                $companyDetails = CompanyDetails::findOrFail($request['company_data']['company_details_id']);
+                $companyDetails = CompanyDetails::findOrFail(request('company_data.company_details_id'));
                 
                 $assigned_route_tbc_monday = AssignedRoute::where('name', 'TBC (Monday)')->get();
                 $assigned_route_tbc_tuesday = AssignedRoute::where('name', 'TBC (Tuesday)')->get();
@@ -140,7 +148,7 @@ class MilkBoxController extends Controller
                 // $newRoute->week_start = $currentWeekStart->current;
                 // $newRoute->previous_delivery_week_start = null // This doesn't need to be here as there will never be a previous delivery for a new route (obvs) but I'm noting all fields in new route table here, for now.
                 // $newRoute->next_delivery = $request['company_data']['first_delivery'];
-                $newRoute->company_details_id = $request['company_data']['company_details_id'];
+                $newRoute->company_details_id = request('company_data.company_details_id');
                 $newRoute->route_name = $companyDetails->route_name;
                 $newRoute->postcode = $companyDetails->route_postcode;
                 
@@ -173,11 +181,11 @@ class MilkBoxController extends Controller
                 sleep(5);
 
                 // New routes need to be created before we have an id for them.  At this point we could then apply that route_id to the new milkbox entry if it has been created quickly enough.
-                $newlyCreatedRoute = CompanyRoute::where('company_details_id', $request['company_data']['company_details_id'])->where('delivery_day', $delivery_day)->get();
+                $newlyCreatedRoute = CompanyRoute::where('company_details_id', request('company_data.company_details_id'))->where('delivery_day', $delivery_day)->get();
 
-                if (count(MilkBox::where('company_details_id', $request['company_data']['company_details_id'])->where('delivery_day', $delivery_day)->get()) > 0) {
+                if (count(MilkBox::where('company_details_id', request('company_data.company_details_id'))->where('delivery_day', $delivery_day)->get()) > 0) {
 
-                    MilkBox::where('company_details_id', $request['company_data']['company_details_id'])->where('delivery_day', $delivery_day)->update([
+                    MilkBox::where('company_details_id', request('company_data.company_details_id'))->where('delivery_day', $delivery_day)->update([
                         'route_id' => $newlyCreatedRoute[0]->id
                     ]);
 
@@ -195,14 +203,16 @@ class MilkBoxController extends Controller
                 // We can update the existing entry.
                 // Scrap that, as we're not saving any fruitbox data to the routes anymore we won't need to update anything here.
                 // Or at least that's my current thinking.  -- Well actually we could add the route id to the milkbox entry if we have one. --
-                $existingRoute = CompanyRoute::where('company_details_id', $request['company_data']['company_details_id'])->where('delivery_day', $delivery_day)->get();
-                // dd($existingRoute);
-                MilkBox::where('company_details_id', $request['company_data']['company_details_id'])->where('delivery_day', $delivery_day)->update([
-                    'route_id' => $existingRoute[0]->id
-                ]);
-
-                $message = "Route ID: " . $existingRoute[0]->id . " added to Milkbox on $delivery_day saved.";
-                Log::channel('slack')->info($message);
+                
+                // EDIT: ACTUALLY NAH, THERE'S NO POINT.
+                // $existingRoute = CompanyRoute::where('company_details_id', request('company_data.company_details_id'))->where('delivery_day', $delivery_day)->get();
+                // // dd($existingRoute);
+                // MilkBox::where('company_details_id', request('company_data.company_details_id'))->where('delivery_day', $delivery_day)->update([
+                //     'route_id' => $existingRoute[0]->id
+                // ]);
+                // 
+                // $message = "Route ID: " . $existingRoute[0]->id . " added to Milkbox on $delivery_day saved.";
+                // Log::channel('slack')->info($message);
 
             }
 
@@ -261,6 +271,14 @@ class MilkBoxController extends Controller
             'semi_skimmed_1l' => request('semi_skimmed_1l'),
             'skimmed_1l' => request('skimmed_1l'),
             'whole_1l' => request('whole_1l'),
+            // Organic Milk 2l
+            'organic_semi_skimmed_2l' => request('organic_semi_skimmed_2l'),
+            'organic_skimmed_2l' => request('organic_skimmed_2l'),
+            'organic_whole_2l' => request('organic_whole_2l'),
+            // Organic Milk 1l
+            'organic_semi_skimmed_1l' => request('organic_semi_skimmed_1l'),
+            'organic_skimmed_1l' => request('organic_skimmed_1l'),
+            'organic_whole_1l' => request('organic_whole_1l'),
             // Milk Alternatives
             'milk_1l_alt_coconut' => request('milk_1l_alt_coconut'),
             'milk_1l_alt_unsweetened_almond' => request('milk_1l_alt_unsweetened_almond'),
@@ -305,7 +323,7 @@ class MilkBoxController extends Controller
             // A route might not exist yet but when the company was set up a route name was inputted, so let's use that.
             
             // $companyDetails = Company::findOrFail($request['company_id']);
-            $companyDetails = CompanyDetails::findOrFail($request['company_details_id']);
+            $companyDetails = CompanyDetails::findOrFail(request('company_details_id'));
             
             $assigned_route_tbc_monday = AssignedRoute::where('name', 'TBC (Monday)')->get();
             $assigned_route_tbc_tuesday = AssignedRoute::where('name', 'TBC (Tuesday)')->get();
@@ -334,7 +352,7 @@ class MilkBoxController extends Controller
             // We need to create a new entry.
             $newRoute = new CompanyRoute();
             // $newRoute->is_active = 'Active'; // Currently hard coded but this is also the default.
-            $newRoute->company_details_id = $request['company_details_id'];
+            $newRoute->company_details_id = request('company_details_id');
             $newRoute->route_name = $companyDetails->route_name;
             $newRoute->postcode = $companyDetails->route_postcode;
             
@@ -351,11 +369,11 @@ class MilkBoxController extends Controller
             
             $newRoute->delivery_information = $companyDetails->delivery_information;
             $newRoute->assigned_route_id = $assigned_route_id;
-            $newRoute->delivery_day = $request['delivery_day'];
+            $newRoute->delivery_day = request('delivery_day');
             $newRoute->save();
 
 
-            $message = "Route $newRoute->company_name on " . $request['delivery_day'] . " saved.";
+            $message = "Route $newRoute->company_name on " . request('delivery_day') . " saved.";
             Log::channel('slack')->info($message);
             
         } else {

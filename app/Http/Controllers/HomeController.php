@@ -44,29 +44,32 @@ class HomeController extends Controller
          // $user->companies()->sync(899, false);
          // $user->companies()->syncWithoutDetaching(899);
          // $user->companies()->attach(934);
-        $companies = $user->companies;
-         // dd($companies);
-        $i = 0;
-        $fruitboxes = [];
-        $milkboxes = [];
-        $routes = [];
-        $user_associated_companies = [];
-        foreach ($companies as $company)
-        {
-            $user_associated_companies[$company->id] = $company->invoice_name;
-            // dd($company);
-            $milkboxes[] = $company->milkbox;
-            $milkboxes[$i]->prepend($company->invoice_name, 'company_name');
+        // if ($user !== null) {
+            // dd($user);
+            $companies = $user->companies;
+             // dd($companies);
+            $i = 0;
+            $fruitboxes = [];
+            $milkboxes = [];
+            $routes = [];
+            $user_associated_companies = [];
+            foreach ($companies as $company)
+            {
+                $user_associated_companies[$company->id] = $company->invoice_name;
+                // dd($company);
+                $milkboxes[] = $company->milkbox;
+                $milkboxes[$i]->prepend($company->invoice_name, 'company_name');
 
 
-            $fruitboxes[] = $company->fruitbox;
-            $fruitboxes[$i]->prepend($company->invoice_name, 'company_name');
+                $fruitboxes[] = $company->fruitbox;
+                $fruitboxes[$i]->prepend($company->invoice_name, 'company_name');
 
-            $routes[] = $company->route;
-            $routes[$i]->prepend($company->invoice_name, 'company_name');
+                $routes[] = $company->route;
+                $routes[$i]->prepend($company->invoice_name, 'company_name');
 
-            $i++;
-        }
+                $i++;
+            }
+        // }
 
         // dd($user_associated_companies);
          // dd($fruitboxes);

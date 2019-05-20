@@ -40,7 +40,7 @@ class CreateRoutesTable extends Migration
             $table->string('drinks')->nullable();
             $table->string('snacks')->nullable();
             $table->string('other')->nullable();
-            $table->string('assigned_to')->default('TBC');
+            $table->string('assigned_to')->default('TBC'); // This is an outdated TBC, now we have TBC's specific to each day created but it should just mean this default is never used.
             $table->string('delivery_day'); // The mispositioning of this field upsets me but for now it's much quicker to keep it and not corrupt the current data for live upload.
             $table->integer('position_on_route')->nullable();
             $table->timestamps();

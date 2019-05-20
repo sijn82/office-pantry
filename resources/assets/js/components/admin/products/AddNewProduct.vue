@@ -71,7 +71,7 @@
                         <!-- Cost Nominal -->
                         <b-col class="col-sm-4">
                             <label> Product Cost Nominal </label>
-                            <b-form-select v-model="form.cost_nominal" :options="cost_nominal" required>
+                            <b-form-select v-model="form.cost_nominal" :options="cost_nominal" >
                                 <template slot="first">
                                         <option :value="null" disabled> Please select an option </option>
                                 </template>

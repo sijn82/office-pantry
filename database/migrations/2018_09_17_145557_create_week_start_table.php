@@ -16,6 +16,7 @@ class CreateWeekStartTable extends Migration
         Schema::create('week_start', function (Blueprint $table) {
             $table->increments('id');
             $table->date('current');
+            $table->string('delivery_days')->nullable();
             $table->timestamps();
         });
     }

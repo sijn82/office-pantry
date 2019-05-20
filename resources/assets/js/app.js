@@ -120,6 +120,7 @@ Vue.component('search-companies', require('./components/admin/SearchCompanies.vu
 Vue.component('select-company', require('./components/admin/SelectCompany.vue'));
 // System Related
 Vue.component('exporting', require('./components/admin/Exporting.vue'));
+Vue.component('invoice-options', require('./components/admin/InvoiceOptions.vue'));
 
 // This works which is great but I should move this somewhere else, maybe somewhere I can add further directives and their associated functions?
 function debounce(fn, delay = 300) {

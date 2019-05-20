@@ -8,7 +8,7 @@ class MilkBox extends Model
 {
     //
     protected $fillable = [
-        
+        // Company order details
         'is_active',
         'fruit_partner_id',
         'company_details_id',
@@ -17,28 +17,35 @@ class MilkBox extends Model
         'frequency',
         'week_in_month',
         'delivery_day',
-        'milk_1l_alt_coconut',
-        'milk_1l_alt_unsweetened_almond',
-        'milk_1l_alt_almond',
-        'milk_1l_alt_unsweetened_soya',
-        'milk_1l_alt_soya',
-        'milk_1l_alt_lactose_free_semi',
+        // Regular 2l 
         'semi_skimmed_2l',
         'skimmed_2l',
         'whole_2l',
+        // Regular 1l
         'semi_skimmed_1l',
         'skimmed_1l',
         'whole_1l',
-        // 'pint_semi_skimmed',
-        // 'pint_whole',
-        // WTF, this doesn't look like a complete set of options!  Need to correct this and add all the options we offer.
+        // Organic 1l
         'organic_semi_skimmed_1l',
         'organic_skimmed_1l',
-        // These are the extra options needed.
         'organic_whole_1l',
+        // Organic 2l
         'organic_semi_skimmed_2l',
         'organic_skimmed_2l',
         'organic_whole_2l',
+        // Alternative 1l options
+        'milk_1l_alt_coconut',
+        'milk_1l_alt_unsweetened_almond',
+        'milk_1l_alt_almond',
+        // Alt pt2
+        'milk_1l_alt_unsweetened_soya',
+        'milk_1l_alt_soya',
+        'milk_1l_alt_oat',
+        // Alt pt3
+        'milk_1l_alt_rice',
+        'milk_1l_alt_cashew',
+        'milk_1l_alt_lactose_free_semi',
+        // Invoice details, currently keeping timestamps out of the editable range.
         'invoiced_at',
 
     ];

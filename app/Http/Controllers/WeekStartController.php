@@ -37,17 +37,31 @@ class WeekStartController extends Controller
     {
         // dd($request->week_start);
         //
-        $week_start =  WeekStart::find(1);
-        $week_start->current = $request->week_start;
-        $week_start->save();
+        $week_start =  WeekStart::first();
+        
+        if ($week_start !== null) {
+            $week_start->current = $request->week_start;
+            $week_start->save();
+        } else {
+            $week_start = new WeekStart();
+            $week_start->current = $request->week_start;
+            $week_start->save();
+        }
     }
     public function storeDeliveryDays(WeekStart $week_start, Request $request)
     {
         // dd($request->week_start);
         //
-        $week_start =  WeekStart::find(1);
-        $week_start->delivery_days = $request->delivery_days;
-        $week_start->save();
+        $week_start =  WeekStart::first();
+        
+        if ($week_start !== null) {
+            $week_start->delivery_days = $request->delivery_days;
+            $week_start->save();
+        } else {
+            $week_start = new WeekStart();
+            $week_start->delivery_days = $request->delivery_days;
+            $week_start->save();
+        }
     }
 
     /**

@@ -105,6 +105,12 @@
                 </b-row>
                 <!-- Regular 2L Milk Options -->
                 <b-row :class="milkbox.is_active" class="b-row-padding" sm="12">
+                    <b-col>
+                        <h6> Regular 2l Milk Options </h6>
+                    </b-col>
+                </b-row>
+                
+                <b-row :class="milkbox.is_active" class="b-row-padding" sm="12">
                     <b-col class="col-sm-4">
                         <label><b> 2L Semi Skimmed </b></label>
                         <div v-if="editing">
@@ -137,6 +143,12 @@
                 </b-row>
                 <!-- Regular 1L Milk Options -->
                 <b-row :class="milkbox.is_active" class="b-row-padding" sm="12">
+                    <b-col>
+                        <h6> Regular 1l Milk Options </h6>
+                    </b-col>
+                </b-row>
+                
+                <b-row :class="milkbox.is_active" class="b-row-padding" sm="12">
                     <b-col class="col-sm-4">
                         <label><b> 1L Semi Skimmed </b></label>
                         <div v-if="editing">
@@ -167,7 +179,89 @@
                         </div>
                     </b-col>
                 </b-row>
+                <!-- Organic 2L Milk Options -->
+                <b-row :class="milkbox.is_active" class="b-row-padding" sm="12">
+                    <b-col>
+                        <h6> Organic 2l Milk Options </h6>
+                    </b-col>
+                </b-row>
+                
+                <b-row :class="milkbox.is_active" class="b-row-padding" sm="12">
+                    <b-col class="col-sm-4">
+                        <label><b> Organic 2L Semi Skimmed </b></label>
+                        <div v-if="editing">
+                            <b-form-input v-model="milkbox.organic_semi_skimmed_2l" type="number"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ milkbox.organic_semi_skimmed_2l }} </p>
+                        </div>
+                    </b-col>
+
+                    <b-col class="col-sm-4">
+                        <label><b> Organic 2L Skimmed </b></label>
+                        <div v-if="editing">
+                            <b-form-input v-model="milkbox.organic_skimmed_2l" type="number"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ milkbox.organic_skimmed_2l }} </p>
+                        </div>
+                    </b-col>
+
+                    <b-col class="col-sm-4">
+                        <label><b> Organic 2L Whole </b></label>
+                        <div v-if="editing">
+                            <b-form-input v-model="milkbox.organic_whole_2l" type="number"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ milkbox.organic_whole_2l }} </p>
+                        </div>
+                    </b-col>
+                </b-row>
+                <!-- Organic 1L Milk Options -->
+                <b-row :class="milkbox.is_active" class="b-row-padding" sm="12">
+                    <b-col>
+                        <h6> Organic 1l Milk Options </h6>
+                    </b-col>
+                </b-row>
+                
+                <b-row :class="milkbox.is_active" class="b-row-padding" sm="12">
+                    <b-col class="col-sm-4">
+                        <label><b> Organic 1L Semi Skimmed </b></label>
+                        <div v-if="editing">
+                            <b-form-input v-model="milkbox.organic_semi_skimmed_1l" type="number"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ milkbox.organic_semi_skimmed_1l }} </p>
+                        </div>
+                    </b-col>
+
+                    <b-col class="col-sm-4">
+                        <label><b> Organic 1L Skimmed </b></label>
+                        <div v-if="editing">
+                            <b-form-input v-model="milkbox.organic_skimmed_1l" type="number"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ milkbox.organic_skimmed_1l }} </p>
+                        </div>
+                    </b-col>
+
+                    <b-col class="col-sm-4">
+                        <label><b> Organic 1L Whole </b></label>
+                        <div v-if="editing">
+                            <b-form-input v-model="milkbox.organic_whole_1l" type="number"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ milkbox.organic_whole_1l }} </p>
+                        </div>
+                    </b-col>
+                </b-row>
                 <!-- Alternative Milk Options -->
+                <b-row :class="milkbox.is_active" class="b-row-padding" sm="12">
+                    <b-col>
+                        <h6> Alternative 1l Milk Options </h6>
+                    </b-col>
+                </b-row>
+                
                 <b-row :class="milkbox.is_active" class="b-row-padding" sm="12">
                     <b-col class="col-sm-4">
                          <label><b> 1L Milk Alt Coconut </b></label>
@@ -325,6 +419,12 @@ export default {
                 semi_skimmed_1l: milkbox.semi_skimmed_1l,
                 skimmed_1l: milkbox.skimmed_1l,
                 whole_1l: milkbox.whole_1l,
+                organic_semi_skimmed_2l: milkbox.organic_semi_skimmed_2l,
+                organic_skimmed_2l: milkbox.organic_skimmed_2l,
+                organic_whole_2l: milkbox.organic_whole_2l,
+                organic_semi_skimmed_1l: milkbox.organic_semi_skimmed_1l,
+                organic_skimmed_1l: milkbox.organic_skimmed_1l,
+                organic_whole_1l: milkbox.organic_whole_1l,
                 milk_1l_alt_coconut: milkbox.milk_1l_alt_coconut,
                 milk_1l_alt_unsweetened_almond: milkbox.milk_1l_alt_unsweetened_almond,
                 milk_1l_alt_almond: milkbox.milk_1l_alt_almond,

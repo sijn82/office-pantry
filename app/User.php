@@ -12,7 +12,7 @@ class User extends Authenticatable
     use HasApiTokens;
 
     protected $casts = [
-      'company_id' => 'array'
+      'company_details_id' => 'array'
     ];
 
     /**
@@ -21,7 +21,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'company_id'
+        'name', 'email', 'password', 'company_details_id'
     ];
 
     /**
@@ -36,7 +36,7 @@ class User extends Authenticatable
     
     public function companies()
     {
-        return $this->belongsToMany('App\Company');
+        return $this->belongsToMany('App\CompanyDetails');
     }
 }
 

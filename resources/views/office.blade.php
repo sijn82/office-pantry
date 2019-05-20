@@ -27,13 +27,19 @@
                         <h4> New System </h4>
                         <ul>
                             <li style="list-style:none;">
-                                <a href="{{ route('exporting') }}"> Exporting Processes </a>
-                            </li>
-                            <li style="list-style:none;">
                                 <a href="{{ route('new-company') }}"> Add New Company </a>
                             </li>
                             <li style="list-style:none;">
                                 <a href="{{ route('snackboxes') }}"> Add New Snackbox, Mass Update Standard (Types) </a>
+                            </li>
+                            <li style="list-style:none;">
+                                <a href="{{ route('preferences') }}"> Add/Edit/View Company Preferences (Allergies, Likes, Dislikes & Additional Info) </a>
+                            </li>
+                            <li style="list-style:none;">
+                                <a href="{{ route('exporting') }}"> Exporting Processes </a>
+                            </li>
+                            <li style="list-style:none;">
+                                <a href="{{ route('invoicing') }}"> Process/Export Invoicing </a>
                             </li>
                         </ul>
                         <h4> View / Add New System Ingredients </h4>

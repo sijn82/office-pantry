@@ -62,6 +62,11 @@
             <!-- Milk Breakdown - Begins with a container to define widths for column spacing -->
             <!-- <b-container style="text-align: center;" sm="12"> -->
                 <b-form-group id="milkbox-breakdown" label="Milkbox Breakdown">
+                    <b-row>
+                        <b-col>
+                            <h6> Regular 2l Milk Options </h6>
+                        </b-col>
+                    </b-row>
                     <b-row sm="12">
                         <b-col class="col-sm-4">
                             <label> 2L Semi-Skimmed </label>
@@ -76,6 +81,11 @@
                             <b-form-input v-model="form.whole_2l" type="number"></b-form-input>
                         </b-col>
                     </b-row>
+                    <b-row>
+                        <b-col>
+                            <h6> Regular 1l Milk Options </h6>
+                        </b-col>
+                    </b-row>
                     <b-row sm="12">
                         <b-col class="col-sm-4">
                             <label> 1L Semi-Skimmed </label>
@@ -88,6 +98,49 @@
                         <b-col class="col-sm-4">
                             <label> 1L Whole </label>
                             <b-form-input v-model="form.whole_1l" type="number"></b-form-input>
+                        </b-col>
+                    </b-row>
+                    <b-row>
+                        <b-col>
+                            <h6> Organic 2l Milk Options </h6>
+                        </b-col>
+                    </b-row>
+                    <b-row sm="12">
+                        <b-col class="col-sm-4">
+                            <label> Organic 2L Semi-Skimmed </label>
+                            <b-form-input v-model="form.organic_semi_skimmed_2l" type="number"></b-form-input>
+                        </b-col>
+                        <b-col class="col-sm-4">
+                            <label> Organic 2L Skimmed </label>
+                            <b-form-input v-model="form.organic_skimmed_2l" type="number"></b-form-input>
+                        </b-col>
+                        <b-col class="col-sm-4">
+                            <label> Organic 2L Whole </label>
+                            <b-form-input v-model="form.organic_whole_2l" type="number"></b-form-input>
+                        </b-col>
+                    </b-row>
+                    <b-row>
+                        <b-col>
+                            <h6> Organic 1l Milk Options </h6>
+                        </b-col>
+                    </b-row>
+                    <b-row sm="12">
+                        <b-col class="col-sm-4">
+                            <label> Organic 1L Semi-Skimmed </label>
+                            <b-form-input v-model="form.organic_semi_skimmed_1l" type="number"></b-form-input>
+                        </b-col>
+                        <b-col class="col-sm-4">
+                            <label> Organic 1L Skimmed </label>
+                            <b-form-input v-model="form.organic_skimmed_1l" type="number"></b-form-input>
+                        </b-col>
+                        <b-col class="col-sm-4">
+                            <label> Organic 1L Whole </label>
+                            <b-form-input v-model="form.organic_whole_1l" type="number"></b-form-input>
+                        </b-col>
+                    </b-row>
+                    <b-row>
+                        <b-col>
+                            <h6> Alternative 1l Milk Options </h6>
                         </b-col>
                     </b-row>
                     <b-row sm="12">
@@ -144,7 +197,10 @@
 </template>
 
 <style>
-
+    h6 {
+        margin-top: 16px;
+        font-weight: bold;
+    }
     #milkbox-breakdown label {
         padding-top: 10px;
     }
@@ -178,18 +234,31 @@ export default {
                     first_delivery: null, // This will be necessary to get the first delivery scheduled and for the frequency field to begin incrementing.
                     frequency: null, // Also new to the system, this will determine between daily, weekly, fortnightly and monthly, or bespoke.  This may then be connected to the cron/events when checking if a company is due for orders.
                     week_in_month: null,
+                    // Regular 2l milk
                     semi_skimmed_2l: 0,
                     skimmed_2l: 0,
                     whole_2l: 0,
+                    // Regular 1l milk
                     semi_skimmed_1l: 0,
                     skimmed_1l: 0,
                     whole_1l: 0,
+                    // Organic 2l milk
+                    organic_semi_skimmed_2l: 0,
+                    organic_skimmed_2l: 0,
+                    organic_whole_2l: 0,
+                    // Organic 1l milk
+                    organic_semi_skimmed_1l: 0,
+                    organic_skimmed_1l: 0,
+                    organic_whole_1l: 0,
+                    // Alternative milk
                     coconut_1l: 0,
                     unsweetened_almond_1l: 0,
                     almond_1l: 0,
+                    // Alt pt2
                     unsweetened_soya_1l: 0,
                     soya_1l: 0,
                     oat_1l: 0,
+                    // Alt pt3
                     rice_1l: 0,
                     cashew_1l: 0,
                     lactose_free_semi_skimmed_1l: 0,
@@ -234,6 +303,12 @@ export default {
               this.form.semi_skimmed_1l = 0;
               this.form.skimmed_1l = 0;
               this.form.whole_1l = 0;
+              this.form.organic_semi_skimmed_2l = 0;
+              this.form.organic_skimmed_2l = 0;
+              this.form.organic_whole_2l = 0;
+              this.form.organic_semi_skimmed_1l = 0;
+              this.form.organic_skimmed_1l = 0;
+              this.form.organic_whole_1l = 0;
               this.form.coconut_1l = 0;
               this.form.unsweetened_almond_1l = 0;
               this.form.almond_1l = 0;

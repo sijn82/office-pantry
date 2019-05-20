@@ -17,9 +17,12 @@ class OtherBoxController extends Controller
 
     public function __construct()
     {
-        $week_start = WeekStart::all()->toArray();
-        $this->week_start = $week_start[0]['current'];
-        $this->delivery_days = $week_start[0]['delivery_days'];
+        $week_start = WeekStart::first();
+        
+        if ($week_start !== null) {
+            $this->week_start = $week_start->current;
+            $this->delivery_days = $week_start->delivery_days;
+        }
     }
     // Not sure when I made this, or how complete the export file?
     public function download_otherbox_op_multicompany()

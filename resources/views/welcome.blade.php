@@ -78,6 +78,7 @@
         @yield('preferences-assets')
         @yield('assigned-routes-styling')
         @yield('exporting-styles')
+        @yield('invoice-styling')
     </head>
     <body>
         <div class="flex-center position-ref full-height">
@@ -124,6 +125,7 @@
                     @yield('assigned-routes')
                     @yield('export-excel')
                     @yield('products/office-pantry-products')
+                    @yield('invoice-options')
                  </div>
             </div>
         </div>

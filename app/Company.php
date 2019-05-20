@@ -39,11 +39,7 @@ class Company extends Model
         'postcode',             // the postcode.
         'branding_theme',       // Not to mention this and any subsequent fields we'll need for invoicing and future developments.
         'supplier',
-        'additional_info',
-        // 'snackbox_likes',
-        // 'snackbox_dislikes',
-        // 'order_id',
-        // 'fruitbox_id',
+
     ];
 
     /**

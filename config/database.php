@@ -1,11 +1,11 @@
 <?php
 
-// $url = parse_url(getenv("DATABASE_URL"));
-// 
-// $host = $url["host"];
-// $username = $url["user"];
-// $password = $url["pass"];
-// $database = substr($url["path"], 1);
+$url = parse_url(getenv("DATABASE_URL"));
+// dd($url);
+$host = $url["host"];
+$username = $url["user"];
+$password = $url["pass"];
+$database = substr($url["path"], 1);
 
 return [
 
@@ -20,7 +20,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => env('DB_CONNECTION', 'pgsql_staging'),
     // 'default' => 'pgsql_production',
 
     /*
@@ -90,6 +90,23 @@ return [
             'prefix' => '',
             'strict' => true,
             'engine' => null,
+        ],
+        
+        'pgsql_staging' => [
+            'driver' => 'pgsql',
+            'port' => '5432',
+            // 'host'     => $host,
+            // 'database' => $database,
+            // 'username' => $username,
+            // 'password' => $password,
+            'host'     => 'ec2-23-21-186-85.compute-1.amazonaws.com',
+            'database' => 'd87nb2d769tpds',
+            'username' => 'mvenpvaswfwuvc',
+            'password' => '10ee7ff56edfb6178350e711fa09994c65f511bdd86a196042e09139265c4664',
+            'charset' => 'utf8',
+            'prefix' => '',
+            'schema' => 'public',
+            'sslmode' => 'prefer',
         ],
 
         // 'pgsql_production' => [

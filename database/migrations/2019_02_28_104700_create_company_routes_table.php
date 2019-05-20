@@ -15,19 +15,19 @@ class CreateCompanyRoutesTable extends Migration
     {
         Schema::create('company_routes', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('is_active');
+            $table->string('is_active')->default('Active');
             $table->integer('company_details_id');
             $table->string('route_name');
             $table->string('postcode');
             $table->longtext('address');
-            $table->longtext('delivery_information');
-            $table->integer('fruit_crates');
-            $table->integer('fruit_boxes');
-            $table->integer('drinks');
-            $table->integer('snacks');
-            $table->longtext('other');
+            $table->longtext('delivery_information')->nullable();
+            $table->integer('fruit_crates')->default(0);
+            $table->integer('fruit_boxes')->nullable(); // hmmn, ->default(0) or ->nullable() ???
+            $table->integer('drinks')->nullable(); // hmmn, ->default(0) or ->nullable() ???
+            $table->integer('snacks')->nullable(); // hmmn, ->default(0) or ->nullable() ???
+            $table->longtext('other')->nullable();
             $table->integer('assigned_route_id');
-            $table->integer('position_on_route');
+            $table->integer('position_on_route')->nullable();
             $table->string('delivery_day');
             $table->timestamps();
         });

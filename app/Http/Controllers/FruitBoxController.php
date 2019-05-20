@@ -22,9 +22,12 @@ class FruitBoxController extends Controller
 
     public function __construct()
     {
-        $week_start = WeekStart::all()->toArray();
-        $this->week_start = $week_start[0]['current'];
-        $this->delivery_days = $week_start[0]['delivery_days'];
+        $week_start = WeekStart::first();
+        
+        if ($week_start !== null) {
+            $this->week_start = $week_start->current;
+            $this->delivery_days = $week_start->delivery_days;
+        }
     }
 
     // new system fruitbox export replacement for the picklist export,
@@ -125,11 +128,11 @@ class FruitBoxController extends Controller
             {
                 // dd($request);
                 $newFruitbox = new Fruitbox();
-                // $newFruitbox->is_active = 'Active'; // Currently hard coded but this is also the default.
+                $newFruitbox->is_active = 'Active'; // Currently hard coded but this is also the default.
                 $newFruitbox->fruit_partner_id = request('company_data.fruit_partner_id');
                 $newFruitbox->name = request('company_data.name');
                 $newFruitbox->company_details_id = request('company_data.company_details_id');
-                $newFruitbox->route_id = request('company_data.route_id');
+                //$newFruitbox->route_id = request('company_data.route_id');
                 $newFruitbox->type = request('company_data.type');
                 $newFruitbox->next_delivery = request('company_data.first_delivery');
                 $newFruitbox->frequency = request('company_data.frequency');
@@ -208,7 +211,7 @@ class FruitBoxController extends Controller
 
                 // We need to create a new entry.
                 $newRoute = new CompanyRoute();
-                // $newRoute->is_active = 'Active'; // Currently hard coded but this is also the default.
+                $newRoute->is_active = 'Active'; // Currently hard coded but this is also the default.
                 // $newRoute->week_start = $currentWeekStart->current;
                 // $newRoute->previous_delivery_week_start = null // This doesn't need to be here as there will never be a previous delivery for a new route (obvs) but I'm noting all fields in new route table here, for now.
                 // $newRoute->next_delivery_week_start = $request['company_data']['first_delivery'];
