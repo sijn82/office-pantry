@@ -13,6 +13,9 @@
               </div>
           </b-col>
           <b-col>
+              <p> {{ snackbox_item.unit_price }} </p>
+          </b-col>
+          <b-col>
               <b-button size="sm" variant="warning" @click="editor()"> Edit </b-button>
               <b-button v-if="edit" size="sm" variant="success" @click="editQuantity(snackbox_item)"> Save </b-button>
               <b-button size="sm" variant="danger" @click="deleteSnackBoxItem(snackbox_item)"> Remove </b-button>
@@ -45,6 +48,7 @@
             deleteSnackBoxItem(snackbox_item) {
                 axios.put('api/snackbox/destroy/' + snackbox_item.id, { 
                     id: snackbox_item.id,
+                    snackbox_id: snackbox_item.snackbox_id,
                 }).then (response => {
                     //location.reload(true); // What am I doing with the store on this one?  Will I need this?
                     console.log(response);

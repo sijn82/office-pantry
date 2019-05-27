@@ -35,7 +35,7 @@
                     </b-col>
                     <b-col>
                         <label> Primary Contact Email </label>
-                        <b-form-input v-model="form.primary_contact_email"></b-form-input>
+                        <b-form-input type="email" v-model="form.primary_contact_email"></b-form-input>
                     </b-col>
                     <b-col>
                         <label> Primary Contact Telephone </label>
@@ -58,7 +58,7 @@
                     </b-col>
                     <b-col>
                         <label> Secondary Contact Email </label>
-                        <b-form-input v-model="form.secondary_contact_email"></b-form-input>
+                        <b-form-input type="email" v-model="form.secondary_contact_email"></b-form-input>
                     </b-col>
                     <b-col>
                         <label> Secondary Contact Telephone </label>
@@ -90,10 +90,17 @@
                         <label> Route Address Line 2 </label>
                         <b-form-input v-model="form.route_address_line_2"></b-form-input>
                     </b-col>
-                    <b-col>
+                    
+                    <!-- Initially this seemed like a good idea, 
+                    then we thought xero wouldn't want this field so was going to scrap it 
+                    but it turns out xero can accept a 3rd address line so commenting it out 
+                    but keeping it here for if/when we want it later -->
+                    
+                    <!-- <b-col>
                         <label> Route Address Line 3 </label>
                         <b-form-input v-model="form.route_address_line_3"></b-form-input>
-                    </b-col>
+                    </b-col> -->
+                    <!-- what the heck is this 'h' doing here? I'll make sure it's a typo before deleting and forgetting all about it. -->
                     <b-col>
                         <label> Route City* </label>
                         <b-form-input v-model="form.route_address_city" required></b-form-input>
@@ -121,10 +128,17 @@
                         <label> Invoice Address Line 2 </label>
                         <b-form-input v-model="form.invoice_address_line_2"></b-form-input>
                     </b-col>
-                    <b-col>
+                    
+                    <!-- Initially this seemed like a good idea, 
+                    then we thought xero wouldn't want this field so was going to scrap it 
+                    but it turns out xero can accept a 3rd address line so commenting it out 
+                    but keeping it here for if/when we want it later -->
+                    
+                    <!-- <b-col>
                         <label> Invoice Address Line 3 </label>
                         <b-form-input v-model="form.invoice_address_line_3"></b-form-input>
-                    </b-col>
+                    </b-col> -->
+                    
                     <b-col>
                         <label> Invoice City </label>
                         <b-form-input v-model="form.invoice_address_city"></b-form-input>
@@ -138,6 +152,13 @@
                         <b-form-input v-model="form.invoice_address_postcode"></b-form-input>
                     </b-col>
                 </b-row>
+                <b-row>
+                    <b-col> 
+                        <label> Invoice Email </label> 
+                        <b-form-input type="email" v-model="form.invoice_email"></b-form-input>
+                    </b-col>
+                </b-row>
+                
                 <b-row class="margin-top-20">
                     <b-col>
                         <label> Branding Theme </label>
@@ -215,6 +236,7 @@ export default {
                 invoice_address_city: '',
                 invoice_address_region: '',
                 invoice_address_postcode: '',
+                invoice_email: '',
                 branding_theme: null,
                 surcharge: null,
                 supplier_id: null,
@@ -261,6 +283,7 @@ export default {
                   invoice_address_city: self.form.invoice_address_city,
                   invoice_address_region: self.form.invoice_address_region,
                   invoice_address_postcode: self.form.invoice_address_postcode,
+                  invoice_email: self.form.invoice_email,
                   branding_theme: self.form.branding_theme,
                   surcharge: self.form.surcharge,
                   supplier_id: self.form.supplier_id,
@@ -303,6 +326,7 @@ export default {
             this.form.invoice_address_city = '',
             this.form.invoice_address_region = '',
             this.form.invoice_address_postcode = '',
+            this.form.invoice_email = '',
             this.form.branding_theme = null,
             this.form.surcharge = null,
             this.form.supplier_id = null,

@@ -6,7 +6,7 @@
                 <b-row>
                     <b-col> <h4> {{ product.name }} </h4> </b-col>
                     <b-col> 
-                        <div v-if="!createWholesaleSnackbox && !createDrinkbox || createDrinkbox && type === 'Unique' || 'monthly-special'">
+                        <div v-if="!createWholesaleSnackbox && !createDrinkbox || createDrinkbox && type === 'Unique' || createDrinkbox && type === 'monthly-special'">
                             <h4 :class="{
                                             'none-in-stock' : matchNumberToColour(product.stock_level),
                                             'some-in-stock' : !matchNumberToColour(product.stock_level),
@@ -32,7 +32,7 @@
                         <b-button size="sm" v-if="createWholesaleSnackbox" variant="outline-success" @click="addProductToSnackbox(product, quantity)"> Add To Wholesale Snackbox </b-button>
                         <b-button size="sm" v-if="createOtherbox" variant="outline-success" @click="addProductToOtherbox(product, quantity)"> Add To Otherbox </b-button>
                         <b-button size="sm" v-if="createDrinkbox" variant="outline-success" @click="addProductToDrinkbox(product, quantity)"> Add To Drinkbox </b-button>
-                        <div v-if="createSnackbox || createOtherbox || createDrinkbox && type === 'Unique' || 'monthly-special'">
+                        <div v-if="createSnackbox || createOtherbox || createDrinkbox && type === 'Unique' || createDrinkbox && type === 'monthly-special'">
                             <b-input-group append="Unit(s)">
                                 <b-form-input size="sm" v-model="quantity" class="quantity-input" type="number"></b-form-input>
                             </b-input-group>

@@ -28,13 +28,14 @@
                 </b-form-select>
             </b-col>
             <b-col>
-                <h4> Stock Level </h4>
+                <h4> Stock Level * </h4>
                 <b-form-select v-model="stock_level_select" :options="stock_level" required>
                     <template slot="first">
                             <option :value="null" disabled> Please select an option </option>
                     </template>
                 </b-form-select>
             </b-col>
+            <b-form-text> * Ignore this filter for now, it's not actually built to do anything yet! </b-form-text>
         </b-row>    
           
         <b-row class="product-list-headers">

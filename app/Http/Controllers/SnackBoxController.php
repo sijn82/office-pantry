@@ -705,6 +705,7 @@ class SnackBoxController extends Controller
         $addProduct->week_in_month = request('snackbox_details.week_in_month');
         $addProduct->previous_delivery_week = request('snackbox_details.previous_delivery_week');
         $addProduct->next_delivery_week = request('snackbox_details.next_delivery_week');
+        $addProduct->product_id = request('product.id');
         $addProduct->code = request('product.code');
         $addProduct->name = request('product.name');
         $addProduct->quantity = request('product.quantity');
@@ -837,7 +838,7 @@ class SnackBoxController extends Controller
                         $new_quantity = ( $old_standard_snack_value / $product_details[0]->unit_price );
                         // dd($new_quantity);
                         $new_standard_snack['quantity'] = ceil($new_quantity);
-
+                        $new_standard_snack['product_id'] = $product_details[0]->product_id;
                         $new_standard_snack['code'] = $product_details[0]->code;
                         $new_standard_snack['name'] = $product_details[0]->name;
                         $new_standard_snack['unit_price'] = $product_details[0]->unit_price;
@@ -859,6 +860,7 @@ class SnackBoxController extends Controller
                     $new_snackbox->previous_delivery_week = $previous_delivery_week_recovered;
                     $new_snackbox->next_delivery_week = $next_delivery_week_recovered;
                     // Product Information
+                    $new_snackbox->product_id = $new_standard_snack['product_id'];
                     $new_snackbox->code = $new_standard_snack['code'];
                     $new_snackbox->name = $new_standard_snack['name'];
                     $new_snackbox->quantity = $new_standard_snack['quantity'];
@@ -883,9 +885,37 @@ class SnackBoxController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroyItem($id, Request $request)
     {
-        //
-        SnackBox::destroy($id);
+        // We need some logic here to decide if the item to be deleted is the last item in the snackbox.
+        // Grab all the entries with the same snackbox_id.
+        $snackbox = SnackBox::where('snackbox_id', request('snackbox_id'))->get();
+        // If we've only retrieved 1 entry then this is the last vestige of box data and should be preserved.
+        if (count($snackbox) === 1) {
+            // To prevent an accidental extinction event, we don't want to destroy the entire entry, just strip out the product details and change the product_id to 0.
+            
+            // Having some update logic in the destroy function is probably breaking best practice rules, but I'm sure i'll be able to refactor it one day!
+            Snackbox::where('id', $id)->update([
+                'product_id' => 0,
+                'code' => null,
+                'name' => null,
+                'quantity' => null,
+                'unit_price' => null,
+            ]);
+            
+        } else {
+            // We still have another entry with the necessary box info, so we can destroy this one.
+            SnackBox::destroy($id);
+        }
+        
+    }
+    
+    public function destroyBox(Request $request)
+    {
+        $snackbox = SnackBox::where('snackbox_id', request('snackbox_id'))->get();
+        // dd($snackbox);
+        foreach ($snackbox as $snackbox_item) {
+            SnackBox::destroy($snackbox_item->id);
+        }
     }
 }

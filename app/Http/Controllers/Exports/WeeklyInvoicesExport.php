@@ -146,6 +146,9 @@ WithTitle
             //---------- End of Snackbox Functions ----------//
 
 
+            // The counter starts every run of invoices at the invoice date + 001.
+            $counter = 1; // I need it out of the foreach ($companies as $company) loop to prevent the counter being reset to 1 each time.
+
 
         // Now each $company should just have the orders which need invoicing attached.
         foreach ($companies as $company) {
@@ -2000,6 +2003,40 @@ WithTitle
 
              // Could put this elsewhere but it's here for now to make it easy to find, while I sort it out.
              // $order_total = 0;
+             
+             
+             //---------- Invoice number counter ----------//
+             
+                // Need to implement the $counter++ for invoice number here so that each company increases the $counter by 1 and not the invoice line.
+                // However I've also had to set it at the VERY BEGINNING of this function so that it isn't reset to one with each new company.
+             
+             
+                //----- Time To Loop Through Invoices Inserting Remaining Fields -----//
+        
+                // Now we (should) have all the invoices we need to process this week
+                // All that remains is to add 'invoice_number', 'invoice_date' and 'due_date'
+                
+                // - Invoice Number is sequential (EDIT: BUT ONLY INCREASES ON A PER COMPANY BASIS), and effectively begins at yy-mm-dd-001 each time invoicing is run.
+                
+        
+                // Let's set the dates
+        
+                // Let's grab today's (relative to when invoice function is run) date without any formatting, to maximise its reuse.
+                $date = CarbonImmutable::now('Europe/London');
+                // The invoice date is the week start (monday) of the invoicing week.
+                $week_start = $date->startOfWeek()->format('d/m/Y');
+                // Invoice date is just the day the invoice function is run.
+                $invoice_date = $date->format('ymd');
+                // Date Xero will take the payments.
+                $due_date = $date->addDay(0)->format('d/m/Y'); 
+                
+                // ^ Day 0 is actually the preferred date to check whether payments are due to be made.  
+                // | I'm going to replace this with a variable to make it amendable to suit the situation though.
+                
+                // I could and maybe should move all these checks to the top of the function as we don't need to set this each time we process (invoice) a different company.
+             
+             
+              //---------- Invoice number counter ----------//
 
              foreach ($sales_invoices as $sales_invoice) {
 
@@ -2011,6 +2048,10 @@ WithTitle
 
                  $sales_invoice->invoice_name = $company->invoice_name;
                  $sales_invoice->email_address = $company->primary_email; // <-- THIS NEEDS CHANGING FOR THE INVOICE EMAIL ADDRESS ONCE I'VE ADDED IT TO COMPANY DETAILS!
+                 
+                 $sales_invoice->invoice_number = $invoice_date . str_pad($counter, 3, 0, STR_PAD_LEFT);
+                 $sales_invoice->invoice_date = $week_start;
+                 $sales_invoice->due_date = $due_date;
 
                  // Let's try to get an invoice address first, if this is null, then we'll just use the route address instead.
                  // If we don't have a route address then we probably shouldn't be invoicing them anyway!
@@ -2036,9 +2077,10 @@ WithTitle
                  $sales_invoice->branding_theme = $company->branding_theme;
 
                  $completed_sales_invoices[] = $sales_invoice;
-             }
-             // NEED TO FIX THE LAST COMPANY INVOICE OVERWRITING ALL THE OTHERS FOR THE INVOICING INFO.
+             } // end of foreach ($sales_invoices as $sales_invoice)
 
+             $counter++;
+             
              unset($sales_invoices);
 
              // dd($completed_sales_invoices);
@@ -2056,42 +2098,18 @@ WithTitle
 
         // dd($completed_sales_invoices);
 
-        //----- Time To Loop Through Invoices Inserting Remaining Fields -----//
-
-        // Now we (should) have all the invoices we need to process this week
-        // All that remains is to add 'invoice_number', 'invoice_date' and 'due_date'
-        // - Invoice Number is sequential, and effectively begins at yy-mm-dd-001 each time invoicing is run.
-        // Which is why I figured I should get all the invoices made, to then loop through at the end - aka here.
-
-        // Let's set the dates
-
-        // Let's grab today's (relative to when invoice function is run) date without any formatting, to maximise its reuse.
-        $date = CarbonImmutable::now('Europe/London');
-        // The invoice date is the week start (monday) of the invoicing week.
-        $week_start = $date->startOfWeek()->format('d/m/Y');
-        // Invoice date is just the day the invoice function is run.
-        $invoice_date = $date->format('ymd');
-        // Date Xero will take the payments.
-        $due_date = $date->addDay(0)->format('d/m/Y');
-        // The counter starts every run of invoices at the invoice date + 001.
-        $counter = 0;
-
-        // The due date is typically the next day after uploading the invoice export to xero.
-        // I will however be adding the ability to change this to a longer time period.  Either through a drop down of days or a numerical input.
-        // For now though, I'm going to hardcode it to the day after the invoice date.
-
         // dump($date->format('d/m/Y'));
         // dump($invoice_date);
         // dump($week_start);
         // dd($due_date);
 
-        foreach ($completed_sales_invoices as $sales_invoice) {
-            
-                $counter++;
-                $sales_invoice->invoice_number = $invoice_date . str_pad($counter, 3, 0, STR_PAD_LEFT);
-                $sales_invoice->invoice_date = $week_start;
-                $sales_invoice->due_date = $due_date;
-        }
+        // foreach ($completed_sales_invoices as $sales_invoice) {
+        // 
+        //         $counter++;
+        //         $sales_invoice->invoice_number = $invoice_date . str_pad($counter, 3, 0, STR_PAD_LEFT);
+        //         $sales_invoice->invoice_date = $week_start;
+        //         $sales_invoice->due_date = $due_date;
+        // }
         
         // dd($completed_sales_invoices);
         return view('exports.invoice-results', [

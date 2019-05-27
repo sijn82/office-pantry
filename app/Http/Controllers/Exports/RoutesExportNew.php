@@ -43,9 +43,22 @@ class RoutesExportNew implements WithMultipleSheets
         {
             $this->week_starting = $week_starting;
 
-            $week_start = WeekStart::all()->toArray();
-            $this->week_start = $week_start[0]['current'];
-            $this->delivery_days = $week_start[0]['delivery_days'];
+            $week_start = WeekStart::first();
+            
+            if ($week_start !== null) {
+                $this->week_start = $week_start->current;
+                $this->delivery_days = $week_start->delivery_days;
+                // dd($this->delivery_days);
+            }
+            if (($this->week_start && $this->delivery_days) === null) {
+                abort(400, 'Week Start and Delivery Days not set!');
+            }
+            elseif ($this->week_start === null) {
+                abort(400, 'Week Start not set!');
+            }
+            elseif ($this->delivery_days === null) {
+                abort(400, 'Delivery days not set!');
+            }
         }
 
     /**
@@ -108,6 +121,7 @@ class RoutesExportNew implements WithMultipleSheets
                     foreach ($orderedRoutes as $assigned_route) {
                         $sheets[] = new RoutesCollectionNew($assigned_route, $this->week_starting);
                     }
+                    return $sheets;
                     break;
                 case 'wed-thur-fri':
                     $orderedRoutesAll = AssignedRoute::whereIn('delivery_day', ['Wednesday', 'Thursday', 'Friday'])->orderBy('tab_order', 'desc')->get();

@@ -17,6 +17,7 @@
             <b-button variant="primary" @click="showDetails()"> Details </b-button>
             <b-button variant="warning" @click="enableEdit()"> Edit </b-button>
             <b-button v-if="editing" class="btn btn-success" @click="updateDetails(snackbox[0])"> Save </b-button>
+            <b-button variant="danger" @click="deleteSnackBox(snackbox[0])"> Delete </b-button>
         </div>
         
         <div class="snackbox-details" v-if="details">
@@ -148,7 +149,7 @@
                         <h4> Quantity </h4>
                     </b-col>
                     <b-col>
-                        
+                        <!-- A place holder column to allow room for the edit/remove buttons on each item -->
                     </b-col>
                 </b-row>
                 <b-row>
@@ -180,6 +181,10 @@
                     <p><b> Quantity In Box </b></p>
                 </b-col>
                 <b-col>
+                    <p><b> Unit Price </b></p>
+                </b-col>
+                <b-col>
+                    <!-- A place holder column to allow room for the edit/remove buttons on each item -->
                 </b-col>
             </b-row>
             
@@ -194,6 +199,8 @@
             This will need refreshing to update, so holding them in the store might be a good option -->
             
             <snackbox-item id="snackbox-products" v-for="snackbox_item in snackbox" :snackbox_item="snackbox_item" :key="snackbox_item.id"></snackbox-item>
+            
+            <!-- <p> {{ snackbox_total }} </p>  This needs some work to generate an accurate and useful total, it's on my todo list but not a priority right now. -->
         </div>
     </div>
 </template>
@@ -218,7 +225,17 @@ export default {
             frequency_options: ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'],
             week_in_month_options: ['First', 'Second', 'Third', 'Forth', 'Last'],
         }
-    }, 
+    },
+    computed: {
+        // snackbox_total(snackbox) {
+        //     let $snackbox_total = 0
+        //     for (unit_price in this.snackbox) {
+        //         $snackbox_total += snackbox_item[unit_price]
+        //     }
+        //     return $snackbox_total;
+        // 
+        // }
+    },
     methods: {
         
         addProduct() {
@@ -235,6 +252,7 @@ export default {
                     name: this.$store.state.selectedProduct.name,
                     code: this.$store.state.selectedProduct.code,
                     quantity: this.quantity,
+                    unit_price: this.$store.state.selectedProduct.unit_price,
                 },
                 snackbox_details: snackbox, 
                     
@@ -265,7 +283,15 @@ export default {
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?
                 console.log(response);
             }).catch(error => console.log(error));
-        }
+        },
+        deleteSnackBox(snackbox) {
+            axios.put('api/snackbox/destroy-box/' + snackbox.snackbox_id, { 
+                snackbox_id: snackbox.snackbox_id,
+            }).then (response => {
+                //location.reload(true); // What am I doing with the store on this one?  Will I need this?
+                console.log(response);
+            }).catch(error => console.log(error));
+        },
     },
     mounted() {
          this.$store.commit('getTypes');

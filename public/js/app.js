@@ -67271,6 +67271,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
             name: '',
             code: '',
             unit_price: '',
+            case_size: '',
             stock_level: '',
             shortest_stock_date: ''
         }, // This one would also suffer if multiple users are selecting products for different orders etc...
@@ -67433,6 +67434,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
             state.selectedProduct.name = product.name;
             state.selectedProduct.code = product.code;
             state.selectedProduct.unit_price = product.unit_price;
+            state.selectedProduct.case_size = product.case_price;
             state.selectedProduct.shortest_stock_date = product.shortest_stock_date;
             state.selectedProduct.stock_level = product.stock_level;
         },
@@ -79218,7 +79220,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     this.form.green_apples = 0;
                     this.form.satsumas = 0;
                     this.form.pears = 0;
-                    this.form.bananas = 10;
+                    this.form.bananas = 0;
                     this.form.nectarines = 0;
                     this.form.grapes = 0;
                     this.form.seasonal_berries = 0;
@@ -88574,6 +88576,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -88594,7 +88599,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         deleteSnackBoxItem: function deleteSnackBoxItem(snackbox_item) {
             axios.put('api/snackbox/destroy/' + snackbox_item.id, {
-                id: snackbox_item.id
+                id: snackbox_item.id,
+                snackbox_id: snackbox_item.snackbox_id
             }).then(function (response) {
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?
                 console.log(response);
@@ -88659,6 +88665,10 @@ var render = function() {
                     _vm._v(" " + _vm._s(_vm.snackbox_item.quantity) + " ")
                   ])
                 ])
+          ]),
+          _vm._v(" "),
+          _c("b-col", [
+            _c("p", [_vm._v(" " + _vm._s(_vm.snackbox_item.unit_price) + " ")])
           ]),
           _vm._v(" "),
           _c(
@@ -89027,6 +89037,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['snackbox'],
@@ -89043,6 +89060,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
 
+    computed: {
+        // snackbox_total(snackbox) {
+        //     let $snackbox_total = 0
+        //     for (unit_price in this.snackbox) {
+        //         $snackbox_total += snackbox_item[unit_price]
+        //     }
+        //     return $snackbox_total;
+        // 
+        // }
+    },
     methods: {
         addProduct: function addProduct() {
             if (this.add_product === false) {
@@ -89057,7 +89084,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     id: this.$store.state.selectedProduct.id,
                     name: this.$store.state.selectedProduct.name,
                     code: this.$store.state.selectedProduct.code,
-                    quantity: this.quantity
+                    quantity: this.quantity,
+                    unit_price: this.$store.state.selectedProduct.unit_price
                 },
                 snackbox_details: snackbox
 
@@ -89086,6 +89114,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         updateDetails: function updateDetails(snackbox) {
             axios.post('api/snackbox/details', {
                 snackbox_details: snackbox
+            }).then(function (response) {
+                //location.reload(true); // What am I doing with the store on this one?  Will I need this?
+                console.log(response);
+            }).catch(function (error) {
+                return console.log(error);
+            });
+        },
+        deleteSnackBox: function deleteSnackBox(snackbox) {
+            axios.put('api/snackbox/destroy-box/' + snackbox.snackbox_id, {
+                snackbox_id: snackbox.snackbox_id
             }).then(function (response) {
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?
                 console.log(response);
@@ -89163,7 +89201,20 @@ var render = function() {
               },
               [_vm._v(" Save ")]
             )
-          : _vm._e()
+          : _vm._e(),
+        _vm._v(" "),
+        _c(
+          "b-button",
+          {
+            attrs: { variant: "danger" },
+            on: {
+              click: function($event) {
+                _vm.deleteSnackBox(_vm.snackbox[0])
+              }
+            }
+          },
+          [_vm._v(" Delete ")]
+        )
       ],
       1
     ),
@@ -89659,6 +89710,8 @@ var render = function() {
                 _c("b-col", [
                   _c("p", [_c("b", [_vm._v(" Quantity In Box ")])])
                 ]),
+                _vm._v(" "),
+                _c("b-col", [_c("p", [_c("b", [_vm._v(" Unit Price ")])])]),
                 _vm._v(" "),
                 _c("b-col")
               ],
@@ -90216,6 +90269,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['addProductToSnackbox', 'product', 'quantity'],
@@ -90247,15 +90302,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         total: function total() {
             // Even though this value is immediately replaced and not used, it still needs to be declared.
             var total_cost = 0;
-            // This function checks each entry in the current snackbox list and creates a running total of the unit price multiplied by the quantity.
-            var sum = function sum(snackbox, cost, quantity) {
-                return snackbox.reduce(function (a, b) {
 
+            // This function checks each entry in the current snackbox list and creates a running total of the unit price multiplied by the quantity.
+            var sum = function sum(snackbox, createWholesaleSnackbox, cost, quantity, case_size) {
+
+                return snackbox.reduce(function (a, b) {
+                    // If we're here then the box we're building is (hopefully!) a wholesale snackbox order so we want to display the cost of a case, rather than the cost of single unit.
+                    if (createWholesaleSnackbox) {
+                        // The return is very similar, it just needs to include multiplying the unit price by the case size, before multiplying again by quantity ordered.
+                        return parseFloat(a) + parseFloat(b[cost]) * parseFloat(b[case_size]) * parseFloat(b[quantity]);
+                    }
+                    // Otherwise it's just an ordinary snackbox so case size is irrelevant.
                     return parseFloat(a) + parseFloat(b[cost]) * parseFloat(b[quantity]);
                 }, 0);
             };
-            // Now we use the function by passing in the snackbox array, and the two properties we need to multiply - saving it as the current total cost.
-            total_cost = sum(this.$store.state.snackbox, 'unit_price', 'quantity');
+            // Now we use the function by passing in the snackbox array, and the two (or 3 for wholesale) properties we need to multiply - saving it as the current total cost.
+            total_cost = sum(this.$store.state.snackbox, this.createWholesaleSnackbox, 'unit_price', 'quantity', 'case_size');
             console.log(total_cost);
 
             // console.log(total_cost);
@@ -90785,7 +90847,17 @@ var render = function() {
                     ]),
                     _vm._v(" "),
                     _c("b-col", [
-                      _c("p", [_vm._v(" " + _vm._s(snack.unit_price) + " ")])
+                      _vm.createWholesaleSnackbox
+                        ? _c("p", [
+                            _vm._v(
+                              " " +
+                                _vm._s(snack.unit_price * snack.case_size) +
+                                " "
+                            )
+                          ])
+                        : _c("p", [
+                            _vm._v(" " + _vm._s(snack.unit_price) + " ")
+                          ])
                     ]),
                     _vm._v(" "),
                     _c(
@@ -92569,6 +92641,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -92715,7 +92788,7 @@ var render = function() {
                 _c(
                   "b-col",
                   [
-                    _c("label", [_vm._v(" Type ")]),
+                    _c("label", [_vm._v(" Type* ")]),
                     _vm._v(" "),
                     _c("b-form-select", {
                       attrs: { size: "sm", options: _vm.type_options },
@@ -92907,7 +92980,13 @@ var render = function() {
                       ],
                       1
                     )
-                  : _vm._e()
+                  : _vm._e(),
+                _vm._v(" "),
+                _c("b-form-text", [
+                  _vm._v(
+                    " * Use the 'unique' type to process coffee etc, as these will be pulled into the snacks column total when processing the routes export. "
+                  )
+                ])
               ],
               1
             )
@@ -93176,6 +93255,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['otherbox_item'],
@@ -93259,6 +93341,10 @@ var render = function() {
                     _vm._v(" " + _vm._s(_vm.otherbox_item.quantity) + " ")
                   ])
                 ])
+          ]),
+          _vm._v(" "),
+          _c("b-col", [
+            _c("p", [_vm._v(" " + _vm._s(_vm.otherbox_item.unit_price) + " ")])
           ]),
           _vm._v(" "),
           _c(
@@ -93421,6 +93507,9 @@ exports.push([module.i, "\n.margin-top-10[data-v-47eb859e] {\n  margin-top: 10px
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
 //
 //
 //
@@ -93841,35 +93930,6 @@ var render = function() {
                           )
                         ])
                       ])
-                ]),
-                _vm._v(" "),
-                _c("b-col", [
-                  _c("label", [_c("b", [_vm._v(" No. Of Boxes ")])]),
-                  _vm._v(" "),
-                  _vm.editing
-                    ? _c(
-                        "div",
-                        [
-                          _c("b-form-input", {
-                            attrs: { type: "number" },
-                            model: {
-                              value: _vm.otherbox[0].no_of_boxes,
-                              callback: function($$v) {
-                                _vm.$set(_vm.otherbox[0], "no_of_boxes", $$v)
-                              },
-                              expression: "otherbox[0].no_of_boxes"
-                            }
-                          })
-                        ],
-                        1
-                      )
-                    : _c("div", [
-                        _c("p", [
-                          _vm._v(
-                            " " + _vm._s(_vm.otherbox[0].no_of_boxes) + " "
-                          )
-                        ])
-                      ])
                 ])
               ],
               1
@@ -94187,6 +94247,8 @@ var render = function() {
                 _c("b-col", [
                   _c("p", [_c("b", [_vm._v(" Quantity In Box ")])])
                 ]),
+                _vm._v(" "),
+                _c("b-col", [_c("p", [_c("b", [_vm._v(" Unit Price ")])])]),
                 _vm._v(" "),
                 _c("b-col")
               ],
@@ -94724,7 +94786,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             frequency_options: ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'],
             week_in_month: null,
             week_in_month_options: ['First', 'Second', 'Third', 'Forth', 'Last'],
-            no_of_boxes: 0,
+            // no_of_boxes: 0,
             next_delivery_week: null,
             selected_company: 'none selected'
         };
@@ -94757,7 +94819,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             axios.post('/api/otherboxes/save', {
                 details: {
                     delivered_by_id: this.delivered_by,
-                    no_of_boxes: this.no_of_boxes,
+                    // no_of_boxes: this.no_of_boxes,
                     type: this.type,
                     company_details_id: this.selected_company,
                     delivery_day: this.delivery_day,
@@ -94854,25 +94916,6 @@ var render = function() {
               "b-row",
               { staticClass: "order-options" },
               [
-                _c(
-                  "b-col",
-                  [
-                    _c("label", [_vm._v(" No. of Boxes ")]),
-                    _vm._v(" "),
-                    _c("b-form-input", {
-                      attrs: { type: "number", size: "sm" },
-                      model: {
-                        value: _vm.no_of_boxes,
-                        callback: function($$v) {
-                          _vm.no_of_boxes = $$v
-                        },
-                        expression: "no_of_boxes"
-                      }
-                    })
-                  ],
-                  1
-                ),
-                _vm._v(" "),
                 _c(
                   "b-col",
                   [
@@ -95650,7 +95693,7 @@ var render = function() {
               _c("b-col", [
                 (!_vm.createWholesaleSnackbox && !_vm.createDrinkbox) ||
                 (_vm.createDrinkbox && _vm.type === "Unique") ||
-                "monthly-special"
+                (_vm.createDrinkbox && _vm.type === "monthly-special")
                   ? _c("div", [
                       _c(
                         "h4",
@@ -95865,7 +95908,7 @@ var render = function() {
                   _vm.createSnackbox ||
                   _vm.createOtherbox ||
                   (_vm.createDrinkbox && _vm.type === "Unique") ||
-                  "monthly-special"
+                  (_vm.createDrinkbox && _vm.type === "monthly-special")
                     ? _c(
                         "div",
                         [
@@ -96494,6 +96537,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -96688,7 +96732,7 @@ var render = function() {
           _c(
             "b-col",
             [
-              _c("h4", [_vm._v(" Stock Level ")]),
+              _c("h4", [_vm._v(" Stock Level * ")]),
               _vm._v(" "),
               _c(
                 "b-form-select",
@@ -96715,7 +96759,13 @@ var render = function() {
               )
             ],
             1
-          )
+          ),
+          _vm._v(" "),
+          _c("b-form-text", [
+            _vm._v(
+              " * Ignore this filter for now, it's not actually built to do anything yet! "
+            )
+          ])
         ],
         1
       ),
@@ -100383,6 +100433,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -100412,6 +100483,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 invoice_address_city: '',
                 invoice_address_region: '',
                 invoice_address_postcode: '',
+                invoice_email: '',
                 branding_theme: null,
                 surcharge: null,
                 supplier_id: null,
@@ -100454,6 +100526,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     invoice_address_city: self.form.invoice_address_city,
                     invoice_address_region: self.form.invoice_address_region,
                     invoice_address_postcode: self.form.invoice_address_postcode,
+                    invoice_email: self.form.invoice_email,
                     branding_theme: self.form.branding_theme,
                     surcharge: self.form.surcharge,
                     supplier_id: self.form.supplier_id,
@@ -100480,7 +100553,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.form.primary_contact_name = '';
             this.form.primary_contact_job_title = '';
             this.form.primary_contact_email = '';
-            this.form.primary_contact_job_title = '', this.form.primary_contact_email = '', this.form.primary_contact_telephone = '', this.form.secondary_contact_name = '', this.form.secondary_contact_job_title = '', this.form.secondary_contact_email = '', this.form.secondary_contact_telephone = '', this.form.delivery_information = '', this.form.route_address_line_1 = '', this.form.route_address_line_2 = '', this.form.route_address_line_3 = '', this.form.route_address_city = '', this.form.route_address_region = '', this.form.route_address_postcode = '', this.form.invoice_address_line_1 = '', this.form.invoice_address_line_2 = '', this.form.invoice_address_line_3 = '', this.form.invoice_address_city = '', this.form.invoice_address_region = '', this.form.invoice_address_postcode = '', this.form.branding_theme = null, this.form.surcharge = null, this.form.supplier_id = null, this.form.model = 'Free',
+            this.form.primary_contact_job_title = '', this.form.primary_contact_email = '', this.form.primary_contact_telephone = '', this.form.secondary_contact_name = '', this.form.secondary_contact_job_title = '', this.form.secondary_contact_email = '', this.form.secondary_contact_telephone = '', this.form.delivery_information = '', this.form.route_address_line_1 = '', this.form.route_address_line_2 = '', this.form.route_address_line_3 = '', this.form.route_address_city = '', this.form.route_address_region = '', this.form.route_address_postcode = '', this.form.invoice_address_line_1 = '', this.form.invoice_address_line_2 = '', this.form.invoice_address_line_3 = '', this.form.invoice_address_city = '', this.form.invoice_address_region = '', this.form.invoice_address_postcode = '', this.form.invoice_email = '', this.form.branding_theme = null, this.form.surcharge = null, this.form.supplier_id = null, this.form.model = 'Free',
             /* Trick to reset/clear native browser form validation state */
             this.show = false;
             this.$nextTick(function () {
@@ -100626,6 +100699,7 @@ var render = function() {
                         _c("label", [_vm._v(" Primary Contact Email ")]),
                         _vm._v(" "),
                         _c("b-form-input", {
+                          attrs: { type: "email" },
                           model: {
                             value: _vm.form.primary_contact_email,
                             callback: function($$v) {
@@ -100719,6 +100793,7 @@ var render = function() {
                         _c("label", [_vm._v(" Secondary Contact Email ")]),
                         _vm._v(" "),
                         _c("b-form-input", {
+                          attrs: { type: "email" },
                           model: {
                             value: _vm.form.secondary_contact_email,
                             callback: function($$v) {
@@ -100838,24 +100913,6 @@ var render = function() {
                     _c(
                       "b-col",
                       [
-                        _c("label", [_vm._v(" Route Address Line 3 ")]),
-                        _vm._v(" "),
-                        _c("b-form-input", {
-                          model: {
-                            value: _vm.form.route_address_line_3,
-                            callback: function($$v) {
-                              _vm.$set(_vm.form, "route_address_line_3", $$v)
-                            },
-                            expression: "form.route_address_line_3"
-                          }
-                        })
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "b-col",
-                      [
                         _c("label", [_vm._v(" Route City* ")]),
                         _vm._v(" "),
                         _c("b-form-input", {
@@ -100961,24 +101018,6 @@ var render = function() {
                     _c(
                       "b-col",
                       [
-                        _c("label", [_vm._v(" Invoice Address Line 3 ")]),
-                        _vm._v(" "),
-                        _c("b-form-input", {
-                          model: {
-                            value: _vm.form.invoice_address_line_3,
-                            callback: function($$v) {
-                              _vm.$set(_vm.form, "invoice_address_line_3", $$v)
-                            },
-                            expression: "form.invoice_address_line_3"
-                          }
-                        })
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "b-col",
-                      [
                         _c("label", [_vm._v(" Invoice City ")]),
                         _vm._v(" "),
                         _c("b-form-input", {
@@ -101028,6 +101067,31 @@ var render = function() {
                               )
                             },
                             expression: "form.invoice_address_postcode"
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "b-row",
+                  [
+                    _c(
+                      "b-col",
+                      [
+                        _c("label", [_vm._v(" Invoice Email ")]),
+                        _vm._v(" "),
+                        _c("b-form-input", {
+                          attrs: { type: "email" },
+                          model: {
+                            value: _vm.form.invoice_email,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "invoice_email", $$v)
+                            },
+                            expression: "form.invoice_email"
                           }
                         })
                       ],
@@ -103242,6 +103306,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: [],
@@ -103307,6 +103372,10 @@ var render = function() {
     "div",
     { staticClass: "col-sm-12" },
     [
+      _c("p", [
+        _vm._v(" This is also currently a case sensitive search, sorry. ")
+      ]),
+      _vm._v(" "),
       _c(
         "b-input-group",
         {

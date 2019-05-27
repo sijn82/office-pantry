@@ -32,14 +32,14 @@ class CreateCompanyDetailsTable extends Migration
             // Route Address
             $table->string('route_address_line_1');
             $table->string('route_address_line_2')->nullable();
-            $table->string('route_address_line_3')->nullable();
+            $table->string('route_address_line_3')->nullable(); 
             $table->string('route_city');
             $table->string('route_region')->nullable();
             $table->string('route_postcode');
             // Invoice Address
             $table->string('invoice_address_line_1')->nullable();
             $table->string('invoice_address_line_2')->nullable();
-            $table->string('invoice_address_line_3')->nullable();
+            $table->string('invoice_address_line_3')->nullable(); 
             $table->string('invoice_city')->nullable();
             $table->string('invoice_region')->nullable();
             $table->string('invoice_postcode')->nullable();

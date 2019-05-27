@@ -93,7 +93,9 @@
                          <p> {{ snack.quantity }} </p>
                      </b-col>
                      <b-col>
-                         <p> {{ snack.unit_price }} </p>
+                         <p v-if="createWholesaleSnackbox"> {{ (snack.unit_price * snack.case_size) }} </p>
+                         <p v-else> {{ snack.unit_price }} </p>
+                         <!-- <p> {{ snack.unit_price }} </p> -->
                      </b-col>
                      <b-col>
                          <b-button size="sm" variant="danger" @click="removeProduct(snack.id)"> Remove </b-button>
@@ -180,15 +182,22 @@ export default {
         total() {
             // Even though this value is immediately replaced and not used, it still needs to be declared.
             let total_cost = 0;
+            
             // This function checks each entry in the current snackbox list and creates a running total of the unit price multiplied by the quantity.
-            let sum = function(snackbox, cost, quantity){
-                return snackbox.reduce( function(a, b){
-
-                    return parseFloat(a) + (parseFloat(b[cost]) * parseFloat(b[quantity]));
+            let sum = function(snackbox, createWholesaleSnackbox, cost, quantity, case_size){
+                
+                return snackbox.reduce( function(a, b) {
+                    // If we're here then the box we're building is (hopefully!) a wholesale snackbox order so we want to display the cost of a case, rather than the cost of single unit.
+                    if (createWholesaleSnackbox) {
+                        // The return is very similar, it just needs to include multiplying the unit price by the case size, before multiplying again by quantity ordered.
+                        return parseFloat(a) + ( ( parseFloat(b[cost]) * parseFloat(b[case_size]) ) * parseFloat(b[quantity]) ); 
+                    }
+                    // Otherwise it's just an ordinary snackbox so case size is irrelevant.
+                    return parseFloat(a) + ( parseFloat(b[cost]) * parseFloat(b[quantity]) );
                 }, 0);
             };
-            // Now we use the function by passing in the snackbox array, and the two properties we need to multiply - saving it as the current total cost.
-            total_cost = sum(this.$store.state.snackbox, 'unit_price', 'quantity');
+            // Now we use the function by passing in the snackbox array, and the two (or 3 for wholesale) properties we need to multiply - saving it as the current total cost.
+            total_cost = sum(this.$store.state.snackbox, this.createWholesaleSnackbox, 'unit_price', 'quantity', 'case_size');
             console.log(total_cost);
 
             // console.log(total_cost);

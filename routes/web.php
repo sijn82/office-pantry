@@ -155,6 +155,7 @@ Route::group(['middleware' => 'web'], function () {
 
 Auth::routes();
 
+
 // I think was auto generated?  Or I'm going in a different direction, either way I can probably remove it at a later date.
 Route::get('/home', 'HomeController@showCompany')->name('home')->middleware('auth');
 
@@ -163,8 +164,8 @@ Route::view('/', 'welcome');
 
 Route::get('/login/office', 'Auth\LoginController@showOfficeLoginForm')->name('login/office');
 Route::get('/login/warehouse', 'Auth\LoginController@showWarehouseLoginForm')->name('login/warehouse');
-Route::get('/register/office', 'Auth\RegisterController@showOfficeRegisterForm');
-Route::get('/register/warehouse', 'Auth\RegisterController@showWarehouseRegisterForm')->middleware('auth:office');
+Route::get('/register/office', 'Auth\RegisterController@showOfficeRegisterForm')->name('register/office');
+Route::get('/register/warehouse', 'Auth\RegisterController@showWarehouseRegisterForm')->middleware('auth:office')->name('register/warehouse');
 
 Route::post('/login/office', 'Auth\LoginController@officeLogin');
 Route::post('/login/warehouse', 'Auth\LoginController@warehouseLogin');

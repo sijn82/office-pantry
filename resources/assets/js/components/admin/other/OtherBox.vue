@@ -39,7 +39,7 @@
                         <p> {{ otherbox[0].fruit_partner_name }} </p>
                     </div>
                 </b-col>
-                <b-col>
+                <!-- <b-col>
                     <label><b> No. Of Boxes </b></label>
                     <div v-if="editing">
                         <b-form-input v-model="otherbox[0].no_of_boxes" type="number"></b-form-input>
@@ -47,7 +47,7 @@
                     <div v-else>
                         <p> {{ otherbox[0].no_of_boxes }} </p>
                     </div>
-                </b-col>
+                </b-col> -->
             </b-row>
             
             <b-row :class="otherbox[0].is_active">
@@ -152,6 +152,9 @@
                 </b-col>
                 <b-col>
                     <p><b> Quantity In Box </b></p>
+                </b-col>
+                <b-col>
+                    <p><b> Unit Price </b></p>
                 </b-col>
                 <b-col>
                 </b-col>

@@ -19,6 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 //Invoicing
 Route::get('weekly-invoicing', 'InvoicingController@weekly_invoicing_export');
+Route::get('confirm-weekly-invoicing', 'InvoicingController@confirm_weekly_invoicing');
 
 // Office Pantry Products
 Route::put('products/office-pantry-products/update/{id}', 'OfficePantryProductsController@update');
@@ -137,7 +138,8 @@ Route::post('snackboxes/standard/update', 'SnackBoxController@massUpdateType');
 Route::post('snackbox/update', 'SnackBoxController@update');
 Route::post('snackbox/details', 'SnackBoxController@updateDetails');
 Route::post('snackbox/add-product', 'SnackBoxController@addProductToSnackbox');
-Route::put('snackbox/destroy/{id}', 'SnackBoxController@destroy');
+Route::put('snackbox/destroy/{id}', 'SnackBoxController@destroyItem');
+Route::put('snackbox/destroy-box/{id}', 'SnackBoxController@destroyBox');
 // Update company specific drinkbox
 Route::post('drinkboxes/save', 'DrinkBoxController@store');
 Route::post('drinkbox/update', 'DrinkBoxController@update');

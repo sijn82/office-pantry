@@ -13,6 +13,9 @@
                 </div>
             </b-col>
             <b-col>
+                <p> {{ otherbox_item.unit_price }} </p>
+            </b-col>
+            <b-col>
                 <b-button size="sm" variant="warning" @click="editor()"> Edit </b-button>
                 <b-button v-if="edit" size="sm" variant="success" @click="editQuantity(otherbox_item)"> Save </b-button>
                 <b-button size="sm" variant="danger" @click="deleteOtherBoxItem(otherbox_item)"> Remove </b-button>

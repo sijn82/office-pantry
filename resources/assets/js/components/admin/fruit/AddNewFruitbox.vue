@@ -290,7 +290,7 @@ export default {
                         this.form.green_apples = 0;
                         this.form.satsumas = 0;
                         this.form.pears = 0;
-                        this.form.bananas = 10;
+                        this.form.bananas = 0;
                         this.form.nectarines = 0;
                         this.form.grapes = 0;
                         this.form.seasonal_berries = 0;

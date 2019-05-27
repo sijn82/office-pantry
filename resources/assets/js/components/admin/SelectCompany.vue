@@ -1,5 +1,6 @@
 <template>
     <div class="col-sm-12">
+        <p> This is also currently a case sensitive search, sorry. </p>
         <b-input-group  id="company-searchbar-select" class="col-sm-12" size="sm">
                         <!-- append=" Company Search" - stripped this from the company searchbar to increase input entry space -->
 

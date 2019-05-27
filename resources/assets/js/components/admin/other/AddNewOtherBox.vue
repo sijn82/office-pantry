@@ -21,10 +21,10 @@
                     </b-col>
                 </b-row>
                 <b-row class="order-options">
-                    <b-col>
+                    <!-- <b-col>
                         <label> No. of Boxes </label>
                         <b-form-input type="number" v-model="no_of_boxes" size="sm"></b-form-input>
-                    </b-col>
+                    </b-col> -->
                     <b-col>
                         <label> Type </label>
                         <b-form-select v-model="type" :options="type_options" size="sm"></b-form-select>
@@ -146,7 +146,7 @@
                 frequency_options: ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'],
                 week_in_month: null,
                 week_in_month_options: ['First', 'Second', 'Third', 'Forth', 'Last'],
-                no_of_boxes: 0,
+                // no_of_boxes: 0,
                 next_delivery_week: null,
                 selected_company: 'none selected',
             }
@@ -177,7 +177,7 @@
                 axios.post('/api/otherboxes/save', {
                     details: { 
                         delivered_by_id: this.delivered_by, 
-                        no_of_boxes: this.no_of_boxes,
+                        // no_of_boxes: this.no_of_boxes,
                         type: this.type,
                         company_details_id: this.selected_company,
                         delivery_day: this.delivery_day, 

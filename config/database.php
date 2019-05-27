@@ -20,7 +20,8 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'pgsql_staging'),
+    //'default' => env('DB_CONNECTION', 'pgsql_staging'),
+    'default' => env('DB_CONNECTION', 'pgsql_local'),
     // 'default' => 'pgsql_production',
 
     /*
@@ -63,20 +64,7 @@ return [
             'strict' => true,
             'engine' => null,
         ],
-
-        'pgsql' => [
-            'driver' => 'pgsql',
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
-            'charset' => 'utf8',
-            'prefix' => '',
-            'schema' => 'public',
-            'sslmode' => 'prefer',
-        ],
-
+        // production server - master branch
         'mysql_production' => [
             'driver' => 'mysql',
             'host' => env('DB_HOST', '127.0.0.1'),
@@ -91,7 +79,20 @@ return [
             'strict' => true,
             'engine' => null,
         ],
-        
+        // local development db
+        'pgsql_local' => [
+            'driver' => 'pgsql',
+            'host' => env('DB_HOST', '127.0.0.1'),
+            'port' => env('DB_PORT', '5432'),
+            'database' => env('DB_DATABASE', 'forge'),
+            'username' => env('DB_USERNAME', 'forge'),
+            'password' => env('DB_PASSWORD', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'schema' => 'public',
+            'sslmode' => 'prefer',
+        ],
+        // staging development - new-system branch
         'pgsql_staging' => [
             'driver' => 'pgsql',
             'port' => '5432',
@@ -99,10 +100,6 @@ return [
             'database' => $database,
             'username' => $username,
             'password' => $password,
-            // 'host'     => 'ec2-23-21-186-85.compute-1.amazonaws.com',
-            // 'database' => 'd87nb2d769tpds',
-            // 'username' => 'mvenpvaswfwuvc',
-            // 'password' => '10ee7ff56edfb6178350e711fa09994c65f511bdd86a196042e09139265c4664',
             'charset' => 'utf8',
             'prefix' => '',
             'schema' => 'public',

@@ -24,6 +24,7 @@
                                 <a href=" {{ route('import-products') }}"> Import and Process Snackboxes </a>
                             </li>
                         </ul>
+
                         <h4> New System </h4>
                         <ul>
                             <li style="list-style:none;">
@@ -42,6 +43,24 @@
                                 <a href="{{ route('invoicing') }}"> Process/Export Invoicing </a>
                             </li>
                         </ul>
+
+                        <!-- Routes are blocked from access if (admin is) already logged in,
+                            defeating the purpose of these links until I review authentication again
+                            and spend some dedicated time on it - add it to the list!! -->
+
+                        <!-- <h4> Create New Users </h4>
+                        <ul>
+                            <li style="list-style:none;">
+                                <a href=" {{ route('register') }}"> Add New Customer Admin </a>
+                            </li>
+                            <li style="list-style:none;">
+                                <a href=" {{ route('register/office') }}"> Add New Office Admin </a>
+                            </li>
+                            <li style="list-style:none;">
+                                <a href=" {{ route('register/warehouse') }}"> Add New Warehouse Admin </a>
+                            </li>
+                        </ul> -->
+
                         <h4> View / Add New System Ingredients </h4>
                         <ul>
                             <li style="list-style:none;">
@@ -59,6 +78,9 @@
                     <div class="card-body">
                         <div>
                             <h3> Review / Update Company Data </h3>
+                            <p> Use the company search below to update existing or create new; company data and orders. </p>
+                            <p> The search is currently case sensitive, so if you don't find what you're looking for, add capitals. </p>
+                            <p> This is because of the switch to postgresql (database) and I'll be fixing this annoying quirk in phase 2. </p>
                             <search-companies></search-companies>
                         </div>
                     </div>

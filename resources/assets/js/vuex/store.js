@@ -30,6 +30,7 @@ export const store = new Vuex.Store({
             name: '',
             code: '',
             unit_price: '',
+            case_size: '',
             stock_level: '',
             shortest_stock_date: '',
         }, // This one would also suffer if multiple users are selecting products for different orders etc...
@@ -189,6 +190,7 @@ export const store = new Vuex.Store({
             state.selectedProduct.name = product.name;
             state.selectedProduct.code = product.code;
             state.selectedProduct.unit_price = product.unit_price;
+            state.selectedProduct.case_size = product.case_price;
             state.selectedProduct.shortest_stock_date = product.shortest_stock_date;
             state.selectedProduct.stock_level = product.stock_level;
         },

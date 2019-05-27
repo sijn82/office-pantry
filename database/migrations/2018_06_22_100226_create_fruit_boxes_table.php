@@ -47,7 +47,7 @@ class CreateFruitBoxesTable extends Migration
             $table->integer('grapefruits');
             $table->integer('avocados');
             $table->integer('root_ginger');
-            $table->integer('tailoring_fee')->nullable();
+            $table->decimal('tailoring_fee', 4, 2)->nullable();
             $table->string('discount_multiple');
             $table->date('invoiced_at')->nullable(); // This is a new field to hopefully keep track of when orders have been processed.
             $table->timestamps();

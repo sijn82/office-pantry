@@ -22,7 +22,7 @@
                 </b-row>
                 <b-row class="order-options">
                     <b-col>
-                        <label> Type </label>
+                        <label> Type* </label>
                         <b-form-select v-model="type" size="sm" :options="type_options"></b-form-select>
                     </b-col>
                     <b-col>
@@ -62,6 +62,7 @@
                             </template>
                         </b-form-select>
                     </b-col>
+                    <b-form-text> * Use the 'unique' type to process coffee etc, as these will be pulled into the snacks column total when processing the routes export. </b-form-text>
                 </b-row>
             </div>
         </div>
