@@ -99347,10 +99347,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         confirmAllergy: function confirmAllergy(allergy) {
             var _this = this;
 
-            var company = this.selected_company;
+            var company_details_id = this.selected_company;
             var name = allergy;
             axios.post('/api/allergies', {
-                new_allergy: { name: name, company: company },
+                new_allergy: { name: name, company_details_id: company_details_id },
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv' }
             }).then(function (response) {
                 alert('Uploaded new company allergy successfully!');
@@ -99385,7 +99385,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         addToPreferences: function addToPreferences(preference) {
             var _this3 = this;
 
-            var company_id = this.selected_company;
+            var company_details_id = this.selected_company;
             var product_name = this.$store.state.selectedProduct.name;
             var product_code = this.$store.state.selectedProduct.code;
             var product_quantity = this.essential_quantity;
@@ -99396,7 +99396,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             // this.$store.commit('addPreferenceToStore', { preference, product_name });
 
             axios.post('/api/preferences/add-new-preference', {
-                preference: { company_id: company_id, product_name: product_name, product_code: product_code, product_quantity: product_quantity, preference_category: preference_category },
+                preference: { company_details_id: company_details_id, product_name: product_name, product_code: product_code, product_quantity: product_quantity, preference_category: preference_category },
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv' }
             }).then(function (response) {
                 alert('Uploaded new preference successfully!');
@@ -99421,13 +99421,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             // console.log(preference);
             // console.log(this.essential_quantity);
         },
-        getCompanyPreferences: function getCompanyPreferences(company_id) {
+        getCompanyPreferences: function getCompanyPreferences(company_details_id) {
             var _this4 = this;
 
             var self = this;
 
             axios.post('/api/preferences/selected', {
-                id: company_id
+                id: company_details_id
             }).then(function (response) {
                 console.log(response.data);
                 // self.preferences = response.data;
