@@ -850,7 +850,7 @@ class SnackBoxController extends Controller
                     $new_snackbox->snackbox_id = $snackbox_id['snackbox_id'];
                     $new_snackbox->delivered_by = $delivered_by_recovered;
                     $new_snackbox->no_of_boxes = $no_of_boxes_recovered;
-                    $new_snackbox->snack_cap = $snack_cap;
+                    $new_snackbox->snack_cap = $snack_cap_recovered;
                     $new_snackbox->type = $request['type'][0];
                     // Company Info
                     $new_snackbox->company_details_id = $company_details_id_recovered;

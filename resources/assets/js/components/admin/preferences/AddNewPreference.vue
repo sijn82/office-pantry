@@ -130,10 +130,10 @@ export default {
 
         confirmAllergy(allergy) {
 
-            let company = this.selected_company;
+            let company_details_id = this.selected_company;
             let name = allergy;
             axios.post('/api/allergies', {
-                new_allergy: { name, company },
+                new_allergy: { name, company_details_id },
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv' }
             }).then( response => {
                 alert('Uploaded new company allergy successfully!');
@@ -168,7 +168,7 @@ export default {
 
         addToPreferences(preference) {
 
-            let company_id = this.selected_company;
+            let company_details_id = this.selected_company;
             let product_name = this.$store.state.selectedProduct.name;
             let product_code = this.$store.state.selectedProduct.code;
             let product_quantity = this.essential_quantity;
@@ -179,7 +179,7 @@ export default {
             // this.$store.commit('addPreferenceToStore', { preference, product_name });
 
             axios.post('/api/preferences/add-new-preference', {
-                preference: { company_id, product_name, product_code, product_quantity, preference_category },
+                preference: { company_details_id, product_name, product_code, product_quantity, preference_category },
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv' },
             }).then( response => {
                  alert('Uploaded new preference successfully!');
@@ -203,12 +203,12 @@ export default {
             // console.log(this.essential_quantity);
         },
 
-        getCompanyPreferences(company_id) {
+        getCompanyPreferences(company_details_id) {
 
             let self = this;
 
             axios.post('/api/preferences/selected', {
-                id: company_id,
+                id: company_details_id,
             }).then( response => {
                 console.log(response.data);
                 // self.preferences = response.data;

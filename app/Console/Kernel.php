@@ -24,11 +24,14 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
-        // $schedule->command('advance:odd')->weekly()->thursday()->at('18:17');
-        $schedule->command('advance:odd')->timezone('Europe/London')->weekly()->wednesdays()->at('13:20');
-        // $schedule->command('advance:odd')->everyMinute();
+        // This command works fine on my local database
+        // $schedule->command('advance:odd')->timezone('Europe/London')->weekly()->wednesdays()->at('13:20');
+        // This is the revised version to check that a condition has been met before running the cron (command).
+        $schedule->command('advance:odd')->everyMinute()->when(function() {
+            // The first parameter is the command to check in the database table, the second is the number of weeks to advance the next scheduled run by, if the shouldIrun returns true.
+            return Cron::shouldIRun('advance:odd', 1);
+            //returns true once every week
+        });
     }
 
     /**
