@@ -9,6 +9,12 @@ class Cron extends Model
 {
     //
     protected $primaryKey = 'command';
+    protected $keyType = 'string';
+    public $incrementing = false;
+    // For future knowledge/use accessing the value of a primary key which isn't an integer, or auto-incrementing (laravel documentation)
+    // suggests you only need the above.  However without declaring the $casts line below, it doesn't work, thankfully with it, it does... yay.
+    protected $casts = [ 'command' => 'string' ]; // <-- For whatever reason, this is VERY IMPORTANT!
+    
     /**
     * The attributes that are mass assignable.
     *
@@ -21,7 +27,7 @@ class Cron extends Model
         // look up the command we wish to run in the database
         $cron = Cron::find($command);
         // grab the current time
-        $now  = Carbon::now();
+        $now = Carbon::now();
         // compare the next scheduled time for the command to be run
         if ($cron && $cron->next_run > $now->timestamp) {
             // return false if we're not due to run it yet - we'll be running this check a lot more often than actually processing it, so typically this should return false.

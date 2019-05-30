@@ -165,6 +165,10 @@ Route::get('carbon', 'OrderController@advanceNextOrderDeliveryDate');
 
 Route::get('week-start/select', 'WeekStartController@showAndSet');
 
+Route::get('cron-data/select', 'OrderController@showCronData');
+Route::post('cron-data/update', 'OrderController@updateCronData');
+
+
 // Import main Company data.
 Route::get('import-companies', 'CompaniesController@store');
 // Import additional route summary address and delivery info

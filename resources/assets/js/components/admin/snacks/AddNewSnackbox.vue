@@ -27,6 +27,9 @@
                     </b-input-group-append>
                 </b-input-group>
             </b-col>
+        </b-row>
+        <!-- This should split the select company and snack cap onto it's own row. -->
+        <b-row>
             <b-col id="company-select">
                 <label> Select Company </label>
                 <select-company v-on:selected-company="companySelected"></select-company>
@@ -102,8 +105,23 @@
                      </b-col>
                  </b-row>
              </div>
-              <b-row><b-col>  </b-col><b-col>  </b-col><b-col><p> Total: £{{ total }} </p></b-col><b-col> <b-button size="sm" variant="success" @click="saveStandardSnackbox()"> Save as New Standard Box </b-button> </b-col></b-row>
-              <b-row class="margin-top"><b-col>  </b-col><b-col>  </b-col><b-col>  </b-col><b-col> <b-button size="sm" variant="success" @click="saveCompanySnackbox()"> Save Exclusively to Company </b-button> </b-col></b-row>
+              <b-row>
+                  <b-col>  </b-col>
+                  <b-col>  </b-col>
+                  <b-col><p> Total: £{{ total }} </p></b-col>
+                  <b-col>
+                      <b-button size="sm" variant="warning" @click="saveStandardSnackbox()"> Save as New Standard Box </b-button>
+                      <b-form-text> This option will <b> update all boxes of the 'type' selected </b> in the input option above.  </b-form-text>
+                  </b-col>
+              </b-row>
+              <b-row class="margin-top"><b-col>  </b-col>
+                  <b-col>  </b-col>
+                  <b-col>  </b-col>
+                  <b-col>
+                      <b-button size="sm" variant="success" @click="saveCompanySnackbox()"> Save Exclusively to Company </b-button>
+                      <b-form-text> This option will <b> only update this box </b>, regardless of 'type'.  </b-form-text>
+                  </b-col>
+              </b-row>
             <!-- <snackbox :product="product" :quantity="quantity"></snackbox> -->
         </div>
 
@@ -182,15 +200,15 @@ export default {
         total() {
             // Even though this value is immediately replaced and not used, it still needs to be declared.
             let total_cost = 0;
-            
+
             // This function checks each entry in the current snackbox list and creates a running total of the unit price multiplied by the quantity.
             let sum = function(snackbox, createWholesaleSnackbox, cost, quantity, case_size){
-                
+
                 return snackbox.reduce( function(a, b) {
                     // If we're here then the box we're building is (hopefully!) a wholesale snackbox order so we want to display the cost of a case, rather than the cost of single unit.
                     if (createWholesaleSnackbox) {
                         // The return is very similar, it just needs to include multiplying the unit price by the case size, before multiplying again by quantity ordered.
-                        return parseFloat(a) + ( ( parseFloat(b[cost]) * parseFloat(b[case_size]) ) * parseFloat(b[quantity]) ); 
+                        return parseFloat(a) + ( ( parseFloat(b[cost]) * parseFloat(b[case_size]) ) * parseFloat(b[quantity]) );
                     }
                     // Otherwise it's just an ordinary snackbox so case size is irrelevant.
                     return parseFloat(a) + ( parseFloat(b[cost]) * parseFloat(b[quantity]) );
@@ -218,6 +236,14 @@ export default {
               this.createSnackbox = false;
             } else {
               this.createSnackbox = true;
+              this.createWholesaleSnackbox = false;
+              // if the wholesale box (button) was pressed prior to this one,
+              // a type would have been entered without the user necessarily realising it,
+              // so let's strip it out for them too.
+              // If it was anything else, they entered it, so they can sort it. <--- UX at its very best!
+              if (this.type === 'wholesale') {
+                  this.type = null;
+              }
             }
         },
         creatingWholesaleSnackbox() {
@@ -226,6 +252,7 @@ export default {
               this.type = null;
             } else {
               this.createWholesaleSnackbox = true;
+              this.createSnackbox = false;
               this.addNewType('wholesale');
               this.type = 'wholesale';
             }
@@ -242,15 +269,15 @@ export default {
 
             axios.post('/api/snackboxes/save', {
                 company_details_id: this.selected_company,
-                details: { 
-                    delivered_by: this.delivered_by, 
-                    no_of_boxes: this.no_of_boxes, 
-                    snack_cap: this.snack_cap, 
-                    type: this.type, 
-                    delivery_day: this.delivery_day, 
-                    frequency: this.frequency, 
-                    week_in_month: this.week_in_month, 
-                    next_delivery_week: this.next_delivery_week 
+                details: {
+                    delivered_by: this.delivered_by,
+                    no_of_boxes: this.no_of_boxes,
+                    snack_cap: this.snack_cap,
+                    type: this.type,
+                    delivery_day: this.delivery_day,
+                    frequency: this.frequency,
+                    week_in_month: this.week_in_month,
+                    next_delivery_week: this.next_delivery_week
                 },
                 order: this.$store.state.snackbox,
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv'},
@@ -261,7 +288,7 @@ export default {
             }).catch(error => console.log(error));
         },
         saveStandardSnackbox() {
-            this.$store.dispatch('saveStandardSnackboxToDB', [ this.type ]);
+            this.$store.dispatch('saveStandardSnackboxToDB', this.type );
 
         },
         addNewType(new_type) {

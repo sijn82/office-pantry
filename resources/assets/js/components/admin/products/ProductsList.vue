@@ -27,7 +27,8 @@
                     </template>
                 </b-form-select>
             </b-col>
-            <b-col>
+            <!-- Why ask to ignore when we can just comment it out for now! -->
+            <!-- <b-col>
                 <h4> Stock Level * </h4>
                 <b-form-select v-model="stock_level_select" :options="stock_level" required>
                     <template slot="first">
@@ -35,7 +36,7 @@
                     </template>
                 </b-form-select>
             </b-col>
-            <b-form-text> * Ignore this filter for now, it's not actually built to do anything yet! </b-form-text>
+            <b-form-text> * Ignore this filter for now, it's not actually built to do anything yet! </b-form-text> -->
         </b-row>    
           
         <b-row class="product-list-headers">

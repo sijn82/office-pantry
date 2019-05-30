@@ -67256,6 +67256,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
         //     {id: 5, name: 'Frankie', registered: false},
         // ],
         week_start: [], // This is a good use of the store as it's used in multiple places and only changes once a week, multiple concurrent users wouldn't be an issue.
+        cron_data: [],
         allergies_list: [], // another good use of store, as it only populates a list of options which are equally useful to all users in real time.
         types_list: [], // another good use of store, as it only populates a list of options which are equally useful to all users in real time.
         fruit_partners_list: [], // another good use of store, as it only populates a list of options which are equally useful to all users in real time.
@@ -67514,6 +67515,17 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
                     state.week_start.push(response.data);
                 }
                 // })
+            });
+        },
+        getCronData: function getCronData(state) {
+            axios.get('/api/cron-data/select').then(function (response) {
+                console.log(response);
+                var check = state.cron_data.findIndex(function (list) {
+                    return list.id == response.data.id;
+                });
+                if (check === -1) {
+                    state.cron_data.push(response.data);
+                }
             });
         }
     },
@@ -72150,6 +72162,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -72163,6 +72193,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 delivery_days: null,
                 options: [{ value: null, text: 'Please Select an Option', disabled: true }, { value: 'mon-tue', text: 'Monday & Tuesday' }, { value: 'wed-thur-fri', text: 'Wednesday, Thursday & Friday' }, { value: 'mon', text: 'Monday' }, { value: 'tue', text: 'Tuesday' }, { value: 'wed', text: 'Wednesday' }, { value: 'thur', text: 'Thursday' }, { value: 'fri', text: 'Friday' }]
             },
+            edit: false,
+            next_run: '',
             //week_start: '',
             new_week_start: '',
             updated_week_start: ''
@@ -72209,12 +72241,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 return console.log(error);
             });
             // this.$router.push('/thank-you')
+        },
+        editCronData: function editCronData() {
+            if (this.edit === false) {
+                this.edit = true;
+            } else {
+                this.edit = false;
+            }
+        },
+        saveCronData: function saveCronData(command) {
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('api/cron-data/update', { next_run: this.next_run, command: this.command }).then(function (response) {
+                alert('Updated Next Cron Run');
+            }).catch(function (error) {
+                return console.log(error);
+            });
         }
     },
 
     mounted: function mounted() {
         console.log('Component Import Week Start mounted.');
         this.$store.commit('getWeekStart');
+        this.$store.commit('getCronData');
     }
 });
 
@@ -72356,6 +72403,111 @@ var render = function() {
                 )
               ])
             ])
+          })
+        ],
+        2
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "col-md-12" },
+        [
+          _c("h3", [_vm._v(" Cron Data ")]),
+          _vm._v(" "),
+          _c("h5", [
+            _vm._v(
+              " When orders were last advanced to 'next delivery' date and will next be advanced again. "
+            )
+          ]),
+          _vm._v(" "),
+          _c(
+            "b-row",
+            [
+              _c("b-col", [_c("h4", [_vm._v(" Command ")])]),
+              _vm._v(" "),
+              _c("b-col", [_c("h4", [_vm._v(" Next Order Advance Date ")])]),
+              _vm._v(" "),
+              _c("b-col", [_c("h4", [_vm._v(" Last Order Advance Date ")])])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _vm._l(_vm.$store.state.cron_data, function(cron_data) {
+            return _c(
+              "div",
+              [
+                _c(
+                  "b-row",
+                  [
+                    _c("b-col", [
+                      _c("p", [
+                        _c("b", [_vm._v(" " + _vm._s(cron_data.command) + " ")])
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("b-col", [
+                      _vm.edit
+                        ? _c(
+                            "div",
+                            [
+                              _c("b-form-input", {
+                                attrs: { type: "date" },
+                                model: {
+                                  value: _vm.next_run,
+                                  callback: function($$v) {
+                                    _vm.next_run = $$v
+                                  },
+                                  expression: "next_run"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        : _c("div", [
+                            _c("p", [
+                              _c("b", [
+                                _vm._v(" " + _vm._s(cron_data.next_run) + " ")
+                              ])
+                            ])
+                          ])
+                    ]),
+                    _vm._v(" "),
+                    _c("b-col", [
+                      _c("p", [
+                        _c("b", [
+                          _vm._v(" " + _vm._s(cron_data.last_run) + " ")
+                        ])
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "b-col",
+                      [
+                        _c("b-button", { on: { click: _vm.editCronData } }, [
+                          _vm._v(" Edit ")
+                        ]),
+                        _c(
+                          "b-button",
+                          {
+                            on: {
+                              click: function($event) {
+                                _vm.saveCronData(
+                                  _vm.$store.state.cron_data.command
+                                )
+                              }
+                            }
+                          },
+                          [_vm._v(" Save ")]
+                        )
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              ],
+              1
+            )
           })
         ],
         2
@@ -90271,6 +90423,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['addProductToSnackbox', 'product', 'quantity'],
@@ -90337,6 +90507,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 this.createSnackbox = false;
             } else {
                 this.createSnackbox = true;
+                this.createWholesaleSnackbox = false;
+                // if the wholesale box (button) was pressed prior to this one,
+                // a type would have been entered without the user necessarily realising it,
+                // so let's strip it out for them too.
+                // If it was anything else, they entered it, so they can sort it. <--- UX at its very best!
+                if (this.type === 'wholesale') {
+                    this.type = null;
+                }
             }
         },
         creatingWholesaleSnackbox: function creatingWholesaleSnackbox() {
@@ -90345,6 +90523,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 this.type = null;
             } else {
                 this.createWholesaleSnackbox = true;
+                this.createSnackbox = false;
                 this.addNewType('wholesale');
                 this.type = 'wholesale';
             }
@@ -90383,7 +90562,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
         },
         saveStandardSnackbox: function saveStandardSnackbox() {
-            this.$store.dispatch('saveStandardSnackboxToDB', [this.type]);
+            this.$store.dispatch('saveStandardSnackboxToDB', this.type);
         },
         addNewType: function addNewType(new_type) {
             console.log(new_type);
@@ -90581,8 +90760,14 @@ var render = function() {
               )
             ],
             1
-          ),
-          _vm._v(" "),
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "b-row",
+        [
           _c(
             "b-col",
             { attrs: { id: "company-select" } },
@@ -90890,17 +91075,20 @@ var render = function() {
             "b-row",
             [
               _c("b-col"),
+              _vm._v(" "),
               _c("b-col"),
+              _vm._v(" "),
               _c("b-col", [
                 _c("p", [_vm._v(" Total: £" + _vm._s(_vm.total) + " ")])
               ]),
+              _vm._v(" "),
               _c(
                 "b-col",
                 [
                   _c(
                     "b-button",
                     {
-                      attrs: { size: "sm", variant: "success" },
+                      attrs: { size: "sm", variant: "warning" },
                       on: {
                         click: function($event) {
                           _vm.saveStandardSnackbox()
@@ -90908,7 +91096,15 @@ var render = function() {
                       }
                     },
                     [_vm._v(" Save as New Standard Box ")]
-                  )
+                  ),
+                  _vm._v(" "),
+                  _c("b-form-text", [
+                    _vm._v(" This option will "),
+                    _c("b", [
+                      _vm._v(" update all boxes of the 'type' selected ")
+                    ]),
+                    _vm._v(" in the input option above.  ")
+                  ])
                 ],
                 1
               )
@@ -90921,8 +91117,11 @@ var render = function() {
             { staticClass: "margin-top" },
             [
               _c("b-col"),
+              _vm._v(" "),
               _c("b-col"),
+              _vm._v(" "),
               _c("b-col"),
+              _vm._v(" "),
               _c(
                 "b-col",
                 [
@@ -90937,7 +91136,13 @@ var render = function() {
                       }
                     },
                     [_vm._v(" Save Exclusively to Company ")]
-                  )
+                  ),
+                  _vm._v(" "),
+                  _c("b-form-text", [
+                    _vm._v(" This option will "),
+                    _c("b", [_vm._v(" only update this box ")]),
+                    _vm._v(", regardless of 'type'.  ")
+                  ])
                 ],
                 1
               )
@@ -96538,6 +96743,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -96727,45 +96933,7 @@ var render = function() {
               )
             ],
             1
-          ),
-          _vm._v(" "),
-          _c(
-            "b-col",
-            [
-              _c("h4", [_vm._v(" Stock Level * ")]),
-              _vm._v(" "),
-              _c(
-                "b-form-select",
-                {
-                  attrs: { options: _vm.stock_level, required: "" },
-                  model: {
-                    value: _vm.stock_level_select,
-                    callback: function($$v) {
-                      _vm.stock_level_select = $$v
-                    },
-                    expression: "stock_level_select"
-                  }
-                },
-                [
-                  _c("template", { slot: "first" }, [
-                    _c(
-                      "option",
-                      { attrs: { disabled: "" }, domProps: { value: null } },
-                      [_vm._v(" Please select an option ")]
-                    )
-                  ])
-                ],
-                2
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c("b-form-text", [
-            _vm._v(
-              " * Ignore this filter for now, it's not actually built to do anything yet! "
-            )
-          ])
+          )
         ],
         1
       ),

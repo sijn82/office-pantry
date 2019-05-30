@@ -102,8 +102,8 @@
                     <a href="{{ route('login/office') }}"> Office Login </a>
                     <a href="{{ route('login/warehouse') }}"> Warehouse Login </a>
                     <a href="{{ route('products') }}"> Products </a> <!-- Get rid of this before going live! -->
-                    <a href="https://forge.laravel.com"> Invoices </a>
-                    <a href="https://github.com/laravel/laravel"> Payments </a>
+                    <a href="https://forge.laravel.com"> Invoices </a> <!-- Get rid of this before going live! -->
+                    <a href="https://github.com/laravel/laravel"> Payments </a> <!-- Get rid of this before going live! -->
                 </div>
 
 

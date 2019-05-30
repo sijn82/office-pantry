@@ -15,6 +15,7 @@ export const store = new Vuex.Store({
         //     {id: 5, name: 'Frankie', registered: false},
         // ],
         week_start: [], // This is a good use of the store as it's used in multiple places and only changes once a week, multiple concurrent users wouldn't be an issue.
+        cron_data: [],
         allergies_list: [], // another good use of store, as it only populates a list of options which are equally useful to all users in real time.
         types_list: [], // another good use of store, as it only populates a list of options which are equally useful to all users in real time.
         fruit_partners_list: [], // another good use of store, as it only populates a list of options which are equally useful to all users in real time.
@@ -263,6 +264,17 @@ export const store = new Vuex.Store({
                         state.week_start.push(response.data);
                     }
                 // })
+            });
+        },
+
+        getCronData (state) {
+            axios.get('/api/cron-data/select').then(
+                response => {
+                    console.log(response);
+                    var check = state.cron_data.findIndex( list => list.id == response.data.id)
+                    if (check === -1) {
+                        state.cron_data.push(response.data);
+                }
             });
         }
     },

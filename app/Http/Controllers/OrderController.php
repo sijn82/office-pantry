@@ -8,6 +8,7 @@ use App\FruitBox;
 use App\MilkBox;
 use App\WeekStart;
 use App\CompanyRoute;
+use App\Cron;
 use Carbon\Carbon;
 
 use Illuminate\Http\Request;
@@ -51,6 +52,32 @@ class OrderController extends Controller
         // if the fruitbox has a next delivery date matching the current week start variable, we need to create a picklist for it.
                 
         
+    }
+    
+    public function showCronData() 
+    {   
+        // While we only have one cron this is fine.  If/when we add more, 
+        // I need to decide if there will be a few different functions grabbing each one or, more likely, that I loop through them and use a more generic query.
+        $cron_data_raw = Cron::where('command', 'advance:odd')->get(); 
+
+        $cron_data_amended = (object)[];
+        $cron_data_amended->command = $cron_data_raw[0]->command;
+        $cron_data_amended->next_run = date('Y-m-d H:i:s', $cron_data_raw[0]->next_run);
+        $cron_data_amended->last_run = date('Y-m-d H:i:s', $cron_data_raw[0]->last_run);
+        
+        return response()->json($cron_data_amended);
+    }
+    
+    public function updateCronData(Request $request)
+    {
+        dump(request('next_run'));
+        $edited_next_run_date = Carbon::parse(request('next_run'))->timestamp;
+        dump($edited_next_run_date);
+        
+        dump(request('command'));
+        Cron::where('command', request('command'))->update([
+            'next_run' => $edited_next_run_date,
+        ]);
     }
     
     // I think this 'public static function advanceNextOrderDeliveryDate()' might be the only function in here that's actually still in use.  

@@ -20,6 +20,7 @@
         <!-- Styles -->
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
         @yield('home-dashboard')
+        @yield('office-admin-styling')
     </head>
     <body>
         <div id="app">

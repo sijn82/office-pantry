@@ -441,7 +441,7 @@ class SnackBoxController extends Controller
     {
         // dd($request);
         // dd($request->order);
-        $snackbox_id = $request->company_details_id . "-" . uniqid();
+        $snackbox_id = request('company_details_id') . "-" . uniqid();
         $courier = request('details.delivered_by');
         $box_number = request('details.no_of_boxes');
         $snack_cap = request('details.snack_cap');
@@ -479,17 +479,21 @@ class SnackBoxController extends Controller
                 $new_snackbox->unit_price = $item['unit_price'];
                 $new_snackbox->save();
                 
-                // Now we need to sort out the stock levels for these order items, keeping them in check and hopefully 100% accurate!
-                //  If these order items get cancelled for any reason, we must remember to add them back in too!!
+                //---------- Adjust stock levels ----------//
                 
-                // First let's grab the product
-                $product = Product::findOrFail($item['id']);
-                // Then it's current stock level, and deduct the order quantity as the new stock level.
-                $new_stock_level = $product->stock_level - $item['quantity'];
-                // Finally saving the new stocklevel to the database.
-                Product::where('id', $item['id'])->update([
-                    'stock_level' => $new_stock_level,
-                ]);
+                    // Now we need to sort out the stock levels for these order items, keeping them in check and hopefully 100% accurate!
+                    //  If these order items get cancelled for any reason, we must remember to add them back in too!!
+                    
+                    // First let's grab the product
+                    $product = Product::findOrFail($item['id']);
+                    // Then it's current stock level, and deduct the order quantity as the new stock level.
+                    $new_stock_level = $product->stock_level - $item['quantity'];
+                    // Finally saving the new stocklevel to the database.
+                    Product::where('id', $item['id'])->update([
+                        'stock_level' => $new_stock_level,
+                    ]);
+                
+                //---------- End of Adjust stock levels ----------//
 
             }
         } else {
@@ -576,7 +580,7 @@ class SnackBoxController extends Controller
 
         } else {
 
-            $message = "Route $newRoute->route_name on " . $delivery_day . " not necessary, delivered by " . $courier;
+            $message = "Route for company details id - " . request('company_details_id') . " on " . $delivery_day . " not necessary, delivered by " . $courier;
             Log::channel('slack')->info($message);
         }
 
@@ -595,12 +599,39 @@ class SnackBoxController extends Controller
 
     public function update(Request $request)
     {
-        //dd(request('snackbox_item_id'));
-        SnackBox::where('id', request('snackbox_item_id'))->update([
-            'quantity' => request('snackbox_item_quantity'),
-        ]);
+        //---------- Calculate and update the new product stock level ----------//
+        
+            // This needs to check what the previous value was before adjusting stock levels with the difference. 
+            $snackbox_item_current = Snackbox::find(request('snackbox_item_id'));
+
+            // This determines whether we need to add or remove quantities from stock
+            if ($snackbox_item_current->quantity > request('snackbox_item_quantity')) {
+                // Work out the difference
+                $stock_difference = ($snackbox_item_current->quantity - request('snackbox_item_quantity'));
+                // Then we need to return the difference to stock
+                Product::where('id', $snackbox_item_current->product_id)->increment('stock_level', $stock_difference);
+                
+            } elseif ($snackbox_item_current->quantity < request('snackbox_item_quantity')) {
+                // Work out the difference
+                $stock_difference = (request('snackbox_item_quantity') - $snackbox_item_current->quantity);
+                // Then we need to remove the difference from stock
+                Product::where('id', $snackbox_item_current->product_id)->decrement('stock_level', $stock_difference);
+            }
+            
+        //---------- End of Calculate and update the new product stock level ----------//
+        
+        //---------- Update the box entry with quantity ----------//
+        
+            // Now the stock levels are sorted we can go ahead and save the updated quantity for that item in the box.
+            SnackBox::where('id', request('snackbox_item_id'))->update([
+                'quantity' => request('snackbox_item_quantity'),
+            ]);
+            
+        //---------- Update the box entry with quantity ----------//
     }
 
+    // This function is just used to update the snackbox company/delivery info - everything but the contents basically.
+    // If the delivery day is changed then a check is made to see if we have a route for them already (on that day), creating it for them if not.
     public function updateDetails(Request $request)
     {
         // dd(request('snackbox_details'));
@@ -689,9 +720,19 @@ class SnackBoxController extends Controller
         }
     }
 
+    // This is just (?) used to add/remove contents from an existing box.  This may well be used to tailor a box after it's creation and before delivery, so automatiucally creating a archive
+    // could cause more trouble than it's worth.
+
     public function addProductToSnackbox (Request $request)
     {
+        // I need to add some sort of stock level amendments here too.  
+        // If stock levels were adjusted in the box creation we need to 
+        // return the stock from removed entries and subtract the stock from added ones.
+        
         //dd(request('snackbox_details'));
+        // dump();
+        Product::find(request('product.id'))->decrement('stock_level', request('product.quantity'));
+        
         $addProduct = new SnackBox();
         $addProduct->snackbox_id = request('snackbox_details.snackbox_id');
         $addProduct->is_active = request('snackbox_details.is_active');
@@ -746,24 +787,34 @@ class SnackBoxController extends Controller
      */
     public function massUpdateType(Request $request)
     {
-         // dd($request['type'][0]);
+        
         // If this is an upload of the new weekly standard box, we won't have a company to attach
         // - instead any snackbox with 'standard' as type and unique delivery day/company id needs to pulled through,
         // stripped of all listed entries and replaced with the new order.
-
+        
+        dd($request);
+        
         // Grab all distinct snackbox_id's, this should (will) grab all unique snackbox Id's for step 2.
         $snackboxes = SnackBox::select('snackbox_id')->distinct()->get();
-        // dd($snackboxes);
+        
+        //---------- Grab any relevant snackbox data and then strip out the rest. ----------//
+        
         foreach ($snackboxes as $snackbox_id) {
-            // dd($snackbox_id['snackbox_id']);
+        
             // In step 2 we want run through all id's, checking that the type is for a standard snackbox.
-            $snackbox = SnackBox::where('snackbox_id', $snackbox_id['snackbox_id'])->where('type', $request['type'][0])->get();
-             // dd($snackbox);
+            $snackbox = SnackBox::where('snackbox_id', $snackbox_id['snackbox_id'])->where('type', request('type'))->get();
+        
             if (count($snackbox)) {
 
                 foreach ($snackbox as $snack) {
-                    // dd($snack);
+                    
                     // Grab these before deleting old entry, kinda important
+                    // However I only really need to do this once per snackbox,
+                    // as I'm basically just writing over these variables each time
+                    // until I get to the last entry of the box!
+                    
+                    // I could just go with $snackbox[0]->blah and take this all out of the loop?
+                    
                     $delivered_by_recovered = $snack->delivered_by;
                     $delivery_date_recovered = $snack->delivery_day;
                     $no_of_boxes_recovered = $snack->no_of_boxes;
@@ -776,9 +827,15 @@ class SnackBoxController extends Controller
 
                     // If the snackbox entry exists we can go ahead and delete it - as the snackbox contents may vary in quantity,
                     // I just want to strip them all out and replace with the new standard order.
-
                     Snackbox::where('id', $snack->id)->delete();
+                    
+                    // Kinda pointless but I'd like to change this ( Snackbox::where('id', $snack->id)->delete(); ) to
+                    // --> SnackBox::destroy($snack->id);
                 }
+                
+                //---------- End of Grab any relevant snackbox data and then strip out the rest. ----------//
+                
+                //---------- Now let's grab their list of likes and dislikes ----------//
 
                 // Moved this further up to keep it out of a second (unnecessary for this query) foreach.
                 $likes = Preference::where('company_details_id', $snack->company_details_id)->where('snackbox_likes', '!=', null)->pluck('snackbox_likes')->toArray();
@@ -788,25 +845,34 @@ class SnackBoxController extends Controller
                 // so let's check the name in Products and see what the stock level looks like.
                 foreach ($likes as $like) {
                     // This will only return a countable $option if the item is in stock.
+                    // If we're reducing stock as we go, then there'll be a slightly unfair hierarchy 
+                    // to get their 'liked' snacks depending on whether they get picked first out of the hat or not, 
+                    // which isn't a random process (unfortunately?).
                     $option = Product::where('name', $like)->where('stock_level', '>', 0)->get();
                     // If $option count returns nothing, it's not in stock and can be removed from selectable products this time around.
                     if (!count($option)) {
-                        // Search for the product in array of $likes and grab its positin (key) in array.
+                        // Search for the product in array of $likes and grab its position (key) in array.
                         $like_key = array_search($like, $likes);
                         // Now use this key to unset (remove) the product from usable list of likes.
                         unset($likes[$like_key]);
                     }
                 }
-                // Likes now only contain products in stock.
-                // dd($likes);
-
-
-                // Should I be deleting and creating in the same function?
-                // I'm not sure but for test purposes and problem solving clarity, I'm gonna start off this way.
-
-                // In fact due to the reuse of data, I kinda need to keep it together, so let's hope this will work without complications.
+                
+                //-------------------- LIKES NOW ONLY CONTAIN PRODUCTS IN STOCK! ---------------------//
+                //---------- End of Now let's grab their list of likes and dislikes ----------//
+                
+                //----- Notes To Self -----//
+                
+                    // Should I be deleting and creating in the same function?
+                    // I'm not sure but for test purposes and problem solving clarity, I'm gonna start off this way.
+                    // In fact due to the reuse of data, I kinda need to keep it together, so let's hope this will work without complications.
+                    
+                //----- End of Notes To Self -----//
+                
+                //---------- Now we need to run through the new selection of snacks, adding them (if not specified as a dislike) for the company being processed ----------//
+                
                 foreach ($request['order'] as $new_standard_snack) {
-                    // dd($new_standard_snack);
+    
                     // I think this is a good place to put the likes and dislikes company check.
                     // $likes = Preference::where('id', $snack->company_details_id)->select('snackbox_likes')->get();
                     // $dislikes = Preference::where('id', $snack->company_details_id)->select('snackbox_dislikes')->get();
@@ -868,6 +934,9 @@ class SnackBoxController extends Controller
                     $new_snackbox->save();
 
                 } // end of foreach ($request['order'] as $new_standard_snack)
+                
+                //---------- End of Now we need to run through the new selection of snacks, adding them (if not specified as a dislike) for the company being processed ----------//
+                
             } // end of if (count($snackbox))
         } // end of foreach ($snackboxes as $snackbox_id)
     }
@@ -889,13 +958,22 @@ class SnackBoxController extends Controller
     {
         // We need some logic here to decide if the item to be deleted is the last item in the snackbox.
         // Grab all the entries with the same snackbox_id.
-        $snackbox = SnackBox::where('snackbox_id', request('snackbox_id'))->get();
+        $snackbox_total_items = SnackBox::where('snackbox_id', request('snackbox_id'))->get();
+        
+        
+        // However we also need to return the quantity, as it's no longer being delivered, to maintain accurate stock levels.
+        // Use the id of the snackbox entry...
+        $snackbox_item = SnackBox::find(request('id'));
+        // ...to grab the associated product_id and increment the stock level by the quantity; before we strip out or destroy the entry.
+        Product::find($snackbox_item->product_id)->increment('stock_level', $snackbox_item->quantity);
+        
         // If we've only retrieved 1 entry then this is the last vestige of box data and should be preserved.
-        if (count($snackbox) === 1) {
+        if (count($snackbox_total_items) === 1) {
             // To prevent an accidental extinction event, we don't want to destroy the entire entry, just strip out the product details and change the product_id to 0.
-            
             // Having some update logic in the destroy function is probably breaking best practice rules, but I'm sure i'll be able to refactor it one day!
-            Snackbox::where('id', $id)->update([
+            
+            
+            SnackBox::where('id', $id)->update([
                 'product_id' => 0,
                 'code' => null,
                 'name' => null,
@@ -904,6 +982,7 @@ class SnackBoxController extends Controller
             ]);
             
         } else {
+            
             // We still have another entry with the necessary box info, so we can destroy this one.
             SnackBox::destroy($id);
         }
