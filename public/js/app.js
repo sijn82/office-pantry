@@ -72071,7 +72071,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "\n.title-headers {\n  margin-top: 30px;\n}\n.input-group label {\n  margin-right: 30px;\n}\nform div {\n  margin-top: 10px;\n  margin-bottom: 10px;\n}\nform div label {\n    margin-top: auto;\n    margin-bottom: auto;\n}\n", ""]);
+exports.push([module.i, "\n.title-headers {\n  margin-top: 30px;\n}\n.input-group label {\n  margin-right: 30px;\n}\nform div {\n  margin-top: 10px;\n  margin-bottom: 10px;\n}\nform div label {\n    margin-top: auto;\n    margin-bottom: auto;\n}\n.info {\n  margin-bottom: 20px;\n}\n", ""]);
 
 // exports
 
@@ -72084,6 +72084,13 @@ exports.push([module.i, "\n.title-headers {\n  margin-top: 30px;\n}\n.input-grou
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -72250,8 +72257,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
         saveCronData: function saveCronData(command) {
-            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('api/cron-data/update', { next_run: this.next_run, command: this.command }).then(function (response) {
+            console.log(command);
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('api/cron-data/update', { next_run: this.next_run, command: command }).then(function (response) {
                 alert('Updated Next Cron Run');
+                location.reload(true);
             }).catch(function (error) {
                 return console.log(error);
             });
@@ -72414,7 +72423,7 @@ var render = function() {
         [
           _c("h3", [_vm._v(" Cron Data ")]),
           _vm._v(" "),
-          _c("h5", [
+          _c("h5", { staticClass: "info" }, [
             _vm._v(
               " When orders were last advanced to 'next delivery' date and will next be advanced again. "
             )
@@ -72427,7 +72436,9 @@ var render = function() {
               _vm._v(" "),
               _c("b-col", [_c("h4", [_vm._v(" Next Order Advance Date ")])]),
               _vm._v(" "),
-              _c("b-col", [_c("h4", [_vm._v(" Last Order Advance Date ")])])
+              _c("b-col", [_c("h4", [_vm._v(" Last Order Advance Date ")])]),
+              _vm._v(" "),
+              _c("b-col")
             ],
             1
           ),
@@ -72483,17 +72494,22 @@ var render = function() {
                     _c(
                       "b-col",
                       [
-                        _c("b-button", { on: { click: _vm.editCronData } }, [
-                          _vm._v(" Edit ")
-                        ]),
                         _c(
                           "b-button",
                           {
+                            attrs: { size: "sm", variant: "warning" },
+                            on: { click: _vm.editCronData }
+                          },
+                          [_vm._v(" Edit ")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "b-button",
+                          {
+                            attrs: { size: "sm", variant: "success" },
                             on: {
                               click: function($event) {
-                                _vm.saveCronData(
-                                  _vm.$store.state.cron_data.command
-                                )
+                                _vm.saveCronData(cron_data.command)
                               }
                             }
                           },
