@@ -53,6 +53,9 @@ Route::get('office-pantry-products', ['as' => 'office-pantry-products', function
 Route::get('invoicing', ['as' => 'invoicing', function () {
     return view('invoicing');
 }]);
+Route::get('cron', ['as' => 'cron', function () {
+    return view('cron');
+}]);
 
 // old system week start added to importing/exporting processes.
 Route::get('import-file', 'WeekStartController@show')->name('import-file')->middleware('auth:office');

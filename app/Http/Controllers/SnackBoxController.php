@@ -892,17 +892,29 @@ class SnackBoxController extends Controller
 
                         $old_product = Product::where('name', $new_standard_snack['name'])->get();
                         $product_details = Product::where('name', $selection)->get();
-                        // dd($old_product);
+                        
                         // This will need further work but so far, we find out the value of product quantity to be replaced
                         // i.e value of product to be replaced (£1.50) multiplied by quantity in standard snackbox for this week (3), totals £4.50 of stock needing to be substituted.
-                        $old_standard_snack_value = ($new_standard_snack['quantity'] * $old_product[0]->unit_price);
+                        
+                        $old_standard_snack_value = ( $new_standard_snack['quantity'] * $old_product[0]->unit_price );
+                        
                         // Now we have a total to be divided by the new product unit price
                         // I'm using ceil to ensure we get a whole number that keeps the product/quantity value at a minimum of what it was before.
                         // I still need to elaborate on this further to limit the quantity at 3 and prevent multiple low value items as a replacement,
                         // however this will come later, let's get it working like this first!
 
                         $new_quantity = ( $old_standard_snack_value / $product_details[0]->unit_price );
-                        // dd($new_quantity);
+                        
+                        // If the new quantity has risen to 4 or more, then the randomly selected product is likely a low value item and shouldn't really dominate the box contents.
+                        // In this scenario we'd like to select a second item to add some variety.
+                        
+                        // I'm not sure what the best approach for this is yet?  
+                        // 1. What would we do if the next randomly selected item is far more expensive than the randomly selected product 1 it's replacing?
+                        // - should we reduce the quantity of randomly selected product 1?
+                        // - what if randomly selected product 2 is more expensive than the original item being replaced?
+                        // - we don't want the default behaviour to make office pantry less profit.
+                        // 2. 
+                        
                         $new_standard_snack['quantity'] = ceil($new_quantity);
                         $new_standard_snack['product_id'] = $product_details[0]->product_id;
                         $new_standard_snack['code'] = $product_details[0]->code;

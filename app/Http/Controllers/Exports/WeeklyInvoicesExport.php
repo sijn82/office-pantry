@@ -152,7 +152,7 @@ WithTitle
 
         // Now each $company should just have the orders which need invoicing attached.
         foreach ($companies as $company) {
-
+            // dd($companies);
             // Each box type needs to be processed slightly differently, so we need 5 dedicated foreach loops.
 
             //---------- Unset Some Variables ----------//
@@ -279,6 +279,7 @@ WithTitle
 
                 //----- Drinkbox Variables -----//
                     $drinkbox_invoice_pt1 = (object) [];
+                    $drinkbox_grand_total = 0; // This is a recent addition (31/05/19) as I hit an undefined variable error
                 //----- Drinkbox Variables -----//
 
                 //----- Otherbox Variables -----//
@@ -1412,118 +1413,127 @@ WithTitle
 
 
             foreach ($snackboxes as $snackbox) {
-                // I only need to get this value once, so moving it up one foreach statement.
-                $snack_cap = $snackbox[0]->snack_cap;
-                $no_of_boxes = $snackbox[0]->no_of_boxes;
-                $type = $snackbox[0]->type;
-                // Hmmn, are these actually just behaving the same as unsetting the variables each time?
-                // I don't think I need them for their original use and if I only want them to unset, shouldn't I just do that to make it clearer?
+                if ($snackbox[0]->product_id !== 0) {
+                    //dump($snackbox);
+                    // I only need to get this value once, so moving it up one foreach statement.
+                    $snack_cap = $snackbox[0]->snack_cap;
+                    $no_of_boxes = $snackbox[0]->no_of_boxes;
+                    $type = $snackbox[0]->type;
+                    // Hmmn, are these actually just behaving the same as unsetting the variables each time?
+                    // I don't think I need them for their original use and if I only want them to unset, shouldn't I just do that to make it clearer?
 
-                // $snackbox_items_total_inc_vat = [];
-                // $snackbox_items_minus_vat = [];
-                // $snackbox_items_vat = [];
-                // $snackbox_items_zero_rated = [];
-                // $all_snackbox_items = [];
+                    // $snackbox_items_total_inc_vat = [];
+                    // $snackbox_items_minus_vat = [];
+                    // $snackbox_items_vat = [];
+                    // $snackbox_items_zero_rated = [];
+                    // $all_snackbox_items = [];
 
-                // Let's see if I still get the same results... EDIT: Yep.
-                unset($snackbox_items_total_inc_vat);
-                unset($snackbox_items_minus_vat);
-                unset($snackbox_items_vat);
-                unset($snackbox_items_zero_rated);
-                unset($all_snackbox_items);
-                unset($snackbox_items_total_inc_vat_with_snack_cap_deduction_applied);
-                unset($snackbox_items_zero_rated_with_snack_cap_deduction_applied);
+                    // Let's see if I still get the same results... EDIT: Yep.
+                    unset($snackbox_items_total_inc_vat);
+                    unset($snackbox_items_minus_vat);
+                    unset($snackbox_items_vat);
+                    unset($snackbox_items_zero_rated);
+                    unset($all_snackbox_items);
+                    unset($snackbox_items_total_inc_vat_with_snack_cap_deduction_applied);
+                    unset($snackbox_items_zero_rated_with_snack_cap_deduction_applied);
 
-                $snackbox_items_total_inc_vat = [];
-                $snackbox_items_minus_vat = [];
-                $snackbox_items_vat = [];
-                $snackbox_items_zero_rated = [];
-                $all_snackbox_items = [];
-                $snackbox_items_total_inc_vat_with_snack_cap_deduction_applied = [];
-                $snackbox_items_zero_rated_with_snack_cap_deduction_applied = [];
+                    $snackbox_items_total_inc_vat = [];
+                    $snackbox_items_minus_vat = [];
+                    $snackbox_items_vat = [];
+                    $snackbox_items_zero_rated = [];
+                    $all_snackbox_items = [];
+                    $snackbox_items_total_inc_vat_with_snack_cap_deduction_applied = [];
+                    $snackbox_items_zero_rated_with_snack_cap_deduction_applied = [];
 
-                // and add up all vat registered and all zero rated items into two totals,
-                foreach ($snackbox as $snackbox_item) {
-                    if ($snackbox_item->product_id != 0) {
-                        // check snackbox item (product) code for whether it's zero rated, or charged vat
-                        $product = Product::findOrFail($snackbox_item->product_id);
+                    // and add up all vat registered and all zero rated items into two totals,
+                    foreach ($snackbox as $snackbox_item) {
+                        if ($snackbox_item->product_id != 0) {
+                            // check snackbox item (product) code for whether it's zero rated, or charged vat
+                            $product = Product::findOrFail($snackbox_item->product_id);
 
-                        if ($product->vat === 'Yes') {
-                            // if it is, then multiply the cost by the quantity, to get a total vat included value.
-                            // Not sure why I'm using unit_cost here, commenting out and replacing with price but worth a relook in case I'm being dumb.
-                            // $snackbox_item_total_inc_vat = $snackbox_item->unit_cost * $snackbox_item->quantity;
-                            $snackbox_items_total_inc_vat[] = $snackbox_item->unit_price * $snackbox_item->quantity;
+                            if ($product->vat === 'Yes') {
+                                // if it is, then multiply the cost by the quantity, to get a total vat included value.
+                                // Not sure why I'm using unit_cost here, commenting out and replacing with price but worth a relook in case I'm being dumb.
+                                // $snackbox_item_total_inc_vat = $snackbox_item->unit_cost * $snackbox_item->quantity;
+                                $snackbox_items_total_inc_vat[] = $snackbox_item->unit_price * $snackbox_item->quantity;
 
-                        } else {
-                            // These are zero rated items, so we don't need to worry about vat.
-                            $snackbox_items_zero_rated[] = $snackbox_item->unit_price * $snackbox_item->quantity;
+                            } else {
+                                // These are zero rated items, so we don't need to worry about vat.
+                                $snackbox_items_zero_rated[] = $snackbox_item->unit_price * $snackbox_item->quantity;
+                            }
+
+                        } // end of if ($snackbox_item->product_id != null)
+                    } // end of foreach ($snackbox as $snackbox_item)
+
+
+                    // Now we've made separate totals of vat registered and zero rated items, we need them back together for some of this.
+                    $all_snackbox_items = array_merge( $snackbox_items_zero_rated, $snackbox_items_total_inc_vat );
+                    // Now I need to work out the natural total of products (before snack_cap) to work out how much to deduct from each product.
+                    // So let's sum up the values of the two arrays.
+                    $snackbox_total_before_snack_cap = array_sum($all_snackbox_items);
+                    // And add up how many products are contained in each.
+                    $number_of_items_in_snackbox = count($all_snackbox_items);
+
+                    // How should I treat wholesale snackboxes?  Thinking the process should be the same except for snack cap deductions.
+                    // If I can contain all the changes to a simple if/else statement, it'll keep it more readable.
+
+                    // if ($snack_cap !== null) { // <-- Should i check snack_cap or type === 'wholesale'?
+                    if ($type !== strtolower('wholesale')) { // <-- Going to use type for now, as I haven't prevented misuse of snack_cap yet.
+                        
+                        // dump($snackbox_total_before_snack_cap);
+                        // dump($snack_cap);
+                        // dump($number_of_items_in_snackbox);
+
+                        // Now we deduct the snack_cap limit to find out how much the box is over that value, dividing the total by the number of products, to get a per product deduction.
+                        $per_product_deduction = ( $snackbox_total_before_snack_cap - $snack_cap ) / $number_of_items_in_snackbox;
+
+                        // OK, now let's loop through the prices applying the discount
+                        foreach ($snackbox_items_total_inc_vat as $item) {
+
+                            $snackbox_items_total_inc_vat_with_snack_cap_deduction_applied[] = apply_deduction($item, $per_product_deduction);
+                        }
+                        // and the same with zero rated items
+                        foreach ($snackbox_items_zero_rated as $item) {
+
+                            $snackbox_items_zero_rated_with_snack_cap_deduction_applied[] = apply_deduction($item, $per_product_deduction);
                         }
 
-                    } // end of if ($snackbox_item->product_id != null)
-                } // end of foreach ($snackbox as $snackbox_item)
+                        // Now we have the snackbox items discounted to their snack_cap limit, we can work out the vat
 
+                        // So let's get the sum total(s)
+                        $snacks_with_vat_and_discount_total = array_sum($snackbox_items_total_inc_vat_with_snack_cap_deduction_applied);
+                        $snacks_zero_rated_total = array_sum($snackbox_items_zero_rated_with_snack_cap_deduction_applied);
 
-                // Now we've made separate totals of vat registered and zero rated items, we need them back together for some of this.
-                $all_snackbox_items = array_merge( $snackbox_items_zero_rated, $snackbox_items_total_inc_vat );
-                // Now I need to work out the natural total of products (before snack_cap) to work out how much to deduct from each product.
-                // So let's sum up the values of the two arrays.
-                $snackbox_total_before_snack_cap = array_sum($all_snackbox_items);
-                // And add up how many products are contained in each.
-                $number_of_items_in_snackbox = count($all_snackbox_items);
+                        // Ah, so fun story - don't forget to unset these arrays before the next order!!
+                        // unset($snackbox_items_total_inc_vat_with_snack_cap_deduction_applied);
+                        // unset($snackbox_items_zero_rated_with_snack_cap_deduction_applied);
 
-                // How should I treat wholesale snackboxes?  Thinking the process should be the same except for snack cap deductions.
-                // If I can contain all the changes to a simple if/else statement, it'll keep it more readable.
-
-                // if ($snack_cap !== null) { // <-- Should i check snack_cap or type === 'wholesale'?
-                if ($type !== strtolower('wholesale')) { // <-- Going to use type for now, as I haven't prevented misuse of snack_cap yet.
-
-                    // Now we deduct the snack_cap limit to find out how much the box is over that value, dividing the total by the number of products, to get a per product deduction.
-                    $per_product_deduction = ( $snackbox_total_before_snack_cap - $snack_cap ) / $number_of_items_in_snackbox;
-
-                    // OK, now let's loop through the prices applying the discount
-                    foreach ($snackbox_items_total_inc_vat as $item) {
-
-                        $snackbox_items_total_inc_vat_with_snack_cap_deduction_applied[] = apply_deduction($item, $per_product_deduction);
-                    }
-                    // and the same with zero rated items
-                    foreach ($snackbox_items_zero_rated as $item) {
-
-                        $snackbox_items_zero_rated_with_snack_cap_deduction_applied[] = apply_deduction($item, $per_product_deduction);
+                    } else {
+                        // These are exempt of Snack Caps, so we can just use the variables prior to the deductions.
+                        // I'm allowing the now slightly misleading variable names, to keep the next 20 lines reusable.
+                        // Or I could rename the variable to something more suitable?
+                        $snacks_with_vat_and_discount_total = array_sum($snackbox_items_total_inc_vat);
+                        $snacks_zero_rated_total = array_sum($snackbox_items_zero_rated);
                     }
 
-                    // Now we have the snackbox items discounted to their snack_cap limit, we can work out the vat
+                        // and work out the total minus vat aka 'unit_amount'
+                        $snacks_with_discount_minus_vat_total = ($snacks_with_vat_and_discount_total / 1.2);
+                        // before grabbing the vat amount aka 'tax_amount'
+                        $snacks_with_discount_vat_total = ($snacks_with_discount_minus_vat_total * 0.2);
 
-                    // So let's get the sum total(s)
-                    $snacks_with_vat_and_discount_total = array_sum($snackbox_items_total_inc_vat_with_snack_cap_deduction_applied);
-                    $snacks_zero_rated_total = array_sum($snackbox_items_zero_rated_with_snack_cap_deduction_applied);
-
-                    // Ah, so fun story - don't forget to unset these arrays before the next order!!
-                    // unset($snackbox_items_total_inc_vat_with_snack_cap_deduction_applied);
-                    // unset($snackbox_items_zero_rated_with_snack_cap_deduction_applied);
-
+                        // Create the 1st stage of the snackbox invoice
+                        $snackbox_pt1 = new $snackbox_invoice_pt1();
+                        $snackbox_pt1->snack_cap = $snack_cap;
+                        $snackbox_pt1->no_of_boxes = $no_of_boxes;
+                        $snackbox_pt1->snack_total_minus_vat = $snacks_with_discount_minus_vat_total;
+                        $snackbox_pt1->snack_total_vat = $snacks_with_discount_vat_total;
+                        $snackbox_pt1->snack_total_zero_registered = $snacks_zero_rated_total;
+                        $snackbox_pt1->snackbox_total_cost = ($snacks_with_discount_minus_vat_total + $snacks_with_discount_vat_total + $snacks_zero_rated_total);
+                        $snackboxes_ready_for_invoicing[] = $snackbox_pt1;
                 } else {
-                    // These are exempt of Snack Caps, so we can just use the variables prior to the deductions.
-                    // I'm allowing the now slightly misleading variable names, to keep the next 20 lines reusable.
-                    // Or I could rename the variable to something more suitable?
-                    $snacks_with_vat_and_discount_total = array_sum($snackbox_items_total_inc_vat);
-                    $snacks_zero_rated_total = array_sum($snackbox_items_zero_rated);
+                    // The snackbox being processed is actually empty
+                    // I COULD SEND THIS TO LARAVEL LOGS WITH BOX ID OR SOMETHING SIMILAR FOR SENSE CHECKING.
                 }
-
-                    // and work out the total minus vat aka 'unit_amount'
-                    $snacks_with_discount_minus_vat_total = ($snacks_with_vat_and_discount_total / 1.2);
-                    // before grabbing the vat amount aka 'tax_amount'
-                    $snacks_with_discount_vat_total = ($snacks_with_discount_minus_vat_total * 0.2);
-
-                    // Create the 1st stage of the snackbox invoice
-                    $snackbox_pt1 = new $snackbox_invoice_pt1();
-                    $snackbox_pt1->snack_cap = $snack_cap;
-                    $snackbox_pt1->no_of_boxes = $no_of_boxes;
-                    $snackbox_pt1->snack_total_minus_vat = $snacks_with_discount_minus_vat_total;
-                    $snackbox_pt1->snack_total_vat = $snacks_with_discount_vat_total;
-                    $snackbox_pt1->snack_total_zero_registered = $snacks_zero_rated_total;
-                    $snackbox_pt1->snackbox_total_cost = ($snacks_with_discount_minus_vat_total + $snacks_with_discount_vat_total + $snacks_zero_rated_total);
-                    $snackboxes_ready_for_invoicing[] = $snackbox_pt1;
-
             } // end of foreach ($company->snackboxes as $snackbox)
 
             // Ok, now I have an array of objects holding snackbox information.
@@ -1597,7 +1607,14 @@ WithTitle
                 }
 
             } // end of foreach ($company->drinkboxes as $drinkbox)
-
+            
+            // if the company doesn't have any drink boxes to invoice then we need to declare this variable as an array for array_sum not to have a hissy fit.
+            // not sure I got through the first round of testing without spotting encountering this!
+            
+            if (!isset($drinks_total)) {
+                $drinks_total = [];
+            }
+            
             // dd($drinkboxes_ready_for_invoicing);
             // dd($drinks_total);
             $drinks_grand_total = array_sum($drinks_total);
@@ -1641,6 +1658,11 @@ WithTitle
 
             } // end of foreach ($company->otherbox as $otherbox)
 
+            // same as drinks, if the company doesn't have an other box to invoice, we need to set the variable as an array.
+            if (!isset($other_total)) {
+                $other_total = [];
+            }
+            
             $other_grand_total = array_sum($other_total);
             // dd($other_grand_total);
 
@@ -1651,7 +1673,14 @@ WithTitle
             // Could move this to join the other variable declarations at the top, should I keep it.
             $company_invoice_discountable_total = 0;
             // $snackbox_grand_total = 0;
-
+            
+            // check if we have any snackboxes ready for invoicing, if not set the variables expected further down the line.
+            if (!isset($snackboxes_ready_for_invoicing)) {
+                
+                $snackboxes_ready_for_invoicing = [];
+                $snackbox_grand_total_array = [];
+            }
+            
             foreach ($snackboxes_ready_for_invoicing as $snackbox) {
 
                 $snackbox_grand_total_array[] = $snackbox->snackbox_total_cost;
@@ -1877,78 +1906,80 @@ WithTitle
                 $grouped_invoice[$invoice->snack_cap][] = $invoice;
             }
 
+            
+            if (isset($grouped_invoice)) {
+            
+                foreach ($grouped_invoice as $key => $group) {
 
-            foreach ($grouped_invoice as $key => $group) {
+                    // Let's ensure we reset the values for each snack cap group.
+                    $group_total = new $sales_invoice_group();
+                    $group_total->no_of_boxes = 0;
+                    $group_total->box_total = 0;
+                    $group_total->snack_total_minus_vat = 0;
+                    $group_total->snack_total_vat = 0;
+                    $group_total->snack_total_zero_registered = 0;
 
-                // Let's ensure we reset the values for each snack cap group.
-                $group_total = new $sales_invoice_group();
-                $group_total->no_of_boxes = 0;
-                $group_total->box_total = 0;
-                $group_total->snack_total_minus_vat = 0;
-                $group_total->snack_total_vat = 0;
-                $group_total->snack_total_zero_registered = 0;
+                    // We need to know how many boxes there are of this snack cap (in total)
+                    // to work out each ratio of product values to get accurate accounts.
 
-                // We need to know how many boxes there are of this snack cap (in total)
-                // to work out each ratio of product values to get accurate accounts.
+                    foreach ($group as $invoice) {
+                        $group_total->box_total += $invoice->no_of_boxes;
+                    }
 
-                foreach ($group as $invoice) {
-                    $group_total->box_total += $invoice->no_of_boxes;
+                    foreach ($group as $invoice) {
+                        // By dividing the number of boxes with these products in, out of all the boxes (in this snack cap category),
+                        // we can work out the ratio to multiply these numbers by.
+                        $group_ratio = ($invoice->no_of_boxes / $group_total->box_total);
+                        // Now we can use it to tweak the values again.
+                        $group_total->snack_cap = $invoice->snack_cap;
+                        $group_total->snack_total_minus_vat += ($invoice->snack_total_minus_vat * $group_ratio);
+                        $group_total->snack_total_vat += ($invoice->snack_total_vat * $group_ratio);
+                        $group_total->snack_total_zero_registered += ($invoice->snack_total_zero_registered * $group_ratio);
+                        $group_total->no_of_boxes += $invoice->no_of_boxes;
+
+                    }
+                    $grouped_totals_ready_for_invoicing[] = $group_total;
                 }
 
-                foreach ($group as $invoice) {
-                    // By dividing the number of boxes with these products in, out of all the boxes (in this snack cap category),
-                    // we can work out the ratio to multiply these numbers by.
-                    $group_ratio = ($invoice->no_of_boxes / $group_total->box_total);
-                    // Now we can use it to tweak the values again.
-                    $group_total->snack_cap = $invoice->snack_cap;
-                    $group_total->snack_total_minus_vat += ($invoice->snack_total_minus_vat * $group_ratio);
-                    $group_total->snack_total_vat += ($invoice->snack_total_vat * $group_ratio);
-                    $group_total->snack_total_zero_registered += ($invoice->snack_total_zero_registered * $group_ratio);
-                    $group_total->no_of_boxes += $invoice->no_of_boxes;
+                // Now we have the invoices grouped by snack cap and the values have been ratioed by number of boxes with those product lines
+                // We can create two new invoice lines ready for further details.  The first is vat inclusive items, the second one's for zero rated items.
+                // Let's put them into invoices and never speak about snackboxes, snack caps and discounts ever again.
 
+                foreach ($grouped_totals_ready_for_invoicing as $snackbox_group) {
+
+                    // OK, so for each of these entries I want to check whether they have zero rated &/or 20% VAT rated products,
+                    // creating an invoice entry for each if they do.
+
+                    // Snackboxes with vat registered products
+                    if ($snackbox_group->snack_total_minus_vat > 0) {
+
+                        $sales_invoice = new $sales_invoice();
+
+                        $sales_invoice->description = 'Snacks';
+                        $sales_invoice->quantity = $snackbox_group->no_of_boxes;
+                        $sales_invoice->account_code = '4010';
+                        $sales_invoice->unit_amount = $snackbox_group->snack_total_minus_vat;
+                        $sales_invoice->tax_amount = ($snackbox_group->snack_total_vat * $snackbox_group->no_of_boxes); // This converts the vat total from per item to grand total.
+                        $sales_invoice->tax_type = '20% (VAT on Income)';
+
+                        $sales_invoices[] = $sales_invoice;
+                    }
+                    // Snackboxes with zero rated products
+                    if ($snackbox_group->snack_total_zero_registered > 0) {
+
+                        $sales_invoice = new $sales_invoice();
+
+                        $sales_invoice->description = 'Snacks';
+                        $sales_invoice->quantity = $snackbox_group->no_of_boxes;
+                        $sales_invoice->account_code = '4010';
+                        $sales_invoice->unit_amount = $snackbox_group->snack_total_zero_registered;
+                        $sales_invoice->tax_amount = 0;
+                        $sales_invoice->tax_type = 'Zero Rated Income';
+
+                        $sales_invoices[] = $sales_invoice;
+                    }
                 }
-                $grouped_totals_ready_for_invoicing[] = $group_total;
             }
-
-            // Now we have the invoices grouped by snack cap and the values have been ratioed by number of boxes with those product lines
-            // We can create two new invoice lines ready for further details.  The first is vat inclusive items, the second one's for zero rated items.
-            // Let's put them into invoices and never speak about snackboxes, snack caps and discounts ever again.
-
-            foreach ($grouped_totals_ready_for_invoicing as $snackbox_group) {
-
-                // OK, so for each of these entries I want to check whether they have zero rated &/or 20% VAT rated products,
-                // creating an invoice entry for each if they do.
-
-                // Snackboxes with vat registered products
-                if ($snackbox_group->snack_total_minus_vat > 0) {
-
-                    $sales_invoice = new $sales_invoice();
-
-                    $sales_invoice->description = 'Snacks';
-                    $sales_invoice->quantity = $snackbox_group->no_of_boxes;
-                    $sales_invoice->account_code = '4010';
-                    $sales_invoice->unit_amount = $snackbox_group->snack_total_minus_vat;
-                    $sales_invoice->tax_amount = ($snackbox_group->snack_total_vat * $snackbox_group->no_of_boxes); // This converts the vat total from per item to grand total.
-                    $sales_invoice->tax_type = '20% (VAT on Income)';
-
-                    $sales_invoices[] = $sales_invoice;
-                }
-                // Snackboxes with zero rated products
-                if ($snackbox_group->snack_total_zero_registered > 0) {
-
-                    $sales_invoice = new $sales_invoice();
-
-                    $sales_invoice->description = 'Snacks';
-                    $sales_invoice->quantity = $snackbox_group->no_of_boxes;
-                    $sales_invoice->account_code = '4010';
-                    $sales_invoice->unit_amount = $snackbox_group->snack_total_zero_registered;
-                    $sales_invoice->tax_amount = 0;
-                    $sales_invoice->tax_type = 'Zero Rated Income';
-
-                    $sales_invoices[] = $sales_invoice;
-                }
-            }
-
             // dd($drinkboxes_ready_for_invoicing);
 
             // Right, time for any last details which will vary between invoice lines for this company.
@@ -2035,7 +2066,7 @@ WithTitle
                 
                 // I could and maybe should move all these checks to the top of the function as we don't need to set this each time we process (invoice) a different company.
              
-             
+                // dd($sales_invoices);
               //---------- Invoice number counter ----------//
 
              foreach ($sales_invoices as $sales_invoice) {
@@ -2078,13 +2109,16 @@ WithTitle
 
                  $completed_sales_invoices[] = $sales_invoice;
              } // end of foreach ($sales_invoices as $sales_invoice)
+             
+             // I need to prevent the invoice number incrementing for every company, and only every company who has at least one invoice.
+             // Isset doesn't work because even a variable which is an empty array, is still set, however empty works like a charm.
 
-             $counter++;
+             if (!empty($sales_invoices)) {
+                 
+                 $counter++;
+             }
              
              unset($sales_invoices);
-
-             // dd($completed_sales_invoices);
-             // dd($order_total);
 
             //----- End of merge orders for invoicing -----//
 

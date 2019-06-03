@@ -10,7 +10,7 @@
             </b-col>
             <b-col>
                 <label> Select Type </label>
-                <b-form-group description="This is a required field for either 'Save' option.">
+                <b-form-group description="This is a required field.">
                     <b-form-select v-model="type" :options="this.$store.state.types_list" size="sm" required>
                         <template slot="first">
                                 <option :value="null" disabled> Please select an option </option>
@@ -98,7 +98,6 @@
                      <b-col>
                          <p v-if="createWholesaleSnackbox"> {{ (snack.unit_price * snack.case_size) }} </p>
                          <p v-else> {{ snack.unit_price }} </p>
-                         <!-- <p> {{ snack.unit_price }} </p> -->
                      </b-col>
                      <b-col>
                          <b-button size="sm" variant="danger" @click="removeProduct(snack.id)"> Remove </b-button>
@@ -110,11 +109,12 @@
                   <b-col>  </b-col>
                   <b-col><p> Total: £{{ total }} </p></b-col>
                   <b-col>
-                      <b-button size="sm" variant="warning" @click="saveStandardSnackbox()"> Save as New Standard Box </b-button>
-                      <b-form-text> This option will <b> update all boxes of the 'type' selected </b> in the input option above.  </b-form-text>
+                      <!-- <b-button size="sm" variant="warning" @click="saveStandardSnackbox()"> Save as New Standard Box </b-button>
+                      <b-form-text> This option will <b> update all boxes of the 'type' selected </b> in the input option above.  </b-form-text> -->
                   </b-col>
               </b-row>
-              <b-row class="margin-top"><b-col>  </b-col>
+              <b-row class="margin-top">
+                  <b-col>  </b-col>
                   <b-col>  </b-col>
                   <b-col>  </b-col>
                   <b-col>
@@ -287,10 +287,10 @@ export default {
                 // console.log(response.data);
             }).catch(error => console.log(error));
         },
-        saveStandardSnackbox() {
-            this.$store.dispatch('saveStandardSnackboxToDB', this.type );
-
-        },
+        // saveStandardSnackbox() {
+        //     this.$store.dispatch('saveStandardSnackboxToDB', this.type );
+        // 
+        // },
         addNewType(new_type) {
             console.log(new_type);
             this.$store.commit('addNewTypeToStore', new_type);

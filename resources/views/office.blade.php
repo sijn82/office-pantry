@@ -31,7 +31,7 @@
                                 <a href="{{ route('new-company') }}"> Add New Company </a>
                             </li>
                             <li style="list-style:none;">
-                                <a href="{{ route('snackboxes') }}"> Add New Snackbox, Mass Update Standard (Types) </a>
+                                <a href="{{ route('snackboxes') }}"> Mass Update Snackbox (By Type) </a>
                             </li>
                             <li style="list-style:none;">
                                 <a href="{{ route('preferences') }}"> Add/Edit/View Company Preferences (Allergies, Likes, Dislikes & Additional Info) </a>
@@ -41,6 +41,9 @@
                             </li>
                             <li style="list-style:none;">
                                 <a href="{{ route('invoicing') }}"> Process/Export Invoicing </a>
+                            </li>
+                            <li style="list-style:none;">
+                                <a href="{{ route('cron') }}"> View/Edit Cron Tasks </a>
                             </li>
                         </ul>
 
@@ -65,6 +68,9 @@
                         <ul>
                             <li style="list-style:none;">
                                 <a href=" {{ route('products') }}"> View / Add New Products </a>
+                            </li>
+                            <li style="list-style:none;">
+                                <a href=" {{ route('office-pantry-products') }}"> View / Edit Office Pantry Products </a>
                             </li>
                             <li style="list-style:none;">
                                 <a href=" {{ route('fruit-partners') }}"> View / Add New Fruit Partners </a>

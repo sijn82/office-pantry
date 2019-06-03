@@ -5,3 +5,11 @@
   <office-pantry-product-list></office-pantry-product-list>
 </div>
 @endsection
+
+@section('office-pantry-products-styling')
+<style media="screen">
+    .flex-center {
+        display: block;
+    }
+</style>
+@endsection

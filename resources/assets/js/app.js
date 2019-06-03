@@ -89,6 +89,7 @@ Vue.component('snackbox-item', require('./components/admin/snacks/SnackBoxItem.v
 Vue.component('snackbox', require('./components/admin/snacks/SnackBox.vue'));
 Vue.component('snackboxes-admin', require('./components/admin/snacks/SnackBoxesAdmin.vue'));
 Vue.component('add-new-snackbox', require('./components/admin/snacks/AddNewSnackbox.vue'));
+Vue.component('mass-update-snackbox', require('./components/admin/snacks/MassUpdateSnackBox.vue'));
 // Drinkbox Related
 Vue.component('drinkbox-item', require('./components/admin/drinks/DrinkBoxItem.vue'));
 Vue.component('drinkbox', require('./components/admin/drinks/DrinkBox.vue'));
@@ -121,6 +122,7 @@ Vue.component('select-company', require('./components/admin/SelectCompany.vue'))
 // System Related
 Vue.component('exporting', require('./components/admin/Exporting.vue'));
 Vue.component('invoice-options', require('./components/admin/InvoiceOptions.vue'));
+Vue.component('cron-list', require('./components/admin/CronList.vue'));
 
 // This works which is great but I should move this somewhere else, maybe somewhere I can add further directives and their associated functions?
 function debounce(fn, delay = 300) {

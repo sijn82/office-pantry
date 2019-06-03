@@ -53,28 +53,7 @@
                     <p v-for="week_start in $store.state.week_start"><b> Current Value: {{ week_start.delivery_days }} </b></p>
                     
                 </div>
-                <div class="col-md-12">
-                    <h3> Cron Data </h3>
-                    <h5 class="info"> When orders were last advanced to 'next delivery' date and will next be advanced again. </h5>
-                    <b-row>
-                        <b-col> <h4> Command </h4> </b-col>
-                        <b-col> <h4> Next Order Advance Date </h4> </b-col>
-                        <b-col> <h4> Last Order Advance Date </h4> </b-col>
-                        <b-col> </b-col> <!-- Empty column to align headers with content below and allow space for buttons on the right. -->
-                    </b-row>
-                    <div v-for="cron_data in $store.state.cron_data">
-                        <b-row>
-                            <b-col><p><b> {{ cron_data.command }} </b></p></b-col>
-                            <!-- The only field it would be useful to edit manually (as an admin) would be the 'next_run', as changing the command would break everything and 'last_run' is otherwise irrelevant. -->
-                            <b-col> <div v-if="edit"><b-form-input type="date" v-model="next_run"> </b-form-input></div> <div v-else> <p><b> {{ cron_data.next_run }} </b></p></div></b-col>
-                            <b-col> <p><b> {{ cron_data.last_run }} </b></p> </b-col>
-                            <b-col>
-                                <b-button size="sm" variant="warning" @click="editCronData"> Edit </b-button> 
-                                <b-button size="sm" variant="success" @click="saveCronData(cron_data.command)"> Save </b-button>
-                            </b-col>
-                        </b-row>
-                    </div>
-                </div>
+                
             </div>
         </div>
 </template>
@@ -94,9 +73,6 @@
             margin-top: auto;
             margin-bottom: auto;
         }
-    }
-    .info {
-        margin-bottom: 20px;
     }
 
 </style>
@@ -123,8 +99,6 @@ export default {
                     { value: 'fri', text: 'Friday' },
                 ],
             },
-            edit: false,
-            next_run: '',
             //week_start: '',
             new_week_start: '',
             updated_week_start: '',
@@ -164,26 +138,12 @@ export default {
               }).catch(error => console.log(error));
               // this.$router.push('/thank-you')
           },
-          editCronData: function () {
-              if (this.edit === false) {
-                  this.edit = true;
-              } else {
-                  this.edit = false;
-              }
-          },
-          saveCronData: function (command) {
-              console.log(command);
-              axios.post('api/cron-data/update', { next_run: this.next_run, command: command }).then( response => {
-                  alert('Updated Next Cron Run');
-                  location.reload(true);
-              }).catch( error => console.log( error ));
-          }
+
     },
 
     mounted() {
             console.log('Component Import Week Start mounted.');
             this.$store.commit('getWeekStart');
-            this.$store.commit('getCronData');
         }
 }
 
