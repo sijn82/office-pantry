@@ -44,6 +44,7 @@
                 position: absolute;
                 right: 10px;
                 top: 18px;
+                background-color: rgba(0,0,0,0.05); /* Temporary addition just to stop accidental creation of customer logins. */
             }
 
             .content {
@@ -67,6 +68,10 @@
             .m-b-md {
                 margin-bottom: 30px;
             }
+            .customer-login {
+                margin: auto;
+                text-align: center;
+            }
         </style>
 
         @yield('importing-csv-files')
@@ -89,6 +94,7 @@
                     @auth
                         <a href="{{ url('/home') }}"> Home </a>
                     @else
+                        <h5 class="customer-login"> Customer </h5>
                         <a href="{{ route('login') }}"> Login </a>
                         <a href="{{ route('register') }}"> Register </a>
                     @endauth

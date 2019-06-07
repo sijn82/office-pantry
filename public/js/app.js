@@ -91121,7 +91121,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "\n.mass-update-snackbox[data-v-a61d40c6] {\n  margin-top: 40px;\n}\n.mass-update-snackbox .select-type-label[data-v-a61d40c6] {\n    font-weight: 400;\n    font-size: 1.2em;\n}\n.mass-update-snackbox .order-selections[data-v-a61d40c6] {\n    padding: 10px 40px;\n}\n.mass-update-snackbox .order-selections p[data-v-a61d40c6] {\n      font-weight: 300;\n}\n.mass-update-snackbox .order-selections .save-info[data-v-a61d40c6] {\n      margin: 10px 30px;\n}\n", ""]);
+exports.push([module.i, "\n.snackbox-recommended-procedure[data-v-a61d40c6] {\n  margin: 40px 60px;\n}\n.snackbox-recommended-procedure p[data-v-a61d40c6] {\n    font-weight: 300;\n    font-size: 1.2em;\n    margin: 20px 20px;\n}\n.snackbox-recommended-procedure p b[data-v-a61d40c6] {\n      font-size: 1.3em;\n}\n.archive-and-empty[data-v-a61d40c6] {\n  margin: 40px 60px;\n}\n.archive-and-empty p[data-v-a61d40c6] {\n    font-weight: 300;\n    font-size: 1.2em;\n    margin: 20px 80px;\n}\n.archive-and-empty p b[data-v-a61d40c6] {\n      font-size: 1.3em;\n}\n.archive-and-empty .archive-and-empty-button[data-v-a61d40c6] {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n}\n.mass-update-snackbox[data-v-a61d40c6] {\n  margin-top: 40px;\n}\n.mass-update-snackbox p[data-v-a61d40c6] {\n    font-weight: 300;\n    font-size: 1.2em;\n    margin: 20px 80px;\n}\n.mass-update-snackbox p b[data-v-a61d40c6] {\n      font-size: 1.3em;\n}\n.mass-update-snackbox .select-type-label[data-v-a61d40c6] {\n    font-weight: 400;\n    font-size: 1.2em;\n}\n.mass-update-snackbox .order-selections[data-v-a61d40c6] {\n    padding: 10px 40px;\n}\n.mass-update-snackbox .order-selections p[data-v-a61d40c6] {\n      font-weight: 300;\n}\n.mass-update-snackbox .order-selections .save-info[data-v-a61d40c6] {\n      margin: 10px 30px;\n}\n", ""]);
 
 // exports
 
@@ -91132,6 +91132,133 @@ exports.push([module.i, "\n.mass-update-snackbox[data-v-a61d40c6] {\n  margin-to
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -91257,196 +91384,373 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "mass-update-snackbox" },
-    [
-      _c("h1", [_vm._v(" Mass Update Snackbox (By Type) ")]),
-      _vm._v(" "),
-      _c(
-        "b-row",
-        [
-          _c("b-col"),
-          _vm._v(" "),
-          _c(
-            "b-col",
-            [
-              _c("label", { staticClass: "select-type-label" }, [
-                _vm._v(" Select Type ")
+  return _c("div", [
+    _c(
+      "div",
+      { staticClass: "snackbox-recommended-procedure" },
+      [
+        _c("h1", [_vm._v(" Snackbox Process ")]),
+        _vm._v(" "),
+        _c(
+          "b-row",
+          [
+            _c("b-col", [
+              _c("h4", [_vm._v(" Step 1: ")]),
+              _vm._v(" "),
+              _c("p", [
+                _vm._v(
+                  "\n                    Go into Company Admin Panel and create any new company snackboxes.  \n                    Leave them empty if you wish to mass update them by 'type' (at Step 2) later on.\n                "
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", [
+              _c("h4", [_vm._v(" Step 2: ")]),
+              _vm._v(" "),
+              _c("p", [
+                _vm._v(
+                  "\n                    Mass Update Snackboxes (By Type).\n                "
+                )
               ]),
               _vm._v(" "),
-              _c(
-                "b-form-group",
-                {
-                  attrs: {
-                    description:
-                      "Select the 'Type', from existing list of options to mass update."
-                  }
-                },
-                [
-                  _c(
-                    "b-form-select",
-                    {
-                      attrs: {
-                        options: this.$store.state.types_list,
-                        size: "sm",
-                        required: ""
-                      },
-                      model: {
-                        value: _vm.type,
-                        callback: function($$v) {
-                          _vm.type = $$v
-                        },
-                        expression: "type"
-                      }
-                    },
-                    [
-                      _c("template", { slot: "first" }, [
-                        _c(
-                          "option",
-                          {
-                            attrs: { disabled: "" },
-                            domProps: { value: null }
-                          },
-                          [_vm._v(" Please select an option ")]
-                        )
-                      ])
-                    ],
-                    2
+              _c("h4", [_vm._v(" Step 3: ")]),
+              _vm._v(" "),
+              _c("p", [
+                _vm._v(
+                  "\n                    Manually update the rest, including any tweaks needed to the mass updated boxes, on a per company basis.\n                "
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", [
+              _c("h4", [_vm._v(" Step 4: ")]),
+              _vm._v(" "),
+              _c("p", [
+                _vm._v(
+                  "\n                    Now the boxes are tailored and ready to go, run picklists, \n                    routes and any other stuff you need that needs this data.\n                "
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", [
+              _c("h4", [_vm._v(" Step 5: ")]),
+              _vm._v(" "),
+              _c("p", [
+                _vm._v(
+                  "\n                    In an ideal world, run invoicing for all orders this week.  \n                    Measures are in place to allow this to be done after Step 6 (fingers crossed).\n                "
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", [
+              _c("h4", [_vm._v(" Step 6: ")]),
+              _vm._v(" "),
+              _c("p", [
+                _vm._v(
+                  "\n                    Archive and empty the snackboxes, ready to repeat the process.\n                "
+                )
+              ])
+            ])
+          ],
+          1
+        )
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "archive-and-empty" },
+      [
+        _c("h1", [_vm._v(" Archive And Empty Snackboxes ")]),
+        _vm._v(" "),
+        _c(
+          "b-row",
+          [
+            _c("b-col", [
+              _c("p", [
+                _vm._v("  \n                    This button will "),
+                _c("b", [
+                  _vm._v(" archive the contents of all 'active' snackboxes. ")
+                ]),
+                _vm._v(
+                  "  \n                    If the box has an 'invoiced_at' date the box is saved to the archives as 'inactive'.  \n                    We only need it for our records.  However, if the box is missing an invoice date it will be saved as 'active'.  \n                "
+                )
+              ]),
+              _vm._v(" "),
+              _c("p", [
+                _vm._v(
+                  "\n                    This is to ensure it gets pulled into the next invoicing run for that branding theme and can be viewed in the company archives section of the admin panel.\n                "
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("b-col", [
+              _c("p", [
+                _vm._v(
+                  "\n                    Next it reuses the box data, i.e snackbox_id, type, frequency etc and builds an empty box. \n                    This box is then ready for when its 'type' is mass updated, \n                    or the box is altered manually through the company admin panel.\n                "
+                )
+              ]),
+              _vm._v(" "),
+              _c("p", [
+                _c("b", [
+                  _vm._v(
+                    " If you're happy to archive and empty these boxes (and no longer need them for picklists, or routes) - push the button. "
                   )
-                ],
-                1
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c("b-col")
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "order-selections" },
-        [
-          _c(
-            "b-row",
-            [
-              _c("b-col", [_c("h4", [_vm._v(" Product Name ")])]),
-              _c("b-col", [_c("h4", [_vm._v(" Quantity ")])]),
-              _c("b-col", [_c("h4", [_vm._v(" Price ")])]),
-              _c("b-col")
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _vm._l(_vm.$store.state.snackbox, function(snack) {
-            return _c(
-              "div",
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c(
+              "b-col",
+              { staticClass: "archive-and-empty-button" },
               [
                 _c(
-                  "b-row",
+                  "b-button",
+                  {
+                    attrs: {
+                      size: "lg",
+                      href: "/snackboxes/archive-and-empty",
+                      variant: "danger"
+                    }
+                  },
+                  [_vm._v(" Archive And Empty Snackboxes ")]
+                )
+              ],
+              1
+            )
+          ],
+          1
+        )
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "mass-update-snackbox" },
+      [
+        _c("h1", [_vm._v(" Mass Update Snackbox (By Type) ")]),
+        _vm._v(" "),
+        _c(
+          "b-row",
+          [
+            _c("b-col", [
+              _c("p", [
+                _vm._v(" \n                    If you've "),
+                _c("b", [
+                  _vm._v(
+                    " already archived and emptied the existing snackboxes from last week, you're ready to mass update any selected 'type' with products. "
+                  )
+                ]),
+                _vm._v(
+                  "\n                    Should a company dislike an item in the box you create (by listing it in their 'Preferences' under 'Dislike'), \n                    it will attempt to pick a different item (in stock) from their listed likes.  \n                    Increasing, or decreasing the quantity to match the replaced product value as closely as possible.\n                    This is a work in progress but if the company doesn't have anything listed in their likes section, \n                    it will default to picking something from else from general stock.  \n                    In the future we'll also be able to autopopulate boxes with a companies listed 'Essentials', \n                    however it's only useful at the moment to keep a record of what they really want for manual replacement.\n                "
+                )
+              ]),
+              _vm._v(" "),
+              _c("p", [
+                _vm._v(
+                  "\n                    As a side note, should you populate a 'type' with products and then add a new box of that 'type', \n                    it will not be autopoulated with products (until the mass update for that 'type' is next run - \n                    "
+                ),
+                _c("b", [
+                  _vm._v(
+                    " Do not just re-run it, archive and stock level chaos will ensue! "
+                  )
+                ]),
+                _vm._v(
+                  ").  \n                    Instead you'll have to do it manually in the company admin panel.\n                "
+                )
+              ])
+            ])
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "b-row",
+          [
+            _c("b-col"),
+            _vm._v(" "),
+            _c(
+              "b-col",
+              [
+                _c("label", { staticClass: "select-type-label" }, [
+                  _vm._v(" Select Type ")
+                ]),
+                _vm._v(" "),
+                _c(
+                  "b-form-group",
+                  {
+                    attrs: {
+                      description:
+                        "Select the 'Type', from existing list of options to mass update."
+                    }
+                  },
                   [
-                    _c("b-col", [
-                      _c("p", [_vm._v(" " + _vm._s(snack.name) + " ")])
-                    ]),
-                    _vm._v(" "),
-                    _c("b-col", [
-                      _c("p", [_vm._v(" " + _vm._s(snack.quantity) + " ")])
-                    ]),
-                    _vm._v(" "),
-                    _c("b-col", [
-                      _c("p", [_vm._v(" " + _vm._s(snack.unit_price) + " ")])
-                    ]),
-                    _vm._v(" "),
                     _c(
-                      "b-col",
-                      [
-                        _c(
-                          "b-button",
-                          {
-                            attrs: { size: "sm", variant: "danger" },
-                            on: {
-                              click: function($event) {
-                                _vm.removeProduct(snack.id)
-                              }
-                            }
+                      "b-form-select",
+                      {
+                        attrs: {
+                          options: this.$store.state.types_list,
+                          size: "sm",
+                          required: ""
+                        },
+                        model: {
+                          value: _vm.type,
+                          callback: function($$v) {
+                            _vm.type = $$v
                           },
-                          [_vm._v(" Remove ")]
-                        )
+                          expression: "type"
+                        }
+                      },
+                      [
+                        _c("template", { slot: "first" }, [
+                          _c(
+                            "option",
+                            {
+                              attrs: { disabled: "" },
+                              domProps: { value: null }
+                            },
+                            [_vm._v(" Please select an option ")]
+                          )
+                        ])
                       ],
-                      1
+                      2
                     )
                   ],
                   1
                 )
               ],
               1
-            )
-          }),
-          _vm._v(" "),
-          _c(
-            "b-row",
-            [
-              _c("b-col"),
-              _vm._v(" "),
-              _c("b-col"),
-              _vm._v(" "),
-              _c("b-col", [
-                _c("p", [_vm._v(" Total: £" + _vm._s(_vm.total) + " ")])
-              ]),
-              _vm._v(" "),
-              _c(
-                "b-col",
+            ),
+            _vm._v(" "),
+            _c("b-col")
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "order-selections" },
+          [
+            _c(
+              "b-row",
+              [
+                _c("b-col", [_c("h4", [_vm._v(" Product Name ")])]),
+                _c("b-col", [_c("h4", [_vm._v(" Quantity ")])]),
+                _c("b-col", [_c("h4", [_vm._v(" Price ")])]),
+                _c("b-col")
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _vm._l(_vm.$store.state.snackbox, function(snack) {
+              return _c(
+                "div",
                 [
                   _c(
-                    "b-button",
-                    {
-                      attrs: { size: "sm", variant: "warning" },
-                      on: {
-                        click: function($event) {
-                          _vm.saveStandardSnackbox()
-                        }
-                      }
-                    },
-                    [_vm._v(" Save as New Standard Box ")]
-                  ),
-                  _vm._v(" "),
-                  _c("b-form-text", { staticClass: "save-info" }, [
-                    _vm._v(" This option will "),
-                    _c("b", [
-                      _vm._v(" update all boxes of the 'type' selected ")
-                    ]),
-                    _vm._v(" in the input option above.  ")
-                  ])
+                    "b-row",
+                    [
+                      _c("b-col", [
+                        _c("p", [_vm._v(" " + _vm._s(snack.name) + " ")])
+                      ]),
+                      _vm._v(" "),
+                      _c("b-col", [
+                        _c("p", [_vm._v(" " + _vm._s(snack.quantity) + " ")])
+                      ]),
+                      _vm._v(" "),
+                      _c("b-col", [
+                        _c("p", [_vm._v(" " + _vm._s(snack.unit_price) + " ")])
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "b-col",
+                        [
+                          _c(
+                            "b-button",
+                            {
+                              attrs: { size: "sm", variant: "danger" },
+                              on: {
+                                click: function($event) {
+                                  _vm.removeProduct(snack.id)
+                                }
+                              }
+                            },
+                            [_vm._v(" Remove ")]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
                 ],
                 1
               )
-            ],
-            1
-          )
-        ],
-        2
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        [
-          _c("products-list", {
-            attrs: { createSnackbox: _vm.createSnackbox },
-            on: {
-              addProduct: function($event) {
-                _vm.addProductToOrder($event)
+            }),
+            _vm._v(" "),
+            _c(
+              "b-row",
+              [
+                _c("b-col"),
+                _vm._v(" "),
+                _c("b-col"),
+                _vm._v(" "),
+                _c("b-col", [
+                  _c("p", [_vm._v(" Total: £" + _vm._s(_vm.total) + " ")])
+                ]),
+                _vm._v(" "),
+                _c(
+                  "b-col",
+                  [
+                    _c(
+                      "b-button",
+                      {
+                        attrs: { size: "sm", variant: "warning" },
+                        on: {
+                          click: function($event) {
+                            _vm.saveStandardSnackbox()
+                          }
+                        }
+                      },
+                      [_vm._v(" Save as New Standard Box ")]
+                    ),
+                    _vm._v(" "),
+                    _c("b-form-text", { staticClass: "save-info" }, [
+                      _vm._v(" This option will "),
+                      _c("b", [
+                        _vm._v(" update all boxes of the 'type' selected ")
+                      ]),
+                      _vm._v(" in the input option above.  ")
+                    ])
+                  ],
+                  1
+                )
+              ],
+              1
+            )
+          ],
+          2
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          [
+            _c("products-list", {
+              attrs: { createSnackbox: _vm.createSnackbox },
+              on: {
+                addProduct: function($event) {
+                  _vm.addProductToOrder($event)
+                }
               }
-            }
-          })
-        ],
-        1
-      )
-    ],
-    1
-  )
+            })
+          ],
+          1
+        )
+      ],
+      1
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true

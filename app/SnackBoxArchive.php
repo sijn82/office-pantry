@@ -4,10 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class SnackBox extends Model
+class SnackBoxArchive extends Model
 {
-    // This is the new, fancy and super shiny version.
-    
     protected $fillable = [
         
         // Snackbox Info
@@ -31,14 +29,9 @@ class SnackBox extends Model
         'unit_price',
         'invoiced_at'
     ];
-    
-    // public function companies()
-    // {
-    //     return $this->belongsTo(Company::class);
-    // }
+
     public function companies()
     {
         return $this->belongsTo(CompanyDetails::class);
     }
-    
 }

@@ -132,6 +132,7 @@ Route::get('import-drinks-n-snacks', 'RoutesController@addDrinksNSnacksToRoute')
 
 // Use this to store a snackbox attached to a single company id
 Route::post('snackboxes/save', 'SnackBoxController@store');
+
 // Use this to update all the existing standard snackboxes.
 Route::post('snackboxes/standard/update', 'SnackBoxController@massUpdateType');
 // Update company specific snackbox

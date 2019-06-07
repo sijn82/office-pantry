@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Company;
+use App\Company; // this is also very out of date!!
+use App\CompanyDetails;
 use App\Order;
 use App\FruitBox;
 use App\MilkBox;
+// looks like I only set this up to advance fruit and milk orders!!
+use App\SnackBox;
+use App\DrinkBox;
+use App\OtherBox;
 use App\WeekStart;
 use App\CompanyRoute;
 use App\Cron;
@@ -105,155 +110,24 @@ class OrderController extends Controller
             // dd($secondMondayBeforeNextMonth);
 
         // ---------- End of Test Area ---------- //
+        
+        //----- Alternative approach for refactoring - thoughts... -----//
+        
+            // Instead of the initial query only taking one frequency, I could grab all of them, with an if clause
+            // filtering by frequency to push the next_delivery_date a week/fortnight/monthly depending on requirements.
+            
+            // I've now refactored the function to reduce the repetition and make it easier to read as all the infomation for each section is now together.
+            // It all appears to be working, however it will be worth keeping an eye on.
+            // It could probably be condensed even further but this is readable enough for now.
+        
+        //----- End of Alternative approach for refactoring - thoughts... -----//
+        
 
-        // ---------- Weekly ---------- //
-
-            // Not actually using this for anything at the moment, identifying the weekstart variable is needed
-            // for determining whether to put them on routes but not to advance their next delivery date.
-            $weekStart = Weekstart::findOrFail(1);
-
-            // ---------- Fruitboxes ---------- //
-
-                // I'm currently updating all weekly fruitboxes, however previously I also had 'where('is_active', 'Active')' as another filter
-                // but this would mean any boxes frozen (even temporarily) would be at the wrong week start when advanced by a week as the code stands.
-                $fruitboxes = FruitBox::where('frequency', 'Weekly')->get();
-
-                echo "<br/> Weekly <br/>";
-
-                foreach ($fruitboxes as $fruitbox) {
-
-                    // If the 'next_delivery' date (value) has passed, we probably need to update it.
-                    // This check will also help to prevent the next_delivery date being increased before that (particular) delivery has been sent.
-
-                    if ($fruitbox->next_delivery < Carbon::now()) {
-
-                        // echo $fruitbox->name . '\'s next delivery was outdated but has been changed from ' . $fruitbox->next_delivery . " to ";
-
-                        $lastDelivery = $fruitbox->next_delivery;
-
-                        // This will pull the current fruitbox next_delivery(_week_start) into Carbon where we can increase its value by 1 week.
-                        $fruitbox->next_delivery = Carbon::parse($fruitbox->next_delivery)->addWeek(1);
-
-                        // Now we can update the next_delivery_week_value, using the id to identify the correct entry.
-                        FruitBox::where('id', $fruitbox->id)->update([
-                            'previous_delivery' => $lastDelivery,
-                            'next_delivery' => $fruitbox->next_delivery,
-                        ]);
-
-                        // echo $fruitbox->next_delivery . "<br/>";
-                    }
-                }
-
-            // ---------- Milkboxes ---------- //
-
-                // I'm currently updating all weekly milkboxes, however previously I also had 'where('is_active', 'Active')' as another filter
-                // but this would mean any boxes frozen (even temporarily) would be at the wrong week start when advanced by a week as the code stands.
-                $milkboxes = MilkBox::where('frequency', 'Weekly')->get();
-
-                echo "<br/> Weekly <br/>";
-
-                foreach ($milkboxes as $milkbox) {
-
-                    // If the 'next_delivery' date (value) has passed, we probably need to update it.
-                    // This check will also help to prevent the next_delivery date being increased before that (particular) delivery has been sent.
-
-                    if ($milkbox->next_delivery < Carbon::now()) {
-
-                        // echo $milkbox->name . '\'s next delivery was outdated but has been changed from ' . $milkbox->next_delivery . " to ";
-
-                        $lastDelivery = $milkbox->next_delivery;
-
-                        // This will pull the current fruitbox next_delivery(_week_start) into Carbon where we can increase its value by 1 week.
-                        $milkbox->next_delivery = Carbon::parse($milkbox->next_delivery)->addWeek(1);
-
-                        // Now we can update the next_delivery_week_value, using the id to identify the correct entry.
-                        MilkBox::where('id', $milkbox->id)->update([
-                            'previous_delivery' => $lastDelivery,
-                            'next_delivery' => $milkbox->next_delivery,
-                        ]);
-
-                        // echo $milkbox->next_delivery . "<br/>";
-                    }
-                }
-
-        // ---------- End of Weekly ---------- //
-
-        // ---------- Fortnightly ---------- //
-
-            // ---------- Fruitboxes ---------- //
-
-                // I'm currently updating all weekly fruitboxes, however previously I also had 'where('is_active', 'Active')' as another filter
-                // but this would mean any boxes frozen (even temporarily) would be at the wrong week start when advanced by a week as the code stands.
-                $fruitboxes = FruitBox::where('frequency', 'Fortnightly')->get();
-
-                echo "<br/> Fortnightly <br/>";
-
-                foreach ($fruitboxes as $fruitbox) {
-
-                    // If the 'next_delivery' date (value) has passed, we probably need to update it.
-                    // This check will also help to prevent the next_delivery date being increased before that (particular) delivery has been sent.
-
-                    if ($fruitbox->next_delivery < Carbon::now()) {
-
-                        // echo $fruitbox->name . '\'s next delivery was outdated but has been changed from ' . $fruitbox->next_delivery . " to ";
-
-                        $lastDelivery = $fruitbox->next_delivery;
-
-                        // This will pull the current fruitbox next_delivery(_week_start) into Carbon where we can increase its value by 2 week.
-                        $fruitbox->next_delivery = Carbon::parse($fruitbox->next_delivery)->addWeek(2);
-
-                        // Now we can update the next_delivery_week_value, using the id to identify the correct entry.
-                        FruitBox::where('id', $fruitbox->id)->update([
-                            'previous_delivery' => $lastDelivery,
-                            'next_delivery' => $fruitbox->next_delivery,
-                        ]);
-
-                        // echo $fruitbox->next_delivery . "<br/>";
-                    }
-                }
-
-            // ---------- Milkboxes ---------- //
-
-            // I'm currently updating all weekly milkboxes, however previously I also had 'where('is_active', 'Active')' as another filter
-            // but this would mean any boxes frozen (even temporarily) would be at the wrong week start when advanced by a week as the code stands.
-            $milkboxes = MilkBox::where('frequency', 'Fortnightly')->get();
-
-            echo "<br/> Fortnightly <br/>";
-
-            foreach ($milkboxes as $milkbox) {
-
-                // If the 'next_delivery' date (value) has passed, we probably need to update it.
-                // This check will also help to prevent the next_delivery date being increased before that (particular) delivery has been sent.
-
-                if ($milkbox->next_delivery < Carbon::now()) {
-
-                    // echo $milkbox->name . '\'s next delivery was outdated but has been changed from ' . $milkbox->next_delivery . " to ";
-
-                    $lastDelivery = $milkbox->next_delivery;
-
-                    // This will pull the current milkbox next_delivery(_week_start) into Carbon where we can increase its value by 2 week.
-                    $milkbox->next_delivery = Carbon::parse($milkbox->next_delivery)->addWeek(2);
-
-                    // Now we can update the next_delivery_week_value, using the id to identify the correct entry.
-                    MilkBox::where('id', $milkbox->id)->update([
-                        'previous_delivery' => $lastDelivery,
-                        'next_delivery' => $milkbox->next_delivery,
-                    ]);
-
-                    // echo $fruitbox->next_delivery . "<br/>";
-                }
-            }
-        // ---------- End of Fortnightly ---------- //
-
-        // ---------- 1st, 2nd, 3rd or 4th of Month ---------- //
-
-            // ---------- Fruitboxes ---------- //
+        // ---------- Fruitboxes ---------- //
 
             // I'm currently updating all weekly fruitboxes, however previously I also had 'where('is_active', 'Active')' as another filter
             // but this would mean any boxes frozen (even temporarily) would be at the wrong week start when advanced by a week as the code stands.
-            $fruitboxes = FruitBox::where('frequency', 'Monthly')->get();
-
-            echo "<br/> Monthly <br/>";
+            $fruitboxes = FruitBox::whereIn('frequency', ['Weekly', 'Fortnightly', 'Monthly'])->get();
 
             foreach ($fruitboxes as $fruitbox) {
 
@@ -262,30 +136,38 @@ class OrderController extends Controller
 
                 if ($fruitbox->next_delivery < Carbon::now()) {
 
-                    // echo $fruitbox->name . '\'s next delivery was outdated but has been changed from ' . $fruitbox->next_delivery . " to ";
-
+                    // Add the old next_delivery_week to the last_delivery_week field.
                     $lastDelivery = $fruitbox->next_delivery;
-
-                    // This will pull the current fruitbox next_delivery(_week_start) into Carbon where we can increase its value by a given monday in the following month.
-                    // Even if the monday remains the same this will still vary more than just progressing forward 4 weeks.
-
-                    // This will hold either the value first, second, third, forth or last.
-                     $week = $fruitbox->week_in_month;
-
-                    // This will check the month of the last delivery and then advance by one month,
-                    // before saving that month as a string to be parsed later in $mondayOfMonth variable.
-                    $month = Carbon::parse($fruitbox->next_delivery)->addMonth()->englishMonth;
-
-                    // Create new instance of Carbon to use as the primer for $carbon::parse() below.
-                    $carbon = new Carbon;
-
-                    // An alternative to setting the month above and parsing below would be to parse the phrase '$week . ' monday of NEXT month'
-                    // and allow it use the carbon date of when the function is run however I'm currently prefering this approach
-                    // as it weighs more heavily on the last delivery date rather than when processes are run.
-                    $mondayOfMonth = $carbon::parse($week . ' monday of ' . $month);
-
-                    // Set the newly parsed delivery date.
-                    $fruitbox->next_delivery = $mondayOfMonth;
+                    
+                    // this is the only line of code which will differ depending on when the frequency selected
+                    if ($fruitbox->frequency === 'Weekly') {
+                        // Push the date forward a week
+                        $fruitbox->next_delivery = Carbon::parse($fruitbox->next_delivery)->addWeek(1);
+                        
+                    } elseif ($fruitbox->frequency === 'Fortnightly') {
+                        // push the date forward two weeks
+                        $fruitbox->next_delivery = Carbon::parse($fruitbox->next_delivery)->addWeek(2);
+                    
+                    } elseif ($fruitbox->frequency === 'Monthly') {
+                    
+                        // This will hold either the value first, second, third, forth or last.
+                         $week = $fruitbox->week_in_month;
+                        // This will check the month of the last delivery and then advance by one month,
+                        // before saving that month as a string to be parsed later in $mondayOfMonth variable.
+                        $month = Carbon::parse($fruitbox->next_delivery)->addMonth()->englishMonth;
+                        // Create new instance of Carbon to use as the primer for $carbon::parse() below.
+                        $carbon = new Carbon;
+                        // An alternative to setting the month above and parsing below would be to parse the phrase '$week . ' monday of NEXT month'
+                        // and allow it use the carbon date of when the function is run however I'm currently prefering this approach
+                        // as it weighs more heavily on the last delivery date rather than when processes are run.
+                        $mondayOfMonth = $carbon::parse($week . ' monday of ' . $month);
+                        // Set the newly parsed delivery date.
+                        $fruitbox->next_delivery = $mondayOfMonth;
+                        
+                    } else {
+                    
+                        // Nothing should get here as the frequency is a drop down (selection) of options, and we specifically grabbed only weekly, fortnightly, and monthly orders
+                    }
 
                     // Now we can update the next_delivery_week_value, using the id to identify the correct entry.
                     FruitBox::where('id', $fruitbox->id)->update([
@@ -294,59 +176,213 @@ class OrderController extends Controller
                     ]);
 
                     // echo $fruitbox->next_delivery . "<br/>";
-                }
-            }
+                } // end of if ($next_delivery < Carbon::now()), the else clause should only contain orders set to a time in the future, so we don't need to do anything.
+            } // end of foreach ($fruitboxes as $fruitbox)
 
-            // ---------- Milkboxes ---------- //
-
+        // ---------- Milkboxes ---------- //
+        
             // I'm currently updating all weekly milkboxes, however previously I also had 'where('is_active', 'Active')' as another filter
             // but this would mean any boxes frozen (even temporarily) would be at the wrong week start when advanced by a week as the code stands.
-            $milkboxes = MilkBox::where('frequency', 'Monthly')->get();
-
-            echo "<br/> Monthly <br/>";
-
+            $milkboxes = MilkBox::whereIn('frequency', ['Weekly', 'Fortnightly', 'Monthly'])->get();
+        
             foreach ($milkboxes as $milkbox) {
-
+        
                 // If the 'next_delivery' date (value) has passed, we probably need to update it.
                 // This check will also help to prevent the next_delivery date being increased before that (particular) delivery has been sent.
-
+        
                 if ($milkbox->next_delivery < Carbon::now()) {
-
+        
                     // echo $milkbox->name . '\'s next delivery was outdated but has been changed from ' . $milkbox->next_delivery . " to ";
-
+        
                     $lastDelivery = $milkbox->next_delivery;
-
-                    // This will pull the current milkbox next_delivery(_week_start) into Carbon where we can increase its value by a given monday in the following month.
-                    // Even if the monday remains the same this will still vary more than just progressing forward 4 weeks.
-
-                    // This will hold either the value first, second, third, forth or last.
-                     $week = $milkbox->week_in_month;
-
-                    // This will check the month of the last delivery and then advance by one month,
-                    // before saving that month as a string to be parsed later in $mondayOfMonth variable.
-                    $month = Carbon::parse($milkbox->next_delivery)->addMonth()->englishMonth;
-
-                    // Create new instance of Carbon to use as the primer for $carbon::parse() below.
-                    $carbon = new Carbon;
-
-                    // An alternative to setting the month above and parsing below would be to parse the phrase '$week . ' monday of NEXT month'
-                    // and allow it use the carbon date of when the function is run however I'm currently prefering this approach
-                    // as it weighs more heavily on the last delivery date rather than when processes are run.
-                    $mondayOfMonth = $carbon::parse($week . ' monday of ' . $month);
-
-                    // Set the newly parsed delivery date.
-                    $milkbox->next_delivery = $mondayOfMonth;
-
+        
+                    // this is the only line of code which will differ depending on when the frequency selected
+                    if ($milkbox->frequency === 'Weekly') {
+                        // Push the date forward a week
+                        $milkbox->next_delivery = Carbon::parse($milkbox->next_delivery)->addWeek(1);
+    
+                    } elseif ($milkbox->frequency === 'Fortnightly') {
+                        // push the date forward two weeks
+                        $milkbox->next_delivery = Carbon::parse($milkbox->next_delivery)->addWeek(2);
+    
+                    } elseif ($milkbox->frequency === 'Monthly') {
+    
+                        // This will hold either the value first, second, third, forth or last.
+                         $week = $milkbox->week_in_month;
+                        // This will check the month of the last delivery and then advance by one month,
+                        // before saving that month as a string to be parsed later in $mondayOfMonth variable.
+                        $month = Carbon::parse($milkbox->next_delivery)->addMonth()->englishMonth;
+                        // Create new instance of Carbon to use as the primer for $carbon::parse() below.
+                        $carbon = new Carbon;
+                        // An alternative to setting the month above and parsing below would be to parse the phrase '$week . ' monday of NEXT month'
+                        // and allow it use the carbon date of when the function is run however I'm currently prefering this approach
+                        // as it weighs more heavily on the last delivery date rather than when processes are run.
+                        $mondayOfMonth = $carbon::parse($week . ' monday of ' . $month);
+                        // Set the newly parsed delivery date.
+                        $milkbox->next_delivery = $mondayOfMonth;
+    
+                    } else {
+    
+                        // Nothing should get here as the frequency is a drop down (selection) of options, and we specifically grabbed only weekly, fortnightly, and monthly orders
+                    }
+        
                     // Now we can update the next_delivery_week_value, using the id to identify the correct entry.
                     MilkBox::where('id', $milkbox->id)->update([
                         'previous_delivery' => $lastDelivery,
                         'next_delivery' => $milkbox->next_delivery,
                     ]);
-
-                    // echo $milkbox->next_delivery . "<br/>";
+        
+                } //  end of if ($milkbox->next_delivery < Carbon::now())
+            } // foreach ($milkboxes as $milkbox)
+        
+        // ---------- Snackboxes ---------- //
+        
+            $snackboxes = SnackBox::whereIn('frequency', ['Weekly', 'Fortnightly', 'Monthly'])->get();
+        
+            // Do I want to group these snackboxes by their snackbox_id or as I'm only really concerned with advancing the next_delivery_date, should I just treat each entry on it's own?
+            // Basically, what's the next delivery date (of entry), is that date prior to Carbon::now(), if so, the order (entry) is out of date and ready to be advanced.
+            // If we've already stripped out the snackbox entries, then we'll only have one entry anyway.                
+        
+            foreach ($snackboxes as $snackbox_entry) {
+        
+                if ($snackbox_entry->next_delivery_week < Carbon::now()) {
+        
+                    $lastDelivery = $snackbox_entry->next_delivery_week;
+        
+                    // this is the only line of code which will differ depending on when the frequency selected
+                    if ($snackbox_entry->frequency === 'Weekly') {
+                        // Push the date forward a week
+                        $snackbox_entry->next_delivery_week = Carbon::parse($snackbox_entry->next_delivery_week)->addWeek(1);
+        
+                    } elseif ($snackbox_entry->frequency === 'Fortnightly') {
+                        // push the date forward two weeks
+                        $snackbox_entry->next_delivery_week = Carbon::parse($snackbox_entry->next_delivery_week)->addWeek(2);
+        
+                    } elseif ($snackbox_entry->frequency === 'Monthly') {
+        
+                        // This will hold either the value first, second, third, forth or last.
+                         $week = $snackbox_entry->week_in_month;
+                        // This will check the month of the last delivery and then advance by one month,
+                        // before saving that month as a string to be parsed later in $mondayOfMonth variable.
+                        $month = Carbon::parse($snackbox_entry->next_delivery_week)->addMonth()->englishMonth;
+                        // Create new instance of Carbon to use as the primer for $carbon::parse() below.
+                        $carbon = new Carbon;
+                        // An alternative to setting the month above and parsing below would be to parse the phrase '$week . ' monday of NEXT month'
+                        // and allow it use the carbon date of when the function is run however I'm currently prefering this approach
+                        // as it weighs more heavily on the last delivery date rather than when processes are run.
+                        $mondayOfMonth = $carbon::parse($week . ' monday of ' . $month);
+                        // Set the newly parsed delivery date.
+                        $snackbox_entry->next_delivery_week = $mondayOfMonth;
+        
+                    } else {
+        
+                        // Nothing should get here as the frequency is a drop down (selection) of options, and we specifically grabbed only weekly, fortnightly, and monthly orders
+                    }
+    
+                    SnackBox::where('id', $snackbox_entry->id)->update([
+                        'previous_delivery_week' => $lastDelivery,
+                        'next_delivery_week' => $snackbox_entry->next_delivery_week,
+                    ]);
+        
+                } //  end of if ($snackbox_entry->next_delivery_week < Carbon::now())    
+            } // foreach ($snackboxes as $snackbox_entry)
+        
+        // ---------- Drinkboxes ---------- //
+        
+        $drinkboxes = DrinkBox::whereIn('frequency', ['Weekly', 'Fortnightly', 'Monthly'])->get();                
+        
+        foreach ($drinkboxes as $drinkbox_entry) {
+        
+            if ($drinkbox_entry->next_delivery_week < Carbon::now()) {
+        
+                $lastDelivery = $drinkbox_entry->next_delivery_week;
+        
+                // this is the only line of code which will differ depending on when the frequency selected
+                if ($drinkbox_entry->frequency === 'Weekly') {
+                    // Push the date forward a week
+                    $drinkbox_entry->next_delivery_week = Carbon::parse($drinkbox_entry->next_delivery_week)->addWeek(1);
+        
+                } elseif ($drinkbox_entry->frequency === 'Fortnightly') {
+                    // push the date forward two weeks
+                    $drinkbox_entry->next_delivery_week = Carbon::parse($drinkbox_entry->next_delivery_week)->addWeek(2);
+        
+                } elseif ($drinkbox_entry->frequency === 'Monthly') {
+        
+                    // This will hold either the value first, second, third, forth or last.
+                     $week = $drinkbox_entry->week_in_month;
+                    // This will check the month of the last delivery and then advance by one month,
+                    // before saving that month as a string to be parsed later in $mondayOfMonth variable.
+                    $month = Carbon::parse($drinkbox_entry->next_delivery_week)->addMonth()->englishMonth;
+                    // Create new instance of Carbon to use as the primer for $carbon::parse() below.
+                    $carbon = new Carbon;
+                    // An alternative to setting the month above and parsing below would be to parse the phrase '$week . ' monday of NEXT month'
+                    // and allow it use the carbon date of when the function is run however I'm currently prefering this approach
+                    // as it weighs more heavily on the last delivery date rather than when processes are run.
+                    $mondayOfMonth = $carbon::parse($week . ' monday of ' . $month);
+                    // Set the newly parsed delivery date.
+                    $drinkbox_entry->next_delivery_week = $mondayOfMonth;
+        
+                } else {
+        
+                    // Nothing should get here as the frequency is a drop down (selection) of options, and we specifically grabbed only weekly, fortnightly, and monthly orders
                 }
-            }
-
+        
+                DrinkBox::where('id', $drinkbox_entry->id)->update([
+                    'previous_delivery_week' => $lastDelivery,
+                    'next_delivery_week' => $drinkbox_entry->next_delivery_week,
+                ]);
+        
+            } // if ($drinkbox_entry->next_delivery_week < Carbon::now())
+        } // foreach ($drinkboxes as $drinkbox_entry)
+        
+        // ---------- Otherboxes ---------- //
+        
+        $otherboxes = OtherBox::whereIn('frequency', ['Weekly', 'Fortnightly', 'Monthly'])->get();                
+        
+        foreach ($otherboxes as $otherbox_entry) {
+        
+            if ($otherbox_entry->next_delivery_week < Carbon::now()) {
+        
+                $lastDelivery = $otherbox_entry->next_delivery_week;
+        
+                // this is the only line of code which will differ depending on when the frequency selected
+                if ($otherbox_entry->frequency === 'Weekly') {
+                    // Push the date forward a week
+                    $otherbox_entry->next_delivery_week = Carbon::parse($otherbox_entry->next_delivery_week)->addWeek(1);
+        
+                } elseif ($otherbox_entry->frequency === 'Fortnightly') {
+                    // push the date forward two weeks
+                    $otherbox_entry->next_delivery_week = Carbon::parse($otherbox_entry->next_delivery_week)->addWeek(2);
+        
+                } elseif ($otherbox_entry->frequency === 'Monthly') {
+        
+                    // This will hold either the value first, second, third, forth or last.
+                     $week = $otherbox_entry->week_in_month;
+                    // This will check the month of the last delivery and then advance by one month,
+                    // before saving that month as a string to be parsed later in $mondayOfMonth variable.
+                    $month = Carbon::parse($otherbox_entry->next_delivery_week)->addMonth()->englishMonth;
+                    // Create new instance of Carbon to use as the primer for $carbon::parse() below.
+                    $carbon = new Carbon;
+                    // An alternative to setting the month above and parsing below would be to parse the phrase '$week . ' monday of NEXT month'
+                    // and allow it use the carbon date of when the function is run however I'm currently prefering this approach
+                    // as it weighs more heavily on the last delivery date rather than when processes are run.
+                    $mondayOfMonth = $carbon::parse($week . ' monday of ' . $month);
+                    // Set the newly parsed delivery date.
+                    $otherbox_entry->next_delivery_week = $mondayOfMonth;
+        
+                } else {
+        
+                    // Nothing should get here as the frequency is a drop down (selection) of options, and we specifically grabbed only weekly, fortnightly, and monthly orders
+                }
+        
+                OtherBox::where('id', $otherbox_entry->id)->update([
+                    'previous_delivery_week' => $lastDelivery,
+                    'next_delivery_week' => $otherbox_entry->next_delivery_week,
+                ]);
+        
+            } // if ($otherbox_entry->next_delivery_week < Carbon::now())
+        } // foreach ($otherboxes as $otherbox_entry)
+        
         // ---------- Bespoke ---------- //
 
             // This may be easier to leave as a manual date field where we select a date when they need a delivery.
