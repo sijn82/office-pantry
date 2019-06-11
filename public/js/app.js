@@ -37882,7 +37882,7 @@ var OBSERVER_CONFIG = {
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(80);
-module.exports = __webpack_require__(530);
+module.exports = __webpack_require__(535);
 
 
 /***/ }),
@@ -37998,18 +37998,19 @@ Vue.component('office-pantry-product', __webpack_require__(465));
 // Preference & Allergy Related
 Vue.component('preference', __webpack_require__(470));
 Vue.component('preferences', __webpack_require__(475));
-Vue.component('add-new-preference', __webpack_require__(480));
-Vue.component('allergy', __webpack_require__(485));
-Vue.component('additional-info', __webpack_require__(490));
+Vue.component('preferences-admin', __webpack_require__(480));
+Vue.component('add-new-preference', __webpack_require__(485));
+Vue.component('allergy', __webpack_require__(490));
+Vue.component('additional-info', __webpack_require__(495));
 // Company Related
-Vue.component('add-new-company', __webpack_require__(495));
-Vue.component('company-details-admin', __webpack_require__(500));
-Vue.component('search-companies', __webpack_require__(505));
-Vue.component('select-company', __webpack_require__(510));
+Vue.component('add-new-company', __webpack_require__(500));
+Vue.component('company-details-admin', __webpack_require__(505));
+Vue.component('search-companies', __webpack_require__(510));
+Vue.component('select-company', __webpack_require__(515));
 // System Related
-Vue.component('exporting', __webpack_require__(515));
-Vue.component('invoice-options', __webpack_require__(520));
-Vue.component('cron-list', __webpack_require__(525));
+Vue.component('exporting', __webpack_require__(520));
+Vue.component('invoice-options', __webpack_require__(525));
+Vue.component('cron-list', __webpack_require__(530));
 
 // This works which is great but I should move this somewhere else, maybe somewhere I can add further directives and their associated functions?
 function debounce(fn) {
@@ -78668,6 +78669,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         // }
     },
     methods: {
+        refreshData: function refreshData($event) {
+            this.$emit('refresh-data', $event);
+        },
         addNew: function addNew() {
             if (this.addnew == false) {
                 this.addnew = true;
@@ -78783,7 +78787,14 @@ var render = function() {
               [_vm._v(" Close ")]
             ),
             _vm._v(" "),
-            _c("add-new-fruitbox", { attrs: { company: this.company } })
+            _c("add-new-fruitbox", {
+              attrs: { company: this.company },
+              on: {
+                "refresh-data": function($event) {
+                  _vm.refreshData($event)
+                }
+              }
+            })
           ],
           1
         )
@@ -79254,6 +79265,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 // user_id: self.userData.id // This hasn't been setup yet so proabably won't work yet?!
             }).then(function (response) {
                 alert('Uploaded new fruitbox successfully!');
+                self.$emit('refresh-data', { company_details_id: self.form.company_details_id });
                 console.log(response.data);
             }).catch(function (error) {
                 return console.log(error);
@@ -98412,7 +98424,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this2 = this;
 
             axios.get('/api/products/' + id).then(function (response) {
-                _this2.product = response.data.product, _this2.$store.commit('selectedProduct', _this2.product);
+                _this2.product = response.data.product;
+                _this2.$store.commit('selectedProduct', _this2.product);
             }).catch(function (error) {});
             // 
         }
@@ -99268,21 +99281,42 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['name', 'id', 'column', 'quantity'],
+    props: ['name', 'column', 'quantity', 'id'],
     data: function data() {
         return {};
     },
 
     methods: {
         removePreference: function removePreference(id, column) {
-            console.log(column);
-            this.$store.commit('removePreference', { id: id, column: column });
+            var _this = this;
+
+            console.log(id);
+            this.$store.commit('removePreference', { id: id, column: column }); // If I continue to move this away from the Store, I'll need to rethink this line.
 
             axios.put('api/preferences/' + id, {
                 id: id
             }).then(function (response) {
+                _this.$emit('refresh-data');
                 // location.reload(true); // This refreshes the browser and pulls the updated variables from the database into the vue component.
                 console.log(response);
             }).catch(function (error) {
@@ -99300,35 +99334,83 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "preference-item" },
-    [
-      _c("p", [_vm._v(" " + _vm._s(_vm.name) + " ")]),
-      _vm._v(" "),
-      _vm.quantity > 0
-        ? _c("p", { staticClass: "quantity" }, [
-            _vm._v(" = " + _vm._s(_vm.quantity) + " ")
-          ])
-        : _vm._e(),
-      _vm._v(" "),
-      _vm.name != "None"
-        ? _c(
-            "b-button",
-            {
-              attrs: { size: "sm" },
-              on: {
-                click: function($event) {
-                  _vm.removePreference(_vm.id, _vm.column)
-                }
-              }
-            },
-            [_vm._v(" Remove ")]
+  return _vm.quantity > 0
+    ? _c(
+        "div",
+        { staticClass: "preference-item" },
+        [
+          _c(
+            "b-row",
+            [
+              _c("b-col", [_c("p", [_vm._v(" " + _vm._s(_vm.name) + " ")])]),
+              _vm._v(" "),
+              _c("b-col", [
+                _c("p", { staticClass: "quantity" }, [
+                  _vm._v(" = " + _vm._s(_vm.quantity) + " ")
+                ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "b-col",
+                [
+                  _vm.name != "None"
+                    ? _c(
+                        "b-button",
+                        {
+                          attrs: { size: "sm" },
+                          on: {
+                            click: function($event) {
+                              _vm.removePreference(_vm.id, _vm.column)
+                            }
+                          }
+                        },
+                        [_vm._v(" Remove ")]
+                      )
+                    : _vm._e()
+                ],
+                1
+              )
+            ],
+            1
           )
-        : _vm._e()
-    ],
-    1
-  )
+        ],
+        1
+      )
+    : _c(
+        "div",
+        { staticClass: "preference-item" },
+        [
+          _c(
+            "b-row",
+            [
+              _c("b-col", [_c("p", [_vm._v(" " + _vm._s(_vm.name) + " ")])]),
+              _vm._v(" "),
+              _c(
+                "b-col",
+                [
+                  _vm.name != "None"
+                    ? _c(
+                        "b-button",
+                        {
+                          attrs: { size: "sm" },
+                          on: {
+                            click: function($event) {
+                              _vm.removePreference(_vm.id, _vm.column)
+                            }
+                          }
+                        },
+                        [_vm._v(" Remove ")]
+                      )
+                    : _vm._e()
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -99546,15 +99628,63 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    // props:['likes', 'dislikes', 'essentials', 'allergies', 'additional_notes'],
+    props: ['preferences', 'likes', 'dislikes', 'essentials', 'allergies', 'additional_info'],
     data: function data() {
         return {};
     },
 
     methods: {
-
+        refreshData: function refreshData(company_details_id) {
+            this.$emit('refresh-data', { company_details_id: company_details_id });
+        }
         // Pretty sure I'm not using this anymore so commenting it out to see if anything breaks.
 
         // removePreference(id){
@@ -99569,9 +99699,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         //         // location.reload(true);
         //     }).catch(error => console.log(error));
         // }
+
     },
     mounted: function mounted() {
-        console.log(this.likes);
+        console.log(this.additional_info);
+        console.log(this.preferences);
     }
 });
 
@@ -99591,139 +99723,109 @@ var render = function() {
         "b-row",
         [
           _c("b-col", [
-            _c("div", { staticClass: "likes" }, [
-              _c("h4", [_vm._v(" Likes ")]),
-              _vm._v(" "),
-              _vm.$store.state.setPreferences.snackbox_likes != "None"
-                ? _c(
-                    "div",
-                    _vm._l(
-                      _vm.$store.state.setPreferences.snackbox_likes,
-                      function(like) {
-                        return _c(
-                          "div",
-                          [
-                            _c("preference", {
-                              attrs: {
-                                name: like.snackbox_likes,
-                                id: like.id,
-                                column: "snackbox_likes"
-                              }
-                            })
-                          ],
-                          1
-                        )
-                      }
-                    )
-                  )
-                : _c(
+            _c(
+              "div",
+              { staticClass: "likes" },
+              [
+                _c("h4", [_vm._v(" Likes ")]),
+                _vm._v(" "),
+                _vm._l(this.preferences, function(preference) {
+                  return _c(
                     "div",
                     [
-                      _c("preference", {
-                        attrs: {
-                          name: _vm.$store.state.setPreferences.snackbox_likes
-                        }
-                      })
+                      preference.snackbox_likes != null
+                        ? _c("preference", {
+                            key: preference.id,
+                            attrs: {
+                              name: preference.snackbox_likes,
+                              id: preference.id,
+                              column: "snackbox_likes"
+                            },
+                            on: {
+                              "refresh-data": function($event) {
+                                _vm.refreshData(preference.company_details_id)
+                              }
+                            }
+                          })
+                        : _vm._e()
                     ],
                     1
                   )
-            ])
+                })
+              ],
+              2
+            )
           ]),
           _vm._v(" "),
           _c("b-col", [
-            _c("div", { staticClass: "dislikes" }, [
-              _c("h4", [_vm._v(" Dislikes ")]),
-              _vm._v(" "),
-              _vm.$store.state.setPreferences.snackbox_dislikes != "None"
-                ? _c(
-                    "div",
-                    _vm._l(
-                      _vm.$store.state.setPreferences.snackbox_dislikes,
-                      function(dislike) {
-                        return _c(
-                          "div",
-                          [
-                            _c("preference", {
-                              attrs: {
-                                name: dislike.snackbox_dislikes,
-                                id: dislike.id,
-                                column: "snackbox_dislikes"
-                              }
-                            })
-                          ],
-                          1
-                        )
-                      }
-                    )
-                  )
-                : _c(
+            _c(
+              "div",
+              { staticClass: "dislikes" },
+              [
+                _c("h4", [_vm._v(" Dislikes ")]),
+                _vm._v(" "),
+                _vm._l(this.preferences, function(preference) {
+                  return _c(
                     "div",
                     [
-                      _c("preference", {
-                        attrs: {
-                          name:
-                            _vm.$store.state.setPreferences.snackbox_dislikes
-                        }
-                      })
+                      preference.snackbox_dislikes != null
+                        ? _c("preference", {
+                            key: preference.id,
+                            attrs: {
+                              name: preference.snackbox_dislikes,
+                              id: preference.id,
+                              column: "snackbox_dislikes"
+                            },
+                            on: {
+                              "refresh-data": function($event) {
+                                _vm.refreshData(preference.company_details_id)
+                              }
+                            }
+                          })
+                        : _vm._e()
                     ],
                     1
                   )
-            ])
+                })
+              ],
+              2
+            )
           ]),
           _vm._v(" "),
           _c("b-col", [
-            _c("div", { staticClass: "essentials" }, [
-              _c("h4", [_vm._v(" Essentials ")]),
-              _vm._v(" "),
-              _vm.$store.state.setPreferences.snackbox_essentials != "None"
-                ? _c(
-                    "div",
-                    _vm._l(
-                      _vm.$store.state.setPreferences.snackbox_essentials,
-                      function(essential) {
-                        return _c(
-                          "div",
-                          [
-                            _c(
-                              "b-row",
-                              [
-                                _c(
-                                  "b-col",
-                                  [
-                                    _c("preference", {
-                                      attrs: {
-                                        name: essential.snackbox_essentials,
-                                        quantity:
-                                          essential.snackbox_essentials_quantity,
-                                        id: essential.id,
-                                        column: "snackbox_essentials"
-                                      }
-                                    })
-                                  ],
-                                  1
-                                )
-                              ],
-                              1
-                            )
-                          ],
-                          1
-                        )
-                      }
-                    )
-                  )
-                : _c(
+            _c(
+              "div",
+              { staticClass: "essentials" },
+              [
+                _c("h4", [_vm._v(" Essentials ")]),
+                _vm._v(" "),
+                _vm._l(this.preferences, function(preference) {
+                  return _c(
                     "div",
                     [
-                      _c("preference", {
-                        attrs: {
-                          name:
-                            _vm.$store.state.setPreferences.snackbox_essentials
-                        }
-                      })
+                      preference.snackbox_essentials != null
+                        ? _c("preference", {
+                            key: preference.id,
+                            attrs: {
+                              name: preference.snackbox_essentials,
+                              quantity: preference.snackbox_essentials_quantity,
+                              id: preference.id,
+                              column: "snackbox_essentials"
+                            },
+                            on: {
+                              "refresh-data": function($event) {
+                                _vm.refreshData(preference.company_details_id)
+                              }
+                            }
+                          })
+                        : _vm._e()
                     ],
                     1
                   )
-            ])
+                })
+              ],
+              2
+            )
           ])
         ],
         1
@@ -99733,106 +99835,73 @@ var render = function() {
         "b-row",
         [
           _c("b-col", [
-            _c("div", { staticClass: "allergies" }, [
-              _c("h4", [_vm._v(" Allergies ")]),
-              _vm._v(" "),
-              _vm.$store.state.setPreferences.allergies != "None"
-                ? _c(
-                    "div",
-                    _vm._l(_vm.$store.state.setPreferences.allergies, function(
-                      allergy
-                    ) {
-                      return _c(
-                        "div",
-                        [
-                          _c(
-                            "b-row",
-                            [
-                              _c(
-                                "b-col",
-                                [
-                                  _c("allergy", {
-                                    attrs: {
-                                      name: allergy.allergy,
-                                      id: allergy.id,
-                                      column: "allergies"
-                                    }
-                                  })
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    })
-                  )
-                : _c(
+            _c(
+              "div",
+              { staticClass: "allergies" },
+              [
+                _c("h4", [_vm._v(" Allergies ")]),
+                _vm._v(" "),
+                _vm._l(this.allergies, function(allergy) {
+                  return _c(
                     "div",
                     [
-                      _c("allergy", {
-                        attrs: {
-                          name: _vm.$store.state.setPreferences.allergies
-                        }
-                      })
+                      allergy != null
+                        ? _c("allergy", {
+                            key: allergy.id,
+                            attrs: {
+                              name: allergy.allergy,
+                              id: allergy.id,
+                              column: "allergies"
+                            },
+                            on: {
+                              "refresh-data": function($event) {
+                                _vm.refreshData(allergy.company_details_id)
+                              }
+                            }
+                          })
+                        : _vm._e()
                     ],
                     1
                   )
-            ])
+                })
+              ],
+              2
+            )
           ]),
           _vm._v(" "),
           _c("b-col", [
-            _c("div", { staticClass: "additional_notes" }, [
-              _c("h4", [_vm._v(" Additional Notes ")]),
-              _vm._v(" "),
-              _vm.$store.state.setPreferences.additional_notes != "None"
-                ? _c(
-                    "div",
-                    _vm._l(
-                      _vm.$store.state.setPreferences.additional_notes,
-                      function(note) {
-                        return _c(
-                          "div",
-                          [
-                            _c(
-                              "b-row",
-                              [
-                                _c(
-                                  "b-col",
-                                  [
-                                    _c("additional-info", {
-                                      attrs: {
-                                        name: note.additional_info,
-                                        id: note.id,
-                                        column: "additional_info"
-                                      }
-                                    })
-                                  ],
-                                  1
-                                )
-                              ],
-                              1
-                            )
-                          ],
-                          1
-                        )
-                      }
-                    )
-                  )
-                : _c(
+            _c(
+              "div",
+              { staticClass: "additional_notes" },
+              [
+                _c("h4", [_vm._v(" Additional Notes ")]),
+                _vm._v(" "),
+                _vm._l(this.additional_info, function(info) {
+                  return _c(
                     "div",
                     [
-                      _c("additional-info", {
-                        attrs: {
-                          name: _vm.$store.state.setPreferences.additional_notes
-                        }
-                      })
+                      info != null
+                        ? _c("additional-info", {
+                            key: info.id,
+                            attrs: {
+                              name: info.additional_info,
+                              id: info.id,
+                              column: "additional_info"
+                            },
+                            on: {
+                              "refresh-data": function($event) {
+                                _vm.refreshData(info.company_details_id)
+                              }
+                            }
+                          })
+                        : _vm._e()
                     ],
                     1
                   )
-            ])
+                })
+              ],
+              2
+            )
           ])
         ],
         1
@@ -99865,6 +99934,279 @@ var normalizeComponent = __webpack_require__(1)
 var __vue_script__ = __webpack_require__(483)
 /* template */
 var __vue_template__ = __webpack_require__(484)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-5946acb6"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/admin/preferences/PreferencesAdmin.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-5946acb6", Component.options)
+  } else {
+    hotAPI.reload("data-v-5946acb6", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 481 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(482);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("d6bf23bc", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-5946acb6\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/sass-loader/lib/loader.js!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PreferencesAdmin.vue", function() {
+     var newContent = require("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-5946acb6\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/sass-loader/lib/loader.js!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PreferencesAdmin.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 482 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n#preferences-admin[data-v-5946acb6] {\n  margin-top: 20px;\n  text-align: center;\n}\n#preferences-admin[data-v-5946acb6]::before {\n  content: \"\";\n  /* This is necessary for the pseudo element to work. */\n  display: block;\n  /* This will put the pseudo element on its own line. */\n  margin: 0 auto;\n  /* This will center the border. */\n  width: 70%;\n  /* Change this to whatever width you want. */\n  padding-bottom: 20px;\n  /* This creates some space between the element and the border. */\n  border-top: 1px solid #636b6f;\n  /* This creates the border. Replace black with whatever color you want. */\n}\n.preferences[data-v-5946acb6] {\n  margin-top: 20px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 483 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['company', 'preferences', 'allergies', 'additional_info'],
+    data: function data() {
+        return {
+            addnew: false
+            //company_details_id: null,
+        };
+    },
+
+    methods: {
+        addNew: function addNew() {
+            if (this.addnew === false) {
+                this.addnew = true;
+            } else {
+                this.addnew = false;
+            }
+        },
+        refreshData: function refreshData($event) {
+            this.$emit('refresh-data', $event);
+            console.log($event);
+        },
+        mounted: function mounted() {
+            console.log(this.preferences);
+            console.log(this.company);
+        }
+    }
+
+});
+
+/***/ }),
+/* 484 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { attrs: { id: "preferences-admin" } }, [
+    _c("h3", [_vm._v(" Preferences ")]),
+    _vm._v(" "),
+    _vm.addnew
+      ? _c(
+          "div",
+          [
+            _c(
+              "b-button",
+              {
+                attrs: { variant: "danger" },
+                on: {
+                  click: function($event) {
+                    _vm.addNew()
+                  }
+                }
+              },
+              [_vm._v(" Close ")]
+            ),
+            _vm._v(" "),
+            _c("add-new-preference", {
+              attrs: { company: this.company },
+              on: {
+                "refresh-data": function($event) {
+                  _vm.refreshData($event)
+                }
+              }
+            })
+          ],
+          1
+        )
+      : _c(
+          "div",
+          [
+            _c(
+              "b-button",
+              {
+                attrs: { variant: "primary" },
+                on: {
+                  click: function($event) {
+                    _vm.addNew()
+                  }
+                }
+              },
+              [_vm._v(" Add New Preference ")]
+            )
+          ],
+          1
+        ),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "preferences" },
+      [
+        _c("preferences", {
+          attrs: {
+            company: this.company,
+            preferences: this.preferences,
+            allergies: this.allergies,
+            additional_info: this.additional_info
+          },
+          on: {
+            "refresh-data": function($event) {
+              _vm.refreshData($event)
+            }
+          }
+        })
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _c("div", { staticClass: "allergies" }),
+    _vm._v(" "),
+    _c("div", { staticClass: "additional-info" })
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-5946acb6", module.exports)
+  }
+}
+
+/***/ }),
+/* 485 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(486)
+}
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(488)
+/* template */
+var __vue_template__ = __webpack_require__(489)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -99903,13 +100245,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 481 */
+/* 486 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(482);
+var content = __webpack_require__(487);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -99929,7 +100271,7 @@ if(false) {
 }
 
 /***/ }),
-/* 482 */
+/* 487 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(false);
@@ -99943,7 +100285,7 @@ exports.push([module.i, "\n#add-to-buttons button {\n  margin: 10px 0;\n}\n#add-
 
 
 /***/ }),
-/* 483 */
+/* 488 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -100038,9 +100380,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    // props: ['likes', 'dislikes', 'essentials', 'allergies', 'additional_notes'],
+    // props: ['likes', 'dislikes', 'essentials', 'allergies', 'additional_notes'], old props, keeping a record but will remove if I carry on with the new plan.
+    props: ['company'],
     data: function data() {
         return {
             essential_quantity: null,
@@ -100048,15 +100393,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             new_allergy: '',
             // allergies: this.$store.state.allergies_list, //'Gluten', 'Dairy', 'Nuts', 'Work', 'Pollen', 'Sunshine'
             additional_info: '',
-            company_selected: null,
+            // company_selected: null,
             preferences: {},
-            show_preferences: false,
-            selected_company: 'none selected'
+            show_preferences: false
+            // selected_company: 'none selected',
         };
     },
 
 
     computed: {
+
+        // selected_company: function (company) {
+        //     console.log('yah, we got this ' . this.company);
+        // }
         // getAllergies () {
         //     axios.get('/api/allergies/select').then( response => {
         //     let allergies = response.data;
@@ -100068,11 +100417,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     methods: {
         companySelected: function companySelected(company) {
-            console.log(company.id), this.selected_company = company.id;
+            console.log('Yah, we got this ' + company.invoice_name);
+            return this.selected_company = company.id;
+            //    return this.selected_company = company.invoice_name;
             //alert(company.id);
         },
         addNewAllergy: function addNewAllergy(new_allergy) {
             console.log(new_allergy);
+
             this.$store.commit('addNewAllergyToStore', new_allergy);
         },
         confirmAllergy: function confirmAllergy(allergy) {
@@ -100085,6 +100437,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv' }
             }).then(function (response) {
                 alert('Uploaded new company allergy successfully!');
+                _this.$emit('refresh-data', { company_details_id: _this.selected_company });
                 // location.load(true);
                 // console.log(response.data[0].id);
                 // console.log(response.data[0].allergy);
@@ -100106,6 +100459,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv' }
             }).then(function (response) {
                 alert('Uploaded new company additional info successfully!');
+                _this2.$emit('refresh-data', { company_details_id: _this2.selected_company });
                 var additional_info = response.data[0].additional_info;
                 var id = response.data[0].id;
                 _this2.$store.commit('addAdditionalInfoToStore', { additional_info: additional_info, id: id });
@@ -100139,9 +100493,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 var name = response.data.preference[0][category];
                 var quantity = null;
                 if (category == 'snackbox_essentials') {
-                    var _quantity = response.data.preference[0].quantity;
+                    var _quantity = response.data.preference[0].snackbox_essentials_quantity;
                 }
                 console.log(name);
+
+                _this3.$emit('refresh-data', { company_details_id: _this3.selected_company });
                 _this3.$store.commit('addPreferenceToStore', { category: category, product: { id: id, name: name, quantity: quantity } });
                 // location.load(true);
                 //     console.log(response.data);
@@ -100152,24 +100508,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             // console.log(preference);
             // console.log(this.essential_quantity);
         },
-        getCompanyPreferences: function getCompanyPreferences(company_details_id) {
-            var _this4 = this;
 
-            var self = this;
 
-            axios.post('/api/preferences/selected', {
-                id: company_details_id
-            }).then(function (response) {
-                console.log(response.data);
-                // self.preferences = response.data;
-                self.$store.commit('setPreferences', response.data);
-                // console.log(self.preferences);
-                // console.log(self.preferences.likes);
-                _this4.show_preferences = true;
-            }).catch(function (error) {
-                return console.log(error);
-            });
-        },
+        // getCompanyPreferences(company_details_id) {
+        // 
+        //     let self = this;
+        // 
+        //     axios.post('/api/preferences/selected', {
+        //         id: company_details_id,
+        //     }).then( response => {
+        //         console.log(response.data);
+        //         // self.preferences = response.data;
+        //         self.$store.commit('setPreferences', response.data );
+        //         // console.log(self.preferences);
+        //         // console.log(self.preferences.likes);
+        //         this.show_preferences = true;
+        // 
+        //     }).catch(error => console.log(error));
+        // 
+        // },
+
         onSubmit: function onSubmit(evt) {
             evt.preventDefault();
             var self = this;
@@ -100197,7 +100555,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 484 */
+/* 489 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -100212,32 +100570,6 @@ var render = function() {
         { staticStyle: { "text-align": "center" }, attrs: { sm: "12" } },
         [
           _vm.show_preferences ? _c("preferences") : _vm._e(),
-          _vm._v(" "),
-          _vm.show_preferences
-            ? _c(
-                "b-button",
-                {
-                  staticClass: "get-preferences",
-                  on: {
-                    click: function($event) {
-                      _vm.getCompanyPreferences(_vm.selected_company)
-                    }
-                  }
-                },
-                [_vm._v(" Refresh Company Preferences ")]
-              )
-            : _c(
-                "b-button",
-                {
-                  staticClass: "get-preferences",
-                  on: {
-                    click: function($event) {
-                      _vm.getCompanyPreferences(_vm.selected_company)
-                    }
-                  }
-                },
-                [_vm._v(" Get Company Preferences ")]
-              ),
           _vm._v(" "),
           _c("h3", [_vm._v(" Add New Preference ")]),
           _vm._v(" "),
@@ -100254,25 +100586,24 @@ var render = function() {
                   _c(
                     "b-row",
                     [
-                      _c(
-                        "b-col",
-                        { attrs: { id: "company-select" } },
-                        [
-                          _c("label", [_vm._v(" Select Company ")]),
-                          _vm._v(" "),
-                          _c("select-company", {
-                            on: { "selected-company": _vm.companySelected }
-                          }),
-                          _vm._v(" "),
-                          _c("p", { staticClass: "font-weight-300" }, [
-                            _vm._v(
-                              " Selected: " + _vm._s(_vm.selected_company) + " "
-                            )
-                          ])
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
+                      _c("b-col", { attrs: { id: "company-select" } }, [
+                        _c("label", [_vm._v(" Selected Company ")]),
+                        _vm._v(" "),
+                        _c("h4", { staticClass: "font-weight-300" }, [
+                          _vm._v(
+                            " " +
+                              _vm._s(_vm.companySelected(this.company)) +
+                              " "
+                          )
+                        ])
+                      ])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-row",
+                    [
                       _c(
                         "b-col",
                         { attrs: { id: "product-select" } },
@@ -100510,19 +100841,19 @@ if (false) {
 }
 
 /***/ }),
-/* 485 */
+/* 490 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(486)
+  __webpack_require__(491)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(488)
+var __vue_script__ = __webpack_require__(493)
 /* template */
-var __vue_template__ = __webpack_require__(489)
+var __vue_template__ = __webpack_require__(494)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -100561,13 +100892,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 486 */
+/* 491 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(487);
+var content = __webpack_require__(492);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -100587,7 +100918,7 @@ if(false) {
 }
 
 /***/ }),
-/* 487 */
+/* 492 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(false);
@@ -100601,11 +100932,15 @@ exports.push([module.i, "\n.allergy-item p {\n  font-weight: 300;\n  display: in
 
 
 /***/ }),
-/* 488 */
+/* 493 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
 //
 //
 //
@@ -100638,11 +100973,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     methods: {
         removeAllergy: function removeAllergy(id, column) {
+            var _this = this;
+
             this.$store.commit('removePreference', { id: id, column: column });
 
             axios.put('api/allergies/' + id, {
                 id: id
             }).then(function (response) {
+                _this.$emit('refresh-data');
                 // location.reload(true); // This refreshes the browser and pulls the updated variables from the database into the vue component.
                 console.log(response);
             }).catch(function (error) {
@@ -100653,7 +100991,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 489 */
+/* 494 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -100664,22 +101002,34 @@ var render = function() {
     "div",
     { staticClass: "allergy-item" },
     [
-      _c("p", [_vm._v(" " + _vm._s(_vm.name) + " ")]),
-      _vm._v(" "),
-      _vm.name != "None"
-        ? _c(
-            "b-button",
-            {
-              attrs: { size: "sm" },
-              on: {
-                click: function($event) {
-                  _vm.removeAllergy(_vm.id, _vm.column)
-                }
-              }
-            },
-            [_vm._v(" Remove ")]
+      _c(
+        "b-row",
+        [
+          _c(
+            "b-col",
+            [
+              _c("p", [_vm._v(" " + _vm._s(_vm.name) + " ")]),
+              _vm._v(" "),
+              _vm.name != "None"
+                ? _c(
+                    "b-button",
+                    {
+                      attrs: { size: "sm" },
+                      on: {
+                        click: function($event) {
+                          _vm.removeAllergy(_vm.id, _vm.column)
+                        }
+                      }
+                    },
+                    [_vm._v(" Remove ")]
+                  )
+                : _vm._e()
+            ],
+            1
           )
-        : _vm._e()
+        ],
+        1
+      )
     ],
     1
   )
@@ -100695,19 +101045,19 @@ if (false) {
 }
 
 /***/ }),
-/* 490 */
+/* 495 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(491)
+  __webpack_require__(496)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(493)
+var __vue_script__ = __webpack_require__(498)
 /* template */
-var __vue_template__ = __webpack_require__(494)
+var __vue_template__ = __webpack_require__(499)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -100746,13 +101096,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 491 */
+/* 496 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(492);
+var content = __webpack_require__(497);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -100772,7 +101122,7 @@ if(false) {
 }
 
 /***/ }),
-/* 492 */
+/* 497 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(false);
@@ -100786,11 +101136,15 @@ exports.push([module.i, "\n.additional-info-item p {\n  font-weight: 300;\n  dis
 
 
 /***/ }),
-/* 493 */
+/* 498 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
 //
 //
 //
@@ -100823,11 +101177,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     methods: {
         removeAdditionalInfo: function removeAdditionalInfo(id, column) {
-            this.$store.commit('removePreference', { id: id, column: column });
+            var _this = this;
+
+            this.$store.commit('removePreference', { id: id, column: column }); // Again, if i'm moving from Store, I need to find a different way to update the view.
 
             axios.put('api/additional-info/' + id, {
                 id: id
             }).then(function (response) {
+                _this.$emit('refresh-data');
                 // location.reload(true); // This refreshes the browser and pulls the updated variables from the database into the vue component.
                 console.log(response);
             }).catch(function (error) {
@@ -100838,7 +101195,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 494 */
+/* 499 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -100849,22 +101206,34 @@ var render = function() {
     "div",
     { staticClass: "additional-info-item" },
     [
-      _c("p", [_vm._v(" " + _vm._s(_vm.name) + " ")]),
-      _vm._v(" "),
-      _vm.name != "None"
-        ? _c(
-            "b-button",
-            {
-              attrs: { size: "sm" },
-              on: {
-                click: function($event) {
-                  _vm.removeAdditionalInfo(_vm.id, _vm.column)
-                }
-              }
-            },
-            [_vm._v(" Remove ")]
+      _c(
+        "b-row",
+        [
+          _c(
+            "b-col",
+            [
+              _c("p", [_vm._v(" " + _vm._s(_vm.name) + " ")]),
+              _vm._v(" "),
+              _vm.name != "None"
+                ? _c(
+                    "b-button",
+                    {
+                      attrs: { size: "sm" },
+                      on: {
+                        click: function($event) {
+                          _vm.removeAdditionalInfo(_vm.id, _vm.column)
+                        }
+                      }
+                    },
+                    [_vm._v(" Remove ")]
+                  )
+                : _vm._e()
+            ],
+            1
           )
-        : _vm._e()
+        ],
+        1
+      )
     ],
     1
   )
@@ -100880,19 +101249,19 @@ if (false) {
 }
 
 /***/ }),
-/* 495 */
+/* 500 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(496)
+  __webpack_require__(501)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(498)
+var __vue_script__ = __webpack_require__(503)
 /* template */
-var __vue_template__ = __webpack_require__(499)
+var __vue_template__ = __webpack_require__(504)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -100931,13 +101300,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 496 */
+/* 501 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(497);
+var content = __webpack_require__(502);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -100957,7 +101326,7 @@ if(false) {
 }
 
 /***/ }),
-/* 497 */
+/* 502 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(false);
@@ -100971,7 +101340,7 @@ exports.push([module.i, "\nlabel[data-v-4b584d05], p[data-v-4b584d05] {\n  font-
 
 
 /***/ }),
-/* 498 */
+/* 503 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -101298,7 +101667,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 499 */
+/* 504 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -101989,19 +102358,19 @@ if (false) {
 }
 
 /***/ }),
-/* 500 */
+/* 505 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(501)
+  __webpack_require__(506)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(503)
+var __vue_script__ = __webpack_require__(508)
 /* template */
-var __vue_template__ = __webpack_require__(504)
+var __vue_template__ = __webpack_require__(509)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -102040,13 +102409,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 501 */
+/* 506 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(502);
+var content = __webpack_require__(507);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -102066,7 +102435,7 @@ if(false) {
 }
 
 /***/ }),
-/* 502 */
+/* 507 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(false);
@@ -102080,7 +102449,7 @@ exports.push([module.i, "\nlabel[data-v-3428ae5e] {\n  font-weight: bold;\n}\n.t
 
 
 /***/ }),
-/* 503 */
+/* 508 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -102508,7 +102877,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 504 */
+/* 509 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -103505,19 +103874,19 @@ if (false) {
 }
 
 /***/ }),
-/* 505 */
+/* 510 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(506)
+  __webpack_require__(511)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(508)
+var __vue_script__ = __webpack_require__(513)
 /* template */
-var __vue_template__ = __webpack_require__(509)
+var __vue_template__ = __webpack_require__(514)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -103556,13 +103925,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 506 */
+/* 511 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(507);
+var content = __webpack_require__(512);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -103582,7 +103951,7 @@ if(false) {
 }
 
 /***/ }),
-/* 507 */
+/* 512 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(false);
@@ -103596,11 +103965,40 @@ exports.push([module.i, "\n.archive-header {\n    text-align: center;\n    font-
 
 
 /***/ }),
-/* 508 */
+/* 513 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -103712,7 +104110,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 509 */
+/* 514 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -103800,6 +104198,28 @@ var render = function() {
           )
         : _vm._e(),
       _vm._v(" "),
+      this.company_data.preferences != null
+        ? _c(
+            "div",
+            [
+              _c("preferences-admin", {
+                attrs: {
+                  company: this.company_data.company,
+                  preferences: this.company_data.preferences,
+                  allergies: this.company_data.allergies,
+                  additional_info: this.company_data.additional_info
+                },
+                on: {
+                  "refresh-data": function($event) {
+                    _vm.officeData($event.company_details_id)
+                  }
+                }
+              })
+            ],
+            1
+          )
+        : _vm._e(),
+      _vm._v(" "),
       this.company_data.fruitboxes != null
         ? _c(
             "div",
@@ -103808,6 +104228,11 @@ var render = function() {
                 attrs: {
                   company: this.company_data.company,
                   fruitboxes: this.company_data.fruitboxes
+                },
+                on: {
+                  "refresh-data": function($event) {
+                    _vm.officeData($event.company_details_id)
+                  }
                 }
               })
             ],
@@ -103914,19 +104339,19 @@ if (false) {
 }
 
 /***/ }),
-/* 510 */
+/* 515 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(511)
+  __webpack_require__(516)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(513)
+var __vue_script__ = __webpack_require__(518)
 /* template */
-var __vue_template__ = __webpack_require__(514)
+var __vue_template__ = __webpack_require__(519)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -103965,13 +104390,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 511 */
+/* 516 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(512);
+var content = __webpack_require__(517);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -103991,7 +104416,7 @@ if(false) {
 }
 
 /***/ }),
-/* 512 */
+/* 517 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(false);
@@ -104005,7 +104430,7 @@ exports.push([module.i, "\n.selected-company {\n    font-weight: 300;\n    margi
 
 
 /***/ }),
-/* 513 */
+/* 518 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -104092,7 +104517,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 514 */
+/* 519 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -104186,19 +104611,19 @@ if (false) {
 }
 
 /***/ }),
-/* 515 */
+/* 520 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(516)
+  __webpack_require__(521)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(518)
+var __vue_script__ = __webpack_require__(523)
 /* template */
-var __vue_template__ = __webpack_require__(519)
+var __vue_template__ = __webpack_require__(524)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -104237,13 +104662,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 516 */
+/* 521 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(517);
+var content = __webpack_require__(522);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -104263,7 +104688,7 @@ if(false) {
 }
 
 /***/ }),
-/* 517 */
+/* 522 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(false);
@@ -104277,7 +104702,7 @@ exports.push([module.i, "\n.margin-30[data-v-bf8615f2] {\n  margin: 30px;\n}\n.p
 
 
 /***/ }),
-/* 518 */
+/* 523 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -104441,7 +104866,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 519 */
+/* 524 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -105052,19 +105477,19 @@ if (false) {
 }
 
 /***/ }),
-/* 520 */
+/* 525 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(521)
+  __webpack_require__(526)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(523)
+var __vue_script__ = __webpack_require__(528)
 /* template */
-var __vue_template__ = __webpack_require__(524)
+var __vue_template__ = __webpack_require__(529)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -105103,13 +105528,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 521 */
+/* 526 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(522);
+var content = __webpack_require__(527);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -105129,7 +105554,7 @@ if(false) {
 }
 
 /***/ }),
-/* 522 */
+/* 527 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(false);
@@ -105143,7 +105568,7 @@ exports.push([module.i, "", ""]);
 
 
 /***/ }),
-/* 523 */
+/* 528 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -105171,7 +105596,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({});
 
 /***/ }),
-/* 524 */
+/* 529 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -105244,19 +105669,19 @@ if (false) {
 }
 
 /***/ }),
-/* 525 */
+/* 530 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(526)
+  __webpack_require__(531)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(528)
+var __vue_script__ = __webpack_require__(533)
 /* template */
-var __vue_template__ = __webpack_require__(529)
+var __vue_template__ = __webpack_require__(534)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -105295,13 +105720,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 526 */
+/* 531 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(527);
+var content = __webpack_require__(532);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -105321,7 +105746,7 @@ if(false) {
 }
 
 /***/ }),
-/* 527 */
+/* 532 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(false);
@@ -105335,7 +105760,7 @@ exports.push([module.i, "\n.info[data-v-268e8703] {\n  margin: 40px 60px;\n  fon
 
 
 /***/ }),
-/* 528 */
+/* 533 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -105416,7 +105841,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 529 */
+/* 534 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -105564,7 +105989,7 @@ if (false) {
 }
 
 /***/ }),
-/* 530 */
+/* 535 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

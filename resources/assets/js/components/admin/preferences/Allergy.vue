@@ -1,7 +1,11 @@
 <template>
     <div class="allergy-item">
-        <p> {{ name }} </p>
-        <b-button v-if="name != 'None'" size="sm" @click="removeAllergy(id, column)"> Remove </b-button>
+        <b-row>
+            <b-col>
+                <p> {{ name }} </p>
+                <b-button v-if="name != 'None'" size="sm" @click="removeAllergy(id, column)"> Remove </b-button>
+            </b-col>
+        </b-row>
     </div>
 </template>
 
@@ -36,6 +40,7 @@
                 axios.put('api/allergies/' + id, { 
                     id: id,
                 }).then (response => {
+                    this.$emit('refresh-data');
                     // location.reload(true); // This refreshes the browser and pulls the updated variables from the database into the vue component.
                     console.log(response);
                 }).catch(error => console.log(error));

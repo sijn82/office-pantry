@@ -61,7 +61,7 @@ export default {
         productData(id) {
              axios.get('/api/products/' + id)
                 .then(response => {
-                    this.product = response.data.product,
+                    this.product = response.data.product;
                     this.$store.commit('selectedProduct', this.product)
                 }).catch(error => {});
                 // 

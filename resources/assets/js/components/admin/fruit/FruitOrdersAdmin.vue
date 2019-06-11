@@ -5,7 +5,7 @@
 
         <div v-if="addnew">
             <b-button class="add-new-close" variant="danger" @click="addNew()"> Close </b-button>
-            <add-new-fruitbox :company="this.company"></add-new-fruitbox>
+            <add-new-fruitbox :company="this.company" @refresh-data="refreshData($event)"></add-new-fruitbox>
         </div>
         <div v-else class="add-new-close">
             <b-button variant="primary" @click="addNew()"> Add New Fruitbox </b-button>
@@ -148,6 +148,9 @@ export default {
         // }
     },
     methods: {
+        refreshData($event) {
+            this.$emit('refresh-data', $event);
+        },
         addNew() {
             if (this.addnew == false) {
                 this.addnew = true;

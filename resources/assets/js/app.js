@@ -111,6 +111,7 @@ Vue.component('office-pantry-product', require('./components/admin/products/Offi
 // Preference & Allergy Related
 Vue.component('preference', require('./components/admin/preferences/Preference.vue'));
 Vue.component('preferences', require('./components/admin/preferences/Preferences.vue'));
+Vue.component('preferences-admin', require('./components/admin/preferences/PreferencesAdmin.vue'));
 Vue.component('add-new-preference', require('./components/admin/preferences/AddNewPreference.vue'));
 Vue.component('allergy', require('./components/admin/preferences/Allergy.vue'));
 Vue.component('additional-info', require('./components/admin/preferences/AdditionalInfo.vue'));

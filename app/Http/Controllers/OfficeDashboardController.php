@@ -101,7 +101,8 @@ class OfficeDashboardController extends Controller
             
             $preferences = $company->preference;
             $allergies = $company->allergy;
-            
+            $additional_info = $company->additional_info;
+            // dd($additional_info);
             $archived_fruitboxes = $company->fruitbox_archive()->where('is_active', 'Active')->get();
             
             foreach ($archived_fruitboxes as $archived_fruitbox) {
@@ -111,11 +112,12 @@ class OfficeDashboardController extends Controller
                 $fruitpartner_name = $fruitpartner->name;
                 $archived_fruitbox->fruit_partner_name = $fruitpartner_name;
             }
-
+            // dd($company);
         // return view('companies', ['companies' => $company, 'fruitboxes' => $fruitboxes, 'milkboxes' => $milkboxes, 'routes' => $routes]);
         return [    'company' => $company, 'fruitboxes' => $fruitboxes, 'milkboxes' => $milkboxes, 'routes' => $routes,
                     'snackboxes' => $snackboxes, 'drinkboxes' => $drinkboxes, 'otherboxes' => $otherboxes,
-                    'preferences' => $preferences, 'allergies' => $allergies, 'archived_fruitboxes' => $archived_fruitboxes
+                    'preferences' => $preferences, 'allergies' => $allergies, 'additional_info' => $additional_info, 
+                    'archived_fruitboxes' => $archived_fruitboxes,
                 ];
     }
 

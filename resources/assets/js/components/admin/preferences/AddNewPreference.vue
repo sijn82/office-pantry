@@ -4,8 +4,8 @@
 
             <preferences v-if="show_preferences"></preferences>
 
-            <b-button class="get-preferences" v-if="show_preferences" @click="getCompanyPreferences(selected_company)"> Refresh Company Preferences </b-button>
-            <b-button class="get-preferences" v-else @click="getCompanyPreferences(selected_company)"> Get Company Preferences </b-button>
+            <!-- <b-button class="get-preferences" v-if="show_preferences" @click="getCompanyPreferences(selected_company)"> Refresh Company Preferences </b-button>
+            <b-button class="get-preferences" v-else @click="getCompanyPreferences(selected_company)"> Get Company Preferences </b-button> -->
 
             <h3> Add New Preference </h3>
             <!-- <p> {{ $store.state.setPreferences }} </p> -->
@@ -16,10 +16,12 @@
                     <b-row>
                         <!-- Company Select -->
                         <b-col id="company-select">
-                            <label> Select Company </label>
-                            <select-company v-on:selected-company="companySelected"></select-company>
-                            <p class="font-weight-300"> Selected: {{ selected_company }} </p>
+                            <label> Selected Company </label>
+                            <!-- <select-company v-on:selected-company="companySelected"></select-company> -->
+                            <h4 class="font-weight-300"> {{ companySelected(this.company) }} </h4>
                         </b-col>
+                    </b-row>
+                    <b-row>
                         <!-- Select Product -->
                         <b-col id="product-select">
                             <label> Select Product </label>
@@ -90,7 +92,8 @@
 
 <script>
 export default {
-    // props: ['likes', 'dislikes', 'essentials', 'allergies', 'additional_notes'],
+    // props: ['likes', 'dislikes', 'essentials', 'allergies', 'additional_notes'], old props, keeping a record but will remove if I carry on with the new plan.
+    props: ['company'],
     data() {
         return {
             essential_quantity: null,
@@ -98,14 +101,18 @@ export default {
             new_allergy: '',
             // allergies: this.$store.state.allergies_list, //'Gluten', 'Dairy', 'Nuts', 'Work', 'Pollen', 'Sunshine'
             additional_info: '',
-            company_selected: null,
+            // company_selected: null,
             preferences: {},
             show_preferences: false,
-            selected_company: 'none selected',
+            // selected_company: 'none selected',
         }
     },
 
     computed: {
+        
+        // selected_company: function (company) {
+        //     console.log('yah, we got this ' . this.company);
+        // }
         // getAllergies () {
         //     axios.get('/api/allergies/select').then( response => {
         //     let allergies = response.data;
@@ -118,13 +125,15 @@ export default {
     methods: {
 
         companySelected(company) {
-            console.log(company.id),
-            this.selected_company = company.id
+            console.log('Yah, we got this ' + company.invoice_name);
+            return this.selected_company = company.id;
+        //    return this.selected_company = company.invoice_name;
             //alert(company.id);
         },
         
         addNewAllergy(new_allergy) {
             console.log(new_allergy);
+            
             this.$store.commit('addNewAllergyToStore', new_allergy);
         },
 
@@ -137,6 +146,7 @@ export default {
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv' }
             }).then( response => {
                 alert('Uploaded new company allergy successfully!');
+                this.$emit('refresh-data', {company_details_id: this.selected_company});
                 // location.load(true);
                 // console.log(response.data[0].id);
                 // console.log(response.data[0].allergy);
@@ -158,6 +168,7 @@ export default {
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv' }
             }).then( response => {
                 alert('Uploaded new company additional info successfully!');
+                this.$emit('refresh-data', {company_details_id: this.selected_company});
                 let additional_info = response.data[0].additional_info;
                 let id = response.data[0].id
                 this.$store.commit('addAdditionalInfoToStore', { additional_info, id });
@@ -191,9 +202,11 @@ export default {
                  let name = response.data.preference[0][category];
                  let quantity = null;
                  if (category == 'snackbox_essentials') {
-                     let quantity = response.data.preference[0].quantity;
+                     let quantity = response.data.preference[0].snackbox_essentials_quantity;
                  }
                  console.log(name);
+                 
+                 this.$emit('refresh-data', {company_details_id: this.selected_company});
                  this.$store.commit('addPreferenceToStore', { category, product:{ id, name, quantity }});
                  // location.load(true);
             //     console.log(response.data);
@@ -203,23 +216,23 @@ export default {
             // console.log(this.essential_quantity);
         },
 
-        getCompanyPreferences(company_details_id) {
-
-            let self = this;
-
-            axios.post('/api/preferences/selected', {
-                id: company_details_id,
-            }).then( response => {
-                console.log(response.data);
-                // self.preferences = response.data;
-                self.$store.commit('setPreferences', response.data );
-                // console.log(self.preferences);
-                // console.log(self.preferences.likes);
-                this.show_preferences = true;
-
-            }).catch(error => console.log(error));
-
-        },
+        // getCompanyPreferences(company_details_id) {
+        // 
+        //     let self = this;
+        // 
+        //     axios.post('/api/preferences/selected', {
+        //         id: company_details_id,
+        //     }).then( response => {
+        //         console.log(response.data);
+        //         // self.preferences = response.data;
+        //         self.$store.commit('setPreferences', response.data );
+        //         // console.log(self.preferences);
+        //         // console.log(self.preferences.likes);
+        //         this.show_preferences = true;
+        // 
+        //     }).catch(error => console.log(error));
+        // 
+        // },
 
         onSubmit (evt) {
           evt.preventDefault();
