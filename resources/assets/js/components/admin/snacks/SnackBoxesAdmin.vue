@@ -6,7 +6,7 @@
 
         <div v-if="addnew">
             <b-button class="add-new-close" variant="danger" @click="addNew()"> Close </b-button>
-            <add-new-snackbox></add-new-snackbox>
+            <add-new-snackbox :company="this.company" @refresh-data="refreshData($event)"></add-new-snackbox>
         </div>
         <div v-else class="add-new-close">
             <b-button variant="primary" @click="addNew()"> Add New SnackBox </b-button>
@@ -14,7 +14,7 @@
 
         <div v-if="Object.keys(this.snackboxes).length"> 
 
-            <snackbox class="snackbox" v-for="(snackbox, key) in this.snackboxes" :key="key" :snackbox="snackbox"> {{ key }} </snackbox>
+            <snackbox class="snackbox" v-for="(snackbox, key) in this.snackboxes" :key="key" :snackbox="snackbox" :company="this.company" @refresh-data="refreshData($event)"> {{ key }} </snackbox>
 
         </div>
         <div v-else>
@@ -69,7 +69,7 @@
 
 <script>
     export default {
-        props: ['snackboxes'],
+        props: ['snackboxes', 'company'],
         data () {
             return {
                 snackbox: {
@@ -86,6 +86,9 @@
                 } else {
                     this.addnew = false;
                 }
+            },
+            refreshData($event) {
+                this.$emit('refresh-data', $event);
             },
         }
     }

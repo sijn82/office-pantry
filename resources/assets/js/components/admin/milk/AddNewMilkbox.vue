@@ -284,6 +284,7 @@ export default {
                   // user_id: self.userData.id // This hasn't been setup yet so proabably won't work yet?!
               }).then(function (response) {
                   alert('Uploaded new milkbox successfully!');
+                  self.$emit('refresh-data', {company_details_id: self.form.company_details_id});
                   console.log(response.data);
               }).catch(error => console.log(error));
             },

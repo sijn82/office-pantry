@@ -6,6 +6,7 @@
             <b-button variant="primary" @click="showDetails()"> Details </b-button>
             <b-button variant="warning" @click="enableEdit()"> Edit </b-button>
             <b-button v-if="editing" class="btn btn-success" @click="updateDetails(otherbox[0])"> Save </b-button>
+            <b-button variant="danger" @click="deleteOtherBox(otherbox[0])"> Delete </b-button>
         </div>
         
         <div class="otherbox-details" v-if="details">
@@ -234,7 +235,18 @@
                     //location.reload(true); // What am I doing with the store on this one?  Will I need this?
                     console.log(response);
                 }).catch(error => console.log(error));
-            }
+            },
+            deleteOtherBox(otherbox) {
+                let self = this;
+                axios.put('api/otherbox/destroy-box/' + otherbox.otherbox_id, { 
+                    otherbox_id: otherbox.otherbox_id,
+                }).then ( (response) => {
+                    //location.reload(true); // What am I doing with the store on this one?  Will I need this?
+                    console.log(response);
+                    console.log(otherbox.company_details_id);
+                    self.$emit('refresh-data', {company_details_id: otherbox.company_details_id})
+                }).catch(error => console.log(error));
+            },
         },
     }
 </script>

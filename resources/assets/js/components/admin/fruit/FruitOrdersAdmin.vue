@@ -5,7 +5,9 @@
 
         <div v-if="addnew">
             <b-button class="add-new-close" variant="danger" @click="addNew()"> Close </b-button>
-            <add-new-fruitbox :company="this.company" @refresh-data="refreshData($event)"></add-new-fruitbox>
+            <!-- <transition name="show-add-new"> -->
+                <add-new-fruitbox :company="this.company" @refresh-data="refreshData($event)"></add-new-fruitbox>
+            <!-- </transition> -->
         </div>
         <div v-else class="add-new-close">
             <b-button variant="primary" @click="addNew()"> Add New Fruitbox </b-button>
@@ -90,6 +92,12 @@
         padding-top: 20px; /* This creates some space between the element and the border. */
         border-bottom: 1px solid #636b6f; /* This creates the border. Replace black with whatever color you want. */
     }
+    // .show-add-new-enter-active, .show-add-new-leave-active {
+    //     transition: opacity .5s;
+    // }
+    // .show-add-new-enter, .show-add-new-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    //     opacity: 0;
+    // }
 
 </style>
 

@@ -4,7 +4,7 @@
   
         <div v-if="addnew">
             <b-button class="add-new-close" variant="danger" @click="addNew()"> Close </b-button>
-            <add-new-otherbox></add-new-otherbox>
+            <add-new-otherbox :company="this.company" @refresh-data="refreshData($event)"></add-new-otherbox>
         </div>
         <div v-else class="add-new-close">
             <b-button variant="primary" @click="addNew()"> Add New OtherBox </b-button>
@@ -12,7 +12,7 @@
   
         <div v-if="Object.keys(this.otherboxes).length"> 
   
-            <otherbox class="otherbox" v-for="(otherbox, key) in this.otherboxes" :key="key" :otherbox="otherbox"> {{ key }} </otherbox>
+            <otherbox class="otherbox" v-for="(otherbox, key) in this.otherboxes" :key="key" :otherbox="otherbox" :company="this.company" @refresh-data="refreshData($event)"> {{ key }} </otherbox>
   
         </div>
         <div v-else>
@@ -55,7 +55,7 @@
 
 <script>
     export default {
-        props: ['otherboxes'],
+        props: ['otherboxes', 'company'],
         data () {
             return {
                 addnew: false,
@@ -68,6 +68,9 @@
                 } else {
                     this.addnew = false;
                 }
+            },
+            refreshData($event) {
+                this.$emit('refresh-data', $event);
             },
         }
     }

@@ -123,11 +123,11 @@ export default {
     },
 
     methods: {
-
+        // I need to do something about what the is held for backend purposes and what the user sees.
         companySelected(company) {
             console.log('Yah, we got this ' + company.invoice_name);
-            return this.selected_company = company.id;
-        //    return this.selected_company = company.invoice_name;
+            this.selected_company = company.id;
+            return this.selected_company_invoice_name = company.invoice_name;
             //alert(company.id);
         },
         

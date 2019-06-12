@@ -16,8 +16,9 @@
                         <!-- When the selected-company event is emitted from <select-company> component, 
                         the companySelected() method from this component is called, 
                         updating the selected_company prop. -->
-                        <select-company v-on:selected-company="companySelected"></select-company>
-                        <p> ID: {{ selected_company }} </p>
+                        <!-- <select-company v-on:selected-company="companySelected"></select-company>
+                        <p> ID: {{ selected_company }} </p> -->
+                        <h4 class="font-weight-300"> {{ companySelected(this.company) }} </h4>
                     </b-col>
                 </b-row>
                 <b-row class="order-options">
@@ -126,7 +127,8 @@
 <script>
 
     export default {
-        //props:['addProductToDrinkbox', 'product', 'quantity'],
+        //props:['addProductToDrinkbox', 'product', 'quantity'], // Looks like i've actually bypassed this by using the store, this may change so keeping it for now.
+        props: ['company'],
         data () {
             return {
                 createDrinkbox: false,
@@ -150,10 +152,16 @@
         },
         methods: {
             companySelected(company) {
-                console.log(company.id),
-                this.selected_company = company.id
+                // console.log('Yah, we got this ' + company.invoice_name);
+                this.selected_company = company.id;
+                return this.selected_company_invoice_name = company.invoice_name;
                 //alert(company.id);
             },
+            // companySelected(company) {
+            //     console.log(company.id),
+            //     this.selected_company = company.id
+            //     //alert(company.id);
+            // },
             creatingDrinkbox() {
                 if (this.createDrinkbox == true) {
                   this.createDrinkbox = false;
@@ -179,12 +187,16 @@
                     },
                     order: this.$store.state.drinkbox,
                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv'},
-                }).then( function (response) {
+                }).then( (response) => {
                     alert('Uploaded new Company Drinkbox successfully!');
+                    this.$emit('refresh-data', {company_details_id: this.selected_company});
                     // location.reload(true); // This refreshes the browser and pulls the updated variables from the database into the vue component.
                     // console.log(response.data);
                 }).catch(error => console.log(error));
             },
+            mounted() {
+                console.log(this.company);
+            }
         }
     }
 

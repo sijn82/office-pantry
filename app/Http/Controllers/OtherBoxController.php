@@ -72,9 +72,34 @@ class OtherBoxController extends Controller
         // Because it generates a unique id based on the time we need to run this once per box only.
         $otherbox_id = request('details.company_details_id') . '-' . uniqid();
 
-         //dd(request('details.company_details_id'));
-        foreach (request('order') as $item) {
+        if (!empty($request->order)) {
+            
+             //dd(request('details.company_details_id'));
+            foreach (request('order') as $item) {
 
+                $new_otherbox = new OtherBox();
+                // These columns will be the same for each item created in this box
+                $new_otherbox->otherbox_id = $otherbox_id;
+                $new_otherbox->delivered_by_id = request('details.delivered_by_id');
+                $new_otherbox->no_of_boxes = request('details.no_of_boxes');
+                $new_otherbox->type = request('details.type');
+                $new_otherbox->company_details_id = request('details.company_details_id');
+                $new_otherbox->delivery_day = request('details.delivery_day');
+                $new_otherbox->frequency = request('details.frequency');
+                $new_otherbox->week_in_month = request('details.week_in_month');
+                $new_otherbox->next_delivery_week = request('details.next_delivery_week');
+                // Now we get to the elements which we want to loop through.
+                $new_otherbox->product_id = $item['id'];
+                $new_otherbox->code = $item['code'];
+                $new_otherbox->name = $item['name'];
+                $new_otherbox->quantity = $item['quantity'];
+                $new_otherbox->unit_price = $item['unit_price'];
+                // For now this is everything, so let's save the new entry to the db.
+                $new_otherbox->save();
+            }
+            
+        } else {
+            // Make an empty box to fill later on.
             $new_otherbox = new OtherBox();
             // These columns will be the same for each item created in this box
             $new_otherbox->otherbox_id = $otherbox_id;
@@ -86,13 +111,6 @@ class OtherBoxController extends Controller
             $new_otherbox->frequency = request('details.frequency');
             $new_otherbox->week_in_month = request('details.week_in_month');
             $new_otherbox->next_delivery_week = request('details.next_delivery_week');
-            // Now we get to the elements which we want to loop through.
-            $new_otherbox->product_id = $item['id'];
-            $new_otherbox->code = $item['code'];
-            $new_otherbox->name = $item['name'];
-            $new_otherbox->quantity = $item['quantity'];
-            $new_otherbox->unit_price = $item['unit_price'];
-            // For now this is everything, so let's save the new entry to the db.
             $new_otherbox->save();
         }
 
@@ -320,5 +338,58 @@ class OtherBoxController extends Controller
     public function destroy($id)
     {
         OtherBox::destroy($id);
+    }
+    
+    //---------- These 2 functions below are currently just copied from the snackbox controller - in case you couldn't already guess! ----------//
+    // I'll update it to work with drinkboxes when I get to this point.
+    
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroyItem($id, Request $request)
+    {
+        // We need some logic here to decide if the item to be deleted is the last item in the snackbox.
+        // Grab all the entries with the same snackbox_id.
+        $snackbox_total_items = SnackBox::where('snackbox_id', request('snackbox_id'))->get();
+        
+        
+        // However we also need to return the quantity, as it's no longer being delivered, to maintain accurate stock levels.
+        // Use the id of the snackbox entry...
+        $snackbox_item = SnackBox::find(request('id'));
+        // ...to grab the associated product_id and increment the stock level by the quantity; before we strip out or destroy the entry.
+        Product::find($snackbox_item->product_id)->increment('stock_level', $snackbox_item->quantity);
+        
+        // If we've only retrieved 1 entry then this is the last vestige of box data and should be preserved.
+        if (count($snackbox_total_items) === 1) {
+            // To prevent an accidental extinction event, we don't want to destroy the entire entry, just strip out the product details and change the product_id to 0.
+            // Having some update logic in the destroy function is probably breaking best practice rules, but I'm sure i'll be able to refactor it one day!
+            
+            
+            SnackBox::where('id', $id)->update([
+                'product_id' => 0,
+                'code' => null,
+                'name' => null,
+                'quantity' => null,
+                'unit_price' => null,
+            ]);
+            
+        } else {
+            
+            // We still have another entry with the necessary box info, so we can destroy this one.
+            SnackBox::destroy($id);
+        }
+        
+    }
+    
+    public function destroyBox(Request $request)
+    {
+        $otherbox = OtherBox::where('otherbox_id', request('otherbox_id'))->get();
+        // dd($snackbox);
+        foreach ($otherbox as $otherbox_item) {
+            OtherBox::destroy($otherbox_item->id);
+        }
     }
 }

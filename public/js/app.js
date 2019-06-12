@@ -78613,6 +78613,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['fruitboxes', 'company'],
@@ -84921,33 +84929,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     props: ['milkboxes', 'company'],
     data: function data() {
         return {
-            // milkbox: { // Pretty sure I don't need this object defined, as it's passed via a prop and no longer displayed in this component!
-            // id: '',
-            // is_active: '',
-            // fruit_partner_id: '',
-            // company_id: '',
-            // route_id: '',
-            // next_delivery: '',
-            // delivery_day: '',
-            // frequency: '',
-            // week_in_month: '',
-            // milk_1l_alt_coconut: '',
-            // milk_1l_alt_unsweetened_almond: '',
-            // milk_1l_alt_almond: '',
-            // milk_1l_alt_unsweetened_soya: '',
-            // milk_1l_alt_soya: '',
-            // milk_1l_alt_lactose_free_semi: '',
-            // semi_skimmed_2l: '',
-            // skimmed_2l: '',
-            // whole_2l: '',
-            // semi_skimmed_1l: '',
-            // skimmed_1l: '',
-            // whole_1l: '',
-            // pint_semi_skimmed: '',
-            // pint_whole: '',
-            // organic_semi_skimmed_1l: '',
-            // organic_skimmed_1l: '',
-            // },
+
             fruit_partner_name: '',
             frequency: ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'],
             week_in_month: ['First', 'Second', 'Third', 'Forth', 'Last'],
@@ -84981,37 +84963,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 this.details = true;
             }
         },
-
-        // updateMilkOrder(milkbox) { // This is also doing diddly squat!
-        //     this.editing = false;
-        //     console.log(milkbox);
-        //     console.log(milkbox.id);
-        //     axios.put('api/milkbox/' + milkbox.id, {
-        //         id: milkbox.id,
-        //         is_active: milkbox.is_active,
-        //         fruit_partner_id: milkbox.fruit_partner_id,
-        //         company_id: milkbox.company_id,
-        //         route_id: milkbox.route_id,
-        //         next_delivery: milkbox.next_delivery,
-        //         delivery_day: milkbox.delivery_day,
-        //         frequency: milkbox.frequency,
-        //         week_in_month: milkbox.week_in_month,
-        //         milk_1l_alt_coconut: milkbox.milk_1l_alt_coconut,
-        //         milk_1l_alt_unsweetened_almond: milkbox.milk_1l_alt_unsweetened_almond,
-        //         milk_1l_alt_almond: milkbox.milk_1l_alt_almond,
-        //         milk_1l_alt_unsweetened_soya: milkbox.milk_1l_alt_unsweetened_soya,
-        //         milk_1l_alt_soya: milkbox.milk_1l_alt_soya,
-        //         milk_1l_alt_lactose_free_semi: milkbox.milk_1l_alt_lactose_free_semi,
-        //         semi_skimmed_2l: milkbox.semi_skimmed_2l,
-        //         skimmed_2l: milkbox.skimmed_2l,
-        //         whole_2l: milkbox.whole_2l,
-        //         semi_skimmed_1l: milkbox.semi_skimmed_1l,
-        //         skimmed_1l: milkbox.skimmed_1l,
-        //         whole_1l: milkbox.whole_1l,
-        //     }).then (response => {
-        //         console.log(response);
-        //     }).catch(error => console.log(error));
-        // },
+        refreshData: function refreshData($event) {
+            this.$emit('refresh-data', $event);
+        },
         changeName: function changeName(name) {
             return this.fruitbox.fruit_partner_name = name;
         }
@@ -85051,7 +85005,14 @@ var render = function() {
               [_vm._v(" Close ")]
             ),
             _vm._v(" "),
-            _c("add-new-milkbox", { attrs: { company: this.company } })
+            _c("add-new-milkbox", {
+              attrs: { company: this.company },
+              on: {
+                "refresh-data": function($event) {
+                  _vm.refreshData($event)
+                }
+              }
+            })
           ],
           1
         )
@@ -85493,6 +85454,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 // user_id: self.userData.id // This hasn't been setup yet so proabably won't work yet?!
             }).then(function (response) {
                 alert('Uploaded new milkbox successfully!');
+                self.$emit('refresh-data', { company_details_id: self.form.company_details_id });
                 console.log(response.data);
             }).catch(function (error) {
                 return console.log(error);
@@ -89072,9 +89034,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['snackbox'],
+    props: ['snackbox', 'company'],
     data: function data() {
         return {
             add_product: false,
@@ -89150,11 +89113,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
         },
         deleteSnackBox: function deleteSnackBox(snackbox) {
+            var self = this;
             axios.put('api/snackbox/destroy-box/' + snackbox.snackbox_id, {
                 snackbox_id: snackbox.snackbox_id
             }).then(function (response) {
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?
                 console.log(response);
+                console.log(snackbox.company_details_id);
+                self.$emit('refresh-data', { company_details_id: snackbox.company_details_id });
             }).catch(function (error) {
                 return console.log(error);
             });
@@ -89162,6 +89128,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     mounted: function mounted() {
         this.$store.commit('getTypes');
+        console.log(this.company); // Is coming back undefined?  But in add-new-snackbox it's working fine! I'm just using snackbox instead but it's still confusing.
     }
 });
 
@@ -89936,7 +89903,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['snackboxes'],
+    props: ['snackboxes', 'company'],
     data: function data() {
         return {
             snackbox: {},
@@ -89952,6 +89919,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             } else {
                 this.addnew = false;
             }
+        },
+        refreshData: function refreshData($event) {
+            this.$emit('refresh-data', $event);
         }
     }
 });
@@ -89985,7 +89955,14 @@ var render = function() {
               [_vm._v(" Close ")]
             ),
             _vm._v(" "),
-            _c("add-new-snackbox")
+            _c("add-new-snackbox", {
+              attrs: { company: this.company },
+              on: {
+                "refresh-data": function($event) {
+                  _vm.refreshData($event)
+                }
+              }
+            })
           ],
           1
         )
@@ -90018,7 +89995,12 @@ var render = function() {
               {
                 key: key,
                 staticClass: "snackbox",
-                attrs: { snackbox: snackbox }
+                attrs: { snackbox: snackbox, company: this.company },
+                on: {
+                  "refresh-data": function($event) {
+                    _vm.refreshData($event)
+                  }
+                }
               },
               [_vm._v(" " + _vm._s(key) + " ")]
             )
@@ -90317,9 +90299,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['addProductToSnackbox', 'product', 'quantity'],
+    props: ['addProductToSnackbox', 'product', 'quantity', // after looking at drinkbox, I'm not sure these are actually being used anymore?
+    'company' // Added this to the new snackbox props so I can do away with the 'select company searchbar' and autopopulate it instead - I'll need an alternative for customwer facing probably.
+    ],
     data: function data() {
         return {
             createSnackbox: false,
@@ -90375,7 +90360,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     methods: {
         companySelected: function companySelected(company) {
-            console.log(company.id), this.selected_company = company.id;
+            // console.log('Yah, we got this ' + company.invoice_name);
+            this.selected_company = company.id;
+            return this.selected_company_invoice_name = company.invoice_name;
             //alert(company.id);
         },
         creatingSnackbox: function creatingSnackbox() {
@@ -90414,6 +90401,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.$store.commit('removeFromSnackbox', id);
         },
         saveCompanySnackbox: function saveCompanySnackbox() {
+            var _this = this;
 
             axios.post('/api/snackboxes/save', {
                 company_details_id: this.selected_company,
@@ -90431,6 +90419,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv' }
             }).then(function (response) {
                 alert('Uploaded new Company snackbox successfully!');
+                _this.$emit('refresh-data', { company_details_id: _this.selected_company });
                 // location.reload(true); // This refreshes the browser and pulls the updated variables from the database into the vue component.
                 // console.log(response.data);
             }).catch(function (error) {
@@ -90447,7 +90436,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.$store.commit('addNewTypeToStore', new_type);
         },
         confirmType: function confirmType(type) {
-            var _this = this;
+            var _this2 = this;
 
             var company = this.selected_company;
             var name = type;
@@ -90461,14 +90450,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 // console.log(response.data[0].allergy);
                 var type = response.data[0].type;
                 var id = response.data[0].id;
-                _this.$store.commit('addTypeToStore', { type: type, id: id });
+                _this2.$store.commit('addTypeToStore', { type: type, id: id });
             }).catch(function (error) {
                 console.log(error);
             });
         }
     },
     mounted: function mounted() {
-
+        console.log(this.company);
         this.$store.commit('getTypes');
     }
 });
@@ -90641,20 +90630,13 @@ var render = function() {
       _c(
         "b-row",
         [
-          _c(
-            "b-col",
-            { attrs: { id: "company-select" } },
-            [
-              _c("label", [_vm._v(" Select Company ")]),
-              _vm._v(" "),
-              _c("select-company", {
-                on: { "selected-company": _vm.companySelected }
-              }),
-              _vm._v(" "),
-              _c("p", [_vm._v(" ID: " + _vm._s(_vm.selected_company) + " ")])
-            ],
-            1
-          ),
+          _c("b-col", { attrs: { id: "company-select" } }, [
+            _c("label", [_vm._v(" Selected Company ")]),
+            _vm._v(" "),
+            _c("h4", { staticClass: "font-weight-300" }, [
+              _vm._v(" " + _vm._s(_vm.companySelected(this.company)) + " ")
+            ])
+          ]),
           _vm._v(" "),
           !_vm.createWholesaleSnackbox
             ? _c(
@@ -92315,6 +92297,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['drinkbox'],
@@ -92378,6 +92361,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).then(function (response) {
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?
                 console.log(response);
+            }).catch(function (error) {
+                return console.log(error);
+            });
+        },
+        deleteDrinkBox: function deleteDrinkBox(drinkbox) {
+            var self = this;
+            axios.put('api/drinkbox/destroy-box/' + drinkbox.drinkbox_id, {
+                drinkbox_id: drinkbox.drinkbox_id
+            }).then(function (response) {
+                //location.reload(true); // What am I doing with the store on this one?  Will I need this?
+                console.log(response);
+                console.log(drinkbox.company_details_id);
+                self.$emit('refresh-data', { company_details_id: drinkbox.company_details_id });
             }).catch(function (error) {
                 return console.log(error);
             });
@@ -92449,7 +92445,20 @@ var render = function() {
               },
               [_vm._v(" Save ")]
             )
-          : _vm._e()
+          : _vm._e(),
+        _vm._v(" "),
+        _c(
+          "b-button",
+          {
+            attrs: { variant: "danger" },
+            on: {
+              click: function($event) {
+                _vm.deleteDrinkBox(_vm.drinkbox[0])
+              }
+            }
+          },
+          [_vm._v(" Delete ")]
+        )
       ],
       1
     ),
@@ -93090,7 +93099,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['drinkboxes'],
+    props: ['drinkboxes', 'company'],
     data: function data() {
         return {
             addnew: false
@@ -93104,6 +93113,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             } else {
                 this.addnew = false;
             }
+        },
+        refreshData: function refreshData($event) {
+            this.$emit('refresh-data', $event);
         }
     }
 });
@@ -93137,7 +93149,14 @@ var render = function() {
               [_vm._v(" Close ")]
             ),
             _vm._v(" "),
-            _c("add-new-drinkbox")
+            _c("add-new-drinkbox", {
+              attrs: { company: this.company },
+              on: {
+                "refresh-data": function($event) {
+                  _vm.refreshData($event)
+                }
+              }
+            })
           ],
           1
         )
@@ -93170,7 +93189,12 @@ var render = function() {
               {
                 key: key,
                 staticClass: "drinkbox",
-                attrs: { drinkbox: drinkbox }
+                attrs: { drinkbox: drinkbox, company: this.company },
+                on: {
+                  "refresh-data": function($event) {
+                    _vm.refreshData($event)
+                  }
+                }
               },
               [_vm._v(" " + _vm._s(key) + " ")]
             )
@@ -93422,10 +93446,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    //props:['addProductToDrinkbox', 'product', 'quantity'],
+    //props:['addProductToDrinkbox', 'product', 'quantity'], // Looks like i've actually bypassed this by using the store, this may change so keeping it for now.
+    props: ['company'],
     data: function data() {
         return {
             createDrinkbox: false,
@@ -93450,9 +93476,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     methods: {
         companySelected: function companySelected(company) {
-            console.log(company.id), this.selected_company = company.id;
+            // console.log('Yah, we got this ' + company.invoice_name);
+            this.selected_company = company.id;
+            return this.selected_company_invoice_name = company.invoice_name;
             //alert(company.id);
         },
+
+        // companySelected(company) {
+        //     console.log(company.id),
+        //     this.selected_company = company.id
+        //     //alert(company.id);
+        // },
         creatingDrinkbox: function creatingDrinkbox() {
             if (this.createDrinkbox == true) {
                 this.createDrinkbox = false;
@@ -93465,6 +93499,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.$store.commit('removeFromDrinkbox', id);
         },
         saveCompanyDrinkbox: function saveCompanyDrinkbox() {
+            var _this = this;
 
             axios.post('/api/drinkboxes/save', {
                 details: {
@@ -93480,11 +93515,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv' }
             }).then(function (response) {
                 alert('Uploaded new Company Drinkbox successfully!');
+                _this.$emit('refresh-data', { company_details_id: _this.selected_company });
                 // location.reload(true); // This refreshes the browser and pulls the updated variables from the database into the vue component.
                 // console.log(response.data);
             }).catch(function (error) {
                 return console.log(error);
             });
+        },
+        mounted: function mounted() {
+            console.log(this.company);
         }
     }
 });
@@ -93541,22 +93580,15 @@ var render = function() {
                   )
                 ]),
                 _vm._v(" "),
-                _c(
-                  "b-col",
-                  { attrs: { id: "company-select" } },
-                  [
-                    _c("label", [_vm._v(" Select Company ")]),
-                    _vm._v(" "),
-                    _c("select-company", {
-                      on: { "selected-company": _vm.companySelected }
-                    }),
-                    _vm._v(" "),
-                    _c("p", [
-                      _vm._v(" ID: " + _vm._s(_vm.selected_company) + " ")
-                    ])
-                  ],
-                  1
-                )
+                _c("b-col", { attrs: { id: "company-select" } }, [
+                  _c("label", [_vm._v(" Select Company ")]),
+                  _vm._v(" "),
+                  _c("h4", { staticClass: "font-weight-300" }, [
+                    _vm._v(
+                      " " + _vm._s(_vm.companySelected(this.company)) + " "
+                    )
+                  ])
+                ])
               ],
               1
             ),
@@ -94462,6 +94494,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['otherbox'],
@@ -94524,6 +94557,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).then(function (response) {
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?
                 console.log(response);
+            }).catch(function (error) {
+                return console.log(error);
+            });
+        },
+        deleteOtherBox: function deleteOtherBox(otherbox) {
+            var self = this;
+            axios.put('api/otherbox/destroy-box/' + otherbox.otherbox_id, {
+                otherbox_id: otherbox.otherbox_id
+            }).then(function (response) {
+                //location.reload(true); // What am I doing with the store on this one?  Will I need this?
+                console.log(response);
+                console.log(otherbox.company_details_id);
+                self.$emit('refresh-data', { company_details_id: otherbox.company_details_id });
             }).catch(function (error) {
                 return console.log(error);
             });
@@ -94595,7 +94641,20 @@ var render = function() {
               },
               [_vm._v(" Save ")]
             )
-          : _vm._e()
+          : _vm._e(),
+        _vm._v(" "),
+        _c(
+          "b-button",
+          {
+            attrs: { variant: "danger" },
+            on: {
+              click: function($event) {
+                _vm.deleteOtherBox(_vm.otherbox[0])
+              }
+            }
+          },
+          [_vm._v(" Delete ")]
+        )
       ],
       1
     ),
@@ -95211,7 +95270,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['otherboxes'],
+    props: ['otherboxes', 'company'],
     data: function data() {
         return {
             addnew: false
@@ -95225,6 +95284,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             } else {
                 this.addnew = false;
             }
+        },
+        refreshData: function refreshData($event) {
+            this.$emit('refresh-data', $event);
         }
     }
 });
@@ -95258,7 +95320,14 @@ var render = function() {
               [_vm._v(" Close ")]
             ),
             _vm._v(" "),
-            _c("add-new-otherbox")
+            _c("add-new-otherbox", {
+              attrs: { company: this.company },
+              on: {
+                "refresh-data": function($event) {
+                  _vm.refreshData($event)
+                }
+              }
+            })
           ],
           1
         )
@@ -95291,7 +95360,12 @@ var render = function() {
               {
                 key: key,
                 staticClass: "otherbox",
-                attrs: { otherbox: otherbox }
+                attrs: { otherbox: otherbox, company: this.company },
+                on: {
+                  "refresh-data": function($event) {
+                    _vm.refreshData($event)
+                  }
+                }
               },
               [_vm._v(" " + _vm._s(key) + " ")]
             )
@@ -95546,10 +95620,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     //props:['addProductToOtherbox', 'product', 'quantity'], <-- I don't think I'm using this, so let's see if any errors get thrown further down the line.
+    props: ['company'],
     data: function data() {
         return {
             createOtherbox: false,
@@ -95574,8 +95650,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     methods: {
         companySelected: function companySelected(company) {
-            //console.log(company.id),
+            // console.log('Yah, we got this ' + company.invoice_name);
             this.selected_company = company.id;
+            return this.selected_company_invoice_name = company.invoice_name;
             //alert(company.id);
         },
         creatingOtherbox: function creatingOtherbox() {
@@ -95595,6 +95672,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.$store.commit('removeFromOtherbox', id);
         },
         saveCompanyOtherbox: function saveCompanyOtherbox() {
+            var _this = this;
 
             axios.post('/api/otherboxes/save', {
                 details: {
@@ -95611,6 +95689,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv' }
             }).then(function (response) {
                 alert('Uploaded new Company Otherbox successfully!');
+                _this.$emit('refresh-data', { company_details_id: _this.selected_company });
                 // location.reload(true); // This refreshes the browser and pulls the updated variables from the database into the vue component.
                 // console.log(response.data);
             }).catch(function (error) {
@@ -95672,22 +95751,15 @@ var render = function() {
                   )
                 ]),
                 _vm._v(" "),
-                _c(
-                  "b-col",
-                  { attrs: { id: "company-select" } },
-                  [
-                    _c("label", [_vm._v(" Select Company ")]),
-                    _vm._v(" "),
-                    _c("select-company", {
-                      on: { "selected-company": _vm.companySelected }
-                    }),
-                    _vm._v(" "),
-                    _c("p", [
-                      _vm._v(" ID: " + _vm._s(_vm.selected_company) + " ")
-                    ])
-                  ],
-                  1
-                )
+                _c("b-col", { attrs: { id: "company-select" } }, [
+                  _c("label", [_vm._v(" Selected Company ")]),
+                  _vm._v(" "),
+                  _c("h4", { staticClass: "font-weight-300" }, [
+                    _vm._v(
+                      " " + _vm._s(_vm.companySelected(this.company)) + " "
+                    )
+                  ])
+                ])
               ],
               1
             ),
@@ -100416,10 +100488,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     methods: {
+        // I need to do something about what the is held for backend purposes and what the user sees.
         companySelected: function companySelected(company) {
             console.log('Yah, we got this ' + company.invoice_name);
-            return this.selected_company = company.id;
-            //    return this.selected_company = company.invoice_name;
+            this.selected_company = company.id;
+            return this.selected_company_invoice_name = company.invoice_name;
             //alert(company.id);
         },
         addNewAllergy: function addNewAllergy(new_allergy) {
@@ -104055,6 +104128,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['fruitboxes', 'milkboxes', 'routes', 'company', 'snackboxes', 'otherboxes', 'drinkboxes', 'archived_fruitboxes'],
@@ -104248,6 +104328,11 @@ var render = function() {
                 attrs: {
                   company: this.company_data.company,
                   milkboxes: this.company_data.milkboxes
+                },
+                on: {
+                  "refresh-data": function($event) {
+                    _vm.officeData($event.company_details_id)
+                  }
                 }
               })
             ],
@@ -104272,7 +104357,15 @@ var render = function() {
             "div",
             [
               _c("snackboxes-admin", {
-                attrs: { snackboxes: this.company_data.snackboxes }
+                attrs: {
+                  company: this.company_data.company,
+                  snackboxes: this.company_data.snackboxes
+                },
+                on: {
+                  "refresh-data": function($event) {
+                    _vm.officeData($event.company_details_id)
+                  }
+                }
               })
             ],
             1
@@ -104284,7 +104377,15 @@ var render = function() {
             "div",
             [
               _c("drink-orders-admin", {
-                attrs: { drinkboxes: this.company_data.drinkboxes }
+                attrs: {
+                  company: this.company_data.company,
+                  drinkboxes: this.company_data.drinkboxes
+                },
+                on: {
+                  "refresh-data": function($event) {
+                    _vm.officeData($event.company_details_id)
+                  }
+                }
               })
             ],
             1
@@ -104296,7 +104397,15 @@ var render = function() {
             "div",
             [
               _c("other-orders-admin", {
-                attrs: { otherboxes: this.company_data.otherboxes }
+                attrs: {
+                  company: this.company_data.company,
+                  otherboxes: this.company_data.otherboxes
+                },
+                on: {
+                  "refresh-data": function($event) {
+                    _vm.officeData($event.company_details_id)
+                  }
+                }
               })
             ],
             1

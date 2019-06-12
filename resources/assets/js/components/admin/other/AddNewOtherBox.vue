@@ -12,12 +12,13 @@
                     </b-col>
             
                     <b-col id="company-select">
-                        <label> Select Company </label>
+                        <label> Selected Company </label>
                         <!-- When the selected-company event is emitted from <select-company> component, 
                         the companySelected() method from this component is called, 
                         updating the selected_company prop. -->
-                        <select-company v-on:selected-company="companySelected"></select-company>
-                        <p> ID: {{ selected_company }} </p>
+                        <!-- <select-company v-on:selected-company="companySelected"></select-company>
+                        <p> ID: {{ selected_company }} </p> -->
+                        <h4 class="font-weight-300"> {{ companySelected(this.company) }} </h4>
                     </b-col>
                 </b-row>
                 <b-row class="order-options">
@@ -130,6 +131,7 @@
 
     export default {
         //props:['addProductToOtherbox', 'product', 'quantity'], <-- I don't think I'm using this, so let's see if any errors get thrown further down the line.
+        props: ['company'],
         data () {
             return {
                 createOtherbox: false,
@@ -153,8 +155,9 @@
         },
         methods: {
             companySelected(company) {
-                //console.log(company.id),
-                this.selected_company = company.id
+                // console.log('Yah, we got this ' + company.invoice_name);
+                this.selected_company = company.id;
+                return this.selected_company_invoice_name = company.invoice_name;
                 //alert(company.id);
             },
             creatingOtherbox() {
@@ -187,8 +190,9 @@
                     },
                     order: this.$store.state.otherbox,
                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv'},
-                }).then( function (response) {
+                }).then( (response) => {
                     alert('Uploaded new Company Otherbox successfully!');
+                    this.$emit('refresh-data', {company_details_id: this.selected_company});
                     // location.reload(true); // This refreshes the browser and pulls the updated variables from the database into the vue component.
                     // console.log(response.data);
                 }).catch(error => console.log(error));

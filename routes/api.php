@@ -146,13 +146,17 @@ Route::post('drinkboxes/save', 'DrinkBoxController@store');
 Route::post('drinkbox/update', 'DrinkBoxController@update');
 Route::post('drinkbox/details', 'DrinkBoxController@updateDetails');
 Route::post('drinkbox/add-product', 'DrinkBoxController@addProductToDrinkbox');
-Route::put('drinkbox/destroy/{id}', 'DrinkBoxController@destroy');
+// Route::put('drinkbox/destroy/{id}', 'DrinkBoxController@destroy'); // Don't think I'm using this, going to replace it anyway.
+Route::put('drinkbox/destroy/{id}', 'DrinkBoxController@destroyItem');
+Route::put('drinkbox/destroy-box/{id}', 'DrinkBoxController@destroyBox');
 // Update company specific otherbox
 Route::post('otherboxes/save', 'OtherBoxController@store');
 Route::post('otherbox/update', 'OtherBoxController@update');
 Route::post('otherbox/details', 'OtherBoxController@updateDetails');
 Route::post('otherbox/add-product', 'OtherBoxController@addProductToOtherbox');
-Route::put('otherbox/destroy/{id}', 'OtherBoxController@destroy');
+// Route::put('otherbox/destroy/{id}', 'OtherBoxController@destroy'); // Don't think I'm using this, going to replace it anyway.
+Route::put('otherbox/destroy/{id}', 'OtherBoxController@destroyItem');
+Route::put('otherbox/destroy-box/{id}', 'OtherBoxController@destroyBox');
 
 Route::post('upload-snackbox-product-codes', 'SnackBoxController@upload_products_and_codes');
 Route::post('upload-snackbox-orders', 'SnackBoxController@upload_snackbox_orders');

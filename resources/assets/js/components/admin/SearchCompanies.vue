@@ -35,6 +35,7 @@
         </div>
         <div v-if="this.company_data.milkboxes != null">
             <milk-orders-admin 
+                @refresh-data="officeData($event.company_details_id)"
                 :company="this.company_data.company" 
                 :milkboxes="this.company_data.milkboxes">
             </milk-orders-admin>
@@ -46,16 +47,22 @@
         </div>
         <div v-if="this.company_data.snackboxes != null">
             <snackboxes-admin 
+                @refresh-data="officeData($event.company_details_id)" 
+                :company="this.company_data.company" 
                 :snackboxes="this.company_data.snackboxes">
             </snackboxes-admin>
         </div>
         <div v-if="this.company_data.drinkboxes != null">
             <drink-orders-admin 
+                @refresh-data="officeData($event.company_details_id)" 
+                :company="this.company_data.company" 
                 :drinkboxes="this.company_data.drinkboxes">
             </drink-orders-admin>
         </div>
         <div v-if="this.company_data.otherboxes != null">
             <other-orders-admin 
+                @refresh-data="officeData($event.company_details_id)" 
+                :company="this.company_data.company" 
                 :otherboxes="this.company_data.otherboxes">
             </other-orders-admin>
         </div>

@@ -31,9 +31,10 @@
         <!-- This should split the select company and snack cap onto it's own row. -->
         <b-row>
             <b-col id="company-select">
-                <label> Select Company </label>
-                <select-company v-on:selected-company="companySelected"></select-company>
-                <p> ID: {{ selected_company }} </p>
+                <label> Selected Company </label>
+                <!-- <select-company v-on:selected-company="companySelected"></select-company>
+                <p> ID: {{ selected_company }} </p> -->
+                <h4 class="font-weight-300"> {{ companySelected(this.company) }} </h4>
             </b-col>
             <b-col v-if="!createWholesaleSnackbox">
                 <label> Snack Cap </label>
@@ -172,7 +173,9 @@
 
 <script>
 export default {
-    props:['addProductToSnackbox', 'product', 'quantity'],
+    props:[ 'addProductToSnackbox', 'product', 'quantity', // after looking at drinkbox, I'm not sure these are actually being used anymore?
+            'company' // Added this to the new snackbox props so I can do away with the 'select company searchbar' and autopopulate it instead - I'll need an alternative for customwer facing probably.
+    ],
     data() {
         return {
             createSnackbox: false,
@@ -227,8 +230,9 @@ export default {
     },
     methods: {
         companySelected(company) {
-            console.log(company.id),
-            this.selected_company = company.id
+            // console.log('Yah, we got this ' + company.invoice_name);
+            this.selected_company = company.id;
+            return this.selected_company_invoice_name = company.invoice_name;
             //alert(company.id);
         },
         creatingSnackbox() {
@@ -281,8 +285,9 @@ export default {
                 },
                 order: this.$store.state.snackbox,
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv'},
-            }).then( function (response) {
+            }).then( (response) => {
                 alert('Uploaded new Company snackbox successfully!');
+                this.$emit('refresh-data', {company_details_id: this.selected_company});
                 // location.reload(true); // This refreshes the browser and pulls the updated variables from the database into the vue component.
                 // console.log(response.data);
             }).catch(error => console.log(error));
@@ -317,7 +322,7 @@ export default {
         },
     },
     mounted() {
-
+        console.log(this.company);
          this.$store.commit('getTypes');
     }
 }

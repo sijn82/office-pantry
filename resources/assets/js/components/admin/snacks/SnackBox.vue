@@ -14,6 +14,7 @@
         <div id="edit-save-buttons">
             <h4> {{ snackbox[0].snackbox_id }} </h4>
             <p> {{ snackbox[0].delivery_day }} - {{ snackbox[0].is_active }} </p>
+            <!-- <p><b> {{ this.company }} </b></p> -->
             <b-button variant="primary" @click="showDetails()"> Details </b-button>
             <b-button variant="warning" @click="enableEdit()"> Edit </b-button>
             <b-button v-if="editing" class="btn btn-success" @click="updateDetails(snackbox[0])"> Save </b-button>
@@ -143,7 +144,7 @@
                         <h4> Shortest Stock Date </h4>
                     </b-col>
                     <b-col>
-                        <h4> Unit Price </h4>
+                        <h4> Unit Price </h4> <!-- This whole order breakdown section is well served for mixed snackboxes BUT NOT WHOLESALE!!!! - I NEED TO DO SOMETHING WITH 'snackbox[0].type' TO DETERMINE WHAT TO DO!! -->
                     </b-col>
                     <b-col>
                         <h4> Quantity </h4>
@@ -213,7 +214,7 @@
 
 <script>
 export default {
-    props: ['snackbox'],
+    props: ['snackbox', 'company'],
     data () {
         return {
             add_product: false,
@@ -285,16 +286,20 @@ export default {
             }).catch(error => console.log(error));
         },
         deleteSnackBox(snackbox) {
+            let self = this;
             axios.put('api/snackbox/destroy-box/' + snackbox.snackbox_id, { 
                 snackbox_id: snackbox.snackbox_id,
-            }).then (response => {
+            }).then ( (response) => {
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?
                 console.log(response);
+                console.log(snackbox.company_details_id);
+                self.$emit('refresh-data', {company_details_id: snackbox.company_details_id})
             }).catch(error => console.log(error));
         },
     },
     mounted() {
          this.$store.commit('getTypes');
+         console.log(this.company); // Is coming back undefined?  But in add-new-snackbox it's working fine! I'm just using snackbox instead but it's still confusing.
     }
 }
 </script>
