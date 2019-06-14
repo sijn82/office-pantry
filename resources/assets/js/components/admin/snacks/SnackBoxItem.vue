@@ -13,7 +13,8 @@
               </div>
           </b-col>
           <b-col>
-              <p> {{ snackbox_item.unit_price }} </p>
+              <p v-if="snackbox_item.type !== 'wholesale'"> {{ snackbox_item.unit_price }} </p>
+              <p v-else> {{ snackbox_item.case_price }} </p>
           </b-col>
           <b-col>
               <b-button size="sm" variant="warning" @click="editor()"> Edit </b-button>
@@ -49,8 +50,9 @@
                 axios.put('api/snackbox/destroy/' + snackbox_item.id, { 
                     id: snackbox_item.id,
                     snackbox_id: snackbox_item.snackbox_id,
-                }).then (response => {
+                }).then ( (response) => {
                     //location.reload(true); // What am I doing with the store on this one?  Will I need this?
+                    this.$emit('refresh-data', {company_details_id: snackbox_item.company_details_id})
                     console.log(response);
                 }).catch(error => console.log(error));
             },

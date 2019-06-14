@@ -67272,10 +67272,12 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
         }, // This is main one that needs to be replaced with tradition props and custom events.
         selectedProduct: {
             id: null,
-            name: '',
             code: '',
-            unit_price: '',
+            name: '',
+            case_price: '',
             case_size: '',
+            unit_cost: '',
+            unit_price: '',
             stock_level: '',
             shortest_stock_date: ''
         }, // This one would also suffer if multiple users are selecting products for different orders etc...
@@ -67433,14 +67435,17 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
         // Currently selected product/company variables for saving data to.
         selectedProduct: function selectedProduct(state, product) {
             console.log(product);
+            // state.selectedProduct.case_size = product.case_price; // Wow, what a dumbass - I've followed the trail though and don't think this is used anywhere else.
 
             state.selectedProduct.id = product.id;
-            state.selectedProduct.name = product.name;
             state.selectedProduct.code = product.code;
+            state.selectedProduct.name = product.name;
+            state.selectedProduct.case_price = product.case_price;
+            state.selectedProduct.case_size = product.case_size;
+            state.selectedProduct.unit_cost = product.unit_cost;
             state.selectedProduct.unit_price = product.unit_price;
-            state.selectedProduct.case_size = product.case_price;
-            state.selectedProduct.shortest_stock_date = product.shortest_stock_date;
             state.selectedProduct.stock_level = product.stock_level;
+            state.selectedProduct.shortest_stock_date = product.shortest_stock_date;
         },
         selectedCompany: function selectedCompany(state, company) {
             console.log(company);
@@ -88569,6 +88574,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -88588,11 +88594,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
         deleteSnackBoxItem: function deleteSnackBoxItem(snackbox_item) {
+            var _this = this;
+
             axios.put('api/snackbox/destroy/' + snackbox_item.id, {
                 id: snackbox_item.id,
                 snackbox_id: snackbox_item.snackbox_id
             }).then(function (response) {
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?
+                _this.$emit('refresh-data', { company_details_id: snackbox_item.company_details_id });
                 console.log(response);
             }).catch(function (error) {
                 return console.log(error);
@@ -88658,7 +88667,13 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("b-col", [
-            _c("p", [_vm._v(" " + _vm._s(_vm.snackbox_item.unit_price) + " ")])
+            _vm.snackbox_item.type !== "wholesale"
+              ? _c("p", [
+                  _vm._v(" " + _vm._s(_vm.snackbox_item.unit_price) + " ")
+                ])
+              : _c("p", [
+                  _vm._v(" " + _vm._s(_vm.snackbox_item.case_price) + " ")
+                ])
           ]),
           _vm._v(" "),
           _c(
@@ -89035,6 +89050,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['snackbox', 'company'],
@@ -89052,6 +89071,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     computed: {
+        case_stock_level: function case_stock_level() {
+            var stock_level = Math.floor(this.$store.state.selectedProduct.stock_level / this.$store.state.selectedProduct.case_size);
+            return Number.isNaN(stock_level) ? '' : stock_level;
+        }
         // snackbox_total(snackbox) {
         //     let $snackbox_total = 0
         //     for (unit_price in this.snackbox) {
@@ -89060,8 +89083,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         //     return $snackbox_total;
         // 
         // }
+
     },
     methods: {
+        refreshData: function refreshData($event) {
+            this.$emit('refresh-data', $event);
+        },
         addProduct: function addProduct() {
             if (this.add_product === false) {
                 this.add_product = true;
@@ -89070,18 +89097,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
         saveProductToBox: function saveProductToBox(snackbox) {
+            var _this = this;
+
             axios.post('api/snackbox/add-product', {
                 product: {
                     id: this.$store.state.selectedProduct.id,
-                    name: this.$store.state.selectedProduct.name,
                     code: this.$store.state.selectedProduct.code,
+                    name: this.$store.state.selectedProduct.name,
                     quantity: this.quantity,
-                    unit_price: this.$store.state.selectedProduct.unit_price
+                    unit_price: this.$store.state.selectedProduct.unit_price,
+                    case_price: this.$store.state.selectedProduct.case_price
                 },
                 snackbox_details: snackbox
 
             }).then(function (response) {
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?
+                _this.$emit('refresh-data', { company_details_id: snackbox.company_details_id });
                 console.log(response);
             }).catch(function (error) {
                 return console.log(error);
@@ -89594,7 +89625,11 @@ var render = function() {
                           _c("h4", [_vm._v(" Shortest Stock Date ")])
                         ]),
                         _vm._v(" "),
-                        _c("b-col", [_c("h4", [_vm._v(" Unit Price ")])]),
+                        _c("b-col", [
+                          _vm.snackbox[0].type !== "wholesale"
+                            ? _c("h4", [_vm._v(" Unit Price ")])
+                            : _c("h4", [_vm._v(" Case Price ")])
+                        ]),
                         _vm._v(" "),
                         _c("b-col", [_c("h4", [_vm._v(" Quantity ")])]),
                         _vm._v(" "),
@@ -89617,15 +89652,20 @@ var render = function() {
                         ]),
                         _vm._v(" "),
                         _c("b-col", [
-                          _c("p", [
-                            _vm._v(
-                              " " +
-                                _vm._s(
-                                  this.$store.state.selectedProduct.stock_level
-                                ) +
-                                " "
-                            )
-                          ])
+                          _vm.snackbox[0].type !== "wholesale"
+                            ? _c("p", [
+                                _vm._v(
+                                  " " +
+                                    _vm._s(
+                                      this.$store.state.selectedProduct
+                                        .stock_level
+                                    ) +
+                                    " "
+                                )
+                              ])
+                            : _c("p", [
+                                _vm._v(" " + _vm._s(_vm.case_stock_level) + " ")
+                              ])
                         ]),
                         _vm._v(" "),
                         _c("b-col", [
@@ -89642,15 +89682,27 @@ var render = function() {
                         ]),
                         _vm._v(" "),
                         _c("b-col", [
-                          _c("p", [
-                            _vm._v(
-                              " " +
-                                _vm._s(
-                                  this.$store.state.selectedProduct.unit_price
-                                ) +
-                                " "
-                            )
-                          ])
+                          _vm.snackbox[0].type !== "wholesale"
+                            ? _c("p", [
+                                _vm._v(
+                                  " " +
+                                    _vm._s(
+                                      this.$store.state.selectedProduct
+                                        .unit_price
+                                    ) +
+                                    " "
+                                )
+                              ])
+                            : _c("p", [
+                                _vm._v(
+                                  " " +
+                                    _vm._s(
+                                      this.$store.state.selectedProduct
+                                        .case_price
+                                    ) +
+                                    " "
+                                )
+                              ])
                         ]),
                         _vm._v(" "),
                         _c(
@@ -89706,7 +89758,11 @@ var render = function() {
                   _c("p", [_c("b", [_vm._v(" Quantity In Box ")])])
                 ]),
                 _vm._v(" "),
-                _c("b-col", [_c("p", [_c("b", [_vm._v(" Unit Price ")])])]),
+                _c("b-col", [
+                  _vm.snackbox[0].type !== "wholesale"
+                    ? _c("p", [_c("b", [_vm._v(" Unit Price ")])])
+                    : _c("p", [_c("b", [_vm._v(" Case Price ")])])
+                ]),
                 _vm._v(" "),
                 _c("b-col")
               ],
@@ -89714,10 +89770,20 @@ var render = function() {
             ),
             _vm._v(" "),
             _vm._l(_vm.snackbox, function(snackbox_item) {
-              return _c("snackbox-item", {
-                key: snackbox_item.id,
-                attrs: { id: "snackbox-products", snackbox_item: snackbox_item }
-              })
+              return snackbox_item.product_id !== 0
+                ? _c("snackbox-item", {
+                    key: snackbox_item.id,
+                    attrs: {
+                      id: "snackbox-products",
+                      snackbox_item: snackbox_item
+                    },
+                    on: {
+                      "refresh-data": function($event) {
+                        _vm.refreshData($event)
+                      }
+                    }
+                  })
+                : _vm._e()
             })
           ],
           2

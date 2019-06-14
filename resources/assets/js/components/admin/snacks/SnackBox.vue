@@ -144,7 +144,8 @@
                         <h4> Shortest Stock Date </h4>
                     </b-col>
                     <b-col>
-                        <h4> Unit Price </h4> <!-- This whole order breakdown section is well served for mixed snackboxes BUT NOT WHOLESALE!!!! - I NEED TO DO SOMETHING WITH 'snackbox[0].type' TO DETERMINE WHAT TO DO!! -->
+                        <h4 v-if="snackbox[0].type !== 'wholesale'"> Unit Price </h4> <!-- This whole order breakdown section is well served for mixed snackboxes BUT NOT WHOLESALE!!!! - I NEED TO DO SOMETHING WITH 'snackbox[0].type' TO DETERMINE WHAT TO DO!! -->
+                        <h4 v-else> Case Price </h4>
                     </b-col>
                     <b-col>
                         <h4> Quantity </h4>
@@ -158,13 +159,15 @@
                         <p> {{ this.$store.state.selectedProduct.name }} </p>
                     </b-col>
                     <b-col>
-                        <p> {{ this.$store.state.selectedProduct.stock_level }} </p>
+                        <p v-if="snackbox[0].type !== 'wholesale'"> {{ this.$store.state.selectedProduct.stock_level }} </p>
+                        <p v-else> {{ case_stock_level }} </p>
                     </b-col>
                     <b-col>
                         <p> {{ this.$store.state.selectedProduct.shortest_stock_date }} </p>
                     </b-col>
                     <b-col>
-                        <p> {{ this.$store.state.selectedProduct.unit_price }} </p>
+                        <p v-if="snackbox[0].type !== 'wholesale'"> {{ this.$store.state.selectedProduct.unit_price }} </p>
+                        <p v-else> {{ this.$store.state.selectedProduct.case_price }} </p>
                     </b-col>
                     <b-col>
                         <b-form-input v-model="quantity" type="number"></b-form-input>
@@ -182,7 +185,8 @@
                     <p><b> Quantity In Box </b></p>
                 </b-col>
                 <b-col>
-                    <p><b> Unit Price </b></p>
+                    <p v-if="snackbox[0].type !== 'wholesale'"><b> Unit Price </b></p>
+                    <p v-else><b> Case Price </b></p>
                 </b-col>
                 <b-col>
                     <!-- A place holder column to allow room for the edit/remove buttons on each item -->
@@ -199,7 +203,7 @@
             though a button revealable section, select a new product(s) and attach it to the current snackbox_id + details.
             This will need refreshing to update, so holding them in the store might be a good option -->
             
-            <snackbox-item id="snackbox-products" v-for="snackbox_item in snackbox" :snackbox_item="snackbox_item" :key="snackbox_item.id"></snackbox-item>
+            <snackbox-item id="snackbox-products" v-for="snackbox_item in snackbox" v-if="snackbox_item.product_id !== 0" :snackbox_item="snackbox_item" :key="snackbox_item.id" @refresh-data="refreshData($event)"></snackbox-item>
             
             <!-- <p> {{ snackbox_total }} </p>  This needs some work to generate an accurate and useful total, it's on my todo list but not a priority right now. -->
         </div>
@@ -228,6 +232,10 @@ export default {
         }
     },
     computed: {
+        case_stock_level() {
+            let stock_level = Math.floor(this.$store.state.selectedProduct.stock_level / this.$store.state.selectedProduct.case_size)
+            return ( Number.isNaN(stock_level) ? '' : stock_level)
+        }
         // snackbox_total(snackbox) {
         //     let $snackbox_total = 0
         //     for (unit_price in this.snackbox) {
@@ -238,7 +246,9 @@ export default {
         // }
     },
     methods: {
-        
+        refreshData($event) {
+            this.$emit('refresh-data', $event);
+        },
         addProduct() {
             if (this.add_product === false) {
                 this.add_product = true;
@@ -250,15 +260,17 @@ export default {
             axios.post('api/snackbox/add-product', {
                 product: {
                     id: this.$store.state.selectedProduct.id,
-                    name: this.$store.state.selectedProduct.name,
                     code: this.$store.state.selectedProduct.code,
+                    name: this.$store.state.selectedProduct.name,
                     quantity: this.quantity,
                     unit_price: this.$store.state.selectedProduct.unit_price,
+                    case_price: this.$store.state.selectedProduct.case_price,
                 },
                 snackbox_details: snackbox, 
                     
             }).then (response => {
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?
+                this.$emit('refresh-data', {company_details_id: snackbox.company_details_id})
                 console.log(response);
             }).catch(error => console.log(error));
         },

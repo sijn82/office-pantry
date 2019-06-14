@@ -28,10 +28,12 @@ export const store = new Vuex.Store({
         }, // This is main one that needs to be replaced with tradition props and custom events.
         selectedProduct: {
             id: null,
-            name: '',
             code: '',
-            unit_price: '',
+            name: '',
+            case_price: '',
             case_size: '',
+            unit_cost: '',
+            unit_price: '',
             stock_level: '',
             shortest_stock_date: '',
         }, // This one would also suffer if multiple users are selecting products for different orders etc...
@@ -186,14 +188,18 @@ export const store = new Vuex.Store({
         // Currently selected product/company variables for saving data to.
         selectedProduct (state, product) {
             console.log(product);
+            // state.selectedProduct.case_size = product.case_price; // Wow, what a dumbass - I've followed the trail though and don't think this is used anywhere else.
 
             state.selectedProduct.id = product.id;
-            state.selectedProduct.name = product.name;
             state.selectedProduct.code = product.code;
+            state.selectedProduct.name = product.name;
+            state.selectedProduct.case_price = product.case_price;
+            state.selectedProduct.case_size = product.case_size;
+            state.selectedProduct.unit_cost = product.unit_cost;
             state.selectedProduct.unit_price = product.unit_price;
-            state.selectedProduct.case_size = product.case_price;
-            state.selectedProduct.shortest_stock_date = product.shortest_stock_date;
             state.selectedProduct.stock_level = product.stock_level;
+            state.selectedProduct.shortest_stock_date = product.shortest_stock_date;
+
         },
         selectedCompany (state, company) {
             console.log(company);

@@ -478,6 +478,7 @@ class SnackBoxController extends Controller
                 // If I do it here and then the product gets changed before delivery, we'll need to reapply the quantity to the stock level or chaos will ensue.
                 $new_snackbox->quantity = $item['quantity'];
                 $new_snackbox->unit_price = $item['unit_price'];
+                $new_snackbox->case_price = $item['case_price'];
                 $new_snackbox->save();
                 
                 //---------- Adjust stock levels ----------//
@@ -752,6 +753,7 @@ class SnackBoxController extends Controller
         $addProduct->name = request('product.name');
         $addProduct->quantity = request('product.quantity');
         $addProduct->unit_price = request('product.unit_price');
+        $addProduct->case_price = request('product.case_price');
         $addProduct->save();
     }
 
@@ -840,6 +842,7 @@ class SnackBoxController extends Controller
                         $snackbox_archive_entry->name = $snackbox_item->name;
                         $snackbox_archive_entry->quantity = $snackbox_item->quantity;
                         $snackbox_archive_entry->unit_price = $snackbox_item->unit_price;
+                        $snackbox_archive_entry->case_price = $snackbox_item->case_price;
                         $snackbox_archive_entry->invoiced_at = $snackbox_item->invoiced_at;
                         $snackbox_archive_entry->save();
                     }
@@ -869,6 +872,7 @@ class SnackBoxController extends Controller
                         $snackbox_archive_entry->name = $snackbox_item->name;
                         $snackbox_archive_entry->quantity = $snackbox_item->quantity;
                         $snackbox_archive_entry->unit_price = $snackbox_item->unit_price;
+                        $snackbox_archive_entry->case_price = $snackbox_item->case_price;
                         $snackbox_archive_entry->invoiced_at = $snackbox_item->invoiced_at;
                         $snackbox_archive_entry->save();
                     }
@@ -925,6 +929,7 @@ class SnackBoxController extends Controller
             $empty_snackbox->name = null;
             $empty_snackbox->quantity = null;
             $empty_snackbox->unit_price = null;
+            $empty_snackbox->case_price = null;
             $empty_snackbox->invoiced_at = null;
             $empty_snackbox->save();
             
@@ -1205,6 +1210,14 @@ class SnackBoxController extends Controller
         // However we also need to return the quantity, as it's no longer being delivered, to maintain accurate stock levels.
         // Use the id of the snackbox entry...
         $snackbox_item = SnackBox::find(request('id'));
+        
+        // New addition, if the snackbox is wholesale we need to multiply the quantity by case size in order to get an accurate number of units to return to stock.
+        if (request('type') === 'wholesale') {
+                // currently untested...
+                $product_case_size = Product::where($snackbox_item->product_id)->pluck('case_size')->first();
+                $case_to_unit_adjustment = ($product_case_size * $snackbox_item->quantity);
+                Product::find($snackbox_item->product_id)->increment('stock_level', $case_to_unit_adjustment);
+        }
         // ...to grab the associated product_id and increment the stock level by the quantity; before we strip out or destroy the entry.
         Product::find($snackbox_item->product_id)->increment('stock_level', $snackbox_item->quantity);
         
@@ -1220,6 +1233,7 @@ class SnackBoxController extends Controller
                 'name' => null,
                 'quantity' => null,
                 'unit_price' => null,
+                'case_price' => null,
             ]);
             
         } else {
