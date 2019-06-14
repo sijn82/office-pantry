@@ -984,6 +984,7 @@ class RoutesController extends Controller
                              if (!is_null($backupRouteEntry->postcode)) {
                                  $selectedRouteAddressInfo = $backupRouteEntry;
                                  // dd($selectedRouteAddressInfo);
+                                 Log::channel('slack')->info($backupRouteEntry . ' on line 987');
                                  $backupAddress = $selectedRouteAddressInfo->address;
                                  $backupPostcode = $selectedRouteAddressInfo->postcode;
                                  $backupDeliveryInfo = $selectedRouteAddressInfo->delivery_information;
@@ -995,6 +996,7 @@ class RoutesController extends Controller
                          if (empty($selectedRouteAddressInfo)) {
                              $selectedRouteAddressInfo = $backupCompanyData;
                              // dd($selectedRouteAddressInfo);
+                             Log::channel('slack')->info($backupCompanyData . ' on line 987');
                              $backupAddress = $selectedRouteAddressInfo[0]->route_summary_address;
                              $backupPostcode = $selectedRouteAddressInfo[0]->postcode;
                              $backupDeliveryInfo = $selectedRouteAddressInfo[0]->delivery_info;
@@ -1006,7 +1008,13 @@ class RoutesController extends Controller
 
                              // if there's an address in the existing route entry for a different day, we could either take that information or rely on the company route summary and delivery information instead.
                              // there's also the fod data but this isn't reliably updated so should be best avioded for now.
-
+                             
+                             if (!isset($backupPostcode)) {
+                                    $backupPostcode = 'problem child';
+                             }
+                             
+                             Log::channel('slack')->info($fruitOrderingDocument->company_name);
+                             
                              // These two fields need to be pulled from Company Data (which is currently empty).
                              $newRoutingData->postcode = $backupPostcode;
                              $newRoutingData->address = $backupAddress; // Condensed values of address_line_1, address_line_2, city and county.
