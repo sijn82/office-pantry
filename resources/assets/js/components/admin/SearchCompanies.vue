@@ -76,6 +76,20 @@
                 :archived_fruitboxes="this.company_data.archived_fruitboxes">
             </archived-fruit-orders-admin>
         </div>
+        
+        <div v-if="this.company_data.archived_milkboxes != null">
+            <archived-milk-orders-admin 
+                :company="this.company_data.company" 
+                :archived_milkboxes="this.company_data.archived_milkboxes">
+            </archived-milk-orders-admin>
+        </div>
+        <div v-if="this.company_data.archived_snackboxes != null">
+            <archived-snackboxes-admin 
+                @refresh-data="officeData($event.company_details_id)" 
+                :company="this.company_data.company" 
+                :archived_snackboxes="this.company_data.archived_snackboxes">
+            </archived-snackboxes-admin>
+        </div>
         <!-- <div v-else>
             <p>empty</p>
         </div> -->
@@ -92,7 +106,7 @@
 
 <script>
 export default {
-    props: ['fruitboxes', 'milkboxes', 'routes', 'company', 'snackboxes', 'otherboxes', 'drinkboxes', 'archived_fruitboxes'],
+    props: ['fruitboxes', 'milkboxes', 'routes', 'company', 'snackboxes', 'otherboxes', 'drinkboxes', 'archived_fruitboxes', 'archived_milkboxes', 'archived_snackboxes'], // Not sure I actually need to declare any of these here?
     data() {
         return {
             keywords: null,

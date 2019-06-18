@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\MilkBox;
+use App\MilkBoxArchive;
 // use App\Company;
 use App\CompanyDetails;
 use App\WeekStart;
@@ -12,6 +13,7 @@ use App\AssignedRoute;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
+use Carbon\CarbonImmutable;
 
 class MilkBoxController extends Controller
 {
@@ -251,6 +253,117 @@ class MilkBoxController extends Controller
     public function update(Request $request, $id)
     {
         // dd($request);
+        
+        $date = CarbonImmutable::now('Europe/London');
+        $invoice_date = $date->format('ymd');
+        
+        // We want to check whether the milkbox about to be updated has already had its old order invoiced.
+        // So before we begin, let's grab the current data from the db.
+        $existing_milkbox_entry = MilkBox::findOrFail($id);
+        // And specifically the invoiced_at date, which despite being inserted from a Carbon date, is now considered a string?
+        // So first it needs passing back into Carbon...
+        $converted_invoiced_at_date = new CarbonImmutable($existing_milkbox_entry->invoiced_at);
+        
+        // if skip-archive is true then we're deliberately trying to update the box and bypassing archive logic entirely.
+        // if the current fruitbox order was updated wrongly this'll prevent the unwanted contents from being stored in the archives,
+        // as it's just a mistake we all want to forget.
+        if (request('skip_archive') === 'false') {
+
+            // ...which we can then use to reformat both dates into the same style (->format('ymd')).
+            // Now we can check if the entry was last updated on the same day as it was invoiced.  If so, odds are very good (100%?) that we have nothing new to archive and charge for.
+            if ($existing_milkbox_entry->updated_at->format('ymd') == $converted_invoiced_at_date->format('ymd')) {
+        
+                // Then the old order has already been process (invoiced) so we just need to create an archive, with an 'Inactive' status
+                $create_milkbox_archive = new MilkBoxArchive();
+                $create_milkbox_archive->is_active = 'Inactive';
+                $create_milkbox_archive->fruit_partner_id = request('fruit_partner_id');
+                $create_milkbox_archive->company_details_id = request('company_details_id');
+                
+                $create_milkbox_archive->next_delivery = request('next_delivery');
+                $create_milkbox_archive->frequency = request('frequency');
+                $create_milkbox_archive->week_in_month = request('week_in_month');
+                $create_milkbox_archive->delivery_day = request('delivery_day');
+                // Milk 2l
+                $create_milkbox_archive->semi_skimmed_2l = request('semi_skimmed_2l');
+                $create_milkbox_archive->skimmed_2l = request('skimmed_2l');
+                $create_milkbox_archive->whole_2l = request('whole_2l');
+                // Milk 1l
+                $create_milkbox_archive->semi_skimmed_1l = request('semi_skimmed_1l');
+                $create_milkbox_archive->skimmed_1l = request('skimmed_1l');
+                $create_milkbox_archive->whole_1l = request('whole_1l');
+                // Organic Milk 2l
+                $create_milkbox_archive->organic_semi_skimmed_2l = request('organic_semi_skimmed_2l');
+                $create_milkbox_archive->organic_skimmed_2l = request('organic_skimmed_2l');
+                $create_milkbox_archive->organic_whole_2l = request('organic_whole_2l');
+                // Organic Milk 1l
+                $create_milkbox_archive->organic_semi_skimmed_1l = request('organic_semi_skimmed_1l');
+                $create_milkbox_archive->organic_skimmed_1l = request('organic_skimmed_1l');
+                $create_milkbox_archive->organic_whole_1l = request('organic_whole_1l');
+                // Milk Alternatives
+                $create_milkbox_archive->milk_1l_alt_coconut = request('coconut_1l');
+                $create_milkbox_archive->milk_1l_alt_unsweetened_almond = request('unsweetened_almond_1l');
+                $create_milkbox_archive->milk_1l_alt_almond = request('almond_1l');
+                // Milk Alternatives (Pt2)
+                $create_milkbox_archive->milk_1l_alt_unsweetened_soya = request('unsweetened_soya_1l');
+                $create_milkbox_archive->milk_1l_alt_soya = request('soya_1l');
+                $create_milkbox_archive->milk_1l_alt_oat = request('oat_1l');
+                // Milk Alternatives (Pt3)
+                $create_milkbox_archive->milk_1l_alt_rice = request('rice_1l');
+                $create_milkbox_archive->milk_1l_alt_cashew = request('cashew_1l');
+                $create_milkbox_archive->milk_1l_alt_lactose_free_semi = request('lactose_free_semi_skimmed_1l');
+                $create_milkbox_archive->save();
+                
+            } else { // if ($existing_fruitbox_entry->updated_at->format('ymd') == $converted_invoiced_at_date->format('ymd'))
+                
+                // Then the old order still needs to be processed (invoiced) so we need to create an archive, with an 'Active' status
+                // This way it'll get pulled into the next invoicing run of their chosen branding theme.
+                
+                MilkBoxArchive::updateOrInsert(
+                [
+                    'milkbox_id' => request('id'),
+                    'company_details_id' => request('company_details_id'),
+                    'next_delivery' => request('next_delivery'),
+                    'delivery_day' => request('delivery_day'), // Technically, milkbox_id + next_delivery_week should be all that's needed but testing will probably prove me wrong.
+                    'is_active' => request('is_active'),
+                ],
+                [            
+                    'fruit_partner_id' => request('fruit_partner_id'),
+                    'frequency' => request('frequency'),
+                    'week_in_month' => request('week_in_month'),
+                    // 'delivery_day' => request('delivery_day'); // Moved this data up to the initial check.
+                    // Milk 2l
+                    'semi_skimmed_2l' => request('semi_skimmed_2l'),
+                    'skimmed_2l' => request('skimmed_2l'),
+                    'whole_2l' => request('whole_2l'),
+                    // Milk 1l
+                    'semi_skimmed_1l' => request('semi_skimmed_1l'),
+                    'skimmed_1l' => request('skimmed_1l'),
+                    'whole_1l' => request('whole_1l'),
+                    // Organic Milk 2l
+                    'organic_semi_skimmed_2l' => request('organic_semi_skimmed_2l'),
+                    'organic_skimmed_2l' => request('organic_skimmed_2l'),
+                    'organic_whole_2l' => request('organic_whole_2l'),
+                    // Organic Milk 1l
+                    'organic_semi_skimmed_1l' => request('organic_semi_skimmed_1l'),
+                    'organic_skimmed_1l' => request('organic_skimmed_1l'),
+                    'organic_whole_1l' => request('organic_whole_1l'),
+                    // Milk Alternatives
+                    'milk_1l_alt_coconut' => request('milk_1l_alt_coconut'),
+                    'milk_1l_alt_unsweetened_almond' => request('milk_1l_alt_unsweetened_almond'),
+                    'milk_1l_alt_almond' => request('milk_1l_alt_almond'),
+                    // Milk Alternatives (Pt2)
+                    'milk_1l_alt_unsweetened_soya' => request('milk_1l_alt_unsweetened_soya'),
+                    'milk_1l_alt_soya' => request('milk_1l_alt_soya'),
+                    'milk_1l_alt_oat' => request('milk_1l_alt_oat'),
+                    // Milk Alternatives (Pt3)
+                    'milk_1l_alt_rice' => request('milk_1l_alt_rice'),
+                    'milk_1l_alt_cashew' => request('milk_1l_alt_cashew'),
+                    'milk_1l_alt_lactose_free_semi' => request('milk_1l_alt_lactose_free_semi'),
+                ]);
+            }
+        } // if (request('skip-archive') == 'true')
+        
+        //---------- Start of regular update process ----------//
         
         // Whatever else needs to be done, we need to make sure we update the entry, so let's get that sorted first.
         MilkBox::where('id', $id)->update([

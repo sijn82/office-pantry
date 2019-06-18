@@ -1,128 +1,128 @@
 <template lang="html">
     <div>
-        <!-- We only need to access these properties once per snackbox -->
-        <!-- <h4> Snackbox Id: {{ snackbox[0].snackbox_id }} </h4>
-        <h4> Delivered By: {{ snackbox[0].delivered_by }} </h4>
-        <h4> No. Of Boxes: {{ snackbox[0].no_of_boxes }} </h4>
-        <h4> Type: {{ snackbox[0].type }} </h4>
-        <h4> Delivery Day: {{ snackbox[0].delivery_day }} </h4>
-        <h4> Frequency: {{ snackbox[0].frequency }} </h4>
-        <h4 v-if="snackbox[0].frequency === 'Monthly'"> Week In Month: {{ snackbox[0].week_in_month }} </h4>
-        <h4 v-if="snackbox[0].previous_delivery_week !== null"> Previous Delivery Date: {{ snackbox[0].previous_delivery_week }} </h4>
-        <h4> Next Delivery Week: {{ snackbox[0].next_delivery_week }} </h4> -->
+        <!-- We only need to access these properties once per archived_snackbox -->
+        <!-- <h4> Snackbox Id: {{ archived_snackbox[0].archived_snackbox_id }} </h4>
+        <h4> Delivered By: {{ archived_snackbox[0].delivered_by }} </h4>
+        <h4> No. Of Boxes: {{ archived_snackbox[0].no_of_boxes }} </h4>
+        <h4> Type: {{ archived_snackbox[0].type }} </h4>
+        <h4> Delivery Day: {{ archived_snackbox[0].delivery_day }} </h4>
+        <h4> Frequency: {{ archived_snackbox[0].frequency }} </h4>
+        <h4 v-if="archived_snackbox[0].frequency === 'Monthly'"> Week In Month: {{ archived_snackbox[0].week_in_month }} </h4>
+        <h4 v-if="archived_snackbox[0].previous_delivery_week !== null"> Previous Delivery Date: {{ archived_snackbox[0].previous_delivery_week }} </h4>
+        <h4> Next Delivery Week: {{ archived_snackbox[0].next_delivery_week }} </h4> -->
         
         <div id="edit-save-buttons">
-            <h4> {{ snackbox[0].snackbox_id }} </h4>
-            <p> {{ snackbox[0].delivery_day }} - {{ snackbox[0].is_active }} </p>
+            <h4> {{ archived_snackbox[0].archived_snackbox_id }} </h4>
+            <p> {{ archived_snackbox[0].delivery_day }} - {{ archived_snackbox[0].is_active }} </p>
             <!-- <p><b> {{ this.company }} </b></p> -->
             <b-button variant="primary" @click="showDetails()"> Details </b-button>
             <b-button variant="warning" @click="enableEdit()"> Edit </b-button>
-            <b-button v-if="editing" class="btn btn-success" @click="updateDetails(snackbox[0])"> Save </b-button>
-            <b-button variant="danger" @click="deleteSnackBox(snackbox[0])"> Delete </b-button>
+            <b-button v-if="editing" class="btn btn-success" @click="updateDetails(archived_snackbox[0])"> Save </b-button>
+            <b-button variant="danger" @click="deleteSnackBox(archived_snackbox[0])"> Delete </b-button>
         </div>
         
-        <div class="snackbox-details" v-if="details">
-            <b-row id="top-details" :class="snackbox[0].is_active">
+        <div class="archived_snackbox-details" v-if="details">
+            <b-row id="top-details" :class="archived_snackbox[0].is_active">
                 <b-col>
                     <label><b> Snackbox Id </b></label>
                     <div>
-                        <p> {{ snackbox[0].snackbox_id }} </p>
+                        <p> {{ archived_snackbox[0].archived_snackbox_id }} </p>
                     </div>
                 </b-col>
                 <b-col>
                     <label><b> Snackbox Status </b></label>
                     <div v-if="editing">
-                        <b-form-select v-model="snackbox[0].is_active">
+                        <b-form-select v-model="archived_snackbox[0].is_active">
                             <option value="Active"> Active </option>
                             <option value="Inactive"> Inactive </option>
                         </b-form-select>
                     </div>
                     <div v-else>
-                        <p> {{ snackbox[0].is_active }} </p>
+                        <p> {{ archived_snackbox[0].is_active }} </p>
                     </div>
                 </b-col>
                 <b-col>
                     <label><b> Delivered By </b></label>
                     <div v-if="editing">
-                        <b-form-select v-model="snackbox[0].delivered_by" :options="delivered_by_options"></b-form-select>
+                        <b-form-select v-model="archived_snackbox[0].delivered_by" :options="delivered_by_options"></b-form-select>
                     </div>
                     <div v-else>
-                        <p> {{ snackbox[0].delivered_by }} </p>
+                        <p> {{ archived_snackbox[0].delivered_by }} </p>
                     </div>
                 </b-col>
                 <b-col>
                     <label><b> No. Of Boxes </b></label>
                     <div v-if="editing">
-                        <b-form-input v-model="snackbox[0].no_of_boxes" type="number"></b-form-input>
+                        <b-form-input v-model="archived_snackbox[0].no_of_boxes" type="number"></b-form-input>
                     </div>
                     <div v-else>
-                        <p> {{ snackbox[0].no_of_boxes }} </p>
+                        <p> {{ archived_snackbox[0].no_of_boxes }} </p>
                     </div>
                 </b-col>
-                <b-col v-if="snackbox[0].type !== 'wholesale'">
+                <b-col v-if="archived_snackbox[0].type !== 'wholesale'">
                     <label><b> Snack Cap </b></label>
                     <div v-if="editing">
-                        <b-form-input v-model="snackbox[0].snack_cap" type="number"></b-form-input>
+                        <b-form-input v-model="archived_snackbox[0].snack_cap" type="number"></b-form-input>
                     </div>
                     <div v-else>
-                        <p> {{ snackbox[0].snack_cap }} </p>
+                        <p> {{ archived_snackbox[0].snack_cap }} </p>
                     </div>
                 </b-col>
             </b-row>
             
-            <b-row :class="snackbox[0].is_active">
+            <b-row :class="archived_snackbox[0].is_active">
                 <b-col>
                     <label><b> Type </b></label>
                     <div v-if="editing">
-                        <b-form-select v-model="snackbox[0].type" :options="this.$store.state.types_list"></b-form-select>
+                        <b-form-select v-model="archived_snackbox[0].type" :options="this.$store.state.types_list"></b-form-select>
                     </div>
                     <div v-else>
-                        <p> {{ snackbox[0].type }} </p>
+                        <p> {{ archived_snackbox[0].type }} </p>
                     </div>
                 </b-col>
                 <b-col>
                     <label><b> Delivery Day </b></label>
                     <div v-if="editing">
-                        <b-form-select v-model="snackbox[0].delivery_day" :options="days_of_week"></b-form-select>
+                        <b-form-select v-model="archived_snackbox[0].delivery_day" :options="days_of_week"></b-form-select>
                     </div>
                     <div v-else>
-                        <p> {{ snackbox[0].delivery_day }} </p>
+                        <p> {{ archived_snackbox[0].delivery_day }} </p>
                     </div>
                 </b-col>
                 <b-col>
                     <label><b> Frequency </b></label>
                     <div v-if="editing">
-                        <b-form-select v-model="snackbox[0].frequency" :options="frequency_options"></b-form-select>
+                        <b-form-select v-model="archived_snackbox[0].frequency" :options="frequency_options"></b-form-select>
                     </div>
                     <div v-else>
-                        <p> {{ snackbox[0].frequency }} </p>
+                        <p> {{ archived_snackbox[0].frequency }} </p>
                     </div>
                 </b-col>
             </b-row>
             
-            <b-row id="bottom-details" :class="snackbox[0].is_active">
-                <b-col v-if="snackbox[0].frequency === 'Monthly'">
+            <b-row id="bottom-details" :class="archived_snackbox[0].is_active">
+                <b-col v-if="archived_snackbox[0].frequency === 'Monthly'">
                     <label><b> Week In Month </b></label>
                     <div v-if="editing">
-                        <b-form-select v-model="snackbox[0].week_in_month" :options="week_in_month_options"></b-form-select>
+                        <b-form-select v-model="archived_snackbox[0].week_in_month" :options="week_in_month_options"></b-form-select>
                     </div>
                     <div v-else>
-                        <p> {{ snackbox[0].week_in_month }} </p>
+                        <p> {{ archived_snackbox[0].week_in_month }} </p>
                     </div>
                 </b-col>
-                <b-col v-if="snackbox[0].previous_delivery_week !== null">
+                <b-col v-if="archived_snackbox[0].previous_delivery_week !== null">
                     <label><b> Previous Delivery Date </b></label>
                     <div>
-                        <p> {{ snackbox[0].previous_delivery_week }} </p>
+                        <p> {{ archived_snackbox[0].previous_delivery_week }} </p>
                     </div>
                 </b-col>
                 <b-col>
                     <label><b> Next Delivery Week </b></label>
                     <div v-if="editing">
-                        <b-form-input v-model="snackbox[0].next_delivery_week" type="date"></b-form-input>
+                        <b-form-input v-model="archived_snackbox[0].next_delivery_week" type="date"></b-form-input>
                     </div>
                     <div v-else>
-                        <p> {{ snackbox[0].next_delivery_week }} </p>
+                        <p> {{ archived_snackbox[0].next_delivery_week }} </p>
                     </div>
                 </b-col>
             </b-row>
@@ -144,7 +144,7 @@
                         <h4> Shortest Stock Date </h4>
                     </b-col>
                     <b-col>
-                        <h4 v-if="snackbox[0].type !== 'wholesale'"> Unit Price </h4> <!-- This whole order breakdown section is well served for mixed snackboxes BUT NOT WHOLESALE!!!! - I NEED TO DO SOMETHING WITH 'snackbox[0].type' TO DETERMINE WHAT TO DO!! -->
+                        <h4 v-if="archived_snackbox[0].type !== 'wholesale'"> Unit Price </h4> <!-- This whole order breakdown section is well served for mixed archived_snackboxes BUT NOT WHOLESALE!!!! - I NEED TO DO SOMETHING WITH 'archived_snackbox[0].type' TO DETERMINE WHAT TO DO!! -->
                         <h4 v-else> Case Price </h4>
                     </b-col>
                     <b-col>
@@ -159,21 +159,21 @@
                         <p> {{ this.$store.state.selectedProduct.name }} </p>
                     </b-col>
                     <b-col>
-                        <p v-if="snackbox[0].type !== 'wholesale'"> {{ (this.$store.state.selectedProduct.stock_level - quantity) }} </p>
+                        <p v-if="archived_snackbox[0].type !== 'wholesale'"> {{ (this.$store.state.selectedProduct.stock_level - quantity) }} </p>
                         <p v-else> {{ (case_stock_level - quantity) }} </p>
                     </b-col>
                     <b-col>
                         <p> {{ this.$store.state.selectedProduct.shortest_stock_date }} </p>
                     </b-col>
                     <b-col>
-                        <p v-if="snackbox[0].type !== 'wholesale'"> {{ this.$store.state.selectedProduct.unit_price }} </p>
+                        <p v-if="archived_snackbox[0].type !== 'wholesale'"> {{ this.$store.state.selectedProduct.unit_price }} </p>
                         <p v-else> {{ this.$store.state.selectedProduct.case_price }} </p>
                     </b-col>
                     <b-col>
                         <b-form-input v-model="quantity" type="number"></b-form-input>
                     </b-col>
                     <b-col>
-                        <b-button variant="success" @click="saveProductToBox(snackbox[0])"> Add </b-button>
+                        <b-button variant="success" @click="saveProductToBox(archived_snackbox[0])"> Add </b-button>
                     </b-col>
                 </b-row>
             </div>
@@ -185,7 +185,7 @@
                     <p><b> Quantity In Box </b></p>
                 </b-col>
                 <b-col>
-                    <p v-if="snackbox[0].type !== 'wholesale'"><b> Unit Price </b></p>
+                    <p v-if="archived_snackbox[0].type !== 'wholesale'"><b> Unit Price </b></p>
                     <p v-else><b> Case Price </b></p>
                 </b-col>
                 <b-col>
@@ -200,12 +200,12 @@
             although I still need to consider some other options on how best to go about this 
         
             Actually I think a better idea is just to allow the user to delete a product or, 
-            though a button revealable section, select a new product(s) and attach it to the current snackbox_id + details.
+            though a button revealable section, select a new product(s) and attach it to the current archived_snackbox_id + details.
             This will need refreshing to update, so holding them in the store might be a good option -->
             
-            <snackbox-item id="snackbox-products" v-for="snackbox_item in snackbox" v-if="snackbox_item.product_id !== 0" :snackbox_item="snackbox_item" :key="snackbox_item.id" @refresh-data="refreshData($event)"></snackbox-item>
+            <archived-snackbox-item id="archived_snackbox-products" v-for="archived_snackbox_item in archived_snackbox" v-if="archived_snackbox_item.product_id !== 0" :archived_snackbox_item="archived_snackbox_item" :key="archived_snackbox_item.id" @refresh-data="refreshData($event)"></archived-snackbox-item>
             
-             <h3 class="border-top"> Current Total: £{{ snackbox_total }} </h3> <!-- This needs some work to generate an accurate and useful total, it's on my todo list but not a priority right now. -->
+             <h3 class="border-top"> Current Total: £{{ archived_snackbox_total }} </h3> <!-- This needs some work to generate an accurate and useful total, it's on my todo list but not a priority right now. -->
         </div>
     </div>
 </template>
@@ -222,7 +222,7 @@
 
 <script>
 export default {
-    props: ['snackbox', 'company'],
+    props: ['archived_snackbox', 'company'],
     data () {
         return {
             add_product: false,
@@ -240,14 +240,14 @@ export default {
             let stock_level = Math.floor(this.$store.state.selectedProduct.stock_level / this.$store.state.selectedProduct.case_size)
             return ( Number.isNaN(stock_level) ? '' : stock_level)
         },
-        snackbox_total() {
+        archived_snackbox_total() {
             
-            let $snackbox_total = 0
+            let $archived_snackbox_total = 0
 
-            // This function checks each entry in the current snackbox list and creates a running total (a) of the unit price (b[cost]) multiplied by the quantity (b[quantity]).
-            let sum = function(snackbox, cost, quantity){
-                // console.log(snackbox);
-                return snackbox.reduce( function(a, b) {
+            // This function checks each entry in the current archived_snackbox list and creates a running total (a) of the unit price (b[cost]) multiplied by the quantity (b[quantity]).
+            let sum = function(archived_snackbox, cost, quantity){
+                // console.log(archived_snackbox);
+                return archived_snackbox.reduce( function(a, b) {
                     if (b[cost] !== null) {
                         // Then this is a regular entry, we just need to total it up
                         return parseFloat(a) + ( parseFloat(b[cost]) * parseFloat(b[quantity]) );
@@ -261,11 +261,11 @@ export default {
                 }, 0);
             };
             
-            // Now we use the function by passing in the snackbox array, and the two properties we need to multiply - saving it as the current total cost.
-            // First a quick check, on whether we need to tally up case prices for wholesale, or unit prices for regular snackboxes.
-            (this.snackbox[0].type === 'wholesale') ? $snackbox_total = sum(this.snackbox, 'case_price', 'quantity') : $snackbox_total = sum(this.snackbox, 'unit_price', 'quantity');
+            // Now we use the function by passing in the archived_snackbox array, and the two properties we need to multiply - saving it as the current total cost.
+            // First a quick check, on whether we need to tally up case prices for wholesale, or unit prices for regular archived_snackboxes.
+            (this.archived_snackbox[0].type === 'wholesale') ? $archived_snackbox_total = sum(this.archived_snackbox, 'case_price', 'quantity') : $archived_snackbox_total = sum(this.archived_snackbox, 'unit_price', 'quantity');
                 
-            return $snackbox_total;
+            return $archived_snackbox_total;
         }
     },
     methods: {
@@ -279,8 +279,8 @@ export default {
                 this.add_product = false;
             }
         },
-        saveProductToBox(snackbox) {
-            axios.post('api/snackbox/add-product', {
+        saveProductToBox(archived_snackbox) {
+            axios.post('api/archived_snackbox/add-product', {
                 product: {
                     id: this.$store.state.selectedProduct.id,
                     code: this.$store.state.selectedProduct.code,
@@ -289,11 +289,11 @@ export default {
                     unit_price: this.$store.state.selectedProduct.unit_price,
                     case_price: this.$store.state.selectedProduct.case_price,
                 },
-                snackbox_details: snackbox, 
+                archived_snackbox_details: archived_snackbox, 
                     
             }).then ((response) => {
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?
-                this.$emit('refresh-data', {company_details_id: snackbox.company_details_id})
+                this.$emit('refresh-data', {company_details_id: archived_snackbox.company_details_id})
                 this.$store.commit('removeSelectedProductFromStore');
                 this.quantity = 0;
                 console.log(response);
@@ -314,29 +314,29 @@ export default {
                 this.details = true;
             }
         },
-        updateDetails(snackbox) {
-            axios.post('api/snackbox/details', {
-                snackbox_details: snackbox,
+        updateDetails(archived_snackbox) {
+            axios.post('api/archived_snackbox/details', {
+                archived_snackbox_details: archived_snackbox,
             }).then (response => {
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?
                 console.log(response);
             }).catch(error => console.log(error));
         },
-        deleteSnackBox(snackbox) {
+        deleteSnackBox(archived_snackbox) {
             let self = this;
-            axios.put('api/snackbox/destroy-box/' + snackbox.snackbox_id, { 
-                snackbox_id: snackbox.snackbox_id,
+            axios.put('api/archived_snackbox/destroy-box/' + archived_snackbox.archived_snackbox_id, { 
+                archived_snackbox_id: archived_snackbox.archived_snackbox_id,
             }).then ( (response) => {
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?
                 console.log(response);
-                console.log(snackbox.company_details_id);
-                self.$emit('refresh-data', {company_details_id: snackbox.company_details_id})
+                console.log(archived_snackbox.company_details_id);
+                self.$emit('refresh-data', {company_details_id: archived_snackbox.company_details_id})
             }).catch(error => console.log(error));
         },
     },
     mounted() {
          this.$store.commit('getTypes');
-         console.log(this.company); // Is coming back undefined?  But in add-new-snackbox it's working fine! I'm just using snackbox instead but it's still confusing.
+         console.log(this.company); // Is coming back undefined?  But in add-new-archived_snackbox it's working fine! I'm just using archived_snackbox instead but it's still confusing.
     }
 }
 </script>

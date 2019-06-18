@@ -10,6 +10,7 @@ use App\AssignedRoute;
 use App\WeekStart;
 // use App\Company;
 use App\CompanyDetails;
+use App\Product;
 
 class DrinkBoxController extends Controller
 {
@@ -353,33 +354,34 @@ class DrinkBoxController extends Controller
     {
         // We need some logic here to decide if the item to be deleted is the last item in the snackbox.
         // Grab all the entries with the same snackbox_id.
-        $snackbox_total_items = SnackBox::where('snackbox_id', request('snackbox_id'))->get();
+        $drinkbox_total_items = DrinkBox::where('drinkbox_id', request('drinkbox_id'))->get();
         
         
         // However we also need to return the quantity, as it's no longer being delivered, to maintain accurate stock levels.
         // Use the id of the snackbox entry...
-        $snackbox_item = SnackBox::find(request('id'));
+        $drinkbox_item = DrinkBox::find(request('id'));
         // ...to grab the associated product_id and increment the stock level by the quantity; before we strip out or destroy the entry.
-        Product::find($snackbox_item->product_id)->increment('stock_level', $snackbox_item->quantity);
+        Product::find($drinkbox_item->product_id)->increment('stock_level', $drinkbox_item->quantity);
         
         // If we've only retrieved 1 entry then this is the last vestige of box data and should be preserved.
-        if (count($snackbox_total_items) === 1) {
+        if (count($drinkbox_total_items) === 1) {
             // To prevent an accidental extinction event, we don't want to destroy the entire entry, just strip out the product details and change the product_id to 0.
             // Having some update logic in the destroy function is probably breaking best practice rules, but I'm sure i'll be able to refactor it one day!
             
             
-            SnackBox::where('id', $id)->update([
+            DrinkBox::where('id', $id)->update([
                 'product_id' => 0,
                 'code' => null,
                 'name' => null,
                 'quantity' => null,
                 'unit_price' => null,
+                'case_price' => null,
             ]);
             
         } else {
             
             // We still have another entry with the necessary box info, so we can destroy this one.
-            SnackBox::destroy($id);
+            DrinkBox::destroy($id);
         }
         
     }

@@ -28,14 +28,14 @@ export const store = new Vuex.Store({
         }, // This is main one that needs to be replaced with tradition props and custom events.
         selectedProduct: {
             id: null,
-            code: '',
-            name: '',
-            case_price: '',
-            case_size: '',
-            unit_cost: '',
-            unit_price: '',
-            stock_level: '',
-            shortest_stock_date: '',
+            code: null,
+            name: null,
+            case_price: null,
+            case_size: null,
+            unit_cost: null,
+            unit_price: null,
+            stock_level: null,
+            shortest_stock_date: null,
         }, // This one would also suffer if multiple users are selecting products for different orders etc...
         setPreferences: {
             snackbox_likes: [],
@@ -182,7 +182,7 @@ export const store = new Vuex.Store({
                             return ass_route.id;
                         }).indexOf(id);
                         // console.log(index);
-            // then we can specify it in splice and remove that product form the list.
+            // then we can specify it in splice and remove that product from the list.
             state.assigned_routes_list.splice(index, 1);
         },
         // Currently selected product/company variables for saving data to.
@@ -200,6 +200,17 @@ export const store = new Vuex.Store({
             state.selectedProduct.stock_level = product.stock_level;
             state.selectedProduct.shortest_stock_date = product.shortest_stock_date;
 
+        },
+        removeSelectedProductFromStore (state) {
+            state.selectedProduct.id = null;
+            state.selectedProduct.code = null;
+            state.selectedProduct.name = null;
+            state.selectedProduct.case_price = null;
+            state.selectedProduct.case_size = null;
+            state.selectedProduct.unit_cost = null;
+            state.selectedProduct.unit_price = null;
+            state.selectedProduct.stock_level = null;
+            state.selectedProduct.shortest_stock_date = null;
         },
         selectedCompany (state, company) {
             console.log(company);

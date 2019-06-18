@@ -311,19 +311,20 @@ class FruitBoxController extends Controller
         //     'invoiced_at' => $invoice_date,
         // ]);
 
-        // We want to check whether the fruitbox about to updated has already had its old order invoiced.
+        // We want to check whether the fruitbox about to be updated has already had its old order invoiced.
         // So before we begin, let's grab the current data from the db.
         $existing_fruitbox_entry = FruitBox::findOrFail($id);
         // And specifically the invoiced_at date, which despite being inserted from a Carbon date, is now considered a string?
         // So first it needs passing back into Carbon...
         $converted_invoiced_at_date = new CarbonImmutable($existing_fruitbox_entry->invoiced_at);
 
-
+        // dd(request('skip_archive'));
         // if skip-archive is true then we're deliberately trying to update the box and bypassing archive logic entirely.
         // if the current fruitbox order was updated wrongly this'll prevent the unwanted contents from being stored in the archives,
         // as it's just a mistake we all want to forget.
-        if (request('skip-archive') == 'true') {
-
+        // if (request('skip-archive') == 'true') { // <-- This doesn't look right?  It might even be the opposite to what I intended.
+        if (request('skip_archive') === 'false') { // Let's try it with the opposite statement, I'm pretty certain that I only want to run this code if 'skip-archive' is set (defaulted) to 'false'.
+            // dd('was that why?');
             // ...which we can then use to reformat both dates into the same style (->format('ymd')).
             if ($existing_fruitbox_entry->updated_at->format('ymd') == $converted_invoiced_at_date->format('ymd')) {
 
@@ -376,7 +377,7 @@ class FruitBoxController extends Controller
             } else { // end of if (invoiced_at date == updated_at date)
 
                 dump('Oh, guess these don\'t match? ' . $converted_invoiced_at_date->format('ymd') . ' isn\'t equal to ' . $existing_fruitbox_entry->updated_at->format('ymd'));
-
+                // dd('WE GOT TO HERE, BUT WHAT HAPPENS NEXT?');
                 // If we're here then the invoiced_at date didn't match the updated_at date.  This means we have an order that hasn't been charged yet.
                 // This time we need to create an archived version of the old details but with an 'Active' status.
 
@@ -388,14 +389,15 @@ class FruitBoxController extends Controller
                 FruitBoxArchive::updateOrInsert(
                     [ // Check the values contained in this array for a matching record.  If we find it, update the record, otherwise add a new entry.
                         'company_details_id' => $existing_fruitbox_entry->company_details_id,
-                        'fruitbox_id' => $existing_fruitbox_entry->id, 'is_active' => 'Active',
+                        'fruitbox_id' => $existing_fruitbox_entry->id, 
+                        'is_active' => 'Active',
                         'next_delivery' => $existing_fruitbox_entry->next_delivery
                     ],
                     [
 
                         'fruit_partner_id' => $existing_fruitbox_entry->fruit_partner_id,
                         'name' => $existing_fruitbox_entry->name,
-                        'company_details_id' => $existing_fruitbox_entry->company_details_id,
+                        // 'company_details_id' => $existing_fruitbox_entry->company_details_id,
                         'type' => $existing_fruitbox_entry->type,
                         'previous_delivery' => $existing_fruitbox_entry->previous_delivery,
                         'frequency' => $existing_fruitbox_entry->frequency,
@@ -438,7 +440,7 @@ class FruitBoxController extends Controller
 
         }
 
-
+        // dd('why did we get this far?');
 
         //----- Start of regular update process -----//
 

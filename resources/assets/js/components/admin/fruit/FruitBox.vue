@@ -7,7 +7,7 @@
                 <b-button variant="primary" @click="showDetails()"> Details </b-button>
                 <b-button variant="warning" @click="enableEdit()"> Edit </b-button>
                 <b-button v-if="editing" class="btn btn-success" @click="updateFruitOrder(fruitbox)"> Save </b-button>
-                <b-form-checkbox v-if="editing" v-model="skip_archive" value="true" unchecked-value="false"> Skip Fruitbox Archive Creation/Update </b-form-checkbox>
+                <b-form-checkbox v-if="editing" v-model="skip_archive" value='true' unchecked-value='false'> Skip Fruitbox Archive Creation/Update </b-form-checkbox>
             </div>
             <div id="fruit-details" v-show="details">
                 <b-row id="top-details" :class="fruitbox.is_active" sm="12" class="b-row-padding">
@@ -388,7 +388,7 @@ export default {
             frequency: ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'],
             week_in_month: ['First', 'Second', 'Third', 'Forth', 'Last'],
             discountable_options: ['Yes', 'No'],
-            skip_archive: false,
+            skip_archive: 'false',
             editing: false,
             details: false,
             addnew: false,

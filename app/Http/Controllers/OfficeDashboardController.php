@@ -41,6 +41,9 @@ class OfficeDashboardController extends Controller
     public function show(CompanyDetails $company)
     {
             //dd($company);
+            
+            //---------- Fruitboxes ----------//
+            
             $fruitboxes = $company->fruitbox;
             //dd($fruitboxes);
             // $fruitpartner->name will break if there's a box retrieved without a fruitpartner
@@ -55,6 +58,9 @@ class OfficeDashboardController extends Controller
                 $fruitbox->fruit_partner_name = $fruitpartner_name;
             }
             // dd($fruitboxes);
+            
+            //---------- Milkboxes ----------//
+            
             $milkboxes = $company->milkbox;
             
             // $fruitpartner->name will break if there's a box retrieved without a fruitpartner
@@ -69,7 +75,12 @@ class OfficeDashboardController extends Controller
                 $milkbox->fruit_partner_name = $fruitpartner_name;
             }
             
+            //---------- Routes ----------//
+            
             $routes = $company->company_routes;
+            
+            
+            //---------- Snackboxes ----------//
             
             // This starts off as a list of snackbox items but we want them grouped by the snackbox_id, so we need to do that either in the snackbox-admin component or here.
             // Let's try doing it here first.
@@ -77,6 +88,7 @@ class OfficeDashboardController extends Controller
             $snackboxes = $snackbox_items->groupBy('snackbox_id');
             // While snackboxes are using the hardcoded options we don't need to add the fruitpartner name along with the id.  If/when this changes the foreach loop will be needed too.
             
+            //---------- Drinkboxes ----------//
             
             // And now do the same with Drinks but include the fruitpartner name.
             $drinkbox_items = $company->drinkboxes;
@@ -87,6 +99,8 @@ class OfficeDashboardController extends Controller
                 $fruitpartner = FruitPartner::find($fruitpartner_id);
                 $drinkbox[0]->fruit_partner_name = $fruitpartner->name;
             }
+            
+            //---------- Otherboxes ----------//
             
             // and Other
             $otherbox_items = $company->otherboxes;
@@ -99,10 +113,15 @@ class OfficeDashboardController extends Controller
             }
             //dd($drinkboxes);
             
+            //---------- Preferences ----------//
+            
             $preferences = $company->preference;
             $allergies = $company->allergy;
             $additional_info = $company->additional_info;
             // dd($additional_info);
+            
+            //---------- Archived Fruitboxes ----------//
+            
             $archived_fruitboxes = $company->fruitbox_archive()->where('is_active', 'Active')->get();
             
             foreach ($archived_fruitboxes as $archived_fruitbox) {
@@ -112,12 +131,31 @@ class OfficeDashboardController extends Controller
                 $fruitpartner_name = $fruitpartner->name;
                 $archived_fruitbox->fruit_partner_name = $fruitpartner_name;
             }
+            
+            //---------- Archived Milkboxes ----------//
+            
+            $archived_milkboxes = $company->milkbox_archive()->where('is_active', 'Active')->get();
+            
+            foreach ($archived_milkboxes as $archived_milkbox) {
+                $fruitpartner_id = $archived_milkbox['fruit_partner_id'];
+                $fruitpartner = FruitPartner::find($fruitpartner_id);
+                // dd($fruitpartner);
+                $fruitpartner_name = $fruitpartner->name;
+                $archived_milkbox->fruit_partner_name = $fruitpartner_name;
+            }
+            
+            //---------- Archived Snackboxes ----------//
+            
+            $archived_snackbox_items = $company->snackbox_archive;
+            $archived_snackboxes = $archived_snackbox_items->groupBy('snackbox_id');
+            
             // dd($company);
         // return view('companies', ['companies' => $company, 'fruitboxes' => $fruitboxes, 'milkboxes' => $milkboxes, 'routes' => $routes]);
-        return [    'company' => $company, 'fruitboxes' => $fruitboxes, 'milkboxes' => $milkboxes, 'routes' => $routes,
+        return [    
+                    'company' => $company, 'fruitboxes' => $fruitboxes, 'milkboxes' => $milkboxes, 'routes' => $routes,
                     'snackboxes' => $snackboxes, 'drinkboxes' => $drinkboxes, 'otherboxes' => $otherboxes,
                     'preferences' => $preferences, 'allergies' => $allergies, 'additional_info' => $additional_info, 
-                    'archived_fruitboxes' => $archived_fruitboxes,
+                    'archived_fruitboxes' => $archived_fruitboxes, 'archived_milkboxes' => $archived_milkboxes, 'archived_snackboxes' => $archived_snackboxes,
                 ];
     }
 

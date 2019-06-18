@@ -15,16 +15,17 @@ class CreateFruitBoxArchivesTable extends Migration
     {
         Schema::create('fruit_box_archives', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('fruitbox_id');
             $table->string('is_active');
             $table->integer('fruit_partner_id');
             $table->string('name');
             $table->integer('company_details_id');
             // $table->integer('route_id'); // not sure i need this, i'm certainly not using it currently!
             $table->string('type');
-            $table->date('previous_delivery');
+            $table->date('previous_delivery')->nullable();
             $table->date('next_delivery');
             $table->string('frequency');
-            $table->string('week_in_month');
+            $table->string('week_in_month')->nullable();
             $table->string('delivery_day');
             $table->integer('fruitbox_total');
             $table->integer('deliciously_red_apples');
@@ -47,9 +48,9 @@ class CreateFruitBoxArchivesTable extends Migration
             $table->integer('grapefruits');
             $table->integer('avocados');
             $table->integer('root_ginger');
-            $table->integer('tailoring_fee');
+            $table->integer('tailoring_fee')->nullable();
             $table->string('discount_multiple');
-            $table->date('invoiced_at'); // This is a new field to hopefully keep track of when orders have been processed.
+            $table->date('invoiced_at')->nullable(); // This is a new field to hopefully keep track of when orders have been processed.
             $table->timestamps();
         });
     }

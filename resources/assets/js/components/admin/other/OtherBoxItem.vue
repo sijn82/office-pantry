@@ -47,7 +47,8 @@
             deleteOtherBoxItem(otherbox_item) {
                 axios.put('api/otherbox/destroy/' + otherbox_item.id, { 
                     id: otherbox_item.id,
-                }).then (response => {
+                }).then ( (response) => {
+                    this.$emit('refresh-data', {company_details_id: otherbox_item.company_details_id})
                     //location.reload(true); // What am I doing with the store on this one?  Will I need this?
                     console.log(response);
                 }).catch(error => console.log(error));

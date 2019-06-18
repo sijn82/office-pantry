@@ -44,7 +44,8 @@
             deleteDrinkBoxItem(drinkbox_item) {
                 axios.put('api/drinkbox/destroy/' + drinkbox_item.id, { 
                     id: drinkbox_item.id,
-                }).then (response => {
+                }).then ( (response) => {
+                    this.$emit('refresh-data', {company_details_id: drinkbox_item.company_details_id})
                     //location.reload(true); // What am I doing with the store on this one?  Will I need this?
                     console.log(response);
                 }).catch(error => console.log(error));

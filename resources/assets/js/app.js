@@ -78,6 +78,10 @@ Vue.component('archived-fruit-orders-admin', require('./components/admin/fruit/A
 Vue.component('milkbox', require('./components/admin/milk/MilkBox.vue'));
 Vue.component('milk-orders-admin', require('./components/admin/milk/MilkOrdersAdmin.vue'));
 Vue.component('add-new-milkbox', require('./components/admin/milk/AddNewMilkbox.vue'));
+// Milkbox Archive Related
+Vue.component('archived-milkbox', require('./components/admin/milk/ArchivedMilkBox.vue'));
+Vue.component('archived-milk-orders-admin', require('./components/admin/milk/ArchivedMilkOrdersAdmin.vue'));
+
 // Route Related
 Vue.component('company-route', require('./components/admin/routes/CompanyRoute.vue'));
 Vue.component('routes-admin', require('./components/admin/routes/RoutesAdmin.vue'));
@@ -90,6 +94,10 @@ Vue.component('snackbox', require('./components/admin/snacks/SnackBox.vue'));
 Vue.component('snackboxes-admin', require('./components/admin/snacks/SnackBoxesAdmin.vue'));
 Vue.component('add-new-snackbox', require('./components/admin/snacks/AddNewSnackbox.vue'));
 Vue.component('mass-update-snackbox', require('./components/admin/snacks/MassUpdateSnackBox.vue'));
+// Snackbox Archive Related
+Vue.component('archived-snackbox-item', require('./components/admin/snacks/ArchivedSnackBoxItem.vue'));
+Vue.component('archived-snackbox', require('./components/admin/snacks/ArchivedSnackBox.vue'));
+Vue.component('archived-snackboxes-admin', require('./components/admin/snacks/ArchivedSnackBoxesAdmin.vue'));
 // Drinkbox Related
 Vue.component('drinkbox-item', require('./components/admin/drinks/DrinkBoxItem.vue'));
 Vue.component('drinkbox', require('./components/admin/drinks/DrinkBox.vue'));

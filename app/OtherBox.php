@@ -26,6 +26,8 @@ class OtherBox extends Model
         'name',
         'quantity',
         'unit_price',
+        'case_price',
+        'invoiced_at',
     ];
     
     // public function companies()

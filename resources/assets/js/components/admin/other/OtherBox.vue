@@ -189,7 +189,9 @@
             }
         }, 
         methods: {
-            
+            refreshData($event) {
+                this.$emit('refresh-data', $event);
+            },
             addProduct() {
                 if (this.add_product === false) {
                     this.add_product = true;
@@ -209,6 +211,7 @@
                     otherbox_details: otherbox, 
                         
                 }).then (response => {
+                    this.$emit('refresh-data', {company_details_id: otherbox.company_details_id})
                     //location.reload(true); // What am I doing with the store on this one?  Will I need this?
                     console.log(response);
                 }).catch(error => console.log(error));
