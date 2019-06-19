@@ -5,8 +5,8 @@
         </b-input-group>
         <b-list-group v-if="results.length > 0">
             <div class="col-sm-12" v-for="result in results">
-                <b-list-group-item class="d-flex justify-content-between align-items-center" button :key="result.id" @click="productData(result.id)"> {{ result.name }}
-                    <b-badge variant="primary" pill> Select Product </b-badge>
+                <b-list-group-item :variant="stock_level(result.stock_level)" class="d-flex justify-content-between align-items-center" button :key="result.id" @click="productData(result.id)"> {{ result.name }}
+                    <b-badge variant="primary" pill> £{{ result.unit_price }} </b-badge>
                 </b-list-group-item>
 
             </div>
@@ -45,8 +45,36 @@ export default {
         },
 
     },
+    
+    computed: {
+        // stock_level() {
+        // 
+        // //    let apply_variant = function (stock_count) {
+        //         if (stock_count < 20) {
+        //             return 'Warning'
+        //         } else {
+        //             return 'Primary'
+        //         }
+        //     }
+        // 
+        // //    $count = apply_variant(this.result.stock_level)
+        //     return $count
+        // 
+        // }
+    },
 
     methods: {
+        stock_level(stock_count) {
+                console.log(stock_count)
+                if (stock_count <= 0) {
+                    return "danger"
+                } else if (stock_count < 20) {
+                    return "warning"
+                } else {
+                    return "primary"
+                }
+        },
+        
         fetch() {
             axios.get('/api/products/search', { params: { keywords: this.keywords }})
                 .then(response => this.results = response.data)

@@ -91001,7 +91001,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "\n.margin-top-10[data-v-4bb783e0] {\n  margin-top: 10px;\n}\n.border-top[data-v-4bb783e0] {\n  border-top: 2px solid black;\n  padding-top: 20px;\n}\n", ""]);
+exports.push([module.i, "\n.margin-top-10[data-v-4bb783e0] {\n  margin-top: 10px;\n}\n.padding-top-10[data-v-4bb783e0] {\n  padding-top: 10px;\n}\n.border-top[data-v-4bb783e0] {\n  border-top: 2px solid black;\n  padding-top: 20px;\n}\n", ""]);
 
 // exports
 
@@ -91012,6 +91012,13 @@ exports.push([module.i, "\n.margin-top-10[data-v-4bb783e0] {\n  margin-top: 10px
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -91599,7 +91606,10 @@ var render = function() {
             _vm._v(" "),
             _c(
               "b-row",
-              { class: _vm.snackbox[0].is_active },
+              {
+                staticClass: "padding-top-10",
+                class: _vm.snackbox[0].is_active
+              },
               [
                 _c("b-col", [
                   _c("label", [_c("b", [_vm._v(" Type ")])]),
@@ -91690,6 +91700,7 @@ var render = function() {
             _c(
               "b-row",
               {
+                staticClass: "padding-top-10",
                 class: _vm.snackbox[0].is_active,
                 attrs: { id: "bottom-details" }
               },
@@ -91748,6 +91759,14 @@ var render = function() {
                       ])
                     ])
                   : _vm._e(),
+                _vm._v(" "),
+                _c("b-col", [
+                  _c("label", [_c("b", [_vm._v(" Last Invoiced At ")])]),
+                  _vm._v(" "),
+                  _c("p", [
+                    _vm._v(" " + _vm._s(_vm.snackbox[0].invoiced_at) + " ")
+                  ])
+                ]),
                 _vm._v(" "),
                 _c("b-col", [
                   _c("label", [_c("b", [_vm._v(" Next Delivery Week ")])]),
@@ -94888,11 +94907,7 @@ var render = function() {
                   _c("div", [
                     _c("p", [
                       _vm._v(
-                        " " +
-                          _vm._s(
-                            _vm.archived_snackbox[0].archived_snackbox_id
-                          ) +
-                          " "
+                        " " + _vm._s(_vm.archived_snackbox[0].snackbox_id) + " "
                       )
                     ])
                   ])
@@ -96103,7 +96118,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "\n.margin-top-10[data-v-68fd3320] {\n  margin-top: 10px;\n}\n", ""]);
+exports.push([module.i, "\n.margin-top-10[data-v-68fd3320] {\n  margin-top: 10px;\n}\n.border-top[data-v-68fd3320] {\n  border-top: 2px solid black;\n  padding-top: 20px;\n}\n", ""]);
 
 // exports
 
@@ -96114,6 +96129,11 @@ exports.push([module.i, "\n.margin-top-10[data-v-68fd3320] {\n  margin-top: 10px
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
 //
 //
 //
@@ -96303,6 +96323,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
 
+    computed: {
+        drinkbox_total: function drinkbox_total() {
+
+            var $drinkbox_total = 0;
+
+            // This function checks each entry in the current snackbox list and creates a running total (a) of the unit price (b[cost]) multiplied by the quantity (b[quantity]).
+            var sum = function sum(drinkbox, cost, quantity) {
+                // console.log(snackbox);
+                return drinkbox.reduce(function (a, b) {
+                    if (b[cost] !== null) {
+                        // Then this is a regular entry, we just need to total it up
+                        return parseFloat(a) + parseFloat(b[cost]) * parseFloat(b[quantity]);
+                    } else {
+                        // Then chances are this is the initial row; where it was either saved without product data, or had it stripped out when archived.
+                        // Let's set the values to 0 so that the accumulator doesn't have a hissy fit about NaN.
+                        b[cost] = 0;
+                        b[quantity] = 0;
+                        return parseFloat(a) + parseFloat(b[cost]) * parseFloat(b[quantity]);
+                    }
+                }, 0);
+            };
+
+            // Now we use the function by passing in the snackbox array, and the two properties we need to multiply - saving it as the current total cost.
+            // First a quick check, on whether we need to tally up case prices for wholesale, or unit prices for regular snackboxes.
+            this.drinkbox[0].type === 'wholesale' ? $drinkbox_total = sum(this.drinkbox, 'case_price', 'quantity') : $drinkbox_total = sum(this.drinkbox, 'unit_price', 'quantity');
+
+            return $drinkbox_total;
+        }
+    },
     methods: {
         refreshData: function refreshData($event) {
             this.$emit('refresh-data', $event);
@@ -96919,19 +96968,25 @@ var render = function() {
             ),
             _vm._v(" "),
             _vm._l(_vm.drinkbox, function(drinkbox_item) {
-              return _c("drinkbox-item", {
-                key: drinkbox_item.id,
-                attrs: {
-                  id: "drinkbox-products",
-                  drinkbox_item: drinkbox_item
-                },
-                on: {
-                  "refresh-data": function($event) {
-                    _vm.refreshData($event)
-                  }
-                }
-              })
-            })
+              return drinkbox_item.product_id !== 0
+                ? _c("drinkbox-item", {
+                    key: drinkbox_item.id,
+                    attrs: {
+                      id: "drinkbox-products",
+                      drinkbox_item: drinkbox_item
+                    },
+                    on: {
+                      "refresh-data": function($event) {
+                        _vm.refreshData($event)
+                      }
+                    }
+                  })
+                : _vm._e()
+            }),
+            _vm._v(" "),
+            _c("h3", { staticClass: "border-top" }, [
+              _vm._v(" Current Total: £" + _vm._s(_vm.drinkbox_total) + " ")
+            ])
           ],
           2
         )
@@ -98314,7 +98369,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "\n.margin-top-10[data-v-47eb859e] {\n  margin-top: 10px;\n}\n", ""]);
+exports.push([module.i, "\n.margin-top-10[data-v-47eb859e] {\n  margin-top: 10px;\n}\n.border-top[data-v-47eb859e] {\n  border-top: 2px solid black;\n  padding-top: 20px;\n}\n", ""]);
 
 // exports
 
@@ -98325,6 +98380,11 @@ exports.push([module.i, "\n.margin-top-10[data-v-47eb859e] {\n  margin-top: 10px
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
 //
 //
 //
@@ -98516,6 +98576,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
 
+    computed: {
+        otherbox_total: function otherbox_total() {
+
+            var $otherbox_total = 0;
+
+            // This function checks each entry in the current snackbox list and creates a running total (a) of the unit price (b[cost]) multiplied by the quantity (b[quantity]).
+            var sum = function sum(otherbox, cost, quantity) {
+                // console.log(snackbox);
+                return otherbox.reduce(function (a, b) {
+                    if (b[cost] !== null) {
+                        // Then this is a regular entry, we just need to total it up
+                        return parseFloat(a) + parseFloat(b[cost]) * parseFloat(b[quantity]);
+                    } else {
+                        // Then chances are this is the initial row; where it was either saved without product data, or had it stripped out when archived.
+                        // Let's set the values to 0 so that the accumulator doesn't have a hissy fit about NaN.
+                        b[cost] = 0;
+                        b[quantity] = 0;
+                        return parseFloat(a) + parseFloat(b[cost]) * parseFloat(b[quantity]);
+                    }
+                }, 0);
+            };
+
+            // Now we use the function by passing in the snackbox array, and the two properties we need to multiply - saving it as the current total cost.
+            // First a quick check, on whether we need to tally up case prices for wholesale, or unit prices for regular snackboxes.
+            this.otherbox[0].type === 'wholesale' ? $otherbox_total = sum(this.otherbox, 'case_price', 'quantity') : $otherbox_total = sum(this.otherbox, 'unit_price', 'quantity');
+
+            return $otherbox_total;
+        }
+    },
     methods: {
         refreshData: function refreshData($event) {
             this.$emit('refresh-data', $event);
@@ -99107,11 +99196,25 @@ var render = function() {
             ),
             _vm._v(" "),
             _vm._l(_vm.otherbox, function(otherbox_item) {
-              return _c("otherbox-item", {
-                key: otherbox_item.id,
-                attrs: { id: "otherbox-products", otherbox_item: otherbox_item }
-              })
-            })
+              return otherbox_item.product_id !== 0
+                ? _c("otherbox-item", {
+                    key: otherbox_item.id,
+                    attrs: {
+                      id: "otherbox-products",
+                      otherbox_item: otherbox_item
+                    },
+                    on: {
+                      "refresh-data": function($event) {
+                        _vm.refreshData($event)
+                      }
+                    }
+                  })
+                : _vm._e()
+            }),
+            _vm._v(" "),
+            _c("h3", { staticClass: "border-top" }, [
+              _vm._v(" Current Total: £" + _vm._s(_vm.otherbox_total) + " ")
+            ])
           ],
           2
         )
@@ -102489,7 +102592,34 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
 
+    computed: {
+        // stock_level() {
+        // 
+        // //    let apply_variant = function (stock_count) {
+        //         if (stock_count < 20) {
+        //             return 'Warning'
+        //         } else {
+        //             return 'Primary'
+        //         }
+        //     }
+        // 
+        // //    $count = apply_variant(this.result.stock_level)
+        //     return $count
+        // 
+        // }
+    },
+
     methods: {
+        stock_level: function stock_level(stock_count) {
+            console.log(stock_count);
+            if (stock_count <= 0) {
+                return "danger";
+            } else if (stock_count < 20) {
+                return "warning";
+            } else {
+                return "primary";
+            }
+        },
         fetch: function fetch() {
             var _this = this;
 
@@ -102570,7 +102700,10 @@ var render = function() {
                       key: result.id,
                       staticClass:
                         "d-flex justify-content-between align-items-center",
-                      attrs: { button: "" },
+                      attrs: {
+                        variant: _vm.stock_level(result.stock_level),
+                        button: ""
+                      },
                       on: {
                         click: function($event) {
                           _vm.productData(result.id)
@@ -102582,7 +102715,7 @@ var render = function() {
                       _c(
                         "b-badge",
                         { attrs: { variant: "primary", pill: "" } },
-                        [_vm._v(" Select Product ")]
+                        [_vm._v(" £" + _vm._s(result.unit_price) + " ")]
                       )
                     ],
                     1

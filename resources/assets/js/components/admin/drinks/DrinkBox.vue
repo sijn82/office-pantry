@@ -158,8 +158,9 @@
                 </b-col>
             </b-row>
             
-            <drinkbox-item id="drinkbox-products" v-for="drinkbox_item in drinkbox" :drinkbox_item="drinkbox_item" :key="drinkbox_item.id" @refresh-data="refreshData($event)"></drinkbox-item>
+            <drinkbox-item id="drinkbox-products" v-for="drinkbox_item in drinkbox" v-if="drinkbox_item.product_id !== 0" :drinkbox_item="drinkbox_item" :key="drinkbox_item.id" @refresh-data="refreshData($event)"></drinkbox-item>
             
+            <h3 class="border-top"> Current Total: £{{ drinkbox_total }} </h3>
         </div>
     </div>
 </template>
@@ -168,6 +169,10 @@
 <style lang="scss" scoped>
     .margin-top-10 {
         margin-top: 10px;
+    }
+    .border-top {
+        border-top: 2px solid black;
+        padding-top: 20px;
     }
 </style>
 
@@ -185,7 +190,36 @@
                 frequency_options: ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'],
                 week_in_month_options: ['First', 'Second', 'Third', 'Forth', 'Last'],
             }
-        }, 
+        },
+        computed: {
+            drinkbox_total() {
+                
+                let $drinkbox_total = 0
+
+                // This function checks each entry in the current snackbox list and creates a running total (a) of the unit price (b[cost]) multiplied by the quantity (b[quantity]).
+                let sum = function(drinkbox, cost, quantity){
+                    // console.log(snackbox);
+                    return drinkbox.reduce( function(a, b) {
+                        if (b[cost] !== null) {
+                            // Then this is a regular entry, we just need to total it up
+                            return parseFloat(a) + ( parseFloat(b[cost]) * parseFloat(b[quantity]) );
+                        } else {
+                            // Then chances are this is the initial row; where it was either saved without product data, or had it stripped out when archived.
+                            // Let's set the values to 0 so that the accumulator doesn't have a hissy fit about NaN.
+                            b[cost] = 0;
+                            b[quantity] = 0;
+                            return parseFloat(a) + ( parseFloat(b[cost]) * parseFloat(b[quantity]) );
+                        }
+                    }, 0);
+                };
+                
+                // Now we use the function by passing in the snackbox array, and the two properties we need to multiply - saving it as the current total cost.
+                // First a quick check, on whether we need to tally up case prices for wholesale, or unit prices for regular snackboxes.
+                (this.drinkbox[0].type === 'wholesale') ? $drinkbox_total = sum(this.drinkbox, 'case_price', 'quantity') : $drinkbox_total = sum(this.drinkbox, 'unit_price', 'quantity');
+                    
+                return $drinkbox_total;
+            }
+        },
         methods: {
             refreshData($event) {
                 this.$emit('refresh-data', $event);

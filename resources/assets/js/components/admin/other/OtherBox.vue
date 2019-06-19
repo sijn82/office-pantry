@@ -161,8 +161,9 @@
                 </b-col>
             </b-row>
             
-            <otherbox-item id="otherbox-products" v-for="otherbox_item in otherbox" :otherbox_item="otherbox_item" :key="otherbox_item.id"></otherbox-item>
+            <otherbox-item id="otherbox-products" v-for="otherbox_item in otherbox" v-if="otherbox_item.product_id !== 0" :otherbox_item="otherbox_item" :key="otherbox_item.id" @refresh-data="refreshData($event)"></otherbox-item>
             
+            <h3 class="border-top"> Current Total: £{{ otherbox_total }} </h3>
         </div>
     </div>
 </template>
@@ -171,6 +172,10 @@
 <style lang="scss" scoped>
     .margin-top-10 {
         margin-top: 10px;
+    }
+    .border-top {
+        border-top: 2px solid black;
+        padding-top: 20px;
     }
 </style>
 
@@ -187,7 +192,36 @@
                 frequency_options: ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'],
                 week_in_month_options: ['First', 'Second', 'Third', 'Forth', 'Last'],
             }
-        }, 
+        },
+        computed: {
+            otherbox_total() {
+                
+                let $otherbox_total = 0
+
+                // This function checks each entry in the current snackbox list and creates a running total (a) of the unit price (b[cost]) multiplied by the quantity (b[quantity]).
+                let sum = function(otherbox, cost, quantity){
+                    // console.log(snackbox);
+                    return otherbox.reduce( function(a, b) {
+                        if (b[cost] !== null) {
+                            // Then this is a regular entry, we just need to total it up
+                            return parseFloat(a) + ( parseFloat(b[cost]) * parseFloat(b[quantity]) );
+                        } else {
+                            // Then chances are this is the initial row; where it was either saved without product data, or had it stripped out when archived.
+                            // Let's set the values to 0 so that the accumulator doesn't have a hissy fit about NaN.
+                            b[cost] = 0;
+                            b[quantity] = 0;
+                            return parseFloat(a) + ( parseFloat(b[cost]) * parseFloat(b[quantity]) );
+                        }
+                    }, 0);
+                };
+                
+                // Now we use the function by passing in the snackbox array, and the two properties we need to multiply - saving it as the current total cost.
+                // First a quick check, on whether we need to tally up case prices for wholesale, or unit prices for regular snackboxes.
+                (this.otherbox[0].type === 'wholesale') ? $otherbox_total = sum(this.otherbox, 'case_price', 'quantity') : $otherbox_total = sum(this.otherbox, 'unit_price', 'quantity');
+                    
+                return $otherbox_total;
+            }
+        },
         methods: {
             refreshData($event) {
                 this.$emit('refresh-data', $event);

@@ -70,7 +70,7 @@
                 </b-col>
             </b-row>
             
-            <b-row :class="snackbox[0].is_active">
+            <b-row :class="snackbox[0].is_active" class="padding-top-10">
                 <b-col>
                     <label><b> Type </b></label>
                     <div v-if="editing">
@@ -100,7 +100,7 @@
                 </b-col>
             </b-row>
             
-            <b-row id="bottom-details" :class="snackbox[0].is_active">
+            <b-row id="bottom-details" :class="snackbox[0].is_active" class="padding-top-10">
                 <b-col v-if="snackbox[0].frequency === 'Monthly'">
                     <label><b> Week In Month </b></label>
                     <div v-if="editing">
@@ -115,6 +115,10 @@
                     <div>
                         <p> {{ snackbox[0].previous_delivery_week }} </p>
                     </div>
+                </b-col>
+                <b-col>
+                    <label><b> Last Invoiced At </b></label>
+                    <p> {{ snackbox[0].invoiced_at }} </p>
                 </b-col>
                 <b-col>
                     <label><b> Next Delivery Week </b></label>
@@ -213,6 +217,9 @@
 <style lang="scss" scoped>
     .margin-top-10 {
         margin-top: 10px;
+    }
+    .padding-top-10 {
+        padding-top: 10px;
     }
     .border-top {
         border-top: 2px solid black;

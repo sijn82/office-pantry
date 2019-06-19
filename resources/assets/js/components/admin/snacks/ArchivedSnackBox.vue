@@ -26,7 +26,7 @@
                 <b-col>
                     <label><b> Snackbox Id </b></label>
                     <div>
-                        <p> {{ archived_snackbox[0].archived_snackbox_id }} </p>
+                        <p> {{ archived_snackbox[0].snackbox_id }} </p>
                     </div>
                 </b-col>
                 <b-col>

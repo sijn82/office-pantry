@@ -36,6 +36,7 @@ class CreateSnackBoxArchivesTable extends Migration
             $table->string('name')->nullable();
             $table->integer('quantity')->nullable();
             $table->decimal('unit_price')->nullable();
+            $table->decimal('case_price')->nullable();
             $table->date('invoiced_at')->nullable();
             $table->timestamps();
         });
