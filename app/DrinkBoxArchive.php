@@ -4,18 +4,17 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class SnackBoxArchive extends Model
+class DrinkBoxArchive extends Model
 {
-    protected $primaryKey = 'snackbox_id';
+    protected $primaryKey = 'drinkbox_id';
     
     protected $fillable = [
         
-        // Snackbox Info
-        'snackbox_id',
+        // DrinkBox Info
+        'drinkbox_id',
         'is_active',
-        'delivered_by',
-        'no_of_boxes',
-        'snack_cap',
+        'delivered_by_id',
+        // 'no_of_boxes', <-- as this is for wholesale only, we don't actually need a 'no. of boxes' field, but commenting out for now in case i'm wrong, or find a new purpose.
         'type',
         // Company Info
         'company_details_id',
@@ -30,7 +29,7 @@ class SnackBoxArchive extends Model
         'quantity',
         'unit_price',
         'case_price',
-        'invoiced_at'
+        'invoiced_at',
     ];
 
     public function companies()

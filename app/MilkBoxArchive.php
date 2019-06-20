@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class MilkBoxArchive extends Model
 {
     //
+    protected $primaryKey = 'milkbox_id';
+    
     protected $fillable = [
         'is_active',
         'fruit_partner_id',

@@ -64,7 +64,8 @@ class FruitBox extends Model
         {
             return $this->belongsTo(CompanyDetails::class);
         }
-        
+        // Looks like I've only added this relationship with fruitboxes and fruitpartners, 
+        // although the other boxes also use fruitpartners for delivery, dpd, apc etc are also classed as fruitpartners.
         public function fruit_partners()
         {
             return $this->belongsTo(FruitPartner::class);

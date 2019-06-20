@@ -63,6 +63,7 @@ class CompanyDetails extends Model
     {
         return $this->hasMany(CompanyRoute::class);
     }
+    // Current Orders
     public function fruitbox()
     {
         return $this->hasMany(FruitBox::class);
@@ -83,6 +84,7 @@ class CompanyDetails extends Model
     {
         return $this->hasMany(OtherBox::class);
     }
+    // Preferences
     public function preference()
     {
         return $this->hasMany(Preference::class);
@@ -95,7 +97,7 @@ class CompanyDetails extends Model
     {
         return $this->hasMany(AdditionalInfo::class);
     }
-    
+    // Archived Orders
     public function fruitbox_archive()
     {
         return $this->hasMany(FruitBoxArchive::class);
@@ -107,6 +109,14 @@ class CompanyDetails extends Model
     public function snackbox_archive()
     {
         return $this->hasMany(SnackBoxArchive::class);
+    }
+    public function drinkbox_archive()
+    {
+        return $this->hasMany(DrinkBoxArchive::class);
+    }
+    public function otherbox_archive()
+    {
+        return $this->hasMany(OtherBoxArchive::class);
     }
     
     // This is a test to see if I can pull a list of relationships into 1 statement request

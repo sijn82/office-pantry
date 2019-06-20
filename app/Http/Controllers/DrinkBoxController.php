@@ -205,6 +205,91 @@ class DrinkBoxController extends Controller
     {
         //
     }
+    
+    public function archiveAndEmptyDrinkBoxes () 
+    {
+        $drinkboxes = DrinkBox::where('is_active', 'Active')->get()->groupBy('drinkbox_id');
+        
+        foreach ($drinkboxes as $drinkbox) {
+             
+            if (count($drinkbox) === 1) {     
+            // we're probably looking at an empty box, so the product_id should be 0
+             
+                if ($drinkbox[0]->product_id === 0) {
+                // Then all is as expected.
+                } else {
+                // Something unexpected has happened, let's log it for review. 
+                $message = 'Well, shhhiiiitttttt! Drinkbox ' . $drinkbox[0]->$drinkbox_id 
+                . ' only has one item in it and it\'s ' . $drinkbox[0]->product_id 
+                . ' rather than 0. You can find it at row ' . $drinkbox[0]->id;
+                
+                Log::channel('slack')->info($message);    
+                }
+                
+            } elseif (count($drinkbox) > 1) {
+            // we have a box which needs to be archived
+                 
+            //---------- Time to save the existing box as an archive ----------//
+            
+                // 1.(a) if the box has an invoiced_at date, we can save it as 'inactive'.
+                if ($drinkbox[0]->invoiced_at !== null) {
+                    // We have a box that's already been invoiced, so we can save it to archives with an 'inactive' status.
+                    foreach ($drinkbox as $drinkbox_item) {
+                        
+                        $drinkbox_archive_entry = new DrinkBoxArchive();
+                        // Snackbox Info
+                        $drinkbox_archive_entry->is_active = 'Inactive';
+                        $drinkbox_archive_entry->snackbox_id = $drinkbox_item->snackbox_id;
+                        $drinkbox_archive_entry->delivered_by = $drinkbox_item->delivered_by;
+                        $drinkbox_archive_entry->type = $drinkbox_item->type;
+                        // Company Info
+                        $drinkbox_archive_entry->company_details_id = $drinkbox_item->company_details_id;
+                        $drinkbox_archive_entry->delivery_day = $drinkbox_item->delivery_day;
+                        $drinkbox_archive_entry->frequency = $drinkbox_item->frequency;
+                        $drinkbox_archive_entry->week_in_month = $drinkbox_item->week_in_month;
+                        $drinkbox_archive_entry->previous_delivery_week = $drinkbox_item->previous_delivery_week;
+                        $drinkbox_archive_entry->next_delivery_week = $drinkbox_item->next_delivery_week;
+                        // Product Information
+                        $drinkbox_archive_entry->product_id = $drinkbox_item->product_id;
+                        $drinkbox_archive_entry->code = $drinkbox_item->code;
+                        $drinkbox_archive_entry->name = $drinkbox_item->name;
+                        $drinkbox_archive_entry->quantity = $drinkbox_item->quantity;
+                        $drinkbox_archive_entry->unit_price = $drinkbox_item->unit_price;
+                        $drinkbox_archive_entry->case_price = $drinkbox_item->case_price;
+                        $drinkbox_archive_entry->invoiced_at = $drinkbox_item->invoiced_at;
+                        $drinkbox_archive_entry->save();
+                    }
+                    
+                } else {
+                    // 1.(b) if it doesn't, we need to save it to archives as 'active' so it can be pulled into the next invoicing run.
+                    foreach ($drinkbox as $drinkbox_item) {
+                        
+                        $drinkbox_archive_entry = new DrinkBoxArchive();
+                        // Snackbox Info
+                        $drinkbox_archive_entry->is_active = 'Active';
+                        $drinkbox_archive_entry->snackbox_id = $drinkbox_item->snackbox_id;
+                        $drinkbox_archive_entry->delivered_by = $drinkbox_item->delivered_by;
+                        $drinkbox_archive_entry->type = $drinkbox_item->type;
+                        // Company Info
+                        $drinkbox_archive_entry->company_details_id = $drinkbox_item->company_details_id;
+                        $drinkbox_archive_entry->delivery_day = $drinkbox_item->delivery_day;
+                        $drinkbox_archive_entry->frequency = $drinkbox_item->frequency;
+                        $drinkbox_archive_entry->week_in_month = $drinkbox_item->week_in_month;
+                        $drinkbox_archive_entry->previous_delivery_week = $drinkbox_item->previous_delivery_week;
+                        $drinkbox_archive_entry->next_delivery_week = $drinkbox_item->next_delivery_week;
+                        // Product Information
+                        $drinkbox_archive_entry->product_id = $drinkbox_item->product_id;
+                        $drinkbox_archive_entry->code = $drinkbox_item->code;
+                        $drinkbox_archive_entry->name = $drinkbox_item->name;
+                        $drinkbox_archive_entry->quantity = $drinkbox_item->quantity;
+                        $drinkbox_archive_entry->unit_price = $drinkbox_item->unit_price;
+                        $drinkbox_archive_entry->case_price = $drinkbox_item->case_price;
+                        $drinkbox_archive_entry->invoiced_at = $drinkbox_item->invoiced_at;
+                        $drinkbox_archive_entry->save();
+                    }
+                    
+                }
+    }
 
     /**
      * Update the specified resource in storage.

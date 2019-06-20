@@ -1106,11 +1106,12 @@ class SnackBoxController extends Controller
                 //---------- Now we need to run through the new selection of snacks, adding them (if not specified as a dislike) for the company being processed ----------//
                 
                 foreach ($request['order'] as $new_standard_snack) {
-                    dump($new_standard_snack);
-                    // I think this is a good place to put the likes and dislikes company check.
-                    // $likes = Preference::where('id', $snack->company_details_id)->select('snackbox_likes')->get();
-                    // $dislikes = Preference::where('id', $snack->company_details_id)->select('snackbox_dislikes')->get();
-
+                    $products_already_in_box[] = $new_standard_snack['id'];
+                }
+                
+                foreach ($request['order'] as $new_standard_snack) {
+                    // dump($request['order']);
+                    // dump($new_standard_snack);
 
                     if (in_array($new_standard_snack['name'], $dislikes)
                                                     && !empty($likes)
@@ -1150,10 +1151,49 @@ class SnackBoxController extends Controller
                         // 2. 
                         
                         $new_standard_snack['quantity'] = ceil($new_quantity);
-                        $new_standard_snack['product_id'] = $product_details[0]->product_id;
+                        //$new_standard_snack['product_id'] = $product_details[0]->product_id; //  This looks wrong?  I'm pretty sure it should be $product_details[0]->id?
+                        $new_standard_snack['product_id'] = $product_details[0]->id;
                         $new_standard_snack['code'] = $product_details[0]->code;
                         $new_standard_snack['name'] = $product_details[0]->name;
                         $new_standard_snack['unit_price'] = $product_details[0]->unit_price;
+                        $new_standard_snack['case_price'] = $product_details[0]->case_price;
+
+                    } elseif (in_array($new_standard_snack['name'], $dislikes) && empty($likes)) {
+                        
+                        // Then the company either didn't have any specified likes or we don't have the item in stock
+                        // Instead all we can do is reselect from the list of Products in stock.
+                        
+                        $old_product = Product::where('name', $new_standard_snack['name'])->get();
+                        $old_standard_snack_value = ( $new_standard_snack['quantity'] * $old_product[0]->unit_price );
+                        
+                        // Now let's grab all product options, so long as they're not in the company dislikes section, or already in the box.
+                        // Let's also limit it to mixed snack products i.e not drinks etc, where the unit value (of 1 item) isn't worth more than the replacement (total) that we're trying to make.
+                        // And that we have at least one of the item in stock.
+                        
+                        $products_in_stock = Product::whereNotIn('name', $dislikes)
+                                                ->whereNotIn('id', $products_already_in_box)
+                                                ->where('sales_nominal', '4010')
+                                                ->where('unit_price', '<=', $old_standard_snack_value)
+                                                ->where('stock_level', '>', 0)
+                                                ->pluck('id')->toArray(); // <-- We now have an array of possible products to choose from as a replacement.
+                        
+                        $key = array_rand($products_in_stock, 1);
+                        // Now we can select it from the $likes array.
+                        $selection = $products_in_stock[$key];
+                        
+                        $product_details = Product::where('id', $selection)->get();
+                        
+                        $new_quantity = ( $old_standard_snack_value / $product_details[0]->unit_price );
+                        
+                        // Now we've selected a replacement product, we just need to overwrite details of the old item, with the new.
+                        
+                        $new_standard_snack['quantity'] = ceil($new_quantity);
+                        //$new_standard_snack['product_id'] = $product_details[0]->product_id; //  This looks wrong?  I'm pretty sure it should be $product_details[0]->id?
+                        $new_standard_snack['product_id'] = $product_details[0]->id;
+                        $new_standard_snack['code'] = $product_details[0]->code;
+                        $new_standard_snack['name'] = $product_details[0]->name;
+                        $new_standard_snack['unit_price'] = $product_details[0]->unit_price;
+                        $new_standard_snack['case_price'] = $product_details[0]->case_price;
 
                     }
 
@@ -1177,6 +1217,7 @@ class SnackBoxController extends Controller
                     $new_snackbox->name = $new_standard_snack['name'];
                     $new_snackbox->quantity = $new_standard_snack['quantity'];
                     $new_snackbox->unit_price = $new_standard_snack['unit_price'];
+                    $new_snackbox->case_price = $new_standard_snack['case_price'];
                     $new_snackbox->save();
 
                 } // end of foreach ($request['order'] as $new_standard_snack)

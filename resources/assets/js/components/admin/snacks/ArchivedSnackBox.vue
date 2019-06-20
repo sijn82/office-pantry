@@ -12,7 +12,7 @@
         <h4> Next Delivery Week: {{ archived_snackbox[0].next_delivery_week }} </h4> -->
         
         <div id="edit-save-buttons">
-            <h4> {{ archived_snackbox[0].archived_snackbox_id }} </h4>
+            <h4> {{ archived_snackbox[0].snackbox_id }} </h4>
             <p> {{ archived_snackbox[0].delivery_day }} - {{ archived_snackbox[0].is_active }} </p>
             <!-- <p><b> {{ this.company }} </b></p> -->
             <b-button variant="primary" @click="showDetails()"> Details </b-button>

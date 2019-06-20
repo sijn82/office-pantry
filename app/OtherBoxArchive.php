@@ -4,18 +4,18 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class SnackBoxArchive extends Model
+class OtherBoxArchive extends Model
 {
-    protected $primaryKey = 'snackbox_id';
+    
+    protected $primaryKey = 'otherbox_id';
     
     protected $fillable = [
         
-        // Snackbox Info
-        'snackbox_id',
+        // OtherBox Info
+        'otherbox_id',
         'is_active',
-        'delivered_by',
+        'delivered_by_id',
         'no_of_boxes',
-        'snack_cap',
         'type',
         // Company Info
         'company_details_id',
@@ -30,7 +30,7 @@ class SnackBoxArchive extends Model
         'quantity',
         'unit_price',
         'case_price',
-        'invoiced_at'
+        'invoiced_at',
     ];
 
     public function companies()
