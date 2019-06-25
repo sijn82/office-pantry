@@ -164,7 +164,7 @@ class FruitOrderingDocumentController extends Controller
                                                             'SSCL (Empress State Building London - FAO Natalia Wielba)' => 'SSCL (Empress State Building London)',
                                                             'Punter Southall Group (FAO Sejal Patel)' => 'Punter Southall Group',
                                                             'L&Q (FAO Zoe Rush (Counties 4th Floor))' => 'L&Q',
-                                                            'Knotel (FAO Martha MacGregor)' => 'Knotel',
+                                                            'Knotel - 1 Stephen Street (FAO Martha MacGregor)' => 'Knotel - 1 Stephen Street',
                                                             'IncuBus Ltd (FAO Ander Mendia)' => 'IncuBus Ltd',
                                                             'Pfizer UK Ltd (FAO Decision Support CoE (IPC 1-G))' => 'Pfizer UK Ltd',
                                                        ];
