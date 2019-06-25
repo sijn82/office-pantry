@@ -13,6 +13,8 @@ class FruitBoxArchive extends Model
     
     // I wish I'd written a quick thing explaining why I went for this.  I'm sure I did it for a reason, most likely connected to being able to retrieve and keep track of its original id in fruitbox.
     protected $primaryKey = 'fruitbox_id';
+    // However I do know that it causes issues assuming the value is auto incremented unless I specifically tell it not too.
+    public $incrementing = false;
     
     protected $fillable = [
         

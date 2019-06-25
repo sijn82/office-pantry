@@ -103,11 +103,20 @@ Vue.component('drinkbox-item', require('./components/admin/drinks/DrinkBoxItem.v
 Vue.component('drinkbox', require('./components/admin/drinks/DrinkBox.vue'));
 Vue.component('drink-orders-admin', require('./components/admin/drinks/DrinkOrdersAdmin.vue'));
 Vue.component('add-new-drinkbox', require('./components/admin/drinks/AddNewDrinkBox.vue'));
+// Drinkbox Archive Related
+Vue.component('archived-drinkbox-item', require('./components/admin/drinks/ArchivedDrinkBoxItem.vue'));
+Vue.component('archived-drinkbox', require('./components/admin/drinks/ArchivedDrinkBox.vue'));
+Vue.component('archived-drink-orders-admin', require('./components/admin/drinks/ArchivedDrinkOrdersAdmin.vue'));
 // Otherbox Related
 Vue.component('otherbox-item', require('./components/admin/other/OtherBoxItem.vue'));
 Vue.component('otherbox', require('./components/admin/other/OtherBox.vue'));
 Vue.component('other-orders-admin', require('./components/admin/other/OtherOrdersAdmin.vue'));
 Vue.component('add-new-otherbox', require('./components/admin/other/AddNewOtherBox.vue'));
+// Otherbox Archive related
+Vue.component('archived-otherbox-item', require('./components/admin/other/ArchivedOtherBoxItem.vue'));
+Vue.component('archived-otherbox', require('./components/admin/other/ArchivedOtherBox.vue'));
+Vue.component('archived-other-orders-admin', require('./components/admin/other/ArchivedOtherOrdersAdmin.vue'));
+
 // Product Related
 Vue.component('product', require('./components/admin/products/Product.vue'));
 Vue.component('products-list', require('./components/admin/products/ProductsList.vue'));

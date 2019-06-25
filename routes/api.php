@@ -141,6 +141,10 @@ Route::post('snackbox/details', 'SnackBoxController@updateDetails');
 Route::post('snackbox/add-product', 'SnackBoxController@addProductToSnackbox');
 Route::put('snackbox/destroy/{id}', 'SnackBoxController@destroyItem');
 Route::put('snackbox/destroy-box/{id}', 'SnackBoxController@destroyBox');
+// Update company specific snackbox archive
+Route::put('archived-snackbox/destroy/{id}', 'ArchivedSnackBoxController@destroyItem');
+Route::put('archived-snackbox/destroy-box/{id}', 'ArchivedSnackBoxController@destroyBox');
+
 // Update company specific drinkbox
 Route::post('drinkboxes/save', 'DrinkBoxController@store');
 Route::post('drinkbox/update', 'DrinkBoxController@update');
@@ -149,6 +153,10 @@ Route::post('drinkbox/add-product', 'DrinkBoxController@addProductToDrinkbox');
 // Route::put('drinkbox/destroy/{id}', 'DrinkBoxController@destroy'); // Don't think I'm using this, going to replace it anyway.
 Route::put('drinkbox/destroy/{id}', 'DrinkBoxController@destroyItem');
 Route::put('drinkbox/destroy-box/{id}', 'DrinkBoxController@destroyBox');
+// Update company specific drinkbox archive
+Route::put('archived-drinkbox/destroy/{id}', 'ArchivedDrinkBoxController@destroyItem');
+Route::put('archived-drinkbox/destroy-box/{id}', 'ArchivedDrinkBoxController@destroyBox');
+
 // Update company specific otherbox
 Route::post('otherboxes/save', 'OtherBoxController@store');
 Route::post('otherbox/update', 'OtherBoxController@update');
@@ -157,6 +165,9 @@ Route::post('otherbox/add-product', 'OtherBoxController@addProductToOtherbox');
 // Route::put('otherbox/destroy/{id}', 'OtherBoxController@destroy'); // Don't think I'm using this, going to replace it anyway.
 Route::put('otherbox/destroy/{id}', 'OtherBoxController@destroyItem');
 Route::put('otherbox/destroy-box/{id}', 'OtherBoxController@destroyBox');
+// Update company specific otherbox archive
+Route::put('archived-otherbox/destroy/{id}', 'ArchivedOtherBoxController@destroyItem');
+Route::put('archived-otherbox/destroy-box/{id}', 'ArchivedOtherBoxController@destroyBox');
 
 Route::post('upload-snackbox-product-codes', 'SnackBoxController@upload_products_and_codes');
 Route::post('upload-snackbox-orders', 'SnackBoxController@upload_snackbox_orders');

@@ -1,18 +1,8 @@
 <template lang="html">
     <div>
-        <!-- We only need to access these properties once per archived_snackbox -->
-        <!-- <h4> Snackbox Id: {{ archived_snackbox[0].archived_snackbox_id }} </h4>
-        <h4> Delivered By: {{ archived_snackbox[0].delivered_by }} </h4>
-        <h4> No. Of Boxes: {{ archived_snackbox[0].no_of_boxes }} </h4>
-        <h4> Type: {{ archived_snackbox[0].type }} </h4>
-        <h4> Delivery Day: {{ archived_snackbox[0].delivery_day }} </h4>
-        <h4> Frequency: {{ archived_snackbox[0].frequency }} </h4>
-        <h4 v-if="archived_snackbox[0].frequency === 'Monthly'"> Week In Month: {{ archived_snackbox[0].week_in_month }} </h4>
-        <h4 v-if="archived_snackbox[0].previous_delivery_week !== null"> Previous Delivery Date: {{ archived_snackbox[0].previous_delivery_week }} </h4>
-        <h4> Next Delivery Week: {{ archived_snackbox[0].next_delivery_week }} </h4> -->
-        
+
         <div id="edit-save-buttons">
-            <h4> {{ archived_snackbox[0].snackbox_id }} </h4>
+            <h4> {{ archived_snackbox[0].next_delivery_week }} </h4>
             <p> {{ archived_snackbox[0].delivery_day }} - {{ archived_snackbox[0].is_active }} </p>
             <!-- <p><b> {{ this.company }} </b></p> -->
             <b-button variant="primary" @click="showDetails()"> Details </b-button>
@@ -20,7 +10,7 @@
             <b-button v-if="editing" class="btn btn-success" @click="updateDetails(archived_snackbox[0])"> Save </b-button>
             <b-button variant="danger" @click="deleteSnackBox(archived_snackbox[0])"> Delete </b-button>
         </div>
-        
+
         <div class="archived_snackbox-details" v-if="details">
             <b-row id="top-details" :class="archived_snackbox[0].is_active">
                 <b-col>
@@ -69,7 +59,7 @@
                     </div>
                 </b-col>
             </b-row>
-            
+
             <b-row :class="archived_snackbox[0].is_active">
                 <b-col>
                     <label><b> Type </b></label>
@@ -99,8 +89,8 @@
                     </div>
                 </b-col>
             </b-row>
-            
-            <b-row id="bottom-details" :class="archived_snackbox[0].is_active">
+
+            <b-row class="bottom-details" :class="archived_snackbox[0].is_active">
                 <b-col v-if="archived_snackbox[0].frequency === 'Monthly'">
                     <label><b> Week In Month </b></label>
                     <div v-if="editing">
@@ -117,7 +107,7 @@
                     </div>
                 </b-col>
                 <b-col>
-                    <label><b> Next Delivery Week </b></label>
+                    <label><b> Week Delivered </b></label>
                     <div v-if="editing">
                         <b-form-input v-model="archived_snackbox[0].next_delivery_week" type="date"></b-form-input>
                     </div>
@@ -125,8 +115,12 @@
                         <p> {{ archived_snackbox[0].next_delivery_week }} </p>
                     </div>
                 </b-col>
+                <b-col>
+                    <label><b> Last Invoiced At </b></label>
+                    <p> {{ archived_snackbox[0].invoiced_at }} </p>
+                </b-col>
             </b-row>
-            
+
             <h4> Order Breakdown </h4>
             <b-button variant="primary" @click="addProduct()"> Add a Product </b-button>
             <div v-if="add_product">
@@ -192,19 +186,19 @@
                     <!-- A place holder column to allow room for the edit/remove buttons on each item -->
                 </b-col>
             </b-row>
-            
-            <!-- Now lets loop through the products contained in the box, 
+
+            <!-- Now lets loop through the products contained in the box,
             I might need to put these in their own component to have them editable as their own instance.
-        
+
             On edit I also need to change the input somehow into (potentially) a filterable searchbar so a new product can be selected
-            although I still need to consider some other options on how best to go about this 
-        
-            Actually I think a better idea is just to allow the user to delete a product or, 
+            although I still need to consider some other options on how best to go about this
+
+            Actually I think a better idea is just to allow the user to delete a product or,
             though a button revealable section, select a new product(s) and attach it to the current archived_snackbox_id + details.
             This will need refreshing to update, so holding them in the store might be a good option -->
-            
+
             <archived-snackbox-item id="archived_snackbox-products" v-for="archived_snackbox_item in archived_snackbox" v-if="archived_snackbox_item.product_id !== 0" :archived_snackbox_item="archived_snackbox_item" :key="archived_snackbox_item.id" @refresh-data="refreshData($event)"></archived-snackbox-item>
-            
+
              <h3 class="border-top"> Current Total: £{{ archived_snackbox_total }} </h3> <!-- This needs some work to generate an accurate and useful total, it's on my todo list but not a priority right now. -->
         </div>
     </div>
@@ -217,6 +211,10 @@
     .border-top {
         border-top: 2px solid black;
         padding-top: 20px;
+    }
+    .bottom-details {
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
     }
 </style>
 
@@ -241,7 +239,7 @@ export default {
             return ( Number.isNaN(stock_level) ? '' : stock_level)
         },
         archived_snackbox_total() {
-            
+
             let $archived_snackbox_total = 0
 
             // This function checks each entry in the current archived_snackbox list and creates a running total (a) of the unit price (b[cost]) multiplied by the quantity (b[quantity]).
@@ -260,11 +258,11 @@ export default {
                     }
                 }, 0);
             };
-            
+
             // Now we use the function by passing in the archived_snackbox array, and the two properties we need to multiply - saving it as the current total cost.
             // First a quick check, on whether we need to tally up case prices for wholesale, or unit prices for regular archived_snackboxes.
             (this.archived_snackbox[0].type === 'wholesale') ? $archived_snackbox_total = sum(this.archived_snackbox, 'case_price', 'quantity') : $archived_snackbox_total = sum(this.archived_snackbox, 'unit_price', 'quantity');
-                
+
             return $archived_snackbox_total;
         }
     },
@@ -280,7 +278,7 @@ export default {
             }
         },
         saveProductToBox(archived_snackbox) {
-            axios.post('api/archived_snackbox/add-product', {
+            axios.post('api/archived-snackbox/add-product', {
                 product: {
                     id: this.$store.state.selectedProduct.id,
                     code: this.$store.state.selectedProduct.code,
@@ -289,8 +287,8 @@ export default {
                     unit_price: this.$store.state.selectedProduct.unit_price,
                     case_price: this.$store.state.selectedProduct.case_price,
                 },
-                archived_snackbox_details: archived_snackbox, 
-                    
+                archived_snackbox_details: archived_snackbox,
+
             }).then ((response) => {
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?
                 this.$emit('refresh-data', {company_details_id: archived_snackbox.company_details_id})
@@ -315,7 +313,7 @@ export default {
             }
         },
         updateDetails(archived_snackbox) {
-            axios.post('api/archived_snackbox/details', {
+            axios.post('api/archived-snackbox/details', {
                 archived_snackbox_details: archived_snackbox,
             }).then (response => {
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?
@@ -324,8 +322,9 @@ export default {
         },
         deleteSnackBox(archived_snackbox) {
             let self = this;
-            axios.put('api/archived_snackbox/destroy-box/' + archived_snackbox.archived_snackbox_id, { 
-                archived_snackbox_id: archived_snackbox.archived_snackbox_id,
+            axios.put('api/archived-snackbox/destroy-box/' + archived_snackbox.snackbox_id, {
+                archived_snackbox_id: archived_snackbox.snackbox_id,
+                archived_snackbox_delivery_date: archived_snackbox.next_delivery_week,
             }).then ( (response) => {
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?
                 console.log(response);

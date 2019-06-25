@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class MilkBoxArchive extends Model
 {
-    //
     protected $primaryKey = 'milkbox_id';
+    public $incrementing = false;
     
     protected $fillable = [
         'is_active',

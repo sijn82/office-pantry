@@ -150,11 +150,15 @@ Route::group(['middleware' => 'web'], function () {
         Route::get('export-monthly-special-apc-weekly', 'MonthlySpecialController@download_monthly_special_apc_weekly');
 
     //----- End of Finally, hopefully, maybe? Mystery Special Items -----//
-    
+
     //----- Run the empty and archive snackboxes -----//
-    
+
         // Strip out orders from snackboxes, archive previous contents.
         Route::get('snackboxes/archive-and-empty', 'SnackBoxController@archiveAndEmptySnackBoxes');
+        // Same for drinks
+        Route::get('drinkboxes/archive-and-empty', 'DrinkBoxController@archiveAndEmptyDrinkBoxes');
+        // And otherbox
+        Route::get('otherboxes/archive-and-empty', 'OtherBoxController@archiveAndEmptyOtherBoxes');
     
     //----- End of Run the empty and archive snackboxes -----//
 });

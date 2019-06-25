@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class DrinkBoxArchive extends Model
 {
-    protected $primaryKey = 'drinkbox_id';
+    // protected $primaryKey = 'drinkbox_id';
+    // public $incrementing = false;
     
     protected $fillable = [
         

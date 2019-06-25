@@ -6,8 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class OtherBoxArchive extends Model
 {
+    // See snackbox archive for why this has been commented out.
     
-    protected $primaryKey = 'otherbox_id';
+    // protected $primaryKey = 'otherbox_id';
+    // public $incrementing = false;
     
     protected $fillable = [
         

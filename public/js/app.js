@@ -37882,7 +37882,7 @@ var OBSERVER_CONFIG = {
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(80);
-module.exports = __webpack_require__(560);
+module.exports = __webpack_require__(590);
 
 
 /***/ }),
@@ -37990,35 +37990,44 @@ Vue.component('drinkbox-item', __webpack_require__(425));
 Vue.component('drinkbox', __webpack_require__(430));
 Vue.component('drink-orders-admin', __webpack_require__(435));
 Vue.component('add-new-drinkbox', __webpack_require__(440));
+// Drinkbox Archive Related
+Vue.component('archived-drinkbox-item', __webpack_require__(445));
+Vue.component('archived-drinkbox', __webpack_require__(450));
+Vue.component('archived-drink-orders-admin', __webpack_require__(455));
 // Otherbox Related
-Vue.component('otherbox-item', __webpack_require__(445));
-Vue.component('otherbox', __webpack_require__(450));
-Vue.component('other-orders-admin', __webpack_require__(455));
-Vue.component('add-new-otherbox', __webpack_require__(460));
+Vue.component('otherbox-item', __webpack_require__(460));
+Vue.component('otherbox', __webpack_require__(465));
+Vue.component('other-orders-admin', __webpack_require__(470));
+Vue.component('add-new-otherbox', __webpack_require__(475));
+// Otherbox Archive related
+Vue.component('archived-otherbox-item', __webpack_require__(480));
+Vue.component('archived-otherbox', __webpack_require__(485));
+Vue.component('archived-other-orders-admin', __webpack_require__(490));
+
 // Product Related
-Vue.component('product', __webpack_require__(465));
-Vue.component('products-list', __webpack_require__(470));
-Vue.component('add-new-product', __webpack_require__(475));
-Vue.component('select-product', __webpack_require__(480));
+Vue.component('product', __webpack_require__(495));
+Vue.component('products-list', __webpack_require__(500));
+Vue.component('add-new-product', __webpack_require__(505));
+Vue.component('select-product', __webpack_require__(510));
 // Office Pantry Products Related
-Vue.component('office-pantry-product-list', __webpack_require__(485));
-Vue.component('office-pantry-product', __webpack_require__(490));
+Vue.component('office-pantry-product-list', __webpack_require__(515));
+Vue.component('office-pantry-product', __webpack_require__(520));
 // Preference & Allergy Related
-Vue.component('preference', __webpack_require__(495));
-Vue.component('preferences', __webpack_require__(500));
-Vue.component('preferences-admin', __webpack_require__(505));
-Vue.component('add-new-preference', __webpack_require__(510));
-Vue.component('allergy', __webpack_require__(515));
-Vue.component('additional-info', __webpack_require__(520));
+Vue.component('preference', __webpack_require__(525));
+Vue.component('preferences', __webpack_require__(530));
+Vue.component('preferences-admin', __webpack_require__(535));
+Vue.component('add-new-preference', __webpack_require__(540));
+Vue.component('allergy', __webpack_require__(545));
+Vue.component('additional-info', __webpack_require__(550));
 // Company Related
-Vue.component('add-new-company', __webpack_require__(525));
-Vue.component('company-details-admin', __webpack_require__(530));
-Vue.component('search-companies', __webpack_require__(535));
-Vue.component('select-company', __webpack_require__(540));
+Vue.component('add-new-company', __webpack_require__(555));
+Vue.component('company-details-admin', __webpack_require__(560));
+Vue.component('search-companies', __webpack_require__(565));
+Vue.component('select-company', __webpack_require__(570));
 // System Related
-Vue.component('exporting', __webpack_require__(545));
-Vue.component('invoice-options', __webpack_require__(550));
-Vue.component('cron-list', __webpack_require__(555));
+Vue.component('exporting', __webpack_require__(575));
+Vue.component('invoice-options', __webpack_require__(580));
+Vue.component('cron-list', __webpack_require__(585));
 
 // This works which is great but I should move this somewhere else, maybe somewhere I can add further directives and their associated functions?
 function debounce(fn) {
@@ -94441,7 +94450,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "\n.margin-top-10[data-v-fcfe1c3c] {\n  margin-top: 10px;\n}\n.border-top[data-v-fcfe1c3c] {\n  border-top: 2px solid black;\n  padding-top: 20px;\n}\n", ""]);
+exports.push([module.i, "\n.margin-top-10[data-v-fcfe1c3c] {\n  margin-top: 10px;\n}\n.border-top[data-v-fcfe1c3c] {\n  border-top: 2px solid black;\n  padding-top: 20px;\n}\n.bottom-details[data-v-fcfe1c3c] {\n  border-bottom-left-radius: 10px;\n  border-bottom-right-radius: 10px;\n}\n", ""]);
 
 // exports
 
@@ -94452,8 +94461,6 @@ exports.push([module.i, "\n.margin-top-10[data-v-fcfe1c3c] {\n  margin-top: 10px
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
 //
 //
 //
@@ -94737,7 +94744,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         saveProductToBox: function saveProductToBox(archived_snackbox) {
             var _this = this;
 
-            axios.post('api/archived_snackbox/add-product', {
+            axios.post('api/archived-snackbox/add-product', {
                 product: {
                     id: this.$store.state.selectedProduct.id,
                     code: this.$store.state.selectedProduct.code,
@@ -94774,7 +94781,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
         updateDetails: function updateDetails(archived_snackbox) {
-            axios.post('api/archived_snackbox/details', {
+            axios.post('api/archived-snackbox/details', {
                 archived_snackbox_details: archived_snackbox
             }).then(function (response) {
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?
@@ -94785,8 +94792,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         deleteSnackBox: function deleteSnackBox(archived_snackbox) {
             var self = this;
-            axios.put('api/archived_snackbox/destroy-box/' + archived_snackbox.archived_snackbox_id, {
-                archived_snackbox_id: archived_snackbox.archived_snackbox_id
+            axios.put('api/archived-snackbox/destroy-box/' + archived_snackbox.snackbox_id, {
+                archived_snackbox_id: archived_snackbox.snackbox_id,
+                archived_snackbox_delivery_date: archived_snackbox.next_delivery_week
             }).then(function (response) {
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?
                 console.log(response);
@@ -94818,7 +94826,7 @@ var render = function() {
       [
         _c("h4", [
           _vm._v(
-            " " + _vm._s(_vm.archived_snackbox[0].archived_snackbox_id) + " "
+            " " + _vm._s(_vm.archived_snackbox[0].next_delivery_week) + " "
           )
         ]),
         _vm._v(" "),
@@ -95178,8 +95186,8 @@ var render = function() {
             _c(
               "b-row",
               {
-                class: _vm.archived_snackbox[0].is_active,
-                attrs: { id: "bottom-details" }
+                staticClass: "bottom-details",
+                class: _vm.archived_snackbox[0].is_active
               },
               [
                 _vm.archived_snackbox[0].frequency === "Monthly"
@@ -95243,7 +95251,7 @@ var render = function() {
                   : _vm._e(),
                 _vm._v(" "),
                 _c("b-col", [
-                  _c("label", [_c("b", [_vm._v(" Next Delivery Week ")])]),
+                  _c("label", [_c("b", [_vm._v(" Week Delivered ")])]),
                   _vm._v(" "),
                   _vm.editing
                     ? _c(
@@ -95279,6 +95287,16 @@ var render = function() {
                           )
                         ])
                       ])
+                ]),
+                _vm._v(" "),
+                _c("b-col", [
+                  _c("label", [_c("b", [_vm._v(" Last Invoiced At ")])]),
+                  _vm._v(" "),
+                  _c("p", [
+                    _vm._v(
+                      " " + _vm._s(_vm.archived_snackbox[0].invoiced_at) + " "
+                    )
+                  ])
                 ])
               ],
               1
@@ -95674,6 +95692,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['archived_snackboxes', 'company'],
@@ -95696,6 +95725,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         refreshData: function refreshData($event) {
             this.$emit('refresh-data', $event);
         }
+    },
+    mounted: function mounted() {
+        console.log('look below for achived snackboxes');
+        console.log(this.archived_snackboxes);
     }
 });
 
@@ -95710,26 +95743,42 @@ var render = function() {
   return _c("div", { attrs: { id: "archived_snackboxes" } }, [
     _c("h3", [_vm._v(" Archived Snack Boxes ")]),
     _vm._v(" "),
-    Object.keys(this.archived_snackboxes).length
+    !Array.isArray(this.archived_snackboxes)
       ? _c(
           "div",
-          _vm._l(this.archived_snackboxes, function(archived_snackbox, key) {
+          _vm._l(this.archived_snackboxes, function(
+            archived_snackbox_week,
+            key
+          ) {
             return _c(
-              "archived-snackbox",
-              {
-                key: key,
-                staticClass: "archived_snackbox",
-                attrs: {
-                  archived_snackbox: archived_snackbox,
-                  company: this.company
-                },
-                on: {
-                  "refresh-data": function($event) {
-                    _vm.refreshData($event)
-                  }
-                }
-              },
-              [_vm._v(" " + _vm._s(key) + " ")]
+              "div",
+              [
+                _c("h3", [_vm._v(" " + _vm._s(key) + " ")]),
+                _vm._v(" "),
+                _vm._l(archived_snackbox_week, function(
+                  archived_snackbox,
+                  key
+                ) {
+                  return _c(
+                    "archived-snackbox",
+                    {
+                      key: key,
+                      staticClass: "archived_snackbox",
+                      attrs: {
+                        archived_snackbox: archived_snackbox,
+                        company: this.company
+                      },
+                      on: {
+                        "refresh-data": function($event) {
+                          _vm.refreshData($event)
+                        }
+                      }
+                    },
+                    [_vm._v(" " + _vm._s(key) + "\n                ")]
+                  )
+                })
+              ],
+              2
             )
           })
         )
@@ -98020,6 +98069,1589 @@ var __vue_template_functional__ = false
 /* styles */
 var __vue_styles__ = injectStyle
 /* scopeId */
+var __vue_scopeId__ = "data-v-6d38ffd5"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/admin/drinks/ArchivedDrinkBoxItem.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-6d38ffd5", Component.options)
+  } else {
+    hotAPI.reload("data-v-6d38ffd5", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 446 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(447);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("37226b7f", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6d38ffd5\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/sass-loader/lib/loader.js!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ArchivedDrinkBoxItem.vue", function() {
+     var newContent = require("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6d38ffd5\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/sass-loader/lib/loader.js!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ArchivedDrinkBoxItem.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 447 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/***/ }),
+/* 448 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['archived_drinkbox_item'],
+    data: function data() {
+        return {
+            edit: false
+        };
+    },
+
+    methods: {
+        editor: function editor() {
+            if (this.edit === false) {
+                this.edit = true;
+            } else {
+                this.edit = false;
+            }
+        },
+        deleteDrinkBoxItem: function deleteDrinkBoxItem(archived_drinkbox_item) {
+            var _this = this;
+
+            axios.put('api/archived_drinkbox/destroy/' + archived_drinkbox_item.id, {
+                id: archived_drinkbox_item.id
+            }).then(function (response) {
+                _this.$emit('refresh-data', { company_details_id: archived_drinkbox_item.company_details_id });
+                //location.reload(true); // What am I doing with the store on this one?  Will I need this?
+                console.log(response);
+            }).catch(function (error) {
+                return console.log(error);
+            });
+        },
+        editQuantity: function editQuantity(archived_drinkbox_item) {
+            axios.post('api/archived_drinkbox/update', {
+                archived_drinkbox_item_id: archived_drinkbox_item.id,
+                archived_drinkbox_item_quantity: archived_drinkbox_item.quantity
+            }).then(function (response) {
+                //location.reload(true); // What am I doing with the store on this one?  Will I need this?
+                console.log(response);
+            }).catch(function (error) {
+                return console.log(error);
+            });
+        }
+    }
+});
+
+/***/ }),
+/* 449 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c(
+        "b-row",
+        {},
+        [
+          _c("b-col", [
+            _c("p", [
+              _vm._v(" " + _vm._s(_vm.archived_drinkbox_item.name) + " ")
+            ])
+          ]),
+          _vm._v(" "),
+          _c("b-col", [
+            _vm.edit
+              ? _c(
+                  "div",
+                  [
+                    _c("b-form-input", {
+                      attrs: { type: "number" },
+                      model: {
+                        value: _vm.archived_drinkbox_item.quantity,
+                        callback: function($$v) {
+                          _vm.$set(_vm.archived_drinkbox_item, "quantity", $$v)
+                        },
+                        expression: "archived_drinkbox_item.quantity"
+                      }
+                    })
+                  ],
+                  1
+                )
+              : _c("div", [
+                  _c("p", [
+                    _vm._v(
+                      " " + _vm._s(_vm.archived_drinkbox_item.quantity) + " "
+                    )
+                  ])
+                ])
+          ]),
+          _vm._v(" "),
+          _c("b-col", [
+            _c("p", [
+              _vm._v(" " + _vm._s(_vm.archived_drinkbox_item.unit_price) + " ")
+            ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "b-col",
+            [
+              _c(
+                "b-button",
+                {
+                  attrs: { size: "sm", variant: "warning" },
+                  on: {
+                    click: function($event) {
+                      _vm.editor()
+                    }
+                  }
+                },
+                [_vm._v(" Edit ")]
+              ),
+              _vm._v(" "),
+              _vm.edit
+                ? _c(
+                    "b-button",
+                    {
+                      attrs: { size: "sm", variant: "success" },
+                      on: {
+                        click: function($event) {
+                          _vm.editQuantity(_vm.archived_drinkbox_item)
+                        }
+                      }
+                    },
+                    [_vm._v(" Save ")]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c(
+                "b-button",
+                {
+                  attrs: { size: "sm", variant: "danger" },
+                  on: {
+                    click: function($event) {
+                      _vm.deleteDrinkBoxItem(_vm.archived_drinkbox_item)
+                    }
+                  }
+                },
+                [_vm._v(" Remove ")]
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-6d38ffd5", module.exports)
+  }
+}
+
+/***/ }),
+/* 450 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(451)
+}
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(453)
+/* template */
+var __vue_template__ = __webpack_require__(454)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-04203722"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/admin/drinks/ArchivedDrinkBox.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-04203722", Component.options)
+  } else {
+    hotAPI.reload("data-v-04203722", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 451 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(452);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("25d91dc6", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-04203722\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/sass-loader/lib/loader.js!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ArchivedDrinkBox.vue", function() {
+     var newContent = require("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-04203722\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/sass-loader/lib/loader.js!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ArchivedDrinkBox.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 452 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.margin-top-10[data-v-04203722] {\n  margin-top: 10px;\n}\n.border-top[data-v-04203722] {\n  border-top: 2px solid black;\n  padding-top: 20px;\n}\n.bottom-details[data-v-04203722] {\n  border-bottom-left-radius: 10px;\n  border-bottom-right-radius: 10px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 453 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['archived_drinkbox'],
+    data: function data() {
+        return {
+            add_product: false,
+            quantity: 0,
+            editing: false,
+            details: false,
+            type_options: ['Regular', 'Unique', { value: 'monthly-special', text: 'Monthly Special' }],
+            days_of_week: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+            frequency_options: ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'],
+            week_in_month_options: ['First', 'Second', 'Third', 'Forth', 'Last']
+        };
+    },
+
+    computed: {
+        drinkbox_total: function drinkbox_total() {
+
+            var $drinkbox_total = 0;
+
+            // This function checks each entry in the current snackbox list and creates a running total (a) of the unit price (b[cost]) multiplied by the quantity (b[quantity]).
+            var sum = function sum(drinkbox, cost, quantity) {
+                // console.log(snackbox);
+                return drinkbox.reduce(function (a, b) {
+                    if (b[cost] !== null) {
+                        // Then this is a regular entry, we just need to total it up
+                        return parseFloat(a) + parseFloat(b[cost]) * parseFloat(b[quantity]);
+                    } else {
+                        // Then chances are this is the initial row; where it was either saved without product data, or had it stripped out when archived.
+                        // Let's set the values to 0 so that the accumulator doesn't have a hissy fit about NaN.
+                        b[cost] = 0;
+                        b[quantity] = 0;
+                        return parseFloat(a) + parseFloat(b[cost]) * parseFloat(b[quantity]);
+                    }
+                }, 0);
+            };
+
+            // Now we use the function by passing in the snackbox array, and the two properties we need to multiply - saving it as the current total cost.
+            // First a quick check, on whether we need to tally up case prices for wholesale, or unit prices for regular snackboxes.
+            this.archived_drinkbox[0].type === 'wholesale' ? $drinkbox_total = sum(this.archived_drinkbox, 'case_price', 'quantity') : $drinkbox_total = sum(this.archived_drinkbox, 'unit_price', 'quantity');
+
+            return $drinkbox_total;
+        }
+    },
+    methods: {
+        refreshData: function refreshData($event) {
+            this.$emit('refresh-data', $event);
+        },
+        addProduct: function addProduct() {
+            if (this.add_product === false) {
+                this.add_product = true;
+            } else {
+                this.add_product = false;
+            }
+        },
+        saveProductToBox: function saveProductToBox(drinkbox) {
+            var _this = this;
+
+            axios.post('api/archived-drinkbox/add-product', {
+                product: {
+                    id: this.$store.state.selectedProduct.id,
+                    name: this.$store.state.selectedProduct.name,
+                    code: this.$store.state.selectedProduct.code,
+                    quantity: this.quantity,
+                    unit_price: this.$store.state.selectedProduct.unit_price
+                },
+                drinkbox_details: drinkbox
+
+            }).then(function (response) {
+                _this.$emit('refresh-data', { company_details_id: archived_drinkbox.company_details_id });
+                //location.reload(true); // What am I doing with the store on this one?  Will I need this?
+                console.log(response);
+            }).catch(function (error) {
+                return console.log(error);
+            });
+        },
+        enableEdit: function enableEdit() {
+            if (this.editing == false) {
+                this.editing = true;
+                this.details = true;
+            } else {
+                this.editing = false;
+            }
+        },
+        showDetails: function showDetails() {
+            if (this.details == true) {
+                this.details = false;
+            } else {
+                this.details = true;
+            }
+        },
+        updateDetails: function updateDetails(archived_drinkbox) {
+            axios.post('api/archived-drinkbox/details', {
+                archived_drinkbox_details: archived_drinkbox
+            }).then(function (response) {
+                //location.reload(true); // What am I doing with the store on this one?  Will I need this?
+                console.log(response);
+            }).catch(function (error) {
+                return console.log(error);
+            });
+        },
+        deleteDrinkBox: function deleteDrinkBox(archived_drinkbox) {
+            var self = this;
+            axios.put('api/archived-drinkbox/destroy-box/' + archived_drinkbox.drinkbox_id, {
+                archived_drinkbox_id: archived_drinkbox.drinkbox_id,
+                archived_drinkbox_delivery_date: archived_drinkbox.next_delivery_week
+            }).then(function (response) {
+                //location.reload(true); // What am I doing with the store on this one?  Will I need this?
+                console.log(response);
+                console.log(drinkbox.company_details_id);
+                self.$emit('refresh-data', { company_details_id: archived_drinkbox.company_details_id });
+            }).catch(function (error) {
+                return console.log(error);
+            });
+        }
+    }
+});
+
+/***/ }),
+/* 454 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c(
+      "div",
+      { attrs: { id: "edit-save-buttons" } },
+      [
+        _c("h4", [
+          _vm._v(
+            " " + _vm._s(_vm.archived_drinkbox[0].next_delivery_week) + " "
+          )
+        ]),
+        _vm._v(" "),
+        _c("p", [
+          _vm._v(
+            " " +
+              _vm._s(_vm.archived_drinkbox[0].delivery_day) +
+              " - " +
+              _vm._s(_vm.archived_drinkbox[0].is_active) +
+              " "
+          )
+        ]),
+        _vm._v(" "),
+        _c(
+          "b-button",
+          {
+            attrs: { variant: "primary" },
+            on: {
+              click: function($event) {
+                _vm.showDetails()
+              }
+            }
+          },
+          [_vm._v(" Details ")]
+        ),
+        _vm._v(" "),
+        _c(
+          "b-button",
+          {
+            attrs: { variant: "warning" },
+            on: {
+              click: function($event) {
+                _vm.enableEdit()
+              }
+            }
+          },
+          [_vm._v(" Edit ")]
+        ),
+        _vm._v(" "),
+        _vm.editing
+          ? _c(
+              "b-button",
+              {
+                staticClass: "btn btn-success",
+                on: {
+                  click: function($event) {
+                    _vm.updateDetails(_vm.archived_drinkbox[0])
+                  }
+                }
+              },
+              [_vm._v(" Save ")]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _c(
+          "b-button",
+          {
+            attrs: { variant: "danger" },
+            on: {
+              click: function($event) {
+                _vm.deleteDrinkBox(_vm.archived_drinkbox[0])
+              }
+            }
+          },
+          [_vm._v(" Delete ")]
+        )
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _vm.details
+      ? _c(
+          "div",
+          { staticClass: "drinkbox-details" },
+          [
+            _c(
+              "b-row",
+              {
+                class: _vm.archived_drinkbox[0].is_active,
+                attrs: { id: "top-details" }
+              },
+              [
+                _c("b-col", [
+                  _c("label", [_c("b", [_vm._v(" Drinkbox Id ")])]),
+                  _vm._v(" "),
+                  _c("div", [
+                    _c("p", [
+                      _vm._v(
+                        " " + _vm._s(_vm.archived_drinkbox[0].drinkbox_id) + " "
+                      )
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("b-col", [
+                  _c("label", [_c("b", [_vm._v(" Drinkbox Status ")])]),
+                  _vm._v(" "),
+                  _vm.editing
+                    ? _c(
+                        "div",
+                        [
+                          _c(
+                            "b-form-select",
+                            {
+                              model: {
+                                value: _vm.archived_drinkbox[0].is_active,
+                                callback: function($$v) {
+                                  _vm.$set(
+                                    _vm.archived_drinkbox[0],
+                                    "is_active",
+                                    $$v
+                                  )
+                                },
+                                expression: "archived_drinkbox[0].is_active"
+                              }
+                            },
+                            [
+                              _c("option", { attrs: { value: "Active" } }, [
+                                _vm._v(" Active ")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Inactive" } }, [
+                                _vm._v(" Inactive ")
+                              ])
+                            ]
+                          )
+                        ],
+                        1
+                      )
+                    : _c("div", [
+                        _c("p", [
+                          _vm._v(
+                            " " +
+                              _vm._s(_vm.archived_drinkbox[0].is_active) +
+                              " "
+                          )
+                        ])
+                      ])
+                ]),
+                _vm._v(" "),
+                _c("b-col", [
+                  _c("label", [_c("b", [_vm._v(" Delivered By ")])]),
+                  _vm._v(" "),
+                  _vm.editing
+                    ? _c(
+                        "div",
+                        [
+                          _c(
+                            "b-form-select",
+                            {
+                              attrs: { size: "sm" },
+                              model: {
+                                value: _vm.archived_drinkbox[0].delivered_by_id,
+                                callback: function($$v) {
+                                  _vm.$set(
+                                    _vm.archived_drinkbox[0],
+                                    "delivered_by_id",
+                                    $$v
+                                  )
+                                },
+                                expression:
+                                  "archived_drinkbox[0].delivered_by_id"
+                              }
+                            },
+                            _vm._l(
+                              _vm.$store.state.fruit_partners_list,
+                              function(fruit_partner) {
+                                return _c(
+                                  "option",
+                                  { domProps: { value: fruit_partner.id } },
+                                  [
+                                    _vm._v(
+                                      " " + _vm._s(fruit_partner.name) + " "
+                                    )
+                                  ]
+                                )
+                              }
+                            )
+                          )
+                        ],
+                        1
+                      )
+                    : _c("div", [
+                        _c("p", [
+                          _vm._v(
+                            " " +
+                              _vm._s(
+                                _vm.archived_drinkbox[0].fruit_partner_name
+                              ) +
+                              " "
+                          )
+                        ])
+                      ])
+                ]),
+                _vm._v(" "),
+                _c("b-col", [
+                  _c("label", [_c("b", [_vm._v(" Type ")])]),
+                  _vm._v(" "),
+                  _vm.editing
+                    ? _c(
+                        "div",
+                        [
+                          _c("b-form-select", {
+                            attrs: { options: _vm.type_options },
+                            model: {
+                              value: _vm.archived_drinkbox[0].type,
+                              callback: function($$v) {
+                                _vm.$set(_vm.archived_drinkbox[0], "type", $$v)
+                              },
+                              expression: "archived_drinkbox[0].type"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    : _c("div", [
+                        _c("p", [
+                          _vm._v(
+                            " " + _vm._s(_vm.archived_drinkbox[0].type) + " "
+                          )
+                        ])
+                      ])
+                ])
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "b-row",
+              { class: _vm.archived_drinkbox[0].is_active },
+              [
+                _c("b-col", [
+                  _c("label", [_c("b", [_vm._v(" Delivery Day ")])]),
+                  _vm._v(" "),
+                  _vm.editing
+                    ? _c(
+                        "div",
+                        [
+                          _c("b-form-select", {
+                            attrs: { options: _vm.days_of_week },
+                            model: {
+                              value: _vm.archived_drinkbox[0].delivery_day,
+                              callback: function($$v) {
+                                _vm.$set(
+                                  _vm.archived_drinkbox[0],
+                                  "delivery_day",
+                                  $$v
+                                )
+                              },
+                              expression: "archived_drinkbox[0].delivery_day"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    : _c("div", [
+                        _c("p", [
+                          _vm._v(
+                            " " +
+                              _vm._s(_vm.archived_drinkbox[0].delivery_day) +
+                              " "
+                          )
+                        ])
+                      ])
+                ]),
+                _vm._v(" "),
+                _c("b-col", [
+                  _c("label", [_c("b", [_vm._v(" Frequency ")])]),
+                  _vm._v(" "),
+                  _vm.editing
+                    ? _c(
+                        "div",
+                        [
+                          _c("b-form-select", {
+                            attrs: { options: _vm.frequency_options },
+                            model: {
+                              value: _vm.archived_drinkbox[0].frequency,
+                              callback: function($$v) {
+                                _vm.$set(
+                                  _vm.archived_drinkbox[0],
+                                  "frequency",
+                                  $$v
+                                )
+                              },
+                              expression: "archived_drinkbox[0].frequency"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    : _c("div", [
+                        _c("p", [
+                          _vm._v(
+                            " " +
+                              _vm._s(_vm.archived_drinkbox[0].frequency) +
+                              " "
+                          )
+                        ])
+                      ])
+                ]),
+                _vm._v(" "),
+                _vm.archived_drinkbox[0].frequency === "Monthly"
+                  ? _c("b-col", [
+                      _c("label", [_c("b", [_vm._v(" Week In Month ")])]),
+                      _vm._v(" "),
+                      _vm.editing
+                        ? _c(
+                            "div",
+                            [
+                              _c("b-form-select", {
+                                attrs: { options: _vm.week_in_month_options },
+                                model: {
+                                  value: _vm.archived_drinkbox[0].week_in_month,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.archived_drinkbox[0],
+                                      "week_in_month",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "archived_drinkbox[0].week_in_month"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        : _c("div", [
+                            _c("p", [
+                              _vm._v(
+                                " " +
+                                  _vm._s(
+                                    _vm.archived_drinkbox[0].week_in_month
+                                  ) +
+                                  " "
+                              )
+                            ])
+                          ])
+                    ])
+                  : _vm._e()
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "b-row",
+              {
+                staticClass: "bottom-details",
+                class: _vm.archived_drinkbox[0].is_active
+              },
+              [
+                _vm.archived_drinkbox[0].previous_delivery_week !== null
+                  ? _c("b-col", [
+                      _c("label", [
+                        _c("b", [_vm._v(" Previous Delivery Date ")])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", [
+                        _c("p", [
+                          _vm._v(
+                            " " +
+                              _vm._s(
+                                _vm.archived_drinkbox[0].previous_delivery_week
+                              ) +
+                              " "
+                          )
+                        ])
+                      ])
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _c("b-col", [
+                  _c("label", [_c("b", [_vm._v(" Week Delivered ")])]),
+                  _vm._v(" "),
+                  _vm.editing
+                    ? _c(
+                        "div",
+                        [
+                          _c("b-form-input", {
+                            attrs: { type: "date" },
+                            model: {
+                              value:
+                                _vm.archived_drinkbox[0].next_delivery_week,
+                              callback: function($$v) {
+                                _vm.$set(
+                                  _vm.archived_drinkbox[0],
+                                  "next_delivery_week",
+                                  $$v
+                                )
+                              },
+                              expression:
+                                "archived_drinkbox[0].next_delivery_week"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    : _c("div", [
+                        _c("p", [
+                          _vm._v(
+                            " " +
+                              _vm._s(
+                                _vm.archived_drinkbox[0].next_delivery_week
+                              ) +
+                              " "
+                          )
+                        ])
+                      ])
+                ]),
+                _vm._v(" "),
+                _c("b-col", [
+                  _c("label", [_c("b", [_vm._v(" Last Invoiced At ")])]),
+                  _vm._v(" "),
+                  _c("p", [
+                    _vm._v(
+                      " " + _vm._s(_vm.archived_drinkbox[0].invoiced_at) + " "
+                    )
+                  ])
+                ])
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c("h4", [_vm._v(" Order Breakdown ")]),
+            _vm._v(" "),
+            _c(
+              "b-button",
+              {
+                attrs: { variant: "primary" },
+                on: {
+                  click: function($event) {
+                    _vm.addProduct()
+                  }
+                }
+              },
+              [_vm._v(" Add a Product ")]
+            ),
+            _vm._v(" "),
+            _vm.add_product
+              ? _c(
+                  "div",
+                  [
+                    _c(
+                      "b-row",
+                      { staticClass: "margin-top-10" },
+                      [_c("select-product")],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "b-row",
+                      { staticClass: "margin-top-10" },
+                      [
+                        _c("b-col", [_c("h4", [_vm._v(" Product Name ")])]),
+                        _vm._v(" "),
+                        _c("b-col", [_c("h4", [_vm._v(" Stock Level ")])]),
+                        _vm._v(" "),
+                        _c("b-col", [
+                          _c("h4", [_vm._v(" Shortest Stock Date ")])
+                        ]),
+                        _vm._v(" "),
+                        _c("b-col", [_c("h4", [_vm._v(" Case Price ")])]),
+                        _vm._v(" "),
+                        _c("b-col", [_c("h4", [_vm._v(" Quantity ")])]),
+                        _vm._v(" "),
+                        _c("b-col")
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "b-row",
+                      [
+                        _c("b-col", [
+                          _c("p", [
+                            _vm._v(
+                              " " +
+                                _vm._s(this.$store.state.selectedProduct.name) +
+                                " "
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("b-col", [
+                          _c("p", [
+                            _vm._v(
+                              " " +
+                                _vm._s(
+                                  this.$store.state.selectedProduct.stock_level
+                                ) +
+                                " "
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("b-col", [
+                          _c("p", [
+                            _vm._v(
+                              " " +
+                                _vm._s(
+                                  this.$store.state.selectedProduct
+                                    .shortest_stock_date
+                                ) +
+                                " "
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("b-col", [
+                          _c("p", [
+                            _vm._v(
+                              " " +
+                                _vm._s(
+                                  this.$store.state.selectedProduct.unit_price
+                                ) +
+                                " "
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "b-col",
+                          [
+                            _c("b-form-input", {
+                              attrs: { type: "number" },
+                              model: {
+                                value: _vm.quantity,
+                                callback: function($$v) {
+                                  _vm.quantity = $$v
+                                },
+                                expression: "quantity"
+                              }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "b-col",
+                          [
+                            _c(
+                              "b-button",
+                              {
+                                attrs: { variant: "success" },
+                                on: {
+                                  click: function($event) {
+                                    _vm.saveProductToBox(
+                                      _vm.archived_drinkbox[0]
+                                    )
+                                  }
+                                }
+                              },
+                              [_vm._v(" Add ")]
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _c(
+              "b-row",
+              { staticClass: "margin-top-10" },
+              [
+                _c("b-col", [_c("p", [_c("b", [_vm._v(" Product Name ")])])]),
+                _vm._v(" "),
+                _c("b-col", [
+                  _c("p", [_c("b", [_vm._v(" Quantity In Box ")])])
+                ]),
+                _vm._v(" "),
+                _c("b-col", [_c("p", [_c("b", [_vm._v(" Case Price ")])])]),
+                _vm._v(" "),
+                _c("b-col")
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _vm._l(_vm.archived_drinkbox, function(archived_drinkbox_item) {
+              return archived_drinkbox_item.product_id !== 0
+                ? _c("archived-drinkbox-item", {
+                    key: archived_drinkbox_item.id,
+                    attrs: {
+                      id: "drinkbox-products",
+                      archived_drinkbox_item: archived_drinkbox_item
+                    },
+                    on: {
+                      "refresh-data": function($event) {
+                        _vm.refreshData($event)
+                      }
+                    }
+                  })
+                : _vm._e()
+            }),
+            _vm._v(" "),
+            _c("h3", { staticClass: "border-top" }, [
+              _vm._v(" Current Total: £" + _vm._s(_vm.drinkbox_total) + " ")
+            ])
+          ],
+          2
+        )
+      : _vm._e()
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-04203722", module.exports)
+  }
+}
+
+/***/ }),
+/* 455 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(456)
+}
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(458)
+/* template */
+var __vue_template__ = __webpack_require__(459)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-4144da41"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/admin/drinks/ArchivedDrinkOrdersAdmin.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-4144da41", Component.options)
+  } else {
+    hotAPI.reload("data-v-4144da41", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 456 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(457);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("0d676c4c", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4144da41\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/sass-loader/lib/loader.js!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ArchivedDrinkOrdersAdmin.vue", function() {
+     var newContent = require("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4144da41\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/sass-loader/lib/loader.js!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ArchivedDrinkOrdersAdmin.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 457 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n#drinkboxes[data-v-4144da41] {\n  margin-top: 20px;\n  text-align: center;\n}\n#drinkboxes[data-v-4144da41]::before {\n  content: \"\";\n  /* This is necessary for the pseudo element to work. */\n  display: block;\n  /* This will put the pseudo element on its own line. */\n  margin: 0 auto;\n  /* This will center the border. */\n  width: 70%;\n  /* Change this to whatever width you want. */\n  padding-bottom: 20px;\n  /* This creates some space between the element and the border. */\n  border-top: 1px solid #636b6f;\n  /* This creates the border. Replace black with whatever color you want. */\n}\n.drinkbox[data-v-4144da41] {\n  padding-top: 20px;\n  padding-left: 0;\n}\n.drinkbox li[data-v-4144da41] {\n    list-style: none;\n}\n.drinkbox[data-v-4144da41]:after {\n  content: \"\";\n  /* This is necessary for the pseudo element to work. */\n  display: block;\n  /* This will put the pseudo element on its own line. */\n  margin: 0 auto;\n  /* This will center the border. */\n  width: 70%;\n  /* Change this to whatever width you want. */\n  padding-top: 20px;\n  /* This creates some space between the element and the border. */\n  border-bottom: 1px solid #636b6f;\n  /* This creates the border. Replace black with whatever color you want. */\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 458 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['archived_drinkboxes', 'company'],
+    data: function data() {
+        return {
+            addnew: false
+        };
+    },
+
+    methods: {
+        addNew: function addNew() {
+            if (this.addnew == false) {
+                this.addnew = true;
+            } else {
+                this.addnew = false;
+            }
+        },
+        refreshData: function refreshData($event) {
+            this.$emit('refresh-data', $event);
+        }
+    },
+    mounted: function mounted() {
+        console.log(this.archived_drinkboxes);
+    }
+});
+
+/***/ }),
+/* 459 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { attrs: { id: "drinkboxes" } }, [
+    _c("h3", [_vm._v(" Archived Drink Boxes ")]),
+    _vm._v(" "),
+    !Array.isArray(this.archived_drinkboxes)
+      ? _c(
+          "div",
+          _vm._l(this.archived_drinkboxes, function(
+            archived_drinkbox_week,
+            key
+          ) {
+            return _c(
+              "div",
+              [
+                _c("h3", [_vm._v(" " + _vm._s(key) + " ")]),
+                _vm._v(" "),
+                _vm._l(archived_drinkbox_week, function(
+                  archived_drinkbox,
+                  key
+                ) {
+                  return _c(
+                    "archived-drinkbox",
+                    {
+                      key: key,
+                      staticClass: "drinkbox",
+                      attrs: {
+                        archived_drinkbox: archived_drinkbox,
+                        company: this.company
+                      },
+                      on: {
+                        "refresh-data": function($event) {
+                          _vm.refreshData($event)
+                        }
+                      }
+                    },
+                    [_vm._v(" " + _vm._s(key) + " \n            ")]
+                  )
+                })
+              ],
+              2
+            )
+          })
+        )
+      : _c("div", [_vm._m(0)])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("ul", [
+      _c("li", { staticStyle: { "list-style": "none" } }, [
+        _vm._v("  ~ Nothing To See Here ~ ")
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-4144da41", module.exports)
+  }
+}
+
+/***/ }),
+/* 460 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(461)
+}
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(463)
+/* template */
+var __vue_template__ = __webpack_require__(464)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
 var __vue_scopeId__ = "data-v-d4f93338"
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
@@ -98053,13 +99685,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 446 */
+/* 461 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(447);
+var content = __webpack_require__(462);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -98079,7 +99711,7 @@ if(false) {
 }
 
 /***/ }),
-/* 447 */
+/* 462 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(false);
@@ -98093,7 +99725,7 @@ exports.push([module.i, "", ""]);
 
 
 /***/ }),
-/* 448 */
+/* 463 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -98173,7 +99805,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 449 */
+/* 464 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -98284,19 +99916,19 @@ if (false) {
 }
 
 /***/ }),
-/* 450 */
+/* 465 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(451)
+  __webpack_require__(466)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(453)
+var __vue_script__ = __webpack_require__(468)
 /* template */
-var __vue_template__ = __webpack_require__(454)
+var __vue_template__ = __webpack_require__(469)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -98335,13 +99967,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 451 */
+/* 466 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(452);
+var content = __webpack_require__(467);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -98361,7 +99993,7 @@ if(false) {
 }
 
 /***/ }),
-/* 452 */
+/* 467 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(false);
@@ -98369,17 +100001,21 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "\n.margin-top-10[data-v-47eb859e] {\n  margin-top: 10px;\n}\n.border-top[data-v-47eb859e] {\n  border-top: 2px solid black;\n  padding-top: 20px;\n}\n", ""]);
+exports.push([module.i, "\n.margin-top-10[data-v-47eb859e] {\n  margin-top: 10px;\n}\n.border-top[data-v-47eb859e] {\n  border-top: 2px solid black;\n  padding-top: 20px;\n}\n.bottom-details[data-v-47eb859e] {\n  border-bottom-left-radius: 10px;\n  border-bottom-right-radius: 10px;\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 453 */
+/* 468 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
 //
 //
 //
@@ -98679,7 +100315,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 454 */
+/* 469 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -98941,8 +100577,8 @@ var render = function() {
             _c(
               "b-row",
               {
-                class: _vm.otherbox[0].is_active,
-                attrs: { id: "bottom-details" }
+                staticClass: "bottom-details",
+                class: _vm.otherbox[0].is_active
               },
               [
                 _vm.otherbox[0].frequency === "Monthly"
@@ -99232,19 +100868,19 @@ if (false) {
 }
 
 /***/ }),
-/* 455 */
+/* 470 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(456)
+  __webpack_require__(471)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(458)
+var __vue_script__ = __webpack_require__(473)
 /* template */
-var __vue_template__ = __webpack_require__(459)
+var __vue_template__ = __webpack_require__(474)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -99283,13 +100919,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 456 */
+/* 471 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(457);
+var content = __webpack_require__(472);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -99309,7 +100945,7 @@ if(false) {
 }
 
 /***/ }),
-/* 457 */
+/* 472 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(false);
@@ -99323,7 +100959,7 @@ exports.push([module.i, "\n#otherboxes[data-v-4c693d60] {\n  margin-top: 20px;\n
 
 
 /***/ }),
-/* 458 */
+/* 473 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -99407,7 +101043,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 459 */
+/* 474 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -99511,19 +101147,19 @@ if (false) {
 }
 
 /***/ }),
-/* 460 */
+/* 475 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(461)
+  __webpack_require__(476)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(463)
+var __vue_script__ = __webpack_require__(478)
 /* template */
-var __vue_template__ = __webpack_require__(464)
+var __vue_template__ = __webpack_require__(479)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -99562,13 +101198,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 461 */
+/* 476 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(462);
+var content = __webpack_require__(477);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -99588,7 +101224,7 @@ if(false) {
 }
 
 /***/ }),
-/* 462 */
+/* 477 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(false);
@@ -99602,7 +101238,7 @@ exports.push([module.i, "\n#company-select p[data-v-354f7d90] {\n  font-weight: 
 
 
 /***/ }),
-/* 463 */
+/* 478 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -99815,7 +101451,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 464 */
+/* 479 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -100224,19 +101860,1563 @@ if (false) {
 }
 
 /***/ }),
-/* 465 */
+/* 480 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(466)
+  __webpack_require__(481)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(468)
+var __vue_script__ = __webpack_require__(483)
 /* template */
-var __vue_template__ = __webpack_require__(469)
+var __vue_template__ = __webpack_require__(484)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-3a1d8066"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/admin/other/ArchivedOtherBoxItem.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-3a1d8066", Component.options)
+  } else {
+    hotAPI.reload("data-v-3a1d8066", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 481 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(482);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("7f3ac439", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3a1d8066\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/sass-loader/lib/loader.js!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ArchivedOtherBoxItem.vue", function() {
+     var newContent = require("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3a1d8066\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/sass-loader/lib/loader.js!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ArchivedOtherBoxItem.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 482 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/***/ }),
+/* 483 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['archived_otherbox_item'],
+    data: function data() {
+        return {
+            edit: false
+        };
+    },
+
+    methods: {
+        editor: function editor() {
+            if (this.edit === false) {
+                this.edit = true;
+            } else {
+                this.edit = false;
+            }
+        },
+        deleteOtherBoxItem: function deleteOtherBoxItem(archived_otherbox_item) {
+            var _this = this;
+
+            axios.put('api/archived-otherbox/destroy/' + archived_otherbox_item.id, {
+                id: archived_otherbox_item.id
+            }).then(function (response) {
+                _this.$emit('refresh-data', { company_details_id: archived_otherbox_item.company_details_id });
+                //location.reload(true); // What am I doing with the store on this one?  Will I need this?
+                console.log(response);
+            }).catch(function (error) {
+                return console.log(error);
+            });
+        },
+        editQuantity: function editQuantity(otherbox_item) {
+            axios.post('api/archived-otherbox/update', {
+                otherbox_item_id: archived_otherbox_item.id,
+                otherbox_item_quantity: archived_otherbox_item.quantity
+            }).then(function (response) {
+                //location.reload(true); // What am I doing with the store on this one?  Will I need this?
+                console.log(response);
+            }).catch(function (error) {
+                return console.log(error);
+            });
+        }
+    }
+});
+
+/***/ }),
+/* 484 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c(
+        "b-row",
+        {},
+        [
+          _c("b-col", [
+            _c("p", [
+              _vm._v(" " + _vm._s(_vm.archived_otherbox_item.name) + " ")
+            ])
+          ]),
+          _vm._v(" "),
+          _c("b-col", [
+            _vm.edit
+              ? _c(
+                  "div",
+                  [
+                    _c("b-form-input", {
+                      attrs: { type: "number" },
+                      model: {
+                        value: _vm.archived_otherbox_item.quantity,
+                        callback: function($$v) {
+                          _vm.$set(_vm.archived_otherbox_item, "quantity", $$v)
+                        },
+                        expression: "archived_otherbox_item.quantity"
+                      }
+                    })
+                  ],
+                  1
+                )
+              : _c("div", [
+                  _c("p", [
+                    _vm._v(
+                      " " + _vm._s(_vm.archived_otherbox_item.quantity) + " "
+                    )
+                  ])
+                ])
+          ]),
+          _vm._v(" "),
+          _c("b-col", [
+            _c("p", [
+              _vm._v(" " + _vm._s(_vm.archived_otherbox_item.unit_price) + " ")
+            ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "b-col",
+            [
+              _c(
+                "b-button",
+                {
+                  attrs: { size: "sm", variant: "warning" },
+                  on: {
+                    click: function($event) {
+                      _vm.editor()
+                    }
+                  }
+                },
+                [_vm._v(" Edit ")]
+              ),
+              _vm._v(" "),
+              _vm.edit
+                ? _c(
+                    "b-button",
+                    {
+                      attrs: { size: "sm", variant: "success" },
+                      on: {
+                        click: function($event) {
+                          _vm.editQuantity(_vm.archived_otherbox_item)
+                        }
+                      }
+                    },
+                    [_vm._v(" Save ")]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c(
+                "b-button",
+                {
+                  attrs: { size: "sm", variant: "danger" },
+                  on: {
+                    click: function($event) {
+                      _vm.deleteOtherBoxItem(_vm.archived_otherbox_item)
+                    }
+                  }
+                },
+                [_vm._v(" Remove ")]
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-3a1d8066", module.exports)
+  }
+}
+
+/***/ }),
+/* 485 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(486)
+}
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(488)
+/* template */
+var __vue_template__ = __webpack_require__(489)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-ab94af9a"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/admin/other/ArchivedOtherBox.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-ab94af9a", Component.options)
+  } else {
+    hotAPI.reload("data-v-ab94af9a", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 486 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(487);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("984a8aba", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-ab94af9a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/sass-loader/lib/loader.js!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ArchivedOtherBox.vue", function() {
+     var newContent = require("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-ab94af9a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/sass-loader/lib/loader.js!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ArchivedOtherBox.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 487 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.margin-top-10[data-v-ab94af9a] {\n  margin-top: 10px;\n}\n.border-top[data-v-ab94af9a] {\n  border-top: 2px solid black;\n  padding-top: 20px;\n}\n.bottom-details[data-v-ab94af9a] {\n  border-bottom-left-radius: 10px;\n  border-bottom-right-radius: 10px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 488 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['archived_otherbox'],
+    data: function data() {
+        return {
+            add_product: false,
+            quantity: 0,
+            editing: false,
+            details: false,
+            days_of_week: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+            frequency_options: ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'],
+            week_in_month_options: ['First', 'Second', 'Third', 'Forth', 'Last']
+        };
+    },
+
+    computed: {
+        archived_otherbox_total: function archived_otherbox_total() {
+
+            var $otherbox_total = 0;
+
+            // This function checks each entry in the current snackbox list and creates a running total (a) of the unit price (b[cost]) multiplied by the quantity (b[quantity]).
+            var sum = function sum(otherbox, cost, quantity) {
+                // console.log(snackbox);
+                return otherbox.reduce(function (a, b) {
+                    if (b[cost] !== null) {
+                        // Then this is a regular entry, we just need to total it up
+                        return parseFloat(a) + parseFloat(b[cost]) * parseFloat(b[quantity]);
+                    } else {
+                        // Then chances are this is the initial row; where it was either saved without product data, or had it stripped out when archived.
+                        // Let's set the values to 0 so that the accumulator doesn't have a hissy fit about NaN.
+                        b[cost] = 0;
+                        b[quantity] = 0;
+                        return parseFloat(a) + parseFloat(b[cost]) * parseFloat(b[quantity]);
+                    }
+                }, 0);
+            };
+
+            $otherbox_total = sum(this.archived_otherbox, 'unit_price', 'quantity');
+
+            return $otherbox_total;
+        }
+    },
+    methods: {
+        refreshData: function refreshData($event) {
+            this.$emit('refresh-data', $event);
+        },
+        addProduct: function addProduct() {
+            if (this.add_product === false) {
+                this.add_product = true;
+            } else {
+                this.add_product = false;
+            }
+        },
+        saveProductToBox: function saveProductToBox(archived_otherbox) {
+            var _this = this;
+
+            axios.post('api/archived-otherbox/add-product', {
+                product: {
+                    id: this.$store.state.selectedProduct.id,
+                    name: this.$store.state.selectedProduct.name,
+                    code: this.$store.state.selectedProduct.code,
+                    quantity: this.quantity,
+                    unit_price: this.$store.state.selectedProduct.unit_price
+                },
+                archived_otherbox_details: archived_otherbox
+
+            }).then(function (response) {
+                _this.$emit('refresh-data', { company_details_id: archived_otherbox.company_details_id });
+                //location.reload(true); // What am I doing with the store on this one?  Will I need this?
+                console.log(response);
+            }).catch(function (error) {
+                return console.log(error);
+            });
+        },
+        enableEdit: function enableEdit() {
+            if (this.editing == false) {
+                this.editing = true;
+                this.details = true;
+            } else {
+                this.editing = false;
+            }
+        },
+        showDetails: function showDetails() {
+            if (this.details == true) {
+                this.details = false;
+            } else {
+                this.details = true;
+            }
+        },
+        updateDetails: function updateDetails(archived_otherbox) {
+            axios.post('api/archived-otherbox/details', {
+                archived_otherbox_details: archived_otherbox
+            }).then(function (response) {
+                //location.reload(true); // What am I doing with the store on this one?  Will I need this?
+                console.log(response);
+            }).catch(function (error) {
+                return console.log(error);
+            });
+        },
+        deleteOtherBox: function deleteOtherBox(archived_otherbox) {
+            var self = this;
+            axios.put('api/archived-otherbox/destroy-box/' + archived_otherbox.otherbox_id, {
+                archived_otherbox_id: archived_otherbox.otherbox_id
+            }).then(function (response) {
+                //location.reload(true); // What am I doing with the store on this one?  Will I need this?
+                console.log(response);
+                console.log(archived_otherbox.company_details_id);
+                self.$emit('refresh-data', { company_details_id: archived_otherbox.company_details_id });
+            }).catch(function (error) {
+                return console.log(error);
+            });
+        }
+    }
+});
+
+/***/ }),
+/* 489 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c(
+      "div",
+      { attrs: { id: "edit-save-buttons" } },
+      [
+        _c("h4", [
+          _vm._v(" " + _vm._s(_vm.archived_otherbox[0].otherbox_id) + " ")
+        ]),
+        _vm._v(" "),
+        _c("p", [
+          _vm._v(
+            " " +
+              _vm._s(_vm.archived_otherbox[0].delivery_day) +
+              " - " +
+              _vm._s(_vm.archived_otherbox[0].is_active) +
+              " "
+          )
+        ]),
+        _vm._v(" "),
+        _c(
+          "b-button",
+          {
+            attrs: { variant: "primary" },
+            on: {
+              click: function($event) {
+                _vm.showDetails()
+              }
+            }
+          },
+          [_vm._v(" Details ")]
+        ),
+        _vm._v(" "),
+        _c(
+          "b-button",
+          {
+            attrs: { variant: "warning" },
+            on: {
+              click: function($event) {
+                _vm.enableEdit()
+              }
+            }
+          },
+          [_vm._v(" Edit ")]
+        ),
+        _vm._v(" "),
+        _vm.editing
+          ? _c(
+              "b-button",
+              {
+                staticClass: "btn btn-success",
+                on: {
+                  click: function($event) {
+                    _vm.updateDetails(_vm.archived_otherbox[0])
+                  }
+                }
+              },
+              [_vm._v(" Save ")]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _c(
+          "b-button",
+          {
+            attrs: { variant: "danger" },
+            on: {
+              click: function($event) {
+                _vm.deleteOtherBox(_vm.archived_otherbox[0])
+              }
+            }
+          },
+          [_vm._v(" Delete ")]
+        )
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _vm.details
+      ? _c(
+          "div",
+          { staticClass: "otherbox-details" },
+          [
+            _c(
+              "b-row",
+              {
+                class: _vm.archived_otherbox[0].is_active,
+                attrs: { id: "top-details" }
+              },
+              [
+                _c("b-col", [
+                  _c("label", [_c("b", [_vm._v(" Otherbox Id ")])]),
+                  _vm._v(" "),
+                  _c("div", [
+                    _c("p", [
+                      _vm._v(
+                        " " + _vm._s(_vm.archived_otherbox[0].otherbox_id) + " "
+                      )
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("b-col", [
+                  _c("label", [_c("b", [_vm._v(" Otherbox Status ")])]),
+                  _vm._v(" "),
+                  _vm.editing
+                    ? _c(
+                        "div",
+                        [
+                          _c(
+                            "b-form-select",
+                            {
+                              model: {
+                                value: _vm.archived_otherbox[0].is_active,
+                                callback: function($$v) {
+                                  _vm.$set(
+                                    _vm.archived_otherbox[0],
+                                    "is_active",
+                                    $$v
+                                  )
+                                },
+                                expression: "archived_otherbox[0].is_active"
+                              }
+                            },
+                            [
+                              _c("option", { attrs: { value: "Active" } }, [
+                                _vm._v(" Active ")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Inactive" } }, [
+                                _vm._v(" Inactive ")
+                              ])
+                            ]
+                          )
+                        ],
+                        1
+                      )
+                    : _c("div", [
+                        _c("p", [
+                          _vm._v(
+                            " " +
+                              _vm._s(_vm.archived_otherbox[0].is_active) +
+                              " "
+                          )
+                        ])
+                      ])
+                ]),
+                _vm._v(" "),
+                _c("b-col", [
+                  _c("label", [_c("b", [_vm._v(" Delivered By ")])]),
+                  _vm._v(" "),
+                  _vm.editing
+                    ? _c(
+                        "div",
+                        [
+                          _c(
+                            "b-form-select",
+                            {
+                              attrs: { size: "sm" },
+                              model: {
+                                value: _vm.archived_otherbox[0].delivered_by_id,
+                                callback: function($$v) {
+                                  _vm.$set(
+                                    _vm.archived_otherbox[0],
+                                    "delivered_by_id",
+                                    $$v
+                                  )
+                                },
+                                expression:
+                                  "archived_otherbox[0].delivered_by_id"
+                              }
+                            },
+                            _vm._l(
+                              _vm.$store.state.fruit_partners_list,
+                              function(fruit_partner) {
+                                return _c(
+                                  "option",
+                                  { domProps: { value: fruit_partner.id } },
+                                  [
+                                    _vm._v(
+                                      " " + _vm._s(fruit_partner.name) + " "
+                                    )
+                                  ]
+                                )
+                              }
+                            )
+                          )
+                        ],
+                        1
+                      )
+                    : _c("div", [
+                        _c("p", [
+                          _vm._v(
+                            " " +
+                              _vm._s(
+                                _vm.archived_otherbox[0].fruit_partner_name
+                              ) +
+                              " "
+                          )
+                        ])
+                      ])
+                ])
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "b-row",
+              { class: _vm.archived_otherbox[0].is_active },
+              [
+                _c("b-col", [
+                  _c("label", [_c("b", [_vm._v(" Delivery Day ")])]),
+                  _vm._v(" "),
+                  _vm.editing
+                    ? _c(
+                        "div",
+                        [
+                          _c("b-form-select", {
+                            attrs: { options: _vm.days_of_week },
+                            model: {
+                              value: _vm.archived_otherbox[0].delivery_day,
+                              callback: function($$v) {
+                                _vm.$set(
+                                  _vm.archived_otherbox[0],
+                                  "delivery_day",
+                                  $$v
+                                )
+                              },
+                              expression: "archived_otherbox[0].delivery_day"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    : _c("div", [
+                        _c("p", [
+                          _vm._v(
+                            " " +
+                              _vm._s(_vm.archived_otherbox[0].delivery_day) +
+                              " "
+                          )
+                        ])
+                      ])
+                ]),
+                _vm._v(" "),
+                _c("b-col", [
+                  _c("label", [_c("b", [_vm._v(" Frequency ")])]),
+                  _vm._v(" "),
+                  _vm.editing
+                    ? _c(
+                        "div",
+                        [
+                          _c("b-form-select", {
+                            attrs: { options: _vm.frequency_options },
+                            model: {
+                              value: _vm.archived_otherbox[0].frequency,
+                              callback: function($$v) {
+                                _vm.$set(
+                                  _vm.archived_otherbox[0],
+                                  "frequency",
+                                  $$v
+                                )
+                              },
+                              expression: "archived_otherbox[0].frequency"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    : _c("div", [
+                        _c("p", [
+                          _vm._v(
+                            " " +
+                              _vm._s(_vm.archived_otherbox[0].frequency) +
+                              " "
+                          )
+                        ])
+                      ])
+                ]),
+                _vm._v(" "),
+                _vm.archived_otherbox[0].frequency === "Monthly"
+                  ? _c("b-col", [
+                      _c("label", [_c("b", [_vm._v(" Week In Month ")])]),
+                      _vm._v(" "),
+                      _vm.editing
+                        ? _c(
+                            "div",
+                            [
+                              _c("b-form-select", {
+                                attrs: { options: _vm.week_in_month_options },
+                                model: {
+                                  value: _vm.archived_otherbox[0].week_in_month,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.archived_otherbox[0],
+                                      "week_in_month",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "archived_otherbox[0].week_in_month"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        : _c("div", [
+                            _c("p", [
+                              _vm._v(
+                                " " +
+                                  _vm._s(
+                                    _vm.archived_otherbox[0].week_in_month
+                                  ) +
+                                  " "
+                              )
+                            ])
+                          ])
+                    ])
+                  : _vm._e()
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "b-row",
+              {
+                staticClass: "bottom-details",
+                class: _vm.archived_otherbox[0].is_active
+              },
+              [
+                _vm.archived_otherbox[0].previous_delivery_week !== null
+                  ? _c("b-col", [
+                      _c("label", [
+                        _c("b", [_vm._v(" Previous Delivery Date ")])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", [
+                        _c("p", [
+                          _vm._v(
+                            " " +
+                              _vm._s(
+                                _vm.archived_otherbox[0].previous_delivery_week
+                              ) +
+                              " "
+                          )
+                        ])
+                      ])
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _c("b-col", [
+                  _c("label", [_c("b", [_vm._v(" Week Delivered ")])]),
+                  _vm._v(" "),
+                  _vm.editing
+                    ? _c(
+                        "div",
+                        [
+                          _c("b-form-input", {
+                            attrs: { type: "date" },
+                            model: {
+                              value:
+                                _vm.archived_otherbox[0].next_delivery_week,
+                              callback: function($$v) {
+                                _vm.$set(
+                                  _vm.archived_otherbox[0],
+                                  "next_delivery_week",
+                                  $$v
+                                )
+                              },
+                              expression:
+                                "archived_otherbox[0].next_delivery_week"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    : _c("div", [
+                        _c("p", [
+                          _vm._v(
+                            " " +
+                              _vm._s(
+                                _vm.archived_otherbox[0].next_delivery_week
+                              ) +
+                              " "
+                          )
+                        ])
+                      ])
+                ]),
+                _vm._v(" "),
+                _c(
+                  "b-col",
+                  [
+                    _c(
+                      "b-row",
+                      [
+                        _c("label", [_c("b", [_vm._v(" Last Invoiced At ")])]),
+                        _vm._v(" "),
+                        _c("b-col", [
+                          _vm._v(
+                            " " +
+                              _vm._s(_vm.archived_otherbox[0].invoiced_at) +
+                              " "
+                          )
+                        ])
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c("h4", [_vm._v(" Order Breakdown ")]),
+            _vm._v(" "),
+            _c(
+              "b-button",
+              {
+                attrs: { variant: "primary" },
+                on: {
+                  click: function($event) {
+                    _vm.addProduct()
+                  }
+                }
+              },
+              [_vm._v(" Add a Product ")]
+            ),
+            _vm._v(" "),
+            _vm.add_product
+              ? _c(
+                  "div",
+                  [
+                    _c(
+                      "b-row",
+                      { staticClass: "margin-top-10" },
+                      [_c("select-product")],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "b-row",
+                      { staticClass: "margin-top-10" },
+                      [
+                        _c("b-col", [_c("h4", [_vm._v(" Product Name ")])]),
+                        _vm._v(" "),
+                        _c("b-col", [_c("h4", [_vm._v(" Stock Level ")])]),
+                        _vm._v(" "),
+                        _c("b-col", [
+                          _c("h4", [_vm._v(" Shortest Stock Date ")])
+                        ]),
+                        _vm._v(" "),
+                        _c("b-col", [_c("h4", [_vm._v(" Unit Price ")])]),
+                        _vm._v(" "),
+                        _c("b-col", [_c("h4", [_vm._v(" Quantity ")])]),
+                        _vm._v(" "),
+                        _c("b-col")
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "b-row",
+                      [
+                        _c("b-col", [
+                          _c("p", [
+                            _vm._v(
+                              " " +
+                                _vm._s(this.$store.state.selectedProduct.name) +
+                                " "
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("b-col", [
+                          _c("p", [
+                            _vm._v(
+                              " " +
+                                _vm._s(
+                                  this.$store.state.selectedProduct.stock_level
+                                ) +
+                                " "
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("b-col", [
+                          _c("p", [
+                            _vm._v(
+                              " " +
+                                _vm._s(
+                                  this.$store.state.selectedProduct
+                                    .shortest_stock_date
+                                ) +
+                                " "
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("b-col", [
+                          _c("p", [
+                            _vm._v(
+                              " " +
+                                _vm._s(
+                                  this.$store.state.selectedProduct.unit_price
+                                ) +
+                                " "
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "b-col",
+                          [
+                            _c("b-form-input", {
+                              attrs: { type: "number" },
+                              model: {
+                                value: _vm.quantity,
+                                callback: function($$v) {
+                                  _vm.quantity = $$v
+                                },
+                                expression: "quantity"
+                              }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "b-col",
+                          [
+                            _c(
+                              "b-button",
+                              {
+                                attrs: { variant: "success" },
+                                on: {
+                                  click: function($event) {
+                                    _vm.saveProductToBox(
+                                      _vm.archived_otherbox[0]
+                                    )
+                                  }
+                                }
+                              },
+                              [_vm._v(" Add ")]
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _c(
+              "b-row",
+              { staticClass: "margin-top-10" },
+              [
+                _c("b-col", [_c("p", [_c("b", [_vm._v(" Product Name ")])])]),
+                _vm._v(" "),
+                _c("b-col", [
+                  _c("p", [_c("b", [_vm._v(" Quantity In Box ")])])
+                ]),
+                _vm._v(" "),
+                _c("b-col", [_c("p", [_c("b", [_vm._v(" Unit Price ")])])]),
+                _vm._v(" "),
+                _c("b-col")
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _vm._l(_vm.archived_otherbox, function(archived_otherbox_item) {
+              return archived_otherbox_item.product_id !== 0
+                ? _c("archived-otherbox-item", {
+                    key: archived_otherbox_item.id,
+                    attrs: {
+                      id: "otherbox-products",
+                      archived_otherbox_item: archived_otherbox_item
+                    },
+                    on: {
+                      "refresh-data": function($event) {
+                        _vm.refreshData($event)
+                      }
+                    }
+                  })
+                : _vm._e()
+            }),
+            _vm._v(" "),
+            _c("h3", { staticClass: "border-top" }, [
+              _vm._v(
+                " Current Total: £" + _vm._s(_vm.archived_otherbox_total) + " "
+              )
+            ])
+          ],
+          2
+        )
+      : _vm._e()
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-ab94af9a", module.exports)
+  }
+}
+
+/***/ }),
+/* 490 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(491)
+}
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(493)
+/* template */
+var __vue_template__ = __webpack_require__(494)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-0fe4aa52"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/admin/other/ArchivedOtherOrdersAdmin.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-0fe4aa52", Component.options)
+  } else {
+    hotAPI.reload("data-v-0fe4aa52", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 491 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(492);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("e05bd44c", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-0fe4aa52\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/sass-loader/lib/loader.js!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ArchivedOtherOrdersAdmin.vue", function() {
+     var newContent = require("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-0fe4aa52\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/sass-loader/lib/loader.js!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ArchivedOtherOrdersAdmin.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 492 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n#otherboxes[data-v-0fe4aa52] {\n  margin-top: 20px;\n  text-align: center;\n}\n#otherboxes[data-v-0fe4aa52]::before {\n  content: \"\";\n  /* This is necessary for the pseudo element to work. */\n  display: block;\n  /* This will put the pseudo element on its own line. */\n  margin: 0 auto;\n  /* This will center the border. */\n  width: 70%;\n  /* Change this to whatever width you want. */\n  padding-bottom: 20px;\n  /* This creates some space between the element and the border. */\n  border-top: 1px solid #636b6f;\n  /* This creates the border. Replace black with whatever color you want. */\n}\n.otherbox[data-v-0fe4aa52] {\n  padding-top: 20px;\n  padding-left: 0;\n}\n.otherbox li[data-v-0fe4aa52] {\n    list-style: none;\n}\n.otherbox[data-v-0fe4aa52]:after {\n  content: \"\";\n  /* This is necessary for the pseudo element to work. */\n  display: block;\n  /* This will put the pseudo element on its own line. */\n  margin: 0 auto;\n  /* This will center the border. */\n  width: 70%;\n  /* Change this to whatever width you want. */\n  padding-top: 20px;\n  /* This creates some space between the element and the border. */\n  border-bottom: 1px solid #636b6f;\n  /* This creates the border. Replace black with whatever color you want. */\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 493 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['archived_otherboxes', 'company'],
+    data: function data() {
+        return {
+            addnew: false
+        };
+    },
+
+    methods: {
+        addNew: function addNew() {
+            if (this.addnew == false) {
+                this.addnew = true;
+            } else {
+                this.addnew = false;
+            }
+        },
+        refreshData: function refreshData($event) {
+            this.$emit('refresh-data', $event);
+        }
+    },
+    mounted: function mounted() {
+        console.log('look below for archived otherboxes');
+        console.log(this.archived_otherboxes);
+    }
+});
+
+/***/ }),
+/* 494 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { attrs: { id: "otherboxes" } }, [
+    _c("h3", [_vm._v(" Archived Other Boxes ")]),
+    _vm._v(" "),
+    !Array.isArray(this.archived_otherboxes)
+      ? _c(
+          "div",
+          _vm._l(this.archived_otherboxes, function(
+            archived_otherbox_week,
+            key
+          ) {
+            return _c(
+              "div",
+              _vm._l(archived_otherbox_week, function(archived_otherbox, key) {
+                return _c(
+                  "archived-otherbox",
+                  {
+                    key: key,
+                    staticClass: "otherbox",
+                    attrs: {
+                      archived_otherbox: archived_otherbox,
+                      company: this.company
+                    },
+                    on: {
+                      "refresh-data": function($event) {
+                        _vm.refreshData($event)
+                      }
+                    }
+                  },
+                  [_vm._v(" " + _vm._s(key) + " \n            ")]
+                )
+              })
+            )
+          })
+        )
+      : _c("div", [_vm._m(0)])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("ul", [
+      _c("li", { staticStyle: { "list-style": "none" } }, [
+        _vm._v("  ~ Nothing To See Here ~ ")
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-0fe4aa52", module.exports)
+  }
+}
+
+/***/ }),
+/* 495 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(496)
+}
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(498)
+/* template */
+var __vue_template__ = __webpack_require__(499)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -100275,13 +103455,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 466 */
+/* 496 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(467);
+var content = __webpack_require__(497);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -100301,7 +103481,7 @@ if(false) {
 }
 
 /***/ }),
-/* 467 */
+/* 497 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(false);
@@ -100315,7 +103495,7 @@ exports.push([module.i, "\nul {\n  padding-right: 40px;\n}\n.b-row-padding-extra
 
 
 /***/ }),
-/* 468 */
+/* 498 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -100637,7 +103817,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 469 */
+/* 499 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -101313,19 +104493,19 @@ if (false) {
 }
 
 /***/ }),
-/* 470 */
+/* 500 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(471)
+  __webpack_require__(501)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(473)
+var __vue_script__ = __webpack_require__(503)
 /* template */
-var __vue_template__ = __webpack_require__(474)
+var __vue_template__ = __webpack_require__(504)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -101364,13 +104544,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 471 */
+/* 501 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(472);
+var content = __webpack_require__(502);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -101390,7 +104570,7 @@ if(false) {
 }
 
 /***/ }),
-/* 472 */
+/* 502 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(false);
@@ -101404,7 +104584,7 @@ exports.push([module.i, "\n.flex-center {\n  display: block;\n}\n.no-list-style 
 
 
 /***/ }),
-/* 473 */
+/* 503 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -101595,7 +104775,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 474 */
+/* 504 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -101761,19 +104941,19 @@ if (false) {
 }
 
 /***/ }),
-/* 475 */
+/* 505 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(476)
+  __webpack_require__(506)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(478)
+var __vue_script__ = __webpack_require__(508)
 /* template */
-var __vue_template__ = __webpack_require__(479)
+var __vue_template__ = __webpack_require__(509)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -101812,13 +104992,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 476 */
+/* 506 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(477);
+var content = __webpack_require__(507);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -101838,7 +105018,7 @@ if(false) {
 }
 
 /***/ }),
-/* 477 */
+/* 507 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(false);
@@ -101852,7 +105032,7 @@ exports.push([module.i, "\n#new-product-form label {\n  font-weight: 400;\n}\n#n
 
 
 /***/ }),
-/* 478 */
+/* 508 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -102038,7 +105218,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 479 */
+/* 509 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -102448,19 +105628,19 @@ if (false) {
 }
 
 /***/ }),
-/* 480 */
+/* 510 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(481)
+  __webpack_require__(511)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(483)
+var __vue_script__ = __webpack_require__(513)
 /* template */
-var __vue_template__ = __webpack_require__(484)
+var __vue_template__ = __webpack_require__(514)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -102499,13 +105679,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 481 */
+/* 511 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(482);
+var content = __webpack_require__(512);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -102525,7 +105705,7 @@ if(false) {
 }
 
 /***/ }),
-/* 482 */
+/* 512 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(false);
@@ -102539,7 +105719,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 
 /***/ }),
-/* 483 */
+/* 513 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -102650,7 +105830,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 484 */
+/* 514 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -102741,19 +105921,19 @@ if (false) {
 }
 
 /***/ }),
-/* 485 */
+/* 515 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(486)
+  __webpack_require__(516)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(488)
+var __vue_script__ = __webpack_require__(518)
 /* template */
-var __vue_template__ = __webpack_require__(489)
+var __vue_template__ = __webpack_require__(519)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -102792,13 +105972,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 486 */
+/* 516 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(487);
+var content = __webpack_require__(517);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -102818,7 +105998,7 @@ if(false) {
 }
 
 /***/ }),
-/* 487 */
+/* 517 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(false);
@@ -102832,7 +106012,7 @@ exports.push([module.i, "\nlabel[data-v-1b0947bf], p[data-v-1b0947bf] {\n  font-
 
 
 /***/ }),
-/* 488 */
+/* 518 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -102946,7 +106126,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 489 */
+/* 519 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -103013,19 +106193,19 @@ if (false) {
 }
 
 /***/ }),
-/* 490 */
+/* 520 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(491)
+  __webpack_require__(521)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(493)
+var __vue_script__ = __webpack_require__(523)
 /* template */
-var __vue_template__ = __webpack_require__(494)
+var __vue_template__ = __webpack_require__(524)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -103064,13 +106244,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 491 */
+/* 521 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(492);
+var content = __webpack_require__(522);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -103090,7 +106270,7 @@ if(false) {
 }
 
 /***/ }),
-/* 492 */
+/* 522 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(false);
@@ -103104,7 +106284,7 @@ exports.push([module.i, "\nlabel[data-v-b75862fe], p[data-v-b75862fe] {\n  font-
 
 
 /***/ }),
-/* 493 */
+/* 523 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -103206,7 +106386,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 494 */
+/* 524 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -103376,19 +106556,19 @@ if (false) {
 }
 
 /***/ }),
-/* 495 */
+/* 525 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(496)
+  __webpack_require__(526)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(498)
+var __vue_script__ = __webpack_require__(528)
 /* template */
-var __vue_template__ = __webpack_require__(499)
+var __vue_template__ = __webpack_require__(529)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -103427,13 +106607,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 496 */
+/* 526 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(497);
+var content = __webpack_require__(527);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -103453,7 +106633,7 @@ if(false) {
 }
 
 /***/ }),
-/* 497 */
+/* 527 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(false);
@@ -103467,7 +106647,7 @@ exports.push([module.i, "\n.preference-item p {\n  font-weight: 300;\n  display:
 
 
 /***/ }),
-/* 498 */
+/* 528 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -103544,7 +106724,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 499 */
+/* 529 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -103640,19 +106820,19 @@ if (false) {
 }
 
 /***/ }),
-/* 500 */
+/* 530 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(501)
+  __webpack_require__(531)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(503)
+var __vue_script__ = __webpack_require__(533)
 /* template */
-var __vue_template__ = __webpack_require__(504)
+var __vue_template__ = __webpack_require__(534)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -103691,13 +106871,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 501 */
+/* 531 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(502);
+var content = __webpack_require__(532);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -103717,7 +106897,7 @@ if(false) {
 }
 
 /***/ }),
-/* 502 */
+/* 532 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(false);
@@ -103731,7 +106911,7 @@ exports.push([module.i, "\n#preferences {\n}\n", ""]);
 
 
 /***/ }),
-/* 503 */
+/* 533 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -103925,7 +107105,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 504 */
+/* 534 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -104138,19 +107318,19 @@ if (false) {
 }
 
 /***/ }),
-/* 505 */
+/* 535 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(506)
+  __webpack_require__(536)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(508)
+var __vue_script__ = __webpack_require__(538)
 /* template */
-var __vue_template__ = __webpack_require__(509)
+var __vue_template__ = __webpack_require__(539)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -104189,13 +107369,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 506 */
+/* 536 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(507);
+var content = __webpack_require__(537);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -104215,7 +107395,7 @@ if(false) {
 }
 
 /***/ }),
-/* 507 */
+/* 537 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(false);
@@ -104229,7 +107409,7 @@ exports.push([module.i, "\n#preferences-admin[data-v-5946acb6] {\n  margin-top: 
 
 
 /***/ }),
-/* 508 */
+/* 538 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -104317,7 +107497,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 509 */
+/* 539 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -104411,19 +107591,19 @@ if (false) {
 }
 
 /***/ }),
-/* 510 */
+/* 540 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(511)
+  __webpack_require__(541)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(513)
+var __vue_script__ = __webpack_require__(543)
 /* template */
-var __vue_template__ = __webpack_require__(514)
+var __vue_template__ = __webpack_require__(544)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -104462,13 +107642,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 511 */
+/* 541 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(512);
+var content = __webpack_require__(542);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -104488,7 +107668,7 @@ if(false) {
 }
 
 /***/ }),
-/* 512 */
+/* 542 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(false);
@@ -104502,7 +107682,7 @@ exports.push([module.i, "\n#add-to-buttons button {\n  margin: 10px 0;\n}\n#add-
 
 
 /***/ }),
-/* 513 */
+/* 543 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -104773,7 +107953,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 514 */
+/* 544 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -105059,19 +108239,19 @@ if (false) {
 }
 
 /***/ }),
-/* 515 */
+/* 545 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(516)
+  __webpack_require__(546)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(518)
+var __vue_script__ = __webpack_require__(548)
 /* template */
-var __vue_template__ = __webpack_require__(519)
+var __vue_template__ = __webpack_require__(549)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -105110,13 +108290,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 516 */
+/* 546 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(517);
+var content = __webpack_require__(547);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -105136,7 +108316,7 @@ if(false) {
 }
 
 /***/ }),
-/* 517 */
+/* 547 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(false);
@@ -105150,7 +108330,7 @@ exports.push([module.i, "\n.allergy-item p {\n  font-weight: 300;\n  display: in
 
 
 /***/ }),
-/* 518 */
+/* 548 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -105209,7 +108389,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 519 */
+/* 549 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -105263,19 +108443,19 @@ if (false) {
 }
 
 /***/ }),
-/* 520 */
+/* 550 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(521)
+  __webpack_require__(551)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(523)
+var __vue_script__ = __webpack_require__(553)
 /* template */
-var __vue_template__ = __webpack_require__(524)
+var __vue_template__ = __webpack_require__(554)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -105314,13 +108494,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 521 */
+/* 551 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(522);
+var content = __webpack_require__(552);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -105340,7 +108520,7 @@ if(false) {
 }
 
 /***/ }),
-/* 522 */
+/* 552 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(false);
@@ -105354,7 +108534,7 @@ exports.push([module.i, "\n.additional-info-item p {\n  font-weight: 300;\n  dis
 
 
 /***/ }),
-/* 523 */
+/* 553 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -105413,7 +108593,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 524 */
+/* 554 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -105467,19 +108647,19 @@ if (false) {
 }
 
 /***/ }),
-/* 525 */
+/* 555 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(526)
+  __webpack_require__(556)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(528)
+var __vue_script__ = __webpack_require__(558)
 /* template */
-var __vue_template__ = __webpack_require__(529)
+var __vue_template__ = __webpack_require__(559)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -105518,13 +108698,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 526 */
+/* 556 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(527);
+var content = __webpack_require__(557);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -105544,7 +108724,7 @@ if(false) {
 }
 
 /***/ }),
-/* 527 */
+/* 557 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(false);
@@ -105558,7 +108738,7 @@ exports.push([module.i, "\nlabel[data-v-4b584d05], p[data-v-4b584d05] {\n  font-
 
 
 /***/ }),
-/* 528 */
+/* 558 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -105885,7 +109065,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 529 */
+/* 559 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -106576,19 +109756,19 @@ if (false) {
 }
 
 /***/ }),
-/* 530 */
+/* 560 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(531)
+  __webpack_require__(561)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(533)
+var __vue_script__ = __webpack_require__(563)
 /* template */
-var __vue_template__ = __webpack_require__(534)
+var __vue_template__ = __webpack_require__(564)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -106627,13 +109807,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 531 */
+/* 561 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(532);
+var content = __webpack_require__(562);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -106653,7 +109833,7 @@ if(false) {
 }
 
 /***/ }),
-/* 532 */
+/* 562 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(false);
@@ -106667,7 +109847,7 @@ exports.push([module.i, "\nlabel[data-v-3428ae5e] {\n  font-weight: bold;\n}\n.t
 
 
 /***/ }),
-/* 533 */
+/* 563 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -107095,7 +110275,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 534 */
+/* 564 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -108092,19 +111272,19 @@ if (false) {
 }
 
 /***/ }),
-/* 535 */
+/* 565 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(536)
+  __webpack_require__(566)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(538)
+var __vue_script__ = __webpack_require__(568)
 /* template */
-var __vue_template__ = __webpack_require__(539)
+var __vue_template__ = __webpack_require__(569)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -108143,13 +111323,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 536 */
+/* 566 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(537);
+var content = __webpack_require__(567);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -108169,7 +111349,7 @@ if(false) {
 }
 
 /***/ }),
-/* 537 */
+/* 567 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(false);
@@ -108183,7 +111363,7 @@ exports.push([module.i, "\n.archive-header {\n    text-align: center;\n    font-
 
 
 /***/ }),
-/* 538 */
+/* 568 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -108294,9 +111474,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['fruitboxes', 'milkboxes', 'routes', 'company', 'snackboxes', 'otherboxes', 'drinkboxes', 'archived_fruitboxes', 'archived_milkboxes', 'archived_snackboxes'], // Not sure I actually need to declare any of these here?
+    // props: [], // Not sure I actually need to declare any of these here?
     data: function data() {
         return {
             keywords: null,
@@ -108349,7 +111543,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 539 */
+/* 569 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -108626,6 +111820,46 @@ var render = function() {
             ],
             1
           )
+        : _vm._e(),
+      _vm._v(" "),
+      this.company_data.archived_drinkboxes != null
+        ? _c(
+            "div",
+            [
+              _c("archived-drink-orders-admin", {
+                attrs: {
+                  company: this.company_data.company,
+                  archived_drinkboxes: this.company_data.archived_drinkboxes
+                },
+                on: {
+                  "refresh-data": function($event) {
+                    _vm.officeData($event.company_details_id)
+                  }
+                }
+              })
+            ],
+            1
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      this.company_data.archived_otherboxes != null
+        ? _c(
+            "div",
+            [
+              _c("archived-other-orders-admin", {
+                attrs: {
+                  company: this.company_data.company,
+                  archived_otherboxes: this.company_data.archived_otherboxes
+                },
+                on: {
+                  "refresh-data": function($event) {
+                    _vm.officeData($event.company_details_id)
+                  }
+                }
+              })
+            ],
+            1
+          )
         : _vm._e()
     ],
     1
@@ -108642,19 +111876,19 @@ if (false) {
 }
 
 /***/ }),
-/* 540 */
+/* 570 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(541)
+  __webpack_require__(571)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(543)
+var __vue_script__ = __webpack_require__(573)
 /* template */
-var __vue_template__ = __webpack_require__(544)
+var __vue_template__ = __webpack_require__(574)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -108693,13 +111927,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 541 */
+/* 571 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(542);
+var content = __webpack_require__(572);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -108719,7 +111953,7 @@ if(false) {
 }
 
 /***/ }),
-/* 542 */
+/* 572 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(false);
@@ -108733,7 +111967,7 @@ exports.push([module.i, "\n.selected-company {\n    font-weight: 300;\n    margi
 
 
 /***/ }),
-/* 543 */
+/* 573 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -108820,7 +112054,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 544 */
+/* 574 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -108914,19 +112148,19 @@ if (false) {
 }
 
 /***/ }),
-/* 545 */
+/* 575 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(546)
+  __webpack_require__(576)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(548)
+var __vue_script__ = __webpack_require__(578)
 /* template */
-var __vue_template__ = __webpack_require__(549)
+var __vue_template__ = __webpack_require__(579)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -108965,13 +112199,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 546 */
+/* 576 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(547);
+var content = __webpack_require__(577);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -108991,7 +112225,7 @@ if(false) {
 }
 
 /***/ }),
-/* 547 */
+/* 577 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(false);
@@ -109005,7 +112239,7 @@ exports.push([module.i, "\n.margin-30[data-v-bf8615f2] {\n  margin: 30px;\n}\n.p
 
 
 /***/ }),
-/* 548 */
+/* 578 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -109169,7 +112403,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 549 */
+/* 579 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -109780,19 +113014,19 @@ if (false) {
 }
 
 /***/ }),
-/* 550 */
+/* 580 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(551)
+  __webpack_require__(581)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(553)
+var __vue_script__ = __webpack_require__(583)
 /* template */
-var __vue_template__ = __webpack_require__(554)
+var __vue_template__ = __webpack_require__(584)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -109831,13 +113065,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 551 */
+/* 581 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(552);
+var content = __webpack_require__(582);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -109857,7 +113091,7 @@ if(false) {
 }
 
 /***/ }),
-/* 552 */
+/* 582 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(false);
@@ -109871,7 +113105,7 @@ exports.push([module.i, "", ""]);
 
 
 /***/ }),
-/* 553 */
+/* 583 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -109899,7 +113133,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({});
 
 /***/ }),
-/* 554 */
+/* 584 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -109972,19 +113206,19 @@ if (false) {
 }
 
 /***/ }),
-/* 555 */
+/* 585 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(556)
+  __webpack_require__(586)
 }
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(558)
+var __vue_script__ = __webpack_require__(588)
 /* template */
-var __vue_template__ = __webpack_require__(559)
+var __vue_template__ = __webpack_require__(589)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -110023,13 +113257,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 556 */
+/* 586 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(557);
+var content = __webpack_require__(587);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -110049,7 +113283,7 @@ if(false) {
 }
 
 /***/ }),
-/* 557 */
+/* 587 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)(false);
@@ -110063,7 +113297,7 @@ exports.push([module.i, "\n.info[data-v-268e8703] {\n  margin: 40px 60px;\n  fon
 
 
 /***/ }),
-/* 558 */
+/* 588 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -110144,7 +113378,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 559 */
+/* 589 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -110292,7 +113526,7 @@ if (false) {
 }
 
 /***/ }),
-/* 560 */
+/* 590 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

@@ -6,7 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class SnackBoxArchive extends Model
 {
-    protected $primaryKey = 'snackbox_id';
+    // OK, so it looks as though If I specify a new primary key, I also need to destroy etc via that key.
+    // This doesn't actually work for my use, so I need to scrap it.  If only I knew what problem I'd solved earlier specifying the snackbox_id as the primary key?!
+    
+    // protected $primaryKey = 'snackbox_id';
+    // public $incrementing = false;
     
     protected $fillable = [
         

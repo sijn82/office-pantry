@@ -182,6 +182,14 @@
                         <b-form-select v-model="form.model" :options="model_options"></b-form-select>
                     </b-col>
                 </b-row>
+                <b-row>
+                    <b-col>
+                        <label> Monthly Special </label>
+                        <b-form-radio-group v-model="form.monthly_special" :monthly_special_options>
+                            
+                        </b-form-radio-group>
+                    </b-col>
+                </b-row>
                 <b-row class="margin-top-20">
                     <b-col>
                         <b-button type="submit" variant="success"> Submit </b-button>
@@ -241,6 +249,7 @@ export default {
                 surcharge: null,
                 supplier_id: null,
                 model: 'Free',
+                monthly_special: null,
             },
             show: true,
             payment_options: [
@@ -250,6 +259,7 @@ export default {
               'Weekly Standing Order', 'Monthly Standing Order', 'Weekly Standing Order In Advance', 'Monthly Standing Order In Advance', 'TBC'
             ],
             model_options: ['Free', 'Honesty Box'],
+            monthly_special_options: [{ text: 'Yes', value:'yes' }, { text: 'No', value:'no' }, { text: 'TBC', value: null }],
         }
     },
     methods: {

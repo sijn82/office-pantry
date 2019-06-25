@@ -1,102 +1,107 @@
 <template lang="html">
     <div>
         <div id="edit-save-buttons">
-            <h4> {{ otherbox[0].otherbox_id }} </h4>
-            <p> {{ otherbox[0].delivery_day }} - {{ otherbox[0].is_active }} </p>
+            <h4> {{ archived_drinkbox[0].next_delivery_week }} </h4>
+            <p> {{ archived_drinkbox[0].delivery_day }} - {{ archived_drinkbox[0].is_active }} </p>
             <b-button variant="primary" @click="showDetails()"> Details </b-button>
             <b-button variant="warning" @click="enableEdit()"> Edit </b-button>
-            <b-button v-if="editing" class="btn btn-success" @click="updateDetails(otherbox[0])"> Save </b-button>
-            <b-button variant="danger" @click="deleteOtherBox(otherbox[0])"> Delete </b-button>
+            <b-button v-if="editing" class="btn btn-success" @click="updateDetails(archived_drinkbox[0])"> Save </b-button>
+            <b-button variant="danger" @click="deleteDrinkBox(archived_drinkbox[0])"> Delete </b-button>
         </div>
         
-        <div class="otherbox-details" v-if="details">
-            <b-row id="top-details" :class="otherbox[0].is_active">
+        <div class="drinkbox-details" v-if="details">
+            <b-row id="top-details" :class="archived_drinkbox[0].is_active">
                 <b-col>
-                    <label><b> Otherbox Id </b></label>
+                    <label><b> Drinkbox Id </b></label>
                     <div>
-                        <p> {{ otherbox[0].otherbox_id }} </p>
+                        <p> {{ archived_drinkbox[0].drinkbox_id }} </p>
                     </div>
                 </b-col>
                 <b-col>
-                    <label><b> Otherbox Status </b></label>
+                    <label><b> Drinkbox Status </b></label>
                     <div v-if="editing">
-                        <b-form-select v-model="otherbox[0].is_active">
+                        <b-form-select v-model="archived_drinkbox[0].is_active">
                             <option value="Active"> Active </option>
                             <option value="Inactive"> Inactive </option>
                         </b-form-select>
                     </div>
                     <div v-else>
-                        <p> {{ otherbox[0].is_active }} </p>
+                        <p> {{ archived_drinkbox[0].is_active }} </p>
                     </div>
                 </b-col>
                 <b-col>
                     <label><b> Delivered By </b></label>
                     <div v-if="editing">
-                        <b-form-select v-model="otherbox[0].delivered_by_id" size="sm">
+                        <b-form-select v-model="archived_drinkbox[0].delivered_by_id" size="sm">
                             <option v-for="fruit_partner in $store.state.fruit_partners_list" :value="fruit_partner.id"> {{ fruit_partner.name }} </option>
                         </b-form-select>
                     </div>
                     <div v-else>
-                        <p> {{ otherbox[0].fruit_partner_name }} </p>
+                        <p> {{ archived_drinkbox[0].fruit_partner_name }} </p>
                     </div>
                 </b-col>
-                <!-- <b-col>
-                    <label><b> No. Of Boxes </b></label>
+                <b-col>
+                    <label><b> Type </b></label>
                     <div v-if="editing">
-                        <b-form-input v-model="otherbox[0].no_of_boxes" type="number"></b-form-input>
+                        <b-form-select v-model="archived_drinkbox[0].type" :options="type_options"></b-form-select>
                     </div>
                     <div v-else>
-                        <p> {{ otherbox[0].no_of_boxes }} </p>
+                        <p> {{ archived_drinkbox[0].type }} </p>
                     </div>
-                </b-col> -->
+                </b-col>
             </b-row>
             
-            <b-row :class="otherbox[0].is_active">
+            <b-row :class="archived_drinkbox[0].is_active">
             
                 <b-col>
                     <label><b> Delivery Day </b></label>
                     <div v-if="editing">
-                        <b-form-select v-model="otherbox[0].delivery_day" :options="days_of_week"></b-form-select>
+                        <b-form-select v-model="archived_drinkbox[0].delivery_day" :options="days_of_week"></b-form-select>
                     </div>
                     <div v-else>
-                        <p> {{ otherbox[0].delivery_day }} </p>
+                        <p> {{ archived_drinkbox[0].delivery_day }} </p>
                     </div>
                 </b-col>
                 <b-col>
                     <label><b> Frequency </b></label>
                     <div v-if="editing">
-                        <b-form-select v-model="otherbox[0].frequency" :options="frequency_options"></b-form-select>
+                        <b-form-select v-model="archived_drinkbox[0].frequency" :options="frequency_options"></b-form-select>
                     </div>
                     <div v-else>
-                        <p> {{ otherbox[0].frequency }} </p>
+                        <p> {{ archived_drinkbox[0].frequency }} </p>
+                    </div>
+                </b-col>
+                <b-col v-if="archived_drinkbox[0].frequency === 'Monthly'">
+                    <label><b> Week In Month </b></label>
+                    <div v-if="editing">
+                        <b-form-select v-model="archived_drinkbox[0].week_in_month" :options="week_in_month_options"></b-form-select>
+                    </div>
+                    <div v-else>
+                        <p> {{ archived_drinkbox[0].week_in_month }} </p>
                     </div>
                 </b-col>
             </b-row>
             
-            <b-row class="bottom-details" :class="otherbox[0].is_active">
-                <b-col v-if="otherbox[0].frequency === 'Monthly'">
-                    <label><b> Week In Month </b></label>
-                    <div v-if="editing">
-                        <b-form-select v-model="otherbox[0].week_in_month" :options="week_in_month_options"></b-form-select>
-                    </div>
-                    <div v-else>
-                        <p> {{ otherbox[0].week_in_month }} </p>
-                    </div>
-                </b-col>
-                <b-col v-if="otherbox[0].previous_delivery_week !== null">
+            <b-row class="bottom-details" :class="archived_drinkbox[0].is_active">
+                
+                <b-col v-if="archived_drinkbox[0].previous_delivery_week !== null">
                     <label><b> Previous Delivery Date </b></label>
                     <div>
-                        <p> {{ otherbox[0].previous_delivery_week }} </p>
+                        <p> {{ archived_drinkbox[0].previous_delivery_week }} </p>
                     </div>
                 </b-col>
                 <b-col>
-                    <label><b> Next Delivery Week </b></label>
+                    <label><b> Week Delivered </b></label>
                     <div v-if="editing">
-                        <b-form-input v-model="otherbox[0].next_delivery_week" type="date"></b-form-input>
+                        <b-form-input v-model="archived_drinkbox[0].next_delivery_week" type="date"></b-form-input>
                     </div>
                     <div v-else>
-                        <p> {{ otherbox[0].next_delivery_week }} </p>
+                        <p> {{ archived_drinkbox[0].next_delivery_week }} </p>
                     </div>
+                </b-col>
+                <b-col>
+                    <label><b> Last Invoiced At </b></label>
+                    <p> {{ archived_drinkbox[0].invoiced_at }} </p>
                 </b-col>
             </b-row>
             
@@ -117,7 +122,7 @@
                         <h4> Shortest Stock Date </h4>
                     </b-col>
                     <b-col>
-                        <h4> Unit Price </h4>
+                        <h4> Case Price </h4>
                     </b-col>
                     <b-col>
                         <h4> Quantity </h4>
@@ -143,7 +148,7 @@
                         <b-form-input v-model="quantity" type="number"></b-form-input>
                     </b-col>
                     <b-col>
-                        <b-button variant="success" @click="saveProductToBox(otherbox[0])"> Add </b-button>
+                        <b-button variant="success" @click="saveProductToBox(archived_drinkbox[0])"> Add </b-button>
                     </b-col>
                 </b-row>
             </div>
@@ -155,15 +160,16 @@
                     <p><b> Quantity In Box </b></p>
                 </b-col>
                 <b-col>
-                    <p><b> Unit Price </b></p>
+                    <p><b> Case Price </b></p>
                 </b-col>
                 <b-col>
+                    <!-- Placeholder title for buttons -->
                 </b-col>
             </b-row>
             
-            <otherbox-item id="otherbox-products" v-for="otherbox_item in otherbox" v-if="otherbox_item.product_id !== 0" :otherbox_item="otherbox_item" :key="otherbox_item.id" @refresh-data="refreshData($event)"></otherbox-item>
+            <archived-drinkbox-item id="drinkbox-products" v-for="archived_drinkbox_item in archived_drinkbox" v-if="archived_drinkbox_item.product_id !== 0" :archived_drinkbox_item="archived_drinkbox_item" :key="archived_drinkbox_item.id" @refresh-data="refreshData($event)"></archived-drinkbox-item>
             
-            <h3 class="border-top"> Current Total: £{{ otherbox_total }} </h3>
+            <h3 class="border-top"> Current Total: £{{ drinkbox_total }} </h3>
         </div>
     </div>
 </template>
@@ -185,27 +191,28 @@
 
 <script>
     export default {
-        props: ['otherbox'],
+        props: ['archived_drinkbox'],
         data () {
             return {
                 add_product: false,
                 quantity: 0,
                 editing: false,
                 details: false,
+                type_options: ['Regular', 'Unique', {value: 'monthly-special', text: 'Monthly Special'}],
                 days_of_week: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
                 frequency_options: ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'],
                 week_in_month_options: ['First', 'Second', 'Third', 'Forth', 'Last'],
             }
         },
         computed: {
-            otherbox_total() {
+            drinkbox_total() {
                 
-                let $otherbox_total = 0
+                let $drinkbox_total = 0
 
                 // This function checks each entry in the current snackbox list and creates a running total (a) of the unit price (b[cost]) multiplied by the quantity (b[quantity]).
-                let sum = function(otherbox, cost, quantity){
+                let sum = function(drinkbox, cost, quantity){
                     // console.log(snackbox);
-                    return otherbox.reduce( function(a, b) {
+                    return drinkbox.reduce( function(a, b) {
                         if (b[cost] !== null) {
                             // Then this is a regular entry, we just need to total it up
                             return parseFloat(a) + ( parseFloat(b[cost]) * parseFloat(b[quantity]) );
@@ -221,9 +228,9 @@
                 
                 // Now we use the function by passing in the snackbox array, and the two properties we need to multiply - saving it as the current total cost.
                 // First a quick check, on whether we need to tally up case prices for wholesale, or unit prices for regular snackboxes.
-                (this.otherbox[0].type === 'wholesale') ? $otherbox_total = sum(this.otherbox, 'case_price', 'quantity') : $otherbox_total = sum(this.otherbox, 'unit_price', 'quantity');
+                (this.archived_drinkbox[0].type === 'wholesale') ? $drinkbox_total = sum(this.archived_drinkbox, 'case_price', 'quantity') : $drinkbox_total = sum(this.archived_drinkbox, 'unit_price', 'quantity');
                     
-                return $otherbox_total;
+                return $drinkbox_total;
             }
         },
         methods: {
@@ -237,8 +244,8 @@
                     this.add_product = false;
                 }
             },
-            saveProductToBox(otherbox) {
-                axios.post('api/otherbox/add-product', {
+            saveProductToBox(drinkbox) {
+                axios.post('api/archived-drinkbox/add-product', {
                     product: {
                         id: this.$store.state.selectedProduct.id,
                         name: this.$store.state.selectedProduct.name,
@@ -246,10 +253,10 @@
                         quantity: this.quantity,
                         unit_price: this.$store.state.selectedProduct.unit_price,
                     },
-                    otherbox_details: otherbox, 
+                    drinkbox_details: drinkbox, 
                         
-                }).then (response => {
-                    this.$emit('refresh-data', {company_details_id: otherbox.company_details_id})
+                }).then ( (response) => {
+                    this.$emit('refresh-data', {company_details_id: archived_drinkbox.company_details_id})
                     //location.reload(true); // What am I doing with the store on this one?  Will I need this?
                     console.log(response);
                 }).catch(error => console.log(error));
@@ -269,23 +276,24 @@
                     this.details = true;
                 }
             },
-            updateDetails(otherbox) {
-                axios.post('api/otherbox/details', {
-                    otherbox_details: otherbox,
+            updateDetails(archived_drinkbox) {
+                axios.post('api/archived-drinkbox/details', {
+                    archived_drinkbox_details: archived_drinkbox,
                 }).then (response => {
                     //location.reload(true); // What am I doing with the store on this one?  Will I need this?
                     console.log(response);
                 }).catch(error => console.log(error));
             },
-            deleteOtherBox(otherbox) {
+            deleteDrinkBox(archived_drinkbox) {
                 let self = this;
-                axios.put('api/otherbox/destroy-box/' + otherbox.otherbox_id, { 
-                    otherbox_id: otherbox.otherbox_id,
+                axios.put('api/archived-drinkbox/destroy-box/' + archived_drinkbox.drinkbox_id, { 
+                    archived_drinkbox_id: archived_drinkbox.drinkbox_id,
+                    archived_drinkbox_delivery_date: archived_drinkbox.next_delivery_week,
                 }).then ( (response) => {
                     //location.reload(true); // What am I doing with the store on this one?  Will I need this?
                     console.log(response);
-                    console.log(otherbox.company_details_id);
-                    self.$emit('refresh-data', {company_details_id: otherbox.company_details_id})
+                    console.log(drinkbox.company_details_id);
+                    self.$emit('refresh-data', {company_details_id: archived_drinkbox.company_details_id})
                 }).catch(error => console.log(error));
             },
         },

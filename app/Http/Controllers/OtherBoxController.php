@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\OtherBox;
+use App\OtherBoxArchive;
 use App\CompanyRoute;
 use App\CompanyDetails;
 use App\WeekStart;
@@ -204,6 +205,160 @@ class OtherBoxController extends Controller
     {
         //
     }
+    
+    public function archiveAndEmptyOtherBoxes () 
+    {
+        $otherboxes = OtherBox::where('is_active', 'Active')->get()->groupBy('otherbox_id');
+        dump($otherboxes);
+        foreach ($otherboxes as $otherbox) {
+             dump($otherbox);
+            if (count($otherbox) === 1) {     
+            // we're probably looking at an empty box, so the product_id should be 0
+             
+                if ($otherbox[0]->product_id === 0) {
+                // Then all is as expected.
+                } else {
+                // Something unexpected has happened, let's log it for review. 
+                $message = 'Well, shhhiiiitttttt! Drinkbox ' . $otherbox[0]->otherbox_id 
+                . ' only has one item in it and it\'s ' . $otherbox[0]->product_id 
+                . ' rather than 0. You can find it at row ' . $otherbox[0]->id;
+                
+                Log::channel('slack')->info($message);    
+                }
+                
+            } elseif (count($otherbox) > 1) {
+            // we have a box which needs to be archived
+                 
+            //---------- Time to save the existing box as an archive ----------//
+            
+                // 1.(a) if the box has an invoiced_at date, we can save it as 'inactive'.
+                if ($otherbox[0]->invoiced_at !== null) {
+                    // We have a box that's already been invoiced, so we can save it to archives with an 'inactive' status.
+                    foreach ($otherbox as $otherbox_item) {
+                        // However if it's the first line in a box and lacks any product info, we don't really need it for invoicing.
+                        if ($otherbox_item->product_id !== 0) {
+                        
+                            $otherbox_archive_entry = new OtherBoxArchive();
+                            // Snackbox Info
+                            $otherbox_archive_entry->is_active = 'Inactive';
+                            $otherbox_archive_entry->otherbox_id = $otherbox_item->otherbox_id;
+                            $otherbox_archive_entry->delivered_by_id = $otherbox_item->delivered_by_id;
+                            $otherbox_archive_entry->type = $otherbox_item->type;
+                            // Company Info
+                            $otherbox_archive_entry->company_details_id = $otherbox_item->company_details_id;
+                            $otherbox_archive_entry->delivery_day = $otherbox_item->delivery_day;
+                            $otherbox_archive_entry->frequency = $otherbox_item->frequency;
+                            $otherbox_archive_entry->week_in_month = $otherbox_item->week_in_month;
+                            $otherbox_archive_entry->previous_delivery_week = $otherbox_item->previous_delivery_week;
+                            $otherbox_archive_entry->next_delivery_week = $otherbox_item->next_delivery_week;
+                            // Product Information
+                            $otherbox_archive_entry->product_id = $otherbox_item->product_id;
+                            $otherbox_archive_entry->code = $otherbox_item->code;
+                            $otherbox_archive_entry->name = $otherbox_item->name;
+                            $otherbox_archive_entry->quantity = $otherbox_item->quantity;
+                            $otherbox_archive_entry->unit_price = $otherbox_item->unit_price;
+                            $otherbox_archive_entry->case_price = $otherbox_item->case_price;
+                            $otherbox_archive_entry->invoiced_at = $otherbox_item->invoiced_at;
+                            $otherbox_archive_entry->save();
+                            
+                        } else {
+                            // Maybe don't need this but we could log that this $drinkbox_item was skipped by logging it.
+                            // Log::channel('slack')->info(''); <-- Yeah let's not bother for now.
+                        }
+                    }
+                    
+                } else {
+                    // 1.(b) if it doesn't, we need to save it to archives as 'active' so it can be pulled into the next invoicing run.
+                    foreach ($otherbox as $otherbox_item) {
+                        // However if it's the first line in a box and lacks any product info, we don't really need it for invoicing.
+                        if ($otherbox_item->product_id !== 0) {
+                            
+                            $otherbox_archive_entry = new OtherBoxArchive();
+                            // Snackbox Info
+                            $otherbox_archive_entry->is_active = 'Active';
+                            $otherbox_archive_entry->otherbox_id = $otherbox_item->otherbox_id;
+                            $otherbox_archive_entry->delivered_by_id = $otherbox_item->delivered_by_id;
+                            $otherbox_archive_entry->type = $otherbox_item->type;
+                            // Company Info
+                            $otherbox_archive_entry->company_details_id = $otherbox_item->company_details_id;
+                            $otherbox_archive_entry->delivery_day = $otherbox_item->delivery_day;
+                            $otherbox_archive_entry->frequency = $otherbox_item->frequency;
+                            $otherbox_archive_entry->week_in_month = $otherbox_item->week_in_month;
+                            $otherbox_archive_entry->previous_delivery_week = $otherbox_item->previous_delivery_week;
+                            $otherbox_archive_entry->next_delivery_week = $otherbox_item->next_delivery_week;
+                            // Product Information
+                            $otherbox_archive_entry->product_id = $otherbox_item->product_id;
+                            $otherbox_archive_entry->code = $otherbox_item->code;
+                            $otherbox_archive_entry->name = $otherbox_item->name;
+                            $otherbox_archive_entry->quantity = $otherbox_item->quantity;
+                            $otherbox_archive_entry->unit_price = $otherbox_item->unit_price;
+                            $otherbox_archive_entry->case_price = $otherbox_item->case_price;
+                            $otherbox_archive_entry->invoiced_at = $otherbox_item->invoiced_at;
+                            $otherbox_archive_entry->save();
+                            
+                        } else {
+                            // Just for symmetry but my current thinking is to scrap doing anything (and consequently needing) else.
+                        }
+                    }
+                    
+                }
+                
+                //---------- End of - Time to save the existing box as an archive ----------//
+                     
+                //---------- Now we can strip out the orders ready for adding new products ----------//
+                
+                // But first we need to grab any details we'll be reusing.
+                $otherbox_id_recovered = $otherbox[0]->otherbox_id;
+                $delivered_by_recovered = $otherbox[0]->delivered_by_id;
+                $delivery_day_recovered = $otherbox[0]->delivery_day;
+                $type_recovered = $otherbox[0]->type;
+                $company_details_id_recovered = $otherbox[0]->company_details_id;
+                $frequency_recovered = $otherbox[0]->frequency;
+                $week_in_month_recovered = $otherbox[0]->week_in_month;
+                $previous_delivery_week_recovered = $otherbox[0]->previous_delivery_week;
+                $next_delivery_week_recovered = $otherbox[0]->next_delivery_week;
+                
+                // Now we can loop through each entry and delete them
+                foreach ($otherbox as $other_item) {
+                    // Don't worry, we've rescued all we need ;) ...probably.
+                    OtherBox::destroy($other_item->id);
+                }
+                
+                //---------- End of - Now we can strip out the orders ready for adding new products ----------//
+                
+                //---------- But we still need to recreate the empty box entry to repopulate with products later on. ----------//
+                
+                // 2. regardless of type, if the otherbox exists we strip out its orders, leaving only 1 entry with box details and a product id of 0, ready for the next mass/solo box update.
+                
+                $empty_otherbox = new OtherBox();
+                // Snackbox Info
+                // $new_snackbox->is_active <-- Is already set to 'Active' by default.
+                $empty_otherbox->otherbox_id = $otherbox_id_recovered;
+                $empty_otherbox->delivered_by_id = $delivered_by_recovered;
+                $empty_otherbox->type = $type_recovered;
+                // Company Info
+                $empty_otherbox->company_details_id = $company_details_id_recovered;
+                $empty_otherbox->delivery_day = $delivery_day_recovered;
+                $empty_otherbox->frequency = $frequency_recovered;
+                $empty_otherbox->week_in_month = $week_in_month_recovered;
+                $empty_otherbox->previous_delivery_week = $previous_delivery_week_recovered;
+                $empty_otherbox->next_delivery_week = $next_delivery_week_recovered;
+                // Product Information
+                $empty_otherbox->product_id = 0;
+                $empty_otherbox->code = null;
+                $empty_otherbox->name = null;
+                $empty_otherbox->quantity = null;
+                $empty_otherbox->unit_price = null;
+                $empty_otherbox->case_price = null;
+                $empty_otherbox->invoiced_at = null;
+                $empty_otherbox->save();
+                
+                //---------- End of - But we still need to recreate the empty box entry to repopulate with products later on. ----------//
+                     
+            } // if (count($otherbox) === 1) & elseif (count($otherbox)) > 1)
+        } // foreach ($otherboxes as $otherbox)
+    }
+
 
     /**
      * Update the specified resource in storage.

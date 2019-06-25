@@ -90,6 +90,20 @@
                 :archived_snackboxes="this.company_data.archived_snackboxes">
             </archived-snackboxes-admin>
         </div>
+        <div v-if="this.company_data.archived_drinkboxes != null">
+            <archived-drink-orders-admin 
+                @refresh-data="officeData($event.company_details_id)" 
+                :company="this.company_data.company" 
+                :archived_drinkboxes="this.company_data.archived_drinkboxes">
+            </archived-drink-orders-admin>
+        </div>
+        <div v-if="this.company_data.archived_otherboxes != null">
+            <archived-other-orders-admin 
+                @refresh-data="officeData($event.company_details_id)" 
+                :company="this.company_data.company" 
+                :archived_otherboxes="this.company_data.archived_otherboxes">
+            </archived-other-orders-admin>
+        </div>
         <!-- <div v-else>
             <p>empty</p>
         </div> -->
@@ -106,7 +120,7 @@
 
 <script>
 export default {
-    props: ['fruitboxes', 'milkboxes', 'routes', 'company', 'snackboxes', 'otherboxes', 'drinkboxes', 'archived_fruitboxes', 'archived_milkboxes', 'archived_snackboxes'], // Not sure I actually need to declare any of these here?
+    // props: [], // Not sure I actually need to declare any of these here?
     data() {
         return {
             keywords: null,
