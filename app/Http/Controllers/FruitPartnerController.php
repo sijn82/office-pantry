@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\FruitPartner;
 use Illuminate\Http\Request;
 use App\WeekStart;
+use Illuminate\Support\Facades\Log;
 
 class FruitPartnerController extends Controller
 {

@@ -73,10 +73,11 @@ use App\WeekStart;
 use App\FruitBox;
 use App\MilkBox;
 use App\CompanyDetails;
+use Illuminate\Support\Facades\Log;
 
 class FruitPartnerPicklists implements
 WithMultipleSheets
-FromView
+// FromView
 {
     public function __construct($orders)
     {
@@ -84,8 +85,8 @@ FromView
         $this->milkboxes = $orders->milkboxes;
     }
     
-    // public function sheets(): array
-    // {
+    public function sheets(): array
+    {
     //     // OK, so how do I want to split up these tabs?
     //     // Each file is a different fruit partner
     //     // Each tab is a different day.
@@ -143,7 +144,21 @@ FromView
     // 
     //     $sheets[] = new FruitPartnerFruitOrders($this->fruitboxes);
     //     $sheets[] = new FruitPartnerMilkOrders($this->fruitboxes);
-    // }
+    
+        if (!empty($this->fruitboxes)) {
+            $sheets[] = new FruitPartnerFruitOrders($this->fruitboxes);
+        } else {
+            $sheets[] = 'No fruit for this week.';
+        }
+        
+        if (!empty($this->milkboxes)) {
+            $sheets[] = new FruitPartnerMilkOrders($this->milkboxes);
+        } else {
+            $sheets[] = 'No milk for this week.';
+        }
+        // dd($sheets);
+        return $sheets;
+    }
 
     public function view(): View
     {
@@ -168,7 +183,7 @@ FromView
 
     public function view(): View
     {
-        dd($this->fruitboxes);
+        // dd($this->fruitboxes);
         return view('exports.fruitpartner-fruitbox-picklists', [
             'picklists' => $this->fruitboxes
         ]);
@@ -180,14 +195,14 @@ FromView
 {
     public function __construct($milkboxes)
     {
-        $this->$milkboxes = $milkboxes;
+        $this->milkboxes = $milkboxes;
     }
 
     public function view(): View
     {
-        dd($this->$milkboxes);
+        // dd($this->milkboxes);
         return view('exports.fruitpartner-milkbox-picklists', [
-            'picklists' => $this->$milkboxes
+            'picklists' => $this->milkboxes
         ]);
     }
 }

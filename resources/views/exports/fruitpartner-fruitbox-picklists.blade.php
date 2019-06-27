@@ -3,7 +3,6 @@
 
       <tr>
           <th>Company Name</th>
-          <th>Fruit Crate</th>
           <th>Fruit Boxes</th>
           <th>Deliciously Red Apples</th>
           <th>Pink Lady Apples</th>
@@ -32,7 +31,6 @@
     </thead>
     <tbody>
         @php
-             $totalFruitCrates = 0; 
              $totalFruitBoxes = 0; 
              $totalDeliciouslyRedApples = 0; 
              $totalPinkLadyApples = 0; 
@@ -61,7 +59,6 @@
 
         @php
             
-             $totalFruitCrates += $picklist->fruit_crates;
              $totalFruitBoxes += $picklist->fruitbox_total;
              $totalDeliciouslyRedApples += $picklist->deliciously_red_apples * $picklist->fruitbox_total;
              $totalPinkLadyApples += $picklist->pink_lady_apples * $picklist->fruitbox_total;
@@ -96,7 +93,6 @@
         <tr>
             <td>{{ $picklist->next_delivery }}</td>
             <td>{{ $picklist->name }}</td>
-            <td>{{ $picklist->fruit_crates }}</td>
             <td>{{ $picklist->fruitbox_total }}</td>
             <td>{{ $picklist->deliciously_red_apples }}</td>
             <td>{{ $picklist->pink_lady_apples }}</td>
