@@ -1064,6 +1064,8 @@ class RoutesController extends Controller
                     // dd($company_box_names);
                     foreach($company_box_names as $company_box_name)
                     {
+                        Log::channel('slack')->info($company_box_name);
+                        
                         if(in_array($fruitOrderingDocument->company_name, $company_box_name)) // If fod entry is a listed box in the company details
                         {
                             // var_dump($company_box_name);
