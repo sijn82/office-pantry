@@ -163,7 +163,7 @@ class FruitOrderingDocumentController extends Controller
                                                             'Jefferies International Limited (FAO Venera Borisova)' => 'Jefferies International Limited',
                                                             'SSCL (Empress State Building London - FAO Natalia Wielba)' => 'SSCL (Empress State Building London)',
                                                             'Punter Southall Group (FAO Sejal Patel)' => 'Punter Southall Group',
-                                                            'L&Q (FAO Zoe Rush (Counties 4th Floor))' => 'L&Q',
+                                                            'L&Q - Counties on 4th Floor (FAO Zoe Rush)' => 'L&Q - Counties on 4th Floor',
                                                             'Knotel - 1 Stephen Street (FAO Martha MacGregor)' => 'Knotel - 1 Stephen Street',
                                                             'IncuBus Ltd (FAO Ander Mendia)' => 'IncuBus Ltd',
                                                             'Pfizer UK Ltd (FAO Decision Support CoE (IPC 1-G))' => 'Pfizer UK Ltd',
