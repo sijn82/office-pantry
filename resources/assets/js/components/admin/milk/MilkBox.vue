@@ -452,6 +452,7 @@ export default {
                 
             }).then (response => {
                 console.log(response);
+                this.$emit('refresh-data', {company_details_id: self.form.company_details_id});
             }).catch(error => console.log(error));
         },
         changeName(name) {

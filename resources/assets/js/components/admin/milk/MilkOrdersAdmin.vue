@@ -14,7 +14,7 @@
         <div v-if="this.milkboxes.length"> 
             <!-- {{ milkbox.company_name }} -->
 
-            <milkbox class="milkbox" v-for="milkbox in this.milkboxes" :milkbox="milkbox" :key="milkbox.id"></milkbox>
+            <milkbox class="milkbox" v-for="milkbox in this.milkboxes" :milkbox="milkbox" :key="milkbox.id" @refresh-data="refreshData($event)"></milkbox>
 
         </div>
         <div v-else>

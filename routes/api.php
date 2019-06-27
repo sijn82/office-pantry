@@ -68,6 +68,7 @@ Route::put('assigned-route/{id}', 'AssignedRouteController@destroy');
 Route::post('fruitpartners/add-new-fruitpartner', 'FruitPartnerController@store');
 Route::get('fruit_partners/select', 'FruitPartnerController@listFruitPartners');
 Route::get('fruit_partners/{id}', 'FruitPartnerController@show');
+Route::get('export-fruitpartner-deliveries', 'FruitPartnerController@groupOrdersByFruitPartner');
 
 Route::put('company-route/update/{id}', 'CompanyRouteController@update');
 Route::put('company-route/delete/{id}', 'CompanyRouteController@destroy');

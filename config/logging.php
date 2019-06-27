@@ -59,6 +59,12 @@ return [
             'emoji' => ':boom:',
             'level' => 'debug',
         ],
+        // GOING TO DO THIS ANOTHER TIME AND PROBABLY ADD SEVERAL NEW CHANNELS SO LARAVEL LOGS IS ONLY USED FOR MY PURPOSES, NOT EVERYTHING!!
+        
+        // 'slack-fruit-partner-orders' => [
+        //     'driver' => 'slack',
+        //     'url' => env('LOG_SLACK_WEBHOOK_URL_FRUIT_PARTNER')
+        // ],
 
         'stderr' => [
             'driver' => 'monolog',

@@ -43,11 +43,14 @@ class CreateCompanyDetailsTable extends Migration
             $table->string('invoice_city')->nullable();
             $table->string('invoice_region')->nullable();
             $table->string('invoice_postcode')->nullable();
+            $table->string('invoice_email')-nullable();
             // Billing and Delivery
             $table->string('branding_theme');
             $table->integer('surcharge')->nullable();
             $table->integer('supplier_id');
             $table->string('model')->nullable();
+            $table->string('monthly_special')->default('TBC');
+            $table->string('no_of_surprises')->default(0);
             $table->timestamps();
         });
     }

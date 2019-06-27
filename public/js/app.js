@@ -77253,6 +77253,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
         updateFruitOrder: function updateFruitOrder(fruitbox) {
+            var _this = this;
+
             this.editing = false;
             console.log(fruitbox);
             console.log(fruitbox.id);
@@ -77293,19 +77295,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 skip_archive: this.skip_archive
             }).then(function (response) {
                 console.log(response);
+                _this.$emit('refresh-data', { company_details_id: fruitbox.company_details_id });
             }).catch(function (error) {
                 return console.log(error);
             });
         },
         fruit_partner_id_to_name_converter: function fruit_partner_id_to_name_converter(id) {
-            var _this = this;
+            var _this2 = this;
 
             console.log(id);
             axios.get('/api/fruit_partners/' + id).then(function (response) {
                 console.log(response);
-                _this.fruitpartner = response.data[0];
-                _this.fruit_partner_name = _this.fruitpartner.name;
-                console.log(_this.fruitpartner.name);
+                _this2.fruitpartner = response.data[0];
+                _this2.fruit_partner_name = _this2.fruitpartner.name;
+                console.log(_this2.fruitpartner.name);
             });
         },
         changeName: function changeName(name) {
@@ -77486,7 +77489,7 @@ var render = function() {
                 : _c("div", [
                     _c("p", [
                       _vm._v(
-                        "  " + _vm._s(_vm.fruitbox.fruit_partner_name) + " "
+                        " " + _vm._s(_vm.fruitbox.fruit_partner_name) + " "
                       )
                     ])
                   ])
@@ -78868,7 +78871,12 @@ var render = function() {
               return _c("fruitbox", {
                 key: fruitbox.id,
                 staticClass: "fruitbox",
-                attrs: { fruitbox: fruitbox }
+                attrs: { fruitbox: fruitbox },
+                on: {
+                  "refresh-data": function($event) {
+                    _vm.refreshData($event)
+                  }
+                }
               })
             })
           ],
@@ -83636,6 +83644,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
         updateMilkOrder: function updateMilkOrder(milkbox) {
+            var _this = this;
+
             this.editing = false;
             console.log(milkbox);
             console.log(milkbox.id);
@@ -83676,6 +83686,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             }).then(function (response) {
                 console.log(response);
+                _this.$emit('refresh-data', { company_details_id: self.form.company_details_id });
             }).catch(function (error) {
                 return console.log(error);
             });
@@ -85131,7 +85142,12 @@ var render = function() {
             return _c("milkbox", {
               key: milkbox.id,
               staticClass: "milkbox",
-              attrs: { milkbox: milkbox }
+              attrs: { milkbox: milkbox },
+              on: {
+                "refresh-data": function($event) {
+                  _vm.refreshData($event)
+                }
+              }
             })
           })
         )
@@ -108665,7 +108681,7 @@ var __vue_template_functional__ = false
 /* styles */
 var __vue_styles__ = injectStyle
 /* scopeId */
-var __vue_scopeId__ = "data-v-4b584d05"
+var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
@@ -108708,13 +108724,13 @@ var content = __webpack_require__(557);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(2)("3c27ac5f", content, false, {});
+var update = __webpack_require__(2)("4b0c0232", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4b584d05\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/sass-loader/lib/loader.js!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AddNewCompany.vue", function() {
-     var newContent = require("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4b584d05\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../node_modules/sass-loader/lib/loader.js!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AddNewCompany.vue");
+   module.hot.accept("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4b584d05\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../../node_modules/sass-loader/lib/loader.js!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AddNewCompany.vue", function() {
+     var newContent = require("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4b584d05\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../../node_modules/sass-loader/lib/loader.js!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AddNewCompany.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -108732,7 +108748,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "\nlabel[data-v-4b584d05], p[data-v-4b584d05] {\n  font-weight: 300;\n}\n.form-margin-40[data-v-4b584d05] {\n  margin: 40px;\n}\n.margin-top-20[data-v-4b584d05] {\n  margin-top: 20px;\n}\n", ""]);
+exports.push([module.i, "\nlabel.custom-control-label {\n  font-weight: 300;\n}\nlabel, p {\n  font-weight: 300;\n}\n.form-margin-40 {\n  margin: 40px;\n}\n.margin-top-20 {\n  margin-top: 20px;\n}\n", ""]);
 
 // exports
 
@@ -108743,6 +108759,19 @@ exports.push([module.i, "\nlabel[data-v-4b584d05], p[data-v-4b584d05] {\n  font-
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -108985,11 +109014,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 branding_theme: null,
                 surcharge: null,
                 supplier_id: null,
-                model: 'Free'
+                model: 'Free',
+                monthly_surprise: null,
+                no_of_surprises: 0
             },
             show: true,
             payment_options: [{ text: 'Please select an option', value: null }, 'BACS', 'GoCardless', 'GoCardless In Advance', 'Invoiced In Advance', 'Monthly Invoice', 'Monthly Invoice GoCardless', 'Paypal (Stripe)', 'Paypal In Advance (Stripe)', 'Weekly Standing Order', 'Monthly Standing Order', 'Weekly Standing Order In Advance', 'Monthly Standing Order In Advance', 'TBC'],
-            model_options: ['Free', 'Honesty Box']
+            model_options: ['Free', 'Honesty Box'],
+            monthly_surprise_options: [{ text: 'Yes', value: 'yes' }, { text: 'No', value: 'no' }, { text: 'TBC', value: null }]
         };
     },
 
@@ -109028,8 +109060,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     branding_theme: self.form.branding_theme,
                     surcharge: self.form.surcharge,
                     supplier_id: self.form.supplier_id,
-                    model: self.form.model
-
+                    model: self.form.model,
+                    monthly_surprise: self.form.monthly_surprise,
+                    no_of_surprises: self.form.no_of_surprises
                 },
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv' }
                 // user_id: self.userData.id // This hasn't been setup yet so probably won't work, ...yet?!
@@ -109051,7 +109084,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.form.primary_contact_name = '';
             this.form.primary_contact_job_title = '';
             this.form.primary_contact_email = '';
-            this.form.primary_contact_job_title = '', this.form.primary_contact_email = '', this.form.primary_contact_telephone = '', this.form.secondary_contact_name = '', this.form.secondary_contact_job_title = '', this.form.secondary_contact_email = '', this.form.secondary_contact_telephone = '', this.form.delivery_information = '', this.form.route_address_line_1 = '', this.form.route_address_line_2 = '', this.form.route_address_line_3 = '', this.form.route_address_city = '', this.form.route_address_region = '', this.form.route_address_postcode = '', this.form.invoice_address_line_1 = '', this.form.invoice_address_line_2 = '', this.form.invoice_address_line_3 = '', this.form.invoice_address_city = '', this.form.invoice_address_region = '', this.form.invoice_address_postcode = '', this.form.invoice_email = '', this.form.branding_theme = null, this.form.surcharge = null, this.form.supplier_id = null, this.form.model = 'Free',
+            this.form.primary_contact_job_title = '', this.form.primary_contact_email = '', this.form.primary_contact_telephone = '', this.form.secondary_contact_name = '', this.form.secondary_contact_job_title = '', this.form.secondary_contact_email = '', this.form.secondary_contact_telephone = '', this.form.delivery_information = '', this.form.route_address_line_1 = '', this.form.route_address_line_2 = '', this.form.route_address_line_3 = '', this.form.route_address_city = '', this.form.route_address_region = '', this.form.route_address_postcode = '', this.form.invoice_address_line_1 = '', this.form.invoice_address_line_2 = '', this.form.invoice_address_line_3 = '', this.form.invoice_address_city = '', this.form.invoice_address_region = '', this.form.invoice_address_postcode = '', this.form.invoice_email = '', this.form.branding_theme = null, this.form.surcharge = null, this.form.supplier_id = null, this.form.model = 'Free', this.form.monthly_surprise = null, this.form.no_of_surprises = 0,
             /* Trick to reset/clear native browser form validation state */
             this.show = false;
             this.$nextTick(function () {
@@ -109719,6 +109752,51 @@ var render = function() {
                     _c(
                       "b-col",
                       [
+                        _c("label", [_vm._v(" Monthly Surprise ")]),
+                        _vm._v(" "),
+                        _c("b-form-radio-group", {
+                          attrs: { options: _vm.monthly_surprise_options },
+                          model: {
+                            value: _vm.form.monthly_surprise,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "monthly_surprise", $$v)
+                            },
+                            expression: "form.monthly_surprise"
+                          }
+                        })
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "b-col",
+                      [
+                        _c("label", [_vm._v(" Number of (Surprised) Staff ")]),
+                        _vm._v(" "),
+                        _c("b-form-input", {
+                          attrs: { type: "number" },
+                          model: {
+                            value: _vm.form.no_of_surprises,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "no_of_surprises", $$v)
+                            },
+                            expression: "form.no_of_surprises"
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "b-row",
+                  { staticClass: "margin-top-20" },
+                  [
+                    _c(
+                      "b-col",
+                      [
                         _c(
                           "b-button",
                           { attrs: { type: "submit", variant: "success" } },
@@ -110204,6 +110282,37 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['company'],
@@ -110212,7 +110321,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             edit: false,
             payment_options: [{ text: 'Please select an option', value: null }, 'BACS', 'GoCardless', 'GoCardless In Advance', 'Invoiced In Advance', 'Monthly Invoice', 'Monthly Invoice GoCardless', 'Paypal (Stripe)', 'Paypal In Advance (Stripe)', 'Standing Order', 'TBC'],
             model_options: ['Free', 'Honesty Box'],
-            status: ['Active', 'Inactive']
+            status: ['Active', 'Inactive'],
+            monthly_surprise_options: [{ text: 'Yes', value: 'yes' }, { text: 'No', value: 'no' }, { text: 'TBC', value: null }]
         };
     },
 
@@ -111114,6 +111224,39 @@ var render = function() {
           _vm._v(" "),
           _c(
             "b-row",
+            [
+              _c("b-col", [
+                _c("label", [_vm._v(" Invoice Email ")]),
+                _vm._v(" "),
+                _vm.edit
+                  ? _c(
+                      "div",
+                      [
+                        _c("b-form-input", {
+                          attrs: { type: "email" },
+                          model: {
+                            value: _vm.company.invoice_email,
+                            callback: function($$v) {
+                              _vm.$set(_vm.company, "invoice_email", $$v)
+                            },
+                            expression: "company.invoice_email"
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  : _c("div", [
+                      _c("p", [
+                        _vm._v(" " + _vm._s(_vm.company.invoice_email) + " ")
+                      ])
+                    ])
+              ])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-row",
             { staticClass: "margin-top-20" },
             [
               _c("b-col", [
@@ -111249,6 +111392,66 @@ var render = function() {
                     )
                   : _c("div", [
                       _c("p", [_vm._v(" " + _vm._s(_vm.company.model) + " ")])
+                    ])
+              ])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-row",
+            [
+              _c("b-col", [
+                _c("label", [_vm._v(" Monthly Surprise ")]),
+                _vm._v(" "),
+                _vm.edit
+                  ? _c(
+                      "div",
+                      [
+                        _c("b-form-radio-group", {
+                          attrs: { options: _vm.monthly_surprise_options },
+                          model: {
+                            value: _vm.company.monthly_surprise,
+                            callback: function($$v) {
+                              _vm.$set(_vm.company, "monthly_surprise", $$v)
+                            },
+                            expression: "company.monthly_surprise"
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  : _c("div", [
+                      _c("p", [
+                        _vm._v(" " + _vm._s(_vm.company.monthly_surprise) + " ")
+                      ])
+                    ])
+              ]),
+              _vm._v(" "),
+              _c("b-col", [
+                _c("label", [_vm._v(" Number of (Surprised) Staff ")]),
+                _vm._v(" "),
+                _vm.edit
+                  ? _c(
+                      "div",
+                      [
+                        _c("b-form-input", {
+                          attrs: { type: "number" },
+                          model: {
+                            value: _vm.form.no_of_surprises,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "no_of_surprises", $$v)
+                            },
+                            expression: "form.no_of_surprises"
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  : _c("div", [
+                      _c("p", [
+                        _vm._v(" " + _vm._s(_vm.company.no_of_surprises) + " ")
+                      ])
                     ])
               ])
             ],

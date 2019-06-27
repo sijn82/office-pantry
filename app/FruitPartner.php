@@ -31,4 +31,9 @@ class FruitPartner extends Model
     {
         return $this->hasMany(FruitBox::class);
     }
+    
+    public function milkbox()
+    {
+        return $this->hasMany(MilkBox::class);
+    }
 }

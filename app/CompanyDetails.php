@@ -37,11 +37,14 @@ class CompanyDetails extends Model
         'invoice_city',
         'invoice_region',
         'invoice_postcode',
+        'invoice_email',
         // Billing and Delivery
         'branding_theme',
         'surcharge',
         'supplier_id',
         'model',
+        'monthly_surprise',
+        'no_of_surprises',
         
     ];
 

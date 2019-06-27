@@ -182,12 +182,14 @@
                         <b-form-select v-model="form.model" :options="model_options"></b-form-select>
                     </b-col>
                 </b-row>
-                <b-row>
+                <b-row class="margin-top-20">
                     <b-col>
-                        <label> Monthly Special </label>
-                        <b-form-radio-group v-model="form.monthly_special" :monthly_special_options>
-                            
-                        </b-form-radio-group>
+                        <label> Monthly Surprise </label>
+                        <b-form-radio-group v-model="form.monthly_surprise" :options="monthly_surprise_options"></b-form-radio-group>
+                    </b-col>
+                    <b-col>
+                        <label> Number of (Surprised) Staff </label>
+                        <b-form-input type="number" v-model="form.no_of_surprises">  </b-form-input>
                     </b-col>
                 </b-row>
                 <b-row class="margin-top-20">
@@ -200,8 +202,11 @@
         </div>
     </div>
 </template>
-
-<style lang="scss" scoped>
+<!-- Removed scoped from <style> as this prevents styles being applied to bootstrap-vue components which are out of the scope! Wow, that's a bit of a pain (to uncover). -->
+<style lang="scss">
+    label.custom-control-label {
+        font-weight: 300;
+    }
 
     label, p {
         font-weight: 300;
@@ -249,7 +254,8 @@ export default {
                 surcharge: null,
                 supplier_id: null,
                 model: 'Free',
-                monthly_special: null,
+                monthly_surprise: null,
+                no_of_surprises: 0
             },
             show: true,
             payment_options: [
@@ -259,7 +265,11 @@ export default {
               'Weekly Standing Order', 'Monthly Standing Order', 'Weekly Standing Order In Advance', 'Monthly Standing Order In Advance', 'TBC'
             ],
             model_options: ['Free', 'Honesty Box'],
-            monthly_special_options: [{ text: 'Yes', value:'yes' }, { text: 'No', value:'no' }, { text: 'TBC', value: null }],
+            monthly_surprise_options: [
+                { text: 'Yes', value:'yes' }, 
+                { text: 'No', value:'no' }, 
+                { text: 'TBC', value: null }
+            ],
         }
     },
     methods: {
@@ -298,7 +308,8 @@ export default {
                   surcharge: self.form.surcharge,
                   supplier_id: self.form.supplier_id,
                   model: self.form.model,
-
+                  monthly_surprise: self.form.monthly_surprise,
+                  no_of_surprises: self.form.no_of_surprises,
               },
               headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv'},
               // user_id: self.userData.id // This hasn't been setup yet so probably won't work, ...yet?!
@@ -341,6 +352,8 @@ export default {
             this.form.surcharge = null,
             this.form.supplier_id = null,
             this.form.model = 'Free',
+            this.form.monthly_surprise = null,
+            this.form.no_of_surprises = 0,
             /* Trick to reset/clear native browser form validation state */
             this.show = false;
             this.$nextTick(() => { this.show = true });

@@ -73,11 +73,14 @@ class CompanyDetailsController extends Controller
         $new_company->invoice_city = request('company_details.invoice_address_city');
         $new_company->invoice_region = request('company_details.invoice_address_region');
         $new_company->invoice_postcode = request('company_details.invoice_address_postcode');
+        $new_company->invoice_email = request('company_details.invoice_email');
         // Billing and Delivery
         $new_company->branding_theme = request('company_details.branding_theme');
         $new_company->surcharge = request('company_details.surcharge');
         $new_company->supplier_id = request('company_details.supplier_id');
         $new_company->model = request('company_details.model');
+        $new_company->monthly_surprise = request('company_details.monthly_surprise');
+        $new_company->no_of_surprises = request('company_details.no_of_surprises');
         $new_company->save();
     }
 

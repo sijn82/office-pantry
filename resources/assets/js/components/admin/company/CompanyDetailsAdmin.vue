@@ -272,6 +272,17 @@
                     </div>
                 </b-col>
             </b-row>
+            <b-row>
+                <b-col>
+                    <label> Invoice Email </label>
+                    <div v-if="edit">
+                        <b-form-input type="email" v-model="company.invoice_email"></b-form-input>
+                    </div>
+                    <div v-else>
+                        <p> {{ company.invoice_email }} </p>
+                    </div>
+                </b-col>
+            </b-row>
             <b-row class="margin-top-20">
                 <b-col>
                     <label> Branding Theme </label>
@@ -312,6 +323,26 @@
                     </div>
                     <div v-else>
                         <p> {{ company.model }} </p>
+                    </div>
+                </b-col>
+            </b-row>
+            <b-row>
+                <b-col>
+                    <label> Monthly Surprise </label>
+                    <div v-if="edit">
+                        <b-form-radio-group v-model="company.monthly_surprise" :options="monthly_surprise_options"></b-form-radio-group>
+                    </div>
+                    <div v-else>
+                        <p> {{ company.monthly_surprise }} </p>
+                    </div>
+                </b-col>
+                <b-col>
+                    <label> Number of (Surprised) Staff </label>
+                    <div v-if="edit">
+                        <b-form-input type="number" v-model="form.no_of_surprises"></b-form-input>
+                    </div>
+                    <div v-else>
+                        <p> {{ company.no_of_surprises }} </p>
                     </div>
                 </b-col>
             </b-row>
@@ -364,6 +395,11 @@ export default {
             ],
             model_options: ['Free', 'Honesty Box'],
             status: ['Active', 'Inactive'],
+            monthly_surprise_options: [
+                { text: 'Yes', value:'yes' }, 
+                { text: 'No', value:'no' }, 
+                { text: 'TBC', value: null }
+            ],
         }
     },
     methods: {
