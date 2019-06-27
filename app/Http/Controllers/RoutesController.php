@@ -1064,8 +1064,9 @@ class RoutesController extends Controller
                     // dd($company_box_names);
                     foreach($company_box_names as $company_box_name)
                     {
-                        Log::channel('slack')->info($company_box_name);
-                        
+                    //    Log::channel('slack')->info($company_box_name);
+                    if ($company_box_name !== null) {
+                         
                         if(in_array($fruitOrderingDocument->company_name, $company_box_name)) // If fod entry is a listed box in the company details
                         {
                             // var_dump($company_box_name);
@@ -1251,7 +1252,7 @@ class RoutesController extends Controller
                           // break; // changed continue to break, to stop the annoying fell through the cracks message repeating on successful entries.
                         }
                     } // end of foreach($company_box_names as $company_box_name)
-
+                } // end of if company_box_name ==  null
                 } // end of else statement capturing the fod entries where we couldn't find the $fruitOrderingDocument->company_name in the route tables
                 // $uh_oh_shit_happened .= 'Uh, oh ' . json_encode($fruitOrderingDocument->company_name) . " fell throught the cracks! \n";
         } // end of foreach loop(ing through fod document)
