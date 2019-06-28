@@ -47,6 +47,8 @@ class RoutesExport implements WithMultipleSheets
     {
         $correctOrderMonTue =   [       
                                         '1.15 - Float',
+                                        '1.18 - East London',
+                                        '1.17 - Canary Wharf 2',
                                         '1.16 - South London 2',
                                         '1.14 - Filling in',
                                         '1.13 - Thames Valley',
