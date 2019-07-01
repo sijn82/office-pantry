@@ -90,7 +90,8 @@ WithMultipleSheets
                                 ];
 
         $correctOrderWedThurFri =   [   
-                                        '3.00 - Weds Float', 
+                                        '3.00 - Weds Float',
+                                        '3.06 - Extra Float', 
                                         '3.05 - Thames',
                                         '3.04 - South & North',
                                         '3.03 - West',
@@ -98,6 +99,7 @@ WithMultipleSheets
                                         '3.01 - Serviced London',
                                         '4.02 - Thu Multidrop',
                                         '4.01 - Thu Serviced',
+                                        '4.00 - Thu Float',
                                         '5.02 - Fri Multidrop',
                                         '5.01 - Fri Serviced',
                                         'TBC',
