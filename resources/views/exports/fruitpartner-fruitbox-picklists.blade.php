@@ -82,17 +82,10 @@
              $totalAvocados += $picklist->avocados * $picklist->fruitbox_total;
              $totalRootGinger += $picklist->root_ginger * $picklist->fruitbox_total;
              
-
-            if ($picklist->type == 'Standard') {
-                $standard_count += $picklist->fruitbox_total;
-            }
-            
-            // dd($picklist);
         @endphp
             
         <tr>
-            <td>{{ $picklist->next_delivery }}</td>
-            <td>{{ $picklist->name }}</td>
+            <td>{{ $picklist->company_name }}</td>
             <td>{{ $picklist->fruitbox_total }}</td>
             <td>{{ $picklist->deliciously_red_apples }}</td>
             <td>{{ $picklist->pink_lady_apples }}</td>
@@ -121,8 +114,8 @@
 
         <tr>
             <td></td>
-            <td>Standard Boxes on Route: {{ $standard_count }}</td>
-            <td>{{ $totalFruitCrates }}</td>
+            <td></td>
+
             <td>{{ $totalFruitBoxes }}</td>
             <td>{{ $totalDeliciouslyRedApples }}</td>
             <td>{{ $totalPinkLadyApples }}</td>
