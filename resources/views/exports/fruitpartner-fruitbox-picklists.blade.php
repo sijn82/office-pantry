@@ -1,144 +1,95 @@
 <table>
     <thead>
-
+        
       <tr>
           <th>Company Name</th>
           <th>Fruit Boxes</th>
-          <th>Deliciously Red Apples</th>
-          <th>Pink Lady Apples</th>
-          <th>Red Apples</th>
-          <th>Green Apples</th>
-          <th>Satsumas</th>
-          <th>Pears</th>
-          <th>Bananas</th>
-          <th>Nectarines</th>
-          <th>Limes</th>
-          <th>Lemons</th>
-          <th>Grapes</th>
-          <th>Seasonal Berries</th>
-          <th>Oranges</th>
-          <th>Cucumbers</th>
-          <th>Mint</th>
-          <th>Organic Lemons</th>
-          <th>Kiwis</th>
-          <th>Grapefruits</th>
-          <th>Avocados</th>
-          <th>Root Ginger</th>
+          @if ($deliciously_red_apples_total === 0) @else <th>Deliciously Red Apples</th> @endif
+          @if ($pink_lady_apples_total === 0) @else <th>Pink Lady Apples</th> @endif
+          @if ($red_apples_total === 0) @else <th>Red Apples</th> @endif
+          @if ($green_apples_total === 0) @else <th>Green Apples</th> @endif
+          @if ($satsumas_total === 0) @else <th>Satsumas</th> @endif
+          @if ($pears_total === 0) @else <th>Pears</th> @endif
+          @if ($bananas_total === 0) @else <th>Bananas</th> @endif
+          @if ($nectarines_total === 0) @else <th>Nectarines</th> @endif
+          @if ($limes_total === 0) @else <th>Limes</th> @endif
+          @if ($lemons_total === 0) @else <th>Lemons</th> @endif
+          @if ($grapes_total === 0) @else <th>Grapes</th> @endif
+          @if ($seasonal_berries_total === 0) @else <th>Seasonal Berries</th> @endif
+          @if ($oranges_total === 0) @else <th>Oranges</th> @endif
+          @if ($cucumbers_total === 0) @else <th>Cucumbers</th> @endif
+          @if ($mint_total === 0) @else <th>Mint</th> @endif
+          @if ($organic_lemons_total === 0) @else <th>Organic Lemons</th> @endif
+          @if ($kiwis_total === 0) @else <th>Kiwis</th> @endif
+          @if ($grapefruits_total === 0) @else <th>Grapefruits</th> @endif
+          @if ($avocados_total === 0) @else <th>Avocados</th> @endif
+          @if ($root_ginger_total === 0) @else <th>Root Ginger</th> @endif
           <th>Delivery Day</th>
 
       </tr>
 
     </thead>
-    <tbody>
-        @php
-             $totalFruitBoxes = 0; 
-             $totalDeliciouslyRedApples = 0; 
-             $totalPinkLadyApples = 0; 
-             $totalRed_apples = 0; 
-             $totalGreen_apples = 0; 
-             $totalSatsumas = 0; 
-             $totalPears = 0; 
-             $totalBananas = 0; 
-             $totalNectarines = 0; 
-             $totalLimes = 0; 
-             $totalLemons = 0; 
-             $totalGrapes = 0; 
-             $totalSeasonalBerries = 0; 
-             $totalOranges = 0; 
-             $totalCucumbers = 0; 
-             $totalMint = 0; 
-             $standard_count = 0; 
-             $totalOrganicLemons = 0;
-             $totalKiwis = 0;
-             $totalGrapefruits = 0;
-             $totalAvocados = 0;
-             $totalRootGinger = 0;
-        @endphp
+    <tbody>    
+        
+        {{ $totalFruitBoxes = 0 }} 
         
         @foreach ($picklists as $picklist)
 
-        @php
-            
-             $totalFruitBoxes += $picklist->fruitbox_total;
-             $totalDeliciouslyRedApples += $picklist->deliciously_red_apples * $picklist->fruitbox_total;
-             $totalPinkLadyApples += $picklist->pink_lady_apples * $picklist->fruitbox_total;
-             $totalRed_apples += $picklist->red_apples * $picklist->fruitbox_total;
-             $totalGreen_apples += $picklist->green_apples * $picklist->fruitbox_total;
-             $totalSatsumas += $picklist->satsumas * $picklist->fruitbox_total;
-             $totalPears += $picklist->pears * $picklist->fruitbox_total;
-             $totalBananas += $picklist->bananas * $picklist->fruitbox_total;
-             $totalNectarines += $picklist->nectarines * $picklist->fruitbox_total;
-             $totalLimes += $picklist->limes * $picklist->fruitbox_total;
-             $totalLemons += $picklist->lemons * $picklist->fruitbox_total;
-             $totalGrapes += $picklist->grapes * $picklist->fruitbox_total;
-             $totalSeasonalBerries += $picklist->seasonal_berries * $picklist->fruitbox_total;
-             $totalOranges += $picklist->oranges * $picklist->fruitbox_total;
-             $totalCucumbers += $picklist->cucumbers * $picklist->fruitbox_total;
-             $totalMint += $picklist->mint * $picklist->fruitbox_total;
-             
-             $totalOrganicLemons += $picklist->organic_lemons * $picklist->fruitbox_total;
-             $totalKiwis += $picklist->kiwis * $picklist->fruitbox_total;
-             $totalGrapefruits += $picklist->grapefruits * $picklist->fruitbox_total;
-             $totalAvocados += $picklist->avocados * $picklist->fruitbox_total;
-             $totalRootGinger += $picklist->root_ginger * $picklist->fruitbox_total;
-             
-        @endphp
-            
-        <tr>
-            <td>{{ $picklist->company_name }}</td>
-            <td>{{ $picklist->fruitbox_total }}</td>
-            <td>{{ $picklist->deliciously_red_apples }}</td>
-            <td>{{ $picklist->pink_lady_apples }}</td>
-            <td>{{ $picklist->red_apples }}</td>
-            <td>{{ $picklist->green_apples }}</td>
-            <td>{{ $picklist->satsumas }}</td>
-            <td>{{ $picklist->pears }}</td>
-            <td>{{ $picklist->bananas }}</td>
-            <td>{{ $picklist->nectarines }}</td>
-            <td>{{ $picklist->limes }}</td>
-            <td>{{ $picklist->lemons }}</td>
-            <td>{{ $picklist->grapes }}</td>
-            <td>{{ $picklist->seasonal_berries }}</td>
-            <td>{{ $picklist->oranges }}</td>
-            <td>{{ $picklist->cucumbers }}</td>
-            <td>{{ $picklist->mint }}</td>
-            <td>{{ $picklist->organic_lemons }}</td>
-            <td>{{ $picklist->kiwis }}</td>
-            <td>{{ $picklist->grapefruits }}</td>
-            <td>{{ $picklist->avocados }}</td>
-            <td>{{ $picklist->root_ginger }}</td>
-            <td>{{ $picklist->delivery_day }}</td>
-        </tr>
+            {{ $totalFruitBoxes += $picklist->fruitbox_total }}
+
+            <tr>
+                <td>{{ $picklist->company_name }}</td>
+                <td>{{ $picklist->fruitbox_total }}</td>
+                
+                @if ($deliciously_red_apples_total === 0) @elseif ($picklist->deliciously_red_apples === 0) <td></td> @else <td> {{ $picklist->deliciously_red_apples }} </td> @endif
+                @if ($pink_lady_apples_total === 0) @elseif ($picklist->pink_lady_apples === 0) <td></td> @else <td> {{ $picklist->pink_lady_apples }} </td> @endif
+                @if ($red_apples_total === 0) @elseif ($picklist->red_apples === 0) <td></td> @else <td> {{ $picklist->red_apples }} </td> @endif
+                @if ($green_apples_total === 0) @elseif ($picklist->green_apples === 0) <td></td> @else <td> {{ $picklist->green_apples }} </td> @endif
+                @if ($satsumas_total === 0) @elseif ($picklist->satsumas === 0) <td></td> @else <td> {{ $picklist->satsumas }} </td> @endif
+                @if ($pears_total === 0) @elseif ($picklist->pears === 0) <td></td> @else <td> {{ $picklist->pears }} </td> @endif
+                @if ($bananas_total === 0) @elseif ($picklist->bananas === 0) <td></td> @else <td> {{ $picklist->bananas }} </td> @endif
+                @if ($nectarines_total === 0) @elseif ($picklist->nectarines === 0) <td></td> @else <td> {{ $picklist->nectarines }} </td> @endif
+                @if ($limes_total === 0) @elseif ($picklist->limes === 0) <td></td> @else <td> {{ $picklist->limes }} </td> @endif
+                @if ($lemons_total === 0) @elseif ($picklist->lemons === 0) <td></td> @else <td> {{ $picklist->lemons }} </td> @endif
+                @if ($grapes_total === 0) @elseif ($picklist->grapes === 0) <td></td> @else <td> {{ $picklist->grapes }} </td> @endif
+                @if ($seasonal_berries_total === 0) @elseif ($picklist->seasonal_berries === 0) <td></td> @else <td> {{ $picklist->seasonal_berries }} </td> @endif
+                @if ($oranges_total === 0) @elseif ($picklist->oranges === 0) <td></td> @else <td> {{ $picklist->oranges }} </td> @endif
+                @if ($cucumbers_total === 0) @elseif ($picklist->cucumbers === 0) <td></td> @else <td> {{ $picklist->cucumbers }} </td> @endif
+                @if ($mint_total === 0) @elseif ($picklist->mint === 0) <td></td> @else <td> {{ $picklist->mint }} </td> @endif
+                @if ($organic_lemons_total === 0) @elseif ($picklist->organic_lemons === 0) <td></td> @else <td> {{ $picklist->organic_lemons }} </td> @endif
+                @if ($kiwis_total === 0) @elseif ($picklist->kiwis === 0) <td></td> @else <td> {{ $picklist->kiwis }} </td> @endif
+                @if ($grapefruits_total === 0) @elseif ($picklist->grapefruits === 0) <td></td> @else <td> {{ $picklist->grapefruits }} </td> @endif
+                @if ($avocados_total === 0) @elseif ($picklist->avocados === 0) <td></td> @else <td> {{ $picklist->avocados }} </td> @endif
+                @if ($root_ginger_total === 0) @elseif ($picklist->root_ginger === 0) <td></td> @else <td> {{ $picklist->root_ginger }} </td> @endif
+                         
+                <td>{{ $picklist->delivery_day }}</td>
+            </tr>
 
         @endforeach
 
         <tr>
-            <td></td>
-            <td></td>
-
+            <td> Totals: </td>
             <td>{{ $totalFruitBoxes }}</td>
-            <td>{{ $totalDeliciouslyRedApples }}</td>
-            <td>{{ $totalPinkLadyApples }}</td>
-            <td>{{ $totalRed_apples }}</td>
-            <td>{{ $totalGreen_apples }}</td>
-            <td>{{ $totalSatsumas }}</td>
-            <td>{{ $totalPears }}</td>
-            <td>{{ $totalBananas }}</td>
-            <td>{{ $totalNectarines }}</td>
-            <td>{{ $totalLimes }}</td>
-            <td>{{ $totalLemons }}</td>
-            <td>{{ $totalGrapes }}</td>
-            <td>{{ $totalSeasonalBerries }}</td>
-            <td>{{ $totalOranges }}</td>
-            <td>{{ $totalCucumbers }}</td>
-            <td>{{ $totalMint }}</td>
-            <td>{{ $totalOrganicLemons }}</td>
-            <td>{{ $totalKiwis }}</td>
-            <td>{{ $totalGrapefruits }}</td>
-            <td>{{ $totalAvocados }}</td>
-            <td>{{ $totalRootGinger }}</td>
-            <td></td>
-            <td></td>
+            @if ($deliciously_red_apples_total === 0) @else <td>{{ $deliciously_red_apples_total }}</td> @endif
+            @if ($pink_lady_apples_total === 0) @else <td>{{ $pink_lady_apples_total }}</td> @endif
+            @if ($red_apples_total === 0) @else <td>{{ $red_apples_total }}</td> @endif
+            @if ($green_apples_total === 0) @else <td>{{ $green_apples_total }}</td> @endif
+            @if ($satsumas_total === 0) @else <td>{{ $satsumas_total }}</td> @endif
+            @if ($pears_total === 0) @else <td>{{ $pears_total }}</td> @endif
+            @if ($bananas_total === 0) @else <td>{{ $bananas_total }}</td> @endif
+            @if ($nectarines_total === 0) @else <td>{{ $nectarines_total }}</td> @endif
+            @if ($limes_total === 0) @else <td>{{ $limes_total }}</td> @endif
+            @if ($lemons_total === 0) @else <td>{{ $lemons_total }}</td> @endif
+            @if ($grapes_total === 0) @else <td>{{ $grapes_total }}</td> @endif
+            @if ($seasonal_berries_total === 0) @else <td>{{ $seasonal_berries_total }}</td> @endif
+            @if ($oranges_total === 0) @else <td>{{ $oranges_total }}</td> @endif
+            @if ($cucumbers_total === 0) @else <td>{{ $cucumbers_total }}</td> @endif
+            @if ($mint_total === 0) @else <td>{{ $mint_total }}</td> @endif
+            @if ($organic_lemons_total === 0) @else <td>{{ $organic_lemons_total }}</td> @endif
+            @if ($kiwis_total === 0) @else <td>{{ $kiwis_total }}</td> @endif
+            @if ($grapefruits_total === 0) @else <td>{{ $grapefruits_total }}</td> @endif
+            @if ($avocados_total === 0) @else <td>{{ $avocados_total }}</td> @endif
+            @if ($root_ginger_total === 0) @else <td>{{ $root_ginger_total }}</td> @endif
             <td></td>
         </tr>
 

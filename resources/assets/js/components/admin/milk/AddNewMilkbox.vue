@@ -228,7 +228,6 @@ export default {
                     is_active: 'Active',
                     fruit_partner_id: 1,
                     company_details_id: null, // If this is created by Frosh, how are they going to select the company to attach the order to?  A typed filter of a long list may be the best way.
-                    route_id: null, // This will also need a way to filter from all possible routes, however once a company has been confirmed, the options could easily fit on a dropdown.
                     delivery_day: '',  // According to the docs this must be an array reference, however it seems to me this is happening anyway?  Interesting...
                     type: null, // Whilst not currently in use, this will determine between standard, berries and tailored, with tailored being the only one which can be edited (probably).
                     first_delivery: null, // This will be necessary to get the first delivery scheduled and for the frequency field to begin incrementing.

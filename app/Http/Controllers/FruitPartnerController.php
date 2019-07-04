@@ -6,6 +6,7 @@ use App\FruitPartner;
 use Illuminate\Http\Request;
 use App\WeekStart;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 
 class FruitPartnerController extends Controller
 {
@@ -110,6 +111,11 @@ class FruitPartnerController extends Controller
     {
         //
     }
+    
+    public function download($orders, $fruitpartner, $week_start) 
+    {
+        return Excel::store(new Exports\FruitPartnerPicklists($orders), 'FruitPartners/fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.xlsx');
+    }
 
     
     // This has become a weird part of my process but moving this logic to the export folder now so I can break $orders up into exports, probably two.
@@ -124,9 +130,11 @@ class FruitPartnerController extends Controller
         // dd($week_start->current);
         
         // Not sure why but I tried to use new \stdClass again and this time it worked fine?!?  Ah well, life is filled with surprises.
-        $orders = new \stdClass;
         
         foreach ($fruitpartners as $fruitpartner) {
+            // dump($fruitpartner);
+            unset($orders);
+            $orders = new \stdClass;
             
             // These are all the boxes due for delivery this week.
             $fruitboxes = $fruitpartner->fruitbox->where('next_delivery', $week_start->current)->where('is_active', 'Active');
@@ -152,7 +160,7 @@ class FruitPartnerController extends Controller
                 $orders->fruitboxes[$fruitpartner->name] = $fruitboxes;
             //    return \Excel::download(new Exports\FruitPartnerPicklists($fruitboxes), 'fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.xlsx');
             } else {
-                
+                $orders->fruitboxes = null;
                 Log::channel('slack')->info('Fruit Partner: ' . $fruitpartner->name . ' has no Fruit Orders to be delivered this week.' );
             }
             
@@ -160,15 +168,48 @@ class FruitPartnerController extends Controller
                 
                 $orders->milkboxes[$fruitpartner->name] = $milkboxes;
             } else {
-                
+                $orders->milkboxes = null;
                 Log::channel('slack')->info('Fruit Partner: ' . $fruitpartner->name . ' has no Milk Orders to be delivered this week.' );
             }
+             $this->download($orders, $fruitpartner, $week_start);
+             // return \Excel::download(new Exports\FruitPartnerPicklists($orders), 'fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.xlsx'); 
+            
         }
         // Cool(io) - $orders is now filled with orders.  Just orders, and the key used is the fruitpartner name as I'm sure that'll save some bother cometh the template.
         // However, do I really want to put/keep them together when they're going to different templates?
         
-        return \Excel::download(new Exports\FruitPartnerPicklists($orders), 'fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.xlsx');
+        // return \Excel::download(new Exports\FruitPartnerPicklists($orders), 'fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.xlsx'); <-- All files are named after last fruit partner.
         // dd($orders);
+        
+        // $zip_test = new \ZipArchive();
+        // dd($zip_test);
+        
+        // Code source -https://laraveldaily.com/how-to-create-zip-archive-with-files-and-download-it-in-laravel/
+        // This appears to work great locally, the next test is whether it will behave the same in the server environment (heroku)?
+        
+        $zip_file = 'fruitpartnerorders-' . $week_start->current . '.zip';
+        $zip = new \ZipArchive();
+        $zip->open($zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+
+        $path = storage_path('app/FruitPartners');
+        $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
+        foreach ($files as $name => $file)
+        {
+            // We're skipping all subfolders
+            if (!$file->isDir()) {
+                $filePath = $file->getRealPath();
+
+                // extracting filename with substr/strlen
+                $relativePath = substr($filePath, strlen($path) + 1);
+
+                $zip->addFile($filePath, $relativePath);
+            }
+        }
+        $zip->close();
+        return response()->download($zip_file);
+        
+        
+        
         
     }
 }

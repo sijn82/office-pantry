@@ -187,9 +187,11 @@ class MilkBoxController extends Controller
 
                 if (count(MilkBox::where('company_details_id', request('company_data.company_details_id'))->where('delivery_day', $delivery_day)->get()) > 0) {
 
-                    MilkBox::where('company_details_id', request('company_data.company_details_id'))->where('delivery_day', $delivery_day)->update([
-                        'route_id' => $newlyCreatedRoute[0]->id
-                    ]);
+                    // I'm not currently using this column, and have actually stripped it from the db.
+                    
+                    // MilkBox::where('company_details_id', request('company_data.company_details_id'))->where('delivery_day', $delivery_day)->update([
+                    //     'route_id' => $newlyCreatedRoute[0]->id
+                    // ]);
 
                     $message = "Route ID: ". $newlyCreatedRoute[0]->id . " added to Milkbox on $delivery_day saved.";
                     Log::channel('slack')->info($message);
