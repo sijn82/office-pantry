@@ -141,7 +141,83 @@ WithEvents
     
     public function registerEvents(): array
     {
-        return [];
+        return [
+            AfterSheet::class    => function(AfterSheet $event) {
+                // dd($event);
+                $highestRow = $event->sheet->getHighestRow();
+                $rowWidth = $event->sheet->getHighestColumn();
+                $event->sheet->getDelegate()->getColumnDimension('C')->setWidth(50);
+                $event->sheet->getColumnDimension('D')->setWidth(50);
+                $event->sheet->getDelegate()->getStyle('A1:' . $rowWidth . $highestRow)->getAlignment()->setHorizontal('center');
+                $event->sheet->getDelegate()->getStyle('A1:' . $rowWidth . $highestRow)->getAlignment()->setVertical('center');
+                
+                $totals_border = [
+                    'borders' => [
+                        'top' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                            'color' => ['argb' => '000'],
+                        ],
+                    ],
+                ];
+                // dd($rowWidth . $highestRow);
+                $event->sheet->getDelegate()->getStyle('A' . $highestRow . ':' . $rowWidth . $highestRow)->applyFromArray($totals_border);
+                
+                // Not sure why the columns array goes white from 'V' onwards, it doesn't seem to affect the excel results.
+                $columns = [
+                    'A', 'B', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+                     'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'AA'];
+                
+                foreach ($columns as $column) {
+                    $event->sheet->getDelegate()->getColumnDimension($column)->setAutoSize(true);
+                }
+
+                foreach ($event->sheet->getRowIterator() as $row) {
+
+                    $cellIterator = $row->getCellIterator();
+                    $cellIterator->setIterateOnlyExistingCells(false); // Loop all cells, even if it is not set
+                    $selectedRow = $row->getRowIndex();
+                    
+                    
+                    // 
+                    $event->sheet->getStyle('C' . $selectedRow . ':D' . $selectedRow)->getAlignment()->setWrapText(true);
+                    foreach ($cellIterator as $cell) {
+                        if ($cell !== null) {
+
+                            if ($cell == 'Company Name') {
+
+                                $selectedCell = 'A' . $selectedRow . ':' . $rowWidth . $selectedRow; //P2
+                                // $selectedRow = $row->getRowIndex();
+                                $event->sheet->styleCells(
+                                  $selectedCell, // Cell Range
+                                  [ // Styles Array
+                                      'borders' => [
+                                          'bottom' => [
+                                              'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
+                                              'color' => ['argb' => '000'],
+                                          ],
+                                      ], // end of borders
+                                      // With no guarantee about colour printers, I'm making this black and white friendly.
+                                      // 'fill' => [
+                                      //             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                                      //             'color' => [
+                                      //               'argb' => '93DA38'
+                                      //             ]
+                                      // ] // end of fill
+                                  ] // end of styles array
+                              ); // end of styleCells function parameters.
+                            } // end of if ($cell == 'Company Name')
+                            
+                        } else {
+                            continue;
+                        }
+                    } // foreach ($cellIterator as $cell)
+                } // end of foreach ($event->sheet->getRowIterator() as $row)
+                
+                // This is nice but the increase in font size also increases the column width, which may be unwanted?
+                $cellRange = 'A1:AA1'; // All headers
+                $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setSize(14);
+            }, // End of AfterSheet class function
+        ];
     }
 }
 
@@ -228,7 +304,83 @@ WithEvents
     
     public function registerEvents(): array
     {
-        return [];
+        return [
+            AfterSheet::class    => function(AfterSheet $event) {
+                // dd($event);
+                $highestRow = $event->sheet->getHighestRow();
+                $rowWidth = $event->sheet->getHighestColumn();
+                $event->sheet->getDelegate()->getColumnDimension('C')->setWidth(50);
+                $event->sheet->getColumnDimension('D')->setWidth(50);
+                $event->sheet->getDelegate()->getStyle('A1:' . $rowWidth . $highestRow)->getAlignment()->setHorizontal('center');
+                $event->sheet->getDelegate()->getStyle('A1:' . $rowWidth . $highestRow)->getAlignment()->setVertical('center');
+                
+                $totals_border = [
+                    'borders' => [
+                        'top' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                            'color' => ['argb' => '000'],
+                        ],
+                    ],
+                ];
+                // dd($rowWidth . $highestRow);
+                $event->sheet->getDelegate()->getStyle('A' . $highestRow . ':' . $rowWidth . $highestRow)->applyFromArray($totals_border);
+                
+                // Not sure why the columns array goes white from 'V' onwards, it doesn't seem to affect the excel results.
+                $columns = [
+                    'A', 'B', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+                     'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'AA'];
+                
+                foreach ($columns as $column) {
+                    $event->sheet->getDelegate()->getColumnDimension($column)->setAutoSize(true);
+                }
+
+                foreach ($event->sheet->getRowIterator() as $row) {
+
+                    $cellIterator = $row->getCellIterator();
+                    $cellIterator->setIterateOnlyExistingCells(false); // Loop all cells, even if it is not set
+                    $selectedRow = $row->getRowIndex();
+                    
+                    
+                    // 
+                    $event->sheet->getStyle('C' . $selectedRow . ':D' . $selectedRow)->getAlignment()->setWrapText(true);
+                    foreach ($cellIterator as $cell) {
+                        if ($cell !== null) {
+
+                            if ($cell == 'Company Name') {
+
+                                $selectedCell = 'A' . $selectedRow . ':' . $rowWidth . $selectedRow; //P2
+                                // $selectedRow = $row->getRowIndex();
+                                $event->sheet->styleCells(
+                                  $selectedCell, // Cell Range
+                                  [ // Styles Array
+                                      'borders' => [
+                                          'bottom' => [
+                                              'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
+                                              'color' => ['argb' => '000'],
+                                          ],
+                                      ], // end of borders
+                                      // With no guarantee about colour printers, I'm making this black and white friendly.
+                                      // 'fill' => [
+                                      //             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                                      //             'color' => [
+                                      //               'argb' => '93DA38'
+                                      //             ]
+                                      // ] // end of fill
+                                  ] // end of styles array
+                              ); // end of styleCells function parameters.
+                            } // end of if ($cell == 'Company Name')
+                            
+                        } else {
+                            continue;
+                        }
+                    } // foreach ($cellIterator as $cell)
+                } // end of foreach ($event->sheet->getRowIterator() as $row)
+                
+                // This is nice but the increase in font size also increases the column width, which may be unwanted?
+                $cellRange = 'A1:AA1'; // All headers
+                $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setSize(14);
+            }, // End of AfterSheet class function
+        ];
     }
 }
 
@@ -531,8 +683,21 @@ WithEvents
                 $event->sheet->getDelegate()->getStyle('A1:' . $rowWidth . $highestRow)->getAlignment()->setHorizontal('center');
                 $event->sheet->getDelegate()->getStyle('A1:' . $rowWidth . $highestRow)->getAlignment()->setVertical('center');
                 
+                $totals_border = [
+                    'borders' => [
+                        'top' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                            'color' => ['argb' => '000'],
+                        ],
+                    ],
+                ];
+                // dd($rowWidth . $highestRow);
+                $event->sheet->getDelegate()->getStyle('A' . $highestRow . ':' . $rowWidth . $highestRow)->applyFromArray($totals_border);
+                
                 // Not sure why the columns array goes white from 'V' onwards, it doesn't seem to affect the excel results.
-                $columns = ['A', 'B', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'AA'];
+                $columns = [
+                    'A', 'B', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+                     'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'AA'];
                 
                 foreach ($columns as $column) {
                     $event->sheet->getDelegate()->getColumnDimension($column)->setAutoSize(true);
@@ -543,6 +708,8 @@ WithEvents
                     $cellIterator = $row->getCellIterator();
                     $cellIterator->setIterateOnlyExistingCells(false); // Loop all cells, even if it is not set
                     $selectedRow = $row->getRowIndex();
+                    
+                    
                     // 
                     $event->sheet->getStyle('C' . $selectedRow . ':D' . $selectedRow)->getAlignment()->setWrapText(true);
                     foreach ($cellIterator as $cell) {
@@ -556,27 +723,21 @@ WithEvents
                                   $selectedCell, // Cell Range
                                   [ // Styles Array
                                       'borders' => [
-                                          'outline' => [
+                                          'bottom' => [
                                               'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
-                                              'color' => ['argb' => 'AFFF46'],
+                                              'color' => ['argb' => '000'],
                                           ],
                                       ], // end of borders
+                                      // With no guarantee about colour printers, I'm making this black and white friendly.
                                       'fill' => [
                                                   'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
                                                   'color' => [
-                                                    'argb' => '93DA38'
+                                                    'argb' => 'f1f0ee'
                                                   ]
                                       ] // end of fill
                                   ] // end of styles array
                               ); // end of styleCells function parameters.
                             } // end of if ($cell == 'Company Name')
-                            // dd($cell);
-                            // if ($cell == 'C:' . $selectedRow || $cell == 'D:' . $selectedRow) {
-                                // dd('C' . $selectedRow . ':D' . $selectedRow);
-                                
-                                
-                                
-                            // }
                             
                         } else {
                             continue;
@@ -585,11 +746,11 @@ WithEvents
                 } // end of foreach ($event->sheet->getRowIterator() as $row)
                 
                 // This is nice but the increase in font size also increases the column width, which may be unwanted?
-                // $cellRange = 'A1:AA1'; // All headers
-                // $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setSize(14);
+                $cellRange = 'A1:AA1'; // All headers
+                $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setSize(14);
             },
-        ];
-    }
+        ]; // End of Register Events return array
+    } // End of Register Events(): array function
 }
 
 

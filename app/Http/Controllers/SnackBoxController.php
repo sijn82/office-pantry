@@ -1112,7 +1112,8 @@ class SnackBoxController extends Controller
                 foreach ($request['order'] as $new_standard_snack) {
                     // dump($request['order']);
                     // dump($new_standard_snack);
-
+                    
+                    // if new snack item is in company list of dislikes and at least one of their listed likes is in stock.
                     if (in_array($new_standard_snack['name'], $dislikes)
                                                     && !empty($likes)
                         ) { // I've added '&& !empty($likes)' to only replace a disliked item if they've specified a liked item and we have one in stock.
@@ -1158,6 +1159,7 @@ class SnackBoxController extends Controller
                         $new_standard_snack['unit_price'] = $product_details[0]->unit_price;
                         $new_standard_snack['case_price'] = $product_details[0]->case_price;
 
+                    // if the new standard snack is in the company list of dislikes but we have nothing in stock they really 'like'
                     } elseif (in_array($new_standard_snack['name'], $dislikes) && empty($likes)) {
                         
                         // Then the company either didn't have any specified likes or we don't have the item in stock
@@ -1196,6 +1198,8 @@ class SnackBoxController extends Controller
                         $new_standard_snack['case_price'] = $product_details[0]->case_price;
 
                     }
+                    
+                    // if we're here, the (original) product, or its replacement should be fine to add to the company snackbox.
 
                     $new_snackbox = new SnackBox();
                     // Snackbox Info
@@ -1212,7 +1216,8 @@ class SnackBoxController extends Controller
                     $new_snackbox->previous_delivery_week = $previous_delivery_week_recovered;
                     $new_snackbox->next_delivery_week = $next_delivery_week_recovered;
                     // Product Information
-                    $new_snackbox->product_id = $new_standard_snack['product_id'];
+                    dd($new_standard_snack);
+                    $new_snackbox->product_id = ($new_standard_snack['product_id']) ? $new_standard_snack['product_id'] :  ;
                     $new_snackbox->code = $new_standard_snack['code'];
                     $new_snackbox->name = $new_standard_snack['name'];
                     $new_snackbox->quantity = $new_standard_snack['quantity'];

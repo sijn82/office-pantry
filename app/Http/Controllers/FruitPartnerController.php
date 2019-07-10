@@ -114,7 +114,9 @@ class FruitPartnerController extends Controller
     
     public function download($orders, $fruitpartner, $week_start) 
     {
-        return Excel::store(new Exports\FruitPartnerPicklists($orders), 'FruitPartners/fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.xlsx');
+        return Excel::store(new Exports\FruitPartnerPicklists($orders), 'FruitPartners/fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.pdf', \Maatwebsite\Excel\Excel::TCPDF);
+        
+        // return Excel::store(new Exports\FruitPartnerPicklists($orders), 'FruitPartners/fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.xlsx');
     }
 
     
@@ -171,9 +173,10 @@ class FruitPartnerController extends Controller
                 $orders->milkboxes = null;
                 Log::channel('slack')->info('Fruit Partner: ' . $fruitpartner->name . ' has no Milk Orders to be delivered this week.' );
             }
-             $this->download($orders, $fruitpartner, $week_start);
+            // $this->download($orders, $fruitpartner, $week_start);
              // return \Excel::download(new Exports\FruitPartnerPicklists($orders), 'fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.xlsx'); 
-            
+            return Excel::store(new Exports\FruitPartnerPicklists($orders),'invoices.pdf');
+            //return Excel::store(new Exports\FruitPartnerPicklists($orders), 'FruitPartners/fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.pdf', \PhpOffice\PhpSpreadsheet\Writer\Pdf\Tcpdf());
         }
         // Cool(io) - $orders is now filled with orders.  Just orders, and the key used is the fruitpartner name as I'm sure that'll save some bother cometh the template.
         // However, do I really want to put/keep them together when they're going to different templates?

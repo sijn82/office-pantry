@@ -33,9 +33,9 @@
                             <li style="list-style:none;">
                                 <a href="{{ route('snackboxes') }}"> Mass Update Snackbox (By Type) </a>
                             </li>
-                            <li style="list-style:none;">
+                            <!-- <li style="list-style:none;">
                                 <a href="{{ route('preferences') }}"> Add/Edit/View Company Preferences (Allergies, Likes, Dislikes & Additional Info) </a>
-                            </li>
+                            </li> -->
                             <li style="list-style:none;">
                                 <a href="{{ route('exporting') }}"> Exporting Processes </a>
                             </li>

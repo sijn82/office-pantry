@@ -19,7 +19,7 @@ class CompanyDetailsController extends Controller
     
     public function search(Request $request)
     {
-        $company_search = CompanyDetails::where('invoice_name', 'LIKE', '%' . $request->keywords . '%')->get();
+        $company_search = CompanyDetails::where('route_name', 'LIKE', '%' . $request->keywords . '%')->get();
         
         return response()->json($company_search);
     }

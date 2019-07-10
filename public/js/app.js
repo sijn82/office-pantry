@@ -80512,6 +80512,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 // user_id: self.userData.id // This hasn't been setup yet so proabably won't work yet?!
             }).then(function (response) {
                 alert('Uploaded new fruit partner successfully!');
+                location.reload(true);
                 console.log(response.data);
             }).catch(function (error) {
                 return console.log(error);
@@ -85502,7 +85503,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 is_active: 'Active',
                 fruit_partner_id: 1,
                 company_details_id: null, // If this is created by Frosh, how are they going to select the company to attach the order to?  A typed filter of a long list may be the best way.
-                route_id: null, // This will also need a way to filter from all possible routes, however once a company has been confirmed, the options could easily fit on a dropdown.
                 delivery_day: '', // According to the docs this must be an array reference, however it seems to me this is happening anyway?  Interesting...
                 type: null, // Whilst not currently in use, this will determine between standard, berries and tailored, with tailored being the only one which can be edited (probably).
                 first_delivery: null, // This will be necessary to get the first delivery scheduled and for the frequency field to begin incrementing.
@@ -90473,6 +90473,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 // user_id: self.userData.id // This hasn't been setup yet so proabably won't work yet?!
             }).then(function (response) {
                 alert('Uploaded new assigned route successfully!');
+                location.reload(true);
                 console.log(response.data);
             }).catch(function (error) {
                 return console.log(error);
@@ -104440,36 +104441,6 @@ var render = function() {
                   ]),
                   _vm._v(" "),
                   _c("b-col", { staticClass: "col-sm-3" }, [
-                    _c("label", [_c("b", [_vm._v(" Cost Nominal ")])]),
-                    _vm._v(" "),
-                    _vm.editing
-                      ? _c(
-                          "div",
-                          [
-                            _c("b-form-select", {
-                              attrs: {
-                                options: _vm.cost_nominal,
-                                required: ""
-                              },
-                              model: {
-                                value: _vm.product.cost_nominal,
-                                callback: function($$v) {
-                                  _vm.$set(_vm.product, "cost_nominal", $$v)
-                                },
-                                expression: "product.cost_nominal"
-                              }
-                            })
-                          ],
-                          1
-                        )
-                      : _c("div", [
-                          _c("p", [
-                            _vm._v(" " + _vm._s(_vm.product.cost_nominal) + " ")
-                          ])
-                        ])
-                  ]),
-                  _vm._v(" "),
-                  _c("b-col", { staticClass: "col-sm-3" }, [
                     _c("label", [_c("b", [_vm._v(" Profit Margin ")])]),
                     _vm._v(" "),
                     _c("div", [
@@ -104748,6 +104719,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.$store.commit('increment'); // This is the only way I could get it to work?  What's the difference?  Why is nothing straightforward?
             // console.log(store.state.count); This is the example in the documentation.
             console.log(this.$store.state.count); // This is the only way I could get it to work?
+        },
+        grabProductList: function grabProductList() {
+            var self = this;
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/products').then(function (response) {
+                // console.log(response);
+                self.products = response.data;
+                console.log(self.products);
+            }).catch(function (error) {
+                return console.log(error);
+            });
         }
         // stockLevel() {
         //     if (product.stock_level < 0) {
@@ -104775,14 +104756,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     created: function created() {
-        var self = this;
-        __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/products').then(function (response) {
-            // console.log(response);
-            self.products = response.data;
-            console.log(self.products);
-        }).catch(function (error) {
-            return console.log(error);
-        });
+        this.grabProductList();
     },
     mounted: function mounted() {
         console.log('Component Product Lists Mounted');
@@ -105208,8 +105182,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 // user_id: self.userData.id // This hasn't been setup yet so probably won't work yet?!
             }).then(function (response) {
                 alert('Uploaded new product successfully!');
-                // location.reload(true); // This refreshes the browser and pulls the updated variables from the database into the vue component.
+                location.reload(true); // This refreshes the browser and pulls the updated variables from the database into the vue component.
                 console.log(response.data);
+                // self.$emit('update-products'); <-- started this but got no further passing the command to the product list component. Add it to the todo list, for now just reload the page.
             }).catch(function (error) {
                 return console.log(error);
             });
@@ -105548,50 +105523,6 @@ var render = function() {
                             _vm._v(
                               " Selected Sales Nominal: " +
                                 _vm._s(_vm.form.sales_nominal) +
-                                " "
-                            )
-                          ])
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        { staticClass: "col-sm-4" },
-                        [
-                          _c("label", [_vm._v(" Product Cost Nominal ")]),
-                          _vm._v(" "),
-                          _c(
-                            "b-form-select",
-                            {
-                              attrs: { options: _vm.cost_nominal },
-                              model: {
-                                value: _vm.form.cost_nominal,
-                                callback: function($$v) {
-                                  _vm.$set(_vm.form, "cost_nominal", $$v)
-                                },
-                                expression: "form.cost_nominal"
-                              }
-                            },
-                            [
-                              _c("template", { slot: "first" }, [
-                                _c(
-                                  "option",
-                                  {
-                                    attrs: { disabled: "" },
-                                    domProps: { value: null }
-                                  },
-                                  [_vm._v(" Please select an option ")]
-                                )
-                              ])
-                            ],
-                            2
-                          ),
-                          _vm._v(" "),
-                          _c("p", { staticClass: "selected-option" }, [
-                            _vm._v(
-                              " Selected Cost Nominal: " +
-                                _vm._s(_vm.form.cost_nominal) +
                                 " "
                             )
                           ])

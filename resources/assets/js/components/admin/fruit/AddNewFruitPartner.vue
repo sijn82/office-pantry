@@ -147,6 +147,7 @@ export default {
               // user_id: self.userData.id // This hasn't been setup yet so proabably won't work yet?!
           }).then( response => {
               alert('Uploaded new fruit partner successfully!');
+              // location.reload(true); // <-- Quick fix to update Fruit Partner list once I've made it.
               console.log(response.data);
           }).catch(error => console.log(error));
         },

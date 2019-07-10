@@ -143,7 +143,7 @@
                             <p> {{ product.sales_nominal }} </p>
                         </div>
                     </b-col>
-                    <b-col class="col-sm-3">
+                    <!-- <b-col class="col-sm-3">
                         <label><b> Cost Nominal </b></label>
                         <div v-if="editing">
                             <b-form-select v-model="product.cost_nominal" :options="cost_nominal" required></b-form-select>
@@ -151,7 +151,7 @@
                         <div v-else>
                             <p> {{ product.cost_nominal }} </p>
                         </div>
-                    </b-col>
+                    </b-col> -->
                     <b-col class="col-sm-3">
                         <label><b> Profit Margin </b></label>
                         <div>

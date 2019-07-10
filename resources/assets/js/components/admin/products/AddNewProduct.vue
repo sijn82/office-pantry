@@ -69,7 +69,7 @@
                                 <p class="selected-option"> Selected Sales Nominal: {{ form.sales_nominal }} </p>
                         </b-col>
                         <!-- Cost Nominal -->
-                        <b-col class="col-sm-4">
+                        <!-- <b-col class="col-sm-4">
                             <label> Product Cost Nominal </label>
                             <b-form-select v-model="form.cost_nominal" :options="cost_nominal" >
                                 <template slot="first">
@@ -77,7 +77,7 @@
                                 </template>
                             </b-form-select>
                                 <p class="selected-option"> Selected Cost Nominal: {{ form.cost_nominal }} </p>
-                        </b-col>
+                        </b-col> -->
                     </b-row>
                 </b-form-group>
                 
@@ -153,8 +153,9 @@ export default {
               // user_id: self.userData.id // This hasn't been setup yet so probably won't work yet?!
           }).then(function (response) {
               alert('Uploaded new product successfully!');
-             // location.reload(true); // This refreshes the browser and pulls the updated variables from the database into the vue component.
+              location.reload(true); // This refreshes the browser and pulls the updated variables from the database into the vue component.
               console.log(response.data);
+             // self.$emit('update-products'); <-- started this but got no further passing the command to the product list component. Add it to the todo list, for now just reload the page.
           }).catch(error => console.log(error));
         },
 

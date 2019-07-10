@@ -143,6 +143,14 @@ export default {
             this.$store.commit('increment'); // This is the only way I could get it to work?  What's the difference?  Why is nothing straightforward?
             // console.log(store.state.count); This is the example in the documentation.
             console.log(this.$store.state.count); // This is the only way I could get it to work?
+        },
+        grabProductList() {
+            let self = this;
+            axios.get('/api/products').then( response => {
+                // console.log(response);
+                self.products = response.data;
+                console.log(self.products)
+            }).catch(error => console.log(error));
         }
         // stockLevel() {
         //     if (product.stock_level < 0) {
@@ -168,12 +176,8 @@ export default {
     },
     
     created() {
-        let self = this;
-        axios.get('/api/products').then( response => {
-            // console.log(response);
-            self.products = response.data;
-            console.log(self.products)
-        }).catch(error => console.log(error));
+        this.grabProductList();
+        
     },
 
     mounted() {

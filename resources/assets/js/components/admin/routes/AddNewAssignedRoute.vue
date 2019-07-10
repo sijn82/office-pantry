@@ -69,6 +69,7 @@ export default {
             // user_id: self.userData.id // This hasn't been setup yet so proabably won't work yet?!
         }).then(function (response) {
             alert('Uploaded new assigned route successfully!');
+            location.reload(true); // <-- Quick fix to update the assigned routes list after submitting new route.
             console.log(response.data);
         }).catch(error => console.log(error));
       },

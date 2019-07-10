@@ -105,19 +105,19 @@ return [
             'schema' => 'public',
             'sslmode' => 'prefer',
         ],
-
-        // 'pgsql_production' => [
-        //     'driver' => 'pgsql',
-        //     'port' => '5432',
-        //     'host'     => $host,
-        //     'database' => $database,
-        //     'username' => $username,
-        //     'password' => $password,
-        //     'charset' => 'utf8',
-        //     'prefix' => '',
-        //     'schema' => 'public',
-        //     'sslmode' => 'prefer',
-        // ],
+        
+        'pgsql_production' => [
+            'driver' => 'pgsql',
+            'port' => '5432',
+            'host'     => $host,
+            'database' => $database,
+            'username' => $username,
+            'password' => $password,
+            'charset' => 'utf8',
+            'prefix' => '',
+            'schema' => 'public',
+            'sslmode' => 'prefer',
+        ],
 
         'sqlsrv' => [
             'driver' => 'sqlsrv',
