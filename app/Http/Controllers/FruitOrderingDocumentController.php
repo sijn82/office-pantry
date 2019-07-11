@@ -168,6 +168,7 @@ class FruitOrderingDocumentController extends Controller
                                                             'IncuBus Ltd (FAO Ander Mendia)' => 'IncuBus Ltd',
                                                             'Pfizer UK Ltd (FAO Decision Support CoE (IPC 1-G))' => 'Pfizer UK Ltd',
                                                             'Baker Charles (FAO Robert Baker)' => 'Baker Charles',
+                                                            'Quintessentially (Portland Place - FAO First Floor Ballroom)' => 'Quintessentially (Portland Place)',
                                                        ];
 
                          // If $newRoute->company_name doesn't match a Company route_name, check to see if this value matches a Company route_name exception.
