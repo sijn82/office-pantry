@@ -16,6 +16,8 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+//Import Rejigged Routes (New System)
+Route::post('import-rejigged-routes', 'CompanyRouteController@import');
 
 //Invoicing
 Route::get('weekly-invoicing', 'InvoicingController@weekly_invoicing_export');

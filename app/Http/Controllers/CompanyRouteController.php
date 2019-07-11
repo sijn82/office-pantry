@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\CompanyRoute;
+use App\AssignedRoute;
 use App\WeekStart;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\RejiggedCompanyRoutes;
+use Illuminate\Support\Facades\Storage;
 
 class CompanyRouteController extends Controller
 {
@@ -15,7 +19,7 @@ class CompanyRouteController extends Controller
     public function __construct()
     {
         $week_start = WeekStart::first();
-        
+
         if ($week_start !== null) {
             $this->week_start = $week_start->current;
             $this->delivery_days = $week_start->delivery_days;
@@ -42,6 +46,86 @@ class CompanyRouteController extends Controller
     public function download_new_routes_override()
     {
         return \Excel::download(new Exports\RoutesExportNewOverride($this->week_start), 'routelists-override' . $this->week_start . '.xlsx');
+    }
+
+    public function import(Request $request)
+    {
+        // I don't understand what Excel::toCollection is doing other than a great job! The first parameter is an empty class (new RejiggedCompanyRoutes(), $request->file an excel (xlsx) file of numerous tabs).
+        // I appear to have the data in exactly the form I need, so wtf is the class for? I mean I could use it, (and it fails if I remove it) but I'm clearly missing something. Hmmn?
+
+        $rejiggedRoutesByTab = Excel::toCollection(new RejiggedCompanyRoutes(), $request->file('rejigged-routes-file'));
+        // $rejiggedRoutesByTab = Excel::toCollection($request->file('rejigged-routes-file'));
+        // $tabNamesTest = Excel::import(new RejiggedCompanyRoutes(), $request->file('rejigged-routes-file'));
+        // $tabNames = $tabNamesTest->getSheetNames();
+        //  dd($rejiggedRoutesByTab);
+
+        // First foreach loop will run through each tab of the excel file i.e each rejigged route (AssignedRoute).
+        foreach ($rejiggedRoutesByTab as $rejiggedRoutesTab) {
+            // Now we can loop through each entry in the route
+            foreach ($rejiggedRoutesTab as $rejiggedRoute) {
+                // And so long as the entry has a company route id, we should have an entry worth processing.
+                // This eliminated the total row at the bottom, through probably not the header.
+                // Which thinking about it, looks to have been skipped as well. Clever girl.
+                // ... Yep, the empty class is ensuring we use headers as keys, so it IS doing something!
+                if ($rejiggedRoute['company_route_id'] !== null) {
+                    // The route export changes the assigned route id to it's name, which means we need to either reverse it here or provide it as an additional field to the routes.
+                    // Which will be better for Vlad, I guess. To give him an additional field (to ignore), or hope he doesn't manually change the route names while re-routing like a man posessed?
+                    $assigned_route = AssignedRoute::where('name', $rejiggedRoute['assigned_to'])->get();
+                    // dd($assigned_route[0]->id);
+                    // dd($rejiggedRoute);
+
+                    $companyRoute = CompanyRoute::find($rejiggedRoute['company_route_id']);
+                    $companyDetailsId = $companyRoute->company_details_id;
+
+                    $allRoutesForCompany = CompanyRoute::where('company_details_id', $companyDetailsId)->get();
+                    // dd($companyRoute);
+
+                    $companyRoute->postcode = $rejiggedRoute['postcode'];
+                    $companyRoute->address = $rejiggedRoute['address'];
+                    $companyRoute->delivery_information = $rejiggedRoute['delivery_information'];
+                    $companyRoute->assigned_route_id = $assigned_route[0]->id;
+                    $companyRoute->position_on_route = $rejiggedRoute['position_on_route'];
+
+                    if ($companyRoute->isDirty('assigned_route_id') || $companyRoute->isDirty('position_on_route')) {
+
+                        dump('Filthy route and position needs a good clean');
+
+                        $companyRoute->update([
+                            'assigned_route_id' => $assigned_route[0]->id,
+                            'position_on_route' => $rejiggedRoute['position_on_route'],
+                        ]);
+                    }
+
+
+                    // If postcode or route has been changed during the rejig, then let's update all their other routes with this information.
+                    if ($companyRoute->isDirty('postcode') || $companyRoute->isDirty('address')) {
+
+                        dump('Filthy address data needs a clean.');
+
+                        foreach ($allRoutesForCompany as $route) {
+
+                            $route->update([
+                                'postcode' => $companyRoute->postcode,
+                                'address' => $companyRoute->address,
+                            ]);
+                        }
+                    }
+                    // And do the same with delivery information.
+                    if ($companyRoute->isDirty('delivery_information')) {
+
+                        dump('Filthy delivery information needs a clean.');
+
+                        foreach ($allRoutesForCompany as $route) {
+
+                            $route->update([
+                                'delivery_information' => $companyRoute->delivery_information,
+                            ]);
+                        }
+                    }
+                    dump($companyRoute);
+                }
+            }
+        }
     }
 
     /**

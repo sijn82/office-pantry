@@ -9,10 +9,14 @@
             <b-col>
                 <b-button href="api/export-routing" variant="info"> Export Routes </b-button>
             </b-col>
-            <b-col>
-                <b-button href="#" variant="info"> Import Rejigged Routes (Unwritten) </b-button>
+            <b-col cols="6">
+                <b-form enctype="multipart/form-data" @submit.prevent="importRejiggedRoutes">
+                <b-form-file v-model="rejigged_routes_file" :state="Boolean(rejigged_routes_file)" placeholder="Choose a file..." drop-placeholder="Drop file here" @change="newFileUpload"></b-form-file>
+                
+                <b-button type="submit" variant="info"> Import Rejigged Routes (Unwritten) </b-button>
+            </b-form>
             </b-col>
-            <b-col></b-col>
+            <b-col>{{ rejigged_routes_file }}</b-col>
         </b-row>
         <div class="padding-top-20">
             <h4> Override Box Totals </h4>
@@ -153,7 +157,34 @@
 export default {
     data () {
         return {
-            
+            rejigged_routes_file: null,
+        }
+    },
+    methods: {
+        newFileUpload(event) {
+        // 
+        // let formData = new FormData();
+        //     formData.append(this.rejigged_routes_file, event.target.result)
+        //     console.log(formData)
+        let fileReader = new FileReader();
+        fileReader.readAsDataURL(event.target.files[0])
+            fileReader.onload = (event) => {
+            this.rejigged_routes_file = event.target.result
+            }
+        },
+        
+        importRejiggedRoutes() {
+            let self = this;
+            axios.post('api/import-rejigged-routes', {
+                rejigged_routes: self.rejigged_routes_file,
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/xlsx'},
+                // user_id: self.userData.id
+            }).then(function (response) {
+                alert('Uploaded Rejigged Routes successfully!');
+                console.log(response.data);
+                // console.log('saved FOD CSV successfully, or have i?');
+            }).catch(error => console.log(error));
+            // this.$router.push('/thank-you')
         }
     }
 }

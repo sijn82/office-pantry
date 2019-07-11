@@ -221,12 +221,13 @@ class FruitBoxController extends Controller
                 //  Route Summary Address isn't a field in the new model, instead I need to grab all route fields and combine them into the summary address.
                 // $newRoute->address = $companyDetails->route_summary_address;
 
-                $newRoute->address = $companyDetails->route_address_line_1 . ', '
-                                    . $companyDetails->route_address_line_2 . ', '
-                                    . $companyDetails->route_address_line_3 . ', '
-                                    . $companyDetails->route_city . ', '
-                                    . $companyDetails->route_region . ', '
-                                    . $companyDetails->route_postcode;
+                $newRoute->address = implode(", ", array_filter([
+                        $companyDetails->route_address_line_1, 
+                        $companyDetails->route_address_line_2, 
+                        $companyDetails->route_address_line_3, 
+                        $companyDetails->route_city, 
+                        $companyDetails->route_region
+                    ]));
 
                 $newRoute->delivery_information = $companyDetails->delivery_information;
                 $newRoute->assigned_route_id = $assigned_route_id;

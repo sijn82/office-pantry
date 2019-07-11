@@ -1,11 +1,22 @@
 <?php
 
 $url = parse_url(getenv("DATABASE_URL"));
-// dd($url);
-$host = $url["host"];
-$username = $url["user"];
-$password = $url["pass"];
-$database = substr($url["path"], 1);
+ // dd($url['path']);
+ 
+ if ($url['path'] == "") {
+     
+     $host = null;
+     $username = null;
+     $password = null;
+     $database = null;
+     
+ } else {
+     
+    $host = $url["host"];
+    $username = $url["user"];
+    $password = $url["pass"];
+    $database = substr($url["path"], 1);
+}
 
 return [
 

@@ -10,6 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::post('exporting', 'CompanyRouteController@import')->name('import-rejigged-routes');
 
 Route::get('/', function () {
     return view('welcome');

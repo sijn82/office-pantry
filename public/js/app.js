@@ -80512,7 +80512,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 // user_id: self.userData.id // This hasn't been setup yet so proabably won't work yet?!
             }).then(function (response) {
                 alert('Uploaded new fruit partner successfully!');
-                location.reload(true);
+                // location.reload(true); // <-- Quick fix to update Fruit Partner list once I've made it.
                 console.log(response.data);
             }).catch(function (error) {
                 return console.log(error);
@@ -90473,7 +90473,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 // user_id: self.userData.id // This hasn't been setup yet so proabably won't work yet?!
             }).then(function (response) {
                 alert('Uploaded new assigned route successfully!');
-                location.reload(true);
+                location.reload(true); // <-- Quick fix to update the assigned routes list after submitting new route.
                 console.log(response.data);
             }).catch(function (error) {
                 return console.log(error);
@@ -112529,10 +112529,47 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
-        return {};
+        return {
+            rejigged_routes_file: null
+        };
+    },
+
+    methods: {
+        newFileUpload: function newFileUpload(event) {
+            var _this = this;
+
+            // 
+            // let formData = new FormData();
+            //     formData.append(this.rejigged_routes_file, event.target.result)
+            //     console.log(formData)
+            var fileReader = new FileReader();
+            fileReader.readAsDataURL(event.target.files[0]);
+            fileReader.onload = function (event) {
+                _this.rejigged_routes_file = event.target.result;
+            };
+        },
+        importRejiggedRoutes: function importRejiggedRoutes() {
+            var self = this;
+            axios.post('api/import-rejigged-routes', {
+                rejigged_routes: self.rejigged_routes_file,
+                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/xlsx' }
+                // user_id: self.userData.id
+            }).then(function (response) {
+                alert('Uploaded Rejigged Routes successfully!');
+                console.log(response.data);
+                // console.log('saved FOD CSV successfully, or have i?');
+            }).catch(function (error) {
+                return console.log(error);
+            });
+            // this.$router.push('/thank-you')
+        }
     }
 });
 
@@ -112587,15 +112624,49 @@ var render = function() {
           _vm._v(" "),
           _c(
             "b-col",
+            { attrs: { cols: "6" } },
             [
-              _c("b-button", { attrs: { href: "#", variant: "info" } }, [
-                _vm._v(" Import Rejigged Routes (Unwritten) ")
-              ])
+              _c(
+                "b-form",
+                {
+                  attrs: { enctype: "multipart/form-data" },
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      return _vm.importRejiggedRoutes($event)
+                    }
+                  }
+                },
+                [
+                  _c("b-form-file", {
+                    attrs: {
+                      state: Boolean(_vm.rejigged_routes_file),
+                      placeholder: "Choose a file...",
+                      "drop-placeholder": "Drop file here"
+                    },
+                    on: { change: _vm.newFileUpload },
+                    model: {
+                      value: _vm.rejigged_routes_file,
+                      callback: function($$v) {
+                        _vm.rejigged_routes_file = $$v
+                      },
+                      expression: "rejigged_routes_file"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "b-button",
+                    { attrs: { type: "submit", variant: "info" } },
+                    [_vm._v(" Import Rejigged Routes (Unwritten) ")]
+                  )
+                ],
+                1
+              )
             ],
             1
           ),
           _vm._v(" "),
-          _c("b-col")
+          _c("b-col", [_vm._v(_vm._s(_vm.rejigged_routes_file))])
         ],
         1
       ),

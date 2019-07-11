@@ -162,12 +162,13 @@ class DrinkBoxController extends Controller
                 // $newRoute->address = $companyDetails->route_summary_address;
                 
                 // An if empty check is being made on the optional fields so that we don't unnecessarily add ', ' to the end of an empty field.
-                $newRoute->address = $companyDetails->route_address_line_1 . ', '
-                                    . $companyDetails->route_address_line_2 . ', '
-                                    . $companyDetails->route_address_line_3 . ', '
-                                    . $companyDetails->route_city . ', '
-                                    . $companyDetails->route_region . ', '
-                                    . $companyDetails->route_postcode;
+                $newRoute->address = implode(", ", array_filter([
+                        $companyDetails->route_address_line_1, 
+                        $companyDetails->route_address_line_2, 
+                        $companyDetails->route_address_line_3, 
+                        $companyDetails->route_city, 
+                        $companyDetails->route_region
+                    ]));
                 
                 $newRoute->delivery_information = $companyDetails->delivery_information;
                 $newRoute->assigned_route_id = $assigned_route_id;

@@ -1,6 +1,7 @@
 <table>
     <thead>
         <tr>
+              <th> Company Route ID </th>
               <th> Week Start </th>
               <th> Company Name </th>
               <th> Postcode </th>
@@ -103,7 +104,7 @@
 
     @endphp
             <tr>
-                <!-- <td>{{ $route->next_delivery_week_start }}</td> -->
+                <td>{{ $route->id }}</td>
                 <td>{{ $route->week_start }}</td>
                 <td>{{ $route->route_name }}</td>
                 <td>{{ $route->postcode }}</td>
@@ -270,8 +271,10 @@
             <td>  </td>
             <td>  </td>
             <td>  </td>
+            <td>  </td>
         </tr>
         <tr>
+            <td>  </td>
             <td>  </td>
             <td>  </td>
             <td>  </td>
