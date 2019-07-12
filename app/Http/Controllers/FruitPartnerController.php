@@ -116,7 +116,10 @@ class FruitPartnerController extends Controller
     {
         //return Excel::store(new Exports\FruitPartnerPicklists($orders), 'FruitPartners/fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.pdf', \Maatwebsite\Excel\Excel::TCPDF);
         
-         return Excel::store(new Exports\FruitPartnerPicklists($orders), 'FruitPartners/' . $week_start->current . '/fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.xlsx');
+        // works locally but heroku having issues, simplifying the folder structure.
+        // return Excel::store(new Exports\FruitPartnerPicklists($orders), 'FruitPartners/' . $week_start->current . '/fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.xlsx');
+        
+        return Excel::store(new Exports\FruitPartnerPicklists($orders), 'fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.xlsx');
     }
 
     
@@ -199,12 +202,14 @@ class FruitPartnerController extends Controller
         // Code source -https://laraveldaily.com/how-to-create-zip-archive-with-files-and-download-it-in-laravel/
         // This appears to work great locally, the next test is whether it will behave the same in the server environment (heroku)?
         
-        $zip_file = 'FruitPartner/fruitpartnerorders-' . $week_start->current . '.zip';
+        // works locally, heroku struggling
+        //$zip_file = 'FruitPartner/fruitpartnerorders-' . $week_start->current . '.zip';
+        $zip_file = 'fruitpartnerorders-' . $week_start->current . '.zip';
         $zip = new \ZipArchive();
         $zip->open($zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
         
         // Made a tweak to where the files are stored, adding another sub directory limiting the zip download to only grab files in the folder of the current week start.
-        $path = storage_path('app/FruitPartners/' . $week_start->current);
+        $path = storage_path('app');
         $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
         
         // debugging anything with dd() in this foreach causes the page to timeout, dump() works but must be removed to successfully download anything.
