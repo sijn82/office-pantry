@@ -110301,7 +110301,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     branding_theme: company.branding_theme,
                     surcharge: company.surcharge,
                     supplier_id: company.supplier_id,
-                    model: company.model
+                    model: company.model,
+                    monthly_surprise: company.monthly_surprise,
+                    no_of_surprises: company.no_of_surprises
                 }
             }).then(function (response) {
                 console.log(response);
@@ -111369,11 +111371,11 @@ var render = function() {
                         _c("b-form-input", {
                           attrs: { type: "number" },
                           model: {
-                            value: _vm.form.no_of_surprises,
+                            value: _vm.company.no_of_surprises,
                             callback: function($$v) {
-                              _vm.$set(_vm.form, "no_of_surprises", $$v)
+                              _vm.$set(_vm.company, "no_of_surprises", $$v)
                             },
-                            expression: "form.no_of_surprises"
+                            expression: "company.no_of_surprises"
                           }
                         })
                       ],

@@ -339,7 +339,7 @@
                 <b-col>
                     <label> Number of (Surprised) Staff </label>
                     <div v-if="edit">
-                        <b-form-input type="number" v-model="form.no_of_surprises"></b-form-input>
+                        <b-form-input type="number" v-model="company.no_of_surprises"></b-form-input>
                     </div>
                     <div v-else>
                         <p> {{ company.no_of_surprises }} </p>
@@ -447,6 +447,8 @@ export default {
                     surcharge: company.surcharge,
                     supplier_id: company.supplier_id,
                     model: company.model,
+                    monthly_surprise: company.monthly_surprise,
+                    no_of_surprises: company.no_of_surprises,
                 }
             }).then (response => {
                 console.log(response);

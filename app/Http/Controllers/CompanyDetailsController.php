@@ -149,6 +149,8 @@ class CompanyDetailsController extends Controller
             'surcharge' => request('company_details.surcharge'),
             'supplier_id' => request('company_details.supplier_id'),
             'model' => request('company_details.model'),
+            'monthly_surprise' => request('company_details.monthly_surprise'),
+            'no_of_surprises' => request('company_details.no_of_surprises'),
         ]);
     }
 
