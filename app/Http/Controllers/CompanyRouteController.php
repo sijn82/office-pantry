@@ -73,6 +73,8 @@ class CompanyRouteController extends Controller
                     $companyRoute = CompanyRoute::find($rejiggedRoute['company_route_id']);
                     // Using the route info we can grab the company details id
                     $companyDetailsId = $companyRoute->company_details_id;
+                    
+                    $companyDetails = CompanyDetails::find($companyDetailsId);
 
                     $allRoutesForCompany = CompanyRoute::where('company_details_id', $companyDetailsId)->get();
 
@@ -97,7 +99,14 @@ class CompanyRouteController extends Controller
                     if ($companyRoute->isDirty('postcode') || $companyRoute->isDirty('address')) {
 
                     //    dump('Filthy address data needs a clean.');
-
+                        
+                        
+                        // While we're at it let's update the CompanyDetails info as well. - Address will be a pain, so let's not worry about that yet.
+                        $companyDetails->update([
+                            'postcode' => $companyRoute->postcode,
+                        ]);
+                        
+                        // and all the routes we have stored
                         foreach ($allRoutesForCompany as $route) {
 
                             $route->update([
@@ -110,7 +119,12 @@ class CompanyRouteController extends Controller
                     if ($companyRoute->isDirty('delivery_information')) {
 
                     //    dump('Filthy delivery information needs a clean.');
-
+                        
+                        // Update CompanyDetails delivery info
+                        $companyDetails->update([
+                            'delivery_information' => $companyRoute->delivery_information,
+                        ]);
+                        // and all the routes we have stored.
                         foreach ($allRoutesForCompany as $route) {
 
                             $route->update([
