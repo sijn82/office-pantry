@@ -17,6 +17,9 @@
                 <b-button type="submit" variant="info"> Import Rejigged Routes (Unwritten) </b-button>
             </b-form>
             </b-col> -->
+            <b-col>
+                <b-button href="api/export-fruitpartner-deliveries" type="submit" variant="info"> Export Fruit Partner Deliveries </b-button>
+            </b-col>
             <b-col></b-col>
         </b-row>
         <div class="padding-top-20">

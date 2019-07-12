@@ -112534,6 +112534,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -112618,6 +112621,24 @@ var render = function() {
                 "b-button",
                 { attrs: { href: "api/export-routing", variant: "info" } },
                 [_vm._v(" Export Routes ")]
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-col",
+            [
+              _c(
+                "b-button",
+                {
+                  attrs: {
+                    href: "api/export-fruitpartner-deliveries",
+                    type: "submit",
+                    variant: "info"
+                  }
+                },
+                [_vm._v(" Export Fruit Partner Deliveries ")]
               )
             ],
             1

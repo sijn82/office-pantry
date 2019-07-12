@@ -114,9 +114,9 @@ class FruitPartnerController extends Controller
     
     public function download($orders, $fruitpartner, $week_start) 
     {
-        return Excel::store(new Exports\FruitPartnerPicklists($orders), 'FruitPartners/fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.pdf', \Maatwebsite\Excel\Excel::TCPDF);
+        //return Excel::store(new Exports\FruitPartnerPicklists($orders), 'FruitPartners/fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.pdf', \Maatwebsite\Excel\Excel::TCPDF);
         
-        // return Excel::store(new Exports\FruitPartnerPicklists($orders), 'FruitPartners/fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.xlsx');
+         return Excel::store(new Exports\FruitPartnerPicklists($orders), 'FruitPartners/' . $week_start->current . '/fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.xlsx');
     }
 
     
@@ -173,10 +173,19 @@ class FruitPartnerController extends Controller
                 $orders->milkboxes = null;
                 Log::channel('slack')->info('Fruit Partner: ' . $fruitpartner->name . ' has no Milk Orders to be delivered this week.' );
             }
-            // $this->download($orders, $fruitpartner, $week_start);
+            
+            if ($orders->milkboxes == null && $orders->fruitboxes == null) {
+                // dd($orders);
+            } else {
+            
+                $this->download($orders, $fruitpartner, $week_start);
+            }
+             
              // return \Excel::download(new Exports\FruitPartnerPicklists($orders), 'fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.xlsx'); 
-            return Excel::store(new Exports\FruitPartnerPicklists($orders),'invoices.pdf');
+            // return Excel::store(new Exports\FruitPartnerPicklists($orders),'invoices.pdf');
             //return Excel::store(new Exports\FruitPartnerPicklists($orders), 'FruitPartners/fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.pdf', \PhpOffice\PhpSpreadsheet\Writer\Pdf\Tcpdf());
+            // dd($orders);
+            //return \Excel::store(new Exports\FruitPartnerPicklists($orders), 'fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.xlsx');
         }
         // Cool(io) - $orders is now filled with orders.  Just orders, and the key used is the fruitpartner name as I'm sure that'll save some bother cometh the template.
         // However, do I really want to put/keep them together when they're going to different templates?
@@ -190,12 +199,15 @@ class FruitPartnerController extends Controller
         // Code source -https://laraveldaily.com/how-to-create-zip-archive-with-files-and-download-it-in-laravel/
         // This appears to work great locally, the next test is whether it will behave the same in the server environment (heroku)?
         
-        $zip_file = 'fruitpartnerorders-' . $week_start->current . '.zip';
+        $zip_file = 'FruitPartner/fruitpartnerorders-' . $week_start->current . '.zip';
         $zip = new \ZipArchive();
         $zip->open($zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
-
-        $path = storage_path('app/FruitPartners');
+        
+        // Made a tweak to where the files are stored, adding another sub directory limiting the zip download to only grab files in the folder of the current week start.
+        $path = storage_path('app/FruitPartners/' . $week_start->current);
         $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
+        
+        // debugging anything with dd() in this foreach causes the page to timeout, dump() works but must be removed to successfully download anything.
         foreach ($files as $name => $file)
         {
             // We're skipping all subfolders
@@ -204,10 +216,11 @@ class FruitPartnerController extends Controller
 
                 // extracting filename with substr/strlen
                 $relativePath = substr($filePath, strlen($path) + 1);
-
+                //dump($filePath);
                 $zip->addFile($filePath, $relativePath);
             }
         }
+        
         $zip->close();
         return response()->download($zip_file);
         
