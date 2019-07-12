@@ -1,6 +1,6 @@
 <template lang="html">
     <div class="margin-30">
-        <h3> Import and Export Stuff </h3>
+        <h3> Export Stuff </h3>
         <b-row class="padding-top-20">
             <b-col></b-col>
             <b-col>
@@ -9,14 +9,15 @@
             <b-col>
                 <b-button href="api/export-routing" variant="info"> Export Routes </b-button>
             </b-col>
-            <b-col cols="6">
+            <!-- MOVED THIS TO THE EXPORT.BLADE.PHP TEMPLATE SO LARAVEL CAN HANDLE THE FILE UPLOAD.
+                <b-col cols="6">
                 <b-form enctype="multipart/form-data" @submit.prevent="importRejiggedRoutes">
                 <b-form-file v-model="rejigged_routes_file" :state="Boolean(rejigged_routes_file)" placeholder="Choose a file..." drop-placeholder="Drop file here" @change="newFileUpload"></b-form-file>
                 
                 <b-button type="submit" variant="info"> Import Rejigged Routes (Unwritten) </b-button>
             </b-form>
-            </b-col>
-            <b-col>{{ rejigged_routes_file }}</b-col>
+            </b-col> -->
+            <b-col></b-col>
         </b-row>
         <div class="padding-top-20">
             <h4> Override Box Totals </h4>

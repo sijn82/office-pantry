@@ -54,10 +54,6 @@ class CompanyRouteController extends Controller
         // I appear to have the data in exactly the form I need, so wtf is the class for? I mean I could use it, (and it fails if I remove it) but I'm clearly missing something. Hmmn?
 
         $rejiggedRoutesByTab = Excel::toCollection(new RejiggedCompanyRoutes(), $request->file('rejigged-routes-file'));
-        // $rejiggedRoutesByTab = Excel::toCollection($request->file('rejigged-routes-file'));
-        // $tabNamesTest = Excel::import(new RejiggedCompanyRoutes(), $request->file('rejigged-routes-file'));
-        // $tabNames = $tabNamesTest->getSheetNames();
-        //  dd($rejiggedRoutesByTab);
 
         // First foreach loop will run through each tab of the excel file i.e each rejigged route (AssignedRoute).
         foreach ($rejiggedRoutesByTab as $rejiggedRoutesTab) {
@@ -70,15 +66,15 @@ class CompanyRouteController extends Controller
                 if ($rejiggedRoute['company_route_id'] !== null) {
                     // The route export changes the assigned route id to it's name, which means we need to either reverse it here or provide it as an additional field to the routes.
                     // Which will be better for Vlad, I guess. To give him an additional field (to ignore), or hope he doesn't manually change the route names while re-routing like a man posessed?
+                    
+                    // Grab delivery route based on the name from 'assigned_to' column in the rejigged routes, so we can use the id from here on.
                     $assigned_route = AssignedRoute::where('name', $rejiggedRoute['assigned_to'])->get();
-                    // dd($assigned_route[0]->id);
-                    // dd($rejiggedRoute);
-
+                    // Grab company route info from 'company_route_id' column in rejigged routes
                     $companyRoute = CompanyRoute::find($rejiggedRoute['company_route_id']);
+                    // Using the route info we can grab the company details id
                     $companyDetailsId = $companyRoute->company_details_id;
 
                     $allRoutesForCompany = CompanyRoute::where('company_details_id', $companyDetailsId)->get();
-                    // dd($companyRoute);
 
                     $companyRoute->postcode = $rejiggedRoute['postcode'];
                     $companyRoute->address = $rejiggedRoute['address'];
@@ -88,7 +84,7 @@ class CompanyRouteController extends Controller
 
                     if ($companyRoute->isDirty('assigned_route_id') || $companyRoute->isDirty('position_on_route')) {
 
-                        dump('Filthy route and position needs a good clean');
+                    //    dump('Filthy route and position needs a good clean');
 
                         $companyRoute->update([
                             'assigned_route_id' => $assigned_route[0]->id,
@@ -100,7 +96,7 @@ class CompanyRouteController extends Controller
                     // If postcode or route has been changed during the rejig, then let's update all their other routes with this information.
                     if ($companyRoute->isDirty('postcode') || $companyRoute->isDirty('address')) {
 
-                        dump('Filthy address data needs a clean.');
+                    //    dump('Filthy address data needs a clean.');
 
                         foreach ($allRoutesForCompany as $route) {
 
@@ -113,7 +109,7 @@ class CompanyRouteController extends Controller
                     // And do the same with delivery information.
                     if ($companyRoute->isDirty('delivery_information')) {
 
-                        dump('Filthy delivery information needs a clean.');
+                    //    dump('Filthy delivery information needs a clean.');
 
                         foreach ($allRoutesForCompany as $route) {
 
@@ -122,11 +118,13 @@ class CompanyRouteController extends Controller
                             ]);
                         }
                     }
-                    dump($companyRoute);
-                }
-            }
-        }
-    }
+                //    dump($companyRoute);
+                } // if ($rejiggedRoute['company_route_id'] !== null)
+            } // foreach ($rejiggedRoutesTab as $rejiggedRoute)
+        } // foreach ($rejiggedRoutesByTab as $rejiggedRoutesTab)
+        
+        return redirect('exporting')->with('status', 'Routes Rejigged!');
+    } // public function import(Request $request)
 
     /**
      * Display a listing of the resource.

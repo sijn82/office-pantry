@@ -112533,6 +112533,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -112585,7 +112586,7 @@ var render = function() {
     "div",
     { staticClass: "margin-30" },
     [
-      _c("h3", [_vm._v(" Import and Export Stuff ")]),
+      _c("h3", [_vm._v(" Export Stuff ")]),
       _vm._v(" "),
       _c(
         "b-row",
@@ -112622,51 +112623,7 @@ var render = function() {
             1
           ),
           _vm._v(" "),
-          _c(
-            "b-col",
-            { attrs: { cols: "6" } },
-            [
-              _c(
-                "b-form",
-                {
-                  attrs: { enctype: "multipart/form-data" },
-                  on: {
-                    submit: function($event) {
-                      $event.preventDefault()
-                      return _vm.importRejiggedRoutes($event)
-                    }
-                  }
-                },
-                [
-                  _c("b-form-file", {
-                    attrs: {
-                      state: Boolean(_vm.rejigged_routes_file),
-                      placeholder: "Choose a file...",
-                      "drop-placeholder": "Drop file here"
-                    },
-                    on: { change: _vm.newFileUpload },
-                    model: {
-                      value: _vm.rejigged_routes_file,
-                      callback: function($$v) {
-                        _vm.rejigged_routes_file = $$v
-                      },
-                      expression: "rejigged_routes_file"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "b-button",
-                    { attrs: { type: "submit", variant: "info" } },
-                    [_vm._v(" Import Rejigged Routes (Unwritten) ")]
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c("b-col", [_vm._v(_vm._s(_vm.rejigged_routes_file))])
+          _c("b-col")
         ],
         1
       ),
