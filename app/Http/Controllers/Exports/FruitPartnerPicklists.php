@@ -534,6 +534,8 @@ WithEvents
                     
                     $delivery_entry = new \stdClass;
                     
+                    $fruitboxes = $this->$fruitboxes[$key];
+                    
                     $additional_fruit = $fruitboxes->where('company_details_id', $milkbox->company_details_id)->where('delivery_day', $milkbox->delivery_day)->first();
                     if (empty($additional_fruit)) {
                         
