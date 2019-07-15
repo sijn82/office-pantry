@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\WeekStart;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Contracts\Filesystem\Filesystem;
 
 class FruitPartnerController extends Controller
 {
@@ -119,7 +121,7 @@ class FruitPartnerController extends Controller
         // works locally but heroku having issues, simplifying the folder structure.
         // return Excel::store(new Exports\FruitPartnerPicklists($orders), 'FruitPartners/' . $week_start->current . '/fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.xlsx');
         
-        return Excel::store(new Exports\FruitPartnerPicklists($orders), 'fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.xlsx');
+        return Excel::store(new Exports\FruitPartnerPicklists($orders), 'fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.xlsx', 's3');
     }
 
     
@@ -203,27 +205,29 @@ class FruitPartnerController extends Controller
         // This appears to work great locally, the next test is whether it will behave the same in the server environment (heroku)?
         
         // works locally, heroku struggling
-        //$zip_file = 'FruitPartner/fruitpartnerorders-' . $week_start->current . '.zip';
+        $zip_file = 'FruitPartner/fruitpartnerorders-' . $week_start->current . '.zip';
         $zip_file = 'fruitpartnerorders-' . $week_start->current . '.zip';
         $zip = new \ZipArchive();
         $zip->open($zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
         
         // Made a tweak to where the files are stored, adding another sub directory limiting the zip download to only grab files in the folder of the current week start.
-        $path = storage_path('app');
-        $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
-        
+        $files = Storage::disk('s3')->files();
+        //$files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
+        //dd($files);
         // debugging anything with dd() in this foreach causes the page to timeout, dump() works but must be removed to successfully download anything.
-        foreach ($files as $name => $file)
+        foreach ($files as $file)
         {
-            // We're skipping all subfolders
-            if (!$file->isDir()) {
-                $filePath = $file->getRealPath();
-
-                // extracting filename with substr/strlen
-                $relativePath = substr($filePath, strlen($path) + 1);
-                //dump($filePath);
-                $zip->addFile($filePath, $relativePath);
-            }
+            $content = Storage::disk('s3')->get($file);
+            // // We're skipping all subfolders
+            // if (!$file->isDir()) {
+            //     $filePath = $file->getRealPath();
+            // 
+            //     // extracting filename with substr/strlen
+            //     $relativePath = substr($filePath, strlen($path) + 1);
+            //     //dump($filePath);
+            //     $zip->addFile($filePath, $relativePath);
+            // }
+            $zip->addFromString($file, $content);
         }
         
         $zip->close();
