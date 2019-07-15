@@ -526,7 +526,7 @@ WithEvents
         } // End of if (!empty($this->fruitboxes))
         
         if (!empty($this->milkboxes)) {
-            foreach ($this->milkboxes as $milkboxes) {
+            foreach ($this->milkboxes as $key => $milkboxes) {
                 foreach ($milkboxes as $milkbox) {
                     
                     // Ok, so each time we run a new order we need to unset and redefine the variable again or the results all end up lthe same asd the last entry.
