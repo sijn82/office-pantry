@@ -210,6 +210,8 @@ class FruitPartnerController extends Controller
         $zip = new \ZipArchive();
         $zip->open($zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
         
+        //----- Had to make some wholesale changes to the previous code, now much smaller and using laravel 'Storage' functions rather than standard php -----//
+        
         // Made a tweak to where the files are stored, adding another sub directory limiting the zip download to only grab files in the folder of the current week start.
         $files = Storage::disk('s3')->files();
         //$files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
