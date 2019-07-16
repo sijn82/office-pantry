@@ -28,28 +28,28 @@ class SnackBoxController extends Controller
         public function __construct()
         {
             $week_start = WeekStart::first();
-            
+
             if ($week_start !== null) {
                 $this->week_start = $week_start->current;
                 $this->delivery_days = $week_start->delivery_days;
             }
 
         }
-        
+
         // public function snackbox_test () {
         //     // dd('well this worked fine? what\'s going on?!!');
         //     session()->put('snackbox_courier', 'OP');
-        // 
+        //
         //     return \Excel::download(new Exports\SnackboxSingleCompanyExportNew, 'snackboxesOPSingleCompany-' . $this->delivery_days . '-' . $this->week_start . '.xlsx');
         // }
-        
+
         // There are a couple of options here, use the same function with a switch statement value based on the button pressed, or as I'm going to do for now, create several functions
         // one to handle each scenario.
 
         //----- Single Company, Multiple Boxes -----//
-        
+
             // - Weekly Export Results
-            
+
             public function download_snackbox_weekly_op_singlecompany()
             {
                 session()->put('snackbox_courier', 'OP');
@@ -68,9 +68,9 @@ class SnackBoxController extends Controller
 
                 return \Excel::download(new Exports\SnackboxSingleCompanyWeeklyExportNew, 'snackboxesAPCSingleCompany-' . $this->week_start . '.xlsx');
             }
-        
+
             // Selected Day(s) Export Results
-            
+
             public function download_snackbox_op_singlecompany()
             {
                 session()->put('snackbox_courier', 'OP');
@@ -89,13 +89,13 @@ class SnackBoxController extends Controller
 
                 return \Excel::download(new Exports\SnackboxSingleCompanyExportNew, 'snackboxesAPCSingleCompany-' . $this->delivery_days . '-' . $this->week_start . '.xlsx');
             }
-        
+
         //----- End of Single Company, Multiple Boxes -----//
-        
+
         //----- Multiple Companies, Single Box -----//
-        
+
             // - Weekly Export Results
-            
+
             public function download_snackbox_weekly_op_multicompany()
             {
                 session()->put('snackbox_courier', 'OP');
@@ -114,9 +114,9 @@ class SnackBoxController extends Controller
 
                 return \Excel::download(new Exports\SnackboxMultiCompanyWeeklyExportNew, 'snackboxesAPCMultiCompany-' . $this->week_start . '.xlsx');
             }
-        
+
             // Selected Day(s) Export Results
-            
+
             public function download_snackbox_op_multicompany()
             {
                 session()->put('snackbox_courier', 'OP');
@@ -135,11 +135,11 @@ class SnackBoxController extends Controller
 
                 return \Excel::download(new Exports\SnackboxMultiCompanyExportNew, 'snackboxesAPCMultiCompany-' . $this->delivery_days . '-' . $this->week_start . '.xlsx');
             }
-        
+
         //----- End of Multiple Companies, Single Box -----//
 
         //----- Unique Box, Multiple Companies -----//
-        
+
             // These are used for companies who receive unique items held in stock which need a picklist creating such as peanut butter, himalayan salt and cereal etc.
             // The following 3 functions are for companies receiving one box.
             public function download_snackbox_unique_op_multicompany()
@@ -160,9 +160,9 @@ class SnackBoxController extends Controller
 
                 return \Excel::download(new Exports\SnackboxUniqueMultiCompanyExportNew, 'snackboxes-Unique-APC-MultiCompany-' . $this->delivery_days . '-' . $this->week_start . '.xlsx');
             }
-            
+
             // Whereas these 3 are for companies receiving more than one box - they will be used rarely but need to be possible if needed.
-            
+
             public function download_snackbox_unique_op_singlecompany()
             {
                 session()->put('snackbox_courier', 'OP');
@@ -181,32 +181,32 @@ class SnackBoxController extends Controller
 
                 return \Excel::download(new Exports\SnackboxUniqueSingleCompanyExportNew, 'snackboxes-Unique-APC-SingleCompany-' . $this->delivery_days . '-' . $this->week_start . '.xlsx');
             }
-        
+
             // These will no longer be used in the new system - replaced by drinkbox.
-            
+
                 // public function download_snackbox_op_unique()
                 // {
                 //     session()->put('snackbox_courier', 'OP');
-                // 
+                //
                 //     return \Excel::download(new Exports\SnackboxUniqueExportNew, 'snackboxesOPUnique' . $this->week_start . '.xlsx');
                 // }
                 // public function download_snackbox_dpd_unique()
                 // {
                 //     session()->put('snackbox_courier', 'DPD');
-                // 
+                //
                 //     return \Excel::download(new Exports\SnackboxUniqueExportNew, 'snackboxesDPDUnique' . $this->week_start . '.xlsx');
                 // }
                 // public function download_snackbox_apc_unique()
                 // {
                 //     session()->put('snackbox_courier', 'APC');
-                // 
+                //
                 //     return \Excel::download(new Exports\SnackboxUniqueExportNew, 'snackboxesAPCUnique' . $this->week_start . '.xlsx');
                 // }
-                
+
             // End of ones replaced by drinkbox
-            
+
         //----- End of Unique Box, Multiple Companies -----//
-            
+
         // Snackbox Wholesale Exports
         public function download_snackbox_wholesale_op_singlecompany()
         {
@@ -480,12 +480,12 @@ class SnackBoxController extends Controller
                 $new_snackbox->unit_price = $item['unit_price'];
                 $new_snackbox->case_price = $item['case_price'];
                 $new_snackbox->save();
-                
+
                 //---------- Adjust stock levels ----------//
-                
+
                     // Now we need to sort out the stock levels for these order items, keeping them in check and hopefully 100% accurate!
                     //  If these order items get cancelled for any reason, we must remember to add them back in too!!
-                    
+
                     // First let's grab the product
                     $product = Product::findOrFail($item['id']);
                     // Then it's current stock level, and deduct the order quantity as the new stock level.
@@ -494,7 +494,7 @@ class SnackBoxController extends Controller
                     Product::where('id', $item['id'])->update([
                         'stock_level' => $new_stock_level,
                     ]);
-                
+
                 //---------- End of Adjust stock levels ----------//
 
             }
@@ -527,13 +527,13 @@ class SnackBoxController extends Controller
 
                 // $companyDetails = Company::findOrFail($request['company_details_id']);
                 $companyDetails = CompanyDetails::findOrFail($request['company_details_id']);
-                
+
                 $assigned_route_tbc_monday = AssignedRoute::where('name', 'TBC (Monday)')->get();
                 $assigned_route_tbc_tuesday = AssignedRoute::where('name', 'TBC (Tuesday)')->get();
                 $assigned_route_tbc_wednesday = AssignedRoute::where('name', 'TBC (Wednesday)')->get();
                 $assigned_route_tbc_thursday = AssignedRoute::where('name', 'TBC (Thursday)')->get();
                 $assigned_route_tbc_friday = AssignedRoute::where('name', 'TBC (Friday)')->get();
-                
+
                 switch ($delivery_day) {
                     case 'Monday':
                         $assigned_route_id = $assigned_route_tbc_monday[0]->id;
@@ -551,26 +551,26 @@ class SnackBoxController extends Controller
                         $assigned_route_id = $assigned_route_tbc_friday[0]->id;
                         break;
                 }
-                
+
                 // We need to create a new entry.
                 $newRoute = new CompanyRoute();
                 // $newRoute->is_active = 'Active'; // Currently hard coded but this is also the default.
                 $newRoute->company_details_id = $request['company_details_id'];
                 $newRoute->route_name = $companyDetails->route_name;
                 $newRoute->postcode = $companyDetails->route_postcode;
-                
+
                 //  Route Summary Address isn't a field in the new model, instead I need to grab all route fields and combine them into the summary address.
                 // $newRoute->address = $companyDetails->route_summary_address;
-                
+
                 // An if empty check is being made on the optional fields so that we don't unnecessarily add ', ' to the end of an empty field.
                 $newRoute->address = implode(", ", array_filter([
-                        $companyDetails->route_address_line_1, 
-                        $companyDetails->route_address_line_2, 
-                        $companyDetails->route_address_line_3, 
-                        $companyDetails->route_city, 
+                        $companyDetails->route_address_line_1,
+                        $companyDetails->route_address_line_2,
+                        $companyDetails->route_address_line_3,
+                        $companyDetails->route_city,
                         $companyDetails->route_region
                     ]));
-                
+
                 $newRoute->delivery_information = $companyDetails->delivery_information;
                 $newRoute->assigned_route_id = $assigned_route_id;
                 $newRoute->delivery_day = $delivery_day;
@@ -603,8 +603,8 @@ class SnackBoxController extends Controller
     public function update(Request $request)
     {
         //---------- Calculate and update the new product stock level ----------//
-        
-            // This needs to check what the previous value was before adjusting stock levels with the difference. 
+
+            // This needs to check what the previous value was before adjusting stock levels with the difference.
             $snackbox_item_current = Snackbox::find(request('snackbox_item_id'));
 
             // This determines whether we need to add or remove quantities from stock
@@ -613,23 +613,23 @@ class SnackBoxController extends Controller
                 $stock_difference = ($snackbox_item_current->quantity - request('snackbox_item_quantity'));
                 // Then we need to return the difference to stock
                 Product::where('id', $snackbox_item_current->product_id)->increment('stock_level', $stock_difference);
-                
+
             } elseif ($snackbox_item_current->quantity < request('snackbox_item_quantity')) {
                 // Work out the difference
                 $stock_difference = (request('snackbox_item_quantity') - $snackbox_item_current->quantity);
                 // Then we need to remove the difference from stock
                 Product::where('id', $snackbox_item_current->product_id)->decrement('stock_level', $stock_difference);
             }
-            
+
         //---------- End of Calculate and update the new product stock level ----------//
-        
+
         //---------- Update the box entry with quantity ----------//
-        
+
             // Now the stock levels are sorted we can go ahead and save the updated quantity for that item in the box.
             SnackBox::where('id', request('snackbox_item_id'))->update([
                 'quantity' => request('snackbox_item_quantity'),
             ]);
-            
+
         //---------- Update the box entry with quantity ----------//
     }
 
@@ -664,13 +664,13 @@ class SnackBoxController extends Controller
                 // This is currently pulling info from the Company table, although I want to create a CompanyData table to replace this.
                 // $companyDetails = Company::findOrFail(request('snackbox_details.company_id'));
                 $companyDetails = CompanyDetails::findOrFail(request('snackbox_details.company_details_id'));
-                
+
                 $assigned_route_tbc_monday = AssignedRoute::where('name', 'TBC (Monday)')->get();
                 $assigned_route_tbc_tuesday = AssignedRoute::where('name', 'TBC (Tuesday)')->get();
                 $assigned_route_tbc_wednesday = AssignedRoute::where('name', 'TBC (Wednesday)')->get();
                 $assigned_route_tbc_thursday = AssignedRoute::where('name', 'TBC (Thursday)')->get();
                 $assigned_route_tbc_friday = AssignedRoute::where('name', 'TBC (Friday)')->get();
-                
+
                 switch (request('delivery_day')) {
                     case 'Monday':
                         $assigned_route_id = $assigned_route_tbc_monday[0]->id;
@@ -688,17 +688,17 @@ class SnackBoxController extends Controller
                         $assigned_route_id = $assigned_route_tbc_friday[0]->id;
                         break;
                 }
-                
+
                 // We need to create a new entry.
                 $newRoute = new CompanyRoute();
                 // $newRoute->is_active = 'Active'; // Currently hard coded but this is also the default.
                 $newRoute->company_details_id = request('snackbox_details.company_details_id');
                 $newRoute->route_name = $companyDetails->route_name;
                 $newRoute->postcode = $companyDetails->route_postcode;
-                
+
                 //  Route Summary Address isn't a field in the new model, instead I need to grab all route fields and combine them into the summary address.
                 // $newRoute->address = $companyDetails->route_summary_address;
-                
+
                 // An if empty check is being made on the optional fields so that we don't unnecessarily add ', ' to the end of an empty field.
                 $newRoute->address = $companyDetails->route_address_line_1 . ', '
                                     . $companyDetails->route_address_line_2 . ', '
@@ -706,7 +706,7 @@ class SnackBoxController extends Controller
                                     . $companyDetails->route_city . ', '
                                     . $companyDetails->route_region . ', '
                                     . $companyDetails->route_postcode;
-                
+
                 $newRoute->delivery_information = $companyDetails->delivery_information;
                 $newRoute->assigned_route_id = $assigned_route_id;
                 $newRoute->delivery_day = request('snackbox_details.delivery_day');
@@ -728,14 +728,14 @@ class SnackBoxController extends Controller
 
     public function addProductToSnackbox (Request $request)
     {
-        // I need to add some sort of stock level amendments here too.  
-        // If stock levels were adjusted in the box creation we need to 
+        // I need to add some sort of stock level amendments here too.
+        // If stock levels were adjusted in the box creation we need to
         // return the stock from removed entries and subtract the stock from added ones.
-        
+
         //dd(request('snackbox_details'));
         // dump();
         Product::find(request('product.id'))->decrement('stock_level', request('product.quantity'));
-        
+
         $addProduct = new SnackBox();
         $addProduct->snackbox_id = request('snackbox_details.snackbox_id');
         $addProduct->is_active = request('snackbox_details.is_active');
@@ -789,39 +789,39 @@ class SnackBoxController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-     
-     
+
+
     public function archiveAndEmptySnackBoxes() {
         // what about if I make this a manual step?
         // 1. regardless of type, if the box is active and contains products (not the entry with product_id = 0), we save it to the archives.
         $snackboxes = SnackBox::where('is_active', 'Active')->get()->groupBy('snackbox_id');
-         
+
         foreach ($snackboxes as $snackbox) {
-             
-            if (count($snackbox) === 1) {     
+
+            if (count($snackbox) === 1) {
             // we're probably looking at an empty box, so the product_id should be 0
-             
+
                 if ($snackbox[0]->product_id === 0) {
                 // Then all is as expected.
                 } else {
-                // Something unexpected has happened, let's log it for review. 
-                $message = 'Well, shhhiiiitttttt! Snackbox ' . $snackbox[0]->snackbox_id 
-                . ' only has one item in it and it\'s ' . $snackbox[0]->product_id 
+                // Something unexpected has happened, let's log it for review.
+                $message = 'Well, shhhiiiitttttt! Snackbox ' . $snackbox[0]->snackbox_id
+                . ' only has one item in it and it\'s ' . $snackbox[0]->product_id
                 . ' rather than 0. You can find it at row ' . $snackbox[0]->id;
-                
-                Log::channel('slack')->info($message);    
+
+                Log::channel('slack')->info($message);
                 }
-                 
+
             } elseif (count($snackbox) > 1) {
             // we have a box which needs to be archived
-                 
+
             //---------- Time to save the existing box as an archive ----------//
-            
+
                 // 1.(a) if the box has an invoiced_at date, we can save it as 'inactive'.
                 if ($snackbox[0]->invoiced_at !== null) {
                     // We have a box that's already been invoiced, so we can save it to archives with an 'inactive' status.
                     foreach ($snackbox as $snackbox_item) {
-                        
+
                         $snackbox_archive_entry = new SnackBoxArchive();
                         // Snackbox Info
                         $snackbox_archive_entry->is_active = 'Inactive';
@@ -847,11 +847,11 @@ class SnackBoxController extends Controller
                         $snackbox_archive_entry->invoiced_at = $snackbox_item->invoiced_at;
                         $snackbox_archive_entry->save();
                     }
-                    
+
                 } else {
                     // 1.(b) if it doesn't, we need to save it to archives as 'active' so it can be pulled into the next invoicing run.
                     foreach ($snackbox as $snackbox_item) {
-                        
+
                         $snackbox_archive_entry = new SnackBoxArchive();
                         // Snackbox Info
                         $snackbox_archive_entry->is_active = 'Active';
@@ -877,13 +877,13 @@ class SnackBoxController extends Controller
                         $snackbox_archive_entry->invoiced_at = $snackbox_item->invoiced_at;
                         $snackbox_archive_entry->save();
                     }
-                    
+
                 }
-                 
+
             //---------- End of - Time to save the existing box as an archive ----------//
-                 
+
             //---------- Now we can strip out the orders ready for adding new products ----------//
-            
+
             // But first we need to grab any details we'll be reusing.
             $snackbox_id_recovered = $snackbox[0]->snackbox_id;
             $delivered_by_recovered = $snackbox[0]->delivered_by;
@@ -896,19 +896,19 @@ class SnackBoxController extends Controller
             $week_in_month_recovered = $snackbox[0]->week_in_month;
             $previous_delivery_week_recovered = $snackbox[0]->previous_delivery_week;
             $next_delivery_week_recovered = $snackbox[0]->next_delivery_week;
-            
+
             // Now we can loop through each entry and delete them
             foreach ($snackbox as $snack_item) {
                 // Don't worry, we've rescued all we need ;) ...probably.
                 SnackBox::destroy($snack_item->id);
             }
-            
+
             //---------- End of - Now we can strip out the orders ready for adding new products ----------//
-            
+
             //---------- But we still need to recreate the empty box entry to repopulate with products later on. ----------//
-            
+
             // 2. regardless of type, if the snackbox exists we strip out its orders, leaving only 1 entry with box details and a product id of 0, ready for the next mass/solo box update.
-            
+
             $empty_snackbox = new SnackBox();
             // Snackbox Info
             // $new_snackbox->is_active <-- Is already set to 'Active' by default.
@@ -933,65 +933,65 @@ class SnackBoxController extends Controller
             $empty_snackbox->case_price = null;
             $empty_snackbox->invoiced_at = null;
             $empty_snackbox->save();
-            
+
             //---------- End of - But we still need to recreate the empty box entry to repopulate with products later on. ----------//
-                 
+
             } // if (count($snackbox) === 1) & elseif (count($snackbox)) > 1)
         } // foreach ($snackboxes as $snackbox)
-         
+
          // If I take this approach, it would work fine for once a week processing but if we switch this to daily, then I'd need to either restrict mass updates in the same way
          // or write some logic to cater for this.
      }
-     
+
      public function massUpdateType(Request $request)
      {
-        
+
         // If this is an upload of the new weekly standard box, we won't have a company to attach
         // - instead any snackbox with 'standard' as type and unique delivery day/company id needs to pulled through,
         // stripped of all listed entries and replaced with the new order.
-        
+
         // dd($request);
-        
+
         // Grab all the snackboxes we have of the requested type.
         // GroupBy must follow '->get()' in query to utilise 'Collections' rather than 'Query Builder' which treats 'groupBy' differently.
         // I've added the where('is_active', 'Active') to prevent boxes no longer in use - getting updated with products, stripped of products, archived and (without sufficient checks) potentially pulled into invoicing.
         $snackboxes = Snackbox::where('type', request('type'))->where('is_active', 'Active')->get()->groupBy('snackbox_id');
-        
+
         // BUT WHAT DO WE DO ABOUT A BOX WITH A DELIVERY DATE SET IN THE FUTURE, FROM BEING UPDATED EACH WEEK UNTIL ITS ACTUAL DELIVERY DATE?
         // CURRENT LOGIC WOULD HAVE THESE CREATED IN ARCHIVE UNTIL DELIVERY DATE UNLESS THEY WERE SET TO INACTIVE WHICH KINDA DEFEATS THE PURPOSE OF SETTING IT UP IN ADVANCE!
-        
+
         // Maybe 'IS_ACTIVE' could be changed to include more options, such as 'PAUSED' - Which waits until the 'next_delivery_week' matches current delivery week (a new thing I could create) before changing its status to ACTIVE?
         // Hmmn, though as we process orders a week in advance, we'd need to set this to act a week in advance, which is annoying?  We also cant use the current 'WEEK START' variable as this is manually changed and wouldn't be a
         // reliable way to activate orders?
 
         // dd($snackboxes);
-        // 
-        // 
+        //
+        //
         // // Grab all distinct snackbox_id's, this should (will) grab all unique snackbox Id's for step 2.
         // $snackboxes = SnackBox::select('snackbox_id')->distinct()->get();
-        
+
         //---------- Grab any relevant snackbox data and then strip out the rest. ----------//
-        
+
         foreach ($snackboxes as $snackbox) {
-            
+
             // dd($snackbox);
-            
+
             //----- By improving the steps above I've bypassed the need for this step as we only get the snackbox type we want. -----//
                 // // In step 2 we want run through all id's, checking that the type is for a standard snackbox.
                 // $snackbox = SnackBox::where('snackbox_id', $snackbox_id['snackbox_id'])->where('type', request('type'))->get();
             //----- End of - By improving the steps above I've bypassed the need for this step as we only get the snackbox type we want. -----//
 
             // If we're about to update the box we should probably create an archive of the existing box contents for posterity.
-            
+
             // Grab these before deleting old entry, kinda important
             // However I only really need to do this once per snackbox,
             // as I'm basically just writing over these variables each time
             // until I get to the last entry of the box!
-            
-            // To be clearer - this is primarily to repopulate the new box with the same details, 
+
+            // To be clearer - this is primarily to repopulate the new box with the same details,
             // however we'll also be creating an archive entry using the old data.
-            
-            
+
+
             $snackbox_id_recovered = $snackbox[0]->snackbox_id;
             $delivered_by_recovered = $snackbox[0]->delivered_by;
             $delivery_date_recovered = $snackbox[0]->delivery_day;
@@ -1002,23 +1002,23 @@ class SnackBoxController extends Controller
             $week_in_month_recovered = $snackbox[0]->week_in_month;
             $previous_delivery_week_recovered = $snackbox[0]->previous_delivery_week;
             $next_delivery_week_recovered = $snackbox[0]->next_delivery_week;
-            
+
             // We can't updateOrCreate (per snack line) based on the uniqueness of snackbox_id/next_delivery_week in the archives due to having multiple rows (one for each item) in the snackbox.
-            // However taking it up a level to here, we can check if the snackbox_id/next_delivery_week currently exists in the snackbox_archives. 
-    
+            // However taking it up a level to here, we can check if the snackbox_id/next_delivery_week currently exists in the snackbox_archives.
+
             $has_archive = SnackBoxArchive::where('snackbox_id', $snackbox_id_recovered)->where('next_delivery_week', $next_delivery_week_recovered)->get();
 
-        
+
             if (count($snackbox)) { // Now I'm not checking all of the snackbox entries I don't need to worry about empty boxes. Though I suppose it's not doing any harm either.
 
                 foreach ($snackbox as $snack) {
 
-                    // By default we want to save the old box to archives so we can update the box on the front end with new products 
+                    // By default we want to save the old box to archives so we can update the box on the front end with new products
                     // but keep a record of what they've had in the past, either for our records or because we invoice them monthly etc...
-                    
+
                     // updateOrCreate wont work here because there will be numerous entries with matching information
                     // Snackbox_id & Next_delivery_week
-                    
+
                     // So we need to think of something else to determine whether to update or create.
                     // Also when trying to 'groupBy' - 'snackbox_id' from the 'snackbox_archives', it'll group all archived entries into one box
                     // so we need to add a second stipulation to 'groupBy - 'snackbox_id' & 'next_delivery_week'
@@ -1050,26 +1050,27 @@ class SnackBoxController extends Controller
                     } else {
                         // But what should we do if it does?
                         // What are the possible reasons for this?
-                        
+
                         // 1. Mass update has already been run for this 'type', backing up orders for that 'next_delivery_week' (i.e the previous week).
                         // 2. An update to a company snackbox (i.e not a mass update) <-- This isn't in place yet and I'm not sure it should be unless specifically requested via a button to back up contents before editing?
                         // 3. OR SHOULD I JUST CREATE A SPECIFIC TIME WHEN ALL SNACKBOX ORDERS ARE EMPTIED AND ARCHIVES CREATED?
                         // - IF BOXES ARE EMPTIED PRIOR TO MASS UPDATING, WE WOULDN'T NEED TO DO THAT HERE EITHER?
                     }
-                    
-                    
+
+
                     // Now we return to the existing code and delete the entry...
-                    
+
                     // If the snackbox entry exists we can go ahead and delete it - as the snackbox contents may vary in quantity,
                     // I just want to strip them all out and replace with the new standard order.
-                    Snackbox::where('id', $snack->id)->delete();
-                    
+
+                    // Snackbox::where('id', $snack->id)->delete(); <-- Temporarily commenting out to test without having to reb uild the orders again!  Must uncomment again when I'm done!!
+
                     // Kinda pointless but I'd like to change this ( Snackbox::where('id', $snack->id)->delete(); ) to
                     // --> SnackBox::destroy($snack->id);
                 }
-                
+
                 //---------- End of Grab any relevant snackbox data and then strip out the rest. ----------//
-                
+
                 //---------- Now let's grab their list of likes and dislikes ----------//
 
                 // Moved this further up to keep it out of a second (unnecessary for this query) foreach.
@@ -1080,8 +1081,8 @@ class SnackBoxController extends Controller
                 // so let's check the name in Products and see what the stock level looks like.
                 foreach ($likes as $like) {
                     // This will only return a countable $option if the item is in stock.
-                    // If we're reducing stock as we go, then there'll be a slightly unfair hierarchy 
-                    // to get their 'liked' snacks depending on whether they get picked first out of the hat or not, 
+                    // If we're reducing stock as we go, then there'll be a slightly unfair hierarchy
+                    // to get their 'liked' snacks depending on whether they get picked first out of the hat or not,
                     // which isn't a random process (unfortunately?).
                     $option = Product::where('name', $like)->where('stock_level', '>', 0)->get();
                     // If $option count returns nothing, it's not in stock and can be removed from selectable products this time around.
@@ -1092,28 +1093,28 @@ class SnackBoxController extends Controller
                         unset($likes[$like_key]);
                     }
                 }
-                
+
                 //-------------------- LIKES NOW ONLY CONTAIN PRODUCTS IN STOCK! ---------------------//
                 //---------- End of Now let's grab their list of likes and dislikes ----------//
-                
+
                 //----- Notes To Self -----//
-                
+
                     // Should I be deleting and creating in the same function?
                     // I'm not sure but for test purposes and problem solving clarity, I'm gonna start off this way.
                     // In fact due to the reuse of data, I kinda need to keep it together, so let's hope this will work without complications.
-                    
+
                 //----- End of Notes To Self -----//
-                
+
                 //---------- Now we need to run through the new selection of snacks, adding them (if not specified as a dislike) for the company being processed ----------//
-                
+
                 foreach ($request['order'] as $new_standard_snack) {
                     $products_already_in_box[] = $new_standard_snack['id'];
                 }
-                
+
                 foreach ($request['order'] as $new_standard_snack) {
                     // dump($request['order']);
                     // dump($new_standard_snack);
-                    
+
                     // if new snack item is in company list of dislikes and at least one of their listed likes is in stock.
                     if (in_array($new_standard_snack['name'], $dislikes)
                                                     && !empty($likes)
@@ -1129,29 +1130,29 @@ class SnackBoxController extends Controller
 
                         $old_product = Product::where('name', $new_standard_snack['name'])->get();
                         $product_details = Product::where('name', $selection)->get();
-                        
+
                         // This will need further work but so far, we find out the value of product quantity to be replaced
                         // i.e value of product to be replaced (£1.50) multiplied by quantity in standard snackbox for this week (3), totals £4.50 of stock needing to be substituted.
-                        
+
                         $old_standard_snack_value = ( $new_standard_snack['quantity'] * $old_product[0]->unit_price );
-                        
+
                         // Now we have a total to be divided by the new product unit price
                         // I'm using ceil to ensure we get a whole number that keeps the product/quantity value at a minimum of what it was before.
                         // I still need to elaborate on this further to limit the quantity at 3 and prevent multiple low value items as a replacement,
                         // however this will come later, let's get it working like this first!
 
                         $new_quantity = ( $old_standard_snack_value / $product_details[0]->unit_price );
-                        
+
                         // If the new quantity has risen to 4 or more, then the randomly selected product is likely a low value item and shouldn't really dominate the box contents.
                         // In this scenario we'd like to select a second item to add some variety.
-                        
-                        // I'm not sure what the best approach for this is yet?  
+
+                        // I'm not sure what the best approach for this is yet?
                         // 1. What would we do if the next randomly selected item is far more expensive than the randomly selected product 1 it's replacing?
                         // - should we reduce the quantity of randomly selected product 1?
                         // - what if randomly selected product 2 is more expensive than the original item being replaced?
                         // - we don't want the default behaviour to make office pantry less profit.
-                        // 2. 
-                        
+                        // 2.
+
                         $new_standard_snack['quantity'] = ceil($new_quantity);
                         //$new_standard_snack['product_id'] = $product_details[0]->product_id; //  This looks wrong?  I'm pretty sure it should be $product_details[0]->id?
                         $new_standard_snack['product_id'] = $product_details[0]->id;
@@ -1162,34 +1163,34 @@ class SnackBoxController extends Controller
 
                     // if the new standard snack is in the company list of dislikes but we have nothing in stock they really 'like'
                     } elseif (in_array($new_standard_snack['name'], $dislikes) && empty($likes)) {
-                        
+
                         // Then the company either didn't have any specified likes or we don't have the item in stock
                         // Instead all we can do is reselect from the list of Products in stock.
-                        
+
                         $old_product = Product::where('name', $new_standard_snack['name'])->get();
                         $old_standard_snack_value = ( $new_standard_snack['quantity'] * $old_product[0]->unit_price );
-                        
+
                         // Now let's grab all product options, so long as they're not in the company dislikes section, or already in the box.
                         // Let's also limit it to mixed snack products i.e not drinks etc, where the unit value (of 1 item) isn't worth more than the replacement (total) that we're trying to make.
                         // And that we have at least one of the item in stock.
-                        
+
                         $products_in_stock = Product::whereNotIn('name', $dislikes)
                                                 ->whereNotIn('id', $products_already_in_box)
                                                 ->where('sales_nominal', '4010')
                                                 ->where('unit_price', '<=', $old_standard_snack_value)
                                                 ->where('stock_level', '>', 0)
                                                 ->pluck('id')->toArray(); // <-- We now have an array of possible products to choose from as a replacement.
-                        
+
                         $key = array_rand($products_in_stock, 1);
                         // Now we can select it from the $likes array.
                         $selection = $products_in_stock[$key];
-                        
+
                         $product_details = Product::where('id', $selection)->get();
-                        
+
                         $new_quantity = ( $old_standard_snack_value / $product_details[0]->unit_price );
-                        
+
                         // Now we've selected a replacement product, we just need to overwrite details of the old item, with the new.
-                        
+
                         $new_standard_snack['quantity'] = ceil($new_quantity);
                         //$new_standard_snack['product_id'] = $product_details[0]->product_id; //  This looks wrong?  I'm pretty sure it should be $product_details[0]->id?
                         $new_standard_snack['product_id'] = $product_details[0]->id;
@@ -1199,7 +1200,7 @@ class SnackBoxController extends Controller
                         $new_standard_snack['case_price'] = $product_details[0]->case_price;
 
                     }
-                    
+
                     // if we're here, the (original) product, or its replacement should be fine to add to the company snackbox.
 
                     $new_snackbox = new SnackBox();
@@ -1208,7 +1209,7 @@ class SnackBoxController extends Controller
                     $new_snackbox->delivered_by = $delivered_by_recovered;
                     $new_snackbox->no_of_boxes = $no_of_boxes_recovered;
                     $new_snackbox->snack_cap = $snack_cap_recovered;
-                    $new_snackbox->type = $request['type'][0];
+                    $new_snackbox->type = $request['type'];
                     // Company Info
                     $new_snackbox->company_details_id = $company_details_id_recovered;
                     $new_snackbox->delivery_day = $delivery_date_recovered;
@@ -1217,8 +1218,10 @@ class SnackBoxController extends Controller
                     $new_snackbox->previous_delivery_week = $previous_delivery_week_recovered;
                     $new_snackbox->next_delivery_week = $next_delivery_week_recovered;
                     // Product Information
-                    dd($new_standard_snack);
-                    $new_snackbox->product_id = ($new_standard_snack['product_id']) ? $new_standard_snack['product_id'] :  ;
+                    //dump($new_standard_snack->product_id);
+                //    dump(isset($new_standard_snack['product_id'])); // <-- Need
+                    // $new_snackbox->product_id = $new_standard_snack['product_id'];
+                    $new_snackbox->product_id = (isset($new_standard_snack['product_id'])) ? $new_standard_snack['product_id'] : $new_standard_snack['id'];
                     $new_snackbox->code = $new_standard_snack['code'];
                     $new_snackbox->name = $new_standard_snack['name'];
                     $new_snackbox->quantity = $new_standard_snack['quantity'];
@@ -1227,9 +1230,9 @@ class SnackBoxController extends Controller
                     $new_snackbox->save();
 
                 } // end of foreach ($request['order'] as $new_standard_snack)
-                
+
                 //---------- End of Now we need to run through the new selection of snacks, adding them (if not specified as a dislike) for the company being processed ----------//
-                
+
             } // end of if (count($snackbox))
         } // end of foreach ($snackboxes as $snackbox_id)
     }
@@ -1252,12 +1255,12 @@ class SnackBoxController extends Controller
         // We need some logic here to decide if the item to be deleted is the last item in the snackbox.
         // Grab all the entries with the same snackbox_id.
         $snackbox_total_items = SnackBox::where('snackbox_id', request('snackbox_id'))->get();
-        
-        
+
+
         // However we also need to return the quantity, as it's no longer being delivered, to maintain accurate stock levels.
         // Use the id of the snackbox entry...
         $snackbox_item = SnackBox::find(request('id'));
-        
+
         // New addition, if the snackbox is wholesale we need to multiply the quantity by case size in order to get an accurate number of units to return to stock.
         if (request('type') === 'wholesale') {
                 // currently untested...
@@ -1267,13 +1270,13 @@ class SnackBoxController extends Controller
         }
         // ...to grab the associated product_id and increment the stock level by the quantity; before we strip out or destroy the entry.
         Product::find($snackbox_item->product_id)->increment('stock_level', $snackbox_item->quantity);
-        
+
         // If we've only retrieved 1 entry then this is the last vestige of box data and should be preserved.
         if (count($snackbox_total_items) === 1) {
             // To prevent an accidental extinction event, we don't want to destroy the entire entry, just strip out the product details and change the product_id to 0.
             // Having some update logic in the destroy function is probably breaking best practice rules, but I'm sure i'll be able to refactor it one day!
-            
-            
+
+
             SnackBox::where('id', $id)->update([
                 'product_id' => 0,
                 'code' => null,
@@ -1282,15 +1285,15 @@ class SnackBoxController extends Controller
                 'unit_price' => null,
                 'case_price' => null,
             ]);
-            
+
         } else {
-            
+
             // We still have another entry with the necessary box info, so we can destroy this one.
             SnackBox::destroy($id);
         }
-        
+
     }
-    
+
     public function destroyBox(Request $request)
     {
         $snackbox = SnackBox::where('snackbox_id', request('snackbox_id'))->get();

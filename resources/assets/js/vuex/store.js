@@ -303,7 +303,7 @@ export const store = new Vuex.Store({
             axios.post('/api/snackboxes/standard/update', {
                 order: store.state.snackbox,
                 type: type,
-                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv'},
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             }).then( function (response) {
                 alert('Uploaded new standard snackbox successfully!');
                 // location.reload(true); // This refreshes the browser and pulls the updated variables from the database into the vue component.
