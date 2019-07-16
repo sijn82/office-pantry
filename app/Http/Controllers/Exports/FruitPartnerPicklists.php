@@ -434,9 +434,9 @@ WithEvents
                     
                     //----- Moved logic up to here to handle all fruit & milk and just fruit deliveries -----//
                     $milkboxes = $this->milkboxes[$key];
-                    // dd($milkboxes);
-                    
-                    $additional_milk = $milkboxes->where('company_details_id', $fruitbox->company_details_id)->where('delivery_day', $fruitbox->delivery_day)->first();
+                    // dump($milkboxes);
+                    $milkboxes ? $additional_milk = $milkboxes->where('company_details_id', $fruitbox->company_details_id)->where('delivery_day', $fruitbox->delivery_day)->first() : $additional_milk = $milkboxes;
+                    // $additional_milk = $milkboxes->where('company_details_id', $fruitbox->company_details_id)->where('delivery_day', $fruitbox->delivery_day)->first();
                     // dd($additional_milk);
                     
                     if (!empty($additional_milk)) {
@@ -535,8 +535,10 @@ WithEvents
                     $delivery_entry = new \stdClass;
                     // Added but untested, however I did the same but with milk to the fruitboxes so it should be fine?
                     $fruitboxes = $this->fruitboxes[$key];
+                    // dump($fruitboxes);
+                    // Call to a member function where() on null, throws error - needs fixing!!
+                    $fruitboxes ? $additional_fruit = $fruitboxes->where('company_details_id', $milkbox->company_details_id)->where('delivery_day', $milkbox->delivery_day)->first() : $additional_fruit = $fruitboxes;
                     
-                    $additional_fruit = $fruitboxes->where('company_details_id', $milkbox->company_details_id)->where('delivery_day', $milkbox->delivery_day)->first();
                     if (empty($additional_fruit)) {
                         
                         // Then this is a milk only office
