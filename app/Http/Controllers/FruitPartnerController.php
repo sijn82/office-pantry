@@ -121,7 +121,7 @@ class FruitPartnerController extends Controller
         // works locally but heroku having issues, simplifying the folder structure.
         // return Excel::store(new Exports\FruitPartnerPicklists($orders), 'FruitPartners/' . $week_start->current . '/fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.xlsx');
         
-        return Excel::store(new Exports\FruitPartnerPicklists($orders), 'fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.xlsx', 's3');
+        return Excel::store(new Exports\FruitPartnerPicklists($orders), '/' . $week_start->current . '/' . 'fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.xlsx', 's3');
     }
 
     
@@ -213,7 +213,7 @@ class FruitPartnerController extends Controller
         //----- Had to make some wholesale changes to the previous code, now much smaller and using laravel 'Storage' functions rather than standard php -----//
         
         // Made a tweak to where the files are stored, adding another sub directory limiting the zip download to only grab files in the folder of the current week start.
-        $files = Storage::disk('s3')->files();
+        $files = Storage::disk('s3')->files($week_start->current);
         //$files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
         //dd($files);
         // debugging anything with dd() in this foreach causes the page to timeout, dump() works but must be removed to successfully download anything.
