@@ -113,6 +113,8 @@ WithTitle
             // Moved this out of the foreach loop as we only need to set these variables once.
 
             //----- OP Products -----//
+                // Yes this is very bad practise, yes I will fix it, yes it works for now.
+                // P.s I also hardcoded the entries directly into the db... why are you crying?  I'll build a proper CRUD eventually :)
                 //----- Milkbox Variables -----//
                     $milk_1l = OfficePantryProducts::findOrFail(1);
                     $milk_2l = OfficePantryProducts::findOrFail(2);
@@ -148,6 +150,10 @@ WithTitle
 
             //---------- End of Snackbox Functions ----------//
 
+            // Discounts to apply if the order total is equal to or greater than the value.
+            // Only apply one or the other, not both!
+            $discount10 = 100; // 10% discount on orders over £100.
+            $discount15 = 300; // 15% discount on orders over £300. 
 
             // The counter starts every run of invoices at the invoice date + 001.
             $counter = 1; // I need it out of the foreach ($companies as $company) loop to prevent the counter being reset to 1 each time.
@@ -1752,7 +1758,7 @@ WithTitle
             // dd($company_invoice_discountable_total);
 
             // I'm pretty sure this'll work but some testing will prove i'm right, hopefully. EDIT: Looks good!
-            if ($company_invoice_discountable_total >= 20) { // <-- Will need to change this value to an actual discount threshold i.e £300(15%)
+            if ($company_invoice_discountable_total >= $discount15) { // <-- Will need to change this value to an actual discount threshold i.e £300(15%)
 
                 // Then they're entitled to 15% off their orders which are eligible for discount.
                 // dump('15% discount!');
@@ -1842,7 +1848,7 @@ WithTitle
                     }
                 }
 
-            } elseif ($company_invoice_discountable_total >= 10) { // <-- Will need to change this value to an actual discount threshold i.e £100(10%)
+            } elseif ($company_invoice_discountable_total >= $discount10) { // <-- Will need to change this value to an actual discount threshold i.e £100(10%)
 
                 // Then they're entitled to 10% off their orders which are eligible for discount.
                 // dump('10% discount!');
