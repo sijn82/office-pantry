@@ -23,7 +23,7 @@
         <thead>
             <tr>
                 <th colspan='3'> Packed By: ..................... </th>
-                <th></th>
+                <th colspan='3'> Checked By: ..................... </th>
             </tr>
             <tr>
                 <th></th>

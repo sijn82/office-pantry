@@ -169,6 +169,7 @@ class FruitOrderingDocumentController extends Controller
                                                             'Pfizer UK Ltd (FAO Decision Support CoE (IPC 1-G))' => 'Pfizer UK Ltd',
                                                             'Baker Charles (FAO Robert Baker)' => 'Baker Charles',
                                                             'Quintessentially (Portland Place - FAO Sophie Fleming, First Floor Ballroom)' => 'Quintessentially (Portland Place)',
+                                                            'Cisco Systems UK (FAO Tom Bailey, eStore team, Building 10, Floor 2' => 'Cisco Systems UK'
                                                        ];
 
                          // If $newRoute->company_name doesn't match a Company route_name, check to see if this value matches a Company route_name exception.
