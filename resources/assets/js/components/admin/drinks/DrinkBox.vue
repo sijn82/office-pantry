@@ -232,7 +232,7 @@
                 }
             },
             saveProductToBox(drinkbox) {
-                axios.post('api/drinkbox/add-product', {
+                axios.post('api/boxes/drinkbox/add-product', {
                     product: {
                         id: this.$store.state.selectedProduct.id,
                         name: this.$store.state.selectedProduct.name,
@@ -264,7 +264,7 @@
                 }
             },
             updateDetails(drinkbox) {
-                axios.post('api/drinkbox/details', {
+                axios.post('api/boxes/drinkbox/details', {
                     drinkbox_details: drinkbox,
                 }).then (response => {
                     //location.reload(true); // What am I doing with the store on this one?  Will I need this?
@@ -273,7 +273,7 @@
             },
             deleteDrinkBox(drinkbox) {
                 let self = this;
-                axios.put('api/drinkbox/destroy-box/' + drinkbox.drinkbox_id, { 
+                axios.put('api/boxes/drinkbox/destroy-box/' + drinkbox.drinkbox_id, { 
                     drinkbox_id: drinkbox.drinkbox_id,
                 }).then ( (response) => {
                     //location.reload(true); // What am I doing with the store on this one?  Will I need this?

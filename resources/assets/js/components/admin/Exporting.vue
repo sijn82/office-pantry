@@ -44,42 +44,42 @@
                     <div id="exportMultiCompanyButtons">
                         <h4> Companies Receiving One Box Only </h4>
                         <b-form-text class="margin-height-10"> Export the full week </b-form-text>
-                        <b-button variant="outline-primary" href="export-snackbox-weekly-op-multicompany"> Export OP (Weekly) </b-button>
-                        <b-button variant="outline-primary" href="export-snackbox-weekly-dpd-multicompany"> Export DPD (Weekly) </b-button>
-                        <b-button variant="outline-primary" href="export-snackbox-weekly-apc-multicompany"> Export APC (Weekly) </b-button>
+                        <b-button variant="outline-primary" href="office/export-snackbox-weekly-op-multicompany"> Export OP (Weekly) </b-button>
+                        <b-button variant="outline-primary" href="office/export-snackbox-weekly-dpd-multicompany"> Export DPD (Weekly) </b-button>
+                        <b-button variant="outline-primary" href="office/export-snackbox-weekly-apc-multicompany"> Export APC (Weekly) </b-button>
                         <b-form-text class="margin-height-10"> Only export the selected delivery days </b-form-text>
-                        <b-button variant="outline-primary" href="export-snackbox-op-multicompany"> Export OP (Selected Days) </b-button>
-                        <b-button variant="outline-primary" href="export-snackbox-dpd-multicompany"> Export DPD (Selected Days) </b-button>
-                        <b-button variant="outline-primary" href="export-snackbox-apc-multicompany"> Export APC (Selected Days) </b-button>
+                        <b-button variant="outline-primary" href="office/export-snackbox-op-multicompany"> Export OP (Selected Days) </b-button>
+                        <b-button variant="outline-primary" href="office/export-snackbox-dpd-multicompany"> Export DPD (Selected Days) </b-button>
+                        <b-button variant="outline-primary" href="office/export-snackbox-apc-multicompany"> Export APC (Selected Days) </b-button>
                     </div>
                     <div id="exportSingleCompanyButtons">
                         <h4> Companies Receiving Multiple Boxes </h4>
                         <b-form-text class="margin-height-10"> Export the full week </b-form-text>
-                        <b-button variant="outline-primary" href="export-snackbox-weekly-op-singlecompany"> Export OP (Weekly) </b-button>
-                        <b-button variant="outline-primary" href="export-snackbox-weekly-dpd-singlecompany"> Export DPD (Weekly) </b-button>
-                        <b-button variant="outline-primary" href="export-snackbox-weekly-apc-singlecompany"> Export APC (Weekly) </b-button>
+                        <b-button variant="outline-primary" href="office/export-snackbox-weekly-op-singlecompany"> Export OP (Weekly) </b-button>
+                        <b-button variant="outline-primary" href="office/export-snackbox-weekly-dpd-singlecompany"> Export DPD (Weekly) </b-button>
+                        <b-button variant="outline-primary" href="office/export-snackbox-weekly-apc-singlecompany"> Export APC (Weekly) </b-button>
                         <b-form-text class="margin-height-10"> Only export the selected delivery days </b-form-text>
-                        <b-button variant="outline-primary" href="export-snackbox-op-singlecompany"> Export OP (Selected Days) </b-button>
-                        <b-button variant="outline-primary" href="export-snackbox-dpd-singlecompany"> Export DPD (Selected Days) </b-button>
-                        <b-button variant="outline-primary" href="export-snackbox-apc-singlecompany"> Export APC (Selected Days) </b-button>
+                        <b-button variant="outline-primary" href="office/export-snackbox-op-singlecompany"> Export OP (Selected Days) </b-button>
+                        <b-button variant="outline-primary" href="office/export-snackbox-dpd-singlecompany"> Export DPD (Selected Days) </b-button>
+                        <b-button variant="outline-primary" href="office/export-snackbox-apc-singlecompany"> Export APC (Selected Days) </b-button>
                     </div>
                     <div>
                         <h4> Unique Snackbox Items </h4>
                         <h6> (Peanut Butter, Himalayan Salt, Cereal etc) </h6>
                         <b-form-text class="margin-height-10"> Companies Receiving Multiple Boxes </b-form-text>
-                        <b-button variant="outline-secondary" href="export-snackbox-unique-op-singlecompany"> Export OP (Selected Days) </b-button>
-                        <b-button variant="outline-secondary" href="export-snackbox-unique-dpd-singlecompany"> Export DPD (Selected Days) </b-button>
-                        <b-button variant="outline-secondary" href="export-snackbox-unique-apc-singlecompany"> Export APC </b-button>
+                        <b-button variant="outline-secondary" href="office/export-snackbox-unique-op-singlecompany"> Export OP (Selected Days) </b-button>
+                        <b-button variant="outline-secondary" href="office/export-snackbox-unique-dpd-singlecompany"> Export DPD (Selected Days) </b-button>
+                        <b-button variant="outline-secondary" href="office/export-snackbox-unique-apc-singlecompany"> Export APC </b-button>
                         <b-form-text class="margin-height-10"> Companies Receiving One Box Only </b-form-text>
-                        <b-button variant="outline-secondary" href="export-snackbox-unique-op-multicompany"> Export OP (Selected Days) </b-button>
-                        <b-button variant="outline-secondary" href="export-snackbox-unique-dpd-multicompany"> Export DPD (Selected Days) </b-button>
-                        <b-button variant="outline-secondary" href="export-snackbox-unique-apc-multicompany"> Export APC (Selected Days) </b-button>
+                        <b-button variant="outline-secondary" href="office/export-snackbox-unique-op-multicompany"> Export OP (Selected Days) </b-button>
+                        <b-button variant="outline-secondary" href="office/export-snackbox-unique-dpd-multicompany"> Export DPD (Selected Days) </b-button>
+                        <b-button variant="outline-secondary" href="office/export-snackbox-unique-apc-multicompany"> Export APC (Selected Days) </b-button>
                     </div>
                     <div>
                         <h4> Process Otherbox Orders into Checklists or Picklists </h4>
-                        <b-button variant="outline-primary" href="export-otherbox-checklist-op"> Export OP Otherboxes (Checklist) </b-button>
-                        <b-button variant="outline-primary" href="export-otherbox-checklist-op-weekly-total"> Export OP Otherboxes (Checklist) Weekly Total </b-button>
-                        <b-button variant="outline-primary" href="export-otherbox-op-multicompany"> Export OP Otherboxes </b-button>
+                        <b-button variant="outline-primary" href="office/export-otherbox-checklist-op"> Export OP Otherboxes (Checklist) </b-button>
+                        <b-button variant="outline-primary" href="office/export-otherbox-checklist-op-weekly-total"> Export OP Otherboxes (Checklist) Weekly Total </b-button>
+                        <b-button variant="outline-primary" href="office/export-otherbox-op-multicompany"> Export OP Otherboxes </b-button>
                         <b-form-text>
                             The checklist is for use when checking deliveries as they arrive, the other for adding to routes (pallets).
                         </b-form-text>
@@ -95,24 +95,24 @@
                     <div id="exportWholesaleButtons">
                         <h4> Process Wholesale (Snackbox, Drinkbox & Otherbox) Orders into Picklists </h4>
                         <b-form-text class="margin-height-10"> Export the full week </b-form-text>
-                        <b-button variant="outline-primary" href="export-wholesale-weekly-snackbox-op-singlecompany"> Export OP Snackboxes (Weekly) </b-button>
-                        <b-button variant="outline-primary" href="export-wholesale-weekly-drinkbox-op-multicompany"> Export OP Drinkboxes (Weekly) </b-button>
+                        <b-button variant="outline-primary" href="office/export-wholesale-weekly-snackbox-op-singlecompany"> Export OP Snackboxes (Weekly) </b-button>
+                        <b-button variant="outline-primary" href="office/export-wholesale-weekly-drinkbox-op-multicompany"> Export OP Drinkboxes (Weekly) </b-button>
                         <b-form-text class="margin-height-10"> Only export the selected delivery days </b-form-text>
-                        <b-button variant="outline-primary" href="export-wholesale-snackbox-op-singlecompany"> Export OP Snackboxes (Selected Days) </b-button>
-                        <b-button variant="outline-primary" href="export-wholesale-drinkbox-op-multicompany"> Export OP Drinkboxes (Selected Days) </b-button>
+                        <b-button variant="outline-primary" href="office/export-wholesale-snackbox-op-singlecompany"> Export OP Snackboxes (Selected Days) </b-button>
+                        <b-button variant="outline-primary" href="office/export-wholesale-drinkbox-op-multicompany"> Export OP Drinkboxes (Selected Days) </b-button>
                         <!-- <b-button variant="outline-primary" href="export-wholesale-otherbox-op-multicompany"> Export OP Otherboxes (Not Needed?) </b-button> -->
                     </div>
                     <div id="exportMonthlySpecialButtons">
                         <h4> Process Monthly Special Items </h4>
                         <h6> Whether it's a Snack, Drink, Other (or a combination) they all get processed here! </h6>
                         <b-form-text class="margin-height-10"> Export the full week </b-form-text>
-                        <b-button variant="outline-warning" href="export-monthly-special-op-weekly"> Export OP (Weekly) </b-button>
-                        <b-button variant="outline-warning" href="export-monthly-special-dpd-weekly"> Export DPD (Weekly) </b-button>
-                        <b-button variant="outline-warning" href="export-monthly-special-apc-weekly"> Export APC (Weekly) </b-button>
+                        <b-button variant="outline-warning" href="office/export-monthly-special-op-weekly"> Export OP (Weekly) </b-button>
+                        <b-button variant="outline-warning" href="office/export-monthly-special-dpd-weekly"> Export DPD (Weekly) </b-button>
+                        <b-button variant="outline-warning" href="office/export-monthly-special-apc-weekly"> Export APC (Weekly) </b-button>
                         <b-form-text class="margin-height-10"> Only export the selected delivery days </b-form-text>
-                        <b-button variant="outline-warning" href="export-monthly-special-op"> Export OP (Selected Days) </b-button>
-                        <b-button variant="outline-warning" href="export-monthly-special-dpd"> Export DPD (Selected Days) </b-button>
-                        <b-button variant="outline-warning" href="export-monthly-special-apc"> Export APC (Selected Days) </b-button>
+                        <b-button variant="outline-warning" href="office/export-monthly-special-op"> Export OP (Selected Days) </b-button>
+                        <b-button variant="outline-warning" href="office/export-monthly-special-dpd"> Export DPD (Selected Days) </b-button>
+                        <b-button variant="outline-warning" href="office/export-monthly-special-apc"> Export APC (Selected Days) </b-button>
                     </div>
                 </div>
             </b-col>

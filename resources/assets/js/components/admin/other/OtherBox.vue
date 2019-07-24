@@ -238,7 +238,7 @@
                 }
             },
             saveProductToBox(otherbox) {
-                axios.post('api/otherbox/add-product', {
+                axios.post('api/boxes/otherbox/add-product', {
                     product: {
                         id: this.$store.state.selectedProduct.id,
                         name: this.$store.state.selectedProduct.name,
@@ -270,7 +270,7 @@
                 }
             },
             updateDetails(otherbox) {
-                axios.post('api/otherbox/details', {
+                axios.post('api/boxes/otherbox/details', {
                     otherbox_details: otherbox,
                 }).then (response => {
                     //location.reload(true); // What am I doing with the store on this one?  Will I need this?
@@ -279,7 +279,7 @@
             },
             deleteOtherBox(otherbox) {
                 let self = this;
-                axios.put('api/otherbox/destroy-box/' + otherbox.otherbox_id, { 
+                axios.put('api/boxes/otherbox/destroy-box/' + otherbox.otherbox_id, { 
                     otherbox_id: otherbox.otherbox_id,
                 }).then ( (response) => {
                     //location.reload(true); // What am I doing with the store on this one?  Will I need this?

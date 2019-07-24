@@ -423,7 +423,7 @@ export default {
             this.editing = false;
             console.log(fruitbox);
             console.log(fruitbox.id);
-            axios.put('api/fruitbox/' + fruitbox.id, {
+            axios.put('api/boxes/fruitbox/' + fruitbox.id, {
                 id: fruitbox.id,
                 is_active: fruitbox.is_active,
                 fruit_partner_id: fruitbox.fruit_partner_id,

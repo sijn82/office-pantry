@@ -175,7 +175,7 @@
             },
             saveCompanyDrinkbox() {
 
-                axios.post('/api/drinkboxes/save', {
+                axios.post('/api/boxes/drinkboxes/save', {
                     details: { 
                         delivered_by_id: this.delivered_by, 
                         type: this.type, 
@@ -186,7 +186,7 @@
                         next_delivery_week: this.next_delivery_week 
                     },
                     order: this.$store.state.drinkbox,
-                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv'},
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 }).then( (response) => {
                     alert('Uploaded new Company Drinkbox successfully!');
                     this.$emit('refresh-data', {company_details_id: this.selected_company});

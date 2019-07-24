@@ -423,7 +423,7 @@ export default {
             }
         },
         deleteArchivedBox(archived_fruitbox) {
-            axios.put('api/archived-fruitbox/destroy/' + archived_fruitbox.id, {
+            axios.put('api/boxes/archived-fruitbox/destroy/' + archived_fruitbox.id, {
                 id: archived_fruitbox.id,
             }).then (response => {
                 // location.reload(true); // If I stored the current products in the store rather than like this, I wouldn't need to reload the page to update the view.
@@ -434,7 +434,7 @@ export default {
             this.editing = false;
             console.log(archived_fruitbox);
             console.log(archived_fruitbox.id);
-            axios.put('api/archived-fruitbox/update/' + archived_fruitbox.id, {
+            axios.put('api/boxes/archived-fruitbox/update/' + archived_fruitbox.id, {
                 id: archived_fruitbox.id,
                 is_active: archived_fruitbox.is_active,
                 fruit_partner_id: archived_fruitbox.fruit_partner_id,

@@ -67491,7 +67491,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
             state.setPreferences.additional_notes = preferences.additional_notes;
         },
         getAllergies: function getAllergies(state) {
-            axios.get('/api/allergies/select').then(function (response) {
+            axios.get('/api/company/allergies/select').then(function (response) {
                 response.data.forEach(function (element) {
                     state.allergies_list.push(element.allergy);
                 }), console.log(state.allergies_list);
@@ -67501,7 +67501,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
         // This one has been tailored to work with an array, rather than an object
         // The var check no longer looks for a matching id but instead searches directly for the value.
         getTypes: function getTypes(state) {
-            axios.get('/api/types/select').then(function (response) {
+            axios.get('/api/boxes/types/select').then(function (response) {
                 response.data.forEach(function (element) {
                     console.log(element);
                     var check = state.types_list.findIndex(function (list) {
@@ -67514,7 +67514,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
             });
         },
         getFruitPartners: function getFruitPartners(state) {
-            axios.get('/api/fruit_partners/select').then(function (response) {
+            axios.get('/api/office-pantry/fruit_partners/select').then(function (response) {
                 response.data.forEach(function (element) {
                     console.log(element);
                     var check = state.fruit_partners_list.findIndex(function (list) {
@@ -67528,7 +67528,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
             });
         },
         getAssignedRoutes: function getAssignedRoutes(state) {
-            axios.get('/api/assigned-routes/select').then(function (response) {
+            axios.get('/api/office-pantry/assigned-routes/select').then(function (response) {
                 response.data.forEach(function (element) {
                     console.log(element);
                     var check = state.assigned_routes_list.findIndex(function (list) {
@@ -67541,7 +67541,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
             });
         },
         getWeekStart: function getWeekStart(state) {
-            axios.get('/api/week-start/select').then(function (response) {
+            axios.get('/api/office-pantry/week-start/select').then(function (response) {
                 // response.data.forEach( element => {
                 console.log(response);
                 var check = state.week_start.findIndex(function (list) {
@@ -67554,7 +67554,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
             });
         },
         getCronData: function getCronData(state) {
-            axios.get('/api/cron-data/select').then(function (response) {
+            axios.get('/api/office-pantry/cron-data/select').then(function (response) {
                 console.log(response);
                 var check = state.cron_data.findIndex(function (list) {
                     return list.id == response.data.id;
@@ -67570,7 +67570,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
             // console.log(state.snackbox);
             console.log(store.state.snackbox);
 
-            axios.post('/api/snackboxes/standard/update', {
+            axios.post('/api/boxes/snackboxes/standard/update', {
                 order: store.state.snackbox,
                 type: type,
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
@@ -72233,7 +72233,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         uploadWeekStart: function uploadWeekStart() {
             var self = this;
-            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('api/import-week-start', {
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('api/office-pantry/import-week-start', {
                 week_start: self.form.week_start,
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
                 // user_id: self.userData.id
@@ -72247,7 +72247,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         uploadDeliveryDays: function uploadDeliveryDays() {
             var self = this;
-            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('api/import-week-start-days', {
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('api/office-pantry/import-week-start-days', {
                 delivery_days: self.form.delivery_days,
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
                 // user_id: self.userData.id
@@ -72288,7 +72288,7 @@ var render = function() {
             "form",
             {
               attrs: {
-                action: "/api/import-week-start",
+                action: "/api/office-pantry/import-week-start",
                 enctype: "multipart/form-data",
                 method: "post",
                 name: "newWeekStart"
@@ -72349,7 +72349,7 @@ var render = function() {
             "form",
             {
               attrs: {
-                action: "/api/import-week-start-days",
+                action: "/api/office-pantry/import-week-start-days",
                 enctype: "multipart/form-data",
                 method: "post",
                 name: "deliveryDaysSelect"
@@ -77258,7 +77258,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.editing = false;
             console.log(fruitbox);
             console.log(fruitbox.id);
-            axios.put('api/fruitbox/' + fruitbox.id, {
+            axios.put('api/boxes/fruitbox/' + fruitbox.id, {
                 id: fruitbox.id,
                 is_active: fruitbox.is_active,
                 fruit_partner_id: fruitbox.fruit_partner_id,
@@ -79308,7 +79308,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             evt.preventDefault();
             var self = this;
             // alert(JSON.stringify(this.form));
-            axios.post('/api/fruitbox/add-new-fruitbox', {
+            axios.post('/api/boxes/fruitbox/add-new-fruitbox', {
                 company_data: self.form,
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv' }
                 // user_id: self.userData.id // This hasn't been setup yet so proabably won't work yet?!
@@ -81429,7 +81429,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
         deleteArchivedBox: function deleteArchivedBox(archived_fruitbox) {
-            axios.put('api/archived-fruitbox/destroy/' + archived_fruitbox.id, {
+            axios.put('api/boxes/archived-fruitbox/destroy/' + archived_fruitbox.id, {
                 id: archived_fruitbox.id
             }).then(function (response) {
                 // location.reload(true); // If I stored the current products in the store rather than like this, I wouldn't need to reload the page to update the view.
@@ -81442,7 +81442,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.editing = false;
             console.log(archived_fruitbox);
             console.log(archived_fruitbox.id);
-            axios.put('api/archived-fruitbox/update/' + archived_fruitbox.id, {
+            axios.put('api/boxes/archived-fruitbox/update/' + archived_fruitbox.id, {
                 id: archived_fruitbox.id,
                 is_active: archived_fruitbox.is_active,
                 fruit_partner_id: archived_fruitbox.fruit_partner_id,
@@ -83650,7 +83650,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.editing = false;
             console.log(milkbox);
             console.log(milkbox.id);
-            axios.put('api/milkbox/' + milkbox.id, {
+            axios.put('api/boxes/milkbox/' + milkbox.id, {
                 id: milkbox.id,
                 is_active: milkbox.is_active,
                 fruit_partner_id: milkbox.fruit_partner_id,
@@ -85552,7 +85552,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             evt.preventDefault();
             var self = this;
             // alert(JSON.stringify(this.form));
-            axios.post('/api/milkbox/add-new-milkbox', {
+            axios.post('/api/boxes/milkbox/add-new-milkbox', {
                 company_data: self.form,
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv' }
                 // user_id: self.userData.id // This hasn't been setup yet so proabably won't work yet?!
@@ -87021,7 +87021,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.editing = false;
             console.log(archived_milkbox);
             console.log(archived_milkbox.id);
-            axios.put('api/archived_milkbox/' + archived_milkbox.id, {
+            axios.put('api/boxes/archived_milkbox/' + archived_milkbox.id, {
                 id: archived_milkbox.id,
                 is_active: archived_milkbox.is_active,
                 fruit_partner_id: archived_milkbox.fruit_partner_id,
@@ -90798,7 +90798,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         deleteSnackBoxItem: function deleteSnackBoxItem(snackbox_item) {
             var _this = this;
 
-            axios.put('api/snackbox/destroy/' + snackbox_item.id, {
+            axios.put('api/boxes/snackbox/destroy/' + snackbox_item.id, {
                 id: snackbox_item.id,
                 snackbox_id: snackbox_item.snackbox_id
             }).then(function (response) {
@@ -90810,7 +90810,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
         },
         editQuantity: function editQuantity(snackbox_item) {
-            axios.post('api/snackbox/update', {
+            axios.post('api/boxes/snackbox/update', {
                 snackbox_item_id: snackbox_item.id,
                 snackbox_item_quantity: snackbox_item.quantity
             }).then(function (response) {
@@ -91330,7 +91330,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         saveProductToBox: function saveProductToBox(snackbox) {
             var _this = this;
 
-            axios.post('api/snackbox/add-product', {
+            axios.post('api/boxes/snackbox/add-product', {
                 product: {
                     id: this.$store.state.selectedProduct.id,
                     code: this.$store.state.selectedProduct.code,
@@ -91367,7 +91367,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
         updateDetails: function updateDetails(snackbox) {
-            axios.post('api/snackbox/details', {
+            axios.post('api/boxes/snackbox/details', {
                 snackbox_details: snackbox
             }).then(function (response) {
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?
@@ -91378,7 +91378,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         deleteSnackBox: function deleteSnackBox(snackbox) {
             var self = this;
-            axios.put('api/snackbox/destroy-box/' + snackbox.snackbox_id, {
+            axios.put('api/boxes/snackbox/destroy-box/' + snackbox.snackbox_id, {
                 snackbox_id: snackbox.snackbox_id
             }).then(function (response) {
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?
@@ -92728,7 +92728,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         saveCompanySnackbox: function saveCompanySnackbox() {
             var _this = this;
 
-            axios.post('/api/snackboxes/save', {
+            axios.post('/api/boxes/snackboxes/save', {
                 company_details_id: this.selected_company,
                 details: {
                     delivered_by: this.delivered_by,
@@ -92741,7 +92741,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     next_delivery_week: this.next_delivery_week
                 },
                 order: this.$store.state.snackbox,
-                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv' }
+                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
             }).then(function (response) {
                 alert('Uploaded new Company snackbox successfully!');
                 _this.$emit('refresh-data', { company_details_id: _this.selected_company });
@@ -92767,7 +92767,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var name = type;
             axios.post('/api/types', {
                 new_type: { name: name, company: company },
-                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv' }
+                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
             }).then(function (response) {
                 alert('Uploaded new snackbox type successfully!');
                 // location.load(true);
@@ -94230,7 +94230,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         deleteSnackBoxItem: function deleteSnackBoxItem(archived_snackbox_item) {
             var _this = this;
 
-            axios.put('api/archived_snackbox/destroy/' + archived_snackbox_item.id, {
+            axios.put('api/boxes/archived_snackbox/destroy/' + archived_snackbox_item.id, {
                 id: archived_snackbox_item.id,
                 archived_snackbox_id: archived_snackbox_item.archived_snackbox_id
             }).then(function (response) {
@@ -94242,7 +94242,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
         },
         editQuantity: function editQuantity(archived_snackbox_item) {
-            axios.post('api/archived_snackbox/update', {
+            axios.post('api/boxes/archived_snackbox/update', {
                 archived_snackbox_item_id: archived_snackbox_item.id,
                 archived_snackbox_item_quantity: archived_snackbox_item.quantity
             }).then(function (response) {
@@ -94761,7 +94761,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         saveProductToBox: function saveProductToBox(archived_snackbox) {
             var _this = this;
 
-            axios.post('api/archived-snackbox/add-product', {
+            axios.post('api/boxes/archived-snackbox/add-product', {
                 product: {
                     id: this.$store.state.selectedProduct.id,
                     code: this.$store.state.selectedProduct.code,
@@ -94798,7 +94798,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
         updateDetails: function updateDetails(archived_snackbox) {
-            axios.post('api/archived-snackbox/details', {
+            axios.post('api/boxes/archived-snackbox/details', {
                 archived_snackbox_details: archived_snackbox
             }).then(function (response) {
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?
@@ -94809,7 +94809,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         deleteSnackBox: function deleteSnackBox(archived_snackbox) {
             var self = this;
-            axios.put('api/archived-snackbox/destroy-box/' + archived_snackbox.snackbox_id, {
+            axios.put('api/boxes/archived-snackbox/destroy-box/' + archived_snackbox.snackbox_id, {
                 archived_snackbox_id: archived_snackbox.snackbox_id,
                 archived_snackbox_delivery_date: archived_snackbox.next_delivery_week
             }).then(function (response) {
@@ -95967,7 +95967,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         deleteDrinkBoxItem: function deleteDrinkBoxItem(drinkbox_item) {
             var _this = this;
 
-            axios.put('api/drinkbox/destroy/' + drinkbox_item.id, {
+            axios.put('api/boxes/drinkbox/destroy/' + drinkbox_item.id, {
                 id: drinkbox_item.id
             }).then(function (response) {
                 _this.$emit('refresh-data', { company_details_id: drinkbox_item.company_details_id });
@@ -95978,7 +95978,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
         },
         editQuantity: function editQuantity(drinkbox_item) {
-            axios.post('api/drinkbox/update', {
+            axios.post('api/boxes/drinkbox/update', {
                 drinkbox_item_id: drinkbox_item.id,
                 drinkbox_item_quantity: drinkbox_item.quantity
             }).then(function (response) {
@@ -96432,7 +96432,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         saveProductToBox: function saveProductToBox(drinkbox) {
             var _this = this;
 
-            axios.post('api/drinkbox/add-product', {
+            axios.post('api/boxes/drinkbox/add-product', {
                 product: {
                     id: this.$store.state.selectedProduct.id,
                     name: this.$store.state.selectedProduct.name,
@@ -96466,7 +96466,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
         updateDetails: function updateDetails(drinkbox) {
-            axios.post('api/drinkbox/details', {
+            axios.post('api/boxes/drinkbox/details', {
                 drinkbox_details: drinkbox
             }).then(function (response) {
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?
@@ -96477,7 +96477,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         deleteDrinkBox: function deleteDrinkBox(drinkbox) {
             var self = this;
-            axios.put('api/drinkbox/destroy-box/' + drinkbox.drinkbox_id, {
+            axios.put('api/boxes/drinkbox/destroy-box/' + drinkbox.drinkbox_id, {
                 drinkbox_id: drinkbox.drinkbox_id
             }).then(function (response) {
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?
@@ -97625,7 +97625,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         saveCompanyDrinkbox: function saveCompanyDrinkbox() {
             var _this = this;
 
-            axios.post('/api/drinkboxes/save', {
+            axios.post('/api/boxes/drinkboxes/save', {
                 details: {
                     delivered_by_id: this.delivered_by,
                     type: this.type,
@@ -97636,7 +97636,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     next_delivery_week: this.next_delivery_week
                 },
                 order: this.$store.state.drinkbox,
-                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv' }
+                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
             }).then(function (response) {
                 alert('Uploaded new Company Drinkbox successfully!');
                 _this.$emit('refresh-data', { company_details_id: _this.selected_company });
@@ -98214,7 +98214,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         deleteDrinkBoxItem: function deleteDrinkBoxItem(archived_drinkbox_item) {
             var _this = this;
 
-            axios.put('api/archived_drinkbox/destroy/' + archived_drinkbox_item.id, {
+            axios.put('api/boxes/archived_drinkbox/destroy/' + archived_drinkbox_item.id, {
                 id: archived_drinkbox_item.id
             }).then(function (response) {
                 _this.$emit('refresh-data', { company_details_id: archived_drinkbox_item.company_details_id });
@@ -98225,7 +98225,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
         },
         editQuantity: function editQuantity(archived_drinkbox_item) {
-            axios.post('api/archived_drinkbox/update', {
+            axios.post('api/boxes/archived_drinkbox/update', {
                 archived_drinkbox_item_id: archived_drinkbox_item.id,
                 archived_drinkbox_item_quantity: archived_drinkbox_item.quantity
             }).then(function (response) {
@@ -98702,7 +98702,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         saveProductToBox: function saveProductToBox(drinkbox) {
             var _this = this;
 
-            axios.post('api/archived-drinkbox/add-product', {
+            axios.post('api/boxes/archived-drinkbox/add-product', {
                 product: {
                     id: this.$store.state.selectedProduct.id,
                     name: this.$store.state.selectedProduct.name,
@@ -98736,7 +98736,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
         updateDetails: function updateDetails(archived_drinkbox) {
-            axios.post('api/archived-drinkbox/details', {
+            axios.post('api/boxes/archived-drinkbox/details', {
                 archived_drinkbox_details: archived_drinkbox
             }).then(function (response) {
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?
@@ -98747,7 +98747,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         deleteDrinkBox: function deleteDrinkBox(archived_drinkbox) {
             var self = this;
-            axios.put('api/archived-drinkbox/destroy-box/' + archived_drinkbox.drinkbox_id, {
+            axios.put('api/boxes/archived-drinkbox/destroy-box/' + archived_drinkbox.drinkbox_id, {
                 archived_drinkbox_id: archived_drinkbox.drinkbox_id,
                 archived_drinkbox_delivery_date: archived_drinkbox.next_delivery_week
             }).then(function (response) {
@@ -99797,7 +99797,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         deleteOtherBoxItem: function deleteOtherBoxItem(otherbox_item) {
             var _this = this;
 
-            axios.put('api/otherbox/destroy/' + otherbox_item.id, {
+            axios.put('api/boxes/otherbox/destroy/' + otherbox_item.id, {
                 id: otherbox_item.id
             }).then(function (response) {
                 _this.$emit('refresh-data', { company_details_id: otherbox_item.company_details_id });
@@ -99808,7 +99808,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
         },
         editQuantity: function editQuantity(otherbox_item) {
-            axios.post('api/otherbox/update', {
+            axios.post('api/boxes/otherbox/update', {
                 otherbox_item_id: otherbox_item.id,
                 otherbox_item_quantity: otherbox_item.quantity
             }).then(function (response) {
@@ -100272,7 +100272,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         saveProductToBox: function saveProductToBox(otherbox) {
             var _this = this;
 
-            axios.post('api/otherbox/add-product', {
+            axios.post('api/boxes/otherbox/add-product', {
                 product: {
                     id: this.$store.state.selectedProduct.id,
                     name: this.$store.state.selectedProduct.name,
@@ -100306,7 +100306,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
         updateDetails: function updateDetails(otherbox) {
-            axios.post('api/otherbox/details', {
+            axios.post('api/boxes/otherbox/details', {
                 otherbox_details: otherbox
             }).then(function (response) {
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?
@@ -100317,7 +100317,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         deleteOtherBox: function deleteOtherBox(otherbox) {
             var self = this;
-            axios.put('api/otherbox/destroy-box/' + otherbox.otherbox_id, {
+            axios.put('api/boxes/otherbox/destroy-box/' + otherbox.otherbox_id, {
                 otherbox_id: otherbox.otherbox_id
             }).then(function (response) {
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?
@@ -101442,7 +101442,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         saveCompanyOtherbox: function saveCompanyOtherbox() {
             var _this = this;
 
-            axios.post('/api/otherboxes/save', {
+            axios.post('api/boxes/otherboxes/save', {
                 details: {
                     delivered_by_id: this.delivered_by,
                     // no_of_boxes: this.no_of_boxes,
@@ -101454,7 +101454,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     next_delivery_week: this.next_delivery_week
                 },
                 order: this.$store.state.otherbox,
-                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv' }
+                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
             }).then(function (response) {
                 alert('Uploaded new Company Otherbox successfully!');
                 _this.$emit('refresh-data', { company_details_id: _this.selected_company });
@@ -102023,7 +102023,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         deleteOtherBoxItem: function deleteOtherBoxItem(archived_otherbox_item) {
             var _this = this;
 
-            axios.put('api/archived-otherbox/destroy/' + archived_otherbox_item.id, {
+            axios.put('api/boxes/archived-otherbox/destroy/' + archived_otherbox_item.id, {
                 id: archived_otherbox_item.id
             }).then(function (response) {
                 _this.$emit('refresh-data', { company_details_id: archived_otherbox_item.company_details_id });
@@ -102034,7 +102034,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
         },
         editQuantity: function editQuantity(otherbox_item) {
-            axios.post('api/archived-otherbox/update', {
+            axios.post('api/boxes/archived-otherbox/update', {
                 otherbox_item_id: archived_otherbox_item.id,
                 otherbox_item_quantity: archived_otherbox_item.quantity
             }).then(function (response) {
@@ -102500,7 +102500,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         saveProductToBox: function saveProductToBox(archived_otherbox) {
             var _this = this;
 
-            axios.post('api/archived-otherbox/add-product', {
+            axios.post('api/boxes/archived-otherbox/add-product', {
                 product: {
                     id: this.$store.state.selectedProduct.id,
                     name: this.$store.state.selectedProduct.name,
@@ -102534,7 +102534,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
         updateDetails: function updateDetails(archived_otherbox) {
-            axios.post('api/archived-otherbox/details', {
+            axios.post('api/boxes/archived-otherbox/details', {
                 archived_otherbox_details: archived_otherbox
             }).then(function (response) {
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?
@@ -102545,7 +102545,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         deleteOtherBox: function deleteOtherBox(archived_otherbox) {
             var self = this;
-            axios.put('api/archived-otherbox/destroy-box/' + archived_otherbox.otherbox_id, {
+            axios.put('api/boxes/archived-otherbox/destroy-box/' + archived_otherbox.otherbox_id, {
                 archived_otherbox_id: archived_otherbox.otherbox_id
             }).then(function (response) {
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?
@@ -112737,7 +112737,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "export-snackbox-weekly-op-multicompany"
+                        href: "office/export-snackbox-weekly-op-multicompany"
                       }
                     },
                     [_vm._v(" Export OP (Weekly) ")]
@@ -112748,7 +112748,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "export-snackbox-weekly-dpd-multicompany"
+                        href: "office/export-snackbox-weekly-dpd-multicompany"
                       }
                     },
                     [_vm._v(" Export DPD (Weekly) ")]
@@ -112759,7 +112759,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "export-snackbox-weekly-apc-multicompany"
+                        href: "office/export-snackbox-weekly-apc-multicompany"
                       }
                     },
                     [_vm._v(" Export APC (Weekly) ")]
@@ -112774,7 +112774,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "export-snackbox-op-multicompany"
+                        href: "office/export-snackbox-op-multicompany"
                       }
                     },
                     [_vm._v(" Export OP (Selected Days) ")]
@@ -112785,7 +112785,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "export-snackbox-dpd-multicompany"
+                        href: "office/export-snackbox-dpd-multicompany"
                       }
                     },
                     [_vm._v(" Export DPD (Selected Days) ")]
@@ -112796,7 +112796,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "export-snackbox-apc-multicompany"
+                        href: "office/export-snackbox-apc-multicompany"
                       }
                     },
                     [_vm._v(" Export APC (Selected Days) ")]
@@ -112820,7 +112820,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "export-snackbox-weekly-op-singlecompany"
+                        href: "office/export-snackbox-weekly-op-singlecompany"
                       }
                     },
                     [_vm._v(" Export OP (Weekly) ")]
@@ -112831,7 +112831,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "export-snackbox-weekly-dpd-singlecompany"
+                        href: "office/export-snackbox-weekly-dpd-singlecompany"
                       }
                     },
                     [_vm._v(" Export DPD (Weekly) ")]
@@ -112842,7 +112842,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "export-snackbox-weekly-apc-singlecompany"
+                        href: "office/export-snackbox-weekly-apc-singlecompany"
                       }
                     },
                     [_vm._v(" Export APC (Weekly) ")]
@@ -112857,7 +112857,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "export-snackbox-op-singlecompany"
+                        href: "office/export-snackbox-op-singlecompany"
                       }
                     },
                     [_vm._v(" Export OP (Selected Days) ")]
@@ -112868,7 +112868,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "export-snackbox-dpd-singlecompany"
+                        href: "office/export-snackbox-dpd-singlecompany"
                       }
                     },
                     [_vm._v(" Export DPD (Selected Days) ")]
@@ -112879,7 +112879,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "export-snackbox-apc-singlecompany"
+                        href: "office/export-snackbox-apc-singlecompany"
                       }
                     },
                     [_vm._v(" Export APC (Selected Days) ")]
@@ -112906,7 +112906,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-secondary",
-                        href: "export-snackbox-unique-op-singlecompany"
+                        href: "office/export-snackbox-unique-op-singlecompany"
                       }
                     },
                     [_vm._v(" Export OP (Selected Days) ")]
@@ -112917,7 +112917,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-secondary",
-                        href: "export-snackbox-unique-dpd-singlecompany"
+                        href: "office/export-snackbox-unique-dpd-singlecompany"
                       }
                     },
                     [_vm._v(" Export DPD (Selected Days) ")]
@@ -112928,7 +112928,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-secondary",
-                        href: "export-snackbox-unique-apc-singlecompany"
+                        href: "office/export-snackbox-unique-apc-singlecompany"
                       }
                     },
                     [_vm._v(" Export APC ")]
@@ -112943,7 +112943,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-secondary",
-                        href: "export-snackbox-unique-op-multicompany"
+                        href: "office/export-snackbox-unique-op-multicompany"
                       }
                     },
                     [_vm._v(" Export OP (Selected Days) ")]
@@ -112954,7 +112954,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-secondary",
-                        href: "export-snackbox-unique-dpd-multicompany"
+                        href: "office/export-snackbox-unique-dpd-multicompany"
                       }
                     },
                     [_vm._v(" Export DPD (Selected Days) ")]
@@ -112965,7 +112965,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-secondary",
-                        href: "export-snackbox-unique-apc-multicompany"
+                        href: "office/export-snackbox-unique-apc-multicompany"
                       }
                     },
                     [_vm._v(" Export APC (Selected Days) ")]
@@ -112988,7 +112988,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "export-otherbox-checklist-op"
+                        href: "office/export-otherbox-checklist-op"
                       }
                     },
                     [_vm._v(" Export OP Otherboxes (Checklist) ")]
@@ -112999,7 +112999,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "export-otherbox-checklist-op-weekly-total"
+                        href: "office/export-otherbox-checklist-op-weekly-total"
                       }
                     },
                     [_vm._v(" Export OP Otherboxes (Checklist) Weekly Total ")]
@@ -113010,7 +113010,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "export-otherbox-op-multicompany"
+                        href: "office/export-otherbox-op-multicompany"
                       }
                     },
                     [_vm._v(" Export OP Otherboxes ")]
@@ -113045,7 +113045,7 @@ var render = function() {
                       attrs: {
                         variant: "outline-primary",
                         href:
-                          "export-wholesale-weekly-snackbox-op-singlecompany"
+                          "office/export-wholesale-weekly-snackbox-op-singlecompany"
                       }
                     },
                     [_vm._v(" Export OP Snackboxes (Weekly) ")]
@@ -113056,7 +113056,8 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "export-wholesale-weekly-drinkbox-op-multicompany"
+                        href:
+                          "office/export-wholesale-weekly-drinkbox-op-multicompany"
                       }
                     },
                     [_vm._v(" Export OP Drinkboxes (Weekly) ")]
@@ -113071,7 +113072,8 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "export-wholesale-snackbox-op-singlecompany"
+                        href:
+                          "office/export-wholesale-snackbox-op-singlecompany"
                       }
                     },
                     [_vm._v(" Export OP Snackboxes (Selected Days) ")]
@@ -113082,7 +113084,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "export-wholesale-drinkbox-op-multicompany"
+                        href: "office/export-wholesale-drinkbox-op-multicompany"
                       }
                     },
                     [_vm._v(" Export OP Drinkboxes (Selected Days) ")]
@@ -113112,7 +113114,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-warning",
-                        href: "export-monthly-special-op-weekly"
+                        href: "office/export-monthly-special-op-weekly"
                       }
                     },
                     [_vm._v(" Export OP (Weekly) ")]
@@ -113123,7 +113125,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-warning",
-                        href: "export-monthly-special-dpd-weekly"
+                        href: "office/export-monthly-special-dpd-weekly"
                       }
                     },
                     [_vm._v(" Export DPD (Weekly) ")]
@@ -113134,7 +113136,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-warning",
-                        href: "export-monthly-special-apc-weekly"
+                        href: "office/export-monthly-special-apc-weekly"
                       }
                     },
                     [_vm._v(" Export APC (Weekly) ")]
@@ -113149,7 +113151,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-warning",
-                        href: "export-monthly-special-op"
+                        href: "office/export-monthly-special-op"
                       }
                     },
                     [_vm._v(" Export OP (Selected Days) ")]
@@ -113160,7 +113162,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-warning",
-                        href: "export-monthly-special-dpd"
+                        href: "office/export-monthly-special-dpd"
                       }
                     },
                     [_vm._v(" Export DPD (Selected Days) ")]
@@ -113171,7 +113173,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-warning",
-                        href: "export-monthly-special-apc"
+                        href: "office/export-monthly-special-apc"
                       }
                     },
                     [_vm._v(" Export APC (Selected Days) ")]

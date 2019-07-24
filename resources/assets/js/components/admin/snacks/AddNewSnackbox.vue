@@ -271,7 +271,7 @@ export default {
         },
         saveCompanySnackbox() {
 
-            axios.post('/api/snackboxes/save', {
+            axios.post('/api/boxes/snackboxes/save', {
                 company_details_id: this.selected_company,
                 details: {
                     delivered_by: this.delivered_by,
@@ -284,7 +284,7 @@ export default {
                     next_delivery_week: this.next_delivery_week
                 },
                 order: this.$store.state.snackbox,
-                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv'},
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             }).then( (response) => {
                 alert('Uploaded new Company snackbox successfully!');
                 this.$emit('refresh-data', {company_details_id: this.selected_company});
@@ -307,7 +307,7 @@ export default {
             let name = type;
             axios.post('/api/types', {
                 new_type: { name, company },
-                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv' }
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
             }).then( response => {
                 alert('Uploaded new snackbox type successfully!');
                 // location.load(true);

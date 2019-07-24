@@ -25,15 +25,30 @@ class ResetPasswordController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    // protected $redirectTo = '/home';
+    // made this change to allow all redirects to return to the main homepage so all logins are only a click away from logging in with new credentials.
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
      *
-     * @return void
+     * @return 
      */
     public function __construct()
     {
         $this->middleware('guest');
+        $this->middleware('guest:office')->except('logout');
+        $this->middleware('guest:warehouse')->except('logout');
     }
+    // 
+    //     /**
+    //  * Get the guard to be used during password reset.
+    //  *
+    //  * @return \Illuminate\Contracts\Auth\StatefulGuard
+    //  */
+    // protected function guard()
+    // {
+    //     //dd(Auth::guard());
+    //     return Auth::guard('office');
+    // }
 }

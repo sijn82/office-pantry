@@ -414,7 +414,7 @@ export default {
             this.editing = false;
             console.log(archived_milkbox);
             console.log(archived_milkbox.id);
-            axios.put('api/archived_milkbox/' + archived_milkbox.id, {
+            axios.put('api/boxes/archived_milkbox/' + archived_milkbox.id, {
                 id: archived_milkbox.id,
                 is_active: archived_milkbox.is_active,
                 fruit_partner_id: archived_milkbox.fruit_partner_id,

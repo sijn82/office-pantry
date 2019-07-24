@@ -1,6 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+// Edited to use sub folder 'Boxes' where the box controllers have now been moved to.
+namespace App\Http\Controllers\Boxes;
+use App\Http\Controllers\Controller;
+
+use App\Http\Controllers\Exports;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;

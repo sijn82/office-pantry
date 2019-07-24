@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+// Updated namespace, after moving controllers into their own (grouped) folders.
+namespace App\Http\Controllers\OfficePantry;
+use App\Http\Controllers\Controller;
 
 use App\OfficePantryProducts;
 use Illuminate\Http\Request;

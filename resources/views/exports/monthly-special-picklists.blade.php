@@ -36,31 +36,39 @@
         @php
             // dd($monthly_specials_all)
         @endphp
+        
+        @if ($monthly_specials_all == 'None for this week.')
+        
+            <tr>
+                <td> {{ $monthly_specials_all }} </td>
+            </tr>
+            
+        @else 
+        
+            @foreach ($monthly_specials_all as $key => $company_order_group)
 
-        @foreach ($monthly_specials_all as $key => $company_order_group)
+            <tr>
+                <td> {{ $key }} </td>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+                <!-- <td>  </td> -->
+            </tr>
 
-        <tr>
-            <td> {{ $key }} </td>
-            <td>  </td>
-            <td>  </td>
-            <td>  </td>
-            <!-- <td>  </td> -->
-        </tr>
+                @foreach ($company_order_group as $order_box_type)
+                    @foreach ($order_box_type as $monthly_special_item)
 
-            @foreach ($company_order_group as $order_box_type)
-                @foreach ($order_box_type as $monthly_special_item)
+                        <tr>
+                            <td> {{ $monthly_special_item->company_name }} </td>
+                            <td> {{ $monthly_special_item->name }} </td>
+                            <td> {{ $monthly_special_item->quantity }} </td>
+                            <td> {{ $monthly_special_item->delivery_day }} </td>
+                            <td> {{ $monthly_special_item->assigned_route_name }} </td>
+                        </tr>
 
-                    <tr>
-                        <td> {{ $monthly_special_item->company_name }} </td>
-                        <td> {{ $monthly_special_item->name }} </td>
-                        <td> {{ $monthly_special_item->quantity }} </td>
-                        <td> {{ $monthly_special_item->delivery_day }} </td>
-                        <td> {{ $monthly_special_item->assigned_route_name }} </td>
-                    </tr>
-
+                    @endforeach
                 @endforeach
             @endforeach
-        @endforeach
-
+        @endif
     </tbody>
 </table>

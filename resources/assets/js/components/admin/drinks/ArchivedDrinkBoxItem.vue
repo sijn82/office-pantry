@@ -45,7 +45,7 @@
                 }
             },
             deleteDrinkBoxItem(archived_drinkbox_item) {
-                axios.put('api/archived_drinkbox/destroy/' + archived_drinkbox_item.id, { 
+                axios.put('api/boxes/archived_drinkbox/destroy/' + archived_drinkbox_item.id, { 
                     id: archived_drinkbox_item.id,
                 }).then ( (response) => {
                     this.$emit('refresh-data', {company_details_id: archived_drinkbox_item.company_details_id})
@@ -54,7 +54,7 @@
                 }).catch(error => console.log(error));
             },
             editQuantity(archived_drinkbox_item) {
-                axios.post('api/archived_drinkbox/update', { 
+                axios.post('api/boxes/archived_drinkbox/update', { 
                     archived_drinkbox_item_id: archived_drinkbox_item.id,
                     archived_drinkbox_item_quantity: archived_drinkbox_item.quantity,
                 }).then (response => {

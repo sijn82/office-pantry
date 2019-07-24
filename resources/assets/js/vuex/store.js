@@ -227,7 +227,7 @@ export const store = new Vuex.Store({
             state.setPreferences.additional_notes = preferences.additional_notes;
         },
         getAllergies (state) {
-            axios.get('/api/allergies/select').then( response => {
+            axios.get('/api/company/allergies/select').then( response => {
                 response.data.forEach( function (element) {
                     state.allergies_list.push(element.allergy);
                 }),
@@ -237,7 +237,7 @@ export const store = new Vuex.Store({
         // This one has been tailored to work with an array, rather than an object
         // The var check no longer looks for a matching id but instead searches directly for the value.
         getTypes (state) {
-            axios.get('/api/types/select').then( response => {
+            axios.get('/api/boxes/types/select').then( response => {
                 response.data.forEach( element => {
                     console.log(element);
                     var check = state.types_list.findIndex( list => list == element.type )
@@ -249,7 +249,7 @@ export const store = new Vuex.Store({
             });
         },
         getFruitPartners (state) {
-            axios.get('/api/fruit_partners/select').then( response => {
+            axios.get('/api/office-pantry/fruit_partners/select').then( response => {
                 response.data.forEach( element => {
                     console.log(element);
                     var check = state.fruit_partners_list.findIndex( list => list.id == element.id)
@@ -261,7 +261,7 @@ export const store = new Vuex.Store({
             });
         },
         getAssignedRoutes (state) {
-            axios.get('/api/assigned-routes/select').then( response => {
+            axios.get('/api/office-pantry/assigned-routes/select').then( response => {
                 response.data.forEach( element => {
                     console.log(element);
                     var check = state.assigned_routes_list.findIndex( list => list.id == element.id)
@@ -273,7 +273,7 @@ export const store = new Vuex.Store({
         },
 
         getWeekStart (state) {
-            axios.get('/api/week-start/select').then( response => {
+            axios.get('/api/office-pantry/week-start/select').then( response => {
                 // response.data.forEach( element => {
                     console.log(response);
                     var check = state.week_start.findIndex( list => list.id == response.data.id)
@@ -285,7 +285,7 @@ export const store = new Vuex.Store({
         },
 
         getCronData (state) {
-            axios.get('/api/cron-data/select').then(
+            axios.get('/api/office-pantry/cron-data/select').then(
                 response => {
                     console.log(response);
                     var check = state.cron_data.findIndex( list => list.id == response.data.id)
@@ -300,7 +300,7 @@ export const store = new Vuex.Store({
                 // console.log(state.snackbox);
                 console.log(store.state.snackbox);
 
-            axios.post('/api/snackboxes/standard/update', {
+            axios.post('/api/boxes/snackboxes/standard/update', {
                 order: store.state.snackbox,
                 type: type,
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},

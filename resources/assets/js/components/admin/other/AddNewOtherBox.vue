@@ -177,7 +177,7 @@
             },
             saveCompanyOtherbox() {
     
-                axios.post('/api/otherboxes/save', {
+                axios.post('api/boxes/otherboxes/save', {
                     details: { 
                         delivered_by_id: this.delivered_by, 
                         // no_of_boxes: this.no_of_boxes,
@@ -189,7 +189,7 @@
                         next_delivery_week: this.next_delivery_week 
                     },
                     order: this.$store.state.otherbox,
-                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv'},
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 }).then( (response) => {
                     alert('Uploaded new Company Otherbox successfully!');
                     this.$emit('refresh-data', {company_details_id: this.selected_company});

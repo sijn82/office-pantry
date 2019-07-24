@@ -45,7 +45,7 @@
                 }
             },
             deleteOtherBoxItem(otherbox_item) {
-                axios.put('api/otherbox/destroy/' + otherbox_item.id, { 
+                axios.put('api/boxes/otherbox/destroy/' + otherbox_item.id, { 
                     id: otherbox_item.id,
                 }).then ( (response) => {
                     this.$emit('refresh-data', {company_details_id: otherbox_item.company_details_id})
@@ -54,7 +54,7 @@
                 }).catch(error => console.log(error));
             },
             editQuantity(otherbox_item) {
-                axios.post('api/otherbox/update', { 
+                axios.post('api/boxes/otherbox/update', { 
                     otherbox_item_id: otherbox_item.id,
                     otherbox_item_quantity: otherbox_item.quantity,
                 }).then (response => {

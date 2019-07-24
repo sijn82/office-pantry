@@ -287,7 +287,7 @@ export default {
             }
         },
         saveProductToBox(snackbox) {
-            axios.post('api/snackbox/add-product', {
+            axios.post('api/boxes/snackbox/add-product', {
                 product: {
                     id: this.$store.state.selectedProduct.id,
                     code: this.$store.state.selectedProduct.code,
@@ -322,7 +322,7 @@ export default {
             }
         },
         updateDetails(snackbox) {
-            axios.post('api/snackbox/details', {
+            axios.post('api/boxes/snackbox/details', {
                 snackbox_details: snackbox,
             }).then (response => {
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?
@@ -331,7 +331,7 @@ export default {
         },
         deleteSnackBox(snackbox) {
             let self = this;
-            axios.put('api/snackbox/destroy-box/' + snackbox.snackbox_id, { 
+            axios.put('api/boxes/snackbox/destroy-box/' + snackbox.snackbox_id, { 
                 snackbox_id: snackbox.snackbox_id,
             }).then ( (response) => {
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?

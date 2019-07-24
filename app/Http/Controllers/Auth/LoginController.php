@@ -51,6 +51,7 @@ class LoginController extends Controller
     // Choose which fields require validation and what to do after the authentication check i.e redirects
     public function officeLogin(Request $request)
     {
+        //dd($request);
         $this->validate($request, [
             'email'   => 'required|email',
             'password' => 'required|min:6'

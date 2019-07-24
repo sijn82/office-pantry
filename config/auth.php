@@ -13,6 +13,11 @@ return [
     |
     */
 
+    // 'defaults' => [
+    //     'guard' => 'office',
+    //     'passwords' => 'office',
+    // ],
+    
     'defaults' => [
         'guard' => 'web',
         'passwords' => 'users',
@@ -114,7 +119,7 @@ return [
             'expire' => 60,
         ],
         'office' => [
-            'provider' => 'office',
+            'provider' => 'officeteam',
             'table' => 'password_resets',
             'expire' => 60,
         ],

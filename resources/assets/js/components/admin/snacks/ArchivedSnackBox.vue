@@ -278,7 +278,7 @@ export default {
             }
         },
         saveProductToBox(archived_snackbox) {
-            axios.post('api/archived-snackbox/add-product', {
+            axios.post('api/boxes/archived-snackbox/add-product', {
                 product: {
                     id: this.$store.state.selectedProduct.id,
                     code: this.$store.state.selectedProduct.code,
@@ -313,7 +313,7 @@ export default {
             }
         },
         updateDetails(archived_snackbox) {
-            axios.post('api/archived-snackbox/details', {
+            axios.post('api/boxes/archived-snackbox/details', {
                 archived_snackbox_details: archived_snackbox,
             }).then (response => {
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?
@@ -322,7 +322,7 @@ export default {
         },
         deleteSnackBox(archived_snackbox) {
             let self = this;
-            axios.put('api/archived-snackbox/destroy-box/' + archived_snackbox.snackbox_id, {
+            axios.put('api/boxes/archived-snackbox/destroy-box/' + archived_snackbox.snackbox_id, {
                 archived_snackbox_id: archived_snackbox.snackbox_id,
                 archived_snackbox_delivery_date: archived_snackbox.next_delivery_week,
             }).then ( (response) => {

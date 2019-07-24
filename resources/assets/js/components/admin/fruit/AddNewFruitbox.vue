@@ -302,7 +302,7 @@ export default {
               evt.preventDefault();
               let self = this;
               // alert(JSON.stringify(this.form));
-              axios.post('/api/fruitbox/add-new-fruitbox', {
+              axios.post('/api/boxes/fruitbox/add-new-fruitbox', {
                   company_data: self.form,
                   headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv'},
                   // user_id: self.userData.id // This hasn't been setup yet so proabably won't work yet?!

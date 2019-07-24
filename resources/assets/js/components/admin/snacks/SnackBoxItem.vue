@@ -47,7 +47,7 @@
                 }
             },
             deleteSnackBoxItem(snackbox_item) {
-                axios.put('api/snackbox/destroy/' + snackbox_item.id, { 
+                axios.put('api/boxes/snackbox/destroy/' + snackbox_item.id, { 
                     id: snackbox_item.id,
                     snackbox_id: snackbox_item.snackbox_id,
                 }).then ( (response) => {
@@ -57,7 +57,7 @@
                 }).catch(error => console.log(error));
             },
             editQuantity(snackbox_item) {
-                axios.post('api/snackbox/update', { 
+                axios.post('api/boxes/snackbox/update', { 
                     snackbox_item_id: snackbox_item.id,
                     snackbox_item_quantity: snackbox_item.quantity,
                 }).then (response => {

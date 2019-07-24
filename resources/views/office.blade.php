@@ -18,24 +18,21 @@
                         <h4> Old System </h4>
                         <ul>
                             <li style="list-style:none;">
-                                <a href=" {{ route('import-file') }}"> Import and Process Files </a>
+                                <a href=" {{ route('import.file') }}"> Import and Process Files </a>
                             </li>
                             <li style="list-style:none;">
-                                <a href=" {{ route('import-products') }}"> Import and Process Snackboxes </a>
+                                <a href=" {{ route('import.products') }}"> Import and Process Snackboxes </a>
                             </li>
                         </ul>
 
                         <h4> New System </h4>
                         <ul>
                             <li style="list-style:none;">
-                                <a href="{{ route('new-company') }}"> Add New Company </a>
+                                <a href="{{ route('company.new') }}"> Add New Company </a>
                             </li>
                             <li style="list-style:none;">
-                                <a href="{{ route('snackboxes') }}"> Mass Update Snackbox (By Type) </a>
+                                <a href="{{ route('snackboxes.massupdate') }}"> Mass Update Snackbox (By Type) </a>
                             </li>
-                            <!-- <li style="list-style:none;">
-                                <a href="{{ route('preferences') }}"> Add/Edit/View Company Preferences (Allergies, Likes, Dislikes & Additional Info) </a>
-                            </li> -->
                             <li style="list-style:none;">
                                 <a href="{{ route('exporting') }}"> Exporting Processes </a>
                             </li>
@@ -57,10 +54,10 @@
                                 <a href=" {{ route('register') }}"> Add New Customer Admin </a>
                             </li>
                             <li style="list-style:none;">
-                                <a href=" {{ route('register/office') }}"> Add New Office Admin </a>
+                                <a href=" {{ route('register.office') }}"> Add New Office Admin </a>
                             </li>
                             <li style="list-style:none;">
-                                <a href=" {{ route('register/warehouse') }}"> Add New Warehouse Admin </a>
+                                <a href=" {{ route('register.warehouse') }}"> Add New Warehouse Admin </a>
                             </li>
                         </ul> -->
 

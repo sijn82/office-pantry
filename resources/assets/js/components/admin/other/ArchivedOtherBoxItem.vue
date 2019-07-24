@@ -45,7 +45,7 @@
                 }
             },
             deleteOtherBoxItem(archived_otherbox_item) {
-                axios.put('api/archived-otherbox/destroy/' + archived_otherbox_item.id, { 
+                axios.put('api/boxes/archived-otherbox/destroy/' + archived_otherbox_item.id, { 
                     id: archived_otherbox_item.id,
                 }).then ( (response) => {
                     this.$emit('refresh-data', {company_details_id: archived_otherbox_item.company_details_id})
@@ -54,7 +54,7 @@
                 }).catch(error => console.log(error));
             },
             editQuantity(otherbox_item) {
-                axios.post('api/archived-otherbox/update', { 
+                axios.post('api/boxes/archived-otherbox/update', { 
                     otherbox_item_id: archived_otherbox_item.id,
                     otherbox_item_quantity: archived_otherbox_item.quantity,
                 }).then (response => {

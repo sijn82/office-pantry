@@ -103,6 +103,10 @@ ShouldAutoSize
             }
         }
         
+        if(!isset($monthly_specials_all)) {
+            
+            $monthly_specials_all = 'None for this week.';
+        }
     
         return view('exports.monthly-special-picklists', [
             'monthly_specials_all' => $monthly_specials_all,

@@ -9,7 +9,7 @@
                             <b> This section will allow a new Week Start Value to be uploaded. This is the 1st step in processing the weekly orders and must be updated prior to uploading any files for the new week! </b>
                         </p>
                     </div>
-                    <form class="" action="/api/import-week-start" enctype="multipart/form-data" method="post" name="newWeekStart" @submit.prevent="uploadWeekStart">
+                    <form class="" action="/api/office-pantry/import-week-start" enctype="multipart/form-data" method="post" name="newWeekStart" @submit.prevent="uploadWeekStart">
 
                             <div class="input-group input-group-md col-md-8 offset-md-2">
                                 <label><b>Week Start:</b></label>
@@ -31,7 +31,7 @@
                     <!-- Really not happy with this v-for work around, I shouldn't need to pointlessly loop through the data in order to access its properties! -->
                     <p v-for="week_start in $store.state.week_start"><b> Current Value: {{ week_start.current }} </b></p>
                     
-                    <form class="" action="/api/import-week-start-days" enctype="multipart/form-data" method="post" name="deliveryDaysSelect" @submit.prevent="uploadDeliveryDays">
+                    <form class="" action="/api/office-pantry/import-week-start-days" enctype="multipart/form-data" method="post" name="deliveryDaysSelect" @submit.prevent="uploadDeliveryDays">
 
                             <div class="input-group input-group-md col-md-8 offset-md-2">
                                 <label><b>Delivery Days:</b></label>
@@ -116,7 +116,7 @@ export default {
           },
           uploadWeekStart: function () {
               let self = this;
-              axios.post('api/import-week-start', {
+              axios.post('api/office-pantry/import-week-start', {
                   week_start: self.form.week_start,
                   headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                   // user_id: self.userData.id
@@ -128,7 +128,7 @@ export default {
           },
           uploadDeliveryDays: function () {
               let self = this;
-              axios.post('api/import-week-start-days', {
+              axios.post('api/office-pantry/import-week-start-days', {
                   delivery_days: self.form.delivery_days,
                   headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                   // user_id: self.userData.id
