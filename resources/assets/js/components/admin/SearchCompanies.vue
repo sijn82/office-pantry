@@ -146,7 +146,7 @@ export default {
 
     methods: {
         fetch() {
-            axios.get('/api/companies/search', { params: { keywords: this.keywords }})
+            axios.get('/api/company/companies/search', { params: { keywords: this.keywords }})
                 .then(response => this.results = response.data)
                 .catch(error => {});
         },

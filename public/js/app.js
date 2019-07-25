@@ -111685,7 +111685,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         fetch: function fetch() {
             var _this = this;
 
-            axios.get('/api/companies/search', { params: { keywords: this.keywords } }).then(function (response) {
+            axios.get('/api/company/companies/search', { params: { keywords: this.keywords } }).then(function (response) {
                 return _this.results = response.data;
             }).catch(function (error) {});
         },
@@ -112194,7 +112194,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         fetch: function fetch() {
             var _this = this;
 
-            axios.get('/api/companies/search', { params: { keywords: this.keywords } }).then(function (response) {
+            axios.get('/api/company/companies/search', { params: { keywords: this.keywords } }).then(function (response) {
                 return _this.results = response.data;
             }).catch(function (error) {});
         },

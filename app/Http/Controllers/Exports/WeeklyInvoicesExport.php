@@ -372,7 +372,7 @@ WithTitle
                         
                         // update - 24/7/19 it looks like berry boxes are causing a default charge of £20 on top of the cost of berries.
                         // I think a solution might be to skip them from adding to box totals entirely.
-                        if ($fruitbox->type === 'berry') {
+                        if (strtolower( $fruitbox->type ) === 'berry' ) {
                             // Er, do nothing?
                         } else {
                             $total_boxes_without_discount += $fruitbox->fruitbox_total;
@@ -446,7 +446,7 @@ WithTitle
                         
                         // update - 24/7/19 it looks like berry boxes are causing a default charge of £20 on top of the cost of berries.
                         // I think a solution might be to skip them from adding to box totals entirely.
-                        if ($fruitbox->type === 'berry') {
+                        if (strtolower( $fruitbox->type ) === 'berry' ) {
                             // Er, do nothing?
                         } else {
                             $total_boxes_without_discount += $fruitbox->fruitbox_total;
@@ -521,7 +521,7 @@ WithTitle
                         
                         // update - 24/7/19 it looks like berry boxes are causing a default charge of £20 on top of the cost of berries.
                         // I think a solution might be to skip them from adding to box totals entirely.
-                        if ($fruitbox->type === 'berry') {
+                        if (strtolower( $fruitbox->type ) === 'berry' ) {
                             // Er, do nothing?
                         } else {
                             $total_boxes_without_discount += $fruitbox->fruitbox_total;
@@ -594,7 +594,7 @@ WithTitle
                         
                         // update - 24/7/19 it looks like berry boxes are causing a default charge of £20 on top of the cost of berries.
                         // I think a solution might be to skip them from adding to box totals entirely.
-                        if ($fruitbox->type === 'berry') {
+                        if (strtolower( $fruitbox->type ) === 'berry' ) {
                             // Er, do nothing?
                         } else {
                             $total_boxes_without_discount += $fruitbox->fruitbox_total;
