@@ -82,6 +82,7 @@ WithMultipleSheets
                         foreach ($monTues as $route_day) {
                             $sheets[] = new BerryPicklistCollection($route_day, $this->week_starting);
                         }
+                        return $sheets;
                         break;
                     case 'wed-thur-fri':
                         foreach ($wedThurFri as $route_day) {
