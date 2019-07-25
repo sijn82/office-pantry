@@ -74538,7 +74538,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "primary",
-                        href: "api/seasonal-berries-breakdown"
+                        href: "/api/seasonal-berries-breakdown"
                       }
                     },
                     [_vm._v(" Export Berry Picklists ")]

@@ -8,7 +8,7 @@
                     <b v-for="week_start in $store.state.week_start"> Week Start: {{ week_start.current }} </b>
                 </b-col>
                 <b-col>
-                    <b-button variant="primary" href="api/seasonal-berries-breakdown"> Export Berry Picklists </b-button>
+                    <b-button variant="primary" href="/api/seasonal-berries-breakdown"> Export Berry Picklists </b-button>
                 </b-col>
                 <b-col>
                     <b v-for="week_start in $store.state.week_start"> Delivery Days: {{ week_start.delivery_days }} </b>
