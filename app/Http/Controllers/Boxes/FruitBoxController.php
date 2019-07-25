@@ -3,6 +3,7 @@
 // Edited to use sub folder 'Boxes' where the box controllers have now been moved to.
 namespace App\Http\Controllers\Boxes;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Exports;
 
 use App\FruitBox;
 use App\FruitBoxArchive;
@@ -25,7 +26,7 @@ class FruitBoxController extends Controller
     public function __construct()
     {
         $week_start = WeekStart::first();
-        
+
         if ($week_start !== null) {
             $this->week_start = $week_start->current;
             $this->delivery_days = $week_start->delivery_days;
@@ -224,10 +225,10 @@ class FruitBoxController extends Controller
                 // $newRoute->address = $companyDetails->route_summary_address;
 
                 $newRoute->address = implode(", ", array_filter([
-                        $companyDetails->route_address_line_1, 
-                        $companyDetails->route_address_line_2, 
-                        $companyDetails->route_address_line_3, 
-                        $companyDetails->route_city, 
+                        $companyDetails->route_address_line_1,
+                        $companyDetails->route_address_line_2,
+                        $companyDetails->route_address_line_3,
+                        $companyDetails->route_city,
                         $companyDetails->route_region
                     ]));
 
@@ -392,7 +393,7 @@ class FruitBoxController extends Controller
                 FruitBoxArchive::updateOrInsert(
                     [ // Check the values contained in this array for a matching record.  If we find it, update the record, otherwise add a new entry.
                         'company_details_id' => $existing_fruitbox_entry->company_details_id,
-                        'fruitbox_id' => $existing_fruitbox_entry->id, 
+                        'fruitbox_id' => $existing_fruitbox_entry->id,
                         'is_active' => 'Active',
                         'next_delivery' => $existing_fruitbox_entry->next_delivery
                     ],

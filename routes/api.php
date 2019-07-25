@@ -27,9 +27,9 @@ Route::group([
     'namespace' => 'Boxes',
     'prefix' => 'boxes'
 ], function () {
-    
+
                         //----- Current Orders -----//
-    
+
     // Fruitbox CRUD
     Route::post('fruitbox/add-new-fruitbox', 'FruitBoxController@store');
     Route::put('fruitbox/{id}', 'FruitBoxController@update');
@@ -58,14 +58,14 @@ Route::group([
     // Route::put('otherbox/destroy/{id}', 'OtherBoxController@destroy'); // Don't think I'm using this, going to replace it anyway.
     Route::put('otherbox/destroy/{id}', 'OtherBoxController@destroyItem');
     Route::put('otherbox/destroy-box/{id}', 'OtherBoxController@destroyBox');
-    
+
                         //----- Archived Orders -----//
-    
+
     // Archived Fruitbox
     Route::put('archived-fruitbox/update/{id}', 'ArchivedFruitBoxController@updateArchivedFruitBox');
     Route::put('archived-fruitbox/destroy/{id}', 'ArchivedFruitBoxController@deleteArchivedFruitBox');
     // Archived Milkbox
-    
+
     // Archived Snackbox
     Route::put('archived-snackbox/destroy/{id}', 'ArchivedSnackBoxController@destroyItem');
     Route::put('archived-snackbox/destroy-box/{id}', 'ArchivedSnackBoxController@destroyBox');
@@ -75,7 +75,7 @@ Route::group([
     // Archived Otherbox
     Route::put('archived-otherbox/destroy/{id}', 'ArchivedOtherBoxController@destroyItem');
     Route::put('archived-otherbox/destroy-box/{id}', 'ArchivedOtherBoxController@destroyBox');
-    
+
     //----- Mass Update Snackboxes -----//
     Route::post('snackboxes/standard/update', 'SnackBoxController@massUpdateType');
     Route::get('types/select', 'SnackBoxController@showTypes');
@@ -89,8 +89,8 @@ Route::group([
     // Route::get('importFruitBox', 'FruitBoxController@store');
     // Again, not sure exactly sure the purpose of this route, obviously it's an export but is it a picklist? Is it currently in use?
     Route::get('otherbox-export', 'OtherBoxController@download_otherboxes');
-    
-    
+
+
     // Old System Routes
     Route::post('upload-snackbox-product-codes', 'SnackBoxController@upload_products_and_codes');
     Route::post('upload-snackbox-orders', 'SnackBoxController@upload_snackbox_orders');
@@ -103,42 +103,42 @@ Route::group([
     'namespace' => 'Company',
     'prefix' => 'company'
 ], function () {
-    
+
     Route::post('additional-info', 'AdditionalInfoController@addAdditionalInfo');
     Route::put('additional-info/{id}', 'AdditionalInfoController@destroy');
-    
+
     Route::get('allergies/select', 'AllergyController@showAllergies');
     Route::post('allergies', 'AllergyController@addAllergy');
     Route::put('allergies/{id}', 'AllergyController@destroy');
-    
+
     Route::post('company-details/add-new-company', 'CompanyDetailsController@store');
     Route::put('company-details/update/{company_details_id}', 'CompanyDetailsController@update');
     Route::get('companies/search', 'CompanyDetailsController@search');
-    
+
     // New system exporting functions, now moved to their new homes but still partially incomplete (DO NOT EXPECT THEM TO RUN RIGHT NOW!)
     // Route::get('export-fruitbox-picklists', 'FruitBoxController@fruitbox_export');
-    
+
     // The next 3 routes should really go into their own group I think, using a more bespoke controller, until I do that, they'll just have to live here for now.
     Route::get('export-routing', 'CompanyRouteController@download_new_routes');
     Route::get('export-routing-override', 'CompanyRouteController@download_new_routes_override');
     //Import Rejigged Routes (New System)
     Route::post('import-rejigged-routes', 'CompanyRouteController@import');
-    
+
     // Company route CRUD - note that the autogeneration of routes means create isn't necessary and I never seem to use read in the default way.
     Route::put('company-route/update/{id}', 'CompanyRouteController@update');
     Route::put('company-route/delete/{id}', 'CompanyRouteController@destroy');
-    
+
     Route::post('preferences/add-new-preference', 'PreferencesController@store');
     Route::post('preferences/selected', 'PreferencesController@show');
     Route::post('preferences/remove', 'PreferencesController@remove');
-    // I'm pretty sure this was just used to test the random selection of a new product id, 
+    // I'm pretty sure this was just used to test the random selection of a new product id,
     // but I'll double check that later, for now it's fine to keep.
     Route::get('random', 'PreferencesController@random');
 });
 
 
-// Essentially this is a group of system functions where, less concerned with specific orders, 
-// these are the bits that enable the generation/processing/delivery of company orders. 
+// Essentially this is a group of system functions where, less concerned with specific orders,
+// these are the bits that enable the generation/processing/delivery of company orders.
 Route::group([
     'namespace' => 'OfficePantry',
     'prefix' => 'office-pantry'
@@ -155,8 +155,8 @@ Route::group([
     // This might get moved to an import/export group later on.
     Route::get('export-fruitpartner-deliveries', 'FruitPartnerController@groupOrdersByFruitPartner');
     // Office Pantry Products
-    Route::put('products/office-pantry-products/update/{id}', 'OfficePantryProductsController@update');
-    Route::get('products/office-pantry-products/show', 'OfficePantryProductsController@show'); // Might do this differently tomorrow morning.
+    Route::put('office-pantry-products/update/{id}', 'OfficePantryProductsController@update');
+    Route::get('office-pantry-products/show', 'OfficePantryProductsController@show'); // Might do this differently tomorrow morning.
     //Invoicing
     Route::get('weekly-invoicing', 'InvoicingController@weekly_invoicing_export');
     Route::get('confirm-weekly-invoicing', 'InvoicingController@confirm_weekly_invoicing');
@@ -170,15 +170,15 @@ Route::group([
     // Route::get('products/{id}', 'OfficeDashboardController@showProduct'); // why does this break the search function, if placed (here) above the 'products/search'
     Route::get('products/search', 'ProductsController@search');
     Route::get('products', 'ProductsController@index');
-    
+
     // To be useful at a later date when more of the process has been implimented.
     //Route::get('importProduct', 'ProductsController@storeCSV');
-    
+
     // Update the week_start variable.
     Route::post('import-week-start', 'WeekStartController@storeWeekStart');
     Route::post('import-week-start-days', 'WeekStartController@storeDeliveryDays');
     Route::get('week-start/select', 'WeekStartController@showAndSet');
-    
+
     Route::get('orders', 'OrderController@index');
     Route::get('process-orders', 'OrderController@addOrdersToRoutes');
     Route::get('carbon', 'OrderController@advanceNextOrderDeliveryDate');
@@ -282,13 +282,13 @@ Route::post('importExcel', 'MaatwebsiteController@importExcel');
 
 // Route::put('fruitbox/{id}', 'FruitBoxController@update');
 // Route::post('fruitbox/add-new-fruitbox', 'FruitBoxController@store');
-// 
+//
 // Route::put('milkbox/{id}', 'MilkBoxController@update');
 // Route::post('milkbox/add-new-milkbox', 'MilkBoxController@store');
 
 // Route::put('products/update/{id}', 'ProductsController@update');
 // Route::put('products/destroy/{id}', 'ProductsController@destroy');
-// 
+//
 // Route::post('products/add-new-product', 'ProductsController@store');
 // // Route::get('products/{id}', 'OfficeDashboardController@showProduct'); // why does this break the search function, if placed (here) above the 'products/search'
 // Route::get('products/search', 'ProductsController@search');
@@ -324,7 +324,7 @@ Route::post('importExcel', 'MaatwebsiteController@importExcel');
 
 // // Update the week_start variable.
 // Route::post('import-week-start', 'WeekStartController@storeWeekStart');
-// 
+//
 // Route::post('import-week-start-days', 'WeekStartController@storeDeliveryDays');
 
 // Route::get('fruitbox-picklists', 'FruitBoxController@addRouteInfoToFruitPicklists');
@@ -369,7 +369,7 @@ Route::post('importExcel', 'MaatwebsiteController@importExcel');
 
 // // test api url to check what encoding was used
 // Route::post('upload-test-csv', 'FruitOrderingDocumentController@csv_tester');
-// 
+//
 // Route::get('process-csv', 'FruitOrderingDocumentController@create');
 
 // // Store the snacks n drinks csv uploaded from import-file (url) vue component.

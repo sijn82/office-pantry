@@ -93440,7 +93440,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "\n.snackbox-recommended-procedure[data-v-a61d40c6] {\n  margin: 40px 60px;\n}\n.snackbox-recommended-procedure p[data-v-a61d40c6] {\n    font-weight: 300;\n    font-size: 1.2em;\n    margin: 20px 20px;\n}\n.snackbox-recommended-procedure p b[data-v-a61d40c6] {\n      font-size: 1.3em;\n}\n.archive-and-empty[data-v-a61d40c6] {\n  margin: 40px 60px;\n}\n.archive-and-empty p[data-v-a61d40c6] {\n    font-weight: 300;\n    font-size: 1.2em;\n    margin: 20px 80px;\n}\n.archive-and-empty p b[data-v-a61d40c6] {\n      font-size: 1.3em;\n}\n.archive-and-empty .archive-and-empty-button[data-v-a61d40c6] {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n}\n.mass-update-snackbox[data-v-a61d40c6] {\n  margin-top: 40px;\n}\n.mass-update-snackbox p[data-v-a61d40c6] {\n    font-weight: 300;\n    font-size: 1.2em;\n    margin: 20px 80px;\n}\n.mass-update-snackbox p b[data-v-a61d40c6] {\n      font-size: 1.3em;\n}\n.mass-update-snackbox .select-type-label[data-v-a61d40c6] {\n    font-weight: 400;\n    font-size: 1.2em;\n}\n.mass-update-snackbox .order-selections[data-v-a61d40c6] {\n    padding: 10px 40px;\n}\n.mass-update-snackbox .order-selections p[data-v-a61d40c6] {\n      font-weight: 300;\n}\n.mass-update-snackbox .order-selections .save-info[data-v-a61d40c6] {\n      margin: 10px 30px;\n}\n", ""]);
+exports.push([module.i, "\n.snackbox-recommended-procedure[data-v-a61d40c6] {\n  margin: 40px 60px;\n}\n.snackbox-recommended-procedure p[data-v-a61d40c6] {\n    font-weight: 300;\n    font-size: 1.2em;\n    margin: 20px 20px;\n}\n.snackbox-recommended-procedure p b[data-v-a61d40c6] {\n      font-size: 1.3em;\n}\n.archive-and-empty[data-v-a61d40c6] {\n  margin: 40px 60px;\n}\n.archive-and-empty p[data-v-a61d40c6] {\n    font-weight: 300;\n    font-size: 1.2em;\n    margin: 20px 80px;\n}\n.archive-and-empty p b[data-v-a61d40c6] {\n      font-size: 1.3em;\n}\n.archive-and-empty .archive-and-empty-button-group[data-v-a61d40c6] {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n}\n.archive-and-empty .archive-and-empty-button-group a[data-v-a61d40c6] {\n      margin: 10px;\n}\n.mass-update-snackbox[data-v-a61d40c6] {\n  margin-top: 40px;\n}\n.mass-update-snackbox p[data-v-a61d40c6] {\n    font-weight: 300;\n    font-size: 1.2em;\n    margin: 20px 80px;\n}\n.mass-update-snackbox p b[data-v-a61d40c6] {\n      font-size: 1.3em;\n}\n.mass-update-snackbox .select-type-label[data-v-a61d40c6] {\n    font-weight: 400;\n    font-size: 1.2em;\n}\n.mass-update-snackbox .order-selections[data-v-a61d40c6] {\n    padding: 10px 40px;\n}\n.mass-update-snackbox .order-selections p[data-v-a61d40c6] {\n      font-weight: 300;\n}\n.mass-update-snackbox .order-selections .save-info[data-v-a61d40c6] {\n      margin: 10px 30px;\n}\n", ""]);
 
 // exports
 
@@ -93451,6 +93451,11 @@ exports.push([module.i, "\n.snackbox-recommended-procedure[data-v-a61d40c6] {\n 
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
 //
 //
 //
@@ -93781,7 +93786,9 @@ var render = function() {
       "div",
       { staticClass: "archive-and-empty" },
       [
-        _c("h1", [_vm._v(" Archive And Empty Snackboxes ")]),
+        _c("h1", [
+          _vm._v(" Archive And Empty Snackboxes (Drinkboxes & Otherboxes) ")
+        ]),
         _vm._v(" "),
         _c(
           "b-row",
@@ -93822,18 +93829,42 @@ var render = function() {
             _vm._v(" "),
             _c(
               "b-col",
-              { staticClass: "archive-and-empty-button" },
+              { staticClass: "archive-and-empty-button-group" },
               [
                 _c(
                   "b-button",
                   {
                     attrs: {
                       size: "lg",
-                      href: "/snackboxes/archive-and-empty",
+                      href: "archive-and-empty",
                       variant: "danger"
                     }
                   },
                   [_vm._v(" Archive And Empty Snackboxes ")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "b-button",
+                  {
+                    attrs: {
+                      size: "lg",
+                      href: "/office/drinkboxes/archive-and-empty",
+                      variant: "danger"
+                    }
+                  },
+                  [_vm._v(" Archive And Empty Drinkboxes ")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "b-button",
+                  {
+                    attrs: {
+                      size: "lg",
+                      href: "/office/otherboxes/archive-and-empty",
+                      variant: "danger"
+                    }
+                  },
+                  [_vm._v(" Archive And Empty Otherboxes ")]
                 )
               ],
               1
@@ -104705,7 +104736,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     methods: {
         fetch: function fetch() {
             var self = this;
-            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/products/search', { params: { keywords: this.keywords } }).then(function (response) {
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/office-pantry/products/search', { params: { keywords: this.keywords } }).then(function (response) {
                 return self.products = response.data;
             }).catch(function (error) {});
         },
@@ -104722,7 +104753,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         grabProductList: function grabProductList() {
             var self = this;
-            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/products').then(function (response) {
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/office-pantry/products').then(function (response) {
                 // console.log(response);
                 self.products = response.data;
                 console.log(self.products);
@@ -106031,7 +106062,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             evt.preventDefault();
             var self = this;
             // alert(JSON.stringify(this.form));
-            axios.post('/api/products/office-pantry-products/update', {
+            axios.post('/api/office-pantry/office-pantry-products/update', {
                 company_data: self.form,
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv' }
                 // user_id: self.userData.id // This hasn't been setup yet so probably won't work yet?!
@@ -106066,7 +106097,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     mounted: function mounted() {
         var _this = this;
 
-        axios.get('api/products/office-pantry-products/show').then(function (response) {
+        axios.get('/api/office-pantry/office-pantry-products/show').then(function (response) {
             return _this.products = response.data;
         });
     }
@@ -112563,7 +112594,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         importRejiggedRoutes: function importRejiggedRoutes() {
             var self = this;
-            axios.post('api/import-rejigged-routes', {
+            axios.post('/api/import-rejigged-routes', {
                 rejigged_routes: self.rejigged_routes_file,
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/xlsx' }
                 // user_id: self.userData.id
@@ -112606,7 +112637,7 @@ var render = function() {
                 "b-button",
                 {
                   attrs: {
-                    href: "api/export-fruitbox-picklists",
+                    href: "/api/boxes/export-fruitbox-picklists",
                     variant: "info"
                   }
                 },
@@ -112621,7 +112652,12 @@ var render = function() {
             [
               _c(
                 "b-button",
-                { attrs: { href: "api/export-routing", variant: "info" } },
+                {
+                  attrs: {
+                    href: "/api/company/export-routing",
+                    variant: "info"
+                  }
+                },
                 [_vm._v(" Export Routes ")]
               )
             ],
@@ -112635,7 +112671,7 @@ var render = function() {
                 "b-button",
                 {
                   attrs: {
-                    href: "api/export-fruitpartner-deliveries",
+                    href: "/api/office-pantry/export-fruitpartner-deliveries",
                     type: "submit",
                     variant: "info"
                   }
@@ -112677,7 +112713,7 @@ var render = function() {
                     "b-button",
                     {
                       attrs: {
-                        href: "api/export-routing-override",
+                        href: "/api/company/export-routing-override",
                         variant: "outline-danger"
                       }
                     },
@@ -112737,7 +112773,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "office/export-snackbox-weekly-op-multicompany"
+                        href: "export-snackbox-weekly-op-multicompany"
                       }
                     },
                     [_vm._v(" Export OP (Weekly) ")]
@@ -112748,7 +112784,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "office/export-snackbox-weekly-dpd-multicompany"
+                        href: "export-snackbox-weekly-dpd-multicompany"
                       }
                     },
                     [_vm._v(" Export DPD (Weekly) ")]
@@ -112759,7 +112795,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "office/export-snackbox-weekly-apc-multicompany"
+                        href: "export-snackbox-weekly-apc-multicompany"
                       }
                     },
                     [_vm._v(" Export APC (Weekly) ")]
@@ -112774,7 +112810,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "office/export-snackbox-op-multicompany"
+                        href: "export-snackbox-op-multicompany"
                       }
                     },
                     [_vm._v(" Export OP (Selected Days) ")]
@@ -112785,7 +112821,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "office/export-snackbox-dpd-multicompany"
+                        href: "export-snackbox-dpd-multicompany"
                       }
                     },
                     [_vm._v(" Export DPD (Selected Days) ")]
@@ -112796,7 +112832,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "office/export-snackbox-apc-multicompany"
+                        href: "export-snackbox-apc-multicompany"
                       }
                     },
                     [_vm._v(" Export APC (Selected Days) ")]
@@ -112820,7 +112856,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "office/export-snackbox-weekly-op-singlecompany"
+                        href: "export-snackbox-weekly-op-singlecompany"
                       }
                     },
                     [_vm._v(" Export OP (Weekly) ")]
@@ -112831,7 +112867,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "office/export-snackbox-weekly-dpd-singlecompany"
+                        href: "export-snackbox-weekly-dpd-singlecompany"
                       }
                     },
                     [_vm._v(" Export DPD (Weekly) ")]
@@ -112842,7 +112878,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "office/export-snackbox-weekly-apc-singlecompany"
+                        href: "export-snackbox-weekly-apc-singlecompany"
                       }
                     },
                     [_vm._v(" Export APC (Weekly) ")]
@@ -112857,7 +112893,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "office/export-snackbox-op-singlecompany"
+                        href: "export-snackbox-op-singlecompany"
                       }
                     },
                     [_vm._v(" Export OP (Selected Days) ")]
@@ -112868,7 +112904,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "office/export-snackbox-dpd-singlecompany"
+                        href: "export-snackbox-dpd-singlecompany"
                       }
                     },
                     [_vm._v(" Export DPD (Selected Days) ")]
@@ -112879,7 +112915,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "office/export-snackbox-apc-singlecompany"
+                        href: "export-snackbox-apc-singlecompany"
                       }
                     },
                     [_vm._v(" Export APC (Selected Days) ")]
@@ -112906,7 +112942,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-secondary",
-                        href: "office/export-snackbox-unique-op-singlecompany"
+                        href: "export-snackbox-unique-op-singlecompany"
                       }
                     },
                     [_vm._v(" Export OP (Selected Days) ")]
@@ -112917,7 +112953,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-secondary",
-                        href: "office/export-snackbox-unique-dpd-singlecompany"
+                        href: "export-snackbox-unique-dpd-singlecompany"
                       }
                     },
                     [_vm._v(" Export DPD (Selected Days) ")]
@@ -112928,7 +112964,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-secondary",
-                        href: "office/export-snackbox-unique-apc-singlecompany"
+                        href: "export-snackbox-unique-apc-singlecompany"
                       }
                     },
                     [_vm._v(" Export APC ")]
@@ -112943,7 +112979,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-secondary",
-                        href: "office/export-snackbox-unique-op-multicompany"
+                        href: "export-snackbox-unique-op-multicompany"
                       }
                     },
                     [_vm._v(" Export OP (Selected Days) ")]
@@ -112954,7 +112990,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-secondary",
-                        href: "office/export-snackbox-unique-dpd-multicompany"
+                        href: "export-snackbox-unique-dpd-multicompany"
                       }
                     },
                     [_vm._v(" Export DPD (Selected Days) ")]
@@ -112965,7 +113001,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-secondary",
-                        href: "office/export-snackbox-unique-apc-multicompany"
+                        href: "export-snackbox-unique-apc-multicompany"
                       }
                     },
                     [_vm._v(" Export APC (Selected Days) ")]
@@ -112988,7 +113024,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "office/export-otherbox-checklist-op"
+                        href: "export-otherbox-checklist-op"
                       }
                     },
                     [_vm._v(" Export OP Otherboxes (Checklist) ")]
@@ -112999,7 +113035,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "office/export-otherbox-checklist-op-weekly-total"
+                        href: "export-otherbox-checklist-op-weekly-total"
                       }
                     },
                     [_vm._v(" Export OP Otherboxes (Checklist) Weekly Total ")]
@@ -113010,7 +113046,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "office/export-otherbox-op-multicompany"
+                        href: "export-otherbox-op-multicompany"
                       }
                     },
                     [_vm._v(" Export OP Otherboxes ")]
@@ -113045,7 +113081,7 @@ var render = function() {
                       attrs: {
                         variant: "outline-primary",
                         href:
-                          "office/export-wholesale-weekly-snackbox-op-singlecompany"
+                          "export-wholesale-weekly-snackbox-op-singlecompany"
                       }
                     },
                     [_vm._v(" Export OP Snackboxes (Weekly) ")]
@@ -113056,8 +113092,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href:
-                          "office/export-wholesale-weekly-drinkbox-op-multicompany"
+                        href: "export-wholesale-weekly-drinkbox-op-multicompany"
                       }
                     },
                     [_vm._v(" Export OP Drinkboxes (Weekly) ")]
@@ -113072,8 +113107,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href:
-                          "office/export-wholesale-snackbox-op-singlecompany"
+                        href: "export-wholesale-snackbox-op-singlecompany"
                       }
                     },
                     [_vm._v(" Export OP Snackboxes (Selected Days) ")]
@@ -113084,7 +113118,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-primary",
-                        href: "office/export-wholesale-drinkbox-op-multicompany"
+                        href: "export-wholesale-drinkbox-op-multicompany"
                       }
                     },
                     [_vm._v(" Export OP Drinkboxes (Selected Days) ")]
@@ -113114,7 +113148,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-warning",
-                        href: "office/export-monthly-special-op-weekly"
+                        href: "export-monthly-special-op-weekly"
                       }
                     },
                     [_vm._v(" Export OP (Weekly) ")]
@@ -113125,7 +113159,7 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-warning",
-                        href: "office/export-monthly-special-dpd-weekly"
+                        href: "export-monthly-special-dpd-weekly"
                       }
                     },
                     [_vm._v(" Export DPD (Weekly) ")]
@@ -113136,47 +113170,10 @@ var render = function() {
                     {
                       attrs: {
                         variant: "outline-warning",
-                        href: "office/export-monthly-special-apc-weekly"
+                        href: "export-monthly-special-apc-weekly"
                       }
                     },
                     [_vm._v(" Export APC (Weekly) ")]
-                  ),
-                  _vm._v(" "),
-                  _c("b-form-text", { staticClass: "margin-height-10" }, [
-                    _vm._v(" Only export the selected delivery days ")
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "b-button",
-                    {
-                      attrs: {
-                        variant: "outline-warning",
-                        href: "office/export-monthly-special-op"
-                      }
-                    },
-                    [_vm._v(" Export OP (Selected Days) ")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "b-button",
-                    {
-                      attrs: {
-                        variant: "outline-warning",
-                        href: "office/export-monthly-special-dpd"
-                      }
-                    },
-                    [_vm._v(" Export DPD (Selected Days) ")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "b-button",
-                    {
-                      attrs: {
-                        variant: "outline-warning",
-                        href: "office/export-monthly-special-apc"
-                      }
-                    },
-                    [_vm._v(" Export APC (Selected Days) ")]
                   )
                 ],
                 1
@@ -113343,7 +113340,7 @@ var render = function() {
                 "b-button",
                 {
                   attrs: {
-                    href: "api/weekly-invoicing",
+                    href: "/api/office-pantry/weekly-invoicing",
                     variant: "outline-primary"
                   }
                 },
@@ -113360,7 +113357,7 @@ var render = function() {
                 "b-button",
                 {
                   attrs: {
-                    href: "api/confirm-weekly-invoicing",
+                    href: "/api/office-pantry/confirm-weekly-invoicing",
                     variant: "outline-primary"
                   }
                 },

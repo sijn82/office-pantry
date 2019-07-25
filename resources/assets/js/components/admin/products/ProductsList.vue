@@ -129,7 +129,7 @@ export default {
     methods: {
         fetch() {
             let self = this;
-            axios.get('/api/products/search', { params: { keywords: this.keywords }})
+            axios.get('/api/office-pantry/products/search', { params: { keywords: this.keywords }})
                 .then(response => self.products = response.data)
                 .catch(error => {});
         },
@@ -146,7 +146,7 @@ export default {
         },
         grabProductList() {
             let self = this;
-            axios.get('/api/products').then( response => {
+            axios.get('/api/office-pantry/products').then( response => {
                 // console.log(response);
                 self.products = response.data;
                 console.log(self.products)

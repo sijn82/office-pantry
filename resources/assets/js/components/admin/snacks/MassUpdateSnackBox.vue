@@ -43,7 +43,7 @@
             </b-row>
         </div>
         <div class="archive-and-empty">
-            <h1> Archive And Empty Snackboxes </h1>
+            <h1> Archive And Empty Snackboxes (Drinkboxes & Otherboxes) </h1>
             <b-row>
                 <b-col>
                     <p>  
@@ -65,8 +65,10 @@
                         <b> If you're happy to archive and empty these boxes (and no longer need them for picklists, or routes) - push the button. </b>
                     </p>
                 </b-col>
-                <b-col class="archive-and-empty-button">
-                    <b-button size="lg" href="/snackboxes/archive-and-empty" variant="danger"> Archive And Empty Snackboxes </b-button>
+                <b-col class="archive-and-empty-button-group">
+                    <b-button size="lg" href="archive-and-empty" variant="danger"> Archive And Empty Snackboxes </b-button>
+                    <b-button size="lg" href="/office/drinkboxes/archive-and-empty" variant="danger"> Archive And Empty Drinkboxes </b-button>
+                    <b-button size="lg" href="/office/otherboxes/archive-and-empty" variant="danger"> Archive And Empty Otherboxes </b-button>
                 </b-col>
             </b-row>
         </div>
@@ -163,10 +165,13 @@
             font-size: 1.3em;
             }
         }
-        .archive-and-empty-button {
+        .archive-and-empty-button-group {
             display: flex;
             align-items: center;
             justify-content: center;
+            a {
+                margin: 10px;
+            }
         }
     }
     .mass-update-snackbox {

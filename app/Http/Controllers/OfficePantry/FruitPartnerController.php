@@ -4,6 +4,8 @@
 namespace App\Http\Controllers\OfficePantry;
 use App\Http\Controllers\Controller;
 
+use App\Http\Controllers\Exports;
+
 use App\FruitPartner;
 use Illuminate\Http\Request;
 use App\WeekStart;

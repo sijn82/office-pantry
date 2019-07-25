@@ -16,7 +16,7 @@
 Route::post('exporting', 'Company\CompanyRouteController@import')->name('import-rejigged-routes'); // <-- Interesting url though, I've also used it again for something else further down.
 
 // I'm pretty sure these are all examples of when I wanted to create a specific url with a new blade template to add vue components too.
-// I'm also pretty sure they only look like this and have a singular purpose because 
+// I'm also pretty sure they only look like this and have a singular purpose because
 // a) it worked! (and)
 // b) I hadn't/haven't spent the time to realise and maximise their use... yet.
 
@@ -36,7 +36,7 @@ Route::get('/register/warehouse', 'Auth\RegisterController@showWarehouseRegister
 // Post the submitted form details
 Route::post('/register/office', 'Auth\RegisterController@createOffice');
 Route::post('/register/warehouse', 'Auth\RegisterController@createWarehouse');
-// Get the login form 
+// Get the login form
 Route::get('/login/office', 'Auth\LoginController@showOfficeLoginForm')->name('login.office');
 Route::get('/login/warehouse', 'Auth\LoginController@showWarehouseLoginForm')->name('login.warehouse');
 // Post the submitted form details
@@ -49,7 +49,7 @@ Route::view('/warehouse', 'warehouse')->middleware('auth:warehouse')->name('ware
 // Only those with office authentication can access these routes.
 // All routes contained here now have the prefix 'office' to clearly indicate the login access needed to visit the url.
 Route::group(['middleware' => ['web','auth:office'], 'prefix' => 'office'], function () {
-    
+
     // Add a new company
     Route::view('companies/new', 'new-company')->name('company.new');
     // View the current 3rd Party products i.e Cranberry Smokey Almonds and Corn
@@ -58,7 +58,7 @@ Route::group(['middleware' => ['web','auth:office'], 'prefix' => 'office'], func
     Route::view('office-pantry-products', 'office-pantry-products')->name('office-pantry-products');
     // Accessing the invoicing and invoice confirm buttons to run invoicing
     Route::view('invoicing', 'invoicing')->name('invoicing');
-    // Access the cron page, to view and edit existing cron jobs. 
+    // Access the cron page, to view and edit existing cron jobs.
     Route::view('cron', 'cron')->name('cron');
     // Access fruit partners currently just to add new ones but will include viewing/editing existing fruit partners
     Route::view('fruit-partners', 'fruit-partners')->name('fruit-partners');
@@ -67,14 +67,16 @@ Route::group(['middleware' => ['web','auth:office'], 'prefix' => 'office'], func
     // Mass update, empty & archive snackboxes.
     Route::view('snackboxes/massupdate', 'snackbox-creation')->name('snackboxes.massupdate');
 
+    Route::view('exporting-processes', 'exporting')->name('exporting-processes');
+
     // Subgroup in group, these all need the namespace 'Boxes' applied to find the new location of the controller files.
-    
+
     Route::group(['namespace' => 'Boxes'], function () {
 
         //----- Old system Processing and Export for Snackboxes -----//
         Route::get('auto_process_snackboxes', 'SnackBoxController@auto_process_snackboxes');
         //----- End of Old system Processing and Export for Snackboxes -----//
-        
+
         // Not sure what this is used for, whether it's just the old system or to be reused?
         Route::get('snackboxes-multi-company', 'SnackBoxController@auto_process_snackboxes');
 
@@ -156,9 +158,9 @@ Route::group(['middleware' => ['web','auth:office'], 'prefix' => 'office'], func
             Route::get('drinkboxes/archive-and-empty', 'DrinkBoxController@archiveAndEmptyDrinkBoxes');
             // And otherbox
             Route::get('otherboxes/archive-and-empty', 'OtherBoxController@archiveAndEmptyOtherBoxes');
-        
+
         //----- End of Run the empty and archive snackboxes -----//
-        
+
     }); // End of (subgroup) Route::group(['middleware' => 'web', 'namespace' => 'Boxes'], function ()
 
 
@@ -170,7 +172,7 @@ Auth::routes();
 
 //----- Old System Routes -----//
 
-    // This is the old system url for downloading all the important stuff, 
+    // This is the old system url for downloading all the important stuff,
     // it's been replaced in the new system but was arguably the most important url in the past.
     Route::view('import-file', 'import-file')->middleware('auth:office')->name('import.file');
     // Another important link from the old system; this was used to import products and snackbox orders before offering links to download all the good stuff, picklists etc.
@@ -179,17 +181,15 @@ Auth::routes();
     // old system week start added to importing/exporting processes.
     // Turns out (after wasting time working out why the route kept becoming unnamed) I've bypassed this by pulling the details from $store.  It also explains why it was working without binding (:) the prop name!
     //Route::get('import-file', 'OfficePantry\WeekStartController@show')->middleware('auth:office');
-    
+
     // new system week start added to exporting page <-- Not sure I really need to pass it like this though? Going to do it a little differently this time.
     Route::get('exporting', 'OfficePantry\WeekStartController@showAndSet')->name('exporting')->middleware('auth:office');
     // looks like we still need one of these to pull the templating elements in.
-    Route::get('exporting', ['as' => 'exporting', function () {
-        return view('exporting');
-    }]);
+
 
 //----- Things I don't think I need anymore, commenting out during further testing but will be removed during the great cleanup of 2019! -----//
 
-// The view hasn't been found and I already though this was an unused url, so commenting out for now.  
+// The view hasn't been found and I already though this was an unused url, so commenting out for now.
 // Could and should delete when I can clean up the file properly of outdated ideas/comments.
 // Route::get('import-csv', function () {
 //     return view('importCSV');

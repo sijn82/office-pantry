@@ -34,7 +34,7 @@
                                 <a href="{{ route('snackboxes.massupdate') }}"> Mass Update Snackbox (By Type) </a>
                             </li>
                             <li style="list-style:none;">
-                                <a href="{{ route('exporting') }}"> Exporting Processes </a>
+                                <a href="{{ route('exporting-processes') }}"> Exporting Processes </a>
                             </li>
                             <li style="list-style:none;">
                                 <a href="{{ route('invoicing') }}"> Process/Export Invoicing </a>
