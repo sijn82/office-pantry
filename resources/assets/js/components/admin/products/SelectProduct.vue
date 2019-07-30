@@ -76,7 +76,7 @@ export default {
         },
         
         fetch() {
-            axios.get('/api/products/search', { params: { keywords: this.keywords }})
+            axios.get('/api/office-pantry/products/search', { params: { keywords: this.keywords }})
                 .then(response => this.results = response.data)
                 .catch(error => {});
         },
@@ -87,7 +87,7 @@ export default {
         //
         // },
         productData(id) {
-             axios.get('/api/products/' + id)
+             axios.get('/api/office-pantry/products/' + id)
                 .then(response => {
                     this.product = response.data.product;
                     this.$store.commit('selectedProduct', this.product)

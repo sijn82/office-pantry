@@ -104,6 +104,14 @@
                 </b-col>
             </b-row>
             <b-row class="row">
+                <b-col>
+                    <label> Use OP Boxes </label>
+                    <b-form-select v-model="form.use_op_boxes" :options="yes_no">
+                        <template slot="first">
+                                <option :value="null" disabled> Please select an option </option>
+                        </template>
+                    </b-form-select>
+                </b-col>
                 <!-- Additional Info -->
                 <b-col>
                     <label> Additional Info </label>
@@ -134,6 +142,7 @@
         .row {
             padding-top: 10px;
         }
+        margin-bottom: 30px;
     }
 
 </style>
@@ -149,18 +158,26 @@ export default {
                 email: '',
                 telephone: '',
                 url: '',
-                primary_contact: '',
-                secondary_contact: '',
+                primary_contact_first_name: '',
+                primary_contact_surname: '',
+                secondary_contact_first_name: '',
+                secondary_contact_surname: '',
+                address_line_1: '',
+                address_line_2: '',
+                address_line_3: '',
+                city: '',
+                region: '',
+                postcode: '',
                 alt_phone: '',
-                location: '',
-                coordinates: '',
                 weekly_action: null,
                 changes_action: '',
                 no_of_customers: '',
+                use_op_boxes: '',
                 additional_info: '',
             },
             show: true,
             weekly_action_options: ['Email Only', 'Email and Call', 'Email and Answerphone', 'Email and Text', 'Text Only', 'Call Only', 'Answerphone Only'],
+            yes_no: ['Yes', 'No'],
         } // end of data return
     }, // end of data
     methods: {
@@ -193,6 +210,7 @@ export default {
             this.form.weekly_action = null,
             this.form.changes_action = '',
             this.form.no_of_customers = '',
+            this.form.use_op_boxes = '',
             this.form.additional_info = '',
             /* Trick to reset/clear native browser form validation state */
             this.show = false
