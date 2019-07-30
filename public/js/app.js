@@ -80648,7 +80648,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             evt.preventDefault();
             /* Reset our form values */
-            this.form.name = '', this.form.email = '', this.form.telephone = '', this.form.url = '', this.form.primary_contact = '', this.form.secondary_contact = '', this.form.alt_phone = '', this.form.location = '', this.form.coordinates = '', this.form.weekly_action = null, this.form.changes_action = '', this.form.no_of_customers = '', this.form.use_op_boxes = '', this.form.additional_info = '',
+            this.form.name = '', this.form.email = '', this.form.telephone = '', this.form.url = '', this.form.primary_contact_first_name = '', this.form.primary_contact_surname = '', this.form.secondary_contact_first_name = '', this.form.secondary_contact_surname = '', this.form.address_line_1 = '', this.form.address_line_2 = '', this.form.address_line_3 = '', this.form.city = '', this.form.region = '', this.form.postcode = '', this.form.alt_phone = '', this.form.weekly_action = null, this.form.changes_action = '', this.form.no_of_customers = '', this.form.use_op_boxes = '', this.form.additional_info = '',
             /* Trick to reset/clear native browser form validation state */
             this.show = false;
             this.$nextTick(function () {
@@ -106084,7 +106084,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         productData: function productData(id) {
             var _this2 = this;
 
-            axios.get('/api/office-pantry/products/' + id).then(function (response) {
+            axios.get('/api/products/' + id).then(function (response) {
                 _this2.product = response.data.product;
                 _this2.$store.commit('selectedProduct', _this2.product);
             }).catch(function (error) {});
@@ -108097,9 +108097,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             var company_details_id = this.selected_company;
             var name = allergy;
-            axios.post('/api/allergies', {
+            axios.post('/api/company/allergies', {
                 new_allergy: { name: name, company_details_id: company_details_id },
-                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv' }
+                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
             }).then(function (response) {
                 alert('Uploaded new company allergy successfully!');
                 _this.$emit('refresh-data', { company_details_id: _this.selected_company });
@@ -108119,9 +108119,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var company = this.selected_company;
             var info = additional_info;
 
-            axios.post('/api/additional-info', {
+            axios.post('/api/company/additional-info', {
                 additional_info: { info: info, company: company },
-                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv' }
+                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
             }).then(function (response) {
                 alert('Uploaded new company additional info successfully!');
                 _this2.$emit('refresh-data', { company_details_id: _this2.selected_company });
@@ -108145,9 +108145,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             // We could maybe make another check but for now, let's sort out actually adding/deleting from database and then worrry about the front end.
             // this.$store.commit('addPreferenceToStore', { preference, product_name });
 
-            axios.post('/api/preferences/add-new-preference', {
+            axios.post('/api/company/preferences/add-new-preference', {
                 preference: { company_details_id: company_details_id, product_name: product_name, product_code: product_code, product_quantity: product_quantity, preference_category: preference_category },
-                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv' }
+                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
             }).then(function (response) {
                 alert('Uploaded new preference successfully!');
                 console.log('should be something below');

@@ -141,9 +141,9 @@ export default {
 
             let company_details_id = this.selected_company;
             let name = allergy;
-            axios.post('/api/allergies', {
+            axios.post('/api/company/allergies', {
                 new_allergy: { name, company_details_id },
-                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv' }
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
             }).then( response => {
                 alert('Uploaded new company allergy successfully!');
                 this.$emit('refresh-data', {company_details_id: this.selected_company});
@@ -163,9 +163,9 @@ export default {
             let company = this.selected_company;
             let info = additional_info;
 
-            axios.post('/api/additional-info', {
+            axios.post('/api/company/additional-info', {
                 additional_info: { info, company },
-                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv' }
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
             }).then( response => {
                 alert('Uploaded new company additional info successfully!');
                 this.$emit('refresh-data', {company_details_id: this.selected_company});
@@ -189,9 +189,9 @@ export default {
             // We could maybe make another check but for now, let's sort out actually adding/deleting from database and then worrry about the front end.
             // this.$store.commit('addPreferenceToStore', { preference, product_name });
 
-            axios.post('/api/preferences/add-new-preference', {
+            axios.post('/api/company/preferences/add-new-preference', {
                 preference: { company_details_id, product_name, product_code, product_quantity, preference_category },
-                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv' },
+                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             }).then( response => {
                  alert('Uploaded new preference successfully!');
                  console.log('should be something below');
