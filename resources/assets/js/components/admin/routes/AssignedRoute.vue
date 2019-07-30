@@ -48,7 +48,7 @@ export default {
             }
         },
         update(assigned_route) {
-            axios.post('api/assigned-routes/update', {
+            axios.post('api/office-pantry/assigned-routes/update', {
                 assigned_route: assigned_route,
             }).then ( response => {
                 console.log(response);
@@ -56,7 +56,7 @@ export default {
         },
         deleter(id) {
             this.$store.commit('removeAssignedRoute', { id });
-            axios.put('api/assigned-route/' + id, { 
+            axios.put('api/office-pantry/assigned-route/' + id, { 
                 id: id,
             }).then (response => {
                 console.log(response);

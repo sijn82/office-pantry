@@ -248,7 +248,7 @@ export default {
             this.editing = false;
             console.log(product);
             console.log(product.id);
-            axios.put('api/products/update/' + product.id, {
+            axios.put('api/office-pantry/products/update/' + product.id, {
                 id: product.id,
                 is_active: product.is_active,
                 name: product.name,
@@ -270,7 +270,7 @@ export default {
         },
         
         deleteProduct(product) {
-            axios.put('api/products/destroy/' + product.id, { 
+            axios.put('api/office-pantry/products/destroy/' + product.id, { 
                 id: product.id,
             }).then (response => {
                 location.reload(true); // If I stored the current products in the store rather than like this, I wouldn't need to reload the page to update the view.

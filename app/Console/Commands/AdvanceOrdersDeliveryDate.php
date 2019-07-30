@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OfficePantry\OrderController;
 
 class AdvanceOrdersDeliveryDate extends Command
 {

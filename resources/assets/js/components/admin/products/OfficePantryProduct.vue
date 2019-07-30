@@ -87,7 +87,7 @@
             },
             saveChange(product) {
                 this.editing = false;
-                axios.put('api/products/office-pantry-products/update/' + product.id, {
+                axios.put('api/office-pantry/office-pantry-products/update/' + product.id, {
                     id: product.id,
                     name: product.name,
                     price: product.price,

@@ -63,7 +63,7 @@ export default {
         
         let self = this;
         
-        axios.post('/api/assigned-route/add-new-assigned-route', {
+        axios.post('/api/office-pantry/assigned-route/add-new-assigned-route', {
             assigned_route: self.form,
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv'},
             // user_id: self.userData.id // This hasn't been setup yet so proabably won't work yet?!

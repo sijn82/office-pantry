@@ -59,7 +59,7 @@
             },
             saveCronData: function (command) {
                 console.log(command);
-                axios.post('api/cron-data/update', { next_run: this.next_run, command: command }).then( response => {
+                axios.post('api/office-pantry/cron-data/update', { next_run: this.next_run, command: command }).then( response => {
                     alert('Updated Next Cron Run');
                     location.reload(true);
                 }).catch( error => console.log( error ));

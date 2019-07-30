@@ -23,6 +23,98 @@ use App\AssignedRoute;
 
 class ArchivedSnackBoxController extends Controller
 {
+    
+    // This function is just used to update the snackbox company/delivery info - everything but the contents basically.
+    // If the delivery day is changed then a check is made to see if we have a route for them already (on that day), creating it for them if not.
+    public function updateDetails(Request $request)
+    {
+        // dd(request('snackbox_details'));
+        $snackbox = SnackBoxArchive::where('snackbox_id', request('archived_snackbox_details.snackbox_id'))->get();
+
+        foreach ($snackbox as $snackbox_entry ) {
+            $snackbox_entry->update([
+                'is_active' => request('archived_snackbox_details.is_active'),
+                'delivered_by' => request('archived_snackbox_details.delivered_by'),
+                'no_of_boxes' => request('archived_snackbox_details.no_of_boxes'),
+                'snack_cap' => request('archived_snackbox_details.snack_cap'),
+                'type' => request('archived_snackbox_details.type'),
+                'delivery_day' => request('archived_snackbox_details.delivery_day'),
+                'frequency' => request('archived_snackbox_details.frequency'),
+                'week_in_month' => request('archived_snackbox_details.week_in_month'),
+                'next_delivery_week' => request('archived_snackbox_details.next_delivery_week'),
+            ]);
+        }
+
+        // We only want to create a route if Office Pantry are delivering it directly.
+        if (request('archived_snackbox_details.delivered_by') === 'OP') {
+
+            // Now we've handled the order itself, we need to make sure there's a route to dispatch it on.  Well, if it's delivered by Office Pantry anyway.
+            // If there is we're all done, if not, let's build a route.
+            if (!count(CompanyRoute::where('company_details_id', request('archived_snackbox_details.company_details_id'))->where('delivery_day', request('archived_snackbox_details.delivery_day'))->get())) {
+
+                // This is currently pulling info from the Company table, although I want to create a CompanyData table to replace this.
+                // $companyDetails = Company::findOrFail(request('snackbox_details.company_id'));
+                $companyDetails = CompanyDetails::findOrFail(request('archived_snackbox_details.company_details_id'));
+
+                $assigned_route_tbc_monday = AssignedRoute::where('name', 'TBC (Monday)')->get();
+                $assigned_route_tbc_tuesday = AssignedRoute::where('name', 'TBC (Tuesday)')->get();
+                $assigned_route_tbc_wednesday = AssignedRoute::where('name', 'TBC (Wednesday)')->get();
+                $assigned_route_tbc_thursday = AssignedRoute::where('name', 'TBC (Thursday)')->get();
+                $assigned_route_tbc_friday = AssignedRoute::where('name', 'TBC (Friday)')->get();
+
+                switch (request('delivery_day')) {
+                    case 'Monday':
+                        $assigned_route_id = $assigned_route_tbc_monday[0]->id;
+                        break;
+                    case 'Tuesday':
+                        $assigned_route_id = $assigned_route_tbc_tuesday[0]->id;
+                        break;
+                    case 'Wednesday':
+                        $assigned_route_id = $assigned_route_tbc_wednesday[0]->id;
+                        break;
+                    case 'Thursday':
+                        $assigned_route_id = $assigned_route_tbc_thursday[0]->id;
+                        break;
+                    case 'Friday':
+                        $assigned_route_id = $assigned_route_tbc_friday[0]->id;
+                        break;
+                }
+
+                // We need to create a new entry.
+                $newRoute = new CompanyRoute();
+                // $newRoute->is_active = 'Active'; // Currently hard coded but this is also the default.
+                $newRoute->company_details_id = request('archived_snackbox_details.company_details_id');
+                $newRoute->route_name = $companyDetails->route_name;
+                $newRoute->postcode = $companyDetails->route_postcode;
+
+                //  Route Summary Address isn't a field in the new model, instead I need to grab all route fields and combine them into the summary address.
+                // $newRoute->address = $companyDetails->route_summary_address;
+
+                // An if empty check is being made on the optional fields so that we don't unnecessarily add ', ' to the end of an empty field.
+                $newRoute->address = $companyDetails->route_address_line_1 . ', '
+                                    . $companyDetails->route_address_line_2 . ', '
+                                    . $companyDetails->route_address_line_3 . ', '
+                                    . $companyDetails->route_city . ', '
+                                    . $companyDetails->route_region . ', '
+                                    . $companyDetails->route_postcode;
+
+                $newRoute->delivery_information = $companyDetails->delivery_information;
+                $newRoute->assigned_route_id = $assigned_route_id;
+                $newRoute->delivery_day = request('archived_snackbox_details.delivery_day');
+                $newRoute->save();
+
+
+                $message = "Route $newRoute->route_name on " . request('archived_snackbox_details.delivery_day') . " saved.";
+                Log::channel('slack')->info($message);
+            }
+        } else {
+
+            $message = "Route on " . request('archived_snackbox_details.delivery_day') . " not necessary, delivered by " . request('archived_snackbox_details.delivered_by');
+            Log::channel('slack')->info($message);
+        }
+    }
+    
+    
     public function destroyItem($id, Request $request)
     {
         // We need some logic here to decide if the item to be deleted is the last item in the snackbox.

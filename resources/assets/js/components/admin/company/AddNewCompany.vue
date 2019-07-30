@@ -26,8 +26,12 @@
                 </b-row>
                 <b-row>
                     <b-col>
-                        <label> Primary Contact Name </label>
-                        <b-form-input v-model="form.primary_contact_name"></b-form-input>
+                        <label> Primary Contact First Name </label>
+                        <b-form-input v-model="form.primary_contact_first_name"></b-form-input>
+                    </b-col>
+                    <b-col>
+                        <label> Primary Contact Surame </label>
+                        <b-form-input v-model="form.primary_contact_surname"></b-form-input>
                     </b-col>
                     <b-col>
                         <label> Primary Contact Job Title </label>
@@ -49,8 +53,12 @@
                 </b-row>
                 <b-row>
                     <b-col>
-                        <label> Secondary Contact Name </label>
-                        <b-form-input v-model="form.secondary_contact_name"></b-form-input>
+                        <label> Secondary Contact First Name </label>
+                        <b-form-input v-model="form.secondary_contact_first_name"></b-form-input>
+                    </b-col>
+                    <b-col>
+                        <label> Secondary Contact Surname </label>
+                        <b-form-input v-model="form.secondary_contact_surname"></b-form-input>
                     </b-col>
                     <b-col>
                         <label> Secondary Contact Job Title </label>
@@ -90,17 +98,10 @@
                         <label> Route Address Line 2 </label>
                         <b-form-input v-model="form.route_address_line_2"></b-form-input>
                     </b-col>
-                    
-                    <!-- Initially this seemed like a good idea, 
-                    then we thought xero wouldn't want this field so was going to scrap it 
-                    but it turns out xero can accept a 3rd address line so commenting it out 
-                    but keeping it here for if/when we want it later -->
-                    
-                    <!-- <b-col>
+                    <b-col>
                         <label> Route Address Line 3 </label>
                         <b-form-input v-model="form.route_address_line_3"></b-form-input>
-                    </b-col> -->
-                    <!-- what the heck is this 'h' doing here? I'll make sure it's a typo before deleting and forgetting all about it. -->
+                    </b-col>
                     <b-col>
                         <label> Route City* </label>
                         <b-form-input v-model="form.route_address_city" required></b-form-input>
@@ -128,17 +129,10 @@
                         <label> Invoice Address Line 2 </label>
                         <b-form-input v-model="form.invoice_address_line_2"></b-form-input>
                     </b-col>
-                    
-                    <!-- Initially this seemed like a good idea, 
-                    then we thought xero wouldn't want this field so was going to scrap it 
-                    but it turns out xero can accept a 3rd address line so commenting it out 
-                    but keeping it here for if/when we want it later -->
-                    
-                    <!-- <b-col>
+                    <b-col>
                         <label> Invoice Address Line 3 </label>
                         <b-form-input v-model="form.invoice_address_line_3"></b-form-input>
-                    </b-col> -->
-                    
+                    </b-col>
                     <b-col>
                         <label> Invoice City </label>
                         <b-form-input v-model="form.invoice_address_city"></b-form-input>
@@ -228,11 +222,13 @@ export default {
             form: {
                 invoice_name: '',
                 route_name: '',
-                primary_contact_name: '',
+                primary_contact_first_name: '',
+                primary_contact_surname: '',
                 primary_contact_job_title: '',
                 primary_contact_email: '',
                 primary_contact_telephone: '',
-                secondary_contact_name: '',
+                secondary_contact_first_name: '',
+                secondary_contact_surname: '',
                 secondary_contact_job_title: '',
                 secondary_contact_email: '',
                 secondary_contact_telephone: '',
@@ -277,16 +273,18 @@ export default {
             evt.preventDefault();
             let self = this;
             // alert(JSON.stringify(this.form));
-            axios.post('/api/company-details/add-new-company', {
+            axios.post('/api/company/company-details/add-new-company', {
               company_details: {
 
                   invoice_name: self.form.invoice_name,
                   route_name: self.form.route_name,
-                  primary_contact_name: self.form.primary_contact_name,
+                  primary_contact_first_name: self.form.primary_contact_first_name,
+                  primary_contact_surname: self.form.primary_contact_surname,
                   primary_contact_job_title: self.form.primary_contact_job_title,
                   primary_contact_email: self.form.primary_contact_email,
                   primary_contact_telephone: self.form.primary_contact_telephone,
-                  secondary_contact_name: self.form.secondary_contact_name,
+                  secondary_contact_first_name: self.form.secondary_contact_first_name,
+                  secondary_contact_surname: self.form.secondary_contact_surname,
                   secondary_contact_job_title: self.form.secondary_contact_job_title,
                   secondary_contact_email: self.form.secondary_contact_email,
                   secondary_contact_telephone: self.form.secondary_contact_telephone,
@@ -311,7 +309,7 @@ export default {
                   monthly_surprise: self.form.monthly_surprise,
                   no_of_surprises: self.form.no_of_surprises,
               },
-              headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv'},
+              headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
               // user_id: self.userData.id // This hasn't been setup yet so probably won't work, ...yet?!
             }).then(function (response) {
               alert('Uploaded new company successfully!');
@@ -324,13 +322,15 @@ export default {
 
             this.form.invoice_name = '';
             this.form.route_name = '';
-            this.form.primary_contact_name = '';
+            this.form.primary_contact_first_name = '';
+            this.form.primary_contact_surname = '';
             this.form.primary_contact_job_title = '';
             this.form.primary_contact_email = '';
             this.form.primary_contact_job_title = '',
             this.form.primary_contact_email = '',
             this.form.primary_contact_telephone = '',
-            this.form.secondary_contact_name = '',
+            this.form.secondary_contact_first_name = '',
+            this.form.secondary_contact_surname = '',
             this.form.secondary_contact_job_title = '',
             this.form.secondary_contact_email = '',
             this.form.secondary_contact_telephone = '',

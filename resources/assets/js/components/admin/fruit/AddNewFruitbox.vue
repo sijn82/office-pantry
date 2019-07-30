@@ -137,6 +137,20 @@
                     </b-row>
                     <b-row sm="12">
                         <b-col class="col-sm-4">
+                            <label> Oranges </label>
+                            <b-form-input v-model="form.oranges" type="number"></b-form-input>
+                        </b-col>
+                        <b-col class="col-sm-4">
+                            <label> Cucumbers </label>
+                            <b-form-input v-model="form.cucumbers" type="number"></b-form-input>
+                        </b-col>
+                        <b-col class="col-sm-4">
+                            <label> Mint </label>
+                            <b-form-input v-model="form.mint" type="number"></b-form-input>
+                        </b-col>
+                    </b-row>
+                    <b-row sm="12">
+                        <b-col class="col-sm-4">
                             <label> Organic Lemons </label>
                             <b-form-input v-model="form.organic_lemons" type="number"></b-form-input>
                         </b-col>

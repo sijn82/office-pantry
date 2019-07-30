@@ -18,6 +18,13 @@ use App\CompanyRoute;
 use App\Cron;
 use Carbon\Carbon;
 
+// Now before the order gets moved onto its next delivery date it creates an archive entry if one doesn't already exist.
+use FruitBoxArchive;
+use MilkBoxArchive;
+use SnackBoxArchive;
+use DrinkBoxArchive;
+use OtherBoxArchive;
+
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -141,6 +148,10 @@ class OrderController extends Controller
                     // Add the old next_delivery_week to the last_delivery_week field.
                     $lastDelivery = $fruitbox->next_delivery;
                     
+                    // Bit of repetition but atleast the names will be very clear... :)
+                    $archived_entry_next_delivery = $fruitbox->next_delivery;
+                    $archived_entry_previous_delivery = $fruitbox->previous_delivery;
+                    
                     // this is the only line of code which will differ depending on when the frequency selected
                     if ($fruitbox->frequency === 'Weekly') {
                         // Push the date forward a week
@@ -170,6 +181,117 @@ class OrderController extends Controller
                     
                         // Nothing should get here as the frequency is a drop down (selection) of options, and we specifically grabbed only weekly, fortnightly, and monthly orders
                     }
+                    
+                    // Now before we update the entries we should create an archive of the order we're effectively replacing.  
+                    // If the order has a matching invoice_at/created_at date we can go ahead and create an 'inactive' archive entry,
+                    // otherwise we need to create an active archive to get pulled into the next invoicing run for that branding theme.
+                    
+                    // First let's make sure the two dates are in the same format for comparison
+                    $converted_invoiced_at_date = new CarbonImmutable($fruitbox->invoiced_at);
+                    $converted_updated_at_date = new CarbonImmutable($fruitbox->updated_at);
+                    
+                    if ($fruitbox->is_active === 'Active') {
+                    
+                        // Now check the dates to see if they match the same day.
+                        if ($converted_invoiced_at_date->format('ymd') == $converted_updated_at_date->format('ymd')) {
+                            
+                            // Then we can create an inactive archive
+                            FruitBoxArchive::updateOrInsert(
+                                [ // Check the values contained in this array for a matching record.  If we find it, update the record, otherwise add a new entry.
+                                    'company_details_id' => $fruitbox->company_details_id,
+                                    'fruitbox_id' => $fruitbox->id,
+                                    'is_active' => 'Inactive',
+                                    'next_delivery' => $archived_entry_next_delivery
+                                ],
+                                [
+
+                                    'fruit_partner_id' => $fruitbox->fruit_partner_id,
+                                    'name' => $fruitbox->name,
+                                    // 'company_details_id' => $existing_fruitbox_entry->company_details_id,
+                                    'type' => $fruitbox->type,
+                                    'previous_delivery' => $archived_entry_previous_delivery,
+                                    'frequency' => $fruitbox->frequency,
+                                    'week_in_month' => $fruitbox->week_in_month,
+                                    'delivery_day' => $fruitbox->delivery_day,
+                                    'fruitbox_total' => $fruitbox->fruitbox_total,
+                                    'deliciously_red_apples' => $fruitbox->deliciously_red_apples,
+                                    'pink_lady_apples' => $fruitbox->pink_lady_apples,
+                                    'red_apples' => $fruitbox->red_apples,
+                                    'green_apples' => $fruitbox->green_apples,
+                                    'satsumas' => $fruitbox->satsumas,
+                                    'pears' => $fruitbox->pears,
+                                    'bananas' => $fruitbox->bananas,
+                                    'nectarines' => $fruitbox->nectarines,
+                                    'limes' => $fruitbox->limes,
+                                    'lemons' => $fruitbox->lemons,
+                                    'grapes' => $fruitbox->grapes,
+                                    'seasonal_berries' => $fruitbox->seasonal_berries,
+                                    'oranges' => $fruitbox->oranges,
+                                    'cucumbers' => $fruitbox->cucumbers,
+                                    'mint' => $fruitbox->mint,
+                                    'organic_lemons' => $fruitbox->organic_lemons,
+                                    'kiwis' => $fruitbox->kiwis,
+                                    'grapefruits' => $fruitbox->grapefruits,
+                                    'avocados' => $fruitbox->avocados,
+                                    'root_ginger' => $fruitbox->root_ginger,
+                                    'tailoring_fee' => $fruitbox->tailoring_fee,
+                                    'discount_multiple' => $fruitbox->discount_multiple,
+                                    'invoiced_at' => $fruitbox->invoiced_at,
+                                    'created_at' => $fruitbox->created_at,
+                                    'updated_at' => $fruitbox->updated_at // this may not be worth updating as it'll be changed on creation?
+                                ]
+                            );
+                            
+                        } else {
+                            
+                            // we need to create an active archive
+                            FruitBoxArchive::updateOrInsert(
+                                [ // Check the values contained in this array for a matching record.  If we find it, update the record, otherwise add a new entry.
+                                    'company_details_id' => $fruitbox->company_details_id,
+                                    'fruitbox_id' => $fruitbox->id,
+                                    'is_active' => 'Active',
+                                    'next_delivery' => $archived_entry_next_delivery
+                                ],
+                                [
+
+                                    'fruit_partner_id' => $fruitbox->fruit_partner_id,
+                                    'name' => $fruitbox->name,
+                                    // 'company_details_id' => $existing_fruitbox_entry->company_details_id,
+                                    'type' => $fruitbox->type,
+                                    'previous_delivery' => $archived_entry_previous_delivery,
+                                    'frequency' => $fruitbox->frequency,
+                                    'week_in_month' => $fruitbox->week_in_month,
+                                    'delivery_day' => $fruitbox->delivery_day,
+                                    'fruitbox_total' => $fruitbox->fruitbox_total,
+                                    'deliciously_red_apples' => $fruitbox->deliciously_red_apples,
+                                    'pink_lady_apples' => $fruitbox->pink_lady_apples,
+                                    'red_apples' => $fruitbox->red_apples,
+                                    'green_apples' => $fruitbox->green_apples,
+                                    'satsumas' => $fruitbox->satsumas,
+                                    'pears' => $fruitbox->pears,
+                                    'bananas' => $fruitbox->bananas,
+                                    'nectarines' => $fruitbox->nectarines,
+                                    'limes' => $fruitbox->limes,
+                                    'lemons' => $fruitbox->lemons,
+                                    'grapes' => $fruitbox->grapes,
+                                    'seasonal_berries' => $fruitbox->seasonal_berries,
+                                    'oranges' => $fruitbox->oranges,
+                                    'cucumbers' => $fruitbox->cucumbers,
+                                    'mint' => $fruitbox->mint,
+                                    'organic_lemons' => $fruitbox->organic_lemons,
+                                    'kiwis' => $fruitbox->kiwis,
+                                    'grapefruits' => $fruitbox->grapefruits,
+                                    'avocados' => $fruitbox->avocados,
+                                    'root_ginger' => $fruitbox->root_ginger,
+                                    'tailoring_fee' => $fruitbox->tailoring_fee,
+                                    'discount_multiple' => $fruitbox->discount_multiple,
+                                    'invoiced_at' => $fruitbox->invoiced_at,
+                                    'created_at' => $fruitbox->created_at,
+                                    'updated_at' => $fruitbox->updated_at // this may not be worth updating as it'll be changed on creation?
+                                ]
+                            );
+                        }
+                    }
 
                     // Now we can update the next_delivery_week_value, using the id to identify the correct entry.
                     FruitBox::where('id', $fruitbox->id)->update([
@@ -197,6 +319,10 @@ class OrderController extends Controller
                     // echo $milkbox->name . '\'s next delivery was outdated but has been changed from ' . $milkbox->next_delivery . " to ";
         
                     $lastDelivery = $milkbox->next_delivery;
+                    
+                    // Bit of repetition but atleast the names will be very clear... :)
+                    $archived_entry_next_delivery = $milkbox->next_delivery;
+                    $archived_entry_previous_delivery = $milkbox->previous_delivery;
         
                     // this is the only line of code which will differ depending on when the frequency selected
                     if ($milkbox->frequency === 'Weekly') {
@@ -227,6 +353,112 @@ class OrderController extends Controller
     
                         // Nothing should get here as the frequency is a drop down (selection) of options, and we specifically grabbed only weekly, fortnightly, and monthly orders
                     }
+                    
+                    // Now before we update the entries we should create an archive of the order we're effectively replacing.  
+                    // If the order has a matching invoice_at/created_at date we can go ahead and create an 'inactive' archive entry,
+                    // otherwise we need to create an active archive to get pulled into the next invoicing run for that branding theme.
+                    
+                    // First let's make sure the two dates are in the same format for comparison
+                    $converted_invoiced_at_date = new CarbonImmutable($milkbox->invoiced_at);
+                    $converted_updated_at_date = new CarbonImmutable($milkbox->updated_at);
+                    
+                    if ($milkbox->is_active === 'Active') {
+                        // Now check the dates to see if they match the same day.
+                        if ($converted_invoiced_at_date->format('ymd') == $converted_updated_at_date->format('ymd')) {
+                            
+                            MilkBoxArchive::updateOrInsert(
+                            [
+                                'milkbox_id' => $milkbox->id,
+                                'company_details_id' => $milkbox->company_details_id,
+                                'next_delivery' => $archived_entry_next_delivery,
+                                'delivery_day' => $milkbox->delivery_day, // Technically, milkbox_id + next_delivery_week should be all that's needed but testing will probably prove me wrong.
+                                'is_active' => 'Inactive',
+                            ],
+                            [            
+                                'fruit_partner_id' => $milkbox->fruit_partner_id,
+                                'frequency' => $milkbox->frequency,
+                                'week_in_month' => $milkbox->week_in_month,
+                                'previous_delivery' => $archived_entry_previous_delivery,
+                                // Milk 2l
+                                'semi_skimmed_2l' => $milkbox->semi_skimmed_2l,
+                                'skimmed_2l' => $milkbox->skimmed_2l,
+                                'whole_2l' => $milkbox->whole_2l,
+                                // Milk 1l
+                                'semi_skimmed_1l' => $milkbox->semi_skimmed_1l,
+                                'skimmed_1l' => $milkbox->skimmed_1l,
+                                'whole_1l' => $milkbox->whole_1l,
+                                // Organic Milk 2l
+                                'organic_semi_skimmed_2l' => $milkbox->organic_semi_skimmed_2l,
+                                'organic_skimmed_2l' => $milkbox->organic_skimmed_2l,
+                                'organic_whole_2l' => $milkbox->organic_whole_2l,
+                                // Organic Milk 1l
+                                'organic_semi_skimmed_1l' => $milkbox->organic_semi_skimmed_1l,
+                                'organic_skimmed_1l' => $milkbox->organic_skimmed_1l,
+                                'organic_whole_1l' => $milkbox->organic_whole_1l,
+                                // Milk Alternatives
+                                'milk_1l_alt_coconut' => $milkbox->milk_1l_alt_coconut,
+                                'milk_1l_alt_unsweetened_almond' => $milkbox->milk_1l_alt_unsweetened_almond,
+                                'milk_1l_alt_almond' => $milkbox->milk_1l_alt_almond,
+                                // Milk Alternatives (Pt2)
+                                'milk_1l_alt_unsweetened_soya' => $milkbox->milk_1l_alt_unsweetened_soya,
+                                'milk_1l_alt_soya' => $milkbox->milk_1l_alt_soya,
+                                'milk_1l_alt_oat' => $milkbox->milk_1l_alt_oat,
+                                // Milk Alternatives (Pt3)
+                                'milk_1l_alt_rice' => $milkbox->milk_1l_alt_rice,
+                                'milk_1l_alt_cashew' => $milkbox->milk_1l_alt_cashew,
+                                'milk_1l_alt_lactose_free_semi' => $milkbox->milk_1l_alt_lactose_free_semi,
+                            ]);
+                        
+                        } else {
+                            
+                            // we need to create an active archive
+                            MilkBoxArchive::updateOrInsert(
+                            [
+                                'milkbox_id' => $milkbox->id,
+                                'company_details_id' => $milkbox->company_details_id,
+                                'next_delivery' => $archived_entry_next_delivery,
+                                'delivery_day' => $milkbox->delivery_day, // Technically, milkbox_id + next_delivery_week should be all that's needed but testing will probably prove me wrong.
+                                'is_active' => 'Active',
+                            ],
+                            [            
+                                'fruit_partner_id' => $milkbox->fruit_partner_id,
+                                'frequency' => $milkbox->frequency,
+                                'week_in_month' => $milkbox->week_in_month,
+                                'previous_delivery' => $archived_entry_previous_delivery,
+                                // Milk 2l
+                                'semi_skimmed_2l' => $milkbox->semi_skimmed_2l,
+                                'skimmed_2l' => $milkbox->skimmed_2l,
+                                'whole_2l' => $milkbox->whole_2l,
+                                // Milk 1l
+                                'semi_skimmed_1l' => $milkbox->semi_skimmed_1l,
+                                'skimmed_1l' => $milkbox->skimmed_1l,
+                                'whole_1l' => $milkbox->whole_1l,
+                                // Organic Milk 2l
+                                'organic_semi_skimmed_2l' => $milkbox->organic_semi_skimmed_2l,
+                                'organic_skimmed_2l' => $milkbox->organic_skimmed_2l,
+                                'organic_whole_2l' => $milkbox->organic_whole_2l,
+                                // Organic Milk 1l
+                                'organic_semi_skimmed_1l' => $milkbox->organic_semi_skimmed_1l,
+                                'organic_skimmed_1l' => $milkbox->organic_skimmed_1l,
+                                'organic_whole_1l' => $milkbox->organic_whole_1l,
+                                // Milk Alternatives
+                                'milk_1l_alt_coconut' => $milkbox->milk_1l_alt_coconut,
+                                'milk_1l_alt_unsweetened_almond' => $milkbox->milk_1l_alt_unsweetened_almond,
+                                'milk_1l_alt_almond' => $milkbox->milk_1l_alt_almond,
+                                // Milk Alternatives (Pt2)
+                                'milk_1l_alt_unsweetened_soya' => $milkbox->milk_1l_alt_unsweetened_soya,
+                                'milk_1l_alt_soya' => $milkbox->milk_1l_alt_soya,
+                                'milk_1l_alt_oat' => $milkbox->milk_1l_alt_oat,
+                                // Milk Alternatives (Pt3)
+                                'milk_1l_alt_rice' => $milkbox->milk_1l_alt_rice,
+                                'milk_1l_alt_cashew' => $milkbox->milk_1l_alt_cashew,
+                                'milk_1l_alt_lactose_free_semi' => $milkbox->milk_1l_alt_lactose_free_semi,
+                            ]);
+                            
+                        }
+                    } else {
+                        // We can assume this is an order that wasn't used this week so no achive is necessary.
+                    }   
         
                     // Now we can update the next_delivery_week_value, using the id to identify the correct entry.
                     MilkBox::where('id', $milkbox->id)->update([
@@ -250,6 +482,10 @@ class OrderController extends Controller
                 if ($snackbox_entry->next_delivery_week < Carbon::now()) {
         
                     $lastDelivery = $snackbox_entry->next_delivery_week;
+                    
+                    // Bit of repetition but atleast the names will be very clear... :)
+                    $archived_entry_next_delivery = $snackbox->next_delivery_date;
+                    $archived_entry_previous_delivery = $snackbox->previous_delivery_date;
         
                     // this is the only line of code which will differ depending on when the frequency selected
                     if ($snackbox_entry->frequency === 'Weekly') {
@@ -280,6 +516,84 @@ class OrderController extends Controller
         
                         // Nothing should get here as the frequency is a drop down (selection) of options, and we specifically grabbed only weekly, fortnightly, and monthly orders
                     }
+                    
+                    $converted_invoiced_at_date = new CarbonImmutable($snackbox_entry->invoiced_at);
+                    $converted_updated_at_date = new CarbonImmutable($snackbox_entry->updated_at);
+                    
+                    if ($snackbox_entry->is_active) {
+                        // As snackboxes are effectively destroyed and rebuilt empty each week, we only need to check that the invoiced_at date isn't null
+                        if ($snackbox_entry->invoiced_at !== null) {
+                            // if we have an invoice date, this box has been processed but not emptied yet.
+                            // if that's the case we just need to create an inactive archive holding all the previous orders.
+                            // at least so long as the archive hasn't been created already
+                            
+                            // Unlike the previous 2 categories (fruitbox/milkbox) the snackbox_id will have multiple entries for the same next_delivery_week, 
+                            // however if we also combine the product_id, the entries should be unique.
+                            
+                            SnackBoxArchive::updateOrInsert(
+                            [
+                                'snackbox_id' => $snackbox_entry->snackbox_id,
+                                'next_delivery_date' => $archived_entry_next_delivery,
+                                'product_id' => $snackbox_entry->product_id,
+                            ], 
+                            [
+                                'is_active' => 'Inactive',
+                                'id' => $snackbox_entry->id,
+                                'delivered_by' => $snackbox_entry->delivered_by,
+                                'no_of_boxes' => $snackbox_entry->no_of_boxes,
+                                'snack_cap' => $snackbox_entry->snack_cap,
+                                'type' => $snackbox_entry->type,
+                                'company_details_id' => $snackbox_entry->company_details_id,
+                                'delivery_day' => $snackbox_entry->delivery_day,
+                                'frequency' => $snackbox_entry->frequency,
+                                'week_in_month' => $snackbox_entry->week_in_month,
+                                'previous_delivery_week' => $archived_entry_previous_delivery,
+                                'code' => $snackbox_entry->code,
+                                'name' => $snackbox_entry->name,
+                                'quantity' => $snackbox_entry->quantity,
+                                'unit_price' => $snackbox_entry->unit_price,
+                                'case_price' => $snackbox_entry->case_price,
+                                'invoiced_at' => $snackbox_entry->invoiced_at,
+                                'created_at' => $snackbox_entry->created_at,
+                                'updated_at' => $snackbox_entry->updated_at,
+                            ]);
+                            
+                        } else {
+                            // Same again if it hasn't been invoiced only this time we save it as active so it can be pulled into the next invoicing run for that branding theme.
+                            SnackBoxArchive::updateOrInsert(
+                            [
+                                'snackbox_id' => $snackbox_entry->snackbox_id,
+                                'next_delivery_date' => $archived_entry_next_delivery,
+                                'product_id' => $snackbox_entry->product_id,
+                            ], 
+                            [
+                                'is_active' => 'Active',
+                                'id' => $snackbox_entry->id,
+                                'delivered_by' => $snackbox_entry->delivered_by,
+                                'no_of_boxes' => $snackbox_entry->no_of_boxes,
+                                'snack_cap' => $snackbox_entry->snack_cap,
+                                'type' => $snackbox_entry->type,
+                                'company_details_id' => $snackbox_entry->company_details_id,
+                                'delivery_day' => $snackbox_entry->delivery_day,
+                                'frequency' => $snackbox_entry->frequency,
+                                'week_in_month' => $snackbox_entry->week_in_month,
+                                'previous_delivery_week' => $archived_entry_previous_delivery,
+                                'code' => $snackbox_entry->code,
+                                'name' => $snackbox_entry->name,
+                                'quantity' => $snackbox_entry->quantity,
+                                'unit_price' => $snackbox_entry->unit_price,
+                                'case_price' => $snackbox_entry->case_price,
+                                'invoiced_at' => $snackbox_entry->invoiced_at,
+                                'created_at' => $snackbox_entry->created_at,
+                                'updated_at' => $snackbox_entry->updated_at,
+                            ]);
+                        }
+                    
+                    
+                    } else {
+                     // then we don't need to worry about it.
+                    }
+                    
     
                     SnackBox::where('id', $snackbox_entry->id)->update([
                         'previous_delivery_week' => $lastDelivery,
@@ -298,6 +612,10 @@ class OrderController extends Controller
             if ($drinkbox_entry->next_delivery_week < Carbon::now()) {
         
                 $lastDelivery = $drinkbox_entry->next_delivery_week;
+                
+                // Bit of repetition but atleast the names will be very clear... :)
+                $archived_entry_next_delivery = $drinkbox->next_delivery_date;
+                $archived_entry_previous_delivery = $drinkbox->previous_delivery_date;
         
                 // this is the only line of code which will differ depending on when the frequency selected
                 if ($drinkbox_entry->frequency === 'Weekly') {
@@ -328,6 +646,84 @@ class OrderController extends Controller
         
                     // Nothing should get here as the frequency is a drop down (selection) of options, and we specifically grabbed only weekly, fortnightly, and monthly orders
                 }
+                
+                $converted_invoiced_at_date = new CarbonImmutable($drinkbox_entry->invoiced_at);
+                $converted_updated_at_date = new CarbonImmutable($drinkbox_entry->updated_at);
+                
+                if ($drinkbox_entry->is_active) {
+                    // As snackboxes are effectively destroyed and rebuilt empty each week, we only need to check that the invoiced_at date isn't null
+                    if ($drinkbox_entry->invoiced_at !== null) {
+                        // if we have an invoice date, this box has been processed but not emptied yet.
+                        // if that's the case we just need to create an inactive archive holding all the previous orders.
+                        // at least so long as the archive hasn't been created already
+                        
+                        // Unlike the previous 2 categories (fruitbox/milkbox) the snackbox_id will have multiple entries for the same next_delivery_week, 
+                        // however if we also combine the product_id, the entries should be unique.
+                        
+                        DrinkBoxArchive::updateOrInsert(
+                        [
+                            'drinkbox_id' => $drinkbox_entry->drinkbox_id,
+                            'next_delivery_date' => $archived_entry_next_delivery,
+                            'product_id' => $drinkbox_entry->product_id,
+                        ], 
+                        [
+                            'is_active' => 'Inactive',
+                            'id' => $drinkbox_entry->id,
+                            'delivered_by_id' => $drinkbox_entry->delivered_by_id,
+                            'no_of_boxes' => $drinkbox_entry->no_of_boxes,
+                            'snack_cap' => $drinkbox_entry->snack_cap,
+                            'type' => $drinkbox_entry->type,
+                            'company_details_id' => $drinkbox_entry->company_details_id,
+                            'delivery_day' => $drinkbox_entry->delivery_day,
+                            'frequency' => $drinkbox_entry->frequency,
+                            'week_in_month' => $drinkbox_entry->week_in_month,
+                            'previous_delivery_week' => $archived_entry_previous_delivery,
+                            'code' => $drinkbox_entry->code,
+                            'name' => $drinkbox_entry->name,
+                            'quantity' => $drinkbox_entry->quantity,
+                            'unit_price' => $drinkbox_entry->unit_price,
+                            'case_price' => $drinkbox_entry->case_price,
+                            'invoiced_at' => $drinkbox_entry->invoiced_at,
+                            'created_at' => $drinkbox_entry->created_at,
+                            'updated_at' => $drinkbox_entry->updated_at,
+                        ]);
+                        
+                    } else {
+                        // Same again if it hasn't been invoiced only this time we save it as active so it can be pulled into the next invoicing run for that branding theme.
+                        DrinkBoxArchive::updateOrInsert(
+                        [
+                            'drinkbox_id' => $drinkbox_entry->drinkbox_id,
+                            'next_delivery_date' => $archived_entry_next_delivery,
+                            'product_id' => $drinkbox_entry->product_id,
+                        ], 
+                        [
+                            'is_active' => 'Active',
+                            'id' => $drinkbox_entry->id,
+                            'delivered_by_id' => $drinkbox_entry->delivered_by_id,
+                            'no_of_boxes' => $drinkbox_entry->no_of_boxes,
+                            'snack_cap' => $drinkbox_entry->snack_cap,
+                            'type' => $drinkbox_entry->type,
+                            'company_details_id' => $drinkbox_entry->company_details_id,
+                            'delivery_day' => $drinkbox_entry->delivery_day,
+                            'frequency' => $drinkbox_entry->frequency,
+                            'week_in_month' => $drinkbox_entry->week_in_month,
+                            'previous_delivery_week' => $archived_entry_previous_delivery,
+                            'code' => $drinkbox_entry->code,
+                            'name' => $drinkbox_entry->name,
+                            'quantity' => $drinkbox_entry->quantity,
+                            'unit_price' => $drinkbox_entry->unit_price,
+                            'case_price' => $drinkbox_entry->case_price,
+                            'invoiced_at' => $drinkbox_entry->invoiced_at,
+                            'created_at' => $drinkbox_entry->created_at,
+                            'updated_at' => $drinkbox_entry->updated_at,
+                        ]);
+                    }
+                
+                
+                } else {
+                 // then we don't need to worry about it.
+                }
+                
         
                 DrinkBox::where('id', $drinkbox_entry->id)->update([
                     'previous_delivery_week' => $lastDelivery,
@@ -346,6 +742,10 @@ class OrderController extends Controller
             if ($otherbox_entry->next_delivery_week < Carbon::now()) {
         
                 $lastDelivery = $otherbox_entry->next_delivery_week;
+                
+                // Bit of repetition but atleast the names will be very clear... :)
+                $archived_entry_next_delivery = $drinkbox->next_delivery_date;
+                $archived_entry_previous_delivery = $drinkbox->previous_delivery_date;
         
                 // this is the only line of code which will differ depending on when the frequency selected
                 if ($otherbox_entry->frequency === 'Weekly') {
@@ -376,6 +776,83 @@ class OrderController extends Controller
         
                     // Nothing should get here as the frequency is a drop down (selection) of options, and we specifically grabbed only weekly, fortnightly, and monthly orders
                 }
+                
+                $converted_invoiced_at_date = new CarbonImmutable($otherbox_entry->invoiced_at);
+                $converted_updated_at_date = new CarbonImmutable($otherbox_entry->updated_at);
+                
+                if ($otherbox_entry->is_active) {
+                    // As snackboxes are effectively destroyed and rebuilt empty each week, we only need to check that the invoiced_at date isn't null
+                    if ($otherbox_entry->invoiced_at !== null) {
+                        // if we have an invoice date, this box has been processed but not emptied yet.
+                        // if that's the case we just need to create an inactive archive holding all the previous orders.
+                        // at least so long as the archive hasn't been created already
+                        
+                        // Unlike the previous 2 categories (fruitbox/milkbox) the snackbox_id will have multiple entries for the same next_delivery_week, 
+                        // however if we also combine the product_id, the entries should be unique.
+                        
+                        OtherBoxArchive::updateOrInsert(
+                        [
+                            'otherbox_id' => $otherbox_entry->otherbox_id,
+                            'next_delivery_date' => $archived_entry_next_delivery,
+                            'product_id' => $otherbox_entry->product_id,
+                        ], 
+                        [
+                            'is_active' => 'Inactive',
+                            'id' => $otherbox_entry->id,
+                            'delivered_by_id' => $otherbox_entry->delivered_by_id,
+                            'no_of_boxes' => $otherbox_entry->no_of_boxes,
+                            'snack_cap' => $otherbox_entry->snack_cap,
+                            'type' => $otherbox_entry->type,
+                            'company_details_id' => $otherbox_entry->company_details_id,
+                            'delivery_day' => $otherbox_entry->delivery_day,
+                            'frequency' => $otherbox_entry->frequency,
+                            'week_in_month' => $otherbox_entry->week_in_month,
+                            'previous_delivery_week' => $archived_entry_previous_delivery,
+                            'code' => $otherbox_entry->code,
+                            'name' => $otherbox_entry->name,
+                            'quantity' => $otherbox_entry->quantity,
+                            'unit_price' => $otherbox_entry->unit_price,
+                            'case_price' => $otherbox_entry->case_price,
+                            'invoiced_at' => $otherbox_entry->invoiced_at,
+                            'created_at' => $otherbox_entry->created_at,
+                            'updated_at' => $otherbox_entry->updated_at,
+                        ]);
+                        
+                    } else {
+                        // Same again if it hasn't been invoiced only this time we save it as active so it can be pulled into the next invoicing run for that branding theme.
+                        OtherBoxArchive::updateOrInsert(
+                        [
+                            'otherbox_id' => $otherbox_entry->otherbox_id,
+                            'next_delivery_date' => $archived_entry_next_delivery,
+                            'product_id' => $otherbox_entry->product_id,
+                        ], 
+                        [
+                            'is_active' => 'Active',
+                            'id' => $otherbox_entry->id,
+                            'delivered_by' => $otherbox_entry->delivered_by,
+                            'no_of_boxes' => $otherbox_entry->no_of_boxes,
+                            'snack_cap' => $otherbox_entry->snack_cap,
+                            'type' => $otherbox_entry->type,
+                            'company_details_id' => $otherbox_entry->company_details_id,
+                            'delivery_day' => $otherbox_entry->delivery_day,
+                            'frequency' => $otherbox_entry->frequency,
+                            'week_in_month' => $otherbox_entry->week_in_month,
+                            'previous_delivery_week' => $archived_entry_previous_delivery,
+                            'code' => $otherbox_entry->code,
+                            'name' => $otherbox_entry->name,
+                            'quantity' => $otherbox_entry->quantity,
+                            'unit_price' => $otherbox_entry->unit_price,
+                            'case_price' => $otherbox_entry->case_price,
+                            'invoiced_at' => $otherbox_entry->invoiced_at,
+                            'created_at' => $otherbox_entry->created_at,
+                            'updated_at' => $otherbox_entry->updated_at,
+                        ]);
+                    }
+                
+                } else {
+                 // then we don't need to worry about it.
+                }
+                
         
                 OtherBox::where('id', $otherbox_entry->id)->update([
                     'previous_delivery_week' => $lastDelivery,

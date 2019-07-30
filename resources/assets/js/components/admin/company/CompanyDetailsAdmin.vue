@@ -412,7 +412,7 @@ export default {
         },
         updateCompanyDetails (company) {
             this.edit = false;
-            axios.put('api/company-details/update/' + company.id, {
+            axios.put('api/company/company-details/update/' + company.id, {
                 company_details: {
                     is_active: company.is_active,
                     // Company Name(s)

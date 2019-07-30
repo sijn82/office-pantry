@@ -141,9 +141,9 @@ export default {
           evt.preventDefault();
           let self = this;
           // alert(JSON.stringify(this.form));
-          axios.post('/api/fruitpartners/add-new-fruitpartner', {
+          axios.post('/api/office-pantry/fruit_partners/add-new-fruitpartner', {
               fruit_partner: self.form,
-              headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv'},
+              headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
               // user_id: self.userData.id // This hasn't been setup yet so proabably won't work yet?!
           }).then( response => {
               alert('Uploaded new fruit partner successfully!');

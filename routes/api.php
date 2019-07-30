@@ -65,8 +65,10 @@ Route::group([
     Route::put('archived-fruitbox/update/{id}', 'ArchivedFruitBoxController@updateArchivedFruitBox');
     Route::put('archived-fruitbox/destroy/{id}', 'ArchivedFruitBoxController@deleteArchivedFruitBox');
     // Archived Milkbox
-
+    Route::put('archived-milkbox/update/{id}', 'ArchivedMilkBoxController@updateArchivedMilkBox');
+    Route::put('archived-milkbox/destroy/{id}', 'ArchivedMilkBoxController@deleteArchivedMilkBox');
     // Archived Snackbox
+    Route::post('archived-snackbox/details', 'ArchivedSnackBoxController@updateDetails');
     Route::put('archived-snackbox/destroy/{id}', 'ArchivedSnackBoxController@destroyItem');
     Route::put('archived-snackbox/destroy-box/{id}', 'ArchivedSnackBoxController@destroyBox');
     // Archived Drinkbox
@@ -149,7 +151,7 @@ Route::group([
     Route::get('assigned-routes/select', 'AssignedRouteController@listAssignedRoutes');
     Route::put('assigned-route/{id}', 'AssignedRouteController@destroy');
     // Fruit Partner Products i.e 1 x fruitbox = £20, 2 x fruitbox = 18.50 etc.
-    Route::post('fruitpartners/add-new-fruitpartner', 'FruitPartnerController@store');
+    Route::post('fruit_partners/add-new-fruitpartner', 'FruitPartnerController@store');
     Route::get('fruit_partners/select', 'FruitPartnerController@listFruitPartners');
     Route::get('fruit_partners/{id}', 'FruitPartnerController@show');
     // This might get moved to an import/export group later on.
