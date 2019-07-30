@@ -6,7 +6,7 @@
             <b-row>
                 <!-- Name -->
                 <b-col>
-                    <label> Name </label>
+                    <label> Fruit Partner Name </label>
                     <b-form-input v-model="form.name" placeholder="" type="text" required>  </b-form-input>
                 </b-col>
                 <!-- Email -->
@@ -19,42 +19,69 @@
                     <label> Telephone </label>
                     <b-form-input v-model="form.telephone" placeholder="" type="tel">  </b-form-input>
                 </b-col>
-            </b-row>
-            <b-row class="row">
                 <!-- Url -->
                 <b-col>
                     <label> Url </label>
                     <b-form-input v-model="form.url" placeholder="" type="url">  </b-form-input>
                 </b-col>
+            </b-row>
+            <b-row class="row">
+                
                 <!-- Primary Contact -->
                 <b-col>
-                    <label> Primary Contact </label>
-                    <b-form-input v-model="form.primary_contact" placeholder="" type="text">  </b-form-input>
+                    <label> Primary Contact First Name </label>
+                    <b-form-input v-model="form.primary_contact_first_name" placeholder="" type="text">  </b-form-input>
+                </b-col>
+                <b-col>
+                    <label> Primary Contact Surname </label>
+                    <b-form-input v-model="form.primary_contact_surname" placeholder="" type="text">  </b-form-input>
                 </b-col>
                 <!-- Secondary Contact -->
                 <b-col>
-                    <label> Secondary Contact </label>
-                    <b-form-input v-model="form.secondary_contact" placeholder="" type="text">  </b-form-input>
+                    <label> Secondary Contact First Name </label>
+                    <b-form-input v-model="form.secondary_contact_first_name" placeholder="" type="text">  </b-form-input>
+                </b-col>
+                <b-col>
+                    <label> Secondary Contact Surname </label>
+                    <b-form-input v-model="form.secondary_contact_surname" placeholder="" type="text">  </b-form-input>
+                </b-col>
+            </b-row>
+            <b-row class="row">
+                
+                <!-- Location -->
+                <b-col>
+                    <label> Address Line 1 </label>
+                    <b-form-input v-model="form.address_line_1" placeholder="" type="text">  </b-form-input>
+                </b-col>
+                <b-col>
+                    <label> Address Line 2 </label>
+                    <b-form-input v-model="form.address_line_2" placeholder="" type="text">  </b-form-input>
+                </b-col>
+                <b-col>
+                    <label> Address Line 3 </label>
+                    <b-form-input v-model="form.address_line_3" placeholder="" type="text">  </b-form-input>
+                </b-col>
+            </b-row>
+            <b-row class="row">
+                <b-col>
+                    <label> City </label>
+                    <b-form-input v-model="form.city" placeholder="" type="text">  </b-form-input>
+                </b-col>
+                <b-col>
+                    <label> Region </label>
+                    <b-form-input v-model="form.region" placeholder="" type="text">  </b-form-input>
+                </b-col>
+                <b-col>
+                    <label> Postcode </label>
+                    <b-form-input v-model="form.postcode" placeholder="" type="text">  </b-form-input>
                 </b-col>
             </b-row>
             <b-row class="row">
                 <!-- Alternative Phone Number -->
                 <b-col>
-                    <label> Alternative Phone Number </label>
+                    <label> Alt Phone Number </label>
                     <b-form-input v-model="form.alt_phone" placeholder="" type="tel">  </b-form-input>
                 </b-col>
-                <!-- Location -->
-                <b-col>
-                    <label> Location </label>
-                    <b-form-input v-model="form.location" placeholder="" type="text">  </b-form-input>
-                </b-col>
-                <!-- Coordinates -->
-                <b-col>
-                    <label> Coordinates </label>
-                    <b-form-input v-model="form.coordinates" placeholder="">  </b-form-input>
-                </b-col>
-            </b-row>
-            <b-row class="row">
                 <!-- Weekly Action -->
                 <b-col>
                     <label> Weekly Action </label>

@@ -116,7 +116,7 @@ export default {
           },
           uploadWeekStart: function () {
               let self = this;
-              axios.post('api/office-pantry/import-week-start', {
+              axios.post('/api/office-pantry/import-week-start', {
                   week_start: self.form.week_start,
                   headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                   // user_id: self.userData.id
@@ -128,7 +128,7 @@ export default {
           },
           uploadDeliveryDays: function () {
               let self = this;
-              axios.post('api/office-pantry/import-week-start-days', {
+              axios.post('/api/office-pantry/import-week-start-days', {
                   delivery_days: self.form.delivery_days,
                   headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                   // user_id: self.userData.id
