@@ -96,14 +96,19 @@
                     <label> Changes Action </label>
                     <b-form-input v-model="form.changes_action" placeholder="">  </b-form-input>
                 </b-col>
+            </b-row>
+            <b-row class="row">
+                <b-col>
+                    <label> Status </label>
+                    <!-- I think this should be a dropdown of options rather than a free for all -->
+                    <b-form-input v-model="form.status" type="text">  </b-form-input>
+                </b-col>
                 <!-- No Of Customers Supplied -->
                 <b-col>
                     <!-- We want this value in the database but not so sure this is the right way to document it, or keep accurate -->
                     <label> No. of Customers Supplied </label> 
                     <b-form-input v-model="form.no_of_customers" placeholder="" type="number">  </b-form-input>
                 </b-col>
-            </b-row>
-            <b-row class="row">
                 <b-col>
                     <label> Use OP Boxes </label>
                     <b-form-select v-model="form.use_op_boxes" :options="yes_no">
@@ -171,6 +176,7 @@ export default {
                 alt_phone: '',
                 weekly_action: null,
                 changes_action: '',
+                status: '',
                 no_of_customers: '',
                 use_op_boxes: '',
                 additional_info: '',
@@ -215,6 +221,7 @@ export default {
             this.form.alt_phone = '',
             this.form.weekly_action = null,
             this.form.changes_action = '',
+            this.form.status = '',
             this.form.no_of_customers = '',
             this.form.use_op_boxes = '',
             this.form.additional_info = '',

@@ -80593,6 +80593,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -80616,6 +80621,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 alt_phone: '',
                 weekly_action: null,
                 changes_action: '',
+                status: '',
                 no_of_customers: '',
                 use_op_boxes: '',
                 additional_info: ''
@@ -80648,7 +80654,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             evt.preventDefault();
             /* Reset our form values */
-            this.form.name = '', this.form.email = '', this.form.telephone = '', this.form.url = '', this.form.primary_contact_first_name = '', this.form.primary_contact_surname = '', this.form.secondary_contact_first_name = '', this.form.secondary_contact_surname = '', this.form.address_line_1 = '', this.form.address_line_2 = '', this.form.address_line_3 = '', this.form.city = '', this.form.region = '', this.form.postcode = '', this.form.alt_phone = '', this.form.weekly_action = null, this.form.changes_action = '', this.form.no_of_customers = '', this.form.use_op_boxes = '', this.form.additional_info = '',
+            this.form.name = '', this.form.email = '', this.form.telephone = '', this.form.url = '', this.form.primary_contact_first_name = '', this.form.primary_contact_surname = '', this.form.secondary_contact_first_name = '', this.form.secondary_contact_surname = '', this.form.address_line_1 = '', this.form.address_line_2 = '', this.form.address_line_3 = '', this.form.city = '', this.form.region = '', this.form.postcode = '', this.form.alt_phone = '', this.form.weekly_action = null, this.form.changes_action = '', this.form.status = '', this.form.no_of_customers = '', this.form.use_op_boxes = '', this.form.additional_info = '',
             /* Trick to reset/clear native browser form validation state */
             this.show = false;
             this.$nextTick(function () {
@@ -81055,6 +81061,32 @@ var render = function() {
                       })
                     ],
                     1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "b-row",
+                { staticClass: "row" },
+                [
+                  _c(
+                    "b-col",
+                    [
+                      _c("label", [_vm._v(" Status ")]),
+                      _vm._v(" "),
+                      _c("b-form-input", {
+                        attrs: { type: "text" },
+                        model: {
+                          value: _vm.form.status,
+                          callback: function($$v) {
+                            _vm.$set(_vm.form, "status", $$v)
+                          },
+                          expression: "form.status"
+                        }
+                      })
+                    ],
+                    1
                   ),
                   _vm._v(" "),
                   _c(
@@ -81074,15 +81106,8 @@ var render = function() {
                       })
                     ],
                     1
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "b-row",
-                { staticClass: "row" },
-                [
+                  ),
+                  _vm._v(" "),
                   _c(
                     "b-col",
                     [
@@ -108999,7 +109024,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "\nlabel.custom-control-label {\n  font-weight: 300;\n}\nlabel, p {\n  font-weight: 300;\n}\n.form-margin-40 {\n  margin: 40px;\n}\n.margin-top-20 {\n  margin-top: 20px;\n}\n", ""]);
+exports.push([module.i, "\nlabel.custom-control-label {\n  font-weight: 300;\n}\nlabel, p {\n  font-weight: 300;\n}\nlabel b, p b {\n    font-weight: bold;\n}\n.form-margin-40 {\n  margin: 40px;\n}\n.margin-top-20 {\n  margin-top: 20px;\n}\n", ""]);
 
 // exports
 
@@ -109010,6 +109035,9 @@ exports.push([module.i, "\nlabel.custom-control-label {\n  font-weight: 300;\n}\
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
 //
 //
 //
@@ -109319,7 +109347,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 alert('Uploaded new company successfully!');
                 console.log(response.data);
             }).catch(function (error) {
-                return console.log(error);
+                return alert(error);
             });
         },
         onReset: function onReset(evt) {
@@ -109374,7 +109402,10 @@ var render = function() {
                     _c("b-col", [
                       _c("h4", [_vm._v(" Company Names ")]),
                       _vm._v(" "),
-                      _c("p", [_vm._v(" * denotes a required field. ")])
+                      _c("p", [
+                        _c("b", [_vm._v(" * & bold text ")]),
+                        _vm._v(" denotes a required field. ")
+                      ])
                     ])
                   ],
                   1
@@ -109386,7 +109417,7 @@ var render = function() {
                     _c(
                       "b-col",
                       [
-                        _c("label", [_vm._v(" Invoice Name* ")]),
+                        _c("label", [_c("b", [_vm._v(" Invoice Name* ")])]),
                         _vm._v(" "),
                         _c("b-form-input", {
                           attrs: { required: "" },
@@ -109405,7 +109436,7 @@ var render = function() {
                     _c(
                       "b-col",
                       [
-                        _c("label", [_vm._v(" Route Name* ")]),
+                        _c("label", [_c("b", [_vm._v(" Route Name* ")])]),
                         _vm._v(" "),
                         _c("b-form-input", {
                           attrs: { required: "" },
@@ -109705,7 +109736,9 @@ var render = function() {
                     _c(
                       "b-col",
                       [
-                        _c("label", [_vm._v(" Route Address Line 1* ")]),
+                        _c("label", [
+                          _c("b", [_vm._v(" Route Address Line 1* ")])
+                        ]),
                         _vm._v(" "),
                         _c("b-form-input", {
                           attrs: { required: "" },
@@ -109760,7 +109793,7 @@ var render = function() {
                     _c(
                       "b-col",
                       [
-                        _c("label", [_vm._v(" Route City* ")]),
+                        _c("label", [_c("b", [_vm._v(" Route City* ")])]),
                         _vm._v(" "),
                         _c("b-form-input", {
                           attrs: { required: "" },
@@ -109797,7 +109830,7 @@ var render = function() {
                     _c(
                       "b-col",
                       [
-                        _c("label", [_vm._v(" Route Postcode* ")]),
+                        _c("label", [_c("b", [_vm._v(" Route Postcode* ")])]),
                         _vm._v(" "),
                         _c("b-form-input", {
                           attrs: { required: "" },
@@ -109946,11 +109979,12 @@ var render = function() {
                   [
                     _c(
                       "b-col",
+                      { staticClass: "margin-top-20" },
                       [
-                        _c("label", [_vm._v(" Invoice Email ")]),
+                        _c("label", [_c("b", [_vm._v(" Invoice Email* ")])]),
                         _vm._v(" "),
                         _c("b-form-input", {
-                          attrs: { type: "email" },
+                          attrs: { type: "email", required: "" },
                           model: {
                             value: _vm.form.invoice_email,
                             callback: function($$v) {
@@ -109973,10 +110007,10 @@ var render = function() {
                     _c(
                       "b-col",
                       [
-                        _c("label", [_vm._v(" Branding Theme ")]),
+                        _c("label", [_c("b", [_vm._v(" Branding Theme* ")])]),
                         _vm._v(" "),
                         _c("b-form-select", {
-                          attrs: { options: _vm.payment_options },
+                          attrs: { options: _vm.payment_options, required: "" },
                           model: {
                             value: _vm.form.branding_theme,
                             callback: function($$v) {
@@ -110011,11 +110045,12 @@ var render = function() {
                     _c(
                       "b-col",
                       [
-                        _c("label", [_vm._v(" Delivered By ")]),
+                        _c("label", [_c("b", [_vm._v(" Delivered By* ")])]),
                         _vm._v(" "),
                         _c(
                           "b-form-select",
                           {
+                            attrs: { required: "" },
                             model: {
                               value: _vm.form.supplier_id,
                               callback: function($$v) {

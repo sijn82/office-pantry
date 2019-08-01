@@ -20,11 +20,13 @@ class CreateCompanyDetailsTable extends Migration
             $table->string('invoice_name');
             $table->string('route_name');
             // Contact Details
-            $table->string('primary_contact')->nullable();
+            $table->string('primary_contact_first_name')->nullable();
+            $table->string('primary_contact_surname')->nullable();
             $table->string('primary_contact_job_title')->nullable();
             $table->string('primary_email')->nullable();
             $table->string('primary_tel')->nullable();
-            $table->string('secondary_contact')->nullable();
+            $table->string('secondary_contact_first_name')->nullable();
+            $table->string('secondary_contact_surname')->nullable();
             $table->string('secondary_contact_job_title')->nullable();
             $table->string('secondary_email')->nullable();
             $table->string('secondary_tel')->nullable();
@@ -43,7 +45,7 @@ class CreateCompanyDetailsTable extends Migration
             $table->string('invoice_city')->nullable();
             $table->string('invoice_region')->nullable();
             $table->string('invoice_postcode')->nullable();
-            $table->string('invoice_email')-nullable();
+            $table->string('invoice_email');
             // Billing and Delivery
             $table->string('branding_theme');
             $table->integer('surcharge')->nullable();

@@ -68,6 +68,10 @@ Route::group(['middleware' => ['web','auth:office'], 'prefix' => 'office'], func
     Route::view('snackboxes/massupdate', 'snackbox-creation')->name('snackboxes.massupdate');
 
     Route::view('exporting-processes', 'exporting')->name('exporting-processes');
+    
+    Route::view('importing', 'imports.import')->name('import-new-system-data');
+    Route::post('importing-company-details', 'ImportController@importCompanyDetails')->name('import-company-details');
+    Route::post('importing-fruit-partners', 'ImportController@importFruitPartners')->name('import-fruit-partners');
 
     // Subgroup in group, these all need the namespace 'Boxes' applied to find the new location of the controller files.
 

@@ -86,6 +86,7 @@
         @yield('invoice-styling')
         @yield('cron-styling')
         @yield('office-pantry-products-styling')
+        @yield('import-styling')
     </head>
     <body>
         <div class="flex-center position-ref full-height">
@@ -135,6 +136,7 @@
                     @yield('products/office-pantry-products')
                     @yield('invoice-options')
                     @yield('cron')
+                    @yield('imports')
                  </div>
             </div>
         </div>

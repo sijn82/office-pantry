@@ -6,16 +6,16 @@
                 <b-row class="margin-top-20">
                     <b-col>
                         <h4> Company Names </h4>
-                        <p> * denotes a required field. </p>
+                        <p> <b> * & bold text </b> denotes a required field. </p>
                     </b-col>
                 </b-row>
                 <b-row>
                     <b-col>
-                        <label> Invoice Name* </label>
+                        <label><b> Invoice Name* </b></label>
                         <b-form-input v-model="form.invoice_name" required></b-form-input>
                     </b-col>
                     <b-col>
-                        <label> Route Name* </label>
+                        <label><b> Route Name* </b></label>
                         <b-form-input v-model="form.route_name" required></b-form-input>
                     </b-col>
                 </b-row>
@@ -91,7 +91,7 @@
                 </b-row>
                 <b-row>
                     <b-col>
-                        <label> Route Address Line 1* </label>
+                        <label><b> Route Address Line 1* </b></label>
                         <b-form-input v-model="form.route_address_line_1" required></b-form-input>
                     </b-col>
                     <b-col>
@@ -103,7 +103,7 @@
                         <b-form-input v-model="form.route_address_line_3"></b-form-input>
                     </b-col>
                     <b-col>
-                        <label> Route City* </label>
+                        <label><b> Route City* </b></label>
                         <b-form-input v-model="form.route_address_city" required></b-form-input>
                     </b-col>
                     <b-col>
@@ -111,7 +111,7 @@
                         <b-form-input v-model="form.route_address_region"></b-form-input>
                     </b-col>
                     <b-col>
-                        <label> Route Postcode* </label>
+                        <label><b> Route Postcode* </b></label>
                         <b-form-input v-model="form.route_address_postcode" required></b-form-input>
                     </b-col>
                 </b-row>
@@ -147,24 +147,24 @@
                     </b-col>
                 </b-row>
                 <b-row>
-                    <b-col> 
-                        <label> Invoice Email </label> 
-                        <b-form-input type="email" v-model="form.invoice_email"></b-form-input>
+                    <b-col class="margin-top-20"> 
+                        <label><b> Invoice Email* </b></label> 
+                        <b-form-input type="email" v-model="form.invoice_email" required></b-form-input>
                     </b-col>
                 </b-row>
                 
                 <b-row class="margin-top-20">
                     <b-col>
-                        <label> Branding Theme </label>
-                        <b-form-select v-model="form.branding_theme" :options="payment_options"></b-form-select>
+                        <label><b> Branding Theme* </b></label>
+                        <b-form-select v-model="form.branding_theme" :options="payment_options" required></b-form-select>
                     </b-col>
                     <b-col>
                         <label> Surcharge (%) </label>
                         <b-form-input v-model="form.surcharge" type="number"></b-form-input>
                     </b-col>
                     <b-col>
-                        <label> Delivered By </label>
-                        <b-form-select v-model="form.supplier_id">
+                        <label><b> Delivered By* </b></label>
+                        <b-form-select v-model="form.supplier_id" required>
                             <template slot="first">
                                     <option :value="null" disabled> Please select an option </option>
                             </template>
@@ -204,6 +204,9 @@
 
     label, p {
         font-weight: 300;
+        b {
+            font-weight: bold;
+        }
     }
     .form-margin-40 {
         margin: 40px;
@@ -314,7 +317,7 @@ export default {
             }).then(function (response) {
               alert('Uploaded new company successfully!');
               console.log(response.data);
-            }).catch(error => console.log(error));
+          }).catch(error => alert(error));
         },
         onReset (evt) {
             evt.preventDefault();

@@ -42,6 +42,9 @@
                             <li style="list-style:none;">
                                 <a href="{{ route('cron') }}"> View/Edit Cron Tasks </a>
                             </li>
+                            <li style="list-style:none;">
+                                <a href="{{ route('import-new-system-data') }}"> Import New System Data </a>
+                            </li>
                         </ul>
 
                         <!-- Routes are blocked from access if (admin is) already logged in,
