@@ -22,8 +22,9 @@
     <table>
         <thead>
             <tr>
-                <th colspan='3'> Packed By: ..................... </th>
-                <th colspan='3'> Checked By: ..................... </th>
+                <th colspan='1'> Packed By: ..................... </th>
+                <th colspan='2'> Checked By: ..................... </th>
+                <th colspan="3">  </th>
             </tr>
             <tr>
                 <th></th>

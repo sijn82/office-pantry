@@ -169,7 +169,8 @@ class FruitOrderingDocumentController extends Controller
                                                             'Pfizer UK Ltd (FAO Decision Support CoE (IPC 1-G))' => 'Pfizer UK Ltd',
                                                             'Baker Charles (FAO Robert Baker)' => 'Baker Charles',
                                                             'Quintessentially (Portland Place - FAO Sophie Fleming, First Floor Ballroom)' => 'Quintessentially (Portland Place)',
-                                                            'Cisco Systems UK (FAO Tom Bailey, eStore team, Building 10, Floor 2' => 'Cisco Systems UK'
+                                                            'Cisco Systems UK (FAO Tom Bailey, eStore team, Building 10, Floor 2' => 'Cisco Systems UK',
+                                                            'Knotel Baker Street - FAO CWT 3rd floor' => 'Knotel Baker Street',
                                                        ];
                                                        // Pointless comment, just to make a change.
 
