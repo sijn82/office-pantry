@@ -229,6 +229,18 @@ WithTitle
                         $milkbox_archive_alt_order = 0;
                         $milk_archive_organic_1l_order = 0;
                         $milk_archive_organic_2l_order = 0;
+                        // Create a running total of milk orders for the whole week <-- Missed this part out initially!
+                        $milkbox_1l_running_total = 0;
+                        $milkbox_2l_running_total = 0;
+                        $milkbox_alt_running_total = 0;
+                        $milkbox_organic_1l_running_total = 0;
+                        $milkbox_organic_2l_running_total = 0;
+                        // Same for Archived (but not invoiced) Orders
+                        $milkbox_archive_1l_running_total = 0;
+                        $milkbox_archive_2l_running_total = 0;
+                        $milkbox_archive_alt_running_total = 0;
+                        $milkbox_archive_organic_1l_running_total = 0;
+                        $milkbox_archive_organic_2l_running_total = 0;
                         // Total of both together
                         $milkbox_1l_total_week = (object) [];
                         $milkbox_2l_total_week = (object) [];
@@ -260,6 +272,18 @@ WithTitle
                         $milkbox_archive_alt_order_fruit_partner = 0;
                         $milk_archive_organic_1l_order_fruit_partner = 0;
                         $milk_archive_organic_2l_order_fruit_partner = 0;
+                        // Create a running total of milk orders for the whole week <-- Missed this part out initially!
+                        $milkbox_1l_running_total_fruit_partner = 0;
+                        $milkbox_2l_running_total_fruit_partner = 0;
+                        $milkbox_alt_running_total_fruit_partner = 0;
+                        $milkbox_organic_1l_running_total_fruit_partner = 0;
+                        $milkbox_organic_2l_running_total_fruit_partner = 0;
+                        // Same again with Archived (but not invoiced) Orders
+                        $milkbox_archive_1l_running_total_fruit_partner = 0;
+                        $milkbox_archive_2l_running_total_fruit_partner = 0;
+                        $milkbox_archive_alt_running_total_fruit_partner = 0;
+                        $milkbox_archive_organic_1l_running_total_fruit_partner = 0;
+                        $milkbox_archive_organic_2l_running_total_fruit_partner = 0;
                         // Total of both together
                         $milkbox_1l_total_week_fruit_partner = (object) [];
                         $milkbox_2l_total_week_fruit_partner = (object) [];
@@ -1194,8 +1218,11 @@ WithTitle
                     //----- End of Organic Milks -----//
 
                     //----- Milkbox Totals -----//
-
-
+                    $milkbox_1l_running_total += $milkbox_1l_order;
+                    $milkbox_2l_running_total += $milkbox_2l_order;
+                    $milkbox_alt_running_total += $milkbox_alt_order;
+                    $milkbox_organic_1l_running_total += $milk_organic_1l_order;
+                    $milkbox_organic_2l_running_total += $milk_organic_2l_order;
                     //----- End of Milkbox Totals -----//
 
 
@@ -1245,11 +1272,11 @@ WithTitle
 
                     //----- Milkbox Totals -----//
 
-                        $milkbox_1l_order_fruit_partner;
-                        $milkbox_2l_order_fruit_partner;
-                        $milkbox_alt_order_fruit_partner;
-                        $milk_organic_1l_order_fruit_partner;
-                        $milk_organic_2l_order_fruit_partner;
+                        $milkbox_1l_running_total_fruit_partner += $milkbox_1l_order_fruit_partner;
+                        $milkbox_2l_running_total_fruit_partner += $milkbox_2l_order_fruit_partner;
+                        $milkbox_alt_running_total_fruit_partner += $milkbox_alt_order_fruit_partner;
+                        $milkbox_organic_1l_running_total_fruit_partner += $milk_organic_1l_order_fruit_partner;
+                        $milkbox_organic_2l_running_total_fruit_partner += $milk_organic_2l_order_fruit_partner;
 
                     //----- End of Milkbox Totals -----//
 
@@ -1303,8 +1330,11 @@ WithTitle
                     //----- End of Organic Milks -----//
 
                     //----- Milkbox Totals -----//
-
-
+                    $milkbox_archive_1l_running_total += $milkbox_archive_1l_order;
+                    $milkbox_archive_2l_running_total += $milkbox_archive_2l_order;
+                    $milkbox_archive_alt_running_total += $milkbox_archive_alt_order;
+                    $milkbox_archive_organic_1l_running_total += $milk_archive_organic_1l_order;
+                    $milkbox_archive_organic_2l_running_total += $milk_archive_organic_2l_order;
                     //----- End of Milkbox Totals -----//
 
 
@@ -1354,8 +1384,11 @@ WithTitle
                     //----- End of Organic Milks -----//
 
                     //----- Milkbox Totals -----//
-
-
+                    $milkbox_archive_1l_running_total_fruit_partner += $milkbox_archive_1l_order_fruit_partner;
+                    $milkbox_archive_2l_running_total_fruit_partner += $milkbox_archive_2l_order_fruit_partner;
+                    $milkbox_archive_alt_running_total_fruit_partner += $milkbox_archive_alt_order_fruit_partner;
+                    $milkbox_archive_organic_1l_running_total_fruit_partner += $milk_archive_organic_1l_order_fruit_partner;
+                    $milkbox_archive_organic_2l_running_total_fruit_partner += $milk_archive_organic_2l_order_fruit_partner;
                     //----- End of Milkbox Totals -----//
 
                 } // End of if/else ($milkbox_archive->fruit_partner_id === 1)
@@ -1364,21 +1397,21 @@ WithTitle
             // Now we need to combine the totals of current and archived (but un-invoiced) milkboxes for the week.
 
             //----- Milkbox OP -----//
-            $milkbox_1l_total_week->quantity = $milkbox_1l_order + $milkbox_archive_1l_order;
+            $milkbox_1l_total_week->quantity = $milkbox_1l_running_total + $milkbox_archive_1l_running_total;
             // dd($milkbox_1l_total_week);
-            $milkbox_2l_total_week->quantity = $milkbox_2l_order + $milkbox_archive_2l_order;
+            $milkbox_2l_total_week->quantity = $milkbox_2l_running_total + $milkbox_archive_2l_running_total;
             // dd($milkbox_2l_total_week);
-            $milkbox_alt_total_week->quantity = $milkbox_alt_order + $milkbox_archive_alt_order;
+            $milkbox_alt_total_week->quantity = $milkbox_alt_running_total + $milkbox_archive_alt_running_total;
             // dd($milkbox_alt_total_week);
-            $milk_organic_1l_total_week->quantity = $milk_organic_1l_order + $milk_archive_organic_1l_order;
-            $milk_organic_2l_total_week->quantity = $milk_organic_2l_order + $milk_archive_organic_2l_order;
+            $milk_organic_1l_total_week->quantity = $milkbox_organic_1l_running_total + $milkbox_archive_organic_1l_running_total;
+            $milk_organic_2l_total_week->quantity = $milkbox_organic_2l_running_total + $milkbox_archive_organic_2l_running_total;
             // dd($milkbox_archive_1l_order_fruit_partner);
             //----- Milkbox Fruit Partners -----//
-            $milkbox_1l_total_week_fruit_partner->quantity = $milkbox_1l_order_fruit_partner + $milkbox_archive_1l_order_fruit_partner;
-            $milkbox_2l_total_week_fruit_partner->quantity = $milkbox_2l_order_fruit_partner + $milkbox_archive_2l_order_fruit_partner;
-            $milkbox_alt_total_week_fruit_partner->quantity = $milkbox_alt_order_fruit_partner + $milkbox_archive_alt_order_fruit_partner;
-            $milk_organic_1l_total_week_fruit_partner->quantity = $milk_organic_1l_order_fruit_partner + $milk_archive_organic_1l_order_fruit_partner;
-            $milk_organic_2l_total_week_fruit_partner->quantity = $milk_organic_2l_order_fruit_partner + $milk_archive_organic_2l_order_fruit_partner;
+            $milkbox_1l_total_week_fruit_partner->quantity = $milkbox_1l_running_total_fruit_partner + $milkbox_archive_1l_running_total_fruit_partner;
+            $milkbox_2l_total_week_fruit_partner->quantity = $milkbox_2l_running_total_fruit_partner + $milkbox_archive_2l_running_total_fruit_partner;
+            $milkbox_alt_total_week_fruit_partner->quantity = $milkbox_alt_running_total_fruit_partner + $milkbox_archive_alt_running_total_fruit_partner;
+            $milk_organic_1l_total_week_fruit_partner->quantity = $milkbox_organic_1l_running_total_fruit_partner + $milkbox_archive_organic_1l_running_total_fruit_partner;
+            $milk_organic_2l_total_week_fruit_partner->quantity = $milkbox_organic_2l_running_total_fruit_partner + $milkbox_archive_organic_2l_running_total_fruit_partner;
 
             // OK, time to process these totals into invoices.
 
