@@ -171,6 +171,7 @@ class FruitOrderingDocumentController extends Controller
                                                             'Quintessentially (Portland Place - FAO Sophie Fleming, First Floor Ballroom)' => 'Quintessentially (Portland Place)',
                                                             'Cisco Systems UK (FAO Tom Bailey, eStore team, Building 10, Floor 2' => 'Cisco Systems UK',
                                                             'Knotel Baker Street - FAO CWT 3rd floor' => 'Knotel Baker Street',
+                                                            'Barratt London (Queen Elizabeth Olympic Park - FAO Mara Byrne)' => 'Barratt London (Queen Elizabeth Olympic Park)',
                                                        ];
                                                        // Pointless comment, just to make a change.
 
