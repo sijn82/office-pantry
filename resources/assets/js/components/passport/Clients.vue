@@ -317,7 +317,7 @@
             persistClient(method, uri, form, modal) {
                 form.errors = [];
 
-                axios[method](uri, form)
+                axios[method](uri, {form, headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},})
                     .then(response => {
                         this.getClients();
 

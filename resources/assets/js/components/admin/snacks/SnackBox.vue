@@ -13,6 +13,7 @@
         
         <div id="edit-save-buttons">
             <h4> {{ snackbox[0].snackbox_id }} </h4>
+            <h5> {{ snackbox[0].next_delivery_week }} </h5>
             <p> {{ snackbox[0].delivery_day }} - {{ snackbox[0].is_active }} </p>
             <!-- <p><b> {{ this.company }} </b></p> -->
             <b-button variant="primary" @click="showDetails()"> Details </b-button>
@@ -132,7 +133,12 @@
             </b-row>
             
             <h4> Order Breakdown </h4>
-            <b-button variant="primary" @click="addProduct()"> Add a Product </b-button>
+            <div v-if="add_product">
+                <b-button variant="danger" @click="addProduct()"> Close </b-button>
+            </div>
+            <div v-else>
+                <b-button variant="primary" @click="addProduct()"> Add a Product </b-button>
+            </div>
             <div v-if="add_product">
                 <b-row class="margin-top-10">
                     <select-product></select-product>

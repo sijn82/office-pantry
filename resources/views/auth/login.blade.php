@@ -62,8 +62,11 @@
                                     {{ __('Login') }}
                                 </button>
                                 
-                                
+                                @isset($url)
                                 <a class="btn btn-link" href="{{ route('password.request', [$url]) }}">
+                                @else
+                                <a class="btn btn-link" href="{{ route('password.request') }}">
+                                @endif
                                     {{ __('Forgot Your Password?') }}
                                 </a>
                             </div>

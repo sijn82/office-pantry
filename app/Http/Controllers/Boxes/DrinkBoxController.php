@@ -103,6 +103,10 @@ class DrinkBoxController extends Controller
                 $new_drinkbox->unit_price = $item['unit_price'];
                 // For now this is everything, so let's save the new entry to the db.
                 $new_drinkbox->save();
+                
+                // Added 7/8/19 - look like I forgot to add stock adjustment to all the functions adding/removing stock
+                // Suspect there may be more but I'm dating this to know how untested these additions might be.
+                Product::find($item['id'])->decrement('stock_level', $item['quantity']);
             }
         
         } else {
@@ -488,6 +492,21 @@ class DrinkBoxController extends Controller
          $addProduct->quantity = request('product.quantity');
          $addProduct->unit_price = request('product.unit_price');
          $addProduct->save();
+         
+         // This currently looks to add products to a box but without reducing the stock level for the product!
+         // I rather suspect there might be a few more of these to find.
+         
+         //---------- Adjust stock levels ----------//
+
+             // Now we need to sort out the stock levels for these order items, keeping them in check and hopefully 100% accurate!
+             //  If these order items get cancelled for any reason, we must remember to add them back in too!!
+
+             // Looks I found a neat one liner to sort out reducing stock levels - I'm also guessing 'increment' will sort out returning stock too.
+             // Just in case there's a problem saving the new product, we'll only worry about reducing the stock levels if we get this far without hitting an error.
+             Product::find(request('product.id'))->decrement('stock_level', request('product.quantity'));
+
+         //---------- End of Adjust stock levels ----------//
+          
      }
      
     /**

@@ -5,6 +5,8 @@
         <div v-if="!Array.isArray(this.archived_otherboxes)">
             <div v-for="(archived_otherbox_week, key) in this.archived_otherboxes"> 
       
+                <h3> {{ key }} </h3>
+      
                 <archived-otherbox 
                     class="otherbox" 
                     v-for="(archived_otherbox, key) in archived_otherbox_week" 

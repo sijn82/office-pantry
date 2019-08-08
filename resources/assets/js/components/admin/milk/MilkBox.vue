@@ -2,7 +2,9 @@
     <div>
         <!-- <ul> -->
             <div id="edit-save-buttons">
-                <h4> {{ milkbox.delivery_day }}</h4> <p> {{ milkbox.is_active }} </p>
+                <h4> {{ milkbox.delivery_day }}</h4> 
+                <h5> {{ milkbox.next_delivery }} </h5>
+                <p> {{ milkbox.is_active }} </p>
                 <b-button variant="primary" @click="showDetails()"> Details </b-button>
                 <b-button variant="warning" @click="enableEdit()"> Edit </b-button>
                 <b-button v-if="editing" class="btn btn-success" @click="updateMilkOrder(milkbox)"> Save </b-button>

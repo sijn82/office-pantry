@@ -49,7 +49,7 @@ class CreateCompanyDetailsTable extends Migration
             // Billing and Delivery
             $table->string('branding_theme');
             $table->integer('surcharge')->nullable();
-            $table->integer('supplier_id');
+            $table->integer('supplier_id')->nullable();
             $table->string('model')->nullable();
             $table->string('monthly_special')->default('TBC');
             $table->string('no_of_surprises')->default(0);

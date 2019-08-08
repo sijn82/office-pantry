@@ -2,6 +2,7 @@
     <div>
         <div id="edit-save-buttons">
             <h4> {{ otherbox[0].otherbox_id }} </h4>
+            <h5> {{ otherbox[0].next_delivery_week }} </h5>
             <p> {{ otherbox[0].delivery_day }} - {{ otherbox[0].is_active }} </p>
             <b-button variant="primary" @click="showDetails()"> Details </b-button>
             <b-button variant="warning" @click="enableEdit()"> Edit </b-button>
@@ -131,7 +132,7 @@
                         <p> {{ this.$store.state.selectedProduct.name }} </p>
                     </b-col>
                     <b-col>
-                        <p> {{ this.$store.state.selectedProduct.stock_level }} </p>
+                        <p> {{ this.$store.state.selectedProduct.stock_level - quantity }} </p>
                     </b-col>
                     <b-col>
                         <p> {{ this.$store.state.selectedProduct.shortest_stock_date }} </p>

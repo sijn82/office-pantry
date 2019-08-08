@@ -12,6 +12,11 @@ use App\Imports\ImportedFruitPartners;
 use App\CompanyDetails;
 use App\FruitPartner;
 
+// Temporary for table merge test
+
+use App\Company;
+use App\Route;
+
 class ImportController extends Controller
 {
 
@@ -28,4 +33,12 @@ class ImportController extends Controller
         $importedFruitPartners = Excel::import(new ImportedFruitPartners(), $request->file('imported-fruit-partners-file'));
 
     }
+    
+    // Temporary for table merge test
+    
+    public function mergeCompanyWithRoutes()
+    {
+        
+    }
+    
 }

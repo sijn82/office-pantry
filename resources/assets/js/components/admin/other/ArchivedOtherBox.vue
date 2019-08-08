@@ -1,7 +1,7 @@
 <template lang="html">
     <div>
         <div id="edit-save-buttons">
-            <h4> {{ archived_otherbox[0].otherbox_id }} </h4>
+            <h4> {{ archived_otherbox[0].next_delivery_week }} </h4>
             <p> {{ archived_otherbox[0].delivery_day }} - {{ archived_otherbox[0].is_active }} </p>
             <b-button variant="primary" @click="showDetails()"> Details </b-button>
             <b-button variant="warning" @click="enableEdit()"> Edit </b-button>

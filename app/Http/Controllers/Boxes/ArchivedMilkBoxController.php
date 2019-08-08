@@ -30,7 +30,7 @@ class ArchivedMilkBoxController extends Controller
             'next_delivery' => request('next_delivery'),
             'frequency' => request('frequency'),
             'week_in_month' => request('week_in_month'),
-            'delivery_day' => request('delivery_day'); // Moved this data up to the initial check.
+            'delivery_day' => request('delivery_day'), // Moved this data up to the initial check.
             // Milk 2l
             'semi_skimmed_2l' => request('semi_skimmed_2l'),
             'skimmed_2l' => request('skimmed_2l'),

@@ -55,7 +55,7 @@ class ForgotPasswordController extends Controller
         return view('auth.passwords.email',[
             'title' => 'Admin Password Reset',
             'passwordEmailRoute' => 'admin.password.email',
-            'login_type' => $this->something[1],
+            'login_type' => isset($this->something[1]) ? $this->something[1] : 'user',
         ]);
     }
     

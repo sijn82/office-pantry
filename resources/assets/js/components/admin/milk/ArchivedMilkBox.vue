@@ -2,7 +2,9 @@
     <div>
         <!-- <ul> -->
             <div id="edit-save-buttons">
-                <h4> {{ archived_milkbox.delivery_day }}</h4> <p> {{ archived_milkbox.is_active }} </p>
+                <h4> {{ archived_milkbox.delivery_day }}</h4>
+                <h5> {{ archived_milkbox.next_delivery }} </h5>
+                <p> {{ archived_milkbox.is_active }} </p>
                 <b-button variant="primary" @click="showDetails()"> Details </b-button>
                 <b-button variant="warning" @click="enableEdit()"> Edit </b-button>
                 <b-button v-if="editing" class="btn btn-success" @click="updateMilkOrder(archived_milkbox)"> Save </b-button>
@@ -34,7 +36,7 @@
                         </div>
                     </b-col>
                     <b-col>
-                        <label><b> Next Delivery </b></label>
+                        <label><b> Week Delivered </b></label>
                         <div v-if="editing">
                             <b-form-input v-model="archived_milkbox.next_delivery" type="date"></b-form-input>
                         </div>

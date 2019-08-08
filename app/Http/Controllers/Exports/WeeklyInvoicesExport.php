@@ -163,7 +163,7 @@ WithTitle
         foreach ($companies as $company) {
             // dd($companies);
             // Each box type needs to be processed slightly differently, so we need 5 dedicated foreach loops.
-
+            
             //---------- Unset Some Variables ----------//
 
                 unset($sales_invoices);
@@ -485,20 +485,20 @@ WithTitle
             foreach ($company->fruitbox_archive as $fruitbox_archive) {
                 // Now we repeat the process adding any potentially archived orders for the current week start to the totals.
 
-                if ($fruitbox->fruit_partner_id === 1) {
+                if ($fruitbox_archive->fruit_partner_id === 1) {
 
-                    if ( strtolower( $fruitbox->type ) === 'seasonal' ) {
-                        $punnets_weekly_total += ( $fruitbox->fruitbox_total * 2 );
-                    } elseif ( strtolower( $fruitbox->type ) === 'berry' ) {
-                        $punnets_weekly_total += ( $fruitbox->fruitbox_total * $fruitbox->seasonal_berries );
-                        $punnets_weekly_total += ( $fruitbox->fruitbox_total * $fruitbox->grapes );
+                    if ( strtolower( $fruitbox_archive->type ) === 'seasonal' ) {
+                        $punnets_weekly_total += ( $fruitbox_archive->fruitbox_total * 2 );
+                    } elseif ( strtolower( $fruitbox_archive->type ) === 'berry' ) {
+                        $punnets_weekly_total += ( $fruitbox_archive->fruitbox_total * $fruitbox_archive->seasonal_berries );
+                        $punnets_weekly_total += ( $fruitbox_archive->fruitbox_total * $fruitbox_archive->grapes );
                     }
 
-                    if (isset($fruitbox->tailoring_fee)) {
-                        $tailoring_fee_weekly_total += $fruitbox->tailoring_fee;
+                    if (isset($fruitbox_archive->tailoring_fee)) {
+                        $tailoring_fee_weekly_total += $fruitbox_archive->tailoring_fee;
                     }
 
-                    if ($fruitbox->discount_multiple === 'Yes') {
+                    if ($fruitbox_archive->discount_multiple === 'Yes') {
                         switch ($fruitbox_archive->delivery_day) {
                             case 'Monday':
                                 if ( isset( $monday_total_boxes->{strtolower( $fruitbox_archive->type )} )) {
@@ -545,10 +545,10 @@ WithTitle
                         
                         // update - 24/7/19 it looks like berry boxes are causing a default charge of £20 on top of the cost of berries.
                         // I think a solution might be to skip them from adding to box totals entirely.
-                        if (strtolower( $fruitbox->type ) === 'berry' ) {
+                        if (strtolower( $fruitbox_archive->type ) === 'berry' ) {
                             // Er, do nothing?
                         } else {
-                            $total_boxes_without_discount += $fruitbox->fruitbox_total;
+                            $total_boxes_without_discount += $fruitbox_archive->fruitbox_total;
                         }
                         // end of update - 24/7/19
                     }
@@ -560,18 +560,18 @@ WithTitle
 
                 } else { // These orders are handles by a fruit partner
 
-                    if ( strtolower( $fruitbox->type ) === 'seasonal' ) {
-                        $punnets_weekly_total_fruit_partner += ( $fruitbox->fruitbox_total * 2 );
-                    } elseif ( strtolower( $fruitbox->type ) === 'berry' ) {
-                        $punnets_weekly_total_fruit_partner += ( $fruitbox->fruitbox_total * $fruitbox->seasonal_berries );
-                        $punnets_weekly_total_fruit_partner += ( $fruitbox->fruitbox_total * $fruitbox->grapes );
+                    if ( strtolower( $fruitbox_archive->type ) === 'seasonal' ) {
+                        $punnets_weekly_total_fruit_partner += ( $fruitbox_archive->fruitbox_total * 2 );
+                    } elseif ( strtolower( $fruitbox_archive->type ) === 'berry' ) {
+                        $punnets_weekly_total_fruit_partner += ( $fruitbox_archive->fruitbox_total * $fruitbox_archive->seasonal_berries );
+                        $punnets_weekly_total_fruit_partner += ( $fruitbox_archive->fruitbox_total * $fruitbox_archive->grapes );
                     }
 
-                    if (isset($fruitbox->tailoring_fee)) {
-                        $tailoring_fee_weekly_total_fruit_partner += $fruitbox->tailoring_fee;
+                    if (isset($fruitbox_archive->tailoring_fee)) {
+                        $tailoring_fee_weekly_total_fruit_partner += $fruitbox_archive->tailoring_fee;
                     }
 
-                    if ($fruitbox->discount_multiple === 'Yes') {
+                    if ($fruitbox_archive->discount_multiple === 'Yes') {
                         switch ($fruitbox_archive->delivery_day) {
                             case 'Monday':
                                 if ( isset( $monday_total_boxes_fruit_partner->{strtolower( $fruitbox_archive->type )} )) {
@@ -618,10 +618,10 @@ WithTitle
                         
                         // update - 24/7/19 it looks like berry boxes are causing a default charge of £20 on top of the cost of berries.
                         // I think a solution might be to skip them from adding to box totals entirely.
-                        if (strtolower( $fruitbox->type ) === 'berry' ) {
+                        if (strtolower( $fruitbox_archive->type ) === 'berry' ) {
                             // Er, do nothing?
                         } else {
-                            $total_boxes_without_discount += $fruitbox->fruitbox_total;
+                            $total_boxes_without_discount += $fruitbox_archive->fruitbox_total;
                         }
                         // end of update - 24/7/19
                     }
@@ -1467,9 +1467,9 @@ WithTitle
             //----- New approach to process archived and active orders together. -----//
             
             // Grab currently active snackboxes
-            $current = $company->snackboxes->groupBy('snackbox_id');
+            $current = $company->snackboxes->where('product_id', '!==', 0)->groupBy('snackbox_id');
             // Now add any archived but still active (yet to be invoiced) snackboxes
-            $archived = $company->snackbox_archive->groupBy('snackbox_id');
+            $archived = $company->snackbox_archive->where('product_id', '!==', 0)->groupBy('snackbox_id');
             // And combine them into an array we can loop through to reuse the snackbox code twice.
             $combined = [$current,$archived];
             // dump($combined);
@@ -1524,9 +1524,10 @@ WithTitle
             //----- Wrapped the snackbox processing with a simple foreach to run the current snackbox orders and then do the same with archived -----//
 
         foreach ($combined as $snackboxes) {
+            // dump($combined);
             //if (isset($snackboxes[0]->product_id)) {
                 foreach ($snackboxes as $snackbox) {
-                    if ($snackbox[0]->product_id !== 0) {
+                    // if ($snackbox[0]->product_id !== 0) { <-- I dont think this is doing what i want!!!!!! 8/8/19
                         //dump($snackbox);
                         // I only need to get this value once, so moving it up one foreach statement.
                         $snack_cap = $snackbox[0]->snack_cap;
@@ -1560,6 +1561,7 @@ WithTitle
 
                         // and add up all vat registered and all zero rated items into two totals,
                         foreach ($snackbox as $snackbox_item) {
+                            //dump($snackbox_item);
                             if ($snackbox_item->product_id != 0) {
                                 // check snackbox item (product) code for whether it's zero rated, or charged vat
                                 $product = Product::findOrFail($snackbox_item->product_id);
@@ -1643,10 +1645,10 @@ WithTitle
                             $snackbox_pt1->snack_total_zero_registered = $snacks_zero_rated_total;
                             $snackbox_pt1->snackbox_total_cost = ($snacks_with_discount_minus_vat_total + $snacks_with_discount_vat_total + $snacks_zero_rated_total);
                             $snackboxes_ready_for_invoicing[] = $snackbox_pt1;
-                    } else {
-                        // The snackbox being processed is actually empty
-                        // I COULD SEND THIS TO LARAVEL LOGS WITH BOX ID OR SOMETHING SIMILAR FOR SENSE CHECKING.
-                    }
+                    // } else {
+                    //     // The snackbox being processed is actually empty
+                    //     // I COULD SEND THIS TO LARAVEL LOGS WITH BOX ID OR SOMETHING SIMILAR FOR SENSE CHECKING.
+                    // } <-- Initial if statement breaking invoicing!!!
                 } // end of foreach ($company->snackboxes as $snackbox)
         //    } // end of - if (isset($snackboxes[0]->product_id))
         }    
@@ -1654,7 +1656,9 @@ WithTitle
             // Each object is a separate entry with a breakdown of vat registered products minus vat, the vat total and zero rated products total.
             // As well as a grand total I can access, to more easily determine whether the customer has spent enough for a further discount.
 
-            // dd($snackboxes_ready_for_invoicing);
+             if (isset($snackboxes_ready_for_invoicing)) {
+                 //dump($snackboxes_ready_for_invoicing);
+             };
 
             //---------- WHAT TO DO ABOUT SNACK_CAP-LESS BOXES? WHAT TO DO ABOUT WHOLESALE? ----------//
 

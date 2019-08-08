@@ -27,6 +27,10 @@ class FruitPartnerController extends Controller
     }
     
     public function listFruitPartners() {
+         // After updating a fruitpartner, the postgresql id looks to have changed.  WHY WOULD IT WANT TO DO THIS?!
+         // I also have an 'id' column, which hasn't changed but hte sortBy below doesn't appear to be using it, instead still ordering by postgresql id. 
+         // I NEED TO LEARN MORE ABOUT THIS BEHAVIOUR WHEN TRING TO CONTROL THE ORDER WHICH LISTS ARE DISPLAYED.
+        
         $fruit_partners = FruitPartner::all();
         // dd($fruit_partners);
         return $fruit_partners;
@@ -105,6 +109,31 @@ class FruitPartnerController extends Controller
     public function update(Request $request, FruitPartner $fruitPartner)
     {
         //
+        // dd($request);
+        
+        FruitPartner::where('id', request('id'))->update([
+            'name' => request('name'),
+            'email' => request('email'),
+            'telephone' => request('telephone'),
+            'url' => request('url'),
+            'primary_contact_first_name' => request('primary_contact_first_name'),
+            'primary_contact_surname' => request('primary_contact_surname'),
+            'secondary_contact_first_name' => request('secondary_contact_first_name'),
+            'secondary_contact_surname' => request('secondary_contact_surname'),
+            'address_line_1' => request('address_line_1'),
+            'address_line_2' => request('address_line_2'),
+            'address_line_3' => request('address_line_3'),
+            'city' => request('city'),
+            'region' => request('region'),
+            'postcode' => request('postcode'),
+            'alternative_telephone' => request('alternative_telephone'),
+            'weekly_action' => request('weekly_action'),
+            'changes_action' => request('changes_action'),
+            'status' => request('status'),
+            'no_of_customers' => request('no_of_customers'),
+            'use_op_boxes' => request('use_op_boxes'),
+            'additional_info' => request('additional_info'),
+        ]);
     }
 
     /**
@@ -113,9 +142,11 @@ class FruitPartnerController extends Controller
      * @param  \App\FruitPartner  $fruitPartner
      * @return \Illuminate\Http\Response
      */
-    public function destroy(FruitPartner $fruitPartner)
+    public function destroy(FruitPartner $fruitPartner, $id)
     {
-        //
+        dump($id);
+        dd($fruitPartner);
+        FruitPartner::destroy($id);
     }
     
     public function download($orders, $fruitpartner, $week_start) 

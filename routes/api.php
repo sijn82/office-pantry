@@ -25,7 +25,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 // This group will hold all the Fruit/Milk/Snacks/Drink & Other Boxes as well as their archived counterparts.
 Route::group([
     'namespace' => 'Boxes',
-    'prefix' => 'boxes'
+    'prefix' => 'boxes',
+    //'middleware' => ['auth:api','auth:office']
 ], function () {
 
                         //----- Current Orders -----//
@@ -103,7 +104,8 @@ Route::group([
 
 Route::group([
     'namespace' => 'Company',
-    'prefix' => 'company'
+    'prefix' => 'company',
+    //'middleware' => ['auth:api','auth:office']
 ], function () {
 
     Route::post('additional-info', 'AdditionalInfoController@addAdditionalInfo');
@@ -143,7 +145,8 @@ Route::group([
 // these are the bits that enable the generation/processing/delivery of company orders.
 Route::group([
     'namespace' => 'OfficePantry',
-    'prefix' => 'office-pantry'
+    'prefix' => 'office-pantry',
+    //'middleware' => 'auth:office'
 ], function () {
     // Assigned routes i.e our own delivery routes.
     Route::post('assigned-route/add-new-assigned-route', 'AssignedRouteController@store');
@@ -151,9 +154,11 @@ Route::group([
     Route::get('assigned-routes/select', 'AssignedRouteController@listAssignedRoutes');
     Route::put('assigned-route/{id}', 'AssignedRouteController@destroy');
     // Fruit Partner Products i.e 1 x fruitbox = £20, 2 x fruitbox = 18.50 etc.
-    Route::post('fruit_partners/add-new-fruitpartner', 'FruitPartnerController@store');
-    Route::get('fruit_partners/select', 'FruitPartnerController@listFruitPartners');
-    Route::get('fruit_partners/{id}', 'FruitPartnerController@show');
+    Route::post('fruit-partners/add-new-fruitpartner', 'FruitPartnerController@store');
+    Route::get('fruit-partners/select', 'FruitPartnerController@listFruitPartners');
+    Route::get('fruit_partners/{id}', 'FruitPartnerController@show'); // <-- not sure where this is used, will edit when I stumble across it or take a proper look.
+    Route::put('fruit-partners/update/{id}', 'FruitPartnerController@update');
+    Route::put('fruit-partners/destroy/{id}', 'FruitPartnerController@destroy');
     // This might get moved to an import/export group later on.
     Route::get('export-fruitpartner-deliveries', 'FruitPartnerController@groupOrdersByFruitPartner');
     // Office Pantry Products

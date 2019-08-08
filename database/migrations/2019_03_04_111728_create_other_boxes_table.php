@@ -20,7 +20,7 @@ class CreateOtherBoxesTable extends Migration
             $table->string('is_active')->default('Active');
             $table->integer('delivered_by_id');
             $table->string('type');
-            $table->integer('no_of_boxes')->nullable(); //  Do we need no_of_boxes here?  I don't think we want them for drinkboxes and these boxes similar.
+            // $table->integer('no_of_boxes')->nullable(); //  Do we need no_of_boxes here?  I don't think we want them for drinkboxes and these boxes similar.
             // Company Info
             $table->integer('company_details_id');
             $table->string('delivery_day');

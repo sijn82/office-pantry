@@ -300,7 +300,7 @@ export default {
             console.log(new_type);
             this.$store.commit('addNewTypeToStore', new_type);
         },
-
+        // Not sure this will work now the url's have changed - 7/8/19 need to check, it might also have been replaced by something else.
         confirmType(type) {
 
             let company = this.selected_company;

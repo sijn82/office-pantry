@@ -70,7 +70,6 @@ Vue.component('snack-orders', require('./components/customer/SnackOrders.vue'));
 Vue.component('fruitbox', require('./components/admin/fruit/FruitBox.vue'));
 Vue.component('fruit-orders-admin', require('./components/admin/fruit/FruitOrdersAdmin.vue'));
 Vue.component('add-new-fruitbox', require('./components/admin/fruit/AddNewFruitbox.vue'));
-Vue.component('add-new-fruitpartner', require('./components/admin/fruit/AddNewFruitPartner.vue'));
 // Fruitbox Archive Related
 Vue.component('archived-fruitbox', require('./components/admin/fruit/ArchivedFruitBox.vue'));
 Vue.component('archived-fruit-orders-admin', require('./components/admin/fruit/ArchivedFruitOrdersAdmin.vue'));
@@ -81,7 +80,10 @@ Vue.component('add-new-milkbox', require('./components/admin/milk/AddNewMilkbox.
 // Milkbox Archive Related
 Vue.component('archived-milkbox', require('./components/admin/milk/ArchivedMilkBox.vue'));
 Vue.component('archived-milk-orders-admin', require('./components/admin/milk/ArchivedMilkOrdersAdmin.vue'));
-
+// Fruit Partner Related
+Vue.component('add-new-fruitpartner', require('./components/admin/fruit/AddNewFruitPartner.vue'));
+Vue.component('fruitpartners-admin', require('./components/admin/fruit/FruitPartnersAdmin.vue'));
+Vue.component('fruitpartner', require('./components/admin/fruit/FruitPartner.vue'));
 // Route Related
 Vue.component('company-route', require('./components/admin/routes/CompanyRoute.vue'));
 Vue.component('routes-admin', require('./components/admin/routes/RoutesAdmin.vue'));

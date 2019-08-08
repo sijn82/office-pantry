@@ -17,13 +17,16 @@ use App\WeekStart;
 use App\CompanyRoute;
 use App\Cron;
 use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 
 // Now before the order gets moved onto its next delivery date it creates an archive entry if one doesn't already exist.
-use FruitBoxArchive;
-use MilkBoxArchive;
-use SnackBoxArchive;
-use DrinkBoxArchive;
-use OtherBoxArchive;
+use App\FruitBoxArchive;
+use App\MilkBoxArchive;
+use App\SnackBoxArchive;
+use App\DrinkBoxArchive;
+use App\OtherBoxArchive;
+
+use Illuminate\Support\Facades\Log;
 
 use Illuminate\Http\Request;
 
@@ -101,6 +104,8 @@ class OrderController extends Controller
     
     public static function advanceNextOrderDeliveryDate()
     {
+        // dd('*Rolls Up Sleeves* ~ "You want me to do this or what?!"');
+        
         // ---------- Test Area ---------- //
 
             // $carbon = new Carbon; // 2019-01-09
@@ -188,12 +193,16 @@ class OrderController extends Controller
                     
                     // First let's make sure the two dates are in the same format for comparison
                     $converted_invoiced_at_date = new CarbonImmutable($fruitbox->invoiced_at);
+                    dump($converted_invoiced_at_date);
                     $converted_updated_at_date = new CarbonImmutable($fruitbox->updated_at);
+                    dump($converted_updated_at_date);
                     
                     if ($fruitbox->is_active === 'Active') {
                     
                         // Now check the dates to see if they match the same day.
                         if ($converted_invoiced_at_date->format('ymd') == $converted_updated_at_date->format('ymd')) {
+                            
+                            Log::channel('slack')->info($converted_invoiced_at_date->format('ymd') . ' must be equal to ' . $converted_updated_at_date->format('ymd'));
                             
                             // Then we can create an inactive archive
                             FruitBoxArchive::updateOrInsert(
@@ -243,6 +252,8 @@ class OrderController extends Controller
                             );
                             
                         } else {
+                            
+                            Log::channel('slack')->info($converted_invoiced_at_date->format('ymd') . ' is not equal to ' . $converted_updated_at_date->format('ymd'));
                             
                             // we need to create an active archive
                             FruitBoxArchive::updateOrInsert(
@@ -471,38 +482,291 @@ class OrderController extends Controller
         
         // ---------- Snackboxes ---------- //
         
-            $snackboxes = SnackBox::whereIn('frequency', ['Weekly', 'Fortnightly', 'Monthly'])->get();
+            $snackboxes = SnackBox::whereIn('frequency', ['Weekly', 'Fortnightly', 'Monthly'])->get()->groupBy('snackbox_id');
         
             // Do I want to group these snackboxes by their snackbox_id or as I'm only really concerned with advancing the next_delivery_date, should I just treat each entry on it's own?
             // Basically, what's the next delivery date (of entry), is that date prior to Carbon::now(), if so, the order (entry) is out of date and ready to be advanced.
             // If we've already stripped out the snackbox entries, then we'll only have one entry anyway.                
         
-            foreach ($snackboxes as $snackbox_entry) {
+            foreach ($snackboxes as $snackbox) {
+                
+                $snackbox_status_recovered = $snackbox[0]->is_active;
+                $snackbox_id_recovered = $snackbox[0]->snackbox_id;
+                $delivered_by_recovered = $snackbox[0]->delivered_by;
+                $delivery_day_recovered = $snackbox[0]->delivery_day;
+                $no_of_boxes_recovered = $snackbox[0]->no_of_boxes;
+                $snack_cap_recovered = $snackbox[0]->snack_cap;
+                $type_recovered = $snackbox[0]->type;
+                $company_details_id_recovered = $snackbox[0]->company_details_id;
+                $frequency_recovered = $snackbox[0]->frequency;
+                $week_in_month_recovered = $snackbox[0]->week_in_month;
+                
+                // while the next delivery date is calculated below I'm going to do it here (either as well, or use this to replace the Carbon::parsing below).
+                
+                if ($frequency_recovered === 'Weekly') {
+                    // Push the date forward a week
+                    $advanced_next_delivery_week = Carbon::parse($snackbox[0]->next_delivery_week)->addWeek(1);
+    
+                } elseif ($frequency_recovered === 'Fortnightly') {
+                    // push the date forward two weeks
+                    $advanced_next_delivery_week = Carbon::parse($snackbox[0]->next_delivery_week)->addWeek(2);
+    
+                } elseif ($frequency_recovered === 'Monthly') {
+    
+                    // This will hold either the value first, second, third, forth or last.
+                    $week = $snackbox[0]->week_in_month;
+                    // This will check the month of the last delivery and then advance by one month,
+                    // before saving that month as a string to be parsed later in $mondayOfMonth variable.
+                    $month = Carbon::parse($snackbox[0]->next_delivery_week)->addMonth()->englishMonth;
+                    // Create new instance of Carbon to use as the primer for $carbon::parse() below.
+                    $carbon = new Carbon;
+                    // An alternative to setting the month above and parsing below would be to parse the phrase '$week . ' monday of NEXT month'
+                    // and allow it use the carbon date of when the function is run however I'm currently prefering this approach
+                    // as it weighs more heavily on the last delivery date rather than when processes are run.
+                    $mondayOfMonth = $carbon::parse($week . ' monday of ' . $month);
+                    // Set the newly parsed delivery date.
+                    $advanced_next_delivery_week = $mondayOfMonth;
+    
+                } else {
+    
+                    // Nothing should get here as the frequency is a drop down (selection) of options, and we specifically grabbed only weekly, fortnightly, and monthly orders
+                }
+            
+                foreach ($snackbox as $snackbox_entry) {
+            
+                    if ($snackbox_entry->next_delivery_week < Carbon::now()) {
+            
+                        $lastDelivery = $snackbox_entry->next_delivery_week;
+                        
+                        // Bit of repetition but atleast the names will be very clear... :)
+                        $archived_entry_next_delivery = $snackbox_entry->next_delivery_week;
+                        $archived_entry_previous_delivery = $snackbox_entry->previous_delivery_week;
+            
+                        // this is the only line of code which will differ depending on when the frequency selected
+                        if ($snackbox_entry->frequency === 'Weekly') {
+                            // Push the date forward a week
+                            $snackbox_entry->next_delivery_week = Carbon::parse($snackbox_entry->next_delivery_week)->addWeek(1);
+            
+                        } elseif ($snackbox_entry->frequency === 'Fortnightly') {
+                            // push the date forward two weeks
+                            $snackbox_entry->next_delivery_week = Carbon::parse($snackbox_entry->next_delivery_week)->addWeek(2);
+            
+                        } elseif ($snackbox_entry->frequency === 'Monthly') {
+            
+                            // This will hold either the value first, second, third, forth or last.
+                            $week = $snackbox_entry->week_in_month;
+                            // This will check the month of the last delivery and then advance by one month,
+                            // before saving that month as a string to be parsed later in $mondayOfMonth variable.
+                            $month = Carbon::parse($snackbox_entry->next_delivery_week)->addMonth()->englishMonth;
+                            // Create new instance of Carbon to use as the primer for $carbon::parse() below.
+                            $carbon = new Carbon;
+                            // An alternative to setting the month above and parsing below would be to parse the phrase '$week . ' monday of NEXT month'
+                            // and allow it use the carbon date of when the function is run however I'm currently prefering this approach
+                            // as it weighs more heavily on the last delivery date rather than when processes are run.
+                            $mondayOfMonth = $carbon::parse($week . ' monday of ' . $month);
+                            // Set the newly parsed delivery date.
+                            $snackbox_entry->next_delivery_week = $mondayOfMonth;
+            
+                        } else {
+            
+                            // Nothing should get here as the frequency is a drop down (selection) of options, and we specifically grabbed only weekly, fortnightly, and monthly orders
+                        }
+                        
+                        $converted_invoiced_at_date = new CarbonImmutable($snackbox_entry->invoiced_at);
+                        $converted_updated_at_date = new CarbonImmutable($snackbox_entry->updated_at);
+                        
+                        if ($snackbox_entry->is_active) {
+                            // As snackboxes are effectively destroyed and rebuilt empty each week, we only need to check that the invoiced_at date isn't null
+                            if ($snackbox_entry->invoiced_at !== null) {
+                                // if we have an invoice date, this box has been processed but not emptied yet.
+                                // if that's the case we just need to create an inactive archive holding all the previous orders.
+                                // at least so long as the archive hasn't been created already
+                                
+                                // Unlike the previous 2 categories (fruitbox/milkbox) the snackbox_id will have multiple entries for the same next_delivery_week, 
+                                // however if we also combine the product_id, the entries should be unique.
+                                
+                                SnackBoxArchive::updateOrInsert(
+                                [
+                                    'snackbox_id' => $snackbox_entry->snackbox_id,
+                                    'next_delivery_week' => $archived_entry_next_delivery,
+                                    'product_id' => $snackbox_entry->product_id,
+                                ], 
+                                [
+                                    'is_active' => 'Inactive',
+                                    'id' => $snackbox_entry->id,
+                                    'delivered_by' => $snackbox_entry->delivered_by,
+                                    'no_of_boxes' => $snackbox_entry->no_of_boxes,
+                                    'snack_cap' => $snackbox_entry->snack_cap,
+                                    'type' => $snackbox_entry->type,
+                                    'company_details_id' => $snackbox_entry->company_details_id,
+                                    'delivery_day' => $snackbox_entry->delivery_day,
+                                    'frequency' => $snackbox_entry->frequency,
+                                    'week_in_month' => $snackbox_entry->week_in_month,
+                                    'previous_delivery_week' => $archived_entry_previous_delivery,
+                                    'code' => $snackbox_entry->code,
+                                    'name' => $snackbox_entry->name,
+                                    'quantity' => $snackbox_entry->quantity,
+                                    'unit_price' => $snackbox_entry->unit_price,
+                                    'case_price' => $snackbox_entry->case_price,
+                                    'invoiced_at' => $snackbox_entry->invoiced_at,
+                                    'created_at' => $snackbox_entry->created_at,
+                                    'updated_at' => $snackbox_entry->updated_at,
+                                ]);
+                                
+                            } else {
+                                // Same again if it hasn't been invoiced only this time we save it as active so it can be pulled into the next invoicing run for that branding theme.
+                                SnackBoxArchive::updateOrInsert(
+                                [
+                                    'snackbox_id' => $snackbox_entry->snackbox_id,
+                                    'next_delivery_week' => $archived_entry_next_delivery,
+                                    'product_id' => $snackbox_entry->product_id,
+                                ], 
+                                [
+                                    'is_active' => 'Active',
+                                    'id' => $snackbox_entry->id,
+                                    'delivered_by' => $snackbox_entry->delivered_by,
+                                    'no_of_boxes' => $snackbox_entry->no_of_boxes,
+                                    'snack_cap' => $snackbox_entry->snack_cap,
+                                    'type' => $snackbox_entry->type,
+                                    'company_details_id' => $snackbox_entry->company_details_id,
+                                    'delivery_day' => $snackbox_entry->delivery_day,
+                                    'frequency' => $snackbox_entry->frequency,
+                                    'week_in_month' => $snackbox_entry->week_in_month,
+                                    'previous_delivery_week' => $archived_entry_previous_delivery,
+                                    'code' => $snackbox_entry->code,
+                                    'name' => $snackbox_entry->name,
+                                    'quantity' => $snackbox_entry->quantity,
+                                    'unit_price' => $snackbox_entry->unit_price,
+                                    'case_price' => $snackbox_entry->case_price,
+                                    'invoiced_at' => $snackbox_entry->invoiced_at,
+                                    'created_at' => $snackbox_entry->created_at,
+                                    'updated_at' => $snackbox_entry->updated_at,
+                                ]);
+                            }
+                        
+                        
+                        } else {
+                         // then (it's inactive &) we don't need to worry about it.
+                        }
+                        
+                        // Updating the box to the next week start is still a good (essential) thing to do 
+                        // but as the orders don't need to be kept, we should also empty the box, ready to be refilled.
+                        
+                        // We can't rely on an entry having a product id of 0, this only happens if we built the box without adding any products initially.
+                        // So what is the best way to empty this box?  Should we just delete all the entries and build a new box, or edit one entry and delete the rest?
+                        
+                        
+                        // So instead of updating a box like this...
+                        // SnackBox::where('id', $snackbox_entry->id)->update([
+                        //     'previous_delivery_week' => $lastDelivery,
+                        //     'next_delivery_week' => $snackbox_entry->next_delivery_week,
+                        // ]);
+                        // we could destroy the box entries like this, now that we have the archive created.
+                        Snackbox::destroy($snackbox_entry->id);
+            
+                    } // end of if ($snackbox_entry->next_delivery_week < Carbon::now())    
+                    
+                } // end of foreach ($snackbox as $snackbox_entry)
+                
+                // Right so now the box has been backed up as an archive and deleted (!), let's recreate it again ready for reuse (phew) :)
+                $rebuilt_snackbox = new SnackBox();
+                $rebuilt_snackbox->is_active = $snackbox_status_recovered;
+                $rebuilt_snackbox->snackbox_id = $snackbox_id_recovered;
+                $rebuilt_snackbox->delivered_by = $delivered_by_recovered;
+                $rebuilt_snackbox->delivery_day = $delivery_day_recovered;
+                $rebuilt_snackbox->no_of_boxes = $no_of_boxes_recovered;
+                $rebuilt_snackbox->snack_cap = $snack_cap_recovered;
+                $rebuilt_snackbox->type = $type_recovered;
+                $rebuilt_snackbox->company_details_id = $company_details_id_recovered;
+                $rebuilt_snackbox->frequency = $frequency_recovered;
+                $rebuilt_snackbox->week_in_month = $week_in_month_recovered;
+                $rebuilt_snackbox->previous_delivery_week = $snackbox[0]->next_delivery_week;
+                $rebuilt_snackbox->next_delivery_week = $advanced_next_delivery_week;
+                $rebuilt_snackbox->product_id = 0;
+                $rebuilt_snackbox->code = null;
+                $rebuilt_snackbox->name = null;
+                $rebuilt_snackbox->quantity = null;
+                $rebuilt_snackbox->unit_price = null;
+                $rebuilt_snackbox->case_price = null;
+                $rebuilt_snackbox->invoiced_at = null;
+                $rebuilt_snackbox->save();
+                
+            } // end of foreach ($snackboxes as $snackbox)
         
-                if ($snackbox_entry->next_delivery_week < Carbon::now()) {
+        // ---------- Drinkboxes ---------- //
         
-                    $lastDelivery = $snackbox_entry->next_delivery_week;
+        $drinkboxes = DrinkBox::whereIn('frequency', ['Weekly', 'Fortnightly', 'Monthly'])->get()->groupBy('drinkbox_id');                
+        
+        foreach ($drinkboxes as $drinkbox) {
+            
+            // dd($drinkbox);
+            
+            $drinkbox_status_recovered = $drinkbox[0]->is_active;
+            $drinkbox_id_recovered = $drinkbox[0]->drinkbox_id;
+            $delivered_by_recovered = $drinkbox[0]->delivered_by_id;
+            $delivery_day_recovered = $drinkbox[0]->delivery_day;
+            $type_recovered = $drinkbox[0]->type;
+            $company_details_id_recovered = $drinkbox[0]->company_details_id;
+            $frequency_recovered = $drinkbox[0]->frequency;
+            $week_in_month_recovered = $drinkbox[0]->week_in_month;
+            
+            // while the next delivery date is calculated below I'm going to do it here (either as well, or use this to replace the Carbon::parsing below).
+            
+            if ($frequency_recovered === 'Weekly') {
+                // Push the date forward a week
+                $advanced_next_delivery_week = Carbon::parse($drinkbox[0]->next_delivery_week)->addWeek(1);
+
+            } elseif ($frequency_recovered === 'Fortnightly') {
+                // push the date forward two weeks
+                $advanced_next_delivery_week = Carbon::parse($drinkbox[0]->next_delivery_week)->addWeek(2);
+
+            } elseif ($frequency_recovered === 'Monthly') {
+
+                // This will hold either the value first, second, third, forth or last.
+                $week = $drinkbox[0]->week_in_month;
+                // This will check the month of the last delivery and then advance by one month,
+                // before saving that month as a string to be parsed later in $mondayOfMonth variable.
+                $month = Carbon::parse($drinkbox[0]->next_delivery_week)->addMonth()->englishMonth;
+                // Create new instance of Carbon to use as the primer for $carbon::parse() below.
+                $carbon = new Carbon;
+                // An alternative to setting the month above and parsing below would be to parse the phrase '$week . ' monday of NEXT month'
+                // and allow it use the carbon date of when the function is run however I'm currently prefering this approach
+                // as it weighs more heavily on the last delivery date rather than when processes are run.
+                $mondayOfMonth = $carbon::parse($week . ' monday of ' . $month);
+                // Set the newly parsed delivery date.
+                $advanced_next_delivery_week = $mondayOfMonth;
+
+            } else {
+
+                // Nothing should get here as the frequency is a drop down (selection) of options, and we specifically grabbed only weekly, fortnightly, and monthly orders
+            }
+            
+            foreach ($drinkbox as $drinkbox_entry) {
+            
+                if ($drinkbox_entry->next_delivery_week < Carbon::now()) {
+            
+                    $lastDelivery = $drinkbox_entry->next_delivery_week;
                     
                     // Bit of repetition but atleast the names will be very clear... :)
-                    $archived_entry_next_delivery = $snackbox->next_delivery_date;
-                    $archived_entry_previous_delivery = $snackbox->previous_delivery_date;
-        
+                    $archived_entry_next_delivery = $drinkbox_entry->next_delivery_week;
+                    $archived_entry_previous_delivery = $drinkbox_entry->previous_delivery_week;
+            
                     // this is the only line of code which will differ depending on when the frequency selected
-                    if ($snackbox_entry->frequency === 'Weekly') {
+                    if ($drinkbox_entry->frequency === 'Weekly') {
                         // Push the date forward a week
-                        $snackbox_entry->next_delivery_week = Carbon::parse($snackbox_entry->next_delivery_week)->addWeek(1);
-        
-                    } elseif ($snackbox_entry->frequency === 'Fortnightly') {
+                        $drinkbox_entry->next_delivery_week = Carbon::parse($drinkbox_entry->next_delivery_week)->addWeek(1);
+            
+                    } elseif ($drinkbox_entry->frequency === 'Fortnightly') {
                         // push the date forward two weeks
-                        $snackbox_entry->next_delivery_week = Carbon::parse($snackbox_entry->next_delivery_week)->addWeek(2);
-        
-                    } elseif ($snackbox_entry->frequency === 'Monthly') {
-        
+                        $drinkbox_entry->next_delivery_week = Carbon::parse($drinkbox_entry->next_delivery_week)->addWeek(2);
+            
+                    } elseif ($drinkbox_entry->frequency === 'Monthly') {
+            
                         // This will hold either the value first, second, third, forth or last.
-                         $week = $snackbox_entry->week_in_month;
+                        $week = $drinkbox_entry->week_in_month;
                         // This will check the month of the last delivery and then advance by one month,
                         // before saving that month as a string to be parsed later in $mondayOfMonth variable.
-                        $month = Carbon::parse($snackbox_entry->next_delivery_week)->addMonth()->englishMonth;
+                        $month = Carbon::parse($drinkbox_entry->next_delivery_week)->addMonth()->englishMonth;
                         // Create new instance of Carbon to use as the primer for $carbon::parse() below.
                         $carbon = new Carbon;
                         // An alternative to setting the month above and parsing below would be to parse the phrase '$week . ' monday of NEXT month'
@@ -510,19 +774,19 @@ class OrderController extends Controller
                         // as it weighs more heavily on the last delivery date rather than when processes are run.
                         $mondayOfMonth = $carbon::parse($week . ' monday of ' . $month);
                         // Set the newly parsed delivery date.
-                        $snackbox_entry->next_delivery_week = $mondayOfMonth;
-        
+                        $drinkbox_entry->next_delivery_week = $mondayOfMonth;
+            
                     } else {
-        
+            
                         // Nothing should get here as the frequency is a drop down (selection) of options, and we specifically grabbed only weekly, fortnightly, and monthly orders
                     }
                     
-                    $converted_invoiced_at_date = new CarbonImmutable($snackbox_entry->invoiced_at);
-                    $converted_updated_at_date = new CarbonImmutable($snackbox_entry->updated_at);
+                    $converted_invoiced_at_date = new CarbonImmutable($drinkbox_entry->invoiced_at);
+                    $converted_updated_at_date = new CarbonImmutable($drinkbox_entry->updated_at);
                     
-                    if ($snackbox_entry->is_active) {
+                    if ($drinkbox_entry->is_active) {
                         // As snackboxes are effectively destroyed and rebuilt empty each week, we only need to check that the invoiced_at date isn't null
-                        if ($snackbox_entry->invoiced_at !== null) {
+                        if ($drinkbox_entry->invoiced_at !== null) {
                             // if we have an invoice date, this box has been processed but not emptied yet.
                             // if that's the case we just need to create an inactive archive holding all the previous orders.
                             // at least so long as the archive hasn't been created already
@@ -530,62 +794,58 @@ class OrderController extends Controller
                             // Unlike the previous 2 categories (fruitbox/milkbox) the snackbox_id will have multiple entries for the same next_delivery_week, 
                             // however if we also combine the product_id, the entries should be unique.
                             
-                            SnackBoxArchive::updateOrInsert(
+                            DrinkBoxArchive::updateOrInsert(
                             [
-                                'snackbox_id' => $snackbox_entry->snackbox_id,
-                                'next_delivery_date' => $archived_entry_next_delivery,
-                                'product_id' => $snackbox_entry->product_id,
+                                'drinkbox_id' => $drinkbox_entry->drinkbox_id,
+                                'next_delivery_week' => $archived_entry_next_delivery,
+                                'product_id' => $drinkbox_entry->product_id,
                             ], 
                             [
                                 'is_active' => 'Inactive',
-                                'id' => $snackbox_entry->id,
-                                'delivered_by' => $snackbox_entry->delivered_by,
-                                'no_of_boxes' => $snackbox_entry->no_of_boxes,
-                                'snack_cap' => $snackbox_entry->snack_cap,
-                                'type' => $snackbox_entry->type,
-                                'company_details_id' => $snackbox_entry->company_details_id,
-                                'delivery_day' => $snackbox_entry->delivery_day,
-                                'frequency' => $snackbox_entry->frequency,
-                                'week_in_month' => $snackbox_entry->week_in_month,
+                                'id' => $drinkbox_entry->id,
+                                'delivered_by_id' => $drinkbox_entry->delivered_by_id,
+                                'type' => $drinkbox_entry->type,
+                                'company_details_id' => $drinkbox_entry->company_details_id,
+                                'delivery_day' => $drinkbox_entry->delivery_day,
+                                'frequency' => $drinkbox_entry->frequency,
+                                'week_in_month' => $drinkbox_entry->week_in_month,
                                 'previous_delivery_week' => $archived_entry_previous_delivery,
-                                'code' => $snackbox_entry->code,
-                                'name' => $snackbox_entry->name,
-                                'quantity' => $snackbox_entry->quantity,
-                                'unit_price' => $snackbox_entry->unit_price,
-                                'case_price' => $snackbox_entry->case_price,
-                                'invoiced_at' => $snackbox_entry->invoiced_at,
-                                'created_at' => $snackbox_entry->created_at,
-                                'updated_at' => $snackbox_entry->updated_at,
+                                'code' => $drinkbox_entry->code,
+                                'name' => $drinkbox_entry->name,
+                                'quantity' => $drinkbox_entry->quantity,
+                                'unit_price' => $drinkbox_entry->unit_price,
+                                'case_price' => $drinkbox_entry->case_price,
+                                'invoiced_at' => $drinkbox_entry->invoiced_at,
+                                'created_at' => $drinkbox_entry->created_at,
+                                'updated_at' => $drinkbox_entry->updated_at,
                             ]);
                             
                         } else {
                             // Same again if it hasn't been invoiced only this time we save it as active so it can be pulled into the next invoicing run for that branding theme.
-                            SnackBoxArchive::updateOrInsert(
+                            DrinkBoxArchive::updateOrInsert(
                             [
-                                'snackbox_id' => $snackbox_entry->snackbox_id,
-                                'next_delivery_date' => $archived_entry_next_delivery,
-                                'product_id' => $snackbox_entry->product_id,
+                                'drinkbox_id' => $drinkbox_entry->drinkbox_id,
+                                'next_delivery_week' => $archived_entry_next_delivery,
+                                'product_id' => $drinkbox_entry->product_id,
                             ], 
                             [
                                 'is_active' => 'Active',
-                                'id' => $snackbox_entry->id,
-                                'delivered_by' => $snackbox_entry->delivered_by,
-                                'no_of_boxes' => $snackbox_entry->no_of_boxes,
-                                'snack_cap' => $snackbox_entry->snack_cap,
-                                'type' => $snackbox_entry->type,
-                                'company_details_id' => $snackbox_entry->company_details_id,
-                                'delivery_day' => $snackbox_entry->delivery_day,
-                                'frequency' => $snackbox_entry->frequency,
-                                'week_in_month' => $snackbox_entry->week_in_month,
+                                'id' => $drinkbox_entry->id,
+                                'delivered_by_id' => $drinkbox_entry->delivered_by_id,
+                                'type' => $drinkbox_entry->type,
+                                'company_details_id' => $drinkbox_entry->company_details_id,
+                                'delivery_day' => $drinkbox_entry->delivery_day,
+                                'frequency' => $drinkbox_entry->frequency,
+                                'week_in_month' => $drinkbox_entry->week_in_month,
                                 'previous_delivery_week' => $archived_entry_previous_delivery,
-                                'code' => $snackbox_entry->code,
-                                'name' => $snackbox_entry->name,
-                                'quantity' => $snackbox_entry->quantity,
-                                'unit_price' => $snackbox_entry->unit_price,
-                                'case_price' => $snackbox_entry->case_price,
-                                'invoiced_at' => $snackbox_entry->invoiced_at,
-                                'created_at' => $snackbox_entry->created_at,
-                                'updated_at' => $snackbox_entry->updated_at,
+                                'code' => $drinkbox_entry->code,
+                                'name' => $drinkbox_entry->name,
+                                'quantity' => $drinkbox_entry->quantity,
+                                'unit_price' => $drinkbox_entry->unit_price,
+                                'case_price' => $drinkbox_entry->case_price,
+                                'invoiced_at' => $drinkbox_entry->invoiced_at,
+                                'created_at' => $drinkbox_entry->created_at,
+                                'updated_at' => $drinkbox_entry->updated_at,
                             ]);
                         }
                     
@@ -593,278 +853,236 @@ class OrderController extends Controller
                     } else {
                      // then we don't need to worry about it.
                     }
+
                     
+                    DrinkBox::destroy($drinkbox_entry->id);
+            
+                } // if ($drinkbox_entry->next_delivery_week < Carbon::now())
+            } // foreach ($drinkbox as $drinkbox_entry)
+            
+            // Right so now the box has been backed up as an archive and deleted (!), let's recreate it again ready for reuse (phew) :)
+            $rebuilt_drinkbox = new DrinkBox();
+            $rebuilt_drinkbox->is_active = $drinkbox_status_recovered;
+            $rebuilt_drinkbox->drinkbox_id = $drinkbox_id_recovered;
+            $rebuilt_drinkbox->delivered_by_id = $delivered_by_recovered;
+            $rebuilt_drinkbox->delivery_day = $delivery_day_recovered;
+            $rebuilt_drinkbox->type = $type_recovered;
+            $rebuilt_drinkbox->company_details_id = $company_details_id_recovered;
+            $rebuilt_drinkbox->frequency = $frequency_recovered;
+            $rebuilt_drinkbox->week_in_month = $week_in_month_recovered;
+            $rebuilt_drinkbox->previous_delivery_week = $drinkbox[0]->next_delivery_week;
+            $rebuilt_drinkbox->next_delivery_week = $advanced_next_delivery_week;
+            $rebuilt_drinkbox->product_id = 0;
+            $rebuilt_drinkbox->code = null;
+            $rebuilt_drinkbox->name = null;
+            $rebuilt_drinkbox->quantity = null;
+            $rebuilt_drinkbox->unit_price = null;
+            $rebuilt_drinkbox->case_price = null;
+            $rebuilt_drinkbox->invoiced_at = null;
+            $rebuilt_drinkbox->save();
+            
+        } // foreach ($drinkboxes as $drinkbox)    
     
-                    SnackBox::where('id', $snackbox_entry->id)->update([
-                        'previous_delivery_week' => $lastDelivery,
-                        'next_delivery_week' => $snackbox_entry->next_delivery_week,
-                    ]);
-        
-                } //  end of if ($snackbox_entry->next_delivery_week < Carbon::now())    
-            } // foreach ($snackboxes as $snackbox_entry)
-        
-        // ---------- Drinkboxes ---------- //
-        
-        $drinkboxes = DrinkBox::whereIn('frequency', ['Weekly', 'Fortnightly', 'Monthly'])->get();                
-        
-        foreach ($drinkboxes as $drinkbox_entry) {
-        
-            if ($drinkbox_entry->next_delivery_week < Carbon::now()) {
-        
-                $lastDelivery = $drinkbox_entry->next_delivery_week;
-                
-                // Bit of repetition but atleast the names will be very clear... :)
-                $archived_entry_next_delivery = $drinkbox->next_delivery_date;
-                $archived_entry_previous_delivery = $drinkbox->previous_delivery_date;
-        
-                // this is the only line of code which will differ depending on when the frequency selected
-                if ($drinkbox_entry->frequency === 'Weekly') {
-                    // Push the date forward a week
-                    $drinkbox_entry->next_delivery_week = Carbon::parse($drinkbox_entry->next_delivery_week)->addWeek(1);
-        
-                } elseif ($drinkbox_entry->frequency === 'Fortnightly') {
-                    // push the date forward two weeks
-                    $drinkbox_entry->next_delivery_week = Carbon::parse($drinkbox_entry->next_delivery_week)->addWeek(2);
-        
-                } elseif ($drinkbox_entry->frequency === 'Monthly') {
-        
-                    // This will hold either the value first, second, third, forth or last.
-                     $week = $drinkbox_entry->week_in_month;
-                    // This will check the month of the last delivery and then advance by one month,
-                    // before saving that month as a string to be parsed later in $mondayOfMonth variable.
-                    $month = Carbon::parse($drinkbox_entry->next_delivery_week)->addMonth()->englishMonth;
-                    // Create new instance of Carbon to use as the primer for $carbon::parse() below.
-                    $carbon = new Carbon;
-                    // An alternative to setting the month above and parsing below would be to parse the phrase '$week . ' monday of NEXT month'
-                    // and allow it use the carbon date of when the function is run however I'm currently prefering this approach
-                    // as it weighs more heavily on the last delivery date rather than when processes are run.
-                    $mondayOfMonth = $carbon::parse($week . ' monday of ' . $month);
-                    // Set the newly parsed delivery date.
-                    $drinkbox_entry->next_delivery_week = $mondayOfMonth;
-        
-                } else {
-        
-                    // Nothing should get here as the frequency is a drop down (selection) of options, and we specifically grabbed only weekly, fortnightly, and monthly orders
-                }
-                
-                $converted_invoiced_at_date = new CarbonImmutable($drinkbox_entry->invoiced_at);
-                $converted_updated_at_date = new CarbonImmutable($drinkbox_entry->updated_at);
-                
-                if ($drinkbox_entry->is_active) {
-                    // As snackboxes are effectively destroyed and rebuilt empty each week, we only need to check that the invoiced_at date isn't null
-                    if ($drinkbox_entry->invoiced_at !== null) {
-                        // if we have an invoice date, this box has been processed but not emptied yet.
-                        // if that's the case we just need to create an inactive archive holding all the previous orders.
-                        // at least so long as the archive hasn't been created already
-                        
-                        // Unlike the previous 2 categories (fruitbox/milkbox) the snackbox_id will have multiple entries for the same next_delivery_week, 
-                        // however if we also combine the product_id, the entries should be unique.
-                        
-                        DrinkBoxArchive::updateOrInsert(
-                        [
-                            'drinkbox_id' => $drinkbox_entry->drinkbox_id,
-                            'next_delivery_date' => $archived_entry_next_delivery,
-                            'product_id' => $drinkbox_entry->product_id,
-                        ], 
-                        [
-                            'is_active' => 'Inactive',
-                            'id' => $drinkbox_entry->id,
-                            'delivered_by_id' => $drinkbox_entry->delivered_by_id,
-                            'no_of_boxes' => $drinkbox_entry->no_of_boxes,
-                            'snack_cap' => $drinkbox_entry->snack_cap,
-                            'type' => $drinkbox_entry->type,
-                            'company_details_id' => $drinkbox_entry->company_details_id,
-                            'delivery_day' => $drinkbox_entry->delivery_day,
-                            'frequency' => $drinkbox_entry->frequency,
-                            'week_in_month' => $drinkbox_entry->week_in_month,
-                            'previous_delivery_week' => $archived_entry_previous_delivery,
-                            'code' => $drinkbox_entry->code,
-                            'name' => $drinkbox_entry->name,
-                            'quantity' => $drinkbox_entry->quantity,
-                            'unit_price' => $drinkbox_entry->unit_price,
-                            'case_price' => $drinkbox_entry->case_price,
-                            'invoiced_at' => $drinkbox_entry->invoiced_at,
-                            'created_at' => $drinkbox_entry->created_at,
-                            'updated_at' => $drinkbox_entry->updated_at,
-                        ]);
-                        
-                    } else {
-                        // Same again if it hasn't been invoiced only this time we save it as active so it can be pulled into the next invoicing run for that branding theme.
-                        DrinkBoxArchive::updateOrInsert(
-                        [
-                            'drinkbox_id' => $drinkbox_entry->drinkbox_id,
-                            'next_delivery_date' => $archived_entry_next_delivery,
-                            'product_id' => $drinkbox_entry->product_id,
-                        ], 
-                        [
-                            'is_active' => 'Active',
-                            'id' => $drinkbox_entry->id,
-                            'delivered_by_id' => $drinkbox_entry->delivered_by_id,
-                            'no_of_boxes' => $drinkbox_entry->no_of_boxes,
-                            'snack_cap' => $drinkbox_entry->snack_cap,
-                            'type' => $drinkbox_entry->type,
-                            'company_details_id' => $drinkbox_entry->company_details_id,
-                            'delivery_day' => $drinkbox_entry->delivery_day,
-                            'frequency' => $drinkbox_entry->frequency,
-                            'week_in_month' => $drinkbox_entry->week_in_month,
-                            'previous_delivery_week' => $archived_entry_previous_delivery,
-                            'code' => $drinkbox_entry->code,
-                            'name' => $drinkbox_entry->name,
-                            'quantity' => $drinkbox_entry->quantity,
-                            'unit_price' => $drinkbox_entry->unit_price,
-                            'case_price' => $drinkbox_entry->case_price,
-                            'invoiced_at' => $drinkbox_entry->invoiced_at,
-                            'created_at' => $drinkbox_entry->created_at,
-                            'updated_at' => $drinkbox_entry->updated_at,
-                        ]);
-                    }
-                
-                
-                } else {
-                 // then we don't need to worry about it.
-                }
-                
-        
-                DrinkBox::where('id', $drinkbox_entry->id)->update([
-                    'previous_delivery_week' => $lastDelivery,
-                    'next_delivery_week' => $drinkbox_entry->next_delivery_week,
-                ]);
-        
-            } // if ($drinkbox_entry->next_delivery_week < Carbon::now())
-        } // foreach ($drinkboxes as $drinkbox_entry)
-        
+    
         // ---------- Otherboxes ---------- //
         
-        $otherboxes = OtherBox::whereIn('frequency', ['Weekly', 'Fortnightly', 'Monthly'])->get();                
+        $otherboxes = OtherBox::whereIn('frequency', ['Weekly', 'Fortnightly', 'Monthly'])->get()->groupBy('otherbox_id');                
         
-        foreach ($otherboxes as $otherbox_entry) {
-        
-            if ($otherbox_entry->next_delivery_week < Carbon::now()) {
-        
-                $lastDelivery = $otherbox_entry->next_delivery_week;
-                
-                // Bit of repetition but atleast the names will be very clear... :)
-                $archived_entry_next_delivery = $drinkbox->next_delivery_date;
-                $archived_entry_previous_delivery = $drinkbox->previous_delivery_date;
-        
-                // this is the only line of code which will differ depending on when the frequency selected
-                if ($otherbox_entry->frequency === 'Weekly') {
-                    // Push the date forward a week
-                    $otherbox_entry->next_delivery_week = Carbon::parse($otherbox_entry->next_delivery_week)->addWeek(1);
-        
-                } elseif ($otherbox_entry->frequency === 'Fortnightly') {
-                    // push the date forward two weeks
-                    $otherbox_entry->next_delivery_week = Carbon::parse($otherbox_entry->next_delivery_week)->addWeek(2);
-        
-                } elseif ($otherbox_entry->frequency === 'Monthly') {
-        
-                    // This will hold either the value first, second, third, forth or last.
-                     $week = $otherbox_entry->week_in_month;
-                    // This will check the month of the last delivery and then advance by one month,
-                    // before saving that month as a string to be parsed later in $mondayOfMonth variable.
-                    $month = Carbon::parse($otherbox_entry->next_delivery_week)->addMonth()->englishMonth;
-                    // Create new instance of Carbon to use as the primer for $carbon::parse() below.
-                    $carbon = new Carbon;
-                    // An alternative to setting the month above and parsing below would be to parse the phrase '$week . ' monday of NEXT month'
-                    // and allow it use the carbon date of when the function is run however I'm currently prefering this approach
-                    // as it weighs more heavily on the last delivery date rather than when processes are run.
-                    $mondayOfMonth = $carbon::parse($week . ' monday of ' . $month);
-                    // Set the newly parsed delivery date.
-                    $otherbox_entry->next_delivery_week = $mondayOfMonth;
-        
-                } else {
-        
-                    // Nothing should get here as the frequency is a drop down (selection) of options, and we specifically grabbed only weekly, fortnightly, and monthly orders
-                }
-                
-                $converted_invoiced_at_date = new CarbonImmutable($otherbox_entry->invoiced_at);
-                $converted_updated_at_date = new CarbonImmutable($otherbox_entry->updated_at);
-                
-                if ($otherbox_entry->is_active) {
-                    // As snackboxes are effectively destroyed and rebuilt empty each week, we only need to check that the invoiced_at date isn't null
-                    if ($otherbox_entry->invoiced_at !== null) {
-                        // if we have an invoice date, this box has been processed but not emptied yet.
-                        // if that's the case we just need to create an inactive archive holding all the previous orders.
-                        // at least so long as the archive hasn't been created already
-                        
-                        // Unlike the previous 2 categories (fruitbox/milkbox) the snackbox_id will have multiple entries for the same next_delivery_week, 
-                        // however if we also combine the product_id, the entries should be unique.
-                        
-                        OtherBoxArchive::updateOrInsert(
-                        [
-                            'otherbox_id' => $otherbox_entry->otherbox_id,
-                            'next_delivery_date' => $archived_entry_next_delivery,
-                            'product_id' => $otherbox_entry->product_id,
-                        ], 
-                        [
-                            'is_active' => 'Inactive',
-                            'id' => $otherbox_entry->id,
-                            'delivered_by_id' => $otherbox_entry->delivered_by_id,
-                            'no_of_boxes' => $otherbox_entry->no_of_boxes,
-                            'snack_cap' => $otherbox_entry->snack_cap,
-                            'type' => $otherbox_entry->type,
-                            'company_details_id' => $otherbox_entry->company_details_id,
-                            'delivery_day' => $otherbox_entry->delivery_day,
-                            'frequency' => $otherbox_entry->frequency,
-                            'week_in_month' => $otherbox_entry->week_in_month,
-                            'previous_delivery_week' => $archived_entry_previous_delivery,
-                            'code' => $otherbox_entry->code,
-                            'name' => $otherbox_entry->name,
-                            'quantity' => $otherbox_entry->quantity,
-                            'unit_price' => $otherbox_entry->unit_price,
-                            'case_price' => $otherbox_entry->case_price,
-                            'invoiced_at' => $otherbox_entry->invoiced_at,
-                            'created_at' => $otherbox_entry->created_at,
-                            'updated_at' => $otherbox_entry->updated_at,
-                        ]);
-                        
+        foreach ($otherboxes as $otherbox) {
+            
+            $otherbox_status_recovered = $otherbox[0]->is_active;
+            $otherbox_id_recovered = $otherbox[0]->otherbox_id;
+            $delivered_by_recovered = $otherbox[0]->delivered_by_id;
+            $delivery_day_recovered = $otherbox[0]->delivery_day;
+            $no_of_boxes_recovered = $otherbox[0]->no_of_boxes;
+            $type_recovered = $otherbox[0]->type;
+            $company_details_id_recovered = $otherbox[0]->company_details_id;
+            $frequency_recovered = $otherbox[0]->frequency;
+            $week_in_month_recovered = $otherbox[0]->week_in_month;
+            
+            // while the next delivery date is calculated below I'm going to do it here (either as well, or use this to replace the Carbon::parsing below).
+            
+            if ($frequency_recovered === 'Weekly') {
+                // Push the date forward a week
+                $advanced_next_delivery_week = Carbon::parse($otherbox[0]->next_delivery_week)->addWeek(1);
+
+            } elseif ($frequency_recovered === 'Fortnightly') {
+                // push the date forward two weeks
+                $advanced_next_delivery_week = Carbon::parse($otherbox[0]->next_delivery_week)->addWeek(2);
+
+            } elseif ($frequency_recovered === 'Monthly') {
+
+                // This will hold either the value first, second, third, forth or last.
+                $week = $otherbox[0]->week_in_month;
+                // This will check the month of the last delivery and then advance by one month,
+                // before saving that month as a string to be parsed later in $mondayOfMonth variable.
+                $month = Carbon::parse($otherbox[0]->next_delivery_week)->addMonth()->englishMonth;
+                // Create new instance of Carbon to use as the primer for $carbon::parse() below.
+                $carbon = new Carbon;
+                // An alternative to setting the month above and parsing below would be to parse the phrase '$week . ' monday of NEXT month'
+                // and allow it use the carbon date of when the function is run however I'm currently prefering this approach
+                // as it weighs more heavily on the last delivery date rather than when processes are run.
+                $mondayOfMonth = $carbon::parse($week . ' monday of ' . $month);
+                // Set the newly parsed delivery date.
+                $advanced_next_delivery_week = $mondayOfMonth;
+
+            } else {
+
+                // Nothing should get here as the frequency is a drop down (selection) of options, and we specifically grabbed only weekly, fortnightly, and monthly orders
+            }
+            
+            
+            
+            foreach ($otherbox as $otherbox_entry) {
+            
+                if ($otherbox_entry->next_delivery_week < Carbon::now()) {
+            
+                    $lastDelivery = $otherbox_entry->next_delivery_week;
+                    
+                    // Bit of repetition but atleast the names will be very clear... :)
+                    $archived_entry_next_delivery = $otherbox_entry->next_delivery_week;
+                    $archived_entry_previous_delivery = $otherbox_entry->previous_delivery_week;
+            
+                    // this is the only line of code which will differ depending on when the frequency selected
+                    if ($otherbox_entry->frequency === 'Weekly') {
+                        // Push the date forward a week
+                        $otherbox_entry->next_delivery_week = Carbon::parse($otherbox_entry->next_delivery_week)->addWeek(1);
+            
+                    } elseif ($otherbox_entry->frequency === 'Fortnightly') {
+                        // push the date forward two weeks
+                        $otherbox_entry->next_delivery_week = Carbon::parse($otherbox_entry->next_delivery_week)->addWeek(2);
+            
+                    } elseif ($otherbox_entry->frequency === 'Monthly') {
+            
+                        // This will hold either the value first, second, third, forth or last.
+                         $week = $otherbox_entry->week_in_month;
+                        // This will check the month of the last delivery and then advance by one month,
+                        // before saving that month as a string to be parsed later in $mondayOfMonth variable.
+                        $month = Carbon::parse($otherbox_entry->next_delivery_week)->addMonth()->englishMonth;
+                        // Create new instance of Carbon to use as the primer for $carbon::parse() below.
+                        $carbon = new Carbon;
+                        // An alternative to setting the month above and parsing below would be to parse the phrase '$week . ' monday of NEXT month'
+                        // and allow it use the carbon date of when the function is run however I'm currently prefering this approach
+                        // as it weighs more heavily on the last delivery date rather than when processes are run.
+                        $mondayOfMonth = $carbon::parse($week . ' monday of ' . $month);
+                        // Set the newly parsed delivery date.
+                        $otherbox_entry->next_delivery_week = $mondayOfMonth;
+            
                     } else {
-                        // Same again if it hasn't been invoiced only this time we save it as active so it can be pulled into the next invoicing run for that branding theme.
-                        OtherBoxArchive::updateOrInsert(
-                        [
-                            'otherbox_id' => $otherbox_entry->otherbox_id,
-                            'next_delivery_date' => $archived_entry_next_delivery,
-                            'product_id' => $otherbox_entry->product_id,
-                        ], 
-                        [
-                            'is_active' => 'Active',
-                            'id' => $otherbox_entry->id,
-                            'delivered_by' => $otherbox_entry->delivered_by,
-                            'no_of_boxes' => $otherbox_entry->no_of_boxes,
-                            'snack_cap' => $otherbox_entry->snack_cap,
-                            'type' => $otherbox_entry->type,
-                            'company_details_id' => $otherbox_entry->company_details_id,
-                            'delivery_day' => $otherbox_entry->delivery_day,
-                            'frequency' => $otherbox_entry->frequency,
-                            'week_in_month' => $otherbox_entry->week_in_month,
-                            'previous_delivery_week' => $archived_entry_previous_delivery,
-                            'code' => $otherbox_entry->code,
-                            'name' => $otherbox_entry->name,
-                            'quantity' => $otherbox_entry->quantity,
-                            'unit_price' => $otherbox_entry->unit_price,
-                            'case_price' => $otherbox_entry->case_price,
-                            'invoiced_at' => $otherbox_entry->invoiced_at,
-                            'created_at' => $otherbox_entry->created_at,
-                            'updated_at' => $otherbox_entry->updated_at,
-                        ]);
+            
+                        // Nothing should get here as the frequency is a drop down (selection) of options, and we specifically grabbed only weekly, fortnightly, and monthly orders
                     }
-                
-                } else {
-                 // then we don't need to worry about it.
-                }
-                
-        
-                OtherBox::where('id', $otherbox_entry->id)->update([
-                    'previous_delivery_week' => $lastDelivery,
-                    'next_delivery_week' => $otherbox_entry->next_delivery_week,
-                ]);
-        
-            } // if ($otherbox_entry->next_delivery_week < Carbon::now())
-        } // foreach ($otherboxes as $otherbox_entry)
+                    
+                    $converted_invoiced_at_date = new CarbonImmutable($otherbox_entry->invoiced_at);
+                    $converted_updated_at_date = new CarbonImmutable($otherbox_entry->updated_at);
+                    
+                    if ($otherbox_entry->is_active) {
+                        // As snackboxes are effectively destroyed and rebuilt empty each week, we only need to check that the invoiced_at date isn't null
+                        if ($otherbox_entry->invoiced_at !== null) {
+                            // if we have an invoice date, this box has been processed but not emptied yet.
+                            // if that's the case we just need to create an inactive archive holding all the previous orders.
+                            // at least so long as the archive hasn't been created already
+                            
+                            // Unlike the previous 2 categories (fruitbox/milkbox) the snackbox_id will have multiple entries for the same next_delivery_week, 
+                            // however if we also combine the product_id, the entries should be unique.
+                            
+                            OtherBoxArchive::updateOrInsert(
+                            [
+                                'otherbox_id' => $otherbox_entry->otherbox_id,
+                                'next_delivery_week' => $archived_entry_next_delivery,
+                                'product_id' => $otherbox_entry->product_id,
+                            ], 
+                            [
+                                'is_active' => 'Inactive',
+                                'id' => $otherbox_entry->id,
+                                'delivered_by_id' => $otherbox_entry->delivered_by_id,
+                                //'no_of_boxes' => $otherbox_entry->no_of_boxes,
+                                'type' => $otherbox_entry->type,
+                                'company_details_id' => $otherbox_entry->company_details_id,
+                                'delivery_day' => $otherbox_entry->delivery_day,
+                                'frequency' => $otherbox_entry->frequency,
+                                'week_in_month' => $otherbox_entry->week_in_month,
+                                'previous_delivery_week' => $archived_entry_previous_delivery,
+                                'code' => $otherbox_entry->code,
+                                'name' => $otherbox_entry->name,
+                                'quantity' => $otherbox_entry->quantity,
+                                'unit_price' => $otherbox_entry->unit_price,
+                                'case_price' => $otherbox_entry->case_price,
+                                'invoiced_at' => $otherbox_entry->invoiced_at,
+                                'created_at' => $otherbox_entry->created_at,
+                                'updated_at' => $otherbox_entry->updated_at,
+                            ]);
+                            
+                        } else {
+                            // Same again if it hasn't been invoiced only this time we save it as active so it can be pulled into the next invoicing run for that branding theme.
+                            OtherBoxArchive::updateOrInsert(
+                            [
+                                'otherbox_id' => $otherbox_entry->otherbox_id,
+                                'next_delivery_week' => $archived_entry_next_delivery,
+                                'product_id' => $otherbox_entry->product_id,
+                            ], 
+                            [
+                                'is_active' => 'Active',
+                                'id' => $otherbox_entry->id,
+                                'delivered_by_id' => $otherbox_entry->delivered_by_id,
+                                //'no_of_boxes' => $otherbox_entry->no_of_boxes,
+                                'type' => $otherbox_entry->type,
+                                'company_details_id' => $otherbox_entry->company_details_id,
+                                'delivery_day' => $otherbox_entry->delivery_day,
+                                'frequency' => $otherbox_entry->frequency,
+                                'week_in_month' => $otherbox_entry->week_in_month,
+                                'previous_delivery_week' => $archived_entry_previous_delivery,
+                                'code' => $otherbox_entry->code,
+                                'name' => $otherbox_entry->name,
+                                'quantity' => $otherbox_entry->quantity,
+                                'unit_price' => $otherbox_entry->unit_price,
+                                'case_price' => $otherbox_entry->case_price,
+                                'invoiced_at' => $otherbox_entry->invoiced_at,
+                                'created_at' => $otherbox_entry->created_at,
+                                'updated_at' => $otherbox_entry->updated_at,
+                            ]);
+                        }
+                    
+                    } else {
+                     // then we don't need to worry about it.
+                    }
+                    
+                    OtherBox::destroy($otherbox_entry->id);
+            
+                } // if ($otherbox_entry->next_delivery_week < Carbon::now())
+            } // foreach ($otherbox as $otherbox_entry)
+            
+            // Right so now the box has been backed up as an archive and deleted (!), let's recreate it again ready for reuse (phew) :)
+            $rebuilt_otherbox = new OtherBox();
+            $rebuilt_otherbox->is_active = $otherbox_status_recovered;
+            $rebuilt_otherbox->otherbox_id = $otherbox_id_recovered;
+            $rebuilt_otherbox->delivered_by_id = $delivered_by_recovered;
+            $rebuilt_otherbox->delivery_day = $delivery_day_recovered;
+            // $rebuilt_otherbox->no_of_boxes = $no_of_boxes_recovered;
+            $rebuilt_otherbox->type = $type_recovered;
+            $rebuilt_otherbox->company_details_id = $company_details_id_recovered;
+            $rebuilt_otherbox->frequency = $frequency_recovered;
+            $rebuilt_otherbox->week_in_month = $week_in_month_recovered;
+            $rebuilt_otherbox->previous_delivery_week = $otherbox[0]->next_delivery_week;
+            $rebuilt_otherbox->next_delivery_week = $advanced_next_delivery_week;
+            $rebuilt_otherbox->product_id = 0;
+            $rebuilt_otherbox->code = null;
+            $rebuilt_otherbox->name = null;
+            $rebuilt_otherbox->quantity = null;
+            $rebuilt_otherbox->unit_price = null;
+            $rebuilt_otherbox->case_price = null;
+            $rebuilt_otherbox->invoiced_at = null;
+            $rebuilt_otherbox->save();
+            
+            
+        } // foreach ($otherboxes as $otherbox)
         
         // ---------- Bespoke ---------- //
 
             // This may be easier to leave as a manual date field where we select a date when they need a delivery.
+            
+            return back(); // <-- This took me back to the homepage, not to the previous page... curious.
+            
     }
     
     // This looks like the earlier form of a full routing function, I think when I created the CompanyRoutes Contoller I copied and continued this development there.

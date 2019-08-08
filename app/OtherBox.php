@@ -12,7 +12,7 @@ class OtherBox extends Model
         'otherbox_id',
         'is_active',
         'delivered_by_id',
-        'no_of_boxes',
+        // 'no_of_boxes',
         'type',
         // Company Info
         'company_details_id',

@@ -46,9 +46,13 @@ Route::post('/login/warehouse', 'Auth\LoginController@warehouseLogin');
 Route::view('/office', 'office')->middleware('auth:office')->name('office');
 Route::view('/warehouse', 'warehouse')->middleware('auth:warehouse')->name('warehouse');
 
+// Passport authentication
+Route::view('passport', 'passport')->name('passport');
+
 // Only those with office authentication can access these routes.
 // All routes contained here now have the prefix 'office' to clearly indicate the login access needed to visit the url.
 Route::group(['middleware' => ['web','auth:office'], 'prefix' => 'office'], function () {
+
 
     // Add a new company
     Route::view('companies/new', 'new-company')->name('company.new');

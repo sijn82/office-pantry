@@ -3,7 +3,8 @@
         <!-- <ul> -->
             <div id="edit-save-buttons">
                 <h4> {{ archived_fruitbox.name }} </h4>
-                <p class="date-delivered"> {{ archived_fruitbox.next_delivery }} </p>
+                <!-- <p class="date-delivered"> {{ archived_fruitbox.next_delivery }} </p> -->
+                <h5> {{ archived_fruitbox.next_delivery }} </h5>
                 <p> {{ archived_fruitbox.delivery_day }} - {{ archived_fruitbox.is_active }} </p>
                 <b-button variant="primary" @click="showDetails()"> Details </b-button>
                 <b-button variant="warning" @click="enableEdit()"> Edit </b-button>

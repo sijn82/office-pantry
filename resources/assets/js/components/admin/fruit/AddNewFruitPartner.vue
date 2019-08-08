@@ -178,7 +178,7 @@ export default {
                 changes_action: '',
                 status: '',
                 no_of_customers: '',
-                use_op_boxes: '',
+                use_op_boxes: null,
                 additional_info: '',
             },
             show: true,
@@ -191,7 +191,7 @@ export default {
           evt.preventDefault();
           let self = this;
           // alert(JSON.stringify(this.form));
-          axios.post('/api/office-pantry/fruit_partners/add-new-fruitpartner', {
+          axios.post('/api/office-pantry/fruit-partners/add-new-fruitpartner', {
               fruit_partner: self.form,
               headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
               // user_id: self.userData.id // This hasn't been setup yet so proabably won't work yet?!

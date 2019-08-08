@@ -249,7 +249,7 @@ export const store = new Vuex.Store({
             });
         },
         getFruitPartners (state) {
-            axios.get('/api/office-pantry/fruit_partners/select').then( response => {
+            axios.get('/api/office-pantry/fruit-partners/select').then( response => {
                 response.data.forEach( element => {
                     console.log(element);
                     var check = state.fruit_partners_list.findIndex( list => list.id == element.id)

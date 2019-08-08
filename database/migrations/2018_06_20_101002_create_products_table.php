@@ -18,16 +18,17 @@ class CreateProductsTable extends Migration
             $table->string('is_active')->default('Active');
             $table->string('code')->unique();
             $table->string('name')->unique();
-            $table->decimal('case_price', 8, 2);
+            $table->decimal('purchase_case_price', 8, 2);
+            $table->decimal('retail_case_price', 8, 2)->nullable();
             $table->integer('case_size');
-            $table->decimal('unit_cost', 8, 4);
-            $table->decimal('unit_price', 8, 2);
+            $table->decimal('unit_cost', 8, 2)->nullable();
+            $table->decimal('unit_price', 8, 2)->nullable();
             $table->string('vat');
-            $table->string('sales_nominal');
-            $table->string('cost_nominal')->nullable();
-            $table->decimal('profit_margin', 8, 4);
-            $table->integer('stock_level');
+            $table->decimal('profit_margin', 8, 2)->nullable(); // While this field is automatically calculated, wholesale case prices may bypass the necessary unit price field.
+            $table->integer('stock_level')->nullable();
             $table->date('shortest_stock_date')->nullable();
+            $table->string('sales_nominal');
+            // $table->string('cost_nominal')->nullable(); // Not used so may as well remove.
             $table->timestamps();
         });
     }

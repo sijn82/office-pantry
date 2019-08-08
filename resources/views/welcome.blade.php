@@ -137,6 +137,7 @@
                     @yield('invoice-options')
                     @yield('cron')
                     @yield('imports')
+                    @yield('passport')
                  </div>
             </div>
         </div>

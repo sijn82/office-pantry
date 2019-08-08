@@ -736,9 +736,6 @@ class SnackBoxController extends Controller
         // If stock levels were adjusted in the box creation we need to
         // return the stock from removed entries and subtract the stock from added ones.
 
-        //dd(request('snackbox_details'));
-        // dump();
-        Product::find(request('product.id'))->decrement('stock_level', request('product.quantity'));
 
         $addProduct = new SnackBox();
         $addProduct->snackbox_id = request('snackbox_details.snackbox_id');
@@ -760,6 +757,10 @@ class SnackBoxController extends Controller
         $addProduct->unit_price = request('product.unit_price');
         $addProduct->case_price = request('product.case_price');
         $addProduct->save();
+        
+        // Looks I found a neat one liner to sort out reducing stock levels - I'm also guessing 'increment' will sort out returning stock too.
+        // Just in case there's a problem saving the new product, we'll only worry about reducing the stock levels if we get this far without hitting an error.
+        Product::find(request('product.id'))->decrement('stock_level', request('product.quantity'));
     }
 
     /**
