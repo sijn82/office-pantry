@@ -55,84 +55,110 @@ class InvoicingController extends Controller
         return \Excel::download(new Exports\WeeklyInvoicesExport(), 'weekly_invoicing-' . $this->week_start . '.csv');
     }
     
+    
+    // There's a tempation to have this function do more than just apply an invoice date but should it?
+    // I'm thinking I could also make archived files 'Inactive' at this point so they can drop off subsequent searches, as we don't really need them for anything anymore.
     public function confirm_weekly_invoicing()
     {
         // This is the same query used in running the weekly invoices so we should be catching the exact same orders.
         // I will have to check to make sure this is as absolute as I think, and that any change made in one is also made in the other.
         // What could go wrong.
         
-        $companies = CompanyDetails::where('is_active', 'Active')->with([
-            'fruitbox' => function ($query) {
-                $query->where('is_active', 'Active')->where('next_delivery', $this->week_start);
-            },
-            // Now we need to check the fruitbox archives for any boxes that have been updated before invoicing,
-            // their status will remain active as there is still work to be done with these box details.
-            // If the status is inactive, this means the box was invoiced prior to being updated and is now only needed for our records.
-            'fruitbox_archive' => function ($query) {
-                $query->where('is_active', 'Active')->where('next_delivery', $this->week_start);
-            },
-            'milkbox' => function ($query) {
-                $query->where('is_active', 'Active')->where('next_delivery', $this->week_start);
-            },
-            'milkbox_archive' => function ($query) {
-                $query->where('is_active', 'Active')->where('next_delivery', $this->week_start);
-            },
-            // Milkbox archive check will go here...
-            'snackboxes' => function ($query) {
-                $query->where('is_active', 'Active')->where('next_delivery_week', $this->week_start);
-            },
-            // Snackbox archive will go here...
-            'drinkboxes' => function ($query) {
-                $query->where('is_active', 'Active')->where('next_delivery_week', $this->week_start);
-            },
-            // Drinkbox archive will go here...
-            'otherboxes' => function ($query) {
-                $query->where('is_active', 'Active')->where('next_delivery_week', $this->week_start);
-            }
-            // , and finally the otherbox archive check will go here.
-            ])->get();
-            
+        
+        $companies = CompanyDetails::where('is_active', 'Active')
+                                    ->whereIn('branding_theme', ['BACS', 'GoCardless', 'Paypal (Stripe)', 'Weekly Standing Order', 'Eden Branding Theme']) // <-- Still need to get confirmation on these!
+                                    ->with([
+                                            'fruitbox' => function ($query) {
+                                                $query->where('is_active', 'Active')->where('next_delivery', $this->week_start);
+                                            },
+                                            'fruitbox_archive' => function ($query) {
+                                                $query->where('is_active', 'Active')->where('next_delivery', $this->week_start);
+                                            },
+                                            'milkbox' => function ($query) {
+                                                $query->where('is_active', 'Active')->where('next_delivery', $this->week_start);
+                                            },
+                                            'milkbox_archive' => function ($query) {
+                                                $query->where('is_active', 'Active')->where('next_delivery', $this->week_start);
+                                            },
+                                            'snackboxes' => function ($query) {
+                                                $query->where('is_active', 'Active')->where('next_delivery_week', $this->week_start);
+                                            },
+                                            'snackbox_archive' => function ($query) {
+                                                $query->where('is_active', 'Active')->where('next_delivery_week', $this->week_start);
+                                            },
+                                            'drinkboxes' => function ($query) {
+                                                $query->where('is_active', 'Active')->where('next_delivery_week', $this->week_start);
+                                            },
+                                            'drinkbox_archive' => function ($query) {
+                                                $query->where('is_active', 'Active')->where('next_delivery_week', $this->week_start);
+                                            },
+                                            'otherboxes' => function ($query) {
+                                                $query->where('is_active', 'Active')->where('next_delivery_week', $this->week_start);
+                                            },
+                                            'otherbox_archive' => function ($query) {
+                                                $query->where('is_active', 'Active')->where('next_delivery_week', $this->week_start);
+                                            }
+                                    ])->get();
             
             // dd($companies);
+            
+            //----- Grab current date for invoiced_at field -----//
             
             // Let's grab today's (relative to when invoice confirmation function is run) date without any formatting, to maximise its reuse.
             $date = CarbonImmutable::now('Europe/London');
 
             // Invoice date is just the day the invoice function is run.
-             $invoice_date = $date->format('Y-m-d');
+            $invoice_date = $date->format('Y-m-d');
+             
+            //----- Loop through each company with qualifying orders -----//
             
             foreach ($companies as $company) {
                 
+                //----- Fruitboxes -----//
+                dump($company->fruitbox);
+                
                 foreach ($company->fruitbox as $fruitbox) {
                     // As this is from the active fruitboxes (not archived), we might want to reuse this order for their next delivery - so let's just add an 'invoiced_at' date to the entry.
-                    $fruitbox->invoiced_at = $date;
+                    // $fruitbox->invoiced_at = $date; // <-- Why was I not using the invoice date for this?  I'm going to chnage them all to $invoice_Date but keeping this here as reference.
+                    $fruitbox->invoiced_at = $invoice_date;
                     $fruitbox->save();
                     
-                    dump($fruitbox);
+                    //dump($fruitbox);
                 }
+                
+                //----- Archived Fruitboxes -----//
                 
                 foreach ($company->fruitbox_archive as $fruitbox_archive) {
                     // As this is from the archive, their current order has now changed.  In this case we can make the box inactive as well as adding the 'invoiced_at' date.
-                    $fruitbox_archive->invoiced_at = $date;
+                    $fruitbox_archive->invoiced_at = $invoice_date;
                     $fruitbox_archive->is_active = 'Inactive';
                     $fruitbox_archive->save();
                     
-                    dump($fruitbox_archive);
+                    //dump($fruitbox_archive);
                 }
+                
+                //----- Milkboxes -----//
+                dump($company->milkbox);
                 
                 foreach ($company->milkbox as $milkbox) {
-                    $milkbox->invoiced_at = $date;
+                    $milkbox->invoiced_at = $invoice_date;
                     $milkbox->save();
                     
-                    dump($milkbox);
+                    //dump($milkbox);
                 }
                 
+                //----- Archived Milkboxes -----//
+                //dd($company->milkbox_archive);
+                
                 foreach ($company->milkbox_archive as $milkbox_archive) {
-                    $milkbox_archive->invoiced_at = $date;
+                    $milkbox_archive->invoiced_at = $invoice_date;
+                    $milkbox_archive->is_active = 'Inactive';
                     $milkbox_archive->save();
                     
-                    dump($milkbox_archive);
+                    //dump($milkbox_archive);
                 }
+                
+                //----- Snackboxes -----//
                 
                 foreach ($company->snackboxes->groupBy('snackbox_id') as $snackbox) {
                     
@@ -142,25 +168,114 @@ class InvoicingController extends Controller
                     foreach ($snackbox as $snackbox_item) {
                         if ($snackbox_item->product_id === 0) {
                             // Then we can ignore it as there was nothing to invoice.
+                            // 9/8/19 Edit: OR SHOULD WE DELETE IT TO PREVENT THESE ENTRIES BUILDING UP IN THE BACKGROUND?
+                            // MIND YOU ARCHIVE AND EMPTY WILL STRIP THESE OUT WEEKLY ANYWAY? HMMN...
                         } else {
                             // Otherwise let's slap an 'invoiced_at' date on there and save it.
-                            $snackbox_item->invoiced_at = $date;
+                            $snackbox_item->invoiced_at = $invoice_date;
                             $snackbox_item->save();
                             
-                            dump($snackbox_item);
+                        //    dump($snackbox_item);
                         }
                     }
                     // dump($snackbox);
                 }
                 
-                foreach ($company->drinkboxes as $drinkbox) {
-                    dd($drinkbox);
+                //----- Archived Snackboxes -----//
+                
+                foreach ($company->snackbox_archive->groupBy('snackbox_id') as $snackbox_archive) {
+                    
+                    // Do we want to add an invoice date to boxes that are effectively empty?
+                    // These would be a $snackbox that has a single entry with a 'product_id' of 0.
+                    // NOPE... well let's say no for now.
+                    foreach ($snackbox_archive as $snackbox_archive_item) {
+                        if ($snackbox_archive_item->product_id === 0) {
+                            // Then we can ignore it as there was nothing to invoice.
+                            // Nope if we do nothing with this one then the box will continue to appear in the archived boxes feed,
+                            // which would serve no useful purpose that I can think of?
+                            $snackbox_archive_item->is_active = 'Inactive';
+                        } else {
+                            // Otherwise let's slap an 'invoiced_at' date on there and save it.
+                            $snackbox_archive_item->invoiced_at = $invoice_date;
+                            $snackbox_archive_item->is_active = 'Inactive';
+                            $snackbox_archive_item->save();
+                            
+                        //    dump($snackbox_archive_item);
+                        }
+                    }
+                    // dump($snackbox);
                 }
                 
-                foreach ($company->otherboxes as $otherbox) {
+                //----- Drinkboxes -----//
                 
+                foreach ($company->drinkboxes->groupBy('drinkbox_id') as $drinkbox) {
+                    // dd($drinkbox);
+                    foreach ($drinkbox as $drinkbox_item) {
+                        // OK so for consistency I'm going add this for now but it's kinda pointless, 
+                        // but then adding an invoice date to items which haven't been invoiced is also WRONG!.
+                        if ($drinkbox_item->product_id === 0) {
+                            // Currently do nothing? Yeah, ok.
+                        } else {
+                            $drinkbox_item->invoiced_at = $invoice_date;
+                            $drinkbox_item->save();
+                        }
+                    }
                 }
-            }
+                
+                //----- Archived Drinkboxes -----//
+                
+                foreach ($company->drinkbox_archive->groupBy('drinkbox_id') as $drinkbox_archive) {
+                    // dd($drinkbox_archive);
+                    foreach ($drinkbox_archive as $drinkbox_archive_item) {
+                        // OK so for consistency I'm going add this for now but it's kinda pointless, 
+                        // but then adding an invoice date to items which haven't been invoiced is also WRONG!.
+                        if ($drinkbox_archive_item->product_id === 0) {
+                            // Currently do nothing? Yeah alright let's deactivate them at least.
+                            $drinkbox_archive_item->is_active = 'Inactive';
+                        } else {
+                            $drinkbox_archive_item->invoiced_at = $invoice_date;
+                            $drinkbox_archive_item->is_active = 'Inactive';
+                            $drinkbox_archive_item->save();
+                        }
+                    }
+                }
+                
+                //----- Otherboxes -----//
+                
+                foreach ($company->otherboxes->groupBy('otherbox_id') as $otherbox) {
+                    // dd($otherbox);
+                    foreach ($otherbox as $otherbox_item) {
+                        // OK so for consistency I'm going add this for now but it's kinda pointless, 
+                        // but then adding an invoice date to items which haven't been invoiced is also WRONG!.
+                        if ($otherbox_item->product_id === 0) {
+                            // Currently do nothing? Yeah, ok.
+                        } else {
+                            $otherbox_item->invoiced_at = $invoice_date;
+                            $otherbox_item->save();
+                        }
+                    }
+                }
+                
+                //----- Archived Otherboxes -----//
+                
+                foreach ($company->otherbox_archive->groupBy('otherbox_id') as $otherbox_archive) {
+                    // dd($otherbox_archive);
+                    foreach ($otherbox_archive as $otherbox_archive_item) {
+                        // OK so for consistency I'm going add this for now but it's kinda pointless, 
+                        // but then adding an invoice date to items which haven't been invoiced is also WRONG!.
+                        if ($otherbox_archive_item->product_id === 0) {
+                            // Currently do nothing? Yeah alright let's deactivate them at least.
+                            $otherbox_archive_item->is_active = 'Inactive';
+                        } else {
+                            $otherbox_archive_item->invoiced_at = $invoice_date;
+                            $otherbox_archive_item->is_active = 'Inactive';
+                            $otherbox_archive_item->save();
+                        }
+                    }
+                }
+                
+            } // End of foreach ($companies as $company)
+            return redirect('office');
     }
 
     // This weekly_invoicing function has been moved to Exports folder and now results in a csv file.

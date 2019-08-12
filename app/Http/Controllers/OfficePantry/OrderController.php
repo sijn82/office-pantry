@@ -245,7 +245,7 @@ class OrderController extends Controller
                                     'root_ginger' => $fruitbox->root_ginger,
                                     'tailoring_fee' => $fruitbox->tailoring_fee,
                                     'discount_multiple' => $fruitbox->discount_multiple,
-                                    'invoiced_at' => $fruitbox->invoiced_at,
+                                    'invoiced_at' => $fruitbox->invoiced_at, // This might prove a useful field, to sense check at least, that the order was indeed invoiced.  Although the due dat will be different.
                                     'created_at' => $fruitbox->created_at,
                                     'updated_at' => $fruitbox->updated_at // this may not be worth updating as it'll be changed on creation?
                                 ]
@@ -296,7 +296,7 @@ class OrderController extends Controller
                                     'root_ginger' => $fruitbox->root_ginger,
                                     'tailoring_fee' => $fruitbox->tailoring_fee,
                                     'discount_multiple' => $fruitbox->discount_multiple,
-                                    'invoiced_at' => $fruitbox->invoiced_at,
+                                    'invoiced_at' => $fruitbox->invoiced_at,  
                                     'created_at' => $fruitbox->created_at,
                                     'updated_at' => $fruitbox->updated_at // this may not be worth updating as it'll be changed on creation?
                                 ]
@@ -418,6 +418,8 @@ class OrderController extends Controller
                                 'milk_1l_alt_rice' => $milkbox->milk_1l_alt_rice,
                                 'milk_1l_alt_cashew' => $milkbox->milk_1l_alt_cashew,
                                 'milk_1l_alt_lactose_free_semi' => $milkbox->milk_1l_alt_lactose_free_semi,
+                                // Invoiced At Date
+                                'invoiced_at' => $milkbox->invoiced_at,
                             ]);
                         
                         } else {
@@ -464,6 +466,8 @@ class OrderController extends Controller
                                 'milk_1l_alt_rice' => $milkbox->milk_1l_alt_rice,
                                 'milk_1l_alt_cashew' => $milkbox->milk_1l_alt_cashew,
                                 'milk_1l_alt_lactose_free_semi' => $milkbox->milk_1l_alt_lactose_free_semi,
+                                // Invoiced At Date
+                                'invoiced_at' => $milkbox->invoiced_at,
                             ]);
                             
                         }
@@ -688,7 +692,7 @@ class OrderController extends Controller
                 $rebuilt_snackbox->quantity = null;
                 $rebuilt_snackbox->unit_price = null;
                 $rebuilt_snackbox->case_price = null;
-                $rebuilt_snackbox->invoiced_at = null;
+                $rebuilt_snackbox->invoiced_at = null; // We could keep a record of the last time this box was invoiced or return it to null.  It looks like I'm going with null... subject to change.
                 $rebuilt_snackbox->save();
                 
             } // end of foreach ($snackboxes as $snackbox)
@@ -878,7 +882,7 @@ class OrderController extends Controller
             $rebuilt_drinkbox->quantity = null;
             $rebuilt_drinkbox->unit_price = null;
             $rebuilt_drinkbox->case_price = null;
-            $rebuilt_drinkbox->invoiced_at = null;
+            $rebuilt_drinkbox->invoiced_at = null; // We could keep a record of the last time this box was invoiced or return it to null.  It looks like I'm going with null... subject to change.
             $rebuilt_drinkbox->save();
             
         } // foreach ($drinkboxes as $drinkbox)    

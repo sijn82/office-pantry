@@ -391,7 +391,8 @@ export default {
               { text: 'Please select an option', value: null },
               'BACS', 'GoCardless', 'GoCardless In Advance', 'Invoiced In Advance',
               'Monthly Invoice', 'Monthly Invoice GoCardless', 'Paypal (Stripe)', 'Paypal In Advance (Stripe)',
-              'Standing Order', 'TBC'
+              'Weekly Standing Order', 'Monthly Standing Order', 'Weekly Standing Order In Advance', 
+              'Monthly Standing Order In Advance', 'Eden Branding Theme', 'TBC'
             ],
             model_options: ['Free', 'Honesty Box'],
             status: ['Active', 'Inactive'],

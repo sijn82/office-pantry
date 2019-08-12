@@ -19,9 +19,13 @@
                         </div>
                     </b-col>
                     <b-col class="col-sm-4">
-                        <label><b> Fruitbox Company ID </b></label>
+                        <!-- <label><b> Fruitbox Company ID </b></label>
                         <div>
                             <p> {{ fruitbox.company_details_id }} </p>
+                        </div> -->
+                        <label><b> Fruitbox Type </b></label>
+                        <div>
+                            <p> {{ fruitbox.type }} </p>
                         </div>
                     </b-col>
                     <b-col class="col-sm-4">

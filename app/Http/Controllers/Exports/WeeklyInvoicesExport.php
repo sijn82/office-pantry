@@ -73,7 +73,7 @@ WithTitle
         // I NEED TO FILTER BY BRANDING THEMES.  EXCLUDING MONTHLY ORDERS WHICH WILL BE HANDLED BY A MONTHLY INVOICES EXPORT FUNCTION.
         
         // These options passed into the whereIn clause are (or should hopefully be) all the weekly payment orders for invoicing.
-        $companies = CompanyDetails::where('is_active', 'Active')->whereIn('branding_theme', ['BACS', 'GoCardless', 'Paypal (Stripe)', 'Weekly Standing Order'])->with([
+        $companies = CompanyDetails::where('is_active', 'Active')->whereIn('branding_theme', ['BACS', 'GoCardless', 'Paypal (Stripe)', 'Weekly Standing Order', 'Eden Branding Theme'])->with([
             'fruitbox' => function ($query) {
                 $query->where('is_active', 'Active')->where('next_delivery', $this->week_start);
             },
@@ -91,22 +91,25 @@ WithTitle
             'milkbox_archive' => function ($query) {
                 $query->where('is_active', 'Active')->where('next_delivery', $this->week_start);
             },
-            // Milkbox archive check will go here...
             'snackboxes' => function ($query) {
                 $query->where('is_active', 'Active')->where('next_delivery_week', $this->week_start);
             },
             'snackbox_archive' => function ($query) {
                 $query->where('is_active', 'Active')->where('next_delivery_week', $this->week_start);
             },
-            // Snackbox archive will go here...
             'drinkboxes' => function ($query) {
                 $query->where('is_active', 'Active')->where('next_delivery_week', $this->week_start);
             },
             // Drinkbox archive will go here...
+            'drinkbox_archive' => function ($query) {
+                $query->where('is_active', 'Active')->where('next_delivery_week', $this->week_start);
+            },
             'otherboxes' => function ($query) {
                 $query->where('is_active', 'Active')->where('next_delivery_week', $this->week_start);
+            },
+            'otherbox_archive' => function ($query) {
+                $query->where('is_active', 'Active')->where('next_delivery_week', $this->week_start);
             }
-            // , and finally the otherbox archive check will go here.
             ])->get();
             
             // dd($companies);
@@ -1466,6 +1469,9 @@ WithTitle
             
             //----- New approach to process archived and active orders together. -----//
             
+            //----- Stripping out the entries where product_id == 0 was introduced on 8/8/19 to fix a bug where any orders that included this line were skipped! -----//
+            //----- This is because I wrote this code at a time when I thought only empty boxes would include this line.  Now it'll probably be in most boxes so we need to account for that. -----//
+            
             // Grab currently active snackboxes
             $current = $company->snackboxes->where('product_id', '!==', 0)->groupBy('snackbox_id');
             // Now add any archived but still active (yet to be invoiced) snackboxes
@@ -1680,51 +1686,67 @@ WithTitle
             //----- End of Snackbox -----//
 
             //----- Drinkbox -----//
+            
+            // 8/8/19 update: FORGOT TO WRITE IN PROCESSING OF DRINK AND OTHER BOX ARCHIVES!
+            
+            // Since we're treating them as individual entries let's put them all into one array, and hopefully limit the additional code needed to process them.
+            
+            $current_drinkboxes = $company->drinkboxes->where('product_id', '!==', 0);
+            $archived_drinkboxes = $company->drinkbox_archive->where('product_id', '!==', 0);
+            
+            $combined_drinkbox_orders = [$current_drinkboxes, $archived_drinkboxes];
 
-            foreach ($company->drinkboxes as $drinkbox_item) {
+            // dd($combined_drinkbox_orders);
+            
+            foreach ($combined_drinkbox_orders as $drinkbox_order) {
+                
+                foreach ($drinkbox_order as $drinkbox_item) {
 
-                // It looks like drinks are processed differently to snacks.
-                // I may be calling it a drinkbox and from a frontend perspective this is quite useful but for invoicing we treat each product as its own invoice line.
-                // So long as I keep a running total for discounting purposes this should be fine.
+                    // It looks like drinks are processed differently to snacks.
+                    // I may be calling it a drinkbox and from a frontend perspective this is quite useful but for invoicing we treat each product as its own invoice line.
+                    // So long as I keep a running total for discounting purposes this should be fine.
 
-                // And in fact, if I don't treat the drinkboxes as a box at all I can just run through the entries one by one, creating an invoice.
-                // This if statement check could be != 0 but while null shouldn't find its way in (because default is 0), this will ensure it can't.
+                    // And in fact, if I don't treat the drinkboxes as a box at all I can just run through the entries one by one, creating an invoice.
+                    // This if statement check could be != 0 but while null shouldn't find its way in (because default is 0), this will ensure it can't.
 
-                if ($drinkbox_item->product_id > 0) {
-                    // dd($drinkbox_item);
-                    // Grab the product info using the drinkbox item product id, this holds more info (than drinkbox entry) such as vat registered or zero rated, etc.
-                    $product = Product::findOrFail($drinkbox_item->product_id);
-                    // Keep a running total of drinkbox items to work out potential discounts later on.
-                    $drinks_total[] = ($product->unit_price * $drinkbox_item->quantity);
-                    // Save each drinkbox entry as on object to process later, after we've applied all possible discounts to price.
-                    $drinkbox_pt1 = new $drinkbox_invoice_pt1();
-                    $drinkbox_pt1->description = $product->name;
-                    $drinkbox_pt1->sales_nominal = $product->sales_nominal;
+                    if ($drinkbox_item->product_id > 0) {
+                        // dd($drinkbox_item);
+                        // Grab the product info using the drinkbox item product id, this holds more info (than drinkbox entry) such as vat registered or zero rated, etc.
+                        $product = Product::findOrFail($drinkbox_item->product_id);
+                        // Keep a running total of drinkbox items to work out potential discounts later on.
+                        $drinks_total[] = ($product->unit_price * $drinkbox_item->quantity);
+                        // Save each drinkbox entry as on object to process later, after we've applied all possible discounts to price.
+                        $drinkbox_pt1 = new $drinkbox_invoice_pt1();
+                        $drinkbox_pt1->description = $product->name;
+                        $drinkbox_pt1->sales_nominal = $product->sales_nominal;
 
-                    if ($product->vat === 'Yes') {
+                        if ($product->vat === 'Yes') {
 
-                        $drinkbox_pt1->unit_amount = ($product->unit_price / 1.2);
-                        $drinkbox_pt1->tax_amount = ($drinkbox_pt1->unit_amount * 0.2);
+                            $drinkbox_pt1->unit_amount = ($product->unit_price / 1.2);
+                            $drinkbox_pt1->tax_amount = ($drinkbox_pt1->unit_amount * 0.2);
 
-                    } elseif ($product->vat === 'No') {
+                        } elseif ($product->vat === 'No') {
 
-                        $drinkbox_pt1->unit_amount = $product->unit_price;
-                        $drinkbox_pt1->tax_amount = 0;
+                            $drinkbox_pt1->unit_amount = $product->unit_price;
+                            $drinkbox_pt1->tax_amount = 0;
 
-                    } else {
-                        // Nothing should get here but I could log anything that does just in case.
-                        $uh_oh_shit_happened = 'Drinkbox item vat status - ' . $drinkbox_item->vat . ' for ' . $drinkbox_item->name
-                                                . ' was neither yes, or no? Company - ' . $company->invoice_name . ' invoicing screwed up.';
+                        } else {
+                            // Nothing should get here but I could log anything that does just in case.
+                            $uh_oh_shit_happened = 'Drinkbox item vat status - ' . $drinkbox_item->vat . ' for ' . $drinkbox_item->name
+                                                    . ' was neither yes, or no? Company - ' . $company->invoice_name . ' invoicing screwed up.';
 
-                        Log::channel('slack')->alert($uh_oh_shit_happened);
+                            Log::channel('slack')->alert($uh_oh_shit_happened);
+                        }
+
+                        $drinkbox_pt1->vat = $product->vat;
+                        $drinkbox_pt1->quantity = $drinkbox_item->quantity;
+                        $drinkboxes_ready_for_invoicing[] = $drinkbox_pt1;
                     }
 
-                    $drinkbox_pt1->vat = $product->vat;
-                    $drinkbox_pt1->quantity = $drinkbox_item->quantity;
-                    $drinkboxes_ready_for_invoicing[] = $drinkbox_pt1;
-                }
+                } // end of foreach ($company->drinkboxes as $drinkbox)
+            } // end of foreach ($combined_drinkbox_orders as $drinkbox_order)
 
-            } // end of foreach ($company->drinkboxes as $drinkbox)
+            
             
             // if the company doesn't have any drink boxes to invoice then we need to declare this variable as an array for array_sum not to have a hissy fit.
             // not sure I got through the first round of testing without spotting encountering this!
@@ -1740,42 +1762,53 @@ WithTitle
             //----- End of Drinkbox -----//
 
             //----- Otherbox -----//
+            
+            $current_otherboxes = $company->otherboxes->where('product_id', '!==', 0);
+            $archived_otherboxes = $company->otherbox_archive->where('product_id', '!==', 0);
+            
+            $combined_otherbox_orders = [$current_otherboxes, $archived_otherboxes];
 
-            foreach ($company->otherboxes as $otherbox_item) {
-                if ($otherbox_item->product_id > 0) {
+            // dd($combined_drinkbox_orders);
+            
+            foreach ($combined_otherbox_orders as $otherbox_order) {
+            
+                foreach ($otherbox_order as $otherbox_item) {
+                    if ($otherbox_item->product_id > 0) {
 
-                    $product = Product::findOrFail($otherbox_item->product_id);
-                    $other_total[] = ($product->unit_price * $otherbox_item->quantity);
+                        $product = Product::findOrFail($otherbox_item->product_id);
+                        $other_total[] = ($product->unit_price * $otherbox_item->quantity);
 
-                    $otherbox_pt1 = new $otherbox_invoice_pt1();
-                    $otherbox_pt1->description = $product->name;
-                    $otherbox_pt1->sales_nominal = $product->sales_nominal;
+                        $otherbox_pt1 = new $otherbox_invoice_pt1();
+                        $otherbox_pt1->description = $product->name;
+                        $otherbox_pt1->sales_nominal = $product->sales_nominal;
 
-                    if ($product->vat === 'Yes') {
+                        if ($product->vat === 'Yes') {
 
-                        $otherbox_pt1->unit_amount = ($product->unit_price / 1.2);
-                        $otherbox_pt1->tax_amount = ($otherbox_pt1->unit_amount * 0.2);
+                            $otherbox_pt1->unit_amount = ($product->unit_price / 1.2);
+                            $otherbox_pt1->tax_amount = ($otherbox_pt1->unit_amount * 0.2);
 
-                    } elseif ($product->vat === 'No') {
+                        } elseif ($product->vat === 'No') {
 
-                        $otherbox_pt1->unit_amount = $product->unit_price;
-                        $otherbox_pt1->tax_amount = 0;
+                            $otherbox_pt1->unit_amount = $product->unit_price;
+                            $otherbox_pt1->tax_amount = 0;
 
-                    } else {
-                        // Nothing should get here but I could log anything that does just in case.
-                        $uh_oh_shit_happened = 'Otherbox item vat status - ' . $otherbox_pt1->vat . ' for ' . $otherbox_pt1->name
-                                                . ' was neither yes, or no? Company - ' . $company->invoice_name . ' invoicing screwed up.';
+                        } else {
+                            // Nothing should get here but I could log anything that does just in case.
+                            $uh_oh_shit_happened = 'Otherbox item vat status - ' . $otherbox_pt1->vat . ' for ' . $otherbox_pt1->name
+                                                    . ' was neither yes, or no? Company - ' . $company->invoice_name . ' invoicing screwed up.';
 
-                        Log::channel('slack')->alert($uh_oh_shit_happened);
+                            Log::channel('slack')->alert($uh_oh_shit_happened);
+                        }
+
+                        $otherbox_pt1->vat = $product->vat;
+                        $otherbox_pt1->quantity = $otherbox_item->quantity;
+                        $otherboxes_ready_for_invoicing[] = $otherbox_pt1;
                     }
 
-                    $otherbox_pt1->vat = $product->vat;
-                    $otherbox_pt1->quantity = $otherbox_item->quantity;
-                    $otherboxes_ready_for_invoicing[] = $otherbox_pt1;
-                }
-
-            } // end of foreach ($company->otherbox as $otherbox)
-
+                } // end of foreach ($company->otherbox as $otherbox)
+            }
+            
+            
             // same as drinks, if the company doesn't have an other box to invoice, we need to set the variable as an array.
             if (!isset($other_total)) {
                 $other_total = [];
