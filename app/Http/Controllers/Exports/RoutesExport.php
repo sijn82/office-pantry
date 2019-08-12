@@ -87,7 +87,8 @@ class RoutesExport implements WithMultipleSheets
                                 ];
 
         $correctOrderWedThurFri =   [   
-                                        '3.00 - Weds Float',  
+                                        '3.00 - Weds Float', 
+                                        '3.07 - Extra', 
                                         '3.06 - Extra Float',
                                         '3.05 - Thames',
                                         '3.04 - South & North',
