@@ -10,6 +10,8 @@ use App\CompanyDetails;
 use App\Company;
 use App\Route;
 
+// this class is named the same as in the ImportedCompanyDetails (also within this folder).
+// that will prevent this one from being used, which is fine, but I should decide what I'm doing with this and delete when officially superfluous.
 class ImportedCompanyDetails implements
 toModel,
 // WithEvents,

@@ -636,7 +636,7 @@ class OrderController extends Controller
                                 ],
                                 [
                                     'is_active' => 'Inactive',
-                                    'id' => $snackbox_entry->id,
+                                    // 'id' => $snackbox_entry->id, // EDIT: DON'T ADD THIS TO ENTRIES, SERVES NO PURPOSE AND CAN THROW DUPLICATE ID ERRORS!
                                     'delivered_by' => $snackbox_entry->delivered_by,
                                     'no_of_boxes' => $snackbox_entry->no_of_boxes,
                                     'snack_cap' => $snackbox_entry->snack_cap,
@@ -666,7 +666,7 @@ class OrderController extends Controller
                                 ],
                                 [
                                     'is_active' => 'Active',
-                                    'id' => $snackbox_entry->id,
+                                    // 'id' => $snackbox_entry->id, // EDIT: DON'T ADD THIS TO ENTRIES, SERVES NO PURPOSE AND CAN THROW DUPLICATE ID ERRORS!
                                     'delivered_by' => $snackbox_entry->delivered_by,
                                     'no_of_boxes' => $snackbox_entry->no_of_boxes,
                                     'snack_cap' => $snackbox_entry->snack_cap,
@@ -845,7 +845,7 @@ class OrderController extends Controller
                             ],
                             [
                                 'is_active' => 'Inactive',
-                                'id' => $drinkbox_entry->id,
+                                // 'id' => $drinkbox_entry->id, // For the same reasons as stated in snackboxes.
                                 'delivered_by_id' => $drinkbox_entry->delivered_by_id,
                                 'type' => $drinkbox_entry->type,
                                 'company_details_id' => $drinkbox_entry->company_details_id,
@@ -873,7 +873,7 @@ class OrderController extends Controller
                             ],
                             [
                                 'is_active' => 'Active',
-                                'id' => $drinkbox_entry->id,
+                                // 'id' => $drinkbox_entry->id, // For the same reasons as stated in snackboxes.
                                 'delivered_by_id' => $drinkbox_entry->delivered_by_id,
                                 'type' => $drinkbox_entry->type,
                                 'company_details_id' => $drinkbox_entry->company_details_id,
@@ -1037,7 +1037,7 @@ class OrderController extends Controller
                             ],
                             [
                                 'is_active' => 'Inactive',
-                                'id' => $otherbox_entry->id,
+                                // 'id' => $otherbox_entry->id, // Yup let's get rid of this too.
                                 'delivered_by_id' => $otherbox_entry->delivered_by_id,
                                 //'no_of_boxes' => $otherbox_entry->no_of_boxes,
                                 'type' => $otherbox_entry->type,
@@ -1066,7 +1066,7 @@ class OrderController extends Controller
                             ],
                             [
                                 'is_active' => 'Active',
-                                'id' => $otherbox_entry->id,
+                                // 'id' => $otherbox_entry->id, // Yup let's get rid of this too.
                                 'delivered_by_id' => $otherbox_entry->delivered_by_id,
                                 //'no_of_boxes' => $otherbox_entry->no_of_boxes,
                                 'type' => $otherbox_entry->type,
