@@ -127,8 +127,8 @@ export default {
         // }
     },
     mounted() {
-        this.$store.commit('getFruitPartners');
-        console.log(this.archived_milkboxes);
+        // this.$store.commit('getFruitPartners');
+        // console.log(this.archived_milkboxes);
     }
 }
 

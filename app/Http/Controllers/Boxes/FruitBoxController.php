@@ -307,20 +307,18 @@ class FruitBoxController extends Controller
         // There's also a good chance the next_delivery_date has since been advanced,
         // do we want to want to save the archive with the old next_delivery_date? If so we'll need to grab it from the db before updating the stored values.
 
+        //----- If I'm not comparing dates, do I need to worry about any of this? Worth checking... -----//
+
         $date = CarbonImmutable::now('Europe/London');
         $invoice_date = $date->format('ymd');
-
-        // This update is just to add a value I can check and test with.
-        // FruitBox::where('id', $id)->update([
-        //     'invoiced_at' => $invoice_date,
-        // ]);
-
         // We want to check whether the fruitbox about to be updated has already had its old order invoiced.
         // So before we begin, let's grab the current data from the db.
         $existing_fruitbox_entry = FruitBox::findOrFail($id);
         // And specifically the invoiced_at date, which despite being inserted from a Carbon date, is now considered a string?
         // So first it needs passing back into Carbon...
         $converted_invoiced_at_date = new CarbonImmutable($existing_fruitbox_entry->invoiced_at);
+
+        //----- If I'm not comparing dates, do I need to worry about any of this? Worth checking... -----//
 
         // dd(request('skip_archive'));
         // if skip-archive is true then we're deliberately trying to update the box and bypassing archive logic entirely.
@@ -330,57 +328,69 @@ class FruitBoxController extends Controller
         if (request('skip_archive') === 'false') { // Let's try it with the opposite statement, I'm pretty certain that I only want to run this code if 'skip-archive' is set (defaulted) to 'false'.
             // dd('was that why?');
             // ...which we can then use to reformat both dates into the same style (->format('ymd')).
-            if ($existing_fruitbox_entry->updated_at->format('ymd') == $converted_invoiced_at_date->format('ymd')) {
 
-                dump('we\'re here! Now just need to do the rest! ' . $converted_invoiced_at_date->format('ymd') . ' is equal to ' . $existing_fruitbox_entry->updated_at->format('ymd'));
+            // EDIT: 19-08-19 I've decided to change the way fruitboxes are continued from one week to the next.
+            // Instead of keeping the same box alive and checking whether the box has an invoice date prior to the last time it was updated (in the database),
+            // I'm going to destroy the box from one week to the next, so we only need to know whether this box has an invoice date or not.
+            // This will bring fruitboxes (and milkboxes) into line with the same approach as snacks, drinks and other.
+            // Comparing dates adds an unnecessary level of complication without any discernible benefit.
 
-                $archived_fruitbox_already_invoiced = new FruitBoxArchive();
-                // Turns out the archived columns are different to the fruitbox columns, before this'll work I need to sort them out.
-                // But below is what I need to have included.
-                // If we're here, we've already invoiced the previous order so can save it in archives but as 'Inactive'.
-                $archived_fruitbox_already_invoiced->is_active = 'Inactive';
-                // The remaining columns just need to hold the old/current db info for the entry, then we can update it.
-                $archived_fruitbox_already_invoiced->fruitbox_id = $existing_fruitbox_entry->id;
-                $archived_fruitbox_already_invoiced->fruit_partner_id = $existing_fruitbox_entry->fruit_partner_id;
-                $archived_fruitbox_already_invoiced->name = $existing_fruitbox_entry->name;
-                $archived_fruitbox_already_invoiced->company_details_id = $existing_fruitbox_entry->company_details_id;
-                $archived_fruitbox_already_invoiced->type = $existing_fruitbox_entry->type;
-                $archived_fruitbox_already_invoiced->previous_delivery = $existing_fruitbox_entry->previous_delivery;
-                $archived_fruitbox_already_invoiced->next_delivery = $existing_fruitbox_entry->next_delivery;
-                $archived_fruitbox_already_invoiced->frequency = $existing_fruitbox_entry->frequency;
-                $archived_fruitbox_already_invoiced->week_in_month = $existing_fruitbox_entry->week_in_month;
-                $archived_fruitbox_already_invoiced->delivery_day = $existing_fruitbox_entry->delivery_day;
-                $archived_fruitbox_already_invoiced->fruitbox_total = $existing_fruitbox_entry->fruitbox_total;
-                $archived_fruitbox_already_invoiced->deliciously_red_apples = $existing_fruitbox_entry->deliciously_red_apples;
-                $archived_fruitbox_already_invoiced->pink_lady_apples = $existing_fruitbox_entry->pink_lady_apples;
-                $archived_fruitbox_already_invoiced->red_apples = $existing_fruitbox_entry->red_apples;
-                $archived_fruitbox_already_invoiced->green_apples = $existing_fruitbox_entry->green_apples;
-                $archived_fruitbox_already_invoiced->satsumas = $existing_fruitbox_entry->satsumas;
-                $archived_fruitbox_already_invoiced->pears = $existing_fruitbox_entry->pears;
-                $archived_fruitbox_already_invoiced->bananas = $existing_fruitbox_entry->bananas;
-                $archived_fruitbox_already_invoiced->nectarines = $existing_fruitbox_entry->nectarines;
-                $archived_fruitbox_already_invoiced->limes = $existing_fruitbox_entry->limes;
-                $archived_fruitbox_already_invoiced->lemons = $existing_fruitbox_entry->lemons;
-                $archived_fruitbox_already_invoiced->grapes = $existing_fruitbox_entry->grapes;
-                $archived_fruitbox_already_invoiced->seasonal_berries = $existing_fruitbox_entry->seasonal_berries;
-                $archived_fruitbox_already_invoiced->oranges = $existing_fruitbox_entry->oranges;
-                $archived_fruitbox_already_invoiced->cucumbers = $existing_fruitbox_entry->cucumbers;
-                $archived_fruitbox_already_invoiced->mint = $existing_fruitbox_entry->mint;
-                $archived_fruitbox_already_invoiced->organic_lemons = $existing_fruitbox_entry->organic_lemons;
-                $archived_fruitbox_already_invoiced->kiwis = $existing_fruitbox_entry->kiwis;
-                $archived_fruitbox_already_invoiced->grapefruits = $existing_fruitbox_entry->grapefruits;
-                $archived_fruitbox_already_invoiced->avocados = $existing_fruitbox_entry->avocados;
-                $archived_fruitbox_already_invoiced->root_ginger = $existing_fruitbox_entry->root_ginger;
-                $archived_fruitbox_already_invoiced->tailoring_fee = $existing_fruitbox_entry->tailoring_fee;
-                $archived_fruitbox_already_invoiced->discount_multiple = $existing_fruitbox_entry->discount_multiple;
-                $archived_fruitbox_already_invoiced->invoiced_at = $existing_fruitbox_entry->invoiced_at;
-                $archived_fruitbox_already_invoiced->created_at = $existing_fruitbox_entry->created_at;
-                $archived_fruitbox_already_invoiced->updated_at = $existing_fruitbox_entry->updated_at; // this may not be worth updating as it'll be changed on creation?
-                $archived_fruitbox_already_invoiced->save();
+            // if ($existing_fruitbox_entry->updated_at->format('ymd') == $converted_invoiced_at_date->format('ymd')) {
+            if ($existing_fruitbox_entry->invoiced_at !== null) {
+
+                // dump('we\'re here! Now just need to do the rest! ' . $converted_invoiced_at_date->format('ymd') . ' is equal to ' . $existing_fruitbox_entry->updated_at->format('ymd'));
+
+                dump($existing_fruitbox_entry->invoiced_at . ' doesn\'t equal null.  Which means it\'s been invoiced.  At least I hope it does as I\'m saving the archive as inactive.' );
+
+                FruitBoxArchive::updateOrInsert(
+                    [ // Check the values contained in this array for a matching record.  If we find it, update the record, otherwise add a new entry.
+                        'fruitbox_id' => $existing_fruitbox_entry->id,
+                        'next_delivery' => $existing_fruitbox_entry->next_delivery
+                    ],
+                    [
+                        'is_active' => 'Inactive',
+                        'company_details_id' => $existing_fruitbox_entry->company_details_id,
+                        'fruit_partner_id' => $existing_fruitbox_entry->fruit_partner_id,
+                        'name' => $existing_fruitbox_entry->name,
+                        'type' => $existing_fruitbox_entry->type,
+                        'previous_delivery' => $existing_fruitbox_entry->previous_delivery,
+                        'frequency' => $existing_fruitbox_entry->frequency,
+                        'week_in_month' => $existing_fruitbox_entry->week_in_month,
+                        'delivery_day' => $existing_fruitbox_entry->delivery_day,
+                        'fruitbox_total' => $existing_fruitbox_entry->fruitbox_total,
+                        'deliciously_red_apples' => $existing_fruitbox_entry->deliciously_red_apples,
+                        'pink_lady_apples' => $existing_fruitbox_entry->pink_lady_apples,
+                        'red_apples' => $existing_fruitbox_entry->red_apples,
+                        'green_apples' => $existing_fruitbox_entry->green_apples,
+                        'satsumas' => $existing_fruitbox_entry->satsumas,
+                        'pears' => $existing_fruitbox_entry->pears,
+                        'bananas' => $existing_fruitbox_entry->bananas,
+                        'nectarines' => $existing_fruitbox_entry->nectarines,
+                        'limes' => $existing_fruitbox_entry->limes,
+                        'lemons' => $existing_fruitbox_entry->lemons,
+                        'grapes' => $existing_fruitbox_entry->grapes,
+                        'seasonal_berries' => $existing_fruitbox_entry->seasonal_berries,
+                        'oranges' => $existing_fruitbox_entry->oranges,
+                        'cucumbers' => $existing_fruitbox_entry->cucumbers,
+                        'mint' => $existing_fruitbox_entry->mint,
+                        'organic_lemons' => $existing_fruitbox_entry->organic_lemons,
+                        'kiwis' => $existing_fruitbox_entry->kiwis,
+                        'grapefruits' => $existing_fruitbox_entry->grapefruits,
+                        'avocados' => $existing_fruitbox_entry->avocados,
+                        'root_ginger' => $existing_fruitbox_entry->root_ginger,
+                        'tailoring_fee' => $existing_fruitbox_entry->tailoring_fee,
+                        'discount_multiple' => $existing_fruitbox_entry->discount_multiple,
+                        'invoiced_at' => $existing_fruitbox_entry->invoiced_at,
+                        'created_at' => $existing_fruitbox_entry->created_at,
+                        'updated_at' => $existing_fruitbox_entry->updated_at // this may not be worth updating as it'll be changed on creation?
+                    ]
+                );
 
             } else { // end of if (invoiced_at date == updated_at date)
 
-                dump('Oh, guess these don\'t match? ' . $converted_invoiced_at_date->format('ymd') . ' isn\'t equal to ' . $existing_fruitbox_entry->updated_at->format('ymd'));
+                dump($existing_fruitbox_entry->invoiced_at . ' must be null, so this box is yet to be invoiced.  Saving the archive as active.');
+
+                // dump('Oh, guess these don\'t match? ' . $converted_invoiced_at_date->format('ymd') . ' isn\'t equal to ' . $existing_fruitbox_entry->updated_at->format('ymd'));
                 // dd('WE GOT TO HERE, BUT WHAT HAPPENS NEXT?');
                 // If we're here then the invoiced_at date didn't match the updated_at date.  This means we have an order that hasn't been charged yet.
                 // This time we need to create an archived version of the old details but with an 'Active' status.
@@ -392,13 +402,12 @@ class FruitBoxController extends Controller
 
                 FruitBoxArchive::updateOrInsert(
                     [ // Check the values contained in this array for a matching record.  If we find it, update the record, otherwise add a new entry.
-                        'company_details_id' => $existing_fruitbox_entry->company_details_id,
                         'fruitbox_id' => $existing_fruitbox_entry->id,
-                        'is_active' => 'Active',
                         'next_delivery' => $existing_fruitbox_entry->next_delivery
                     ],
                     [
-
+                        'is_active' => 'Active',
+                        'company_details_id' => $existing_fruitbox_entry->company_details_id,
                         'fruit_partner_id' => $existing_fruitbox_entry->fruit_partner_id,
                         'name' => $existing_fruitbox_entry->name,
                         // 'company_details_id' => $existing_fruitbox_entry->company_details_id,
@@ -484,6 +493,7 @@ class FruitBoxController extends Controller
            'root_ginger' => request('root_ginger'),
            'tailoring_fee' => request('tailoring_fee'),
            'discount_multiple' => request('discount_multiple'),
+           'invoiced_at' => request('invoiced_at'),
        ]);
 
        // When making an update to the fruitbox, we need to check there's still a route for its delivery.

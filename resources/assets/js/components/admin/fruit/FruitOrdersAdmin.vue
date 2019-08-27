@@ -239,8 +239,8 @@ export default {
         }
     },
     mounted() {
-        this.$store.commit('getFruitPartners');
-        console.log(this.fruitboxes);
+        // this.$store.commit('getFruitPartners');
+        // console.log(this.fruitboxes);
     }
 }
 

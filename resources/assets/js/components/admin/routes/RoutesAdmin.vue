@@ -62,7 +62,7 @@ export default {
 
     mounted() {
         console.log(this.routes);
-        //this.$store.commit('getAssignedRoutes');
+        this.$store.commit('getAssignedRoutes'); // Can I move calls up a component?
     }
 }
 </script>

@@ -241,7 +241,7 @@ export default {
     },
     mounted() {
         
-        this.$store.commit('getAssignedRoutes');
+        // this.$store.commit('getAssignedRoutes'); // <-- Moved this up a component.
     }
 }
 

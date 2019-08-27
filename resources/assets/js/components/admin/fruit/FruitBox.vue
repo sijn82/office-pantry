@@ -31,7 +31,7 @@
                     <b-col class="col-sm-4">
                         <label><b> Fruitbox Fruit Partner </b></label>
                         <div v-if="editing">
-                            <b-form-select v-model="fruitbox.fruit_partner_id"> 
+                            <b-form-select v-model="fruitbox.fruit_partner_id">
                                 <option v-for="fruit_partner in $store.state.fruit_partners_list" :value="fruit_partner.id"> {{ fruit_partner.name }} </option>
                             </b-form-select>
                             <p> Selected: {{ fruitbox.fruit_partner_id }} </p>
@@ -52,7 +52,7 @@
                             <p> {{ fruitbox.name }} </p>
                         </div>
                     </b-col>
-                    
+
                     <b-col>
                         <label><b> Fruitbox Status </b></label>
                         <div v-if="editing">
@@ -83,7 +83,7 @@
                         </div>
                     </b-col>
                 </b-row>
-                
+
                 <b-row :class="fruitbox.is_active" class="b-row-padding" sm="12">
                     <b-col>
                         <label><b> Frequency </b></label>
@@ -399,7 +399,7 @@ export default {
             addnew: false,
         }
     },
-    
+
     methods: {
         addNew() {
             if (this.addnew == false) {
@@ -415,7 +415,7 @@ export default {
             } else {
                 this.editing = false;
             }
-    
+
         },
         showDetails() {
             if (this.details == true) {
@@ -462,12 +462,16 @@ export default {
                 root_ginger: fruitbox.root_ginger,
                 tailoring_fee: fruitbox.tailoring_fee,
                 discount_multiple: fruitbox.discount_multiple,
+                invoiced_at: fruitbox.invoiced_at,
                 skip_archive: this.skip_archive,
             }).then (response => {
                 console.log(response);
                 this.$emit('refresh-data', {company_details_id: fruitbox.company_details_id});
             }).catch(error => console.log(error));
         },
+        // getFruitPartners() {
+        //     this.$store.commit('getFruitPartners');
+        // },
         fruit_partner_id_to_name_converter(id) {
             console.log(id);
             axios.get('/api/fruit_partners/' + id)
@@ -477,15 +481,15 @@ export default {
                             this.fruit_partner_name = this.fruitpartner.name;
                             console.log(this.fruitpartner.name);
                         });
-                    
+
         },
         changeName(name) {
             return this.fruitbox.fruit_partner_name = name;
         }
     },
-    
+
     mounted() {
-        this.$store.commit('getFruitPartners');
+        // this.$store.commit('getFruitPartners'); // <-- Trying to limit the amount of time getFruitPartners is called and attempted to add to store.
     }
 }
 

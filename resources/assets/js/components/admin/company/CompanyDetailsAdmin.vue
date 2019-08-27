@@ -457,7 +457,7 @@ export default {
         }
     },
     mounted () {
-        this.$store.commit('getFruitPartners');
+        this.$store.commit('getFruitPartners'); // The company must exist to add boxes to their account.  So this component seems a good place to make the call? This and add new company are now the only calls.
     }
 }
 </script>

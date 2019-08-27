@@ -1,15 +1,5 @@
 <template lang="html">
     <div>
-        <!-- We only need to access these properties once per snackbox -->
-        <!-- <h4> Snackbox Id: {{ snackbox[0].snackbox_id }} </h4>
-        <h4> Delivered By: {{ snackbox[0].delivered_by }} </h4>
-        <h4> No. Of Boxes: {{ snackbox[0].no_of_boxes }} </h4>
-        <h4> Type: {{ snackbox[0].type }} </h4>
-        <h4> Delivery Day: {{ snackbox[0].delivery_day }} </h4>
-        <h4> Frequency: {{ snackbox[0].frequency }} </h4>
-        <h4 v-if="snackbox[0].frequency === 'Monthly'"> Week In Month: {{ snackbox[0].week_in_month }} </h4>
-        <h4 v-if="snackbox[0].previous_delivery_week !== null"> Previous Delivery Date: {{ snackbox[0].previous_delivery_week }} </h4>
-        <h4> Next Delivery Week: {{ snackbox[0].next_delivery_week }} </h4> -->
         
         <div id="edit-save-buttons">
             <h4> {{ snackbox[0].snackbox_id }} </h4>
@@ -210,7 +200,7 @@
             although I still need to consider some other options on how best to go about this 
         
             Actually I think a better idea is just to allow the user to delete a product or, 
-            though a button revealable section, select a new product(s) and attach it to the current snackbox_id + details.
+            through a button revealable section, select a new product(s) and attach it to the current snackbox_id + details.
             This will need refreshing to update, so holding them in the store might be a good option -->
             
             <snackbox-item id="snackbox-products" v-for="snackbox_item in snackbox" v-if="snackbox_item.product_id !== 0" :snackbox_item="snackbox_item" :key="snackbox_item.id" @refresh-data="refreshData($event)"></snackbox-item>

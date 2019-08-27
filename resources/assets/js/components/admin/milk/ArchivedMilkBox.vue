@@ -460,7 +460,7 @@ export default {
         }
     },
     mounted() {
-        this.$store.commit('getFruitPartners');
+        // this.$store.commit('getFruitPartners');
     }
 }
 

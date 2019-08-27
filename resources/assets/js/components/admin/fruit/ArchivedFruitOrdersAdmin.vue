@@ -220,8 +220,8 @@ export default {
         }
     },
     mounted() {
-        this.$store.commit('getFruitPartners');
-        console.log(this.archived_fruitboxes);
+        // this.$store.commit('getFruitPartners');
+        // console.log(this.archived_fruitboxes);
     }
 }
 

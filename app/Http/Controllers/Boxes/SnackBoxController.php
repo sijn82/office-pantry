@@ -757,7 +757,7 @@ class SnackBoxController extends Controller
         $addProduct->unit_price = request('product.unit_price');
         $addProduct->case_price = request('product.case_price');
         $addProduct->save();
-        
+
         // Looks I found a neat one liner to sort out reducing stock levels - I'm also guessing 'increment' will sort out returning stock too.
         // Just in case there's a problem saving the new product, we'll only worry about reducing the stock levels if we get this far without hitting an error.
         Product::find(request('product.id'))->decrement('stock_level', request('product.quantity'));
@@ -827,63 +827,77 @@ class SnackBoxController extends Controller
                     // We have a box that's already been invoiced, so we can save it to archives with an 'inactive' status.
                     foreach ($snackbox as $snackbox_item) {
 
-                        $snackbox_archive_entry = new SnackBoxArchive();
-                        // Snackbox Info
-                        $snackbox_archive_entry->is_active = 'Inactive';
-                        $snackbox_archive_entry->snackbox_id = $snackbox_item->snackbox_id;
-                        $snackbox_archive_entry->delivered_by = $snackbox_item->delivered_by;
-                        $snackbox_archive_entry->no_of_boxes = $snackbox_item->no_of_boxes;
-                        $snackbox_archive_entry->snack_cap = $snackbox_item->snack_cap;
-                        $snackbox_archive_entry->type = $snackbox_item->type;
-                        // Company Info
-                        $snackbox_archive_entry->company_details_id = $snackbox_item->company_details_id;
-                        $snackbox_archive_entry->delivery_day = $snackbox_item->delivery_day;
-                        $snackbox_archive_entry->frequency = $snackbox_item->frequency;
-                        $snackbox_archive_entry->week_in_month = $snackbox_item->week_in_month;
-                        $snackbox_archive_entry->previous_delivery_week = $snackbox_item->previous_delivery_week;
-                        $snackbox_archive_entry->next_delivery_week = $snackbox_item->next_delivery_week;
-                        // Product Information
-                        $snackbox_archive_entry->product_id = $snackbox_item->product_id;
-                        $snackbox_archive_entry->code = $snackbox_item->code;
-                        $snackbox_archive_entry->name = $snackbox_item->name;
-                        $snackbox_archive_entry->quantity = $snackbox_item->quantity;
-                        $snackbox_archive_entry->unit_price = $snackbox_item->unit_price;
-                        $snackbox_archive_entry->case_price = $snackbox_item->case_price;
-                        $snackbox_archive_entry->invoiced_at = $snackbox_item->invoiced_at;
-                        $snackbox_archive_entry->save();
+                        // I'm currently switching all create new instances with updateOrInsert instances to prevent the possibility of duplicates.
+                        // Snack_id and next_delivery_week isn't sufficient a check but combined with product_id we should be good.
+                        // The only issue would be if the box has two entries for the same product rather than removing the original entry and combining the quantity.
+                        // I should maybe prevent this from happening at all but for now just telling admins not to add duplicate product entries to the same box would suffice/save time.
+
+                        SnackBoxArchive::updateOrInsert(
+                        [
+                            // Initial checks for matching entry
+                            'snackbox_id' => $snackbox_item->snackbox_id,
+                            'next_delivery_week' => $snackbox_item->next_delivery_week,
+                            'product_id' => $snackbox_item->product_id,
+                        ],
+                        [
+                            // Snackbox Info
+                            'is_active' => 'Inactive',
+                            'delivered_by' => $snackbox_item->delivered_by,
+                            'no_of_boxes' => $snackbox_item->no_of_boxes,
+                            'snack_cap' => $snackbox_item->snack_cap,
+                            'type' => $snackbox_item->type,
+                            // Company Info
+                            'company_details_id' => $snackbox_item->company_details_id,
+                            'delivery_day' => $snackbox_item->delivery_day,
+                            'frequency' => $snackbox_item->frequency,
+                            'week_in_month' => $snackbox_item->week_in_month,
+                            'previous_delivery_week' => $snackbox_item->previous_delivery_week,
+                            // Product Info
+                            'code' => $snackbox_item->code,
+                            'name' => $snackbox_item->name,
+                            'quantity' => $snackbox_item->quantity,
+                            'unit_price' => $snackbox_item->unit_price,
+                            'case_price' => $snackbox_item->case_price,
+                            'invoiced_at' => $snackbox_item->invoiced_at,
+                        ]);
+
                     }
 
                 } else {
                     // 1.(b) if it doesn't, we need to save it to archives as 'active' so it can be pulled into the next invoicing run.
                     foreach ($snackbox as $snackbox_item) {
 
-                        $snackbox_archive_entry = new SnackBoxArchive();
-                        // Snackbox Info
-                        $snackbox_archive_entry->is_active = 'Active';
-                        $snackbox_archive_entry->snackbox_id = $snackbox_item->snackbox_id;
-                        $snackbox_archive_entry->delivered_by = $snackbox_item->delivered_by;
-                        $snackbox_archive_entry->no_of_boxes = $snackbox_item->no_of_boxes;
-                        $snackbox_archive_entry->snack_cap = $snackbox_item->snack_cap;
-                        $snackbox_archive_entry->type = $snackbox_item->type;
-                        // Company Info
-                        $snackbox_archive_entry->company_details_id = $snackbox_item->company_details_id;
-                        $snackbox_archive_entry->delivery_day = $snackbox_item->delivery_day;
-                        $snackbox_archive_entry->frequency = $snackbox_item->frequency;
-                        $snackbox_archive_entry->week_in_month = $snackbox_item->week_in_month;
-                        $snackbox_archive_entry->previous_delivery_week = $snackbox_item->previous_delivery_week;
-                        $snackbox_archive_entry->next_delivery_week = $snackbox_item->next_delivery_week;
-                        // Product Information
-                        $snackbox_archive_entry->product_id = $snackbox_item->product_id;
-                        $snackbox_archive_entry->code = $snackbox_item->code;
-                        $snackbox_archive_entry->name = $snackbox_item->name;
-                        $snackbox_archive_entry->quantity = $snackbox_item->quantity;
-                        $snackbox_archive_entry->unit_price = $snackbox_item->unit_price;
-                        $snackbox_archive_entry->case_price = $snackbox_item->case_price;
-                        $snackbox_archive_entry->invoiced_at = $snackbox_item->invoiced_at;
-                        $snackbox_archive_entry->save();
+                        SnackBoxArchive::updateOrInsert(
+                        [
+                            // Initial checks for matching entry
+                            'snackbox_id' => $snackbox_item->snackbox_id,
+                            'next_delivery_week' => $snackbox_item->next_delivery_week,
+                            'product_id' => $snackbox_item->product_id,
+                        ],
+                        [
+                            // Snackbox Info
+                            'is_active' => 'Active',
+                            'delivered_by' => $snackbox_item->delivered_by,
+                            'no_of_boxes' => $snackbox_item->no_of_boxes,
+                            'snack_cap' => $snackbox_item->snack_cap,
+                            'type' => $snackbox_item->type,
+                            // Company Info
+                            'company_details_id' => $snackbox_item->company_details_id,
+                            'delivery_day' => $snackbox_item->delivery_day,
+                            'frequency' => $snackbox_item->frequency,
+                            'week_in_month' => $snackbox_item->week_in_month,
+                            'previous_delivery_week' => $snackbox_item->previous_delivery_week,
+                            // Product Info
+                            'code' => $snackbox_item->code,
+                            'name' => $snackbox_item->name,
+                            'quantity' => $snackbox_item->quantity,
+                            'unit_price' => $snackbox_item->unit_price,
+                            'case_price' => $snackbox_item->case_price,
+                            'invoiced_at' => $snackbox_item->invoiced_at,
+                        ]);
                     }
 
-                }
+                } // End of if/else ($snackbox[0]->invoiced_at !== null)
 
             //---------- End of - Time to save the existing box as an archive ----------//
 
@@ -944,6 +958,9 @@ class SnackBoxController extends Controller
             } // if (count($snackbox) === 1) & elseif (count($snackbox)) > 1)
         } // foreach ($snackboxes as $snackbox)
 
+        // Now it's time for the redirect
+        return redirect()->route('office');
+
          // If I take this approach, it would work fine for once a week processing but if we switch this to daily, then I'd need to either restrict mass updates in the same way
          // or write some logic to cater for this.
      }
@@ -965,9 +982,10 @@ class SnackBoxController extends Controller
         // BUT WHAT DO WE DO ABOUT A BOX WITH A DELIVERY DATE SET IN THE FUTURE, FROM BEING UPDATED EACH WEEK UNTIL ITS ACTUAL DELIVERY DATE?
         // CURRENT LOGIC WOULD HAVE THESE CREATED IN ARCHIVE UNTIL DELIVERY DATE UNLESS THEY WERE SET TO INACTIVE WHICH KINDA DEFEATS THE PURPOSE OF SETTING IT UP IN ADVANCE!
 
-        // Maybe 'IS_ACTIVE' could be changed to include more options, such as 'PAUSED' - Which waits until the 'next_delivery_week' matches current delivery week (a new thing I could create) before changing its status to ACTIVE?
-        // Hmmn, though as we process orders a week in advance, we'd need to set this to act a week in advance, which is annoying?  We also cant use the current 'WEEK START' variable as this is manually changed and wouldn't be a
-        // reliable way to activate orders?
+        // Maybe 'IS_ACTIVE' could be changed to include more options, such as 'PAUSED' - Which waits until the 'next_delivery_week' matches current delivery week (a new thing I could create)
+        // before changing its status to ACTIVE?
+        // Hmmn, though as we process orders a week in advance, we'd need to set this to act a week in advance, which is annoying?
+        // We also cant use the current 'WEEK START' variable as this is manually changed and wouldn't be a reliable way to activate orders?
 
         // dd($snackboxes);
         //
@@ -996,22 +1014,26 @@ class SnackBoxController extends Controller
             // To be clearer - this is primarily to repopulate the new box with the same details,
             // however we'll also be creating an archive entry using the old data.
 
-
+            // Snackbox Info
             $snackbox_id_recovered = $snackbox[0]->snackbox_id;
             $delivered_by_recovered = $snackbox[0]->delivered_by;
             $delivery_date_recovered = $snackbox[0]->delivery_day;
             $no_of_boxes_recovered = $snackbox[0]->no_of_boxes;
             $snack_cap_recovered = $snackbox[0]->snack_cap;
+            // Company Info
             $company_details_id_recovered = $snackbox[0]->company_details_id;
             $frequency_recovered = $snackbox[0]->frequency;
             $week_in_month_recovered = $snackbox[0]->week_in_month;
             $previous_delivery_week_recovered = $snackbox[0]->previous_delivery_week;
             $next_delivery_week_recovered = $snackbox[0]->next_delivery_week;
 
-            // We can't updateOrCreate (per snack line) based on the uniqueness of snackbox_id/next_delivery_week in the archives due to having multiple rows (one for each item) in the snackbox.
+            // We can't updateOrInsert (per snack line) based on the uniqueness of snackbox_id/next_delivery_week in the archives due to having multiple rows (one for each item) in the snackbox.
             // However taking it up a level to here, we can check if the snackbox_id/next_delivery_week currently exists in the snackbox_archives.
 
-            $has_archive = SnackBoxArchive::where('snackbox_id', $snackbox_id_recovered)->where('next_delivery_week', $next_delivery_week_recovered)->get();
+            // While I quite like this approach and I'm sure it does a job, I've now implemented updateOrInsert everywhere else, using product_id to make the check more specific to each entry.
+            // To try and create predictable behaviour I'm going to change this as well, so the same checks are being made throughout the site.
+
+            // $has_archive = SnackBoxArchive::where('snackbox_id', $snackbox_id_recovered)->where('next_delivery_week', $next_delivery_week_recovered)->get();
 
 
             if (count($snackbox)) { // Now I'm not checking all of the snackbox entries I don't need to worry about empty boxes. Though I suppose it's not doing any harm either.
@@ -1028,39 +1050,75 @@ class SnackBoxController extends Controller
                     // Also when trying to 'groupBy' - 'snackbox_id' from the 'snackbox_archives', it'll group all archived entries into one box
                     // so we need to add a second stipulation to 'groupBy - 'snackbox_id' & 'next_delivery_week'
 
-                    // If it doesn't we can go ahead and save each row of the old box contents
-                    if (!count($has_archive)) {
-                        $archived_snackbox = new SnackBoxArchive();
-                        // Snackbox Info
-                        $archived_snackbox->snackbox_id = $snack->snackbox_id;
-                        $archived_snackbox->is_active = $snack->is_active;
-                        $archived_snackbox->delivered_by = $snack->delivered_by;
-                        $archived_snackbox->no_of_boxes = $snack->no_of_boxes;
-                        $archived_snackbox->snack_cap = $snack->snack_cap;
-                        $archived_snackbox->type = $snack->type;
-                        // Company Info
-                        $archived_snackbox->company_details_id = $snack->company_details_id;
-                        $archived_snackbox->delivery_day = $snack->delivery_day;
-                        $archived_snackbox->frequency = $snack->frequency;
-                        $archived_snackbox->previous_delivery_week = $snack->previous_delivery_week;
-                        $archived_snackbox->next_delivery_week = $snack->next_delivery_week;
-                        // Product Information
-                        $archived_snackbox->product_id = $snack->product_id;
-                        $archived_snackbox->code = $snack->code;
-                        $archived_snackbox->name = $snack->name;
-                        $archived_snackbox->quantity = $snack->quantity;
-                        $archived_snackbox->unit_price = $snack->unit_price;
-                        $archived_snackbox->invoiced_at = $snack->invoiced_at;
-                        $archived_snackbox->save();
-                    } else {
-                        // But what should we do if it does?
-                        // What are the possible reasons for this?
+                    //----- HAVE I TACKLED THIS YET? IS IT SOMETHING I NEED TO CONSIDER AND FIX - MUST CHECK!! -----//
 
-                        // 1. Mass update has already been run for this 'type', backing up orders for that 'next_delivery_week' (i.e the previous week).
-                        // 2. An update to a company snackbox (i.e not a mass update) <-- This isn't in place yet and I'm not sure it should be unless specifically requested via a button to back up contents before editing?
-                        // 3. OR SHOULD I JUST CREATE A SPECIFIC TIME WHEN ALL SNACKBOX ORDERS ARE EMPTIED AND ARCHIVES CREATED?
-                        // - IF BOXES ARE EMPTIED PRIOR TO MASS UPDATING, WE WOULDN'T NEED TO DO THAT HERE EITHER?
-                    }
+                    // Now that we should already have archives in place before this step, we can go ahead and check for the archive,
+                    // only adding the entry if it doesn't exist, as we expect an entry to be present and don't want to update unnecessarily.
+
+                    // First checks to see if the entry exists, if it does, do nothing, if it doesn't, create a new entry but the odds of this needing to happen are infinitesimally small.  I think?
+                    SnackBoxArchive::firstOrCreate(
+                    [
+                        // If this is written the same way as updateOrInsert, this is the initial check
+                        'snackbox_id' => $snack->snackbox_id,
+                        'next_delivery_week' => $snack->next_delivery_week,
+                        'product_id' => $snack->product_id,
+                    ],
+                    [
+                        // Snackbox Info
+                        'is_active' => $snack->is_active, // Mind you we're only getting the 'Active' ones, so this could be hardcoded.
+                        'delivered_by' => $snack->delivered_by,
+                        'no_of_boxes' => $snack->no_of_boxes,
+                        'snack_cap' => $snack->no_of_boxes,
+                        'type' => $snack->type,
+                        // Company Info
+                        'company_details_id' => $snack->company_details_id,
+                        'delivery_day' => $snack->delivery_day,
+                        'frequency' => $snack->frequency,
+                        'previous_delivery_week' => $snack->previous_delivery_week,
+                        // Product info
+                        'code' => $snack->code,
+                        'name' => $snack->name,
+                        'quantity' => $snack->quantity,
+                        'unit_price' => $snack->unit_price,
+                        'case_price' => $snack->case_price,
+                        'invoiced_at' => $snack->invoiced_at,
+                    ]);
+
+
+
+                    // // If it doesn't we can go ahead and save each row of the old box contents
+                    // if (!count($has_archive)) {
+                    //     $archived_snackbox = new SnackBoxArchive();
+                    //     // Snackbox Info
+                    //     $archived_snackbox->snackbox_id = $snack->snackbox_id;
+                    //     $archived_snackbox->is_active = $snack->is_active;
+                    //     $archived_snackbox->delivered_by = $snack->delivered_by;
+                    //     $archived_snackbox->no_of_boxes = $snack->no_of_boxes;
+                    //     $archived_snackbox->snack_cap = $snack->snack_cap;
+                    //     $archived_snackbox->type = $snack->type;
+                    //     // Company Info
+                    //     $archived_snackbox->company_details_id = $snack->company_details_id;
+                    //     $archived_snackbox->delivery_day = $snack->delivery_day;
+                    //     $archived_snackbox->frequency = $snack->frequency;
+                    //     $archived_snackbox->previous_delivery_week = $snack->previous_delivery_week;
+                    //     $archived_snackbox->next_delivery_week = $snack->next_delivery_week;
+                    //     // Product Information
+                    //     $archived_snackbox->product_id = $snack->product_id;
+                    //     $archived_snackbox->code = $snack->code;
+                    //     $archived_snackbox->name = $snack->name;
+                    //     $archived_snackbox->quantity = $snack->quantity;
+                    //     $archived_snackbox->unit_price = $snack->unit_price;
+                    //     $archived_snackbox->invoiced_at = $snack->invoiced_at;
+                    //     $archived_snackbox->save();
+                    // } else {
+                    //     // But what should we do if it does?
+                    //     // What are the possible reasons for this?
+                    //
+                    //     // 1. Mass update has already been run for this 'type', backing up orders for that 'next_delivery_week' (i.e the previous week).
+                    //     // 2. An update to a company snackbox (i.e not a mass update) <-- This isn't in place yet and I'm not sure it should be unless specifically requested via a button to back up contents before editing?
+                    //     // 3. OR SHOULD I JUST CREATE A SPECIFIC TIME WHEN ALL SNACKBOX ORDERS ARE EMPTIED AND ARCHIVES CREATED?
+                    //     // - IF BOXES ARE EMPTIED PRIOR TO MASS UPDATING, WE WOULDN'T NEED TO DO THAT HERE EITHER?
+                    // }
 
 
                     // Now we return to the existing code and delete the entry...
@@ -1068,11 +1126,26 @@ class SnackBoxController extends Controller
                     // If the snackbox entry exists we can go ahead and delete it - as the snackbox contents may vary in quantity,
                     // I just want to strip them all out and replace with the new standard order.
 
-                    // Snackbox::where('id', $snack->id)->delete(); <-- Temporarily commenting out to test without having to reb uild the orders again!  Must uncomment again when I'm done!!
+                //----- LOOK AT THIS!  DID I MEAN TO LEAVE IT COMMENTED OUT OR HAVE I JUST SPOTTED AN OVERSIGHT! -----//
+
+                    // Snackbox::where('id', $snack->id)->delete(); <-- Temporarily commenting out to test without having to rebuild the orders again!  Must uncomment again when I'm done!!
 
                     // Kinda pointless but I'd like to change this ( Snackbox::where('id', $snack->id)->delete(); ) to
                     // --> SnackBox::destroy($snack->id);
-                }
+
+                    // On reflection, this could be reinstated or deleted (boxes should be empty before this function is called, however should the unexpected happen, and as
+                    // we're going to the trouble of checking for unarchived entries, let's delete any entries other than default product_id == 0.
+                    // Then hopefully we have the best of both worlds.
+
+                    // EDIT: SOMETHING IS CAUSING EMPTY BOX DUPLICATION - IT HAPPENS TO SNACKS, DRINKS AND I'D ASSUME OTHER BUT I'LL NEED TO GENERATE AN OTHERBOX TO CONFIRM.
+                    // IF IT'S HAPPENING TO THE REST, THEN HOW CAN THIS BUT OF CODE BE RESPONSIBLE?  I'M NOT SURE BUT NEED TO HIGHLIGHT THIS JUST IN CASE!
+                    if ($snack->product_id !== 0) {
+                        SnackBox::destroy($snack->id);
+                    }
+
+                //----- LOOK AT THIS!  DID I MEAN TO LEAVE IT COMMENTED OUT OR HAVE I JUST SPOTTED AN OVERSIGHT! -----//
+
+            } // End of foreach ($snackbox as $snack) <-- IT'S GETTING LOST IN ALL THE COMMENTS, JEEZ STOP TALKING TO YOURSELF!
 
                 //---------- End of Grab any relevant snackbox data and then strip out the rest. ----------//
 
@@ -1223,8 +1296,8 @@ class SnackBoxController extends Controller
                     $new_snackbox->previous_delivery_week = $previous_delivery_week_recovered;
                     $new_snackbox->next_delivery_week = $next_delivery_week_recovered;
                     // Product Information
-                    //dump($new_standard_snack->product_id);
-                //    dump(isset($new_standard_snack['product_id'])); // <-- Need
+                    // dump($new_standard_snack->product_id);
+                    // dump(isset($new_standard_snack['product_id'])); // <-- Need
                     // $new_snackbox->product_id = $new_standard_snack['product_id'];
                     $new_snackbox->product_id = (isset($new_standard_snack['product_id'])) ? $new_standard_snack['product_id'] : $new_standard_snack['id'];
                     $new_snackbox->code = $new_standard_snack['code'];

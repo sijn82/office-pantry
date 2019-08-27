@@ -77299,6 +77299,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 root_ginger: fruitbox.root_ginger,
                 tailoring_fee: fruitbox.tailoring_fee,
                 discount_multiple: fruitbox.discount_multiple,
+                invoiced_at: fruitbox.invoiced_at,
                 skip_archive: this.skip_archive
             }).then(function (response) {
                 console.log(response);
@@ -77307,6 +77308,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 return console.log(error);
             });
         },
+
+        // getFruitPartners() {
+        //     this.$store.commit('getFruitPartners');
+        // },
         fruit_partner_id_to_name_converter: function fruit_partner_id_to_name_converter(id) {
             var _this2 = this;
 
@@ -77324,7 +77329,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     mounted: function mounted() {
-        this.$store.commit('getFruitPartners');
+        // this.$store.commit('getFruitPartners'); // <-- Trying to limit the amount of time getFruitPartners is called and attempted to add to store.
     }
 });
 
@@ -78804,8 +78809,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     mounted: function mounted() {
-        this.$store.commit('getFruitPartners');
-        console.log(this.fruitboxes);
+        // this.$store.commit('getFruitPartners');
+        // console.log(this.fruitboxes);
     }
 });
 
@@ -79377,7 +79382,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     mounted: function mounted() {
 
-        this.$store.commit('getFruitPartners');
+        // this.$store.commit('getFruitPartners'); //  So long as this is mounted whether an attempt is made to create a new box, then this will limit the calls from 5+ to 5. - EDIT: Aiming lower.
     }
 });
 
@@ -80953,7 +80958,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     mounted: function mounted() {
-        this.$store.commit('getFruitPartners');
+        // this.$store.commit('getFruitPartners');
     }
 });
 
@@ -82528,8 +82533,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     mounted: function mounted() {
-        this.$store.commit('getFruitPartners');
-        console.log(this.archived_fruitboxes);
+        // this.$store.commit('getFruitPartners');
+        // console.log(this.archived_fruitboxes);
     }
 });
 
@@ -83149,7 +83154,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     mounted: function mounted() {
-        this.$store.commit('getFruitPartners');
+        // this.$store.commit('getFruitPartners'); // <-- Trying to limit the amount of time getFruitPartners is called and attempted to add to store.
     }
 });
 
@@ -84525,8 +84530,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     mounted: function mounted() {
-        this.$store.commit('getFruitPartners');
-        console.log(this.milkboxes);
+        // this.$store.commit('getFruitPartners');
+        // console.log(this.milkboxes);
     }
 });
 
@@ -86523,7 +86528,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     mounted: function mounted() {
-        this.$store.commit('getFruitPartners');
+        // this.$store.commit('getFruitPartners');
     }
 });
 
@@ -88020,8 +88025,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     mounted: function mounted() {
-        this.$store.commit('getFruitPartners');
-        console.log(this.archived_milkboxes);
+        // this.$store.commit('getFruitPartners');
+        // console.log(this.archived_milkboxes);
     }
 });
 
@@ -90766,7 +90771,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     mounted: function mounted() {
 
-        this.$store.commit('getAssignedRoutes');
+        // this.$store.commit('getAssignedRoutes'); // <-- Moved this up a component.
     }
 });
 
@@ -91514,7 +91519,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     mounted: function mounted() {
         console.log(this.routes);
-        //this.$store.commit('getAssignedRoutes');
+        this.$store.commit('getAssignedRoutes'); // Can I move calls up a component?
     }
 });
 
@@ -92849,16 +92854,6 @@ exports.push([module.i, "\n.margin-top-10[data-v-4bb783e0] {\n  margin-top: 10px
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -112309,7 +112304,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     mounted: function mounted() {
-        this.$store.commit('getFruitPartners');
+        this.$store.commit('getFruitPartners'); // The company must exist to add boxes to their account.  So this component seems a good place to make the call? This and add new company are now the only calls.
     }
 });
 
@@ -115248,7 +115243,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "\n.flex-center {\n  display: block;\n}\np {\n  font-weight: 300;\n  margin-left: 30px;\n  margin-right: 30px;\n}\n.margin-top-20 {\n  margin-top: 20px;\n}\n.invoice-options {\n  margin-bottom: 40px;\n}\n", ""]);
+exports.push([module.i, "\n.flex-center {\n  display: block;\n}\np {\n  font-weight: 300;\n  margin-left: 30px;\n  margin-right: 30px;\n}\n.margin-top-20 {\n  margin-top: 20px;\n}\n.margin-left-right-auto {\n  margin-left: auto;\n  margin-right: auto;\n}\n.margin-left-right-top-20 {\n  margin-top: 20px;\n  margin-left: 20px;\n  margin-right: 20px;\n}\n.border-top {\n  border-top: solid 2px #636b6f;\n  margin-left: 40px;\n  margin-right: 40px;\n}\n.invoice-options {\n  margin-bottom: 40px;\n}\n", ""]);
 
 // exports
 
@@ -115259,6 +115254,34 @@ exports.push([module.i, "\n.flex-center {\n  display: block;\n}\np {\n  font-wei
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -115325,7 +115348,11 @@ var render = function() {
     "div",
     { staticClass: "invoice-options" },
     [
-      _c("h4", [_vm._v(" Invoice Options ")]),
+      _c("b-row", { staticClass: "margin-top-20 border-top" }, [
+        _c("h4", { staticClass: "margin-top-20 margin-left-right-auto" }, [
+          _vm._v(" Invoice Options ")
+        ])
+      ]),
       _vm._v(" "),
       _c(
         "b-row",
@@ -115342,7 +115369,13 @@ var render = function() {
                   }
                 },
                 [_vm._v(" Export Weekly Invoicing ")]
-              )
+              ),
+              _vm._v(" "),
+              _c("b-form-text", { staticClass: "margin-left-right-top-20" }, [
+                _vm._v(
+                  " All active orders for companies using these branding themes ['BACS', 'GoCardless', 'Paypal (Stripe)', 'Weekly Standing Order', 'Eden Branding Theme']. "
+                )
+              ])
             ],
             1
           ),
@@ -115361,7 +115394,7 @@ var render = function() {
                 [_vm._v(" Confirm Weekly Invoicing ")]
               ),
               _vm._v(" "),
-              _c("b-form-text", [
+              _c("b-form-text", { staticClass: "margin-left-right-top-20" }, [
                 _vm._v(
                   " If you're happy with the exported invoice, click here to confirm and add an invoiced_at date to each entry. "
                 )
@@ -115373,27 +115406,37 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _c("h4", { staticClass: "margin-top-20" }, [
-        _vm._v(" Advance Order Date ")
+      _c("b-row", { staticClass: "margin-top-20" }, [
+        _c("p", [
+          _vm._v(
+            "\n            While you don't need to confirm the invoicing immediately, I'd still suggest not leaving it too long.  \n            It calls the same query, checking all active companies with a matching branding theme, \n            then loops through each current box/archive looking for orders which match the current week start. \n            So make sure the week start is the same one you selected when exporting the invoices!\n        "
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c("b-row", { staticClass: "margin-top-20 border-top" }, [
+        _c("h4", { staticClass: "margin-top-20 margin-left-right-auto" }, [
+          _vm._v(" Advance Order Date ")
+        ])
       ]),
       _vm._v(" "),
       _vm._m(0),
       _vm._v(" "),
       _c("p", [
         _vm._v(
-          "\n        As well as advancing orders to their next delivery date (if the current date set on the box has past), it will also archive the pre-existing orders, so we have a record of them.\n    "
+          "\n            As well as advancing orders to their next delivery date (if the current date set on the box has past), it will also archive the pre-existing orders, so we have a record of them.\n        "
         )
       ]),
       _vm._v(" "),
       _c("p", [
         _vm._v(
-          " \n        If the order in question hasn't been invoiced yet, it will become an active archive and appear in the company dashboard (under archives), otherwise it'll be a deactivated archive.\n    "
+          " \n            If the order in question hasn't been invoiced yet, it will become an active archive and appear in the company dashboard (under archives), otherwise it'll be a deactivated archive.\n        "
         )
       ]),
       _vm._v(" "),
       _c("p", [
         _vm._v(
-          "\n        I'm yet to write the ability to search through these inactive orders but I will.  For now I'm hoping out of sight, out of mind.\n    "
+          "\n            I'm yet to write the ability to search through these inactive orders but I will.  For now I'm hoping out of sight, out of mind.\n        "
         )
       ]),
       _vm._v(" "),
@@ -115413,10 +115456,10 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("p", [
       _vm._v(
-        " \n        While this process was set up to run once a week automatically, I'm going to deactivate that feature for now.\n        Instead you're going to need to "
+        " \n            While this process was set up to run once a week automatically, I'm going to deactivate that feature for now.\n            Instead you're going to need to "
       ),
       _c("b", [_vm._v(" remember to advance it yourselves ")]),
-      _vm._v(", when it suits your workflow.\n    ")
+      _vm._v(", when it suits your workflow.\n        ")
     ])
   }
 ]
