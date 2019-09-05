@@ -14,10 +14,10 @@ class OfficeTeam extends Authenticatable
         protected $table = 'office_team';
 
         protected $fillable = [
-            'name', 'email', 'password',
+            'name', 'email', 'password', 'api_token',
         ];
 
         protected $hidden = [
-            'password', 'remember_token',
+            'password', 'remember_token', 'api_token'
         ];
 }

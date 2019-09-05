@@ -17,11 +17,18 @@ class RedirectIfAuthenticated
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if ($guard == "office" && Auth::guard($guard)->check()) {
+        // dump($guard);
+        // dd($request);
+        
+        dump(Auth::guard());
+        dd(Auth::guard($guard)->check());
+        
+        // if ($guard == "office" && Auth::guard($guard)->check()) { // As $guard always comes back as null, I'm going to try Auth::guard() for a little bit to see what happens - 30/08/19
+        if (Auth::guard() == "office" && Auth::guard($guard)->check()) {
 
             return redirect('/office');
         }
-
+        // keeping the previous $guard check here though as I'm not really doing anything to warehouse until I get office sorted!
         if ($guard == "warehouse" && Auth::guard($guard)->check()) {
 
             return redirect('/warehouse');

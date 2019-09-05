@@ -38,7 +38,7 @@
                     <b-col>
                         <label><b> Week Delivered </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="archived_milkbox.next_delivery" type="date"></b-form-input>
+                            <b-form-input v-model="archived_milkbox.next_delivery" type="date" readonly></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ archived_milkbox.next_delivery }} </p>

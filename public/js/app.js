@@ -72314,6 +72314,7 @@ var render = function() {
                   _c("b-form-input", {
                     attrs: {
                       type: "date",
+                      readonly: "",
                       placeholder: "Edit the current week_start"
                     },
                     model: {
@@ -77730,7 +77731,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "date" },
+                        attrs: { type: "date", readonly: "" },
                         model: {
                           value: _vm.fruitbox.next_delivery,
                           callback: function($$v) {
@@ -79669,6 +79670,7 @@ var render = function() {
                     attrs: {
                       id: "fruitbox-first-delivery",
                       type: "date",
+                      readonly: "",
                       placeholder: "Enter fruitbox first delivery week start",
                       required: ""
                     },
@@ -81385,7 +81387,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "date" },
+                        attrs: { type: "date", readonly: "" },
                         model: {
                           value: _vm.archived_fruitbox.next_delivery,
                           callback: function($$v) {
@@ -83332,7 +83334,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "date" },
+                        attrs: { type: "date", readonly: "" },
                         model: {
                           value: _vm.milkbox.next_delivery,
                           callback: function($$v) {
@@ -85269,6 +85271,7 @@ var render = function() {
                     attrs: {
                       id: "milkbox-first-delivery",
                       type: "date",
+                      readonly: "",
                       placeholder: "Enter milkbox first delivery week start",
                       required: ""
                     },
@@ -86701,7 +86704,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "date" },
+                        attrs: { type: "date", readonly: "" },
                         model: {
                           value: _vm.archived_milkbox.next_delivery,
                           callback: function($$v) {
@@ -93618,7 +93621,7 @@ var render = function() {
                         "div",
                         [
                           _c("b-form-input", {
-                            attrs: { type: "date" },
+                            attrs: { type: "date", readonly: "" },
                             model: {
                               value: _vm.snackbox[0].next_delivery_week,
                               callback: function($$v) {
@@ -94872,7 +94875,7 @@ var render = function() {
               _c("label", [_vm._v(" Next Delivery Week Start ")]),
               _vm._v(" "),
               _c("b-form-input", {
-                attrs: { type: "date", size: "sm" },
+                attrs: { type: "date", readonly: "", size: "sm" },
                 model: {
                   value: _vm.next_delivery_week,
                   callback: function($$v) {
@@ -97149,7 +97152,7 @@ var render = function() {
                         "div",
                         [
                           _c("b-form-input", {
-                            attrs: { type: "date" },
+                            attrs: { type: "date", readonly: "" },
                             model: {
                               value:
                                 _vm.archived_snackbox[0].next_delivery_week,
@@ -98727,7 +98730,7 @@ var render = function() {
                         "div",
                         [
                           _c("b-form-input", {
-                            attrs: { type: "date" },
+                            attrs: { type: "date", readonly: "" },
                             model: {
                               value: _vm.drinkbox[0].next_delivery_week,
                               callback: function($$v) {
@@ -99626,7 +99629,7 @@ var render = function() {
                     _c("label", [_vm._v(" Next Delivery Week Start ")]),
                     _vm._v(" "),
                     _c("b-form-input", {
-                      attrs: { type: "date", size: "sm" },
+                      attrs: { type: "date", readonly: "", size: "sm" },
                       model: {
                         value: _vm.next_delivery_week,
                         callback: function($$v) {
@@ -101037,7 +101040,7 @@ var render = function() {
                         "div",
                         [
                           _c("b-form-input", {
-                            attrs: { type: "date" },
+                            attrs: { type: "date", readonly: "" },
                             model: {
                               value:
                                 _vm.archived_drinkbox[0].next_delivery_week,
@@ -102546,7 +102549,7 @@ var render = function() {
                         "div",
                         [
                           _c("b-form-input", {
-                            attrs: { type: "date" },
+                            attrs: { type: "date", readonly: "" },
                             model: {
                               value: _vm.otherbox[0].next_delivery_week,
                               callback: function($$v) {
@@ -103447,7 +103450,7 @@ var render = function() {
                     _c("label", [_vm._v(" Next Delivery Week Start ")]),
                     _vm._v(" "),
                     _c("b-form-input", {
-                      attrs: { type: "date", size: "sm" },
+                      attrs: { type: "date", readonly: "", size: "sm" },
                       model: {
                         value: _vm.next_delivery_week,
                         callback: function($$v) {
@@ -104811,7 +104814,7 @@ var render = function() {
                         "div",
                         [
                           _c("b-form-input", {
-                            attrs: { type: "date" },
+                            attrs: { type: "date", readonly: "" },
                             model: {
                               value:
                                 _vm.archived_otherbox[0].next_delivery_week,
@@ -106053,7 +106056,7 @@ var render = function() {
                           "div",
                           [
                             _c("b-form-input", {
-                              attrs: { type: "date" },
+                              attrs: { type: "date", readonly: "" },
                               model: {
                                 value: _vm.product.shortest_stock_date,
                                 callback: function($$v) {
@@ -115717,7 +115720,7 @@ var render = function() {
                         "div",
                         [
                           _c("b-form-input", {
-                            attrs: { type: "date" },
+                            attrs: { type: "date", readonly: "" },
                             model: {
                               value: _vm.next_run,
                               callback: function($$v) {

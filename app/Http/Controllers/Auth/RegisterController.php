@@ -12,6 +12,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+// added for token authentication in laravel docs - 29/8/19
+use Illuminate\Support\Str;
 
 class RegisterController extends Controller
 {
@@ -97,6 +99,7 @@ class RegisterController extends Controller
             'name' => $request['name'],
             'email' => $request['email'],
             'password' => Hash::make($request['password']),
+            'api_token' => Str::random(60),
         ]);
 
         return redirect()->intended('login/office');

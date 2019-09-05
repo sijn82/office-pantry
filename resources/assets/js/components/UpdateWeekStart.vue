@@ -15,7 +15,7 @@
                                 <label><b>Week Start:</b></label>
                                     <b-form-input
                                         v-model="form.week_start"
-                                        type="date"
+                                        type="date" readonly
                                         placeholder="Edit the current week_start">
                                     </b-form-input>
                             </div>

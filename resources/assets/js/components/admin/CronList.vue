@@ -23,7 +23,7 @@
             <b-row>
                 <b-col><p><b> {{ cron_data.command }} </b></p></b-col>
                 <!-- The only field it would be useful to edit manually (as an admin) would be the 'next_run', as changing the command would break everything and 'last_run' is otherwise irrelevant. -->
-                <b-col> <div v-if="edit"><b-form-input type="date" v-model="next_run"> </b-form-input></div> <div v-else> <p><b> {{ cron_data.next_run }} </b></p></div></b-col>
+                <b-col> <div v-if="edit"><b-form-input type="date" readonly v-model="next_run"> </b-form-input></div> <div v-else> <p><b> {{ cron_data.next_run }} </b></p></div></b-col>
                 <b-col> <p><b> {{ cron_data.last_run }} </b></p> </b-col>
                 <b-col>
                     <b-button size="sm" variant="warning" @click="editCronData"> Edit </b-button> 

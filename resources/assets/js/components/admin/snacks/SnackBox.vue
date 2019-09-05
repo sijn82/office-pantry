@@ -1,6 +1,6 @@
 <template lang="html">
     <div>
-        
+
         <div id="edit-save-buttons">
             <h4> {{ snackbox[0].snackbox_id }} </h4>
             <h5> {{ snackbox[0].next_delivery_week }} </h5>
@@ -11,7 +11,7 @@
             <b-button v-if="editing" class="btn btn-success" @click="updateDetails(snackbox[0])"> Save </b-button>
             <b-button variant="danger" @click="deleteSnackBox(snackbox[0])"> Delete </b-button>
         </div>
-        
+
         <div class="snackbox-details" v-if="details">
             <b-row id="top-details" :class="snackbox[0].is_active">
                 <b-col>
@@ -60,7 +60,7 @@
                     </div>
                 </b-col>
             </b-row>
-            
+
             <b-row :class="snackbox[0].is_active" class="padding-top-10">
                 <b-col>
                     <label><b> Type </b></label>
@@ -90,7 +90,7 @@
                     </div>
                 </b-col>
             </b-row>
-            
+
             <b-row id="bottom-details" :class="snackbox[0].is_active" class="padding-top-10">
                 <b-col v-if="snackbox[0].frequency === 'Monthly'">
                     <label><b> Week In Month </b></label>
@@ -114,14 +114,14 @@
                 <b-col>
                     <label><b> Next Delivery Week </b></label>
                     <div v-if="editing">
-                        <b-form-input v-model="snackbox[0].next_delivery_week" type="date"></b-form-input>
+                        <b-form-input v-model="snackbox[0].next_delivery_week" type="date" readonly></b-form-input>
                     </div>
                     <div v-else>
                         <p> {{ snackbox[0].next_delivery_week }} </p>
                     </div>
                 </b-col>
             </b-row>
-            
+
             <h4> Order Breakdown </h4>
             <div v-if="add_product">
                 <b-button variant="danger" @click="addProduct()"> Close </b-button>
@@ -192,19 +192,19 @@
                     <!-- A place holder column to allow room for the edit/remove buttons on each item -->
                 </b-col>
             </b-row>
-            
-            <!-- Now lets loop through the products contained in the box, 
+
+            <!-- Now lets loop through the products contained in the box,
             I might need to put these in their own component to have them editable as their own instance.
-        
+
             On edit I also need to change the input somehow into (potentially) a filterable searchbar so a new product can be selected
-            although I still need to consider some other options on how best to go about this 
-        
-            Actually I think a better idea is just to allow the user to delete a product or, 
+            although I still need to consider some other options on how best to go about this
+
+            Actually I think a better idea is just to allow the user to delete a product or,
             through a button revealable section, select a new product(s) and attach it to the current snackbox_id + details.
             This will need refreshing to update, so holding them in the store might be a good option -->
-            
+
             <snackbox-item id="snackbox-products" v-for="snackbox_item in snackbox" v-if="snackbox_item.product_id !== 0" :snackbox_item="snackbox_item" :key="snackbox_item.id" @refresh-data="refreshData($event)"></snackbox-item>
-            
+
              <h3 class="border-top"> Current Total: £{{ snackbox_total }} </h3> <!-- This needs some work to generate an accurate and useful total, it's on my todo list but not a priority right now. -->
         </div>
     </div>
@@ -244,7 +244,7 @@ export default {
             return ( Number.isNaN(stock_level) ? '' : stock_level)
         },
         snackbox_total() {
-            
+
             let $snackbox_total = 0
 
             // This function checks each entry in the current snackbox list and creates a running total (a) of the unit price (b[cost]) multiplied by the quantity (b[quantity]).
@@ -263,11 +263,11 @@ export default {
                     }
                 }, 0);
             };
-            
+
             // Now we use the function by passing in the snackbox array, and the two properties we need to multiply - saving it as the current total cost.
             // First a quick check, on whether we need to tally up case prices for wholesale, or unit prices for regular snackboxes.
             (this.snackbox[0].type === 'wholesale') ? $snackbox_total = sum(this.snackbox, 'case_price', 'quantity') : $snackbox_total = sum(this.snackbox, 'unit_price', 'quantity');
-                
+
             return $snackbox_total;
         }
     },
@@ -292,8 +292,8 @@ export default {
                     unit_price: this.$store.state.selectedProduct.unit_price,
                     case_price: this.$store.state.selectedProduct.case_price,
                 },
-                snackbox_details: snackbox, 
-                    
+                snackbox_details: snackbox,
+
             }).then ((response) => {
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?
                 this.$emit('refresh-data', {company_details_id: snackbox.company_details_id})
@@ -327,7 +327,7 @@ export default {
         },
         deleteSnackBox(snackbox) {
             let self = this;
-            axios.put('api/boxes/snackbox/destroy-box/' + snackbox.snackbox_id, { 
+            axios.put('api/boxes/snackbox/destroy-box/' + snackbox.snackbox_id, {
                 snackbox_id: snackbox.snackbox_id,
             }).then ( (response) => {
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?

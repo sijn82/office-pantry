@@ -19,6 +19,7 @@ class CreateOfficeTeamTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->boolean('is_super')->default(false);
+            $table->string('api_token', 80)->unique()->nullable()->default(null);
             $table->rememberToken();
             $table->timestamps();
         });

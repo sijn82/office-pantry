@@ -52,7 +52,7 @@
                     <b-col class="col-sm-3">
                         <label><b> Shortest Stock Date </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="product.shortest_stock_date" type="date"></b-form-input>
+                            <b-form-input v-model="product.shortest_stock_date" type="date" readonly></b-form-input>
                         </div>
                         <div>
                             <p> {{ product.shortest_stock_date }} </p>

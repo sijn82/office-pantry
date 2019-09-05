@@ -39,7 +39,7 @@
                     <b-col>
                         <label><b> Next Delivery </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="milkbox.next_delivery" type="date"></b-form-input>
+                            <b-form-input v-model="milkbox.next_delivery" type="date" readonly></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ milkbox.next_delivery }} </p>

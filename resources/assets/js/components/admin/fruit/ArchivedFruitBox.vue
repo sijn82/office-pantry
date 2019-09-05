@@ -115,7 +115,7 @@
                     <b-col>
                         <label><b> Week Delivered </b></label> <!-- Changed title to reflect the value it really represents in this scenario -->
                         <div v-if="editing">
-                            <b-form-input type="date" v-model="archived_fruitbox.next_delivery"></b-form-input> <!-- I could change the db name etc... -->
+                            <b-form-input type="date" readonly v-model="archived_fruitbox.next_delivery"></b-form-input> <!-- I could change the db name etc... -->
                         </div>
                         <div v-else>
                             <p> {{ archived_fruitbox.next_delivery }} </p> <!-- ...but let's add it to the todo list for now. -->

@@ -93,7 +93,7 @@
                 <b-col>
                     <label><b> Next Delivery Week </b></label>
                     <div v-if="editing">
-                        <b-form-input v-model="otherbox[0].next_delivery_week" type="date"></b-form-input>
+                        <b-form-input v-model="otherbox[0].next_delivery_week" type="date" readonly></b-form-input>
                     </div>
                     <div v-else>
                         <p> {{ otherbox[0].next_delivery_week }} </p>

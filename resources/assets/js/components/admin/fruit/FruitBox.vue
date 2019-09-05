@@ -114,7 +114,7 @@
                     <b-col>
                         <label><b> Next Delivery </b></label>
                         <div v-if="editing">
-                            <b-form-input type="date" v-model="fruitbox.next_delivery"></b-form-input>
+                            <b-form-input type="date" readonly v-model="fruitbox.next_delivery"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ fruitbox.next_delivery }} </p>
