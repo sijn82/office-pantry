@@ -20,7 +20,7 @@ Route::post('exporting', 'Company\CompanyRouteController@import')->name('import-
 // a) it worked! (and)
 // b) I hadn't/haven't spent the time to realise and maximise their use... yet.
 
-// Main homepage for guest/office/warhouse login - no authentication on route and end point for logged out users
+// Main homepage for guest/office/warehouse login - no authentication on route and end point for logged out users
 Route::get('/', function () {
     return view('welcome');
 });
@@ -72,7 +72,7 @@ Route::group(['middleware' => ['web','auth:office'], 'prefix' => 'office'], func
     Route::view('snackboxes/massupdate', 'snackbox-creation')->name('snackboxes.massupdate');
 
     Route::view('exporting-processes', 'exporting')->name('exporting-processes');
-    
+
     Route::view('importing', 'imports.import')->name('import-new-system-data');
     Route::post('importing-company-details', 'ImportController@importCompanyDetails')->name('import-company-details');
     Route::post('importing-fruit-partners', 'ImportController@importFruitPartners')->name('import-fruit-partners');

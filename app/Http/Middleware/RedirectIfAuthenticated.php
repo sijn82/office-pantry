@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 class RedirectIfAuthenticated
 {
+    public $user;
     /**
      * Handle an incoming request.
      *
@@ -17,14 +18,18 @@ class RedirectIfAuthenticated
      */
     public function handle($request, Closure $next, $guard = null)
     {
+
         // dump($guard);
         // dd($request);
-        
-        dump(Auth::guard());
-        dd(Auth::guard($guard)->check());
-        
+
+        // dump(Auth::guard());
+        $check = Auth::guard($guard)->check();
+        $auth = Auth::guard();
+
+        //----- OK, sometimes this works, I think? But $guard isn't working as intended, neither are the if statement checks, so a better solution is required 11/09/19 -----//
+
         // if ($guard == "office" && Auth::guard($guard)->check()) { // As $guard always comes back as null, I'm going to try Auth::guard() for a little bit to see what happens - 30/08/19
-        if (Auth::guard() == "office" && Auth::guard($guard)->check()) {
+        if (Auth::guard() == "office") { //  && Auth::guard($guard)->check() <- removing this bit to see if I get redirected more appropriately, then I can decide what to do with it.
 
             return redirect('/office');
         }
@@ -35,8 +40,8 @@ class RedirectIfAuthenticated
         }
 
         if (Auth::guard($guard)->check()) {
-    
-            return redirect('/home');
+
+            return redirect('/');
         }
 
         // This is the old check, now updated and improved with the code above.

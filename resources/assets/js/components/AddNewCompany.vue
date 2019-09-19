@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h3 class="section-header">Add New Company</h3>
+        <h3 class="section-header">Add New Company (not in use)</h3>
         <b-form class="add-company-form" @submit="onSubmit" @reset="onReset" v-if="show">
                 <!-- Company Names -->
                 <b-form-group id="company-name-group"
@@ -394,7 +394,7 @@ export default {
           this.$nextTick(() => { this.show = true });
         }
   },
-  
+
   mounted() {
 
        this.$store.commit('getFruitPartners');

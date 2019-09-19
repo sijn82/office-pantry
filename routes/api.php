@@ -26,11 +26,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group([
     'namespace' => 'Boxes',
     'prefix' => 'boxes',
-    'guard' => 'office',
+    //'guard' => 'office',
     // middleware currently throws a 401 unauthenticated error when turned on.
-    
+
     'middleware' => [
-        // 'auth:office'//, 
+        // 'auth:office'//,
         'auth:api'
     ]
 ], function () {
@@ -203,7 +203,7 @@ Route::group([
 
 Route::post('companies/selected', 'OfficeDashboardController@showSelectedCompanyData');
 Route::get('companies/selected', 'OfficeDashboardController@showSelectedCompanyData');
-Route::get('companies/{company}', 'OfficeDashboardController@show')->middleware('auth:api');
+Route::get('companies/{company}', 'OfficeDashboardController@show')->middleware('auth:api'); //
 
 Route::get('products/{id}', 'OfficeDashboardController@showProduct'); // but works fine when placed below it here? <-- that was before, now I've moved it again what will happen?
 Route::put('preferences/{id}', 'OfficeDashboardController@destroy');

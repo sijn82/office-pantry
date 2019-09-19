@@ -17,7 +17,7 @@ return [
         'guard' => 'office',
         'passwords' => 'office',
     ],
-    
+
     // 'defaults' => [
     //     'guard' => 'web',
     //     'passwords' => 'users',
@@ -47,8 +47,8 @@ return [
         ],
 
         'api' => [
-            // 'driver' => 'passport', // 'passport' is for a more robust authentication (currently struggling to get it working properly with multi auth)
-             'driver' => 'token', // 'token' is for basic authentication, simpler (theoretically) to use with multi authentication.
+             'driver' => 'passport', // 'passport' is for a more robust authentication (currently struggling to get it working properly with multi auth)
+            //'driver' => 'token', // 'token' is for basic authentication, simpler (theoretically) to use with multi authentication.
             'provider' => 'officeteam', // changed this from users to enable office (admins) access to these urls.  Not sure what this will do customers trying to access information? 8/8/19
         ],
         'office' => [

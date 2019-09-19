@@ -147,12 +147,12 @@
                     </b-col>
                 </b-row>
                 <b-row>
-                    <b-col class="margin-top-20"> 
-                        <label><b> Invoice Email* </b></label> 
+                    <b-col class="margin-top-20">
+                        <label><b> Invoice Email* </b></label>
                         <b-form-input type="email" v-model="form.invoice_email" required></b-form-input>
                     </b-col>
                 </b-row>
-                
+
                 <b-row class="margin-top-20">
                     <b-col>
                         <label><b> Branding Theme* </b></label>
@@ -261,13 +261,13 @@ export default {
               { text: 'Please select an option', value: null },
               'BACS', 'GoCardless', 'GoCardless In Advance', 'Invoiced In Advance',
               'Monthly Invoice', 'Monthly Invoice GoCardless', 'Paypal (Stripe)', 'Paypal In Advance (Stripe)',
-              'Weekly Standing Order', 'Monthly Standing Order', 'Weekly Standing Order In Advance', 
+              'Weekly Standing Order', 'Monthly Standing Order', 'Weekly Standing Order In Advance',
               'Monthly Standing Order In Advance', 'Eden Branding Theme', 'TBC'
             ],
             model_options: ['Free', 'Honesty Box'],
             monthly_surprise_options: [
-                { text: 'Yes', value:'yes' }, 
-                { text: 'No', value:'no' }, 
+                { text: 'Yes', value:'yes' },
+                { text: 'No', value:'no' },
                 { text: 'TBC', value: null }
             ],
         }
@@ -365,6 +365,11 @@ export default {
     },
     mounted () {
         this.$store.commit('getFruitPartners');
+        //  Passport test, ran out of time in the day.
+          axios.get('/api/user').then(response => {
+              console.log(response.data);
+
+          });
     }
 }
 

@@ -110928,6 +110928,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     mounted: function mounted() {
         this.$store.commit('getFruitPartners');
+        //  Passport test, ran out of time in the day.
+        axios.get('/api/user').then(function (response) {
+            console.log(response.data);
+        });
     }
 });
 
