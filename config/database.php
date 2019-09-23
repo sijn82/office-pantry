@@ -2,10 +2,25 @@
 
 $url = parse_url(getenv("DATABASE_URL"));
 
-$host = $url["host"];
-$username = $url["user"];
-$password = $url["pass"];
-$database = substr($url["path"], 1);
+// I'm sure I've already done this once!  But wrapping this around an if statement... again?
+// Ahh, I'm on the wrong branch - that's why.  Keeping this change as it's an improvement anyway.
+
+if ($url['path'] !== '') {
+
+    $host = $url["host"];
+    $username = $url["user"];
+    $password = $url["pass"];
+    $database = substr($url["path"], 1);
+
+} else {
+
+    $host = '';
+    $username = '';
+    $password = '';
+    $database = '';
+
+}
+
 
 return [
 
