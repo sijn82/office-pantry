@@ -68,6 +68,7 @@ WithMultipleSheets
                                         '1.03 - M25 South',
                                         '1.02 - Serviced Thames',
                                         '1.01 - Serviced London',
+                                        '2.03 - Tue Float',
                                         '2.02 - Tue Multidrop',
                                         '2.01 - Tue Serviced',
                                         'TBC',
