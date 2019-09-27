@@ -15,7 +15,7 @@
                                 <label><b>Week Start:</b></label>
                                     <b-form-input
                                         v-model="form.week_start"
-                                        type="date" readonly
+                                        type="date"
                                         placeholder="Edit the current week_start">
                                     </b-form-input>
                             </div>
@@ -27,10 +27,10 @@
                             </div>
 
                     </form>
-                    
+
                     <!-- Really not happy with this v-for work around, I shouldn't need to pointlessly loop through the data in order to access its properties! -->
                     <p v-for="week_start in $store.state.week_start"><b> Current Value: {{ week_start.current }} </b></p>
-                    
+
                     <form class="" action="/api/office-pantry/import-week-start-days" enctype="multipart/form-data" method="post" name="deliveryDaysSelect" @submit.prevent="uploadDeliveryDays">
 
                             <div class="input-group input-group-md col-md-8 offset-md-2">
@@ -48,12 +48,12 @@
                                 <input class=" col-md-2 col-sm-3 offset-md-5 btn btn-success" type="submit" value="Change Delivery Days">
                             </div>
                     </form>
-                    
-                    <!-- Really not happy with this v-for work around, I shouldn't need to pointlessly loop through the data in order to access its properties! -->        
+
+                    <!-- Really not happy with this v-for work around, I shouldn't need to pointlessly loop through the data in order to access its properties! -->
                     <p v-for="week_start in $store.state.week_start"><b> Current Value: {{ week_start.delivery_days }} </b></p>
-                    
+
                 </div>
-                
+
             </div>
         </div>
 </template>

@@ -1,5 +1,8 @@
 <?php
 
+// Added during the upgrade to Laravel 6.0 to replace the deprecated helper function and allow the package manifest to generate successfully.
+use Illuminate\Support\Str;
+
 return [
 
     /*
@@ -124,7 +127,7 @@ return [
 
     'cookie' => env(
         'SESSION_COOKIE',
-        str_slug(env('APP_NAME', 'laravel'), '_').'_session'
+        Str::slug(env('APP_NAME', 'laravel'), '_').'_session'
     ),
 
     /*

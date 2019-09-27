@@ -1,5 +1,8 @@
 <?php
 
+// Added during the upgrade to Laravel 6.0 to replace the deprecated helper function and allow the package manifest to generate successfully.
+use Illuminate\Support\Str;
+
 return [
 
     /*
@@ -88,7 +91,8 @@ return [
 
     'prefix' => env(
         'CACHE_PREFIX',
-        str_slug(env('APP_NAME', 'laravel'), '_').'_cache'
+        // str_slug(env('APP_NAME', 'laravel'), '_').'_cache' // after updating to Laravel 6.0 str_slug deprecated (along with other helper functions) and replaced with
+        Str::slug(env('APP_NAME', 'laravel'), '_').'_cache' //  though this is still currently untested and may need 'Illuminate\Support\Str' at the top of the file.
     ),
 
 ];

@@ -72314,7 +72314,6 @@ var render = function() {
                   _c("b-form-input", {
                     attrs: {
                       type: "date",
-                      readonly: "",
                       placeholder: "Edit the current week_start"
                     },
                     model: {

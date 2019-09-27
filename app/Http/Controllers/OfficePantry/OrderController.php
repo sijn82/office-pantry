@@ -517,7 +517,7 @@ class OrderController extends Controller
 
         // ---------- Snackboxes ---------- //
 
-            $snackboxes = SnackBox::whereIn('frequency', ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'])->get()->groupBy('snackbox_id');
+            $snackboxes = SnackBox::whereIn('frequency', ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'])->get()->groupBy('snackbox_id'); // <-- I think bespoke was a temporary test and should be removed, as I can't automate bespoke!
 
             // Do I want to group these snackboxes by their snackbox_id or as I'm only really concerned with advancing the next_delivery_date, should I just treat each entry on it's own?
             // Basically, what's the next delivery date (of entry), is that date prior to Carbon::now(), if so, the order (entry) is out of date and ready to be advanced.
@@ -540,11 +540,11 @@ class OrderController extends Controller
 
                 if ($frequency_recovered === 'Weekly') {
                     // Push the date forward a week
-                    $advanced_next_delivery_week = Carbon::parse($snackbox[0]->next_delivery_week)->addWeek(1);
+                    $advanced_next_delivery_week = Carbon::parse($snackbox[0]->next_delivery_week)->addWeek(1)->format('Y-m-d'); // Added format('Y-m-d') ...
 
                 } elseif ($frequency_recovered === 'Fortnightly') {
                     // push the date forward two weeks
-                    $advanced_next_delivery_week = Carbon::parse($snackbox[0]->next_delivery_week)->addWeek(2);
+                    $advanced_next_delivery_week = Carbon::parse($snackbox[0]->next_delivery_week)->addWeek(2)->format('Y-m-d'); // ... In the hope of fixing the ...
 
                 } elseif ($frequency_recovered === 'Monthly') {
 
@@ -558,7 +558,7 @@ class OrderController extends Controller
                     // An alternative to setting the month above and parsing below would be to parse the phrase '$week . ' monday of NEXT month'
                     // and allow it use the carbon date of when the function is run however I'm currently prefering this approach
                     // as it weighs more heavily on the last delivery date rather than when processes are run.
-                    $mondayOfMonth = $carbon::parse($week . ' monday of ' . $month);
+                    $mondayOfMonth = $carbon::parse($week . ' monday of ' . $month)->format('Y-m-d'); // ... Inconsistent date format! 23/09/19
                     // Set the newly parsed delivery date.
                     $advanced_next_delivery_week = $mondayOfMonth;
 
@@ -581,11 +581,11 @@ class OrderController extends Controller
                         // this is the only line of code which will differ depending on when the frequency selected
                         if ($snackbox_entry->frequency === 'Weekly') {
                             // Push the date forward a week
-                            $snackbox_entry->next_delivery_week = Carbon::parse($snackbox_entry->next_delivery_week)->addWeek(1)->format('ymd'); // <-- Why not use $advanced_next_delivery_week?
+                            $snackbox_entry->next_delivery_week = Carbon::parse($snackbox_entry->next_delivery_week)->addWeek(1)->format('Y-m-d'); // <-- Why not use $advanced_next_delivery_week?
 
                         } elseif ($snackbox_entry->frequency === 'Fortnightly') {
                             // push the date forward two weeks
-                            $snackbox_entry->next_delivery_week = Carbon::parse($snackbox_entry->next_delivery_week)->addWeek(2)->format('ymd');
+                            $snackbox_entry->next_delivery_week = Carbon::parse($snackbox_entry->next_delivery_week)->addWeek(2)->format('Y-m-d');
 
                         } elseif ($snackbox_entry->frequency === 'Monthly') {
 
@@ -601,7 +601,7 @@ class OrderController extends Controller
                             // as it weighs more heavily on the last delivery date rather than when processes are run.
                             $mondayOfMonth = $carbon::parse($week . ' monday of ' . $month);
                             // Set the newly parsed delivery date.
-                            $snackbox_entry->next_delivery_week = $mondayOfMonth->format('ymd');
+                            $snackbox_entry->next_delivery_week = $mondayOfMonth->format('Y-m-d');
 
                         } else {
 
