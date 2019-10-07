@@ -90,6 +90,7 @@ class RoutesExport implements WithMultipleSheets
 
         $correctOrderWedThurFri =   [
                                         '3.00 - Weds Float',
+                                        '3.08 - Float 2',
                                         '3.07 - Extra',
                                         '3.06 - Extra Float',
                                         '3.05 - Thames',
@@ -102,6 +103,7 @@ class RoutesExport implements WithMultipleSheets
                                         '4.00 - Thu Float',
                                         '5.02 - Fri Multidrop',
                                         '5.01 - Fri Serviced',
+                                        '5.00 - Float',
                                         'TBC',
                                         '26 - Friday Route 2',
                                         '25 - Friday Route',
