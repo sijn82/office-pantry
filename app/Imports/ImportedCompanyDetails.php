@@ -16,7 +16,7 @@ WithHeadingRow
 
     public function model(array $row)
     {
-        dd($row); // I think to access the column names, I'll need to use - 'invoice_name' => $row['Invoice Name'] (for example).
+        //dd($row); // I think to access the column names, I'll need to use - 'invoice_name' => $row['Invoice Name'] (for example).
 
         return new CompanyDetails([
 
