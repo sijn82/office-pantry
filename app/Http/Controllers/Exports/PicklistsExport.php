@@ -50,6 +50,7 @@ WithMultipleSheets
     {
         $correctOrderMonTue =   [
                                         '1.15 - Float',
+                                        '1.20 - Extra Float',
                                         '1.19 - Float 3',
                                         '1.18 - East London',
                                         '1.17 - Canary Wharf 2',
