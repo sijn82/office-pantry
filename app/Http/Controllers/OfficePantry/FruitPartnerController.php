@@ -25,12 +25,12 @@ class FruitPartnerController extends Controller
     {
         //
     }
-    
+
     public function listFruitPartners() {
          // After updating a fruitpartner, the postgresql id looks to have changed.  WHY WOULD IT WANT TO DO THIS?!
-         // I also have an 'id' column, which hasn't changed but hte sortBy below doesn't appear to be using it, instead still ordering by postgresql id. 
+         // I also have an 'id' column, which hasn't changed but hte sortBy below doesn't appear to be using it, instead still ordering by postgresql id.
          // I NEED TO LEARN MORE ABOUT THIS BEHAVIOUR WHEN TRING TO CONTROL THE ORDER WHICH LISTS ARE DISPLAYED.
-        
+
         $fruit_partners = FruitPartner::all();
         // dd($fruit_partners);
         return $fruit_partners;
@@ -55,7 +55,7 @@ class FruitPartnerController extends Controller
     public function store(Request $request)
     {
         // dd(request('fruit_partner'));
-        
+
         $new_fruit_partner = new FruitPartner();
         $new_fruit_partner->name = request('fruit_partner.name');
         $new_fruit_partner->email = request('fruit_partner.email');
@@ -69,6 +69,7 @@ class FruitPartnerController extends Controller
         $new_fruit_partner->weekly_action = request('fruit_partner.weekly_action');
         $new_fruit_partner->changes_action = request('fruit_partner.changes_action');
         $new_fruit_partner->no_of_customers = request('fruit_partner.no_of_customers');
+        $new_fruit_partner->finance = request('fruit_partner.finance');
         $new_fruit_partner->additional_info = request('fruit_partner.additional_info');
         $new_fruit_partner->save();
     }
@@ -83,8 +84,8 @@ class FruitPartnerController extends Controller
     {
         //
         $fruit_partner = FruitPartner::where('id', $id)->get();
-        
-        
+
+
         return $fruit_partner;
     }
 
@@ -110,7 +111,7 @@ class FruitPartnerController extends Controller
     {
         //
         // dd($request);
-        
+
         FruitPartner::where('id', request('id'))->update([
             'name' => request('name'),
             'email' => request('email'),
@@ -132,6 +133,7 @@ class FruitPartnerController extends Controller
             'status' => request('status'),
             'no_of_customers' => request('no_of_customers'),
             'use_op_boxes' => request('use_op_boxes'),
+            'finance' => request('finance'),
             'additional_info' => request('additional_info'),
         ]);
     }
@@ -148,42 +150,42 @@ class FruitPartnerController extends Controller
         dd($fruitPartner);
         FruitPartner::destroy($id);
     }
-    
-    public function download($orders, $fruitpartner, $week_start) 
+
+    public function download($orders, $fruitpartner, $week_start)
     {
         //return Excel::store(new Exports\FruitPartnerPicklists($orders), 'FruitPartners/fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.pdf', \Maatwebsite\Excel\Excel::TCPDF);
-        
+
         // works locally but heroku having issues, simplifying the folder structure.
         // return Excel::store(new Exports\FruitPartnerPicklists($orders), 'FruitPartners/' . $week_start->current . '/fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.xlsx');
-        
+
         return Excel::store(new Exports\FruitPartnerPicklists($orders), '/' . $week_start->current . '/' . 'fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.xlsx', 's3');
     }
 
-    
+
     // This has become a weird part of my process but moving this logic to the export folder now so I can break $orders up into exports, probably two.
     // AT SOME POINT I REALLY NEED TO DELETE SUPERFLUOUS CODE!!!
     public function groupOrdersByFruitPartner()
     {
-        // This will grab all fruit partners except for Office Pantry, so long as Office Pantry remains the 1st fruitpartner in the db.   
+        // This will grab all fruit partners except for Office Pantry, so long as Office Pantry remains the 1st fruitpartner in the db.
         // This is easy to guarantee, so long as I don't forget to add it during datbase refresh and setup!
-        
+
         $fruitpartners = FruitPartner::all()->whereNotIn('id', [1]);
         $week_start = WeekStart::first();
         // dd($week_start->current);
-        
+
         // Not sure why but I tried to use new \stdClass again and this time it worked fine?!?  Ah well, life is filled with surprises.
-        
+
         foreach ($fruitpartners as $fruitpartner) {
             // dump($fruitpartner);
             unset($orders);
             $orders = new \stdClass;
-            
+
             // These are all the boxes due for delivery this week.
             $fruitboxes = $fruitpartner->fruitbox->where('next_delivery', $week_start->current)->where('is_active', 'Active');
             $milkboxes = $fruitpartner->milkbox->where('next_delivery', $week_start->current)->where('is_active', 'Active');
-            
+
             //---------- Archive Checks ----------//
-            
+
             // Quick check that this returns something before making the request more specific, 'cause otherwise there be errors.
             if ($fruitpartner->fruitbox_archive) {
                 // These are the archived boxes, although I'm not sure how relevant they'll be as this function is run (weekly?) before orders have been delivered.
@@ -194,7 +196,7 @@ class FruitPartnerController extends Controller
                 // Still not sure we'll actually be using them but all the more reason to make sure they don't throw errors.
                 $archived_milkboxes = $fruitpartner->milkbox_archive->where('next_delivery', $week_start->current)->where('is_active', 'Active');
             }
-            
+
             //---------- End of Archive Checks ----------//
 
             // I probably don't need to worry about empty collections, so let's check that before adding to the orders.
@@ -205,23 +207,23 @@ class FruitPartnerController extends Controller
                 $orders->fruitboxes = null;
                 Log::channel('slack')->info('Fruit Partner: ' . $fruitpartner->name . ' has no Fruit Orders to be delivered this week.' );
             }
-            
+
             if ($milkboxes->isNotEmpty()) {
-                
+
                 $orders->milkboxes[$fruitpartner->name] = $milkboxes;
             } else {
                 $orders->milkboxes = null;
                 Log::channel('slack')->info('Fruit Partner: ' . $fruitpartner->name . ' has no Milk Orders to be delivered this week.' );
             }
-            
+
             if ($orders->milkboxes == null && $orders->fruitboxes == null) {
                 // dd($orders);
             } else {
-            
+
                 $this->download($orders, $fruitpartner, $week_start);
             }
-             
-             // return \Excel::download(new Exports\FruitPartnerPicklists($orders), 'fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.xlsx'); 
+
+             // return \Excel::download(new Exports\FruitPartnerPicklists($orders), 'fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.xlsx');
             // return Excel::store(new Exports\FruitPartnerPicklists($orders),'invoices.pdf');
             //return Excel::store(new Exports\FruitPartnerPicklists($orders), 'FruitPartners/fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.pdf', \PhpOffice\PhpSpreadsheet\Writer\Pdf\Tcpdf());
             // dd($orders);
@@ -229,24 +231,24 @@ class FruitPartnerController extends Controller
         }
         // Cool(io) - $orders is now filled with orders.  Just orders, and the key used is the fruitpartner name as I'm sure that'll save some bother cometh the template.
         // However, do I really want to put/keep them together when they're going to different templates?
-        
+
         // return \Excel::download(new Exports\FruitPartnerPicklists($orders), 'fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.xlsx'); <-- All files are named after last fruit partner.
         // dd($orders);
-        
+
         // $zip_test = new \ZipArchive();
         // dd($zip_test);
-        
+
         // Code source -https://laraveldaily.com/how-to-create-zip-archive-with-files-and-download-it-in-laravel/
         // This appears to work great locally, the next test is whether it will behave the same in the server environment (heroku)?
-        
+
         // works locally, heroku struggling
         $zip_file = 'FruitPartner/fruitpartnerorders-' . $week_start->current . '.zip';
         $zip_file = 'fruitpartnerorders-' . $week_start->current . '.zip';
         $zip = new \ZipArchive();
         $zip->open($zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
-        
+
         //----- Had to make some wholesale changes to the previous code, now much smaller and using laravel 'Storage' functions rather than standard php -----//
-        
+
         // Made a tweak to where the files are stored, adding another sub directory limiting the zip download to only grab files in the folder of the current week start.
         $files = Storage::disk('s3')->files($week_start->current);
         //$files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
@@ -258,7 +260,7 @@ class FruitPartnerController extends Controller
             // // We're skipping all subfolders
             // if (!$file->isDir()) {
             //     $filePath = $file->getRealPath();
-            // 
+            //
             //     // extracting filename with substr/strlen
             //     $relativePath = substr($filePath, strlen($path) + 1);
             //     //dump($filePath);
@@ -266,12 +268,12 @@ class FruitPartnerController extends Controller
             // }
             $zip->addFromString($file, $content);
         }
-        
+
         $zip->close();
         return response()->download($zip_file);
-        
-        
-        
-        
+
+
+
+
     }
 }

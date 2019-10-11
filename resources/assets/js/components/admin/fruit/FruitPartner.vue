@@ -91,7 +91,7 @@
             </b-col>
         </b-row>
         <b-row class="margin-top-10" v-if="details">
-            
+
             <!-- Location -->
             <b-col>
                 <label> Address Line 1 </label>
@@ -200,7 +200,7 @@
             <!-- No Of Customers Supplied -->
             <b-col>
                 <!-- We want this value in the database but not so sure this is the right way to document it, or keep accurate -->
-                <label> No. of Customers Supplied </label> 
+                <label> No. of Customers Supplied </label>
                 <div class="" v-if="editing">
                     <b-form-input v-model="fruitpartner.no_of_customers" placeholder="" type="number">  </b-form-input>
                 </div>
@@ -220,6 +220,16 @@
                 </div>
                 <div class="" v-else>
                     <p> {{ fruitpartner.use_op_boxes }} </p>
+                </div>
+            </b-col>
+            <!-- Finance -->
+            <b-col>
+                <label> Finance </label>
+                <div class="" v-if="editing">
+                    <b-form-textarea v-model="fruitpartner.finance" placeholder="" :rows="3" :max-rows="6">  </b-form-textarea>
+                </div>
+                <div class="" v-else>
+                    <p> {{ fruitpartner.finance }} </p>
                 </div>
             </b-col>
             <!-- Additional Info -->
@@ -296,8 +306,9 @@ export default {
                 status: fruitpartner.status,
                 no_of_customers: fruitpartner.no_of_customers,
                 use_op_boxes: fruitpartner.use_op_boxes,
+                finance: fruitpartner.finance,
                 additional_info: fruitpartner.additional_info,
-                
+
             });
         },
         deleteFruitPartner(fruitpartner) {
@@ -306,6 +317,6 @@ export default {
             });
         },
     }
-    
+
 }
 </script>

@@ -89551,6 +89551,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['fruitpartner'],
@@ -89604,6 +89614,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 status: fruitpartner.status,
                 no_of_customers: fruitpartner.no_of_customers,
                 use_op_boxes: fruitpartner.use_op_boxes,
+                finance: fruitpartner.finance,
                 additional_info: fruitpartner.additional_info
 
             });
@@ -90378,6 +90389,34 @@ var render = function() {
                         _vm._v(
                           " " + _vm._s(_vm.fruitpartner.use_op_boxes) + " "
                         )
+                      ])
+                    ])
+              ]),
+              _vm._v(" "),
+              _c("b-col", [
+                _c("label", [_vm._v(" Finance ")]),
+                _vm._v(" "),
+                _vm.editing
+                  ? _c(
+                      "div",
+                      {},
+                      [
+                        _c("b-form-textarea", {
+                          attrs: { placeholder: "", rows: 3, "max-rows": 6 },
+                          model: {
+                            value: _vm.fruitpartner.finance,
+                            callback: function($$v) {
+                              _vm.$set(_vm.fruitpartner, "finance", $$v)
+                            },
+                            expression: "fruitpartner.finance"
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  : _c("div", {}, [
+                      _c("p", [
+                        _vm._v(" " + _vm._s(_vm.fruitpartner.finance) + " ")
                       ])
                     ])
               ]),

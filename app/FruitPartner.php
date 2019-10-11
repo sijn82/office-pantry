@@ -8,7 +8,7 @@ class FruitPartner extends Model
 {
     //
     protected $fillable = [
-    
+
         'name',
         'email',
         'telephone',
@@ -29,16 +29,17 @@ class FruitPartner extends Model
         'status',
         'no_of_customers',
         'use_op_boxes',
+        'finance',
         'additional_info',
-        
+
     ];
-    
-    
+
+
     public function fruitbox()
     {
         return $this->hasMany(FruitBox::class);
     }
-    
+
     public function milkbox()
     {
         return $this->hasMany(MilkBox::class);

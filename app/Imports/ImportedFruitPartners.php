@@ -18,7 +18,7 @@ WithHeadingRow
     {
 
         return new FruitPartner([
-            
+
             'name' => $row['name'],
             'email' => $row['email'],
             'telephone' => $row['telephone'],
@@ -39,9 +39,10 @@ WithHeadingRow
             'status' => $row['status'],
             'no_of_customers' => $row['no_of_customers'],
             'use_op_boxes' => $row['use_op_boxes'],
+            'finance' => $row['finance'],
             'additional_info' => $row['additional_info'],
         ]);
-        
+
     }
-    
+
 }
