@@ -50,7 +50,7 @@
             </b-col>
             <b-col>
                 <label> Next Delivery Week Start </label>
-                <b-form-input type="date" readonly v-model="next_delivery_week" size="sm"></b-form-input>
+                <b-form-input type="date" v-model="next_delivery_week" size="sm"></b-form-input>
             </b-col>
             <b-col>
                 <label> Delivered By </label>
@@ -294,7 +294,7 @@ export default {
         },
         // saveStandardSnackbox() {
         //     this.$store.dispatch('saveStandardSnackboxToDB', this.type );
-        // 
+        //
         // },
         addNewType(new_type) {
             console.log(new_type);

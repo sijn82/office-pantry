@@ -2,7 +2,7 @@
     <div>
         <b-container style="text-align: center;" sm="12">
             <h3> Add New Milkbox </h3>
-            
+
             <b-form id="new-milkbox-form" @submit="onSubmit" @reset="onReset">
                 <!-- Select Fruit Supplier -->
                 <b-form-group>
@@ -39,7 +39,7 @@
                 </b-form-group>
                 <!-- Week Start of First Delivery -->
                 <b-form-group label="Week Start For First Delivery:" label-for="milkbox-first-delivery" description="Please enter the week start of the first delivery">
-                    <b-form-input id="milkbox-first-delivery" type="date" readonly v-model="form.first_delivery" placeholder="Enter milkbox first delivery week start" required></b-form-input>
+                    <b-form-input id="milkbox-first-delivery" type="date" v-model="form.first_delivery" placeholder="Enter milkbox first delivery week start" required></b-form-input>
                 </b-form-group>
                 <p style="padding-top:10px;"> Selected First Week Start Date: {{ form.first_delivery }} </p>
                 <!-- Frequency Of Order -->
@@ -264,8 +264,8 @@ export default {
                 },
                 frequency: ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'],
                 week_in_month: ['First', 'Second', 'Third', 'Forth', 'Last'],
-                company_selected: [{ 
-                    value: this.company.id,  
+                company_selected: [{
+                    value: this.company.id,
                     text: this.company.route_name
                 }]
             }
@@ -326,4 +326,3 @@ export default {
         }
 }
 </script>
-

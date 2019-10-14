@@ -9,7 +9,7 @@
             <b-button v-if="editing" class="btn btn-success" @click="updateDetails(drinkbox[0])"> Save </b-button>
             <b-button variant="danger" @click="deleteDrinkBox(drinkbox[0])"> Delete </b-button>
         </div>
-        
+
         <div class="drinkbox-details" v-if="details">
             <b-row id="top-details" :class="drinkbox[0].is_active">
                 <b-col>
@@ -51,9 +51,9 @@
                     </div>
                 </b-col>
             </b-row>
-            
+
             <b-row :class="drinkbox[0].is_active">
-            
+
                 <b-col>
                     <label><b> Delivery Day </b></label>
                     <div v-if="editing">
@@ -73,7 +73,7 @@
                     </div>
                 </b-col>
             </b-row>
-            
+
             <b-row id="bottom-details" :class="drinkbox[0].is_active">
                 <b-col v-if="drinkbox[0].frequency === 'Monthly'">
                     <label><b> Week In Month </b></label>
@@ -93,14 +93,14 @@
                 <b-col>
                     <label><b> Next Delivery Week </b></label>
                     <div v-if="editing">
-                        <b-form-input v-model="drinkbox[0].next_delivery_week" type="date" readonly></b-form-input>
+                        <b-form-input v-model="drinkbox[0].next_delivery_week" type="date"></b-form-input>
                     </div>
                     <div v-else>
                         <p> {{ drinkbox[0].next_delivery_week }} </p>
                     </div>
                 </b-col>
             </b-row>
-            
+
             <h4> Order Breakdown </h4>
             <b-button variant="primary" @click="addProduct()"> Add a Product </b-button>
             <div v-if="add_product">
@@ -124,7 +124,7 @@
                         <h4> Quantity </h4>
                     </b-col>
                     <b-col>
-                        
+
                     </b-col>
                 </b-row>
                 <b-row>
@@ -158,9 +158,9 @@
                 <b-col>
                 </b-col>
             </b-row>
-            
+
             <drinkbox-item id="drinkbox-products" v-for="drinkbox_item in drinkbox" v-if="drinkbox_item.product_id !== 0" :drinkbox_item="drinkbox_item" :key="drinkbox_item.id" @refresh-data="refreshData($event)"></drinkbox-item>
-            
+
             <h3 class="border-top"> Current Total: £{{ drinkbox_total }} </h3>
         </div>
     </div>
@@ -194,7 +194,7 @@
         },
         computed: {
             drinkbox_total() {
-                
+
                 let $drinkbox_total = 0
 
                 // This function checks each entry in the current snackbox list and creates a running total (a) of the unit price (b[cost]) multiplied by the quantity (b[quantity]).
@@ -213,11 +213,11 @@
                         }
                     }, 0);
                 };
-                
+
                 // Now we use the function by passing in the snackbox array, and the two properties we need to multiply - saving it as the current total cost.
                 // First a quick check, on whether we need to tally up case prices for wholesale, or unit prices for regular snackboxes.
                 (this.drinkbox[0].type === 'wholesale') ? $drinkbox_total = sum(this.drinkbox, 'case_price', 'quantity') : $drinkbox_total = sum(this.drinkbox, 'unit_price', 'quantity');
-                    
+
                 return $drinkbox_total;
             }
         },
@@ -241,8 +241,8 @@
                         quantity: this.quantity,
                         unit_price: this.$store.state.selectedProduct.unit_price,
                     },
-                    drinkbox_details: drinkbox, 
-                        
+                    drinkbox_details: drinkbox,
+
                 }).then ( (response) => {
                     this.$emit('refresh-data', {company_details_id: drinkbox.company_details_id})
                     //location.reload(true); // What am I doing with the store on this one?  Will I need this?
@@ -274,7 +274,7 @@
             },
             deleteDrinkBox(drinkbox) {
                 let self = this;
-                axios.put('api/boxes/drinkbox/destroy-box/' + drinkbox.drinkbox_id, { 
+                axios.put('api/boxes/drinkbox/destroy-box/' + drinkbox.drinkbox_id, {
                     drinkbox_id: drinkbox.drinkbox_id,
                 }).then ( (response) => {
                     //location.reload(true); // What am I doing with the store on this one?  Will I need this?

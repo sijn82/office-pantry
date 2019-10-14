@@ -2,7 +2,7 @@
     <div>
         <!-- <ul> -->
             <div id="edit-save-buttons">
-                <h4> {{ milkbox.delivery_day }}</h4> 
+                <h4> {{ milkbox.delivery_day }}</h4>
                 <h5> {{ milkbox.next_delivery }} </h5>
                 <p> {{ milkbox.is_active }} </p>
                 <b-button variant="primary" @click="showDetails()"> Details </b-button>
@@ -27,7 +27,7 @@
                     <b-col>
                         <label><b> Milkbox Fruit Partner </b></label>
                         <div v-if="editing">
-                            <b-form-select v-model="milkbox.fruit_partner_id"> 
+                            <b-form-select v-model="milkbox.fruit_partner_id">
                                 <option v-for="fruit_partner in $store.state.fruit_partners_list" :value="fruit_partner.id"> {{ fruit_partner.name }} </option>
                             </b-form-select>
                             <p> Selected: {{ milkbox.fruit_partner_id }} </p>
@@ -39,7 +39,7 @@
                     <b-col>
                         <label><b> Next Delivery </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="milkbox.next_delivery" type="date" readonly></b-form-input>
+                            <b-form-input v-model="milkbox.next_delivery" type="date"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ milkbox.next_delivery }} </p>
@@ -77,7 +77,7 @@
                             <p> {{ milkbox.delivery_day }} </p>
                         </div>
                     </b-col>
-                    
+
                     <b-col>
                         <label><b> Frequency </b></label>
                         <div v-if="editing">
@@ -91,7 +91,7 @@
                             <p> {{ milkbox.frequency }} </p>
                         </div>
                     </b-col>
-                    
+
                     <b-col v-if="milkbox.frequency == 'Monthly'">
                         <label><b> Week In Month </b></label>
                         <div v-if="editing">
@@ -112,7 +112,7 @@
                         <h6> Regular 2l Milk Options </h6>
                     </b-col>
                 </b-row>
-                
+
                 <b-row :class="milkbox.is_active" class="b-row-padding" sm="12">
                     <b-col class="col-sm-4">
                         <label><b> 2L Semi Skimmed </b></label>
@@ -150,7 +150,7 @@
                         <h6> Regular 1l Milk Options </h6>
                     </b-col>
                 </b-row>
-                
+
                 <b-row :class="milkbox.is_active" class="b-row-padding" sm="12">
                     <b-col class="col-sm-4">
                         <label><b> 1L Semi Skimmed </b></label>
@@ -188,7 +188,7 @@
                         <h6> Organic 2l Milk Options </h6>
                     </b-col>
                 </b-row>
-                
+
                 <b-row :class="milkbox.is_active" class="b-row-padding" sm="12">
                     <b-col class="col-sm-4">
                         <label><b> Organic 2L Semi Skimmed </b></label>
@@ -226,7 +226,7 @@
                         <h6> Organic 1l Milk Options </h6>
                     </b-col>
                 </b-row>
-                
+
                 <b-row :class="milkbox.is_active" class="b-row-padding" sm="12">
                     <b-col class="col-sm-4">
                         <label><b> Organic 1L Semi Skimmed </b></label>
@@ -264,7 +264,7 @@
                         <h6> Alternative 1l Milk Options </h6>
                     </b-col>
                 </b-row>
-                
+
                 <b-row :class="milkbox.is_active" class="b-row-padding" sm="12">
                     <b-col class="col-sm-4">
                          <label><b> 1L Milk Alt Coconut </b></label>
@@ -317,7 +317,7 @@
                             <p> {{ milkbox.milk_1l_alt_soya }} </p>
                         </div>
                     </b-col>
-                    
+
                     <b-col class="col-sm-4">
                         <label><b> 1L Oat </b></label>
                         <div v-if="editing">
@@ -330,7 +330,7 @@
                 </b-row>
                 <!-- Alternative Milk Options (Pt3) -->
                 <b-row :class="milkbox.is_active" class="b-row-padding" sm="12">
-                    
+
                     <b-col class="col-sm-4">
                         <label><b> 1L Rice </b></label>
                         <div v-if="editing">
@@ -340,7 +340,7 @@
                             <p> {{ milkbox.milk_1l_alt_rice }} </p>
                         </div>
                     </b-col>
-                    
+
                     <b-col class="col-sm-4">
                         <label><b> 1L Cashew </b></label>
                         <div v-if="editing">
@@ -350,7 +350,7 @@
                             <p> {{ milkbox.milk_1l_alt_cashew }} </p>
                         </div>
                     </b-col>
-                    
+
                     <b-col class="col-sm-4">
                         <label><b> 1L Lactose Free Semi </b></label>
                         <div v-if="editing">
@@ -364,11 +364,11 @@
                 <b-row id="bottom-details" :class="milkbox.is_active" class="b-row-padding" sm="12">
                     <b-col>
                         <label><b> Invoiced At </b></label>
-                        <p> {{ milkbox.invoiced_at }} </p> 
+                        <p> {{ milkbox.invoiced_at }} </p>
                     </b-col>
                     <b-col>
                         <label><b> Updated At </b></label>
-                        <p> {{ milkbox.updated_at }} </p> 
+                        <p> {{ milkbox.updated_at }} </p>
                     </b-col>
                 </b-row>
             </div>
@@ -451,7 +451,7 @@ export default {
                 invoiced_at: milkbox.invoiced_at,
                 updated_at: milkbox.updated_at,
                 skip_archive: this.skip_archive,
-                
+
             }).then (response => {
                 console.log(response);
                 this.$emit('refresh-data', {company_details_id: self.form.company_details_id});

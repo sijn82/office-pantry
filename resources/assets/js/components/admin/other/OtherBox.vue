@@ -9,7 +9,7 @@
             <b-button v-if="editing" class="btn btn-success" @click="updateDetails(otherbox[0])"> Save </b-button>
             <b-button variant="danger" @click="deleteOtherBox(otherbox[0])"> Delete </b-button>
         </div>
-        
+
         <div class="otherbox-details" v-if="details">
             <b-row id="top-details" :class="otherbox[0].is_active">
                 <b-col>
@@ -51,9 +51,9 @@
                     </div>
                 </b-col> -->
             </b-row>
-            
+
             <b-row :class="otherbox[0].is_active">
-            
+
                 <b-col>
                     <label><b> Delivery Day </b></label>
                     <div v-if="editing">
@@ -73,7 +73,7 @@
                     </div>
                 </b-col>
             </b-row>
-            
+
             <b-row class="bottom-details" :class="otherbox[0].is_active">
                 <b-col v-if="otherbox[0].frequency === 'Monthly'">
                     <label><b> Week In Month </b></label>
@@ -93,14 +93,14 @@
                 <b-col>
                     <label><b> Next Delivery Week </b></label>
                     <div v-if="editing">
-                        <b-form-input v-model="otherbox[0].next_delivery_week" type="date" readonly></b-form-input>
+                        <b-form-input v-model="otherbox[0].next_delivery_week" type="date"></b-form-input>
                     </div>
                     <div v-else>
                         <p> {{ otherbox[0].next_delivery_week }} </p>
                     </div>
                 </b-col>
             </b-row>
-            
+
             <h4> Order Breakdown </h4>
             <b-button variant="primary" @click="addProduct()"> Add a Product </b-button>
             <div v-if="add_product">
@@ -124,7 +124,7 @@
                         <h4> Quantity </h4>
                     </b-col>
                     <b-col>
-                        
+
                     </b-col>
                 </b-row>
                 <b-row>
@@ -161,9 +161,9 @@
                 <b-col>
                 </b-col>
             </b-row>
-            
+
             <otherbox-item id="otherbox-products" v-for="otherbox_item in otherbox" v-if="otherbox_item.product_id !== 0" :otherbox_item="otherbox_item" :key="otherbox_item.id" @refresh-data="refreshData($event)"></otherbox-item>
-            
+
             <h3 class="border-top"> Current Total: £{{ otherbox_total }} </h3>
         </div>
     </div>
@@ -200,7 +200,7 @@
         },
         computed: {
             otherbox_total() {
-                
+
                 let $otherbox_total = 0
 
                 // This function checks each entry in the current snackbox list and creates a running total (a) of the unit price (b[cost]) multiplied by the quantity (b[quantity]).
@@ -219,11 +219,11 @@
                         }
                     }, 0);
                 };
-                
+
                 // Now we use the function by passing in the snackbox array, and the two properties we need to multiply - saving it as the current total cost.
                 // First a quick check, on whether we need to tally up case prices for wholesale, or unit prices for regular snackboxes.
                 (this.otherbox[0].type === 'wholesale') ? $otherbox_total = sum(this.otherbox, 'case_price', 'quantity') : $otherbox_total = sum(this.otherbox, 'unit_price', 'quantity');
-                    
+
                 return $otherbox_total;
             }
         },
@@ -247,8 +247,8 @@
                         quantity: this.quantity,
                         unit_price: this.$store.state.selectedProduct.unit_price,
                     },
-                    otherbox_details: otherbox, 
-                        
+                    otherbox_details: otherbox,
+
                 }).then (response => {
                     this.$emit('refresh-data', {company_details_id: otherbox.company_details_id})
                     //location.reload(true); // What am I doing with the store on this one?  Will I need this?
@@ -280,7 +280,7 @@
             },
             deleteOtherBox(otherbox) {
                 let self = this;
-                axios.put('api/boxes/otherbox/destroy-box/' + otherbox.otherbox_id, { 
+                axios.put('api/boxes/otherbox/destroy-box/' + otherbox.otherbox_id, {
                     otherbox_id: otherbox.otherbox_id,
                 }).then ( (response) => {
                     //location.reload(true); // What am I doing with the store on this one?  Will I need this?
