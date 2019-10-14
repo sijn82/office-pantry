@@ -113793,7 +113793,7 @@ var render = function() {
                     },
                     [
                       _vm._v(
-                        " " + _vm._s(result.invoice_name) + "\n                "
+                        " " + _vm._s(result.route_name) + "\n                "
                       ),
                       _c(
                         "b-badge",
