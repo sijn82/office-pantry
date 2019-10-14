@@ -79272,7 +79272,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 discount_multiple: 'Yes'
 
             },
-            types: ['Standard', 'Berry', 'Seasonal', 'Tailored'],
+            types: ['Standard', 'Berry', 'Seasonal', 'Tailored', 'Orange Juicer', 'Banana'],
             frequency: ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'],
             week_in_month: ['First', 'Second', 'Third', 'Forth', 'Last'],
             discountable_options: ['Yes', 'No'],
@@ -79297,6 +79297,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             console.log(type);
             switch (type) {
                 case 'Standard':
+                case 'Tailored':
                     this.form.red_apples = 6;
                     this.form.green_apples = 3;
                     this.form.satsumas = 10;
@@ -79316,13 +79317,33 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     this.form.grapes = 1;
                     this.form.seasonal_berries = 2;
                     break;
-                case 'Tailored':
                 case 'Berry':
                     this.form.red_apples = 0;
                     this.form.green_apples = 0;
                     this.form.satsumas = 0;
                     this.form.pears = 0;
                     this.form.bananas = 0;
+                    this.form.nectarines = 0;
+                    this.form.grapes = 0;
+                    this.form.seasonal_berries = 0;
+                    break;
+                case 'Orange Juicer':
+                    this.form.red_apples = 0;
+                    this.form.green_apples = 0;
+                    this.form.satsumas = 0;
+                    this.form.pears = 0;
+                    this.form.bananas = 0;
+                    this.form.nectarines = 0;
+                    this.form.grapes = 0;
+                    this.form.seasonal_berries = 0;
+                    this.form.oranges = 40;
+                    break;
+                case 'Banana':
+                    this.form.red_apples = 0;
+                    this.form.green_apples = 0;
+                    this.form.satsumas = 0;
+                    this.form.pears = 0;
+                    this.form.bananas = 45;
                     this.form.nectarines = 0;
                     this.form.grapes = 0;
                     this.form.seasonal_berries = 0;
