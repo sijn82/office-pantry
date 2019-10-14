@@ -78980,13 +78980,13 @@ var content = __webpack_require__(317);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(2)("7a4289d7", content, false, {});
+var update = __webpack_require__(2)("fd11f278", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-519e48a8\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AddNewFruitbox.vue", function() {
-     var newContent = require("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-519e48a8\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AddNewFruitbox.vue");
+   module.hot.accept("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-519e48a8\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../../node_modules/sass-loader/lib/loader.js!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AddNewFruitbox.vue", function() {
+     var newContent = require("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-519e48a8\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../../node_modules/sass-loader/lib/loader.js!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./AddNewFruitbox.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -79004,7 +79004,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "\n#fruitbox-breakdown label {\n    padding-top: 10px;\n}\n#new-fruitbox-form:after {\n    content: \"\"; /* This is necessary for the pseudo element to work. */\n    display: block; /* This will put the pseudo element on its own line. */\n    margin: 0 auto; /* This will center the border. */\n    width: 70%; /* Change this to whatever width you want. */\n    padding-top: 30px; /* This creates some space between the element and the border. */\n    margin-bottom: 30px; /*  */\n    border-bottom: 1px solid #636b6f; /* This creates the border. Replace black with whatever color you want. */\n}\n\n\n", ""]);
+exports.push([module.i, "\n#fruitbox-breakdown label {\n  padding-top: 10px;\n}\n#new-fruitbox-form:after {\n  content: \"\";\n  /* This is necessary for the pseudo element to work. */\n  display: block;\n  /* This will put the pseudo element on its own line. */\n  margin: 0 auto;\n  /* This will center the border. */\n  width: 70%;\n  /* Change this to whatever width you want. */\n  padding-top: 30px;\n  /* This creates some space between the element and the border. */\n  margin-bottom: 30px;\n  /*  */\n  border-bottom: 1px solid #636b6f;\n  /* This creates the border. Replace black with whatever color you want. */\n}\n.selected-company {\n  font-size: 2.2em;\n}\n", ""]);
 
 // exports
 
@@ -79229,6 +79229,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -79238,9 +79251,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             form: {
                 is_active: 'Active',
-                fruit_partner_id: 1, // By default this will be 'Office Pantry', I could change this to 'Please Select' but figure Office Pantry is still the main distributor.
+                fruit_partner_id: this.company.supplier_id, // By default this will be 'Office Pantry', I could change this to 'Please Select' but figure Office Pantry is still the main distributor.
                 name: '',
-                company_details_id: null, // If this is created by Frosh, how are they going to select the company to attach the order to?  A typed filter of a long list may be the best way.
+                company_details_id: this.company.id, // If this is created by Frosh, how are they going to select the company to attach the order to?  A typed filter of a long list may be the best way.
                 route_id: null, // This will also need a way to filter from all possible routes, however once a company has been confirmed, the options could easily fit on a dropdown.
                 delivery_day: '', // According to the docs this must be an array reference, however it seems to me this is happening anyway?  Interesting...
                 type: null, // Whilst not currently in use, this will determine between standard, berries and tailored, with tailored being the only one which can be edited (probably).
@@ -79306,6 +79319,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     this.form.nectarines = 12;
                     this.form.grapes = 0;
                     this.form.seasonal_berries = 0;
+                    this.form.oranges = 0;
                     break;
                 case 'Seasonal':
                     this.form.red_apples = 5;
@@ -79316,6 +79330,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     this.form.nectarines = 9;
                     this.form.grapes = 1;
                     this.form.seasonal_berries = 2;
+                    this.form.oranges = 0;
                     break;
                 case 'Berry':
                     this.form.red_apples = 0;
@@ -79326,6 +79341,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     this.form.nectarines = 0;
                     this.form.grapes = 0;
                     this.form.seasonal_berries = 0;
+                    this.form.oranges = 0;
                     break;
                 case 'Orange Juicer':
                     this.form.red_apples = 0;
@@ -79347,6 +79363,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     this.form.nectarines = 0;
                     this.form.grapes = 0;
                     this.form.seasonal_berries = 0;
+                    this.form.oranges = 0;
                     break;
             }
         },
@@ -79371,7 +79388,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             evt.preventDefault();
             /* Reset our form values */
             this.form.name = '';
-            this.form.company_details_id = null;
+            this.form.company_details_id = this.company.id;
             this.form.route_id = null;
             this.form.delivery_day = '';
             this.form.type = null;
@@ -79551,85 +79568,12 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
-              _c(
-                "b-form-group",
-                {
-                  attrs: {
-                    id: "fruitbox-company-select",
-                    label: "Select Company For Fruitbox: "
-                  }
-                },
-                [
-                  _vm.user_associated_companies != undefined
-                    ? _c(
-                        "b-form-select",
-                        {
-                          attrs: {
-                            options: _vm.user_associated_companies,
-                            required: ""
-                          },
-                          model: {
-                            value: _vm.form.company_details_id,
-                            callback: function($$v) {
-                              _vm.$set(_vm.form, "company_details_id", $$v)
-                            },
-                            expression: "form.company_details_id"
-                          }
-                        },
-                        [
-                          _c("template", { slot: "first" }, [
-                            _c(
-                              "option",
-                              {
-                                attrs: { disabled: "" },
-                                domProps: { value: null }
-                              },
-                              [_vm._v("-- Please select an option --")]
-                            )
-                          ])
-                        ],
-                        2
-                      )
-                    : _c(
-                        "b-form-select",
-                        {
-                          attrs: {
-                            options: _vm.company_selected,
-                            required: ""
-                          },
-                          model: {
-                            value: _vm.form.company_details_id,
-                            callback: function($$v) {
-                              _vm.$set(_vm.form, "company_details_id", $$v)
-                            },
-                            expression: "form.company_details_id"
-                          }
-                        },
-                        [
-                          _c("template", { slot: "first" }, [
-                            _c(
-                              "option",
-                              {
-                                attrs: { disabled: "" },
-                                domProps: { value: null }
-                              },
-                              [_vm._v("-- Please select an option --")]
-                            )
-                          ])
-                        ],
-                        2
-                      ),
-                  _vm._v(" "),
-                  _c("p", { staticStyle: { "padding-top": "10px" } }, [
-                    _vm._v(
-                      " Selected Company: " +
-                        _vm._s(_vm.form.company_details_id) +
-                        " "
-                    )
-                  ])
-                ],
-                1
-              ),
+              _c("p", { staticStyle: { "padding-top": "10px" } }, [
+                _vm._v(" Selected Company: "),
+                _c("b", { staticClass: "selected-company" }, [
+                  _vm._v(" " + _vm._s(_vm.company.route_name) + " ")
+                ])
+              ]),
               _vm._v(" "),
               _c(
                 "b-form-group",
@@ -112299,6 +112243,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['company'],
@@ -112329,11 +112291,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     invoice_name: company.invoice_name,
                     route_name: company.route_name,
                     // Contact Details
-                    primary_contact: company.primary_contact,
+                    primary_contact_first_name: company.primary_contact_first_name,
+                    primary_contact_surname: company.primary_contact_surname,
                     primary_contact_job_title: company.primary_contact_job_title,
                     primary_email: company.primary_email,
                     primary_tel: company.primary_tel,
-                    secondary_contact: company.secondary_contact,
+                    secondary_contact_first_name: company.secondary_contact_first_name,
+                    secondary_contact_surname: company.secondary_contact_surname,
                     secondary_contact_job_title: company.secondary_contact_job_title,
                     secondary_email: company.secondary_email,
                     secondary_tel: company.secondary_tel,
@@ -112562,7 +112526,7 @@ var render = function() {
             "b-row",
             [
               _c("b-col", [
-                _c("label", [_vm._v(" Primary Contact Name ")]),
+                _c("label", [_vm._v(" Primary Contact First Name ")]),
                 _vm._v(" "),
                 _vm.edit
                   ? _c(
@@ -112570,11 +112534,15 @@ var render = function() {
                       [
                         _c("b-form-input", {
                           model: {
-                            value: _vm.company.primary_contact,
+                            value: _vm.company.primary_contact_first_name,
                             callback: function($$v) {
-                              _vm.$set(_vm.company, "primary_contact", $$v)
+                              _vm.$set(
+                                _vm.company,
+                                "primary_contact_first_name",
+                                $$v
+                              )
                             },
-                            expression: "company.primary_contact"
+                            expression: "company.primary_contact_first_name"
                           }
                         })
                       ],
@@ -112582,7 +112550,45 @@ var render = function() {
                     )
                   : _c("div", [
                       _c("p", [
-                        _vm._v(" " + _vm._s(_vm.company.primary_contact) + " ")
+                        _vm._v(
+                          " " +
+                            _vm._s(_vm.company.primary_contact_first_name) +
+                            " "
+                        )
+                      ])
+                    ])
+              ]),
+              _vm._v(" "),
+              _c("b-col", [
+                _c("label", [_vm._v(" Primary Contact Surname ")]),
+                _vm._v(" "),
+                _vm.edit
+                  ? _c(
+                      "div",
+                      [
+                        _c("b-form-input", {
+                          model: {
+                            value: _vm.company.primary_contact_surname,
+                            callback: function($$v) {
+                              _vm.$set(
+                                _vm.company,
+                                "primary_contact_surname",
+                                $$v
+                              )
+                            },
+                            expression: "company.primary_contact_surname"
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  : _c("div", [
+                      _c("p", [
+                        _vm._v(
+                          " " +
+                            _vm._s(_vm.company.primary_contact_surname) +
+                            " "
+                        )
                       ])
                     ])
               ]),
@@ -112687,7 +112693,7 @@ var render = function() {
             "b-row",
             [
               _c("b-col", [
-                _c("label", [_vm._v(" Secondary Contact Name ")]),
+                _c("label", [_vm._v(" Secondary Contact First Name ")]),
                 _vm._v(" "),
                 _vm.edit
                   ? _c(
@@ -112695,11 +112701,15 @@ var render = function() {
                       [
                         _c("b-form-input", {
                           model: {
-                            value: _vm.company.secondary_contact,
+                            value: _vm.company.secondary_contact_first_name,
                             callback: function($$v) {
-                              _vm.$set(_vm.company, "secondary_contact", $$v)
+                              _vm.$set(
+                                _vm.company,
+                                "secondary_contact_first_name",
+                                $$v
+                              )
                             },
-                            expression: "company.secondary_contact"
+                            expression: "company.secondary_contact_first_name"
                           }
                         })
                       ],
@@ -112708,7 +112718,43 @@ var render = function() {
                   : _c("div", [
                       _c("p", [
                         _vm._v(
-                          " " + _vm._s(_vm.company.secondary_contact) + " "
+                          " " +
+                            _vm._s(_vm.company.secondary_contact_first_name) +
+                            " "
+                        )
+                      ])
+                    ])
+              ]),
+              _vm._v(" "),
+              _c("b-col", [
+                _c("label", [_vm._v(" Secondary Contact Surname ")]),
+                _vm._v(" "),
+                _vm.edit
+                  ? _c(
+                      "div",
+                      [
+                        _c("b-form-input", {
+                          model: {
+                            value: _vm.company.secondary_contact_surname,
+                            callback: function($$v) {
+                              _vm.$set(
+                                _vm.company,
+                                "secondary_contact_surname",
+                                $$v
+                              )
+                            },
+                            expression: "company.secondary_contact_surname"
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  : _c("div", [
+                      _c("p", [
+                        _vm._v(
+                          " " +
+                            _vm._s(_vm.company.secondary_contact_surname) +
+                            " "
                         )
                       ])
                     ])

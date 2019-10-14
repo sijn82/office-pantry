@@ -28,19 +28,28 @@
                 </b-form-group>
                     <p> Selected Delivery Day(s): {{ form.delivery_day }} </p> <!-- According to the docs this must be an array reference, however it seems to me this is happening anyway?  Interesting... -->
                     <!-- Company Select -->
-                <b-form-group id="fruitbox-company-select" label="Select Company For Fruitbox: ">
-                    <b-form-select v-model="form.company_details_id" v-if="user_associated_companies != undefined" :options="user_associated_companies" required>
+                <!-- <b-form-group id="fruitbox-company-select" label="Select Company For Fruitbox: "> -->
+
+                    <!-- This is disabled for now - we don't really need to offer the option to select,
+                        as customers don't get access to this currently and I may need a better solution for when they do!
+                        At the moment the admin has already selected the company they wish to add a box to. -->
+
+                    <!-- <b-form-select v-model="form.company_details_id" v-if="user_associated_companies != undefined" :options="user_associated_companies" required>
                         <template slot="first">
-                            <option :value="null" disabled>-- Please select an option --</option>
+                            <option :value="null" disabled> Please select an option </option>
                         </template>
-                    </b-form-select>
-                    <b-form-select v-model="form.company_details_id" :options="company_selected" v-else required>
-                        <template slot="first">
-                            <option :value="null" disabled>-- Please select an option --</option>
+                    </b-form-select> -->
+                    <!-- <b-form-select v-model="form.company_details_id" :options="company_selected" v-else required>
+                         <template slot="first">
+                            <option :value="null" disabled> Please select an option </option>
                         </template>
-                    </b-form-select>
-                    <p style="padding-top:10px;"> Selected Company: {{ form.company_details_id }} </p>
-                </b-form-group>
+                    </b-form-select> -->
+
+                    <!-- Which we are showing here, just as a sense check. -->
+
+                    <p style="padding-top:10px;"> Selected Company: <b class="selected-company"> {{ company.route_name }} </b> </p>
+
+                <!-- </b-form-group> -->
                 <!-- Type of Box -->
                 <b-form-group id="fruitbox-type" label="Select Fruitbox Type: ">
                     <b-form-select v-model="form.type" :options="types" @change="selectType" required>
@@ -194,7 +203,7 @@
     </div>
 </template>
 
-<style>
+<style lang="scss">
 
     #fruitbox-breakdown label {
         padding-top: 10px;
@@ -207,6 +216,10 @@
         padding-top: 30px; /* This creates some space between the element and the border. */
         margin-bottom: 30px; /*  */
         border-bottom: 1px solid #636b6f; /* This creates the border. Replace black with whatever color you want. */
+    }
+    .selected-company {
+
+        font-size: 2.2em;
     }
 
 
@@ -221,9 +234,9 @@ export default {
             return {
                 form: {
                     is_active: 'Active',
-                    fruit_partner_id: 1, // By default this will be 'Office Pantry', I could change this to 'Please Select' but figure Office Pantry is still the main distributor.
+                    fruit_partner_id: this.company.supplier_id, // By default this will be 'Office Pantry', I could change this to 'Please Select' but figure Office Pantry is still the main distributor.
                     name: '',
-                    company_details_id: null, // If this is created by Frosh, how are they going to select the company to attach the order to?  A typed filter of a long list may be the best way.
+                    company_details_id: this.company.id, // If this is created by Frosh, how are they going to select the company to attach the order to?  A typed filter of a long list may be the best way.
                     route_id: null, // This will also need a way to filter from all possible routes, however once a company has been confirmed, the options could easily fit on a dropdown.
                     delivery_day: '',  // According to the docs this must be an array reference, however it seems to me this is happening anyway?  Interesting...
                     type: null, // Whilst not currently in use, this will determine between standard, berries and tailored, with tailored being the only one which can be edited (probably).
@@ -288,6 +301,7 @@ export default {
                         this.form.nectarines = 12;
                         this.form.grapes = 0;
                         this.form.seasonal_berries = 0;
+                        this.form.oranges = 0;
                         break;
                     case 'Seasonal':
                         this.form.red_apples = 5;
@@ -298,6 +312,7 @@ export default {
                         this.form.nectarines = 9;
                         this.form.grapes = 1;
                         this.form.seasonal_berries = 2;
+                        this.form.oranges = 0;
                         break;
                     case 'Berry':
                         this.form.red_apples = 0;
@@ -308,6 +323,7 @@ export default {
                         this.form.nectarines = 0;
                         this.form.grapes = 0;
                         this.form.seasonal_berries = 0;
+                        this.form.oranges = 0;
                         break;
                     case 'Orange Juicer':
                         this.form.red_apples = 0;
@@ -329,6 +345,7 @@ export default {
                         this.form.nectarines = 0;
                         this.form.grapes = 0;
                         this.form.seasonal_berries = 0;
+                        this.form.oranges = 0;
                         break;
                 }
             },
@@ -352,7 +369,7 @@ export default {
               evt.preventDefault();
               /* Reset our form values */
               this.form.name = '';
-              this.form.company_details_id = null;
+              this.form.company_details_id = this.company.id;
               this.form.route_id = null;
               this.form.delivery_day = '';
               this.form.type = null;

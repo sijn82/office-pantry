@@ -55,12 +55,21 @@
             </b-row>
             <b-row>
                 <b-col>
-                    <label> Primary Contact Name </label>
+                    <label> Primary Contact First Name </label>
                     <div v-if="edit">
-                        <b-form-input v-model="company.primary_contact"></b-form-input>
+                        <b-form-input v-model="company.primary_contact_first_name"></b-form-input>
                     </div>
                     <div v-else>
-                        <p> {{ company.primary_contact }} </p>
+                        <p> {{ company.primary_contact_first_name }} </p>
+                    </div>
+                </b-col>
+                <b-col>
+                    <label> Primary Contact Surname </label>
+                    <div v-if="edit">
+                        <b-form-input v-model="company.primary_contact_surname"></b-form-input>
+                    </div>
+                    <div v-else>
+                        <p> {{ company.primary_contact_surname }} </p>
                     </div>
                 </b-col>
                 <b-col>
@@ -98,12 +107,21 @@
             </b-row>
             <b-row>
                 <b-col>
-                    <label> Secondary Contact Name </label>
+                    <label> Secondary Contact First Name </label>
                     <div v-if="edit">
-                        <b-form-input v-model="company.secondary_contact"></b-form-input>
+                        <b-form-input v-model="company.secondary_contact_first_name"></b-form-input>
                     </div>
                     <div v-else>
-                        <p> {{ company.secondary_contact }} </p>
+                        <p> {{ company.secondary_contact_first_name }} </p>
+                    </div>
+                </b-col>
+                <b-col>
+                    <label> Secondary Contact Surname </label>
+                    <div v-if="edit">
+                        <b-form-input v-model="company.secondary_contact_surname"></b-form-input>
+                    </div>
+                    <div v-else>
+                        <p> {{ company.secondary_contact_surname }} </p>
                     </div>
                 </b-col>
                 <b-col>
@@ -378,7 +396,7 @@
         padding-top: 20px; /* This creates some space between the element and the border. */
         border-bottom: 1px solid #636b6f; /* This creates the border. Replace black with whatever color you want. */
     }
-    
+
 </style>
 
 <script>
@@ -391,14 +409,14 @@ export default {
               { text: 'Please select an option', value: null },
               'BACS', 'GoCardless', 'GoCardless In Advance', 'Invoiced In Advance',
               'Monthly Invoice', 'Monthly Invoice GoCardless', 'Paypal (Stripe)', 'Paypal In Advance (Stripe)',
-              'Weekly Standing Order', 'Monthly Standing Order', 'Weekly Standing Order In Advance', 
+              'Weekly Standing Order', 'Monthly Standing Order', 'Weekly Standing Order In Advance',
               'Monthly Standing Order In Advance', 'Eden Branding Theme', 'TBC'
             ],
             model_options: ['Free', 'Honesty Box'],
             status: ['Active', 'Inactive'],
             monthly_surprise_options: [
-                { text: 'Yes', value:'yes' }, 
-                { text: 'No', value:'no' }, 
+                { text: 'Yes', value:'yes' },
+                { text: 'No', value:'no' },
                 { text: 'TBC', value: null }
             ],
         }
@@ -420,11 +438,13 @@ export default {
                     invoice_name: company.invoice_name,
                     route_name: company.route_name,
                     // Contact Details
-                    primary_contact: company.primary_contact,
+                    primary_contact_first_name: company.primary_contact_first_name,
+                    primary_contact_surname: company.primary_contact_surname,
                     primary_contact_job_title: company.primary_contact_job_title,
                     primary_email: company.primary_email,
                     primary_tel: company.primary_tel,
-                    secondary_contact: company.secondary_contact,
+                    secondary_contact_first_name: company.secondary_contact_first_name,
+                    secondary_contact_surname: company.secondary_contact_surname,
                     secondary_contact_job_title: company.secondary_contact_job_title,
                     secondary_email: company.secondary_email,
                     secondary_tel: company.secondary_tel,
