@@ -6,7 +6,7 @@
             </b-col>
             <b-col>
                 <div v-if="edit">
-                    <b-form-input type="number" v-model="otherbox_item.quantity"></b-form-input>
+                    <b-form-input v-model="otherbox_item.quantity" type="number" min="0" max="100"></b-form-input>
                 </div>
                 <div v-else>
                     <p> {{ otherbox_item.quantity }} </p>
@@ -45,7 +45,7 @@
                 }
             },
             deleteOtherBoxItem(otherbox_item) {
-                axios.put('api/boxes/otherbox/destroy/' + otherbox_item.id, { 
+                axios.put('api/boxes/otherbox/destroy/' + otherbox_item.id, {
                     id: otherbox_item.id,
                 }).then ( (response) => {
                     this.$emit('refresh-data', {company_details_id: otherbox_item.company_details_id})
@@ -54,7 +54,7 @@
                 }).catch(error => console.log(error));
             },
             editQuantity(otherbox_item) {
-                axios.post('api/boxes/otherbox/update', { 
+                axios.post('api/boxes/otherbox/update', {
                     otherbox_item_id: otherbox_item.id,
                     otherbox_item_quantity: otherbox_item.quantity,
                 }).then (response => {

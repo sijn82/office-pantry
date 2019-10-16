@@ -92,8 +92,9 @@
         <div class="flex-center position-ref full-height">
             @if (Route::has('login'))
                 <div class="top-right links">
+                    <!-- I'm going to need to make this a bit more elaborate - check which type of user is logged in and offer the right link to their logged in 'home' page -->
                     @auth
-                        <a href="{{ url('/home') }}"> Home </a>
+                        <a href="{{ url('/office') }}"> Office Admin Panel </a>
                     @else
                         <h5 class="customer-login"> Customer </h5>
                         <a href="{{ route('login') }}"> Login </a>
@@ -119,7 +120,7 @@
 
                 @yield('display-routes')
                 @yield('snackboxes-multi-company')
-                
+
 
 
                 <div id="app">

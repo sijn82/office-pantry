@@ -57,10 +57,10 @@ return [
             'url' => env('LOG_SLACK_WEBHOOK_URL'),
             'username' => 'Laravel Log',
             'emoji' => ':boom:',
-            'level' => 'debug',
+            'level' => 'debug', // <-- This is the reason slack gets more detailed error messages, is there a way to show these as alerts on the user side as more useful feedback on a failed form submission?
         ],
         // GOING TO DO THIS ANOTHER TIME AND PROBABLY ADD SEVERAL NEW CHANNELS SO LARAVEL LOGS IS ONLY USED FOR MY PURPOSES, NOT EVERYTHING!!
-        
+
         // 'slack-fruit-partner-orders' => [
         //     'driver' => 'slack',
         //     'url' => env('LOG_SLACK_WEBHOOK_URL_FRUIT_PARTNER')

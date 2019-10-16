@@ -6,7 +6,7 @@
             </b-col>
             <b-col>
                 <div v-if="edit">
-                    <b-form-input type="number" v-model="archived_drinkbox_item.quantity"></b-form-input>
+                    <b-form-input v-model="archived_drinkbox_item.quantity" type="number" min="0" max="100"></b-form-input>
                 </div>
                 <div v-else>
                     <p> {{ archived_drinkbox_item.quantity }} </p>
@@ -45,7 +45,7 @@
                 }
             },
             deleteDrinkBoxItem(archived_drinkbox_item) {
-                axios.put('api/boxes/archived_drinkbox/destroy/' + archived_drinkbox_item.id, { 
+                axios.put('api/boxes/archived_drinkbox/destroy/' + archived_drinkbox_item.id, {
                     id: archived_drinkbox_item.id,
                 }).then ( (response) => {
                     this.$emit('refresh-data', {company_details_id: archived_drinkbox_item.company_details_id})
@@ -54,7 +54,7 @@
                 }).catch(error => console.log(error));
             },
             editQuantity(archived_drinkbox_item) {
-                axios.post('api/boxes/archived_drinkbox/update', { 
+                axios.post('api/boxes/archived_drinkbox/update', {
                     archived_drinkbox_item_id: archived_drinkbox_item.id,
                     archived_drinkbox_item_quantity: archived_drinkbox_item.quantity,
                 }).then (response => {

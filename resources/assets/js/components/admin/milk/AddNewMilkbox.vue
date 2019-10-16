@@ -70,15 +70,15 @@
                     <b-row sm="12">
                         <b-col class="col-sm-4">
                             <label> 2L Semi-Skimmed </label>
-                            <b-form-input v-model="form.semi_skimmed_2l" type="number"></b-form-input>
+                            <b-form-input v-model="form.semi_skimmed_2l" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                         <b-col class="col-sm-4">
                             <label> 2L Skimmed </label>
-                            <b-form-input v-model="form.skimmed_2l" type="number"></b-form-input>
+                            <b-form-input v-model="form.skimmed_2l" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                         <b-col class="col-sm-4">
                             <label> 2L Whole </label>
-                            <b-form-input v-model="form.whole_2l" type="number"></b-form-input>
+                            <b-form-input v-model="form.whole_2l" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                     </b-row>
                     <b-row>
@@ -89,15 +89,15 @@
                     <b-row sm="12">
                         <b-col class="col-sm-4">
                             <label> 1L Semi-Skimmed </label>
-                            <b-form-input v-model="form.semi_skimmed_1l" type="number"></b-form-input>
+                            <b-form-input v-model="form.semi_skimmed_1l" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                         <b-col class="col-sm-4">
                             <label> 1L Skimmed </label>
-                            <b-form-input v-model="form.skimmed_1l" type="number"></b-form-input>
+                            <b-form-input v-model="form.skimmed_1l" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                         <b-col class="col-sm-4">
                             <label> 1L Whole </label>
-                            <b-form-input v-model="form.whole_1l" type="number"></b-form-input>
+                            <b-form-input v-model="form.whole_1l" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                     </b-row>
                     <b-row>
@@ -108,15 +108,15 @@
                     <b-row sm="12">
                         <b-col class="col-sm-4">
                             <label> Organic 2L Semi-Skimmed </label>
-                            <b-form-input v-model="form.organic_semi_skimmed_2l" type="number"></b-form-input>
+                            <b-form-input v-model="form.organic_semi_skimmed_2l" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                         <b-col class="col-sm-4">
                             <label> Organic 2L Skimmed </label>
-                            <b-form-input v-model="form.organic_skimmed_2l" type="number"></b-form-input>
+                            <b-form-input v-model="form.organic_skimmed_2l" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                         <b-col class="col-sm-4">
                             <label> Organic 2L Whole </label>
-                            <b-form-input v-model="form.organic_whole_2l" type="number"></b-form-input>
+                            <b-form-input v-model="form.organic_whole_2l" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                     </b-row>
                     <b-row>
@@ -127,15 +127,15 @@
                     <b-row sm="12">
                         <b-col class="col-sm-4">
                             <label> Organic 1L Semi-Skimmed </label>
-                            <b-form-input v-model="form.organic_semi_skimmed_1l" type="number"></b-form-input>
+                            <b-form-input v-model="form.organic_semi_skimmed_1l" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                         <b-col class="col-sm-4">
                             <label> Organic 1L Skimmed </label>
-                            <b-form-input v-model="form.organic_skimmed_1l" type="number"></b-form-input>
+                            <b-form-input v-model="form.organic_skimmed_1l" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                         <b-col class="col-sm-4">
                             <label> Organic 1L Whole </label>
-                            <b-form-input v-model="form.organic_whole_1l" type="number"></b-form-input>
+                            <b-form-input v-model="form.organic_whole_1l" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                     </b-row>
                     <b-row>
@@ -146,43 +146,43 @@
                     <b-row sm="12">
                         <b-col class="col-sm-4">
                             <label> 1L Coconut </label>
-                            <b-form-input v-model="form.coconut_1l" type="number"></b-form-input>
+                            <b-form-input v-model="form.coconut_1l" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                         <b-col class="col-sm-4">
                             <label> 1L Unsweetened Almond </label>
-                            <b-form-input v-model="form.unsweetened_almond_1l" type="number"></b-form-input>
+                            <b-form-input v-model="form.unsweetened_almond_1l" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                         <b-col class="col-sm-4">
                             <label> 1L Almond </label>
-                            <b-form-input v-model="form.almond_1l" type="number"></b-form-input>
+                            <b-form-input v-model="form.almond_1l" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                     </b-row>
                     <b-row sm="12">
                         <b-col class="col-sm-4">
                             <label> 1L Unsweetened Soya </label>
-                            <b-form-input v-model="form.unsweetened_soya_1l" type="number"></b-form-input>
+                            <b-form-input v-model="form.unsweetened_soya_1l" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                         <b-col class="col-sm-4">
                             <label> 1L Soya </label>
-                            <b-form-input v-model="form.soya_1l" type="number"></b-form-input>
+                            <b-form-input v-model="form.soya_1l" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                         <b-col class="col-sm-4">
                             <label> 1L Oat </label>
-                            <b-form-input v-model="form.oat_1l" type="number"></b-form-input>
+                            <b-form-input v-model="form.oat_1l" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                     </b-row>
                     <b-row sm="12">
                         <b-col class="col-sm-4">
                             <label> 1L Rice </label>
-                            <b-form-input v-model="form.rice_1l" type="number"></b-form-input>
+                            <b-form-input v-model="form.rice_1l" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                         <b-col class="col-sm-4">
                             <label> 1L Cashew </label>
-                            <b-form-input v-model="form.cashew_1l" type="number"></b-form-input>
+                            <b-form-input v-model="form.cashew_1l" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                         <b-col class="col-sm-4">
                             <label> 1L Lactose Free Semi-Skimmed </label>
-                            <b-form-input v-model="form.lactose_free_semi_skimmed_1l" type="number"></b-form-input>
+                            <b-form-input v-model="form.lactose_free_semi_skimmed_1l" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                     </b-row>
                 </b-form-group>

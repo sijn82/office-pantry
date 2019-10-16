@@ -270,6 +270,7 @@
                 }).then (response => {
                     //location.reload(true); // What am I doing with the store on this one?  Will I need this?
                     console.log(response);
+                    alert('Updated Drinkbox Details Sucessfully');
                 }).catch(error => console.log(error));
             },
             deleteDrinkBox(drinkbox) {

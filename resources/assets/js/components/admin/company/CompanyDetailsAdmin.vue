@@ -473,6 +473,7 @@ export default {
                 }
             }).then (response => {
                 console.log(response);
+                alert('Updated Company Details Successfully');
             }).catch(error => console.log(error));
         }
     },

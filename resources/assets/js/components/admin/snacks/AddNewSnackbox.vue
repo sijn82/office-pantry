@@ -46,7 +46,7 @@
         <b-row class="order-options">
             <b-col v-if="!createWholesaleSnackbox">
                 <label> No. of Boxes </label>
-                <b-form-input type="number" v-model="no_of_boxes" size="sm"></b-form-input>
+                <b-form-input v-model="no_of_boxes" size="sm" type="number" min="0"></b-form-input>
             </b-col>
             <b-col>
                 <label> Next Delivery Week Start </label>

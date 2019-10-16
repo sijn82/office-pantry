@@ -82,7 +82,7 @@
                         <p style="padding-top:10px;"> Selected Box Delivery Week (In Month): {{ form.week_in_month }} </p>
                 </b-form-group>
                 <b-form-group id="fruitbox-totals" label="Number Of Fruitboxes">
-                    <b-form-input v-model="form.fruitbox_total" type="number"></b-form-input>
+                    <b-form-input v-model="form.fruitbox_total" type="number" min="0"></b-form-input>
                 </b-form-group>
 
             <!-- Fruit Breakdown - Begins with a container to define widths for column spacing -->
@@ -91,97 +91,97 @@
                     <b-row sm="12">
                         <b-col class="col-sm-4">
                             <label> Deliciously Red Apples </label>
-                            <b-form-input v-model="form.deliciously_red_apples" type="number"></b-form-input>
+                            <b-form-input v-model="form.deliciously_red_apples" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                         <b-col class="col-sm-4">
                             <label> Pink Lady Apples </label>
-                            <b-form-input v-model="form.pink_lady_apples" type="number"></b-form-input>
+                            <b-form-input v-model="form.pink_lady_apples" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                         <b-col class="col-sm-4">
                             <label> Red Apples </label>
-                            <b-form-input v-model="form.red_apples" type="number"></b-form-input>
+                            <b-form-input v-model="form.red_apples" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                     </b-row>
                     <b-row sm="12">
                         <b-col class="col-sm-4">
                             <label> Green Apples </label>
-                            <b-form-input v-model="form.green_apples" type="number"></b-form-input>
+                            <b-form-input v-model="form.green_apples" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                         <b-col class="col-sm-4">
                             <label> Satsumas </label>
-                            <b-form-input v-model="form.satsumas" type="number"></b-form-input>
+                            <b-form-input v-model="form.satsumas" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                         <b-col class="col-sm-4">
                             <label> Pears </label>
-                            <b-form-input v-model="form.pears" type="number"></b-form-input>
+                            <b-form-input v-model="form.pears" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                     </b-row>
                     <b-row sm="12">
                         <b-col class="col-sm-4">
                             <label> Bananas </label>
-                            <b-form-input v-model="form.bananas" type="number"></b-form-input>
+                            <b-form-input v-model="form.bananas" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                         <b-col class="col-sm-4">
                             <label> Nectarines </label>
-                            <b-form-input v-model="form.nectarines" type="number"></b-form-input>
+                            <b-form-input v-model="form.nectarines" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                         <b-col class="col-sm-4">
                             <label> Limes </label>
-                            <b-form-input v-model="form.limes" type="number"></b-form-input>
+                            <b-form-input v-model="form.limes" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                     </b-row>
                     <b-row sm="12">
                         <b-col class="col-sm-4">
                             <label> Lemons </label>
-                            <b-form-input v-model="form.lemons" type="number"></b-form-input>
+                            <b-form-input v-model="form.lemons" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                         <b-col class="col-sm-4">
                             <label> Grapes </label>
-                            <b-form-input v-model="form.grapes" type="number"></b-form-input>
+                            <b-form-input v-model="form.grapes" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                         <b-col class="col-sm-4">
                             <label> Seasonal Berries </label>
-                            <b-form-input v-model="form.seasonal_berries" type="number"></b-form-input>
+                            <b-form-input v-model="form.seasonal_berries" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                     </b-row>
                     <b-row sm="12">
                         <b-col class="col-sm-4">
                             <label> Oranges </label>
-                            <b-form-input v-model="form.oranges" type="number"></b-form-input>
+                            <b-form-input v-model="form.oranges" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                         <b-col class="col-sm-4">
                             <label> Cucumbers </label>
-                            <b-form-input v-model="form.cucumbers" type="number"></b-form-input>
+                            <b-form-input v-model="form.cucumbers" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                         <b-col class="col-sm-4">
                             <label> Mint </label>
-                            <b-form-input v-model="form.mint" type="number"></b-form-input>
+                            <b-form-input v-model="form.mint" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                     </b-row>
                     <b-row sm="12">
                         <b-col class="col-sm-4">
                             <label> Organic Lemons </label>
-                            <b-form-input v-model="form.organic_lemons" type="number"></b-form-input>
+                            <b-form-input v-model="form.organic_lemons" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                         <b-col class="col-sm-4">
                             <label> Kiwis </label>
-                            <b-form-input v-model="form.kiwis" type="number"></b-form-input>
+                            <b-form-input v-model="form.kiwis" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                         <b-col class="col-sm-4">
                             <label> Grapefruits </label>
-                            <b-form-input v-model="form.grapefruits" type="number"></b-form-input>
+                            <b-form-input v-model="form.grapefruits" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                     </b-row>
                     <b-row sm="12">
                         <b-col class="col-sm-4">
                             <label> Avocados </label>
-                            <b-form-input v-model="form.avocados" type="number"></b-form-input>
+                            <b-form-input v-model="form.avocados" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                         <b-col class="col-sm-4">
                             <label> Root Ginger </label>
-                            <b-form-input v-model="form.root_ginger" type="number"></b-form-input>
+                            <b-form-input v-model="form.root_ginger" type="number" min="0" max="100"></b-form-input>
                         </b-col>
-                        <b-col class="col-sm-4">
+                        <b-col class="col-sm-4 yellow">
                             <label> Tailoring Fee </label>
                             <b-form-input v-model="form.tailoring_fee" type="number"></b-form-input>
                         </b-col>
@@ -218,8 +218,13 @@
         border-bottom: 1px solid #636b6f; /* This creates the border. Replace black with whatever color you want. */
     }
     .selected-company {
-
         font-size: 2.2em;
+    }
+    .yellow {
+
+        .form-control {
+            background-color: yellow;
+        }
     }
 
 
@@ -235,7 +240,7 @@ export default {
                 form: {
                     is_active: 'Active',
                     fruit_partner_id: this.company.supplier_id, // By default this will be 'Office Pantry', I could change this to 'Please Select' but figure Office Pantry is still the main distributor.
-                    name: '',
+                    name: this.company.route_name,
                     company_details_id: this.company.id, // If this is created by Frosh, how are they going to select the company to attach the order to?  A typed filter of a long list may be the best way.
                     route_id: null, // This will also need a way to filter from all possible routes, however once a company has been confirmed, the options could easily fit on a dropdown.
                     delivery_day: '',  // According to the docs this must be an array reference, however it seems to me this is happening anyway?  Interesting...
@@ -362,7 +367,9 @@ export default {
                   alert('Uploaded new fruitbox successfully!');
                   self.$emit('refresh-data', {company_details_id: self.form.company_details_id});
                   console.log(response.data);
-              }).catch(error => console.log(error));
+              }).catch(error => {
+                  console.log(error),
+                  alert(error) });
             },
 
             onReset (evt) {

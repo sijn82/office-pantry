@@ -43,7 +43,7 @@
                 <b-col>
                     <label><b> No. Of Boxes </b></label>
                     <div v-if="editing">
-                        <b-form-input v-model="archived_snackbox[0].no_of_boxes" type="number"></b-form-input>
+                        <b-form-input v-model="archived_snackbox[0].no_of_boxes" type="number" min="0" max="100"></b-form-input>
                     </div>
                     <div v-else>
                         <p> {{ archived_snackbox[0].no_of_boxes }} </p>
@@ -52,7 +52,7 @@
                 <b-col v-if="archived_snackbox[0].type !== 'wholesale'">
                     <label><b> Snack Cap </b></label>
                     <div v-if="editing">
-                        <b-form-input v-model="archived_snackbox[0].snack_cap" type="number"></b-form-input>
+                        <b-form-input v-model="archived_snackbox[0].snack_cap" type="number" min="0" max="100"></b-form-input>
                     </div>
                     <div v-else>
                         <p> {{ archived_snackbox[0].snack_cap }} </p>
@@ -164,7 +164,7 @@
                         <p v-else> {{ this.$store.state.selectedProduct.case_price }} </p>
                     </b-col>
                     <b-col>
-                        <b-form-input v-model="quantity" type="number"></b-form-input>
+                        <b-form-input v-model="quantity" type="number" min="0" max="100"></b-form-input>
                     </b-col>
                     <b-col>
                         <b-button variant="success" @click="saveProductToBox(archived_snackbox[0])"> Add </b-button>

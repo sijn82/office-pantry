@@ -123,7 +123,7 @@
                     <b-col>
                         <label><b> Fruitbox Total </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="fruitbox.fruitbox_total" type="number"></b-form-input>
+                            <b-form-input v-model="fruitbox.fruitbox_total" type="number" min="0"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ fruitbox.fruitbox_total }} </p>
@@ -135,7 +135,7 @@
                     <b-col class="col-sm-4">
                          <label><b> Deliciously Red Apples </b></label>
                          <div v-if="editing">
-                             <b-form-input v-model="fruitbox.deliciously_red_apples" type="number"></b-form-input>
+                             <b-form-input v-model="fruitbox.deliciously_red_apples" type="number" min="0" max="100"></b-form-input>
                          </div>
                          <div v-else>
                              <p> {{ fruitbox.deliciously_red_apples }} </p>
@@ -145,7 +145,7 @@
                     <b-col class="col-sm-4">
                          <label><b> Pink Lady Apples </b></label>
                          <div v-if="editing">
-                             <b-form-input v-model="fruitbox.pink_lady_apples" type="number"></b-form-input>
+                             <b-form-input v-model="fruitbox.pink_lady_apples" type="number" min="0" max="100"></b-form-input>
                          </div>
                          <div v-else>
                              <p> {{ fruitbox.pink_lady_apples }} </p>
@@ -155,7 +155,7 @@
                     <b-col class="col-sm-4">
                         <label><b> Red Apples </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="fruitbox.red_apples" type="number"></b-form-input>
+                            <b-form-input v-model="fruitbox.red_apples" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ fruitbox.red_apples }} </p>
@@ -167,7 +167,7 @@
                     <b-col class="col-sm-4">
                         <label><b> Green Apples </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="fruitbox.green_apples" type="number"></b-form-input>
+                            <b-form-input v-model="fruitbox.green_apples" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ fruitbox.green_apples }} </p>
@@ -177,7 +177,7 @@
                     <b-col class="col-sm-4">
                         <label><b> Satsumas </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="fruitbox.satsumas" type="number"></b-form-input>
+                            <b-form-input v-model="fruitbox.satsumas" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ fruitbox.satsumas }} </p>
@@ -187,7 +187,7 @@
                     <b-col class="col-sm-4">
                         <label><b> Pears </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="fruitbox.pears" type="number"></b-form-input>
+                            <b-form-input v-model="fruitbox.pears" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ fruitbox.pears }} </p>
@@ -199,7 +199,7 @@
                     <b-col class="col-sm-4">
                         <label><b> Bananas </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="fruitbox.bananas" type="number"></b-form-input>
+                            <b-form-input v-model="fruitbox.bananas" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ fruitbox.bananas }} </p>
@@ -209,7 +209,7 @@
                     <b-col class="col-sm-4">
                         <label><b> Nectarines </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="fruitbox.nectarines" type="number"></b-form-input>
+                            <b-form-input v-model="fruitbox.nectarines" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ fruitbox.nectarines }} </p>
@@ -219,7 +219,7 @@
                     <b-col class="col-sm-4">
                         <label><b> Limes </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="fruitbox.limes" type="number"></b-form-input>
+                            <b-form-input v-model="fruitbox.limes" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ fruitbox.limes }} </p>
@@ -231,7 +231,7 @@
                     <b-col class="col-sm-4">
                         <label><b> Lemons </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="fruitbox.lemons" type="number"></b-form-input>
+                            <b-form-input v-model="fruitbox.lemons" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ fruitbox.lemons }} </p>
@@ -241,7 +241,7 @@
                     <b-col class="col-sm-4">
                         <label><b> Grapes </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="fruitbox.grapes" type="number"></b-form-input>
+                            <b-form-input v-model="fruitbox.grapes" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ fruitbox.grapes }} </p>
@@ -251,7 +251,7 @@
                     <b-col class="col-sm-4">
                         <label><b> Seasonal Berries </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="fruitbox.seasonal_berries" type="number"></b-form-input>
+                            <b-form-input v-model="fruitbox.seasonal_berries" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ fruitbox.seasonal_berries }} </p>
@@ -263,7 +263,7 @@
                     <b-col class="col-sm-4">
                         <label><b> Oranges </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="fruitbox.oranges" type="number"></b-form-input>
+                            <b-form-input v-model="fruitbox.oranges" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ fruitbox.oranges }} </p>
@@ -273,7 +273,7 @@
                     <b-col class="col-sm-4">
                         <label><b> Cucumbers </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="fruitbox.cucumbers" type="number"></b-form-input>
+                            <b-form-input v-model="fruitbox.cucumbers" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ fruitbox.cucumbers }} </p>
@@ -283,7 +283,7 @@
                     <b-col class="col-sm-4">
                         <label><b> Mint </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="fruitbox.mint" type="number"></b-form-input>
+                            <b-form-input v-model="fruitbox.mint" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ fruitbox.mint }} </p>
@@ -295,7 +295,7 @@
                     <b-col class="col-sm-4">
                         <label><b> Organic Lemons </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="fruitbox.organic_lemons" type="number"></b-form-input>
+                            <b-form-input v-model="fruitbox.organic_lemons" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ fruitbox.organic_lemons }} </p>
@@ -305,7 +305,7 @@
                     <b-col class="col-sm-4">
                         <label><b> Kiwis </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="fruitbox.kiwis" type="number"></b-form-input>
+                            <b-form-input v-model="fruitbox.kiwis" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ fruitbox.kiwis }} </p>
@@ -315,7 +315,7 @@
                     <b-col class="col-sm-4">
                         <label><b> Grapefruits </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="fruitbox.grapefruits" type="number"></b-form-input>
+                            <b-form-input v-model="fruitbox.grapefruits" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ fruitbox.grapefruits }} </p>
@@ -327,7 +327,7 @@
                     <b-col class="col-sm-4">
                         <label><b> Avocados </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="fruitbox.avocados" type="number"></b-form-input>
+                            <b-form-input v-model="fruitbox.avocados" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ fruitbox.avocados }} </p>
@@ -337,7 +337,7 @@
                     <b-col class="col-sm-4">
                         <label><b> Root Ginger </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="fruitbox.root_ginger" type="number"></b-form-input>
+                            <b-form-input v-model="fruitbox.root_ginger" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ fruitbox.root_ginger }} </p>

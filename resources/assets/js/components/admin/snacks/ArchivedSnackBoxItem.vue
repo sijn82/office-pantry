@@ -6,7 +6,7 @@
           </b-col>
           <b-col>
               <div v-if="edit">
-                  <b-form-input type="number" v-model="archived_snackbox_item.quantity"></b-form-input>
+                  <b-form-input v-model="archived_snackbox_item.quantity" type="number" min="0"></b-form-input>
               </div>
               <div v-else>
                   <p> {{ archived_snackbox_item.quantity }} </p>
@@ -47,7 +47,7 @@
                 }
             },
             deleteSnackBoxItem(archived_snackbox_item) {
-                axios.put('api/boxes/archived_snackbox/destroy/' + archived_snackbox_item.id, { 
+                axios.put('api/boxes/archived_snackbox/destroy/' + archived_snackbox_item.id, {
                     id: archived_snackbox_item.id,
                     archived_snackbox_id: archived_snackbox_item.archived_snackbox_id,
                 }).then ( (response) => {
@@ -57,7 +57,7 @@
                 }).catch(error => console.log(error));
             },
             editQuantity(archived_snackbox_item) {
-                axios.post('api/boxes/archived_snackbox/update', { 
+                axios.post('api/boxes/archived_snackbox/update', {
                     archived_snackbox_item_id: archived_snackbox_item.id,
                     archived_snackbox_item_quantity: archived_snackbox_item.quantity,
                 }).then (response => {

@@ -26,7 +26,7 @@
                     <b-col>
                         <label><b> Milkbox Fruit Partner </b></label>
                         <div v-if="editing">
-                            <b-form-select v-model="archived_milkbox.fruit_partner_id"> 
+                            <b-form-select v-model="archived_milkbox.fruit_partner_id">
                                 <option v-for="fruit_partner in $store.state.fruit_partners_list" :value="fruit_partner.id"> {{ fruit_partner.name }} </option>
                             </b-form-select>
                             <p> Selected: {{ archived_milkbox.fruit_partner_id }} </p>
@@ -76,7 +76,7 @@
                             <p> {{ archived_milkbox.delivery_day }} </p>
                         </div>
                     </b-col>
-                    
+
                     <b-col>
                         <label><b> Frequency </b></label>
                         <div v-if="editing">
@@ -90,7 +90,7 @@
                             <p> {{ archived_milkbox.frequency }} </p>
                         </div>
                     </b-col>
-                    
+
                     <b-col v-if="archived_milkbox.frequency == 'Monthly'">
                         <label><b> Week In Month </b></label>
                         <div v-if="editing">
@@ -111,12 +111,12 @@
                         <h6> Regular 2l Milk Options </h6>
                     </b-col>
                 </b-row>
-                
+
                 <b-row :class="archived_milkbox.is_active" class="b-row-padding" sm="12">
                     <b-col class="col-sm-4">
                         <label><b> 2L Semi Skimmed </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="archived_milkbox.semi_skimmed_2l" type="number"></b-form-input>
+                            <b-form-input v-model="archived_milkbox.semi_skimmed_2l" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ archived_milkbox.semi_skimmed_2l }} </p>
@@ -126,7 +126,7 @@
                     <b-col class="col-sm-4">
                         <label><b> 2L Skimmed </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="archived_milkbox.skimmed_2l" type="number"></b-form-input>
+                            <b-form-input v-model="archived_milkbox.skimmed_2l" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ archived_milkbox.skimmed_2l }} </p>
@@ -136,7 +136,7 @@
                     <b-col class="col-sm-4">
                         <label><b> 2L Whole </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="archived_milkbox.whole_2l" type="number"></b-form-input>
+                            <b-form-input v-model="archived_milkbox.whole_2l" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ archived_milkbox.whole_2l }} </p>
@@ -149,12 +149,12 @@
                         <h6> Regular 1l Milk Options </h6>
                     </b-col>
                 </b-row>
-                
+
                 <b-row :class="archived_milkbox.is_active" class="b-row-padding" sm="12">
                     <b-col class="col-sm-4">
                         <label><b> 1L Semi Skimmed </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="archived_milkbox.semi_skimmed_1l" type="number"></b-form-input>
+                            <b-form-input v-model="archived_milkbox.semi_skimmed_1l" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ archived_milkbox.semi_skimmed_1l }} </p>
@@ -164,7 +164,7 @@
                     <b-col class="col-sm-4">
                         <label><b> 1L Skimmed </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="archived_milkbox.skimmed_1l" type="number"></b-form-input>
+                            <b-form-input v-model="archived_milkbox.skimmed_1l" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ archived_milkbox.skimmed_1l }} </p>
@@ -174,7 +174,7 @@
                     <b-col class="col-sm-4">
                         <label><b> 1L Whole </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="archived_milkbox.whole_1l" type="number"></b-form-input>
+                            <b-form-input v-model="archived_milkbox.whole_1l" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ archived_milkbox.whole_1l }} </p>
@@ -187,12 +187,12 @@
                         <h6> Organic 2l Milk Options </h6>
                     </b-col>
                 </b-row>
-                
+
                 <b-row :class="archived_milkbox.is_active" class="b-row-padding" sm="12">
                     <b-col class="col-sm-4">
                         <label><b> Organic 2L Semi Skimmed </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="archived_milkbox.organic_semi_skimmed_2l" type="number"></b-form-input>
+                            <b-form-input v-model="archived_milkbox.organic_semi_skimmed_2l" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ archived_milkbox.organic_semi_skimmed_2l }} </p>
@@ -202,7 +202,7 @@
                     <b-col class="col-sm-4">
                         <label><b> Organic 2L Skimmed </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="archived_milkbox.organic_skimmed_2l" type="number"></b-form-input>
+                            <b-form-input v-model="archived_milkbox.organic_skimmed_2l" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ archived_milkbox.organic_skimmed_2l }} </p>
@@ -212,7 +212,7 @@
                     <b-col class="col-sm-4">
                         <label><b> Organic 2L Whole </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="archived_milkbox.organic_whole_2l" type="number"></b-form-input>
+                            <b-form-input v-model="archived_milkbox.organic_whole_2l" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ archived_milkbox.organic_whole_2l }} </p>
@@ -225,12 +225,12 @@
                         <h6> Organic 1l Milk Options </h6>
                     </b-col>
                 </b-row>
-                
+
                 <b-row :class="archived_milkbox.is_active" class="b-row-padding" sm="12">
                     <b-col class="col-sm-4">
                         <label><b> Organic 1L Semi Skimmed </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="archived_milkbox.organic_semi_skimmed_1l" type="number"></b-form-input>
+                            <b-form-input v-model="archived_milkbox.organic_semi_skimmed_1l" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ archived_milkbox.organic_semi_skimmed_1l }} </p>
@@ -240,7 +240,7 @@
                     <b-col class="col-sm-4">
                         <label><b> Organic 1L Skimmed </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="archived_milkbox.organic_skimmed_1l" type="number"></b-form-input>
+                            <b-form-input v-model="archived_milkbox.organic_skimmed_1l" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ archived_milkbox.organic_skimmed_1l }} </p>
@@ -250,7 +250,7 @@
                     <b-col class="col-sm-4">
                         <label><b> Organic 1L Whole </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="archived_milkbox.organic_whole_1l" type="number"></b-form-input>
+                            <b-form-input v-model="archived_milkbox.organic_whole_1l" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ archived_milkbox.organic_whole_1l }} </p>
@@ -263,12 +263,12 @@
                         <h6> Alternative 1l Milk Options </h6>
                     </b-col>
                 </b-row>
-                
+
                 <b-row :class="archived_milkbox.is_active" class="b-row-padding" sm="12">
                     <b-col class="col-sm-4">
                          <label><b> 1L Milk Alt Coconut </b></label>
                          <div v-if="editing">
-                             <b-form-input v-model="archived_milkbox.milk_1l_alt_coconut" type="number"></b-form-input>
+                             <b-form-input v-model="archived_milkbox.milk_1l_alt_coconut" type="number" min="0" max="100"></b-form-input>
                          </div>
                          <div v-else>
                              <p> {{ archived_milkbox.milk_1l_alt_coconut }} </p>
@@ -278,7 +278,7 @@
                     <b-col class="col-sm-4">
                          <label><b> 1L Unsweetened Almond </b></label>
                          <div v-if="editing">
-                             <b-form-input v-model="archived_milkbox.milk_1l_alt_unsweetened_almond" type="number"></b-form-input>
+                             <b-form-input v-model="archived_milkbox.milk_1l_alt_unsweetened_almond" type="number" min="0" max="100"></b-form-input>
                          </div>
                          <div v-else>
                              <p> {{ archived_milkbox.milk_1l_alt_unsweetened_almond }} </p>
@@ -288,7 +288,7 @@
                     <b-col class="col-sm-4">
                         <label><b> 1L Almond </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="archived_milkbox.milk_1l_alt_almond" type="number"></b-form-input>
+                            <b-form-input v-model="archived_milkbox.milk_1l_alt_almond" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ archived_milkbox.milk_1l_alt_almond }} </p>
@@ -300,7 +300,7 @@
                     <b-col class="col-sm-4">
                         <label><b> 1L Unsweetened Soya </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="archived_milkbox.milk_1l_alt_unsweetened_soya" type="number"></b-form-input>
+                            <b-form-input v-model="archived_milkbox.milk_1l_alt_unsweetened_soya" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ archived_milkbox.milk_1l_alt_unsweetened_soya }} </p>
@@ -310,17 +310,17 @@
                     <b-col class="col-sm-4">
                         <label><b> 1L Soya </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="archived_milkbox.milk_1l_alt_soya" type="number"></b-form-input>
+                            <b-form-input v-model="archived_milkbox.milk_1l_alt_soya" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ archived_milkbox.milk_1l_alt_soya }} </p>
                         </div>
                     </b-col>
-                    
+
                     <b-col class="col-sm-4">
                         <label><b> 1L Oat </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="archived_milkbox.milk_1l_alt_oat" type="number"></b-form-input>
+                            <b-form-input v-model="archived_milkbox.milk_1l_alt_oat" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ archived_milkbox.milk_1l_alt_oat }} </p>
@@ -329,31 +329,31 @@
                 </b-row>
                 <!-- Alternative Milk Options (Pt3) -->
                 <b-row :class="archived_milkbox.is_active" class="b-row-padding" sm="12">
-                    
+
                     <b-col class="col-sm-4">
                         <label><b> 1L Rice </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="archived_milkbox.milk_1l_alt_rice" type="number"></b-form-input>
+                            <b-form-input v-model="archived_milkbox.milk_1l_alt_rice" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ archived_milkbox.milk_1l_alt_rice }} </p>
                         </div>
                     </b-col>
-                    
+
                     <b-col class="col-sm-4">
                         <label><b> 1L Cashew </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="archived_milkbox.milk_1l_alt_cashew" type="number"></b-form-input>
+                            <b-form-input v-model="archived_milkbox.milk_1l_alt_cashew" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ archived_milkbox.milk_1l_alt_cashew }} </p>
                         </div>
                     </b-col>
-                    
+
                     <b-col class="col-sm-4">
                         <label><b> 1L Lactose Free Semi </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="archived_milkbox.milk_1l_alt_lactose_free_semi" type="number"></b-form-input>
+                            <b-form-input v-model="archived_milkbox.milk_1l_alt_lactose_free_semi" type="number" min="0" max="100"></b-form-input>
                         </div>
                         <div v-else>
                             <p> {{ archived_milkbox.milk_1l_alt_lactose_free_semi }} </p>
@@ -363,11 +363,11 @@
                 <b-row id="bottom-details" :class="archived_milkbox.is_active" class="b-row-padding" sm="12">
                     <b-col>
                         <label><b> Invoiced At </b></label>
-                        <p> {{ archived_milkbox.invoiced_at }} </p> 
+                        <p> {{ archived_milkbox.invoiced_at }} </p>
                     </b-col>
                     <b-col>
                         <label><b> Updated At </b></label>
-                        <p> {{ archived_milkbox.updated_at }} </p> 
+                        <p> {{ archived_milkbox.updated_at }} </p>
                     </b-col>
                 </b-row>
             </div>
@@ -450,7 +450,7 @@ export default {
                 invoiced_at: archived_milkbox.invoiced_at,
                 updated_at: archived_milkbox.updated_at,
                 skip_archive: this.skip_archive,
-                
+
             }).then (response => {
                 console.log(response);
             }).catch(error => console.log(error));

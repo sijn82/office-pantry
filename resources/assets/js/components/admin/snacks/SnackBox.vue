@@ -44,7 +44,7 @@
                 <b-col>
                     <label><b> No. Of Boxes </b></label>
                     <div v-if="editing">
-                        <b-form-input v-model="snackbox[0].no_of_boxes" type="number"></b-form-input>
+                        <b-form-input v-model="snackbox[0].no_of_boxes" type="number" min="0"></b-form-input>
                     </div>
                     <div v-else>
                         <p> {{ snackbox[0].no_of_boxes }} </p>
@@ -53,7 +53,7 @@
                 <b-col v-if="snackbox[0].type !== 'wholesale'">
                     <label><b> Snack Cap </b></label>
                     <div v-if="editing">
-                        <b-form-input v-model="snackbox[0].snack_cap" type="number"></b-form-input>
+                        <b-form-input v-model="snackbox[0].snack_cap" type="number" min="0"></b-form-input>
                     </div>
                     <div v-else>
                         <p> {{ snackbox[0].snack_cap }} </p>

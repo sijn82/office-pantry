@@ -8,7 +8,7 @@
             <b-button v-if="editing" class="btn btn-success" @click="updateDetails(archived_drinkbox[0])"> Save </b-button>
             <b-button variant="danger" @click="deleteDrinkBox(archived_drinkbox[0])"> Delete </b-button>
         </div>
-        
+
         <div class="drinkbox-details" v-if="details">
             <b-row id="top-details" :class="archived_drinkbox[0].is_active">
                 <b-col>
@@ -50,9 +50,9 @@
                     </div>
                 </b-col>
             </b-row>
-            
+
             <b-row :class="archived_drinkbox[0].is_active">
-            
+
                 <b-col>
                     <label><b> Delivery Day </b></label>
                     <div v-if="editing">
@@ -81,9 +81,9 @@
                     </div>
                 </b-col>
             </b-row>
-            
+
             <b-row class="bottom-details" :class="archived_drinkbox[0].is_active">
-                
+
                 <b-col v-if="archived_drinkbox[0].previous_delivery_week !== null">
                     <label><b> Previous Delivery Date </b></label>
                     <div>
@@ -93,7 +93,7 @@
                 <b-col>
                     <label><b> Week Delivered </b></label>
                     <div v-if="editing">
-                        <b-form-input v-model="archived_drinkbox[0].next_delivery_week" type="date" readonly></b-form-input>
+                        <b-form-input v-model="archived_drinkbox[0].next_delivery_week" type="date"></b-form-input>
                     </div>
                     <div v-else>
                         <p> {{ archived_drinkbox[0].next_delivery_week }} </p>
@@ -104,7 +104,7 @@
                     <p> {{ archived_drinkbox[0].invoiced_at }} </p>
                 </b-col>
             </b-row>
-            
+
             <h4> Order Breakdown </h4>
             <b-button variant="primary" @click="addProduct()"> Add a Product </b-button>
             <div v-if="add_product">
@@ -128,7 +128,7 @@
                         <h4> Quantity </h4>
                     </b-col>
                     <b-col>
-                        
+
                     </b-col>
                 </b-row>
                 <b-row>
@@ -145,7 +145,7 @@
                         <p> {{ this.$store.state.selectedProduct.unit_price }} </p>
                     </b-col>
                     <b-col>
-                        <b-form-input v-model="quantity" type="number"></b-form-input>
+                        <b-form-input v-model="quantity" type="number" min="0"></b-form-input>
                     </b-col>
                     <b-col>
                         <b-button variant="success" @click="saveProductToBox(archived_drinkbox[0])"> Add </b-button>
@@ -166,9 +166,9 @@
                     <!-- Placeholder title for buttons -->
                 </b-col>
             </b-row>
-            
+
             <archived-drinkbox-item id="drinkbox-products" v-for="archived_drinkbox_item in archived_drinkbox" v-if="archived_drinkbox_item.product_id !== 0" :archived_drinkbox_item="archived_drinkbox_item" :key="archived_drinkbox_item.id" @refresh-data="refreshData($event)"></archived-drinkbox-item>
-            
+
             <h3 class="border-top"> Current Total: £{{ drinkbox_total }} </h3>
         </div>
     </div>
@@ -206,7 +206,7 @@
         },
         computed: {
             drinkbox_total() {
-                
+
                 let $drinkbox_total = 0
 
                 // This function checks each entry in the current snackbox list and creates a running total (a) of the unit price (b[cost]) multiplied by the quantity (b[quantity]).
@@ -225,11 +225,11 @@
                         }
                     }, 0);
                 };
-                
+
                 // Now we use the function by passing in the snackbox array, and the two properties we need to multiply - saving it as the current total cost.
                 // First a quick check, on whether we need to tally up case prices for wholesale, or unit prices for regular snackboxes.
                 (this.archived_drinkbox[0].type === 'wholesale') ? $drinkbox_total = sum(this.archived_drinkbox, 'case_price', 'quantity') : $drinkbox_total = sum(this.archived_drinkbox, 'unit_price', 'quantity');
-                    
+
                 return $drinkbox_total;
             }
         },
@@ -253,8 +253,8 @@
                         quantity: this.quantity,
                         unit_price: this.$store.state.selectedProduct.unit_price,
                     },
-                    drinkbox_details: drinkbox, 
-                        
+                    drinkbox_details: drinkbox,
+
                 }).then ( (response) => {
                     this.$emit('refresh-data', {company_details_id: archived_drinkbox.company_details_id})
                     //location.reload(true); // What am I doing with the store on this one?  Will I need this?
@@ -282,11 +282,12 @@
                 }).then (response => {
                     //location.reload(true); // What am I doing with the store on this one?  Will I need this?
                     console.log(response);
+                    alert('Updated Archived Drinkbox Details Sucessfully');
                 }).catch(error => console.log(error));
             },
             deleteDrinkBox(archived_drinkbox) {
                 let self = this;
-                axios.put('api/boxes/archived-drinkbox/destroy-box/' + archived_drinkbox.drinkbox_id, { 
+                axios.put('api/boxes/archived-drinkbox/destroy-box/' + archived_drinkbox.drinkbox_id, {
                     archived_drinkbox_id: archived_drinkbox.drinkbox_id,
                     archived_drinkbox_delivery_date: archived_drinkbox.next_delivery_week,
                 }).then ( (response) => {

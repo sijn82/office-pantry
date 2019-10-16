@@ -77757,7 +77757,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0" },
                         model: {
                           value: _vm.fruitbox.fruitbox_total,
                           callback: function($$v) {
@@ -77795,7 +77795,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.fruitbox.deliciously_red_apples,
                           callback: function($$v) {
@@ -77828,7 +77828,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.fruitbox.pink_lady_apples,
                           callback: function($$v) {
@@ -77855,7 +77855,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.fruitbox.red_apples,
                           callback: function($$v) {
@@ -77893,7 +77893,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.fruitbox.green_apples,
                           callback: function($$v) {
@@ -77920,7 +77920,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.fruitbox.satsumas,
                           callback: function($$v) {
@@ -77945,7 +77945,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.fruitbox.pears,
                           callback: function($$v) {
@@ -77981,7 +77981,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.fruitbox.bananas,
                           callback: function($$v) {
@@ -78006,7 +78006,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.fruitbox.nectarines,
                           callback: function($$v) {
@@ -78033,7 +78033,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.fruitbox.limes,
                           callback: function($$v) {
@@ -78069,7 +78069,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.fruitbox.lemons,
                           callback: function($$v) {
@@ -78094,7 +78094,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.fruitbox.grapes,
                           callback: function($$v) {
@@ -78119,7 +78119,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.fruitbox.seasonal_berries,
                           callback: function($$v) {
@@ -78157,7 +78157,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.fruitbox.oranges,
                           callback: function($$v) {
@@ -78182,7 +78182,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.fruitbox.cucumbers,
                           callback: function($$v) {
@@ -78209,7 +78209,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.fruitbox.mint,
                           callback: function($$v) {
@@ -78245,7 +78245,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.fruitbox.organic_lemons,
                           callback: function($$v) {
@@ -78272,7 +78272,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.fruitbox.kiwis,
                           callback: function($$v) {
@@ -78297,7 +78297,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.fruitbox.grapefruits,
                           callback: function($$v) {
@@ -78335,7 +78335,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.fruitbox.avocados,
                           callback: function($$v) {
@@ -78360,7 +78360,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.fruitbox.root_ginger,
                           callback: function($$v) {
@@ -79004,7 +79004,7 @@ exports = module.exports = __webpack_require__(0)(false);
 
 
 // module
-exports.push([module.i, "\n#fruitbox-breakdown label {\n  padding-top: 10px;\n}\n#new-fruitbox-form:after {\n  content: \"\";\n  /* This is necessary for the pseudo element to work. */\n  display: block;\n  /* This will put the pseudo element on its own line. */\n  margin: 0 auto;\n  /* This will center the border. */\n  width: 70%;\n  /* Change this to whatever width you want. */\n  padding-top: 30px;\n  /* This creates some space between the element and the border. */\n  margin-bottom: 30px;\n  /*  */\n  border-bottom: 1px solid #636b6f;\n  /* This creates the border. Replace black with whatever color you want. */\n}\n.selected-company {\n  font-size: 2.2em;\n}\n", ""]);
+exports.push([module.i, "\n#fruitbox-breakdown label {\n  padding-top: 10px;\n}\n#new-fruitbox-form:after {\n  content: \"\";\n  /* This is necessary for the pseudo element to work. */\n  display: block;\n  /* This will put the pseudo element on its own line. */\n  margin: 0 auto;\n  /* This will center the border. */\n  width: 70%;\n  /* Change this to whatever width you want. */\n  padding-top: 30px;\n  /* This creates some space between the element and the border. */\n  margin-bottom: 30px;\n  /*  */\n  border-bottom: 1px solid #636b6f;\n  /* This creates the border. Replace black with whatever color you want. */\n}\n.selected-company {\n  font-size: 2.2em;\n}\n.yellow .form-control {\n  background-color: yellow;\n}\n", ""]);
 
 // exports
 
@@ -79242,6 +79242,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -79252,7 +79257,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             form: {
                 is_active: 'Active',
                 fruit_partner_id: this.company.supplier_id, // By default this will be 'Office Pantry', I could change this to 'Please Select' but figure Office Pantry is still the main distributor.
-                name: '',
+                name: this.company.route_name,
                 company_details_id: this.company.id, // If this is created by Frosh, how are they going to select the company to attach the order to?  A typed filter of a long list may be the best way.
                 route_id: null, // This will also need a way to filter from all possible routes, however once a company has been confirmed, the options could easily fit on a dropdown.
                 delivery_day: '', // According to the docs this must be an array reference, however it seems to me this is happening anyway?  Interesting...
@@ -79381,7 +79386,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 self.$emit('refresh-data', { company_details_id: self.form.company_details_id });
                 console.log(response.data);
             }).catch(function (error) {
-                return console.log(error);
+                console.log(error), alert(error);
             });
         },
         onReset: function onReset(evt) {
@@ -79763,7 +79768,7 @@ var render = function() {
                 },
                 [
                   _c("b-form-input", {
-                    attrs: { type: "number" },
+                    attrs: { type: "number", min: "0" },
                     model: {
                       value: _vm.form.fruitbox_total,
                       callback: function($$v) {
@@ -79796,7 +79801,7 @@ var render = function() {
                           _c("label", [_vm._v(" Deliciously Red Apples ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.deliciously_red_apples,
                               callback: function($$v) {
@@ -79820,7 +79825,7 @@ var render = function() {
                           _c("label", [_vm._v(" Pink Lady Apples ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.pink_lady_apples,
                               callback: function($$v) {
@@ -79840,7 +79845,7 @@ var render = function() {
                           _c("label", [_vm._v(" Red Apples ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.red_apples,
                               callback: function($$v) {
@@ -79867,7 +79872,7 @@ var render = function() {
                           _c("label", [_vm._v(" Green Apples ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.green_apples,
                               callback: function($$v) {
@@ -79887,7 +79892,7 @@ var render = function() {
                           _c("label", [_vm._v(" Satsumas ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.satsumas,
                               callback: function($$v) {
@@ -79907,7 +79912,7 @@ var render = function() {
                           _c("label", [_vm._v(" Pears ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.pears,
                               callback: function($$v) {
@@ -79934,7 +79939,7 @@ var render = function() {
                           _c("label", [_vm._v(" Bananas ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.bananas,
                               callback: function($$v) {
@@ -79954,7 +79959,7 @@ var render = function() {
                           _c("label", [_vm._v(" Nectarines ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.nectarines,
                               callback: function($$v) {
@@ -79974,7 +79979,7 @@ var render = function() {
                           _c("label", [_vm._v(" Limes ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.limes,
                               callback: function($$v) {
@@ -80001,7 +80006,7 @@ var render = function() {
                           _c("label", [_vm._v(" Lemons ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.lemons,
                               callback: function($$v) {
@@ -80021,7 +80026,7 @@ var render = function() {
                           _c("label", [_vm._v(" Grapes ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.grapes,
                               callback: function($$v) {
@@ -80041,7 +80046,7 @@ var render = function() {
                           _c("label", [_vm._v(" Seasonal Berries ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.seasonal_berries,
                               callback: function($$v) {
@@ -80068,7 +80073,7 @@ var render = function() {
                           _c("label", [_vm._v(" Oranges ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.oranges,
                               callback: function($$v) {
@@ -80088,7 +80093,7 @@ var render = function() {
                           _c("label", [_vm._v(" Cucumbers ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.cucumbers,
                               callback: function($$v) {
@@ -80108,7 +80113,7 @@ var render = function() {
                           _c("label", [_vm._v(" Mint ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.mint,
                               callback: function($$v) {
@@ -80135,7 +80140,7 @@ var render = function() {
                           _c("label", [_vm._v(" Organic Lemons ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.organic_lemons,
                               callback: function($$v) {
@@ -80155,7 +80160,7 @@ var render = function() {
                           _c("label", [_vm._v(" Kiwis ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.kiwis,
                               callback: function($$v) {
@@ -80175,7 +80180,7 @@ var render = function() {
                           _c("label", [_vm._v(" Grapefruits ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.grapefruits,
                               callback: function($$v) {
@@ -80202,7 +80207,7 @@ var render = function() {
                           _c("label", [_vm._v(" Avocados ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.avocados,
                               callback: function($$v) {
@@ -80222,7 +80227,7 @@ var render = function() {
                           _c("label", [_vm._v(" Root Ginger ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.root_ginger,
                               callback: function($$v) {
@@ -80237,7 +80242,7 @@ var render = function() {
                       _vm._v(" "),
                       _c(
                         "b-col",
-                        { staticClass: "col-sm-4" },
+                        { staticClass: "col-sm-4 yellow" },
                         [
                           _c("label", [_vm._v(" Tailoring Fee ")]),
                           _vm._v(" "),
@@ -80902,8 +80907,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 // updated_at: archived_fruitbox.updated_at,
             }).then(function (response) {
                 console.log(response);
+                alert('Updated Archived Fruitbox Sucessfully');
             }).catch(function (error) {
-                return console.log(error);
+                console.log(error);alert(error);
             });
         },
         fruit_partner_id_to_name_converter: function fruit_partner_id_to_name_converter(id) {
@@ -81383,7 +81389,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0" },
                         model: {
                           value: _vm.archived_fruitbox.fruitbox_total,
                           callback: function($$v) {
@@ -81427,7 +81433,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_fruitbox.deliciously_red_apples,
                           callback: function($$v) {
@@ -81462,7 +81468,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_fruitbox.pink_lady_apples,
                           callback: function($$v) {
@@ -81497,7 +81503,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_fruitbox.red_apples,
                           callback: function($$v) {
@@ -81537,7 +81543,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_fruitbox.green_apples,
                           callback: function($$v) {
@@ -81566,7 +81572,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_fruitbox.satsumas,
                           callback: function($$v) {
@@ -81593,7 +81599,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_fruitbox.pears,
                           callback: function($$v) {
@@ -81631,7 +81637,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_fruitbox.bananas,
                           callback: function($$v) {
@@ -81658,7 +81664,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_fruitbox.nectarines,
                           callback: function($$v) {
@@ -81687,7 +81693,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_fruitbox.limes,
                           callback: function($$v) {
@@ -81725,7 +81731,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_fruitbox.lemons,
                           callback: function($$v) {
@@ -81752,7 +81758,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_fruitbox.grapes,
                           callback: function($$v) {
@@ -81779,7 +81785,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_fruitbox.seasonal_berries,
                           callback: function($$v) {
@@ -81825,7 +81831,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_fruitbox.oranges,
                           callback: function($$v) {
@@ -81852,7 +81858,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_fruitbox.cucumbers,
                           callback: function($$v) {
@@ -81881,7 +81887,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_fruitbox.mint,
                           callback: function($$v) {
@@ -81919,7 +81925,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_fruitbox.organic_lemons,
                           callback: function($$v) {
@@ -81952,7 +81958,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_fruitbox.kiwis,
                           callback: function($$v) {
@@ -81979,7 +81985,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_fruitbox.grapefruits,
                           callback: function($$v) {
@@ -82019,7 +82025,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_fruitbox.avocados,
                           callback: function($$v) {
@@ -82046,7 +82052,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_fruitbox.root_ginger,
                           callback: function($$v) {
@@ -83522,7 +83528,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.milkbox.semi_skimmed_2l,
                           callback: function($$v) {
@@ -83549,7 +83555,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.milkbox.skimmed_2l,
                           callback: function($$v) {
@@ -83576,7 +83582,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.milkbox.whole_2l,
                           callback: function($$v) {
@@ -83623,7 +83629,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.milkbox.semi_skimmed_1l,
                           callback: function($$v) {
@@ -83650,7 +83656,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.milkbox.skimmed_1l,
                           callback: function($$v) {
@@ -83677,7 +83683,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.milkbox.whole_1l,
                           callback: function($$v) {
@@ -83724,7 +83730,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.milkbox.organic_semi_skimmed_2l,
                           callback: function($$v) {
@@ -83757,7 +83763,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.milkbox.organic_skimmed_2l,
                           callback: function($$v) {
@@ -83784,7 +83790,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.milkbox.organic_whole_2l,
                           callback: function($$v) {
@@ -83833,7 +83839,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.milkbox.organic_semi_skimmed_1l,
                           callback: function($$v) {
@@ -83866,7 +83872,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.milkbox.organic_skimmed_1l,
                           callback: function($$v) {
@@ -83893,7 +83899,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.milkbox.organic_whole_1l,
                           callback: function($$v) {
@@ -83942,7 +83948,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.milkbox.milk_1l_alt_coconut,
                           callback: function($$v) {
@@ -83971,7 +83977,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.milkbox.milk_1l_alt_unsweetened_almond,
                           callback: function($$v) {
@@ -84006,7 +84012,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.milkbox.milk_1l_alt_almond,
                           callback: function($$v) {
@@ -84044,7 +84050,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.milkbox.milk_1l_alt_unsweetened_soya,
                           callback: function($$v) {
@@ -84079,7 +84085,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.milkbox.milk_1l_alt_soya,
                           callback: function($$v) {
@@ -84106,7 +84112,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.milkbox.milk_1l_alt_oat,
                           callback: function($$v) {
@@ -84144,7 +84150,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.milkbox.milk_1l_alt_rice,
                           callback: function($$v) {
@@ -84171,7 +84177,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.milkbox.milk_1l_alt_cashew,
                           callback: function($$v) {
@@ -84198,7 +84204,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.milkbox.milk_1l_alt_lactose_free_semi,
                           callback: function($$v) {
@@ -85380,7 +85386,7 @@ var render = function() {
                           _c("label", [_vm._v(" 2L Semi-Skimmed ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.semi_skimmed_2l,
                               callback: function($$v) {
@@ -85400,7 +85406,7 @@ var render = function() {
                           _c("label", [_vm._v(" 2L Skimmed ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.skimmed_2l,
                               callback: function($$v) {
@@ -85420,7 +85426,7 @@ var render = function() {
                           _c("label", [_vm._v(" 2L Whole ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.whole_2l,
                               callback: function($$v) {
@@ -85457,7 +85463,7 @@ var render = function() {
                           _c("label", [_vm._v(" 1L Semi-Skimmed ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.semi_skimmed_1l,
                               callback: function($$v) {
@@ -85477,7 +85483,7 @@ var render = function() {
                           _c("label", [_vm._v(" 1L Skimmed ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.skimmed_1l,
                               callback: function($$v) {
@@ -85497,7 +85503,7 @@ var render = function() {
                           _c("label", [_vm._v(" 1L Whole ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.whole_1l,
                               callback: function($$v) {
@@ -85534,7 +85540,7 @@ var render = function() {
                           _c("label", [_vm._v(" Organic 2L Semi-Skimmed ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.organic_semi_skimmed_2l,
                               callback: function($$v) {
@@ -85558,7 +85564,7 @@ var render = function() {
                           _c("label", [_vm._v(" Organic 2L Skimmed ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.organic_skimmed_2l,
                               callback: function($$v) {
@@ -85578,7 +85584,7 @@ var render = function() {
                           _c("label", [_vm._v(" Organic 2L Whole ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.organic_whole_2l,
                               callback: function($$v) {
@@ -85615,7 +85621,7 @@ var render = function() {
                           _c("label", [_vm._v(" Organic 1L Semi-Skimmed ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.organic_semi_skimmed_1l,
                               callback: function($$v) {
@@ -85639,7 +85645,7 @@ var render = function() {
                           _c("label", [_vm._v(" Organic 1L Skimmed ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.organic_skimmed_1l,
                               callback: function($$v) {
@@ -85659,7 +85665,7 @@ var render = function() {
                           _c("label", [_vm._v(" Organic 1L Whole ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.organic_whole_1l,
                               callback: function($$v) {
@@ -85696,7 +85702,7 @@ var render = function() {
                           _c("label", [_vm._v(" 1L Coconut ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.coconut_1l,
                               callback: function($$v) {
@@ -85716,7 +85722,7 @@ var render = function() {
                           _c("label", [_vm._v(" 1L Unsweetened Almond ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.unsweetened_almond_1l,
                               callback: function($$v) {
@@ -85736,7 +85742,7 @@ var render = function() {
                           _c("label", [_vm._v(" 1L Almond ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.almond_1l,
                               callback: function($$v) {
@@ -85763,7 +85769,7 @@ var render = function() {
                           _c("label", [_vm._v(" 1L Unsweetened Soya ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.unsweetened_soya_1l,
                               callback: function($$v) {
@@ -85783,7 +85789,7 @@ var render = function() {
                           _c("label", [_vm._v(" 1L Soya ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.soya_1l,
                               callback: function($$v) {
@@ -85803,7 +85809,7 @@ var render = function() {
                           _c("label", [_vm._v(" 1L Oat ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.oat_1l,
                               callback: function($$v) {
@@ -85830,7 +85836,7 @@ var render = function() {
                           _c("label", [_vm._v(" 1L Rice ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.rice_1l,
                               callback: function($$v) {
@@ -85850,7 +85856,7 @@ var render = function() {
                           _c("label", [_vm._v(" 1L Cashew ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.cashew_1l,
                               callback: function($$v) {
@@ -85872,7 +85878,7 @@ var render = function() {
                           ]),
                           _vm._v(" "),
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.form.lactose_free_semi_skimmed_1l,
                               callback: function($$v) {
@@ -86911,7 +86917,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_milkbox.semi_skimmed_2l,
                           callback: function($$v) {
@@ -86944,7 +86950,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_milkbox.skimmed_2l,
                           callback: function($$v) {
@@ -86973,7 +86979,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_milkbox.whole_2l,
                           callback: function($$v) {
@@ -87022,7 +87028,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_milkbox.semi_skimmed_1l,
                           callback: function($$v) {
@@ -87055,7 +87061,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_milkbox.skimmed_1l,
                           callback: function($$v) {
@@ -87084,7 +87090,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_milkbox.whole_1l,
                           callback: function($$v) {
@@ -87133,7 +87139,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_milkbox.organic_semi_skimmed_2l,
                           callback: function($$v) {
@@ -87168,7 +87174,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_milkbox.organic_skimmed_2l,
                           callback: function($$v) {
@@ -87203,7 +87209,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_milkbox.organic_whole_2l,
                           callback: function($$v) {
@@ -87260,7 +87266,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_milkbox.organic_semi_skimmed_1l,
                           callback: function($$v) {
@@ -87295,7 +87301,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_milkbox.organic_skimmed_1l,
                           callback: function($$v) {
@@ -87330,7 +87336,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_milkbox.organic_whole_1l,
                           callback: function($$v) {
@@ -87387,7 +87393,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_milkbox.milk_1l_alt_coconut,
                           callback: function($$v) {
@@ -87422,7 +87428,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value:
                             _vm.archived_milkbox.milk_1l_alt_unsweetened_almond,
@@ -87461,7 +87467,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_milkbox.milk_1l_alt_almond,
                           callback: function($$v) {
@@ -87507,7 +87513,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value:
                             _vm.archived_milkbox.milk_1l_alt_unsweetened_soya,
@@ -87546,7 +87552,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_milkbox.milk_1l_alt_soya,
                           callback: function($$v) {
@@ -87581,7 +87587,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_milkbox.milk_1l_alt_oat,
                           callback: function($$v) {
@@ -87625,7 +87631,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_milkbox.milk_1l_alt_rice,
                           callback: function($$v) {
@@ -87660,7 +87666,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value: _vm.archived_milkbox.milk_1l_alt_cashew,
                           callback: function($$v) {
@@ -87695,7 +87701,7 @@ var render = function() {
                     "div",
                     [
                       _c("b-form-input", {
-                        attrs: { type: "number" },
+                        attrs: { type: "number", min: "0", max: "100" },
                         model: {
                           value:
                             _vm.archived_milkbox.milk_1l_alt_lactose_free_semi,
@@ -92669,7 +92675,7 @@ var render = function() {
                   "div",
                   [
                     _c("b-form-input", {
-                      attrs: { type: "number" },
+                      attrs: { type: "number", min: "0" },
                       model: {
                         value: _vm.snackbox_item.quantity,
                         callback: function($$v) {
@@ -93395,7 +93401,7 @@ var render = function() {
                         "div",
                         [
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0" },
                             model: {
                               value: _vm.snackbox[0].no_of_boxes,
                               callback: function($$v) {
@@ -93425,7 +93431,7 @@ var render = function() {
                             "div",
                             [
                               _c("b-form-input", {
-                                attrs: { type: "number" },
+                                attrs: { type: "number", min: "0" },
                                 model: {
                                   value: _vm.snackbox[0].snack_cap,
                                   callback: function($$v) {
@@ -94856,7 +94862,7 @@ var render = function() {
                   _c("label", [_vm._v(" No. of Boxes ")]),
                   _vm._v(" "),
                   _c("b-form-input", {
-                    attrs: { type: "number", size: "sm" },
+                    attrs: { size: "sm", type: "number", min: "0" },
                     model: {
                       value: _vm.no_of_boxes,
                       callback: function($$v) {
@@ -96161,7 +96167,7 @@ var render = function() {
                   "div",
                   [
                     _c("b-form-input", {
-                      attrs: { type: "number" },
+                      attrs: { type: "number", min: "0" },
                       model: {
                         value: _vm.archived_snackbox_item.quantity,
                         callback: function($$v) {
@@ -96905,7 +96911,7 @@ var render = function() {
                         "div",
                         [
                           _c("b-form-input", {
-                            attrs: { type: "number" },
+                            attrs: { type: "number", min: "0", max: "100" },
                             model: {
                               value: _vm.archived_snackbox[0].no_of_boxes,
                               callback: function($$v) {
@@ -96941,7 +96947,7 @@ var render = function() {
                             "div",
                             [
                               _c("b-form-input", {
-                                attrs: { type: "number" },
+                                attrs: { type: "number", min: "0", max: "100" },
                                 model: {
                                   value: _vm.archived_snackbox[0].snack_cap,
                                   callback: function($$v) {
@@ -97328,7 +97334,11 @@ var render = function() {
                               "b-col",
                               [
                                 _c("b-form-input", {
-                                  attrs: { type: "number" },
+                                  attrs: {
+                                    type: "number",
+                                    min: "0",
+                                    max: "100"
+                                  },
                                   model: {
                                     value: _vm.quantity,
                                     callback: function($$v) {
@@ -97894,7 +97904,7 @@ var render = function() {
                   "div",
                   [
                     _c("b-form-input", {
-                      attrs: { type: "number" },
+                      attrs: { type: "number", min: "0", max: "100" },
                       model: {
                         value: _vm.drinkbox_item.quantity,
                         callback: function($$v) {
@@ -98350,6 +98360,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).then(function (response) {
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?
                 console.log(response);
+                alert('Updated Drinkbox Details Sucessfully');
             }).catch(function (error) {
                 return console.log(error);
             });
@@ -100149,7 +100160,7 @@ var render = function() {
                   "div",
                   [
                     _c("b-form-input", {
-                      attrs: { type: "number" },
+                      attrs: { type: "number", min: "0", max: "100" },
                       model: {
                         value: _vm.archived_drinkbox_item.quantity,
                         callback: function($$v) {
@@ -100625,6 +100636,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).then(function (response) {
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?
                 console.log(response);
+                alert('Updated Archived Drinkbox Details Sucessfully');
             }).catch(function (error) {
                 return console.log(error);
             });
@@ -101041,7 +101053,7 @@ var render = function() {
                         "div",
                         [
                           _c("b-form-input", {
-                            attrs: { type: "date", readonly: "" },
+                            attrs: { type: "date" },
                             model: {
                               value:
                                 _vm.archived_drinkbox[0].next_delivery_week,
@@ -101186,7 +101198,7 @@ var render = function() {
                           "b-col",
                           [
                             _c("b-form-input", {
-                              attrs: { type: "number" },
+                              attrs: { type: "number", min: "0" },
                               model: {
                                 value: _vm.quantity,
                                 callback: function($$v) {
@@ -101730,7 +101742,7 @@ var render = function() {
                   "div",
                   [
                     _c("b-form-input", {
-                      attrs: { type: "number" },
+                      attrs: { type: "number", min: "0", max: "100" },
                       model: {
                         value: _vm.otherbox_item.quantity,
                         callback: function($$v) {
@@ -103964,7 +103976,7 @@ var render = function() {
                   "div",
                   [
                     _c("b-form-input", {
-                      attrs: { type: "number" },
+                      attrs: { type: "number", min: "0" },
                       model: {
                         value: _vm.archived_otherbox_item.quantity,
                         callback: function($$v) {
@@ -104815,7 +104827,7 @@ var render = function() {
                         "div",
                         [
                           _c("b-form-input", {
-                            attrs: { type: "date", readonly: "" },
+                            attrs: { type: "date" },
                             model: {
                               value:
                                 _vm.archived_otherbox[0].next_delivery_week,
@@ -112326,6 +112338,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }
             }).then(function (response) {
                 console.log(response);
+                alert('Updated Company Details Successfully');
             }).catch(function (error) {
                 return console.log(error);
             });

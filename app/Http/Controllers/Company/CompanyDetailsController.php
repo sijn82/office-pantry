@@ -26,6 +26,14 @@ class CompanyDetailsController extends Controller
         return response()->json($company_search);
     }
 
+    // This is going to be used to allow the admin to check the invoice name in CompanyDetails
+    // and to grab the first entry that matches to autopopulate the associated fields on the add new company form.
+
+    public function invoice_details_lookup(Request $request)
+    {
+
+    }
+
     /**
      * Show the form for creating a new resource.
      *
