@@ -60,13 +60,13 @@ class CompanyDetailsController extends Controller
         $new_company->invoice_name = request('company_details.invoice_name');
         $new_company->route_name = request('company_details.route_name');
         // Contact Details
-        $new_company->primary_contact_first_name = request('company_details.primary_contact_name');
-        $new_company->primary_contact_surname = request('company_details.primary_surname');
+        $new_company->primary_contact_first_name = request('company_details.primary_contact_first_name');
+        $new_company->primary_contact_surname = request('company_details.primary_contact_surname');
         $new_company->primary_contact_job_title = request('company_details.primary_contact_job_title');
         $new_company->primary_email = request('company_details.primary_contact_email');
         $new_company->primary_tel = request('company_details.primary_contact_telephone');
-        $new_company->secondary_contact_first_name = request('company_details.secondary_contact_name');
-        $new_company->secondary_contact_surname = request('company_details.secondary_surname');
+        $new_company->secondary_contact_first_name = request('company_details.secondary_contact_first_name');
+        $new_company->secondary_contact_surname = request('company_details.secondary_contact_surname');
         $new_company->secondary_contact_job_title = request('company_details.secondary_contact_job_title');
         $new_company->secondary_email = request('company_details.secondary_contact_email');
         $new_company->secondary_tel = request('company_details.secondary_contact_telephone');
