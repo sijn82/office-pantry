@@ -77218,6 +77218,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -77228,7 +77229,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             frequency: ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'],
             week_in_month: ['First', 'Second', 'Third', 'Forth', 'Last'],
             discountable_options: ['Yes', 'No'],
-            skip_archive: 'false',
+            skip_archive: 'true',
             editing: false,
             details: false,
             addnew: false
@@ -77416,6 +77417,14 @@ var render = function() {
               },
               [_vm._v(" Skip Fruitbox Archive Creation/Update ")]
             )
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.editing
+          ? _c("b-form-text", [
+              _vm._v(
+                " Skip fruitbox archiving if you're updating a mistake and do not need to keep the existing information. "
+              )
+            ])
           : _vm._e()
       ],
       1

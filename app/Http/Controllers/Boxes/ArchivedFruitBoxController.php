@@ -65,7 +65,7 @@ class ArchivedFruitBoxController extends Controller
 
     public function deleteArchivedFruitBox($id)
     {
-        dd('If I hadn\'t stopped it, fruitbox archive entry ' . $id . ' would have been deleted!');
+        //dd('If I hadn\'t stopped it, fruitbox archive entry ' . $id . ' would have been deleted!');
         FruitBoxArchive::destroy($id);
     }
 
