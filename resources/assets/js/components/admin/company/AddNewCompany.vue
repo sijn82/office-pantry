@@ -262,7 +262,7 @@ export default {
               'BACS', 'GoCardless', 'GoCardless In Advance', 'Invoiced In Advance',
               'Monthly Invoice', 'Monthly Invoice GoCardless', 'Paypal (Stripe)', 'Paypal In Advance (Stripe)',
               'Weekly Standing Order', 'Monthly Standing Order', 'Weekly Standing Order In Advance',
-              'Monthly Standing Order In Advance', 'Eden Branding Theme', 'TBC'
+              'Monthly Standing Order In Advance', 'Eden Branding Theme', 'FOC', 'TBC'
             ],
             model_options: ['Free', 'Honesty Box'],
             monthly_surprise_options: [

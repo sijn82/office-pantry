@@ -25,7 +25,10 @@
                             <p> {{ fruitbox.company_details_id }} </p>
                         </div> -->
                         <label><b> Fruitbox Type </b></label>
-                        <div>
+                        <div v-if="editing">
+                            <b-form-select v-model="fruitbox.type" :options="types" required></b-form-select>
+                        </div>
+                        <div v-else>
                             <p> {{ fruitbox.type }} </p>
                         </div>
                     </b-col>
@@ -395,6 +398,7 @@ export default {
             week_in_month: ['First', 'Second', 'Third', 'Forth', 'Last'],
             discountable_options: ['Yes', 'No'],
             skip_archive: 'true',
+            types: ['Standard', 'Berry', 'Seasonal', 'Tailored', 'Orange Juicer', 'Banana'],
             editing: false,
             details: false,
             addnew: false,

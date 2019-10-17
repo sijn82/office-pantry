@@ -77219,6 +77219,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -77230,6 +77233,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             week_in_month: ['First', 'Second', 'Third', 'Forth', 'Last'],
             discountable_options: ['Yes', 'No'],
             skip_archive: 'true',
+            types: ['Standard', 'Berry', 'Seasonal', 'Tailored', 'Orange Juicer', 'Banana'],
             editing: false,
             details: false,
             addnew: false
@@ -77463,9 +77467,26 @@ var render = function() {
             _c("b-col", { staticClass: "col-sm-4" }, [
               _c("label", [_c("b", [_vm._v(" Fruitbox Type ")])]),
               _vm._v(" "),
-              _c("div", [
-                _c("p", [_vm._v(" " + _vm._s(_vm.fruitbox.type) + " ")])
-              ])
+              _vm.editing
+                ? _c(
+                    "div",
+                    [
+                      _c("b-form-select", {
+                        attrs: { options: _vm.types, required: "" },
+                        model: {
+                          value: _vm.fruitbox.type,
+                          callback: function($$v) {
+                            _vm.$set(_vm.fruitbox, "type", $$v)
+                          },
+                          expression: "fruitbox.type"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _c("div", [
+                    _c("p", [_vm._v(" " + _vm._s(_vm.fruitbox.type) + " ")])
+                  ])
             ]),
             _vm._v(" "),
             _c("b-col", { staticClass: "col-sm-4" }, [
@@ -110460,6 +110481,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['name', 'id', 'column'],
@@ -110480,7 +110502,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 // location.reload(true); // This refreshes the browser and pulls the updated variables from the database into the vue component.
                 console.log(response);
             }).catch(function (error) {
-                return console.log(error);
+                console.log(error);alert(error);
             });
         }
     }
@@ -110896,7 +110918,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 no_of_surprises: 0
             },
             show: true,
-            payment_options: [{ text: 'Please select an option', value: null }, 'BACS', 'GoCardless', 'GoCardless In Advance', 'Invoiced In Advance', 'Monthly Invoice', 'Monthly Invoice GoCardless', 'Paypal (Stripe)', 'Paypal In Advance (Stripe)', 'Weekly Standing Order', 'Monthly Standing Order', 'Weekly Standing Order In Advance', 'Monthly Standing Order In Advance', 'Eden Branding Theme', 'TBC'],
+            payment_options: [{ text: 'Please select an option', value: null }, 'BACS', 'GoCardless', 'GoCardless In Advance', 'Invoiced In Advance', 'Monthly Invoice', 'Monthly Invoice GoCardless', 'Paypal (Stripe)', 'Paypal In Advance (Stripe)', 'Weekly Standing Order', 'Monthly Standing Order', 'Weekly Standing Order In Advance', 'Monthly Standing Order In Advance', 'Eden Branding Theme', 'FOC', 'TBC'],
             model_options: ['Free', 'Honesty Box'],
             monthly_surprise_options: [{ text: 'Yes', value: 'yes' }, { text: 'No', value: 'no' }, { text: 'TBC', value: null }]
         };
@@ -112312,7 +112334,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             edit: false,
-            payment_options: [{ text: 'Please select an option', value: null }, 'BACS', 'GoCardless', 'GoCardless In Advance', 'Invoiced In Advance', 'Monthly Invoice', 'Monthly Invoice GoCardless', 'Paypal (Stripe)', 'Paypal In Advance (Stripe)', 'Weekly Standing Order', 'Monthly Standing Order', 'Weekly Standing Order In Advance', 'Monthly Standing Order In Advance', 'Eden Branding Theme', 'TBC'],
+            payment_options: [{ text: 'Please select an option', value: null }, 'BACS', 'GoCardless', 'GoCardless In Advance', 'Invoiced In Advance', 'Monthly Invoice', 'Monthly Invoice GoCardless', 'Paypal (Stripe)', 'Paypal In Advance (Stripe)', 'Weekly Standing Order', 'Monthly Standing Order', 'Weekly Standing Order In Advance', 'Monthly Standing Order In Advance', 'Eden Branding Theme', 'FOC', 'TBC'],
             model_options: ['Free', 'Honesty Box'],
             status: ['Active', 'Inactive'],
             monthly_surprise_options: [{ text: 'Yes', value: 'yes' }, { text: 'No', value: 'no' }, { text: 'TBC', value: null }]
