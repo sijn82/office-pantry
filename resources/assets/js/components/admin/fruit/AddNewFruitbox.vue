@@ -361,12 +361,12 @@ export default {
               // alert(JSON.stringify(this.form));
               axios.post('/api/boxes/fruitbox/add-new-fruitbox', {
                   company_data: self.form,
-                  headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv'},
+                  headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                   // user_id: self.userData.id // This hasn't been setup yet so proabably won't work yet?!
               }).then(function (response) {
                   alert('Uploaded new fruitbox successfully!');
                   self.$emit('refresh-data', {company_details_id: self.form.company_details_id});
-                  console.log(response.data);
+                  // console.log(response.data);
               }).catch(error => {
                   console.log(error),
                   alert(error) });
@@ -407,6 +407,30 @@ export default {
 
             }
         },
+        // created() {
+        //     this.form.fruitbox_total = 0;
+        //     this.form.deliciously_red_apples = this.form.deliciously_red_apples || '';
+        //     this.form.pink_lady_apples = this.form.pink_lady_apples || '';
+        //     this.form.red_apples = this.form.red_apples || '';
+        //     this.form.green_apples = this.form.green_apples || '';
+        //     this.form.satsumas = this.form.satsumas || '';
+        //     this.form.pears = this.form.pears || '';
+        //     this.form.bananas = this.form.bananas || '';
+        //     this.form.nectarines = this.form.nectarines || '';
+        //     this.form.limes = this.form.limes || '';
+        //     this.form.lemons = this.form.lemons || '';
+        //     this.form.grapes = this.form.grapes || '';
+        //     this.form.seasonal_berries = this.form.seasonal_berries || '';
+        //     this.form.oranges = this.form.oranges || '';
+        //     this.form.cucumbers = this.form.cucumbers || '';
+        //     this.form.mint = this.form.mint || '';
+        //     this.form.organic_lemons = this.form.organic_lemons || '';
+        //     this.form.kiwis = this.form.kiwis || '';
+        //     this.form.grapefruits = this.form.grapefruits || '';
+        //     this.form.avocados = this.form.avocados || '';
+        //     this.form.root_ginger = this.form.root_ginger || '';
+        //     this.form.tailoring_fee = this.form.tailoring_fee || '';
+        // },
         mounted() {
 
             // this.$store.commit('getFruitPartners'); //  So long as this is mounted whether an attempt is made to create a new box, then this will limit the calls from 5+ to 5. - EDIT: Aiming lower.

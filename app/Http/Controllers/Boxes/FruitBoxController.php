@@ -126,37 +126,37 @@ class FruitBoxController extends Controller
 
         // Ok let's see if I can create some better error messages for user feedback.
 
-        $validatedData = $request->validate([
-
-            'fruit_partner_id' => 'required',
-            'name' => 'required',
-            'type' => 'required',
-            'next_delivery' => 'required',
-            'frequency' => 'required',
-            'delivery_day' => 'required',
-            'fruitbox_total' => 'required',
-            'deliciously_red_apples' => 'required',
-            'pink_lady_apples' => 'required',
-            'red_apples' => 'required',
-            'green_apples' => 'required',
-            'satsumas' => 'required',
-            'pears' => 'required',
-            'bananas' => 'required',
-            'nectarines' => 'required',
-            'limes' => 'required',
-            'lemons' => 'required',
-            'grapes' => 'required',
-            'seasonal_berries' => 'required',
-            'oranges' => 'required',
-            'cucumbers' => 'required',
-            'mint' => 'required',
-            'organic_lemons' => 'required',
-            'kiwis' => 'required',
-            'grapefruits' => 'required',
-            'avocados' => 'required',
-            'root_ginger' => 'required',
-            'discount_multiple' => 'required',
-        ]);
+        // $validatedData = $request->validate([
+        //
+        //     'fruit_partner_id' => 'required',
+        //     'name' => 'required',
+        //     'type' => 'required',
+        //     'next_delivery' => 'required',
+        //     'frequency' => 'required',
+        //     'delivery_day' => 'required',
+        //     'fruitbox_total' => 'required',
+        //     'deliciously_red_apples' => 'required',
+        //     'pink_lady_apples' => 'required',
+        //     'red_apples' => 'required',
+        //     'green_apples' => 'required',
+        //     'satsumas' => 'required',
+        //     'pears' => 'required',
+        //     'bananas' => 'required',
+        //     'nectarines' => 'required',
+        //     'limes' => 'required',
+        //     'lemons' => 'required',
+        //     'grapes' => 'required',
+        //     'seasonal_berries' => 'required',
+        //     'oranges' => 'required',
+        //     'cucumbers' => 'required',
+        //     'mint' => 'required',
+        //     'organic_lemons' => 'required',
+        //     'kiwis' => 'required',
+        //     'grapefruits' => 'required',
+        //     'avocados' => 'required',
+        //     'root_ginger' => 'required',
+        //     'discount_multiple' => 'required',
+        // ]);
 
 
         foreach (request('company_data.delivery_day') as $delivery_day)
