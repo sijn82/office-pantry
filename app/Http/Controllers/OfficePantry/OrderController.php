@@ -98,6 +98,119 @@ class OrderController extends Controller
         ]);
     }
 
+    public function fudgeOrderAdvancement()
+    {
+        //----- Fruitboxes -----//
+        $fruitboxes = FruitBox::whereIn('frequency', ['Weekly', 'Fortnightly', 'Monthly'])->get();
+
+        foreach ($fruitboxes as $fruitbox) {
+
+            if ($fruitbox->next_delivery < Carbon::now()) {
+
+                // Add the old next_delivery_week to the last_delivery_week field.
+                $lastDelivery = $fruitbox->next_delivery;
+
+                // this is the only line of code which will differ depending on when the frequency selected
+                if ($fruitbox->frequency === 'Weekly') {
+                    // Push the date forward a week
+                    $fruitbox->next_delivery = Carbon::parse($fruitbox->next_delivery)->addWeek(1);
+
+                } elseif ($fruitbox->frequency === 'Fortnightly') {
+                    // push the date forward two weeks
+                    $fruitbox->next_delivery = Carbon::parse($fruitbox->next_delivery)->addWeek(2);
+
+                } elseif ($fruitbox->frequency === 'Monthly') {
+
+                    // This will hold either the value first, second, third, forth or last.
+                    $week = $fruitbox->week_in_month;
+                    // This will check the month of the last delivery and then advance by one month,
+                    // before saving that month as a string to be parsed later in $mondayOfMonth variable.
+                    $month = Carbon::parse($fruitbox->next_delivery)->addMonth()->englishMonth;
+                    // Create new instance of Carbon to use as the primer for $carbon::parse() below.
+                    $carbon = new Carbon;
+                    // An alternative to setting the month above and parsing below would be to parse the phrase '$week . ' monday of NEXT month'
+                    // and allow it use the carbon date of when the function is run however I'm currently prefering this approach
+                    // as it weighs more heavily on the last delivery date rather than when processes are run.
+                    $mondayOfMonth = $carbon::parse($week . ' monday of ' . $month);
+                    // Set the newly parsed delivery date.
+                    $fruitbox->next_delivery = $mondayOfMonth;
+
+                } else {
+                    // Nothing should get here as the frequency is a drop down (selection) of options, and we specifically grabbed only weekly, fortnightly, and monthly orders
+                }
+
+                //----- Advance the Fruitbox Orders -----//
+
+                FruitBox::where('id', $fruitbox->id)->update([
+                    'previous_delivery' => $lastDelivery,
+                    'next_delivery' => $fruitbox->next_delivery,
+                    // 'invoiced_at' => null, nothing will have been invoiced so let's not worry about that.
+                ]);
+
+                //----- End of Advance the Fruitbox Orders -----//
+            }
+        }
+
+        //----- End of Fruitboxes -----//
+
+        //----- Milkboxes -----//
+        $milkboxes = MilkBox::whereIn('frequency', ['Weekly', 'Fortnightly', 'Monthly'])->get();
+
+        foreach ($milkboxes as $milkbox) {
+
+            if ($milkbox->next_delivery < Carbon::now()) {
+
+                // echo $milkbox->name . '\'s next delivery was outdated but has been changed from ' . $milkbox->next_delivery . " to ";
+
+                $lastDelivery = $milkbox->next_delivery;
+
+                // this is the only line of code which will differ depending on when the frequency selected
+                if ($milkbox->frequency === 'Weekly') {
+                    // Push the date forward a week
+                    $milkbox->next_delivery = Carbon::parse($milkbox->next_delivery)->addWeek(1);
+
+                } elseif ($milkbox->frequency === 'Fortnightly') {
+                    // push the date forward two weeks
+                    $milkbox->next_delivery = Carbon::parse($milkbox->next_delivery)->addWeek(2);
+
+                } elseif ($milkbox->frequency === 'Monthly') {
+
+                    // This will hold either the value first, second, third, forth or last.
+                    $week = $milkbox->week_in_month;
+                    // This will check the month of the last delivery and then advance by one month,
+                    // before saving that month as a string to be parsed later in $mondayOfMonth variable.
+                    $month = Carbon::parse($milkbox->next_delivery)->addMonth()->englishMonth;
+                    // Create new instance of Carbon to use as the primer for $carbon::parse() below.
+                    $carbon = new Carbon;
+                    // An alternative to setting the month above and parsing below would be to parse the phrase '$week . ' monday of NEXT month'
+                    // and allow it use the carbon date of when the function is run however I'm currently prefering this approach
+                    // as it weighs more heavily on the last delivery date rather than when processes are run.
+                    $mondayOfMonth = $carbon::parse($week . ' monday of ' . $month);
+                    // Set the newly parsed delivery date.
+                    $milkbox->next_delivery = $mondayOfMonth;
+
+                } else {
+
+                    // Nothing should get here as the frequency is a drop down (selection) of options, and we specifically grabbed only weekly, fortnightly, and monthly orders
+                }
+
+                //----- Advance the Milkbox Orders -----//
+
+                MilkBox::where('id', $milkbox->id)->update([
+                    'previous_delivery' => $lastDelivery,
+                    'next_delivery' => $milkbox->next_delivery,
+                    // 'invoiced_at' => null, nothing will have been invoiced so let's not worry about that.
+                ]);
+
+                //----- End of Advance the Milkbox Orders -----//
+        }
+
+        //----- End of Milkboxes -----//
+        }
+    }
+
+
+
     // I think this 'public static function advanceNextOrderDeliveryDate()' might be the only function in here that's actually still in use.
     // Which is quite funny as I have no idea whether it's still updating successfully since I don't actually know
     // when it would ATTEMPT TO UPDATE THE ORDERS, OR WHAT HAPPENS WHEN IT CAN'T?!

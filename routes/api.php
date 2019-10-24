@@ -197,6 +197,9 @@ Route::group([
     Route::get('carbon', 'OrderController@advanceNextOrderDeliveryDate');
     Route::get('cron-data/select', 'OrderController@showCronData');
     Route::post('cron-data/update', 'OrderController@updateCronData');
+
+    //----- Temporary hack to advance orders without worrying about whether the boxes have been invoiced, or to make archives - fruit & milk only! -----//
+    Route::get('fudge-order-advancement', 'OrderController@fudgeOrderAdvancement');
 });
 
 // Routes still looking for a folder to call home.
