@@ -392,7 +392,7 @@ export default {
             editing: false,
             details: false,
             addnew: false,
-            skip_archive: 'false',
+            skip_archive: 'true',
         }
     },
     methods: {
@@ -454,7 +454,7 @@ export default {
 
             }).then (response => {
                 console.log(response);
-                this.$emit('refresh-data', {company_details_id: self.form.company_details_id});
+                this.$emit('refresh-data', {company_details_id: milkbox.company_details_id});
             }).catch(error => console.log(error));
         },
         changeName(name) {

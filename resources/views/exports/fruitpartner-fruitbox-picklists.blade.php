@@ -1,8 +1,9 @@
 <table>
     <thead>
-        
+
       <tr>
           <th>Company Name</th>
+          <th>Delivery Day</th>
           <th>Fruit Boxes</th>
           @if ($deliciously_red_apples_total === 0) @else <th>Deliciously Red Apples</th> @endif
           @if ($pink_lady_apples_total === 0) @else <th>Pink Lady Apples</th> @endif
@@ -24,23 +25,21 @@
           @if ($grapefruits_total === 0) @else <th>Grapefruits</th> @endif
           @if ($avocados_total === 0) @else <th>Avocados</th> @endif
           @if ($root_ginger_total === 0) @else <th>Root Ginger</th> @endif
-          <th>Delivery Day</th>
-
       </tr>
 
     </thead>
-    <tbody>    
-        
-        {{ $totalFruitBoxes = 0 }} 
-        
+    <tbody>
+
+        {{ $totalFruitBoxes = 0 }}
+
         @foreach ($picklists as $picklist)
 
             {{ $totalFruitBoxes += $picklist->fruitbox_total }}
 
             <tr>
                 <td>{{ $picklist->company_name }}</td>
+                <td>{{ $picklist->delivery_day }}</td>
                 <td>{{ $picklist->fruitbox_total }}</td>
-                
                 @if ($deliciously_red_apples_total === 0) @elseif ($picklist->deliciously_red_apples === 0) <td></td> @else <td> {{ $picklist->deliciously_red_apples }} </td> @endif
                 @if ($pink_lady_apples_total === 0) @elseif ($picklist->pink_lady_apples === 0) <td></td> @else <td> {{ $picklist->pink_lady_apples }} </td> @endif
                 @if ($red_apples_total === 0) @elseif ($picklist->red_apples === 0) <td></td> @else <td> {{ $picklist->red_apples }} </td> @endif
@@ -61,13 +60,12 @@
                 @if ($grapefruits_total === 0) @elseif ($picklist->grapefruits === 0) <td></td> @else <td> {{ $picklist->grapefruits }} </td> @endif
                 @if ($avocados_total === 0) @elseif ($picklist->avocados === 0) <td></td> @else <td> {{ $picklist->avocados }} </td> @endif
                 @if ($root_ginger_total === 0) @elseif ($picklist->root_ginger === 0) <td></td> @else <td> {{ $picklist->root_ginger }} </td> @endif
-                         
-                <td>{{ $picklist->delivery_day }}</td>
             </tr>
 
         @endforeach
 
         <tr>
+            <td></td>
             <td> Totals: </td>
             <td>{{ $totalFruitBoxes }}</td>
             @if ($deliciously_red_apples_total === 0) @else <td>{{ $deliciously_red_apples_total }}</td> @endif
@@ -90,7 +88,6 @@
             @if ($grapefruits_total === 0) @else <td>{{ $grapefruits_total }}</td> @endif
             @if ($avocados_total === 0) @else <td>{{ $avocados_total }}</td> @endif
             @if ($root_ginger_total === 0) @else <td>{{ $root_ginger_total }}</td> @endif
-            <td></td>
         </tr>
 
     </tbody>

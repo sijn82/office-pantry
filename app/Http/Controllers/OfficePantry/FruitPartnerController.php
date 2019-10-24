@@ -147,7 +147,7 @@ class FruitPartnerController extends Controller
     public function destroy(FruitPartner $fruitPartner, $id)
     {
         dump($id);
-        dd($fruitPartner);
+        // dd($fruitPartner);
         FruitPartner::destroy($id);
     }
 
@@ -185,6 +185,10 @@ class FruitPartnerController extends Controller
             $milkboxes = $fruitpartner->milkbox->where('next_delivery', $week_start->current)->where('is_active', 'Active');
 
             //---------- Archive Checks ----------//
+
+            // EDIT: Reviewing this again on 18/10/19 was after writing this!
+            //       At a glance I realsise why these are unlikely to need using, unless the fruit/milk boxes get updated before exprting the fruit partner orders.
+            //       If these are required though I don't see where I'm using/adding these potential orders to the export?
 
             // Quick check that this returns something before making the request more specific, 'cause otherwise there be errors.
             if ($fruitpartner->fruitbox_archive) {

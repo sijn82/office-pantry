@@ -83106,7 +83106,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             editing: false,
             details: false,
             addnew: false,
-            skip_archive: 'false'
+            skip_archive: 'true'
         };
     },
 
@@ -83169,7 +83169,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             }).then(function (response) {
                 console.log(response);
-                _this.$emit('refresh-data', { company_details_id: self.form.company_details_id });
+                _this.$emit('refresh-data', { company_details_id: milkbox.company_details_id });
             }).catch(function (error) {
                 return console.log(error);
             });

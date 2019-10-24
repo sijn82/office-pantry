@@ -355,6 +355,12 @@ class FruitBoxController extends Controller
 
         //----- If I'm not comparing dates, do I need to worry about any of this? Worth checking... -----//
 
+        //----- What's getting changed? If it's the fruitbox quantity or make up of that order we need to log it for later retrieval -----//
+
+        //----- End of What's getting changed? If it's the fruitbox quantity or make up of that order we need to log it for later retrieval -----//
+
+
+
         // dd(request('skip_archive'));
         // if skip-archive is true then we're deliberately trying to update the box and bypassing archive logic entirely.
         // if the current fruitbox order was updated wrongly this'll prevent the unwanted contents from being stored in the archives,
