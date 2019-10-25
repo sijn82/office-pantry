@@ -112,10 +112,35 @@ WithEvents
 
     public function view(): View
     {
+        // Let's set some variables to generate a running total for the export.
+        $deliciously_red_apples_running_total = 0;
+        $pink_lady_apples_running_total = 0;
+        $red_apples_running_total = 0;
+        $green_apples_running_total = 0;
+        $satsumas_running_total = 0;
+
+        $pears_running_total = 0;
+        $bananas_running_total = 0;
+        $nectarines_running_total = 0;
+        $limes_running_total = 0;
+        $lemons_running_total = 0;
+
+        $grapes_running_total = 0;
+        $seasonal_berries_running_total = 0;
+        $oranges_running_total = 0;
+        $cucumbers_running_total = 0;
+        $mint_running_total = 0;
+
+        $organic_lemons_running_total = 0;
+        $kiwis_running_total = 0;
+        $grapefruits_running_total = 0;
+        $avocados_running_total = 0;
+        $root_ginger_running_total = 0;
+
          // this is somewhat silly, I injected the fruitpartner's name as a key earlier, now I'm essentially just stripping it out.
          // It does mean I have it accessible for display, rather than using the id but once I know exactly what I'm doing with it, I may revise this.
          foreach ($this->fruitpartner_fruitboxes as $key => $fruitboxes) {
-            // dump($fruitboxes);
+            // dd($fruitboxes);
             // foreach ($fruitboxes as $fruitbox) {
 
                  $company = CompanyDetails::find($fruitboxes->company_details_id);
@@ -127,30 +152,80 @@ WithEvents
                  // Route name could suffer the same fate, however I think in practice this will be more flexible as it's not used by xero, so could be more easily fudged.
                  $fruitboxes->company_name = $company->route_name;
             // }
+
+            $deliciously_red_apples_running_total += ($fruitboxes->deliciously_red_apples * $fruitboxes->fruitbox_total);
+            $pink_lady_apples_running_total += ($fruitboxes->pink_lady_apples * $fruitboxes->fruitbox_total);
+            $red_apples_running_total += ($fruitboxes->red_apples * $fruitboxes->fruitbox_total);
+            $green_apples_running_total += ($fruitboxes->green_apples * $fruitboxes->fruitbox_total);
+            $satsumas_running_total += ($fruitboxes->satsumas * $fruitboxes->fruitbox_total);
+
+            $pears_running_total += ($fruitboxes->pears * $fruitboxes->fruitbox_total);
+            $bananas_running_total += ($fruitboxes->bananas * $fruitboxes->fruitbox_total);
+            $nectarines_running_total += ($fruitboxes->nectarines * $fruitboxes->fruitbox_total);
+            $limes_running_total += ($fruitboxes->limes * $fruitboxes->fruitbox_total);
+            $lemons_running_total += ($fruitboxes->lemons * $fruitboxes->fruitbox_total);
+
+            $grapes_running_total += ($fruitboxes->grapes * $fruitboxes->fruitbox_total);
+            $seasonal_berries_running_total += ($fruitboxes->seasonal_berries * $fruitboxes->fruitbox_total);
+            $oranges_running_total += ($fruitboxes->oranges * $fruitboxes->fruitbox_total);
+            $cucumbers_running_total += ($fruitboxes->cucumbers * $fruitboxes->fruitbox_total);
+            $mint_running_total += ($fruitboxes->mint * $fruitboxes->fruitbox_total);
+
+            $organic_lemons_running_total += ($fruitboxes->organic_lemons * $fruitboxes->fruitbox_total);
+            $kiwis_running_total += ($fruitboxes->kiwis * $fruitboxes->fruitbox_total);
+            $grapefruits_running_total += ($fruitboxes->grapefruits * $fruitboxes->fruitbox_total);
+            $avocados_running_total += ($fruitboxes->avocados * $fruitboxes->fruitbox_total);
+            $root_ginger_running_total += ($fruitboxes->root_ginger * $fruitboxes->fruitbox_total);
+
+
          }
-         // dd($fruitboxes);
+         // dump($fruitboxes);
 
          // Generate totals prior to going into template, which allows us to omit columns that would otherwise total 0.
-         $deliciously_red_apples_total = $this->fruitpartner_fruitboxes->pluck('deliciously_red_apples')->sum();
-         $pink_lady_apples_total = $this->fruitpartner_fruitboxes->pluck('pink_lady_apples')->sum();
-         $red_apples_total = $this->fruitpartner_fruitboxes->pluck('red_apples')->sum();
-         $green_apples_total = $this->fruitpartner_fruitboxes->pluck('green_apples')->sum();
-         $satsumas_total = $this->fruitpartner_fruitboxes->pluck('satsumas')->sum();
-         $pears_total = $this->fruitpartner_fruitboxes->pluck('pears')->sum();
-         $bananas_total = $this->fruitpartner_fruitboxes->pluck('bananas')->sum();
-         $nectarines_total = $this->fruitpartner_fruitboxes->pluck('nectarines')->sum();
-         $limes_total = $this->fruitpartner_fruitboxes->pluck('limes')->sum();
-         $lemons_total = $this->fruitpartner_fruitboxes->pluck('lemons')->sum();
-         $grapes_total = $this->fruitpartner_fruitboxes->pluck('grapes')->sum();
-         $seasonal_berries_total = $this->fruitpartner_fruitboxes->pluck('seasonal_berries')->sum();
-         $oranges_total = $this->fruitpartner_fruitboxes->pluck('oranges')->sum();
-         $cucumbers_total = $this->fruitpartner_fruitboxes->pluck('cucumbers')->sum();
-         $mint_total = $this->fruitpartner_fruitboxes->pluck('mint')->sum();
-         $organic_lemons_total = $this->fruitpartner_fruitboxes->pluck('organic_lemons')->sum();
-         $kiwis_total = $this->fruitpartner_fruitboxes->pluck('kiwis')->sum();
-         $grapefruits_total = $this->fruitpartner_fruitboxes->pluck('grapefruits')->sum();
-         $avocados_total = $this->fruitpartner_fruitboxes->pluck('avocados')->sum();
-         $root_ginger_total = $this->fruitpartner_fruitboxes->pluck('root_ginger')->sum();
+
+         // Edit: 25/10/19 Crap, this doesn't actually create accurate totals! It totals the amount of fruit if the companies only recieved 1 box.  Oops, I need a new solution.
+         // $deliciously_red_apples_total = $this->fruitpartner_fruitboxes->pluck('deliciously_red_apples')->sum();
+         // $pink_lady_apples_total = $this->fruitpartner_fruitboxes->pluck('pink_lady_apples')->sum();
+         // $red_apples_total = $this->fruitpartner_fruitboxes->pluck('red_apples')->sum();
+         // $green_apples_total = $this->fruitpartner_fruitboxes->pluck('green_apples')->sum();
+         // $satsumas_total = $this->fruitpartner_fruitboxes->pluck('satsumas')->sum();
+         // $pears_total = $this->fruitpartner_fruitboxes->pluck('pears')->sum();
+         // $bananas_total = $this->fruitpartner_fruitboxes->pluck('bananas')->sum();
+         // $nectarines_total = $this->fruitpartner_fruitboxes->pluck('nectarines')->sum();
+         // $limes_total = $this->fruitpartner_fruitboxes->pluck('limes')->sum();
+         // $lemons_total = $this->fruitpartner_fruitboxes->pluck('lemons')->sum();
+         // $grapes_total = $this->fruitpartner_fruitboxes->pluck('grapes')->sum();
+         // $seasonal_berries_total = $this->fruitpartner_fruitboxes->pluck('seasonal_berries')->sum();
+         // $oranges_total = $this->fruitpartner_fruitboxes->pluck('oranges')->sum();
+         // $cucumbers_total = $this->fruitpartner_fruitboxes->pluck('cucumbers')->sum();
+         // $mint_total = $this->fruitpartner_fruitboxes->pluck('mint')->sum();
+         // $organic_lemons_total = $this->fruitpartner_fruitboxes->pluck('organic_lemons')->sum();
+         // $kiwis_total = $this->fruitpartner_fruitboxes->pluck('kiwis')->sum();
+         // $grapefruits_total = $this->fruitpartner_fruitboxes->pluck('grapefruits')->sum();
+         // $avocados_total = $this->fruitpartner_fruitboxes->pluck('avocados')->sum();
+         // $root_ginger_total = $this->fruitpartner_fruitboxes->pluck('root_ginger')->sum();
+
+         // See above and below for the new solution - it appears to work fine now. Fingers crossed.
+         $deliciously_red_apples_total = $deliciously_red_apples_running_total;
+         $pink_lady_apples_total = $pink_lady_apples_running_total;
+         $red_apples_total = $red_apples_running_total;
+         $green_apples_total = $green_apples_running_total;
+         $satsumas_total = $satsumas_running_total;
+         $pears_total = $pears_running_total;
+         $bananas_total = $bananas_running_total;
+         $nectarines_total = $nectarines_running_total;
+         $limes_total = $limes_running_total;
+         $lemons_total = $lemons_running_total;
+         $grapes_total = $grapes_running_total;
+         $seasonal_berries_total = $seasonal_berries_running_total;
+         $oranges_total = $oranges_running_total;
+         $cucumbers_total = $cucumbers_running_total;
+         $mint_total = $mint_running_total;
+         $organic_lemons_total = $organic_lemons_running_total;
+         $kiwis_total = $kiwis_running_total;
+         $grapefruits_total = $grapefruits_running_total;
+         $avocados_total = $avocados_running_total;
+         $root_ginger_total = $root_ginger_running_total;
 
         return view('exports.fruitpartner-fruitbox-picklists', [
             'picklists' => $this->fruitpartner_fruitboxes,

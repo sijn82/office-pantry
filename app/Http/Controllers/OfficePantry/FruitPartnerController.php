@@ -220,7 +220,7 @@ class FruitPartnerController extends Controller
                 Log::channel('slack')->info('Fruit Partner: ' . $fruitpartner->name . ' has no Milk Orders to be delivered this week.' );
             }
 
-            if ($orders->milkboxes == null && $orders->fruitboxes == null) {
+            if (($orders->milkboxes == null) && ($orders->fruitboxes == null)) {
                 // dd($orders);
             } else {
 
