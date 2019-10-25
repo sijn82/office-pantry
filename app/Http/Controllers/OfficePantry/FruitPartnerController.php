@@ -219,8 +219,8 @@ class FruitPartnerController extends Controller
                 $orders->milkboxes = null;
                 Log::channel('slack')->info('Fruit Partner: ' . $fruitpartner->name . ' has no Milk Orders to be delivered this week.' );
             }
-
-            if (($orders->milkboxes == null) && ($orders->fruitboxes == null)) {
+            // What's going on here, I think if it fails the first check (no milk), then it goes straight into the do nothing pile regardless of havibng fruit orders?
+            if ($orders->fruitboxes == null && $orders->milkboxes == null) {
                 // dd($orders);
             } else {
 
