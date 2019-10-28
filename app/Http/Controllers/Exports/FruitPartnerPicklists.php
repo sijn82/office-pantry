@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Exports;
+ini_set('max_execution_time', 180); //3 minutes
 
 //----- Copied from another export function for speed but I should clean up and remove any not actually used -----//
 

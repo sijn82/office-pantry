@@ -2,6 +2,7 @@
 
 // Updated namespace, after moving controllers into their own (grouped) folders.
 namespace App\Http\Controllers\OfficePantry;
+ini_set('max_execution_time', 180); //3 minutes
 use App\Http\Controllers\Controller;
 
 use App\Http\Controllers\Exports;
