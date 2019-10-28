@@ -572,12 +572,16 @@ WithEvents
 
         if (!empty($this->fruitboxes)) {
             foreach ($this->fruitboxes as $key => $fruitboxes) {
+                // dd($fruitboxes);
                 foreach ($fruitboxes as $fruitbox) {
 
                     // Each time we process a new order we need to redeclare the variable.
                     $delivery_entry = new \stdClass;
                     // dd($fruitbox);
                     $company_details = CompanyDetails::find($fruitbox->company_details_id);
+
+                    //
+                    $fruitbox->company_details_id = $company_details->id;
                     $fruitbox->company_details_route_name = $company_details->route_name;
                     $fruitbox->company_details_delivery_information = $company_details->delivery_information;
                     $fruitbox->company_details_postcode = $company_details->route_postcode;
@@ -606,6 +610,7 @@ WithEvents
                     if (!empty($additional_milk)) {
                         // Then if the check is working properly, we have a corresponding milkbox entry to add to the delivery route.
                         // First let's grab the delivery data pushed into the fruitbox (this could equally be taken from the milkbox data)
+                        $delivery_entry->company_details_id = $fruitbox->company_details_id;
                         $delivery_entry->company_details_route_name = $fruitbox->company_details_route_name;
                         $delivery_entry->company_details_delivery_information = $fruitbox->company_details_delivery_information;
                         $delivery_entry->company_details_postcode = $fruitbox->company_details_postcode;
@@ -645,6 +650,7 @@ WithEvents
 
                     } else {
                         // Then this hopefully means we have a fruit only delivery.
+                        $delivery_entry->company_details_id = $fruitbox->company_details_id;
                         $delivery_entry->company_details_route_name = $fruitbox->company_details_route_name;
                         $delivery_entry->company_details_delivery_information = $fruitbox->company_details_delivery_information;
                         $delivery_entry->company_details_postcode = $fruitbox->company_details_postcode;
@@ -723,6 +729,7 @@ WithEvents
                             ]));
 
                             // Grab delivery information
+                            $delivery_entry->company_details_id = $company_details->id;
                             $delivery_entry->company_details_route_name = $company_details->route_name;
                             $delivery_entry->company_details_delivery_information = $company_details->delivery_information;
                             $delivery_entry->company_details_postcode = $company_details->route_postcode;
@@ -772,41 +779,78 @@ WithEvents
 
          // dd($orders); // <-- This should now hold everything we need to take to the template.
 
-         // In order (huh) to use the laravel collection methods we need to turn $orders into a collection using collect.
-         $orders_collect = collect($orders);
+        // In order (huh) to use the laravel collection methods we need to turn $orders into a collection using collect.
+        //$orders_collect = collect($orders); // I'm not really utilising anything from having turned it into a collection at this point.  Maybe I wait until after stripping out unneccessary results?
+
+         //----- Now we have address details added to all the orders, we need to check if there are any orders which need combining into 1 delivery -----//
+
+         foreach ($orders as $order) {
+             // Sort orders by company, then delivery day so we can look for and combine fruitboxes to the same location.
+             $orders_by_company_details_id[$order->company_details_id][$order->delivery_day][] = $order;
+         }
+         //dd($orders_by_company_details_id);
+
+         // Now we need to burrow down into the nested arrays, first looping through each company
+         foreach ($orders_by_company_details_id as $orders_by_id) {
+             // And then through their orders day by day
+             foreach ($orders_by_id as $orders_by_day) {
+                 // Now we can count to see if there's more than one delivery to the same location any day
+                 if (count($orders_by_day) > 1) {
+                     // If so, we can loop through the orders
+                     foreach ($orders_by_day as $key => $order) {
+                         // after the first one, so as not to duplicate the initial order
+                         if($key > 0) {
+                             // Adding the additional fruit totals to the 1st entry which we're going to keep
+                             $orders_by_day[0]->fruitbox_total += $order->fruitbox_total;
+                             // dump($orders_by_day[$key]);
+                             // unset($orders_by_day[$key]);
+                             // Before unsetting the rest from the original array at the top of this nested chaos - apologies, I'm sure there was a better way to this!
+                             unset($orders_by_company_details_id[$order->company_details_id][$order->delivery_day][$key]);
+                         }
+                     }
+                 }
+             }
+         }
+         // Now we can turn this into a collection and use flatten to undo the madness.
+         $reordered_deliveries = collect($orders_by_company_details_id);
+         // Flatten(2) removes the data out of the 2 nested arrays into its original format, minus the duplicate deliveries.
+         $flattened_back_to_orders_collection = $reordered_deliveries->flatten(2);
+         //dd($flattened_back_to_orders_collection);
+
+         //----- End of reducing orders into one drop per location per day. -----//
 
          // Now we can pluck the values a product at a time and add them up, saving the total ahead of reaching the blade template.
          // This means we can determine whether to show a column or not before creating the rows for each company order.
          // Regular Milk
-         $semi_skimmed_2l_total = $orders_collect->pluck('semi_skimmed_2l')->sum();
-         $skimmed_2l_total = $orders_collect->pluck('skimmed_2l')->sum();
-         $whole_2l_total = $orders_collect->pluck('whole_2l')->sum();
-         $semi_skimmed_1l_total = $orders_collect->pluck('semi_skimmed_1l')->sum();
-         $skimmed_1l_total = $orders_collect->pluck('skimmed_1l')->sum();
-         $whole_1l_total = $orders_collect->pluck('whole_1l')->sum();
+         $semi_skimmed_2l_total = $flattened_back_to_orders_collection->pluck('semi_skimmed_2l')->sum();
+         $skimmed_2l_total = $flattened_back_to_orders_collection->pluck('skimmed_2l')->sum();
+         $whole_2l_total = $flattened_back_to_orders_collection->pluck('whole_2l')->sum();
+         $semi_skimmed_1l_total = $flattened_back_to_orders_collection->pluck('semi_skimmed_1l')->sum();
+         $skimmed_1l_total = $flattened_back_to_orders_collection->pluck('skimmed_1l')->sum();
+         $whole_1l_total = $flattened_back_to_orders_collection->pluck('whole_1l')->sum();
          // Organic Milk
-         $organic_semi_skimmed_2l_total = $orders_collect->pluck('organic_semi_skimmed_2l')->sum();
-         $organic_skimmed_2l_total = $orders_collect->pluck('organic_skimmed_2l')->sum();
-         $organic_whole_2l_total = $orders_collect->pluck('organic_whole_2l')->sum();
-         $organic_semi_skimmed_1l_total = $orders_collect->pluck('organic_semi_skimmed_1l')->sum();
-         $organic_skimmed_1l_total = $orders_collect->pluck('organic_skimmed_1l')->sum();
-         $organic_whole_1l_total = $orders_collect->pluck('organic_whole_1l')->sum();
+         $organic_semi_skimmed_2l_total = $flattened_back_to_orders_collection->pluck('organic_semi_skimmed_2l')->sum();
+         $organic_skimmed_2l_total = $flattened_back_to_orders_collection->pluck('organic_skimmed_2l')->sum();
+         $organic_whole_2l_total = $flattened_back_to_orders_collection->pluck('organic_whole_2l')->sum();
+         $organic_semi_skimmed_1l_total = $flattened_back_to_orders_collection->pluck('organic_semi_skimmed_1l')->sum();
+         $organic_skimmed_1l_total = $flattened_back_to_orders_collection->pluck('organic_skimmed_1l')->sum();
+         $organic_whole_1l_total = $flattened_back_to_orders_collection->pluck('organic_whole_1l')->sum();
          // Alternative Milk
-         $alt_coconut_total = $orders_collect->pluck('milk_1l_alt_coconut')->sum();
-         $alt_unsweetened_almond_total = $orders_collect->pluck('milk_1l_alt_unsweetened_almond')->sum();
-         $alt_almond_total = $orders_collect->pluck('milk_1l_alt_almond')->sum();
-         $alt_unsweetened_soya_total = $orders_collect->pluck('milk_1l_alt_unsweetened_soya')->sum();
-         $alt_soya_total = $orders_collect->pluck('milk_1l_alt_soya')->sum();
-         $alt_oat_total = $orders_collect->pluck('milk_1l_alt_oat')->sum();
-         $alt_rice_total = $orders_collect->pluck('milk_1l_alt_rice')->sum();
-         $alt_cashew_total = $orders_collect->pluck('milk_1l_alt_cashew')->sum();
-         $alt_lactose_free_semi_total = $orders_collect->pluck('milk_1l_alt_lactose_free_semi')->sum();
+         $alt_coconut_total = $flattened_back_to_orders_collection->pluck('milk_1l_alt_coconut')->sum();
+         $alt_unsweetened_almond_total = $flattened_back_to_orders_collection->pluck('milk_1l_alt_unsweetened_almond')->sum();
+         $alt_almond_total = $flattened_back_to_orders_collection->pluck('milk_1l_alt_almond')->sum();
+         $alt_unsweetened_soya_total = $flattened_back_to_orders_collection->pluck('milk_1l_alt_unsweetened_soya')->sum();
+         $alt_soya_total = $flattened_back_to_orders_collection->pluck('milk_1l_alt_soya')->sum();
+         $alt_oat_total = $flattened_back_to_orders_collection->pluck('milk_1l_alt_oat')->sum();
+         $alt_rice_total = $flattened_back_to_orders_collection->pluck('milk_1l_alt_rice')->sum();
+         $alt_cashew_total = $flattened_back_to_orders_collection->pluck('milk_1l_alt_cashew')->sum();
+         $alt_lactose_free_semi_total = $flattened_back_to_orders_collection->pluck('milk_1l_alt_lactose_free_semi')->sum();
 
           //dd($orders);
 
           $monToFri = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
-          $ordersByMonToFri = $orders_collect->sortBy( function ($order) use ($monToFri) {
+          $ordersByMonToFri = $flattened_back_to_orders_collection->sortBy( function ($order) use ($monToFri) {
               return array_search($order->delivery_day, $monToFri);
           });
 
