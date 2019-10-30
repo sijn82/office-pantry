@@ -26,38 +26,41 @@ class ProductsController extends Controller
     {
         //
         $products = Product::all();
-        
+
         return response()->json($products);
         // return view ('products', ['products' => $products]);
     }
-    
+
     public function search(Request $request)
     {
         $product_search = Product::where('name', 'LIKE', '%' . $request->keywords . '%')->get();
-        
+
         return response()->json($product_search);
     }
-    
-    
+
+
     public function store(Request $request)
-    {    
+    {
         $newProduct = new Product();
         $newProduct->is_active = $request['company_data']['is_active'];
+        $newProduct->brand = $request['company_data']['brand'];
+        $newProduct->flavour = $request['company_data']['flavour'];
         $newProduct->code = $request['company_data']['code'];
-        $newProduct->name = $request['company_data']['name'];
-        $newProduct->case_price = $request['company_data']['case_price'];
-        $newProduct->case_size = $request['company_data']['case_size'];
-        $newProduct->unit_cost = $request['company_data']['unit_cost'];
-        $newProduct->unit_price = $request['company_data']['unit_price'];
+        $newProduct->buying_case_cost = $request['company_data']['buying_case_cost'];
+        $newProduct->selling_case_price = $request['company_data']['selling_case_price'];
+        $newProduct->buying_case_size = $request['company_data']['buying_case_size'];
+        $newProduct->selling_case_size = $request['company_data']['selling_case_size'];
+        $newProduct->buying_unit_cost = $request['company_data']['buying_unit_cost'];
+        $newProduct->selling_unit_price = $request['company_data']['selling_unit_price'];
         $newProduct->vat = $request['company_data']['vat'];
+        $newProduct->supplier = $request['company_data']['supplier'];
         $newProduct->sales_nominal = $request['company_data']['sales_nominal'];
-        $newProduct->cost_nominal = $request['company_data']['cost_nominal'];
         $newProduct->profit_margin = $request['company_data']['profit_margin'];
         $newProduct->stock_level = $request['company_data']['stock_level'];
         //$newProduct->shortest_stock_date = $request['company_data']['shortest_stock_date']; <-- I think it's highly unlikely we'll have this info to hand when adding the product to the system.
         $newProduct->save();
     }
-    
+
     /**
      * Update the specified resource in storage.
      *
@@ -70,18 +73,21 @@ class ProductsController extends Controller
         // dd($request);
         Product::where('id', $id)->update([
             'is_active' => request('is_active'),
+            'brand' => request('brand'),
+            'flavour' => request('flavour'),
             'code' => request('code'),
-             'name' => request('name'),
-             'case_price' => request('case_price'),
-             'case_size' => request('case_size'),
-             'unit_cost' => request('unit_cost'),
-             'unit_price' => request('unit_price'),
-             'vat' => request('vat'),
-             'sales_nominal' => request('sales_nominal'),
-             'cost_nominal' => request('cost_nominal'),
-             'profit_margin' => request('profit_margin'),
-             'stock_level' => request('stock_level'),
-             'shortest_stock_date' => request('shortest_stock_date')
+            'buying_case_cost' => request('buying_case_cost'),
+            'selling_case_price' => request('selling_case_price'),
+            'buying_case_size' => request('buying_case_size'),
+            'selling_case_size' => request('selling_case_size'),
+            'buying_unit_cost' => request('buying_unit_cost'),
+            'selling_unit_price' => request('selling_unit_price'),
+            'vat' => request('vat'),
+            'supplier' => request('supplier'),
+            'sales_nominal' => request('sales_nominal'),
+            'profit_margin' => request('profit_margin'),
+            'stock_level' => request('stock_level'),
+            'shortest_stock_date' => request('shortest_stock_date')
         ]);
     }
 
@@ -180,10 +186,10 @@ class ProductsController extends Controller
     // {
     //     //
     //     $product = $id;
-    // 
+    //
     //     return ['product' => $product];
     // }
-    
+
 
     /**
      * Show the form for editing the specified resource.

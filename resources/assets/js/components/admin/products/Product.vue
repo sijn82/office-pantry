@@ -4,14 +4,15 @@
         <ul >
             <div id="edit-save-buttons">
                 <b-row>
-                    <b-col> <h4> {{ product.name }} </h4> </b-col>
-                    <b-col> 
+                    <b-col> <h4> {{ product.brand }} </h4> </b-col>
+                    <b-col> <h4> {{ product.flavour }} </h4> </b-col>
+                    <b-col>
                         <div v-if="!createWholesaleSnackbox && !createDrinkbox || createDrinkbox && type === 'Unique' || createDrinkbox && type === 'monthly-special'">
                             <h4 :class="{
                                             'none-in-stock' : matchNumberToColour(product.stock_level),
                                             'some-in-stock' : !matchNumberToColour(product.stock_level),
                                             'a-few-in-stock' : !matchNumberToColour(product.stock_level) && product.stock_level <= 20}">
-                                            Units: {{ computed_quantity_units }} / {{ product.is_active }} 
+                                            Units: {{ computed_quantity_units }} / {{ product.is_active }}
                             </h4>
                         </div>
                         <div v-if="createWholesaleSnackbox || createDrinkbox && type === 'Regular'">
@@ -19,7 +20,7 @@
                                             'none-in-stock' : matchNumberToColour(product.stock_level),
                                             'some-in-stock' : !matchNumberToColour(product.stock_level),
                                             'a-few-in-stock' : !matchNumberToColour(product.stock_level) && product.stock_level <= 20}">
-                                            Cases: {{ number_of_cases }} / {{ product.is_active }} 
+                                            Cases: {{ number_of_cases }} / {{ product.is_active }}
                             </h4>
                         </div>
                     </b-col>
@@ -49,17 +50,17 @@
             <!-- Top Row -->
             <div id="product-details" v-if="details">
                 <b-row id="top-details" sm="12" class="b-row-padding b-row-padding-extra">
-                    <b-col class="col-sm-3">
+                    <b-col>
                         <label><b> Shortest Stock Date </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="product.shortest_stock_date" type="date" readonly></b-form-input>
+                            <b-form-input v-model="product.shortest_stock_date" type="date"></b-form-input>
                         </div>
                         <div>
                             <p> {{ product.shortest_stock_date }} </p>
                         </div>
                     </b-col>
-                    
-                    <b-col class="col-sm-3">
+
+                    <b-col>
                         <label><b> Status </b></label>
                         <div v-if="editing">
                             <b-form-select v-model="product.is_active" :options="status" required></b-form-select>
@@ -68,16 +69,25 @@
                             <p> {{ product.is_active }} </p>
                         </div>
                     </b-col>
-                    <b-col class="col-sm-3">
-                        <label><b> Name </b></label>
+                    <b-col>
+                        <label><b> Brand </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="product.name"></b-form-input>
+                            <b-form-input v-model="product.brand"></b-form-input>
                         </div>
                         <div v-else>
-                            <p> {{ product.name }} </p>
+                            <p> {{ product.brand }} </p>
                         </div>
                     </b-col>
-                    <b-col class="col-sm-3">
+                    <b-col>
+                        <label><b> Flavour </b></label>
+                        <div v-if="editing">
+                            <b-form-input v-model="product.flavour"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ product.flavour }} </p>
+                        </div>
+                    </b-col>
+                    <b-col>
                         <label><b> Code </b></label>
                         <div v-if="editing">
                             <b-form-input v-model="product.code"></b-form-input>
@@ -89,52 +99,83 @@
                 </b-row>
                 <!-- Middle Row -->
                 <b-row :class="product.is_active" sm="12" class="b-row-padding b-row-padding-extra">
-                    <b-col class="col-sm-3">
-                        <label><b> Case Price (£) </b></label>
+                    <b-col>
+                        <label><b> Buying Case Cost (£) </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="product.case_price" type="number"></b-form-input>
+                            <b-form-input v-model="product.buying_case_cost" type="number"></b-form-input>
                         </div>
                         <div v-else>
-                            <p> {{ product.case_price }} </p>
+                            <p> {{ product.buying_case_cost }} </p>
                         </div>
                     </b-col>
-                    <b-col class="col-sm-3">
-                        <label><b> Case Size </b></label>
+                    <b-col>
+                        <label><b> Selling Case Price (£) </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="product.case_size" type="number"></b-form-input>
+                            <b-form-input v-model="product.selling_case_price" type="number"></b-form-input>
                         </div>
                         <div v-else>
-                            <p> {{ product.case_size }} </p>
+                            <p> {{ product.selling_case_price }} </p>
                         </div>
                     </b-col>
-                    <b-col class="col-sm-3">
-                        <label><b> Unit Purchase Cost (£) </b></label>
+                    <b-col>
+                        <label><b> Buying Case Size </b></label>
+                        <div v-if="editing">
+                            <b-form-input v-model="product.buying_case_size" type="number"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ product.buying_case_size }} </p>
+                        </div>
+                    </b-col>
+                    <b-col>
+                        <label><b> Selling Case Size </b></label>
+                        <div v-if="editing">
+                            <b-form-input v-model="product.selling_case_size" type="number"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ product.selling_case_size }} </p>
+                        </div>
+                    </b-col>
+                    <b-col>
+                        <label><b> Buying Unit Cost (£) </b></label>
                         <div>
-                            <p> {{ product.unit_cost = product.case_price / product.case_size }} </p>
+                            <p> {{ product.buying_unit_cost = product.buying_case_cost / product.buying_case_size }} </p>
                         </div>
                     </b-col>
-                    <b-col class="col-sm-3">
-                        <label><b> Unit Sale Price (£) </b></label>
+                    <b-col>
+                        <label><b> Selling Unit Price (£) </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="product.unit_price" type="number"></b-form-input>
+                            <b-form-input v-model="product.selling_unit_price" type="number"></b-form-input>
                         </div>
                         <div v-else>
-                            <p> {{ product.unit_price }} </p>
+                            <p> {{ product.selling_unit_price }} </p>
                         </div>
                     </b-col>
                 </b-row>
                 <!-- Bottom Row -->
                 <b-row :class="product.is_active" sm="12" class="b-row-padding b-row-padding-extra">
-                    <b-col class="col-sm-3">
+                    <b-col>
                         <label><b> VAT? </b></label>
                         <div v-if="editing">
-                            <b-form-select v-model="product.vat" :options="vat" required></b-form-select>    
+                            <b-form-select v-model="product.vat" :options="vat" required></b-form-select>
                         </div>
                         <div v-else>
                             <p> {{ product.vat }} </p>
                         </div>
                     </b-col>
-                    <b-col class="col-sm-3">
+                    <b-col class="col-sm-4">
+                        <label><b> Supplier </b></label>
+                        <div v-if="editing">
+                            <b-form-select v-model="product.supplier" :options="supplier" required>
+                                <!-- <template slot="first">
+                                        <option :value="product.supplier"> {{ product.supplier }} </option>
+                                </template> -->
+                            </b-form-select>
+                        </div>
+                        <div v-else>
+                            <p class="selected-option"> Selected Supplier: {{ product.supplier }} </p>
+                        </div>
+                    </b-col>
+                    <b-col>
                         <label><b> Sales Nominal </b></label>
                         <div v-if="editing">
                             <b-form-select v-model="product.sales_nominal" :options="sales_nominal" required></b-form-select>
@@ -143,19 +184,10 @@
                             <p> {{ product.sales_nominal }} </p>
                         </div>
                     </b-col>
-                    <!-- <b-col class="col-sm-3">
-                        <label><b> Cost Nominal </b></label>
-                        <div v-if="editing">
-                            <b-form-select v-model="product.cost_nominal" :options="cost_nominal" required></b-form-select>
-                        </div>
-                        <div v-else>
-                            <p> {{ product.cost_nominal }} </p>
-                        </div>
-                    </b-col> -->
                     <b-col class="col-sm-3">
                         <label><b> Profit Margin </b></label>
                         <div>
-                            <p> {{ product.profit_margin = (product.unit_price - product.unit_cost) / product.unit_cost * 100 }} % </p>
+                            <p> {{ product.profit_margin = (product.selling_unit_price - product.buying_unit_cost) / product.selling_unit_price * 100 }} % </p>
                         </div>
                     </b-col>
                 </b-row>
@@ -193,26 +225,41 @@ export default {
             quantity: 0,
             status: ['Active', 'Inactive'],
             vat: ['Yes', 'No'],
+            supplier: [
+                'Booker',
+                'Epicurium',
+                'Kingdom Coffee',
+                'Supermarket',
+                'Craft Drink Co',
+                'Direct',
+                'Holley\'s Fine Foods',
+                'Essential Trading',
+                'Templeton Drinks',
+                'Majestic Wines',
+                'Enotria & Coe',
+                'LWC',
+                'Euroffice',
+                'Other',
+            ],
             sales_nominal: ['4010', '4020', '4040', '4050', '4090'],
-            cost_nominal: ['5010', '5020', '5030', '5040'],
         }
     },
-    
+
     computed: {
-        // This little computed property converts the stock level from units, to cases but 
+        // This little computed property converts the stock level from units, to cases but
         // ignores any left over singles by rounding down to the nearest full case.
         number_of_cases: function () {
-            
-            return Math.floor(this.product.stock_level / this.product.case_size)
-        }, 
+
+            return Math.floor(this.product.stock_level / this.product.selling_case_size)
+        },
         computed_quantity_units: function () {
             return this.product.stock_level - this.quantity
         }
-    
+
     },
-    
+
     methods: {
-        
+
         productSearch: function() {
             var self=this;
             if (product.name == this.product) {
@@ -220,13 +267,13 @@ export default {
             return this.product;
             };
         },
-        
+
         matchNumberToColour(number) {
             if (number < 1) {
             return true;
             }
         },
-        
+
         enableEdit() {
             if (this.editing == false) {
                   this.editing = true;
@@ -235,7 +282,7 @@ export default {
                   this.editing = false;
             }
         },
-        
+
         showDetails() {
             if (this.details == true) {
               this.details = false;
@@ -243,46 +290,49 @@ export default {
               this.details = true;
             }
         },
-        
+
         updateProduct(product) {
             this.editing = false;
             console.log(product);
             console.log(product.id);
-            axios.put('api/office-pantry/products/update/' + product.id, {
+            axios.put('/api/office-pantry/products/update/' + product.id, {
                 id: product.id,
                 is_active: product.is_active,
-                name: product.name,
+                brand: product.brand,
+                flavour: product.flavour,
                 code: product.code,
-                case_price: product.case_price,
-                case_size: product.case_size,
-                unit_cost: product.unit_cost,
-                unit_price: product.unit_price,
+                buying_case_cost: product.buying_case_cost,
+                selling_case_price: product.selling_case_price,
+                buying_case_size: product.buying_case_size,
+                selling_case_size: product.selling_case_size,
+                buying_unit_cost: product.buying_unit_cost,
+                selling_unit_price: product.selling_unit_price,
                 vat: product.vat,
+                supplier: product.supplier,
                 sales_nominal: product.sales_nominal,
-                cost_nominal: product.cost_nominal,
                 profit_margin: product.profit_margin,
                 stock_level: product.stock_level,
                 shortest_stock_date: product.shortest_stock_date,
-              
+
             }).then (response => {
               console.log(response);
             }).catch(error => console.log(error));
         },
-        
+
         deleteProduct(product) {
-            axios.put('api/office-pantry/products/destroy/' + product.id, { 
+            axios.put('api/office-pantry/products/destroy/' + product.id, {
                 id: product.id,
             }).then (response => {
                 location.reload(true); // If I stored the current products in the store rather than like this, I wouldn't need to reload the page to update the view.
                 console.log(response);
             }).catch(error => console.log(error));
         },
-        
+
         // addProductToSnackbox(product, quantity) {
         //     this.$emit('addProduct', [product, quantity]);
         //     console.log(this.$emit('addProduct', [product, quantity]));
         // }
-        
+
         addProductToSnackbox(product, quantity) {
              // var $snackbox = [];
             product.quantity = quantity;
@@ -305,7 +355,7 @@ export default {
             this.$store.commit('addDrinkboxToStore', product);
         }
     },
-    
+
     mounted() {
         console.log('Components Product Mounted');
         //console.log(this.createSnackbox);

@@ -2,53 +2,73 @@
     <div>
         <b-container style="text-align: center;" sm="12">
             <h3> Add New Product </h3>
-            
+
             <b-form id="new-product-form" @submit="onSubmit" @reset="onReset">
-                
+
                 <b-form-group>
                     <b-row sm="12">
-                        <!-- Product Name -->
+                        <!-- Product Brand -->
                         <b-col class="col-sm-4" id="product-name">
-                            <label> Name </label>
-                            <b-form-input id="product-name" type="text" v-model="form.name" placeholder="Enter unique product name" required></b-form-input>
+                            <label> Brand </label>
+                            <b-form-input id="product-brand" type="text" v-model="form.brand" placeholder="Enter unique product name" required></b-form-input>
+                        </b-col>
+                        <!-- Product Flavour -->
+                        <b-col class="col-sm-4" id="product-name">
+                            <label> Flavour </label>
+                            <b-form-input id="product-flavour" type="text" v-model="form.flavour" placeholder="Enter unique product name" required></b-form-input>
                         </b-col>
                         <!-- Product Code -->
                         <b-col class="col-sm-4" id="product-code">
-                            <label> Code </label>
+                            <label> Product Code </label>
                             <b-form-input id="product-code" type="text" v-model="form.code" placeholder="Enter unique product code" required></b-form-input>
+                        </b-col>
+                    </b-row>
+                </b-form-group>
+
+                <b-form-group>
+                    <b-row sm="12">
+                        <b-col class="col-sm-4" id="product-case-cost">
+                            <!-- Product Case Cost -->
+                            <label> Buying Case Cost </label>
+                            <b-form-input v-model="form.buying_case_cost" type="number"></b-form-input>
+                        </b-col>
+                        <b-col class="col-sm-4" id="product-case-price">
+                            <!-- Product Case Price -->
+                            <label> Selling Case Price </label>
+                            <!-- This needs to be formula linked - selling_case_price = (selling_unit_price * selling_case_size) -->
+                            <b-form-input v-model="form.selling_case_price" type="number"></b-form-input>
+                            <p class="selected-option"> Selling Case Price: {{ form.selling_case_price = form.selling_unit_price * form.selling_case_size }} </p>
+                        </b-col>
+                        <b-col class="col-sm-4" id="buying-case-size">
+                            <!-- Buying Case Size -->
+                            <label> Buying Case Size </label>
+                            <b-form-input v-model="form.buying_case_size" type="number"></b-form-input>
+                        </b-col>
+                    </b-row>
+                    <b-row sm="12">
+                        <b-col class="col-sm-4" id="selling-case-size">
+                            <!-- Selling Case Size -->
+                            <label> Selling Case Size </label>
+                            <b-form-input v-model="form.selling_case_size" type="number"></b-form-input>
+                        </b-col>
+                        <b-col class="col-sm-4" id="product-unit-price">
+                            <!-- Product Unit Price -->
+                            <label> Selling Unit Price </label>
+                            <b-form-input v-model="form.selling_unit_price" type="number"></b-form-input>
+                            <p class="selected-option"> Buying Unit Cost: {{ form.buying_unit_cost = form.buying_case_cost / form.buying_case_size }} </p>
                         </b-col>
                         <!-- Product Stock Level -->
                         <b-col class="col-sm-4" id="product-case-stock-level">
                             <label> Stock Level (Singles) </label>
                             <b-form-input v-model="form.stock_level" type="number"></b-form-input>
+                            <p class="selected-option"> Product Profit Margin: {{ form.profit_margin = (form.selling_unit_price - form.buying_unit_cost) / form.selling_unit_price * 100 }} % </p>
                         </b-col>
                     </b-row>
                 </b-form-group>
-                
-                <b-form-group>
-                    <b-row sm="12">
-                        <b-col class="col-sm-4" id="product-case-price">
-                            <!-- Product Case Price -->
-                            <label> Product Case Price </label>
-                            <b-form-input v-model="form.case_price" type="number"></b-form-input>
-                        </b-col>
-                        <b-col class="col-sm-4" id="product-case-size">
-                            <!-- Product Case Size -->
-                            <label> Product Case Size </label>
-                            <b-form-input v-model="form.case_size" type="number"></b-form-input>
-                            <p class="selected-option"> Product Profit Margin: {{ form.profit_margin = (form.unit_price - form.unit_cost) / form.unit_price * 100 }} % </p>
-                        </b-col>
-                        <b-col class="col-sm-4" id="product-unit-price">
-                            <!-- Product Unit Price -->
-                            <label> Product Unit Price </label>
-                            <b-form-input v-model="form.unit_price" type="number"></b-form-input>
-                            <p class="selected-option"> Product Unit Cost: {{ form.unit_cost = form.case_price / form.case_size }} </p>
-                        </b-col>
-                    </b-row>        
-                </b-form-group>
-                <!-- Product Vat? -->
+
                 <b-form-group id="product-vat-nominals">
                     <b-row sm="12">
+                        <!-- Product Vat? -->
                         <b-col class="col-sm-4">
                             <label> VAT? </label>
                             <b-form-select v-model="form.vat" :options="vat" required>
@@ -57,6 +77,16 @@
                                 </template>
                             </b-form-select>
                                 <p class="selected-option"> Selected VAT Option: {{ form.vat }} </p>
+                        </b-col>
+                        <!-- Supplier -->
+                        <b-col class="col-sm-4">
+                            <label> Supplier </label>
+                            <b-form-select v-model="form.supplier" :options="supplier" required>
+                                <template slot="first">
+                                        <option :value="null" disabled> Please select an option </option>
+                                </template>
+                            </b-form-select>
+                                <p class="selected-option"> Selected Supplier: {{ form.supplier }} </p>
                         </b-col>
                         <!-- Sales Nominal -->
                         <b-col class="col-sm-4">
@@ -68,19 +98,10 @@
                             </b-form-select>
                                 <p class="selected-option"> Selected Sales Nominal: {{ form.sales_nominal }} </p>
                         </b-col>
-                        <!-- Cost Nominal -->
-                        <!-- <b-col class="col-sm-4">
-                            <label> Product Cost Nominal </label>
-                            <b-form-select v-model="form.cost_nominal" :options="cost_nominal" >
-                                <template slot="first">
-                                        <option :value="null" disabled> Please select an option </option>
-                                </template>
-                            </b-form-select>
-                                <p class="selected-option"> Selected Cost Nominal: {{ form.cost_nominal }} </p>
-                        </b-col> -->
+
                     </b-row>
                 </b-form-group>
-                
+
                 <div id="product-buttons">
                     <b-button type="submit" variant="primary"> Submit </b-button>
                     <b-button type="reset" variant="danger"> Reset </b-button>
@@ -125,20 +146,38 @@ export default {
             form: {
                 is_active: 'Active',
                 code: '',
-                name: '',
-                case_price: 0.00,
-                case_size: 0,
-                unit_cost: 0,
-                unit_price: 0.00,
+                brand: '',
+                flavour: '',
+                buying_case_cost: 0.00,
+                selling_case_price:0.00,
+                buying_case_size: 0,
+                selling_case_size: 0,
+                buying_unit_cost: 0,
+                selling_unit_price: 0.00,
                 vat: null,
+                supplier: null,
                 sales_nominal: null,
-                cost_nominal: null,
                 profit_margin: '',
                 stock_level: 0,
             },
             vat: ['Yes', 'No'],
             sales_nominal: ['4010', '4020', '4040', '4050', '4090'],
-            cost_nominal: ['5010', '5020', '5030', '5040'],
+            supplier: [
+                'Booker',
+                'Epicurium',
+                'Kingdom Coffee',
+                'Supermarket',
+                'Craft Drink Co',
+                'Direct',
+                'Holley\'s Fine Foods',
+                'Essential Trading',
+                'Templeton Drinks',
+                'Majestic Wines',
+                'Enotria & Coe',
+                'LWC',
+                'Euroffice',
+                'Other'
+            ],
         }
     },
     methods: {
@@ -149,7 +188,7 @@ export default {
           // alert(JSON.stringify(this.form));
           axios.post('/api/office-pantry/products/add-new-product', {
               company_data: self.form,
-              headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv'},
+              headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
               // user_id: self.userData.id // This hasn't been setup yet so probably won't work yet?!
           }).then(function (response) {
               alert('Uploaded new product successfully!');
@@ -162,19 +201,22 @@ export default {
         onReset (evt) {
           evt.preventDefault();
           /* Reset our form values */
-         
+
+          this.form.brand = '';
+          this.form.flavour = '';
           this.form.code = '';
-          this.form.name = '';
-          this.form.case_price = 0.00;
-          this.form.case_size = 0;
-          this.form.unit_cost = 0.00;
-          this.form.unit_price = 0.00;
+          this.form.buying_case_cost = 0.00;
+          this.form.selling_case_price = 0.00;
+          this.form.buying_case_size = 0;
+          this.form.selling_case_size = 0;
+          this.form.selling_unit_price = 0.00;
+          this.form.buying_unit_cost = 0.00;
+
           this.form.vat = null;
           this.form.sales_nominal = null;
-          this.form.cost_nominal = null;
           this.form.profit_margin = '';
           this.form.stock_level = 0;
-        
+
         }
     },
 }

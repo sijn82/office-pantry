@@ -105670,6 +105670,38 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['product', 'route', 'createSnackbox', 'createWholesaleSnackbox', 'createOtherbox', 'createWholesaleOtherbox', 'createDrinkbox', 'type'],
@@ -105680,18 +105712,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             quantity: 0,
             status: ['Active', 'Inactive'],
             vat: ['Yes', 'No'],
-            sales_nominal: ['4010', '4020', '4040', '4050', '4090'],
-            cost_nominal: ['5010', '5020', '5030', '5040']
+            supplier: ['Booker', 'Epicurium', 'Kingdom Coffee', 'Supermarket', 'Craft Drink Co', 'Direct', 'Holley\'s Fine Foods', 'Essential Trading', 'Templeton Drinks', 'Majestic Wines', 'Enotria & Coe', 'LWC', 'Euroffice', 'Other'],
+            sales_nominal: ['4010', '4020', '4040', '4050', '4090']
         };
     },
 
 
     computed: {
-        // This little computed property converts the stock level from units, to cases but 
+        // This little computed property converts the stock level from units, to cases but
         // ignores any left over singles by rounding down to the nearest full case.
         number_of_cases: function number_of_cases() {
 
-            return Math.floor(this.product.stock_level / this.product.case_size);
+            return Math.floor(this.product.stock_level / this.product.selling_case_size);
         },
         computed_quantity_units: function computed_quantity_units() {
             return this.product.stock_level - this.quantity;
@@ -105733,18 +105765,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.editing = false;
             console.log(product);
             console.log(product.id);
-            axios.put('api/office-pantry/products/update/' + product.id, {
+            axios.put('/api/office-pantry/products/update/' + product.id, {
                 id: product.id,
                 is_active: product.is_active,
-                name: product.name,
+                brand: product.brand,
+                flavour: product.flavour,
                 code: product.code,
-                case_price: product.case_price,
-                case_size: product.case_size,
-                unit_cost: product.unit_cost,
-                unit_price: product.unit_price,
+                buying_case_cost: product.buying_case_cost,
+                selling_case_price: product.selling_case_price,
+                buying_case_size: product.buying_case_size,
+                selling_case_size: product.selling_case_size,
+                buying_unit_cost: product.buying_unit_cost,
+                selling_unit_price: product.selling_unit_price,
                 vat: product.vat,
+                supplier: product.supplier,
                 sales_nominal: product.sales_nominal,
-                cost_nominal: product.cost_nominal,
                 profit_margin: product.profit_margin,
                 stock_level: product.stock_level,
                 shortest_stock_date: product.shortest_stock_date
@@ -105819,7 +105854,11 @@ var render = function() {
             "b-row",
             [
               _c("b-col", [
-                _c("h4", [_vm._v(" " + _vm._s(_vm.product.name) + " ")])
+                _c("h4", [_vm._v(" " + _vm._s(_vm.product.brand) + " ")])
+              ]),
+              _vm._v(" "),
+              _c("b-col", [
+                _c("h4", [_vm._v(" " + _vm._s(_vm.product.flavour) + " ")])
               ]),
               _vm._v(" "),
               _c("b-col", [
@@ -105849,7 +105888,7 @@ var render = function() {
                               _vm._s(_vm.computed_quantity_units) +
                               " / " +
                               _vm._s(_vm.product.is_active) +
-                              " \n                        "
+                              "\n                        "
                           )
                         ]
                       )
@@ -105881,7 +105920,7 @@ var render = function() {
                               _vm._s(_vm.number_of_cases) +
                               " / " +
                               _vm._s(_vm.product.is_active) +
-                              " \n                        "
+                              "\n                        "
                           )
                         ]
                       )
@@ -106115,7 +106154,7 @@ var render = function() {
                   attrs: { id: "top-details", sm: "12" }
                 },
                 [
-                  _c("b-col", { staticClass: "col-sm-3" }, [
+                  _c("b-col", [
                     _c("label", [_c("b", [_vm._v(" Shortest Stock Date ")])]),
                     _vm._v(" "),
                     _vm.editing
@@ -106123,7 +106162,7 @@ var render = function() {
                           "div",
                           [
                             _c("b-form-input", {
-                              attrs: { type: "date", readonly: "" },
+                              attrs: { type: "date" },
                               model: {
                                 value: _vm.product.shortest_stock_date,
                                 callback: function($$v) {
@@ -106150,7 +106189,7 @@ var render = function() {
                     ])
                   ]),
                   _vm._v(" "),
-                  _c("b-col", { staticClass: "col-sm-3" }, [
+                  _c("b-col", [
                     _c("label", [_c("b", [_vm._v(" Status ")])]),
                     _vm._v(" "),
                     _vm.editing
@@ -106177,8 +106216,8 @@ var render = function() {
                         ])
                   ]),
                   _vm._v(" "),
-                  _c("b-col", { staticClass: "col-sm-3" }, [
-                    _c("label", [_c("b", [_vm._v(" Name ")])]),
+                  _c("b-col", [
+                    _c("label", [_c("b", [_vm._v(" Brand ")])]),
                     _vm._v(" "),
                     _vm.editing
                       ? _c(
@@ -106186,11 +106225,11 @@ var render = function() {
                           [
                             _c("b-form-input", {
                               model: {
-                                value: _vm.product.name,
+                                value: _vm.product.brand,
                                 callback: function($$v) {
-                                  _vm.$set(_vm.product, "name", $$v)
+                                  _vm.$set(_vm.product, "brand", $$v)
                                 },
-                                expression: "product.name"
+                                expression: "product.brand"
                               }
                             })
                           ],
@@ -106198,12 +106237,38 @@ var render = function() {
                         )
                       : _c("div", [
                           _c("p", [
-                            _vm._v(" " + _vm._s(_vm.product.name) + " ")
+                            _vm._v(" " + _vm._s(_vm.product.brand) + " ")
                           ])
                         ])
                   ]),
                   _vm._v(" "),
-                  _c("b-col", { staticClass: "col-sm-3" }, [
+                  _c("b-col", [
+                    _c("label", [_c("b", [_vm._v(" Flavour ")])]),
+                    _vm._v(" "),
+                    _vm.editing
+                      ? _c(
+                          "div",
+                          [
+                            _c("b-form-input", {
+                              model: {
+                                value: _vm.product.flavour,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.product, "flavour", $$v)
+                                },
+                                expression: "product.flavour"
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      : _c("div", [
+                          _c("p", [
+                            _vm._v(" " + _vm._s(_vm.product.flavour) + " ")
+                          ])
+                        ])
+                  ]),
+                  _vm._v(" "),
+                  _c("b-col", [
                     _c("label", [_c("b", [_vm._v(" Code ")])]),
                     _vm._v(" "),
                     _vm.editing
@@ -106240,8 +106305,8 @@ var render = function() {
                   attrs: { sm: "12" }
                 },
                 [
-                  _c("b-col", { staticClass: "col-sm-3" }, [
-                    _c("label", [_c("b", [_vm._v(" Case Price (£) ")])]),
+                  _c("b-col", [
+                    _c("label", [_c("b", [_vm._v(" Buying Case Cost (£) ")])]),
                     _vm._v(" "),
                     _vm.editing
                       ? _c(
@@ -106250,11 +106315,11 @@ var render = function() {
                             _c("b-form-input", {
                               attrs: { type: "number" },
                               model: {
-                                value: _vm.product.case_price,
+                                value: _vm.product.buying_case_cost,
                                 callback: function($$v) {
-                                  _vm.$set(_vm.product, "case_price", $$v)
+                                  _vm.$set(_vm.product, "buying_case_cost", $$v)
                                 },
-                                expression: "product.case_price"
+                                expression: "product.buying_case_cost"
                               }
                             })
                           ],
@@ -106262,50 +106327,121 @@ var render = function() {
                         )
                       : _c("div", [
                           _c("p", [
-                            _vm._v(" " + _vm._s(_vm.product.case_price) + " ")
+                            _vm._v(
+                              " " + _vm._s(_vm.product.buying_case_cost) + " "
+                            )
                           ])
                         ])
                   ]),
                   _vm._v(" "),
-                  _c("b-col", { staticClass: "col-sm-3" }, [
-                    _c("label", [_c("b", [_vm._v(" Case Size ")])]),
-                    _vm._v(" "),
-                    _vm.editing
-                      ? _c(
-                          "div",
-                          [
-                            _c("b-form-input", {
-                              attrs: { type: "number" },
-                              model: {
-                                value: _vm.product.case_size,
-                                callback: function($$v) {
-                                  _vm.$set(_vm.product, "case_size", $$v)
-                                },
-                                expression: "product.case_size"
-                              }
-                            })
-                          ],
-                          1
-                        )
-                      : _c("div", [
-                          _c("p", [
-                            _vm._v(" " + _vm._s(_vm.product.case_size) + " ")
-                          ])
-                        ])
-                  ]),
-                  _vm._v(" "),
-                  _c("b-col", { staticClass: "col-sm-3" }, [
+                  _c("b-col", [
                     _c("label", [
-                      _c("b", [_vm._v(" Unit Purchase Cost (£) ")])
+                      _c("b", [_vm._v(" Selling Case Price (£) ")])
                     ]),
+                    _vm._v(" "),
+                    _vm.editing
+                      ? _c(
+                          "div",
+                          [
+                            _c("b-form-input", {
+                              attrs: { type: "number" },
+                              model: {
+                                value: _vm.product.selling_case_price,
+                                callback: function($$v) {
+                                  _vm.$set(
+                                    _vm.product,
+                                    "selling_case_price",
+                                    $$v
+                                  )
+                                },
+                                expression: "product.selling_case_price"
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      : _c("div", [
+                          _c("p", [
+                            _vm._v(
+                              " " + _vm._s(_vm.product.selling_case_price) + " "
+                            )
+                          ])
+                        ])
+                  ]),
+                  _vm._v(" "),
+                  _c("b-col", [
+                    _c("label", [_c("b", [_vm._v(" Buying Case Size ")])]),
+                    _vm._v(" "),
+                    _vm.editing
+                      ? _c(
+                          "div",
+                          [
+                            _c("b-form-input", {
+                              attrs: { type: "number" },
+                              model: {
+                                value: _vm.product.buying_case_size,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.product, "buying_case_size", $$v)
+                                },
+                                expression: "product.buying_case_size"
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      : _c("div", [
+                          _c("p", [
+                            _vm._v(
+                              " " + _vm._s(_vm.product.buying_case_size) + " "
+                            )
+                          ])
+                        ])
+                  ]),
+                  _vm._v(" "),
+                  _c("b-col", [
+                    _c("label", [_c("b", [_vm._v(" Selling Case Size ")])]),
+                    _vm._v(" "),
+                    _vm.editing
+                      ? _c(
+                          "div",
+                          [
+                            _c("b-form-input", {
+                              attrs: { type: "number" },
+                              model: {
+                                value: _vm.product.selling_case_size,
+                                callback: function($$v) {
+                                  _vm.$set(
+                                    _vm.product,
+                                    "selling_case_size",
+                                    $$v
+                                  )
+                                },
+                                expression: "product.selling_case_size"
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      : _c("div", [
+                          _c("p", [
+                            _vm._v(
+                              " " + _vm._s(_vm.product.selling_case_size) + " "
+                            )
+                          ])
+                        ])
+                  ]),
+                  _vm._v(" "),
+                  _c("b-col", [
+                    _c("label", [_c("b", [_vm._v(" Buying Unit Cost (£) ")])]),
                     _vm._v(" "),
                     _c("div", [
                       _c("p", [
                         _vm._v(
                           " " +
                             _vm._s(
-                              (_vm.product.unit_cost =
-                                _vm.product.case_price / _vm.product.case_size)
+                              (_vm.product.buying_unit_cost =
+                                _vm.product.buying_case_cost /
+                                _vm.product.buying_case_size)
                             ) +
                             " "
                         )
@@ -106313,8 +106449,10 @@ var render = function() {
                     ])
                   ]),
                   _vm._v(" "),
-                  _c("b-col", { staticClass: "col-sm-3" }, [
-                    _c("label", [_c("b", [_vm._v(" Unit Sale Price (£) ")])]),
+                  _c("b-col", [
+                    _c("label", [
+                      _c("b", [_vm._v(" Selling Unit Price (£) ")])
+                    ]),
                     _vm._v(" "),
                     _vm.editing
                       ? _c(
@@ -106323,11 +106461,15 @@ var render = function() {
                             _c("b-form-input", {
                               attrs: { type: "number" },
                               model: {
-                                value: _vm.product.unit_price,
+                                value: _vm.product.selling_unit_price,
                                 callback: function($$v) {
-                                  _vm.$set(_vm.product, "unit_price", $$v)
+                                  _vm.$set(
+                                    _vm.product,
+                                    "selling_unit_price",
+                                    $$v
+                                  )
                                 },
-                                expression: "product.unit_price"
+                                expression: "product.selling_unit_price"
                               }
                             })
                           ],
@@ -106335,7 +106477,9 @@ var render = function() {
                         )
                       : _c("div", [
                           _c("p", [
-                            _vm._v(" " + _vm._s(_vm.product.unit_price) + " ")
+                            _vm._v(
+                              " " + _vm._s(_vm.product.selling_unit_price) + " "
+                            )
                           ])
                         ])
                   ])
@@ -106351,7 +106495,7 @@ var render = function() {
                   attrs: { sm: "12" }
                 },
                 [
-                  _c("b-col", { staticClass: "col-sm-3" }, [
+                  _c("b-col", [
                     _c("label", [_c("b", [_vm._v(" VAT? ")])]),
                     _vm._v(" "),
                     _vm.editing
@@ -106376,7 +106520,38 @@ var render = function() {
                         ])
                   ]),
                   _vm._v(" "),
-                  _c("b-col", { staticClass: "col-sm-3" }, [
+                  _c("b-col", { staticClass: "col-sm-4" }, [
+                    _c("label", [_c("b", [_vm._v(" Supplier ")])]),
+                    _vm._v(" "),
+                    _vm.editing
+                      ? _c(
+                          "div",
+                          [
+                            _c("b-form-select", {
+                              attrs: { options: _vm.supplier, required: "" },
+                              model: {
+                                value: _vm.product.supplier,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.product, "supplier", $$v)
+                                },
+                                expression: "product.supplier"
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      : _c("div", [
+                          _c("p", { staticClass: "selected-option" }, [
+                            _vm._v(
+                              " Selected Supplier: " +
+                                _vm._s(_vm.product.supplier) +
+                                " "
+                            )
+                          ])
+                        ])
+                  ]),
+                  _vm._v(" "),
+                  _c("b-col", [
                     _c("label", [_c("b", [_vm._v(" Sales Nominal ")])]),
                     _vm._v(" "),
                     _vm.editing
@@ -106417,9 +106592,9 @@ var render = function() {
                           " " +
                             _vm._s(
                               (_vm.product.profit_margin =
-                                ((_vm.product.unit_price -
-                                  _vm.product.unit_cost) /
-                                  _vm.product.unit_cost) *
+                                ((_vm.product.selling_unit_price -
+                                  _vm.product.buying_unit_cost) /
+                                  _vm.product.selling_unit_price) *
                                 100)
                             ) +
                             " % "
@@ -106641,6 +106816,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -106700,7 +106876,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
         // stockLevel() {
         //     if (product.stock_level < 0) {
-        //         return 
+        //         return
         //     }
         // }
 
@@ -106842,7 +107018,9 @@ var render = function() {
         "b-row",
         { staticClass: "product-list-headers" },
         [
-          _c("b-col", [_c("h3", [_vm._v(" Name ")])]),
+          _c("b-col", [_c("h3", [_vm._v(" Brand ")])]),
+          _vm._v(" "),
+          _c("b-col", [_c("h3", [_vm._v(" Flavour ")])]),
           _vm._v(" "),
           _c("b-col", [_c("h3", [_vm._v(" Stock Level and Status ")])]),
           _vm._v(" "),
@@ -107113,6 +107291,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -107122,20 +107321,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             form: {
                 is_active: 'Active',
                 code: '',
-                name: '',
-                case_price: 0.00,
-                case_size: 0,
-                unit_cost: 0,
-                unit_price: 0.00,
+                brand: '',
+                flavour: '',
+                buying_case_cost: 0.00,
+                selling_case_price: 0.00,
+                buying_case_size: 0,
+                selling_case_size: 0,
+                buying_unit_cost: 0,
+                selling_unit_price: 0.00,
                 vat: null,
+                supplier: null,
                 sales_nominal: null,
-                cost_nominal: null,
                 profit_margin: '',
                 stock_level: 0
             },
             vat: ['Yes', 'No'],
             sales_nominal: ['4010', '4020', '4040', '4050', '4090'],
-            cost_nominal: ['5010', '5020', '5030', '5040']
+            supplier: ['Booker', 'Epicurium', 'Kingdom Coffee', 'Supermarket', 'Craft Drink Co', 'Direct', 'Holley\'s Fine Foods', 'Essential Trading', 'Templeton Drinks', 'Majestic Wines', 'Enotria & Coe', 'LWC', 'Euroffice', 'Other']
         };
     },
 
@@ -107146,7 +107348,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             // alert(JSON.stringify(this.form));
             axios.post('/api/office-pantry/products/add-new-product', {
                 company_data: self.form,
-                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv' }
+                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
                 // user_id: self.userData.id // This hasn't been setup yet so probably won't work yet?!
             }).then(function (response) {
                 alert('Uploaded new product successfully!');
@@ -107161,15 +107363,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             evt.preventDefault();
             /* Reset our form values */
 
+            this.form.brand = '';
+            this.form.flavour = '';
             this.form.code = '';
-            this.form.name = '';
-            this.form.case_price = 0.00;
-            this.form.case_size = 0;
-            this.form.unit_cost = 0.00;
-            this.form.unit_price = 0.00;
+            this.form.buying_case_cost = 0.00;
+            this.form.selling_case_price = 0.00;
+            this.form.buying_case_size = 0;
+            this.form.selling_case_size = 0;
+            this.form.selling_unit_price = 0.00;
+            this.form.buying_unit_cost = 0.00;
+
             this.form.vat = null;
             this.form.sales_nominal = null;
-            this.form.cost_nominal = null;
             this.form.profit_margin = '';
             this.form.stock_level = 0;
         }
@@ -107214,21 +107419,49 @@ var render = function() {
                           attrs: { id: "product-name" }
                         },
                         [
-                          _c("label", [_vm._v(" Name ")]),
+                          _c("label", [_vm._v(" Brand ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
                             attrs: {
-                              id: "product-name",
+                              id: "product-brand",
                               type: "text",
                               placeholder: "Enter unique product name",
                               required: ""
                             },
                             model: {
-                              value: _vm.form.name,
+                              value: _vm.form.brand,
                               callback: function($$v) {
-                                _vm.$set(_vm.form, "name", $$v)
+                                _vm.$set(_vm.form, "brand", $$v)
                               },
-                              expression: "form.name"
+                              expression: "form.brand"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-col",
+                        {
+                          staticClass: "col-sm-4",
+                          attrs: { id: "product-name" }
+                        },
+                        [
+                          _c("label", [_vm._v(" Flavour ")]),
+                          _vm._v(" "),
+                          _c("b-form-input", {
+                            attrs: {
+                              id: "product-flavour",
+                              type: "text",
+                              placeholder: "Enter unique product name",
+                              required: ""
+                            },
+                            model: {
+                              value: _vm.form.flavour,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "flavour", $$v)
+                              },
+                              expression: "form.flavour"
                             }
                           })
                         ],
@@ -107242,7 +107475,7 @@ var render = function() {
                           attrs: { id: "product-code" }
                         },
                         [
-                          _c("label", [_vm._v(" Code ")]),
+                          _c("label", [_vm._v(" Product Code ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
                             attrs: {
@@ -107257,29 +107490,6 @@ var render = function() {
                                 _vm.$set(_vm.form, "code", $$v)
                               },
                               expression: "form.code"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "b-col",
-                        {
-                          staticClass: "col-sm-4",
-                          attrs: { id: "product-case-stock-level" }
-                        },
-                        [
-                          _c("label", [_vm._v(" Stock Level (Singles) ")]),
-                          _vm._v(" "),
-                          _c("b-form-input", {
-                            attrs: { type: "number" },
-                            model: {
-                              value: _vm.form.stock_level,
-                              callback: function($$v) {
-                                _vm.$set(_vm.form, "stock_level", $$v)
-                              },
-                              expression: "form.stock_level"
                             }
                           })
                         ],
@@ -107303,19 +107513,19 @@ var render = function() {
                         "b-col",
                         {
                           staticClass: "col-sm-4",
-                          attrs: { id: "product-case-price" }
+                          attrs: { id: "product-case-cost" }
                         },
                         [
-                          _c("label", [_vm._v(" Product Case Price ")]),
+                          _c("label", [_vm._v(" Buying Case Cost ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
                             attrs: { type: "number" },
                             model: {
-                              value: _vm.form.case_price,
+                              value: _vm.form.buying_case_cost,
                               callback: function($$v) {
-                                _vm.$set(_vm.form, "case_price", $$v)
+                                _vm.$set(_vm.form, "buying_case_cost", $$v)
                               },
-                              expression: "form.case_price"
+                              expression: "form.buying_case_cost"
                             }
                           })
                         ],
@@ -107326,35 +107536,86 @@ var render = function() {
                         "b-col",
                         {
                           staticClass: "col-sm-4",
-                          attrs: { id: "product-case-size" }
+                          attrs: { id: "product-case-price" }
                         },
                         [
-                          _c("label", [_vm._v(" Product Case Size ")]),
+                          _c("label", [_vm._v(" Selling Case Price ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
                             attrs: { type: "number" },
                             model: {
-                              value: _vm.form.case_size,
+                              value: _vm.form.selling_case_price,
                               callback: function($$v) {
-                                _vm.$set(_vm.form, "case_size", $$v)
+                                _vm.$set(_vm.form, "selling_case_price", $$v)
                               },
-                              expression: "form.case_size"
+                              expression: "form.selling_case_price"
                             }
                           }),
                           _vm._v(" "),
                           _c("p", { staticClass: "selected-option" }, [
                             _vm._v(
-                              " Product Profit Margin: " +
+                              " Selling Case Price: " +
                                 _vm._s(
-                                  (_vm.form.profit_margin =
-                                    ((_vm.form.unit_price -
-                                      _vm.form.unit_cost) /
-                                      _vm.form.unit_price) *
-                                    100)
+                                  (_vm.form.selling_case_price =
+                                    _vm.form.selling_unit_price *
+                                    _vm.form.selling_case_size)
                                 ) +
-                                " % "
+                                " "
                             )
                           ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-col",
+                        {
+                          staticClass: "col-sm-4",
+                          attrs: { id: "buying-case-size" }
+                        },
+                        [
+                          _c("label", [_vm._v(" Buying Case Size ")]),
+                          _vm._v(" "),
+                          _c("b-form-input", {
+                            attrs: { type: "number" },
+                            model: {
+                              value: _vm.form.buying_case_size,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "buying_case_size", $$v)
+                              },
+                              expression: "form.buying_case_size"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-row",
+                    { attrs: { sm: "12" } },
+                    [
+                      _c(
+                        "b-col",
+                        {
+                          staticClass: "col-sm-4",
+                          attrs: { id: "selling-case-size" }
+                        },
+                        [
+                          _c("label", [_vm._v(" Selling Case Size ")]),
+                          _vm._v(" "),
+                          _c("b-form-input", {
+                            attrs: { type: "number" },
+                            model: {
+                              value: _vm.form.selling_case_size,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "selling_case_size", $$v)
+                              },
+                              expression: "form.selling_case_size"
+                            }
+                          })
                         ],
                         1
                       ),
@@ -107366,27 +107627,65 @@ var render = function() {
                           attrs: { id: "product-unit-price" }
                         },
                         [
-                          _c("label", [_vm._v(" Product Unit Price ")]),
+                          _c("label", [_vm._v(" Selling Unit Price ")]),
                           _vm._v(" "),
                           _c("b-form-input", {
                             attrs: { type: "number" },
                             model: {
-                              value: _vm.form.unit_price,
+                              value: _vm.form.selling_unit_price,
                               callback: function($$v) {
-                                _vm.$set(_vm.form, "unit_price", $$v)
+                                _vm.$set(_vm.form, "selling_unit_price", $$v)
                               },
-                              expression: "form.unit_price"
+                              expression: "form.selling_unit_price"
                             }
                           }),
                           _vm._v(" "),
                           _c("p", { staticClass: "selected-option" }, [
                             _vm._v(
-                              " Product Unit Cost: " +
+                              " Buying Unit Cost: " +
                                 _vm._s(
-                                  (_vm.form.unit_cost =
-                                    _vm.form.case_price / _vm.form.case_size)
+                                  (_vm.form.buying_unit_cost =
+                                    _vm.form.buying_case_cost /
+                                    _vm.form.buying_case_size)
                                 ) +
                                 " "
+                            )
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-col",
+                        {
+                          staticClass: "col-sm-4",
+                          attrs: { id: "product-case-stock-level" }
+                        },
+                        [
+                          _c("label", [_vm._v(" Stock Level (Singles) ")]),
+                          _vm._v(" "),
+                          _c("b-form-input", {
+                            attrs: { type: "number" },
+                            model: {
+                              value: _vm.form.stock_level,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "stock_level", $$v)
+                              },
+                              expression: "form.stock_level"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("p", { staticClass: "selected-option" }, [
+                            _vm._v(
+                              " Product Profit Margin: " +
+                                _vm._s(
+                                  (_vm.form.profit_margin =
+                                    ((_vm.form.selling_unit_price -
+                                      _vm.form.buying_unit_cost) /
+                                      _vm.form.selling_unit_price) *
+                                    100)
+                                ) +
+                                " % "
                             )
                           ])
                         ],
@@ -107444,6 +107743,50 @@ var render = function() {
                             _vm._v(
                               " Selected VAT Option: " +
                                 _vm._s(_vm.form.vat) +
+                                " "
+                            )
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "b-col",
+                        { staticClass: "col-sm-4" },
+                        [
+                          _c("label", [_vm._v(" Supplier ")]),
+                          _vm._v(" "),
+                          _c(
+                            "b-form-select",
+                            {
+                              attrs: { options: _vm.supplier, required: "" },
+                              model: {
+                                value: _vm.form.supplier,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.form, "supplier", $$v)
+                                },
+                                expression: "form.supplier"
+                              }
+                            },
+                            [
+                              _c("template", { slot: "first" }, [
+                                _c(
+                                  "option",
+                                  {
+                                    attrs: { disabled: "" },
+                                    domProps: { value: null }
+                                  },
+                                  [_vm._v(" Please select an option ")]
+                                )
+                              ])
+                            ],
+                            2
+                          ),
+                          _vm._v(" "),
+                          _c("p", { staticClass: "selected-option" }, [
+                            _vm._v(
+                              " Selected Supplier: " +
+                                _vm._s(_vm.form.supplier) +
                                 " "
                             )
                           ])

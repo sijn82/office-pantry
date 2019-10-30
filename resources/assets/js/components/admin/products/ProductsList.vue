@@ -1,7 +1,7 @@
 <template>
     <div class="products-container">
         <h1> Product List </h1>
-        
+
         <b-row>
             <b-col> <h3> Filters </h3> </b-col>
         </b-row>
@@ -38,9 +38,10 @@
             </b-col>
             <b-form-text> * Ignore this filter for now, it's not actually built to do anything yet! </b-form-text> -->
         </b-row>    
-          
+
         <b-row class="product-list-headers">
-            <b-col><h3> Name </h3></b-col>
+            <b-col><h3> Brand </h3></b-col>
+            <b-col><h3> Flavour </h3></b-col>
             <b-col><h3> Stock Level and Status </h3></b-col>
             <b-col><h3> Options </h3></b-col>
         </b-row>
@@ -53,16 +54,16 @@
                             <product    v-on:addProduct="addProductToOrder($event)"
                                         :createSnackbox="createSnackbox"
                                         :createWholesaleSnackbox="createWholesaleSnackbox"
-                                        :createOtherbox="createOtherbox" 
+                                        :createOtherbox="createOtherbox"
                                         :createDrinkbox="createDrinkbox"
-                                        :type="type" 
+                                        :type="type"
                                         :product="product">
                             </product>
                         <!-- </div> -->
                     </div>
                 </div>
             </div>
-                
+
     </div>
 </template>
 
@@ -118,14 +119,14 @@ export default {
             ],
         }
     },
-    
+
     watch: {
         keywords(after, before) {
             this.fetch();
         },
 
     },
-    
+
     methods: {
         fetch() {
             let self = this;
@@ -154,18 +155,18 @@ export default {
         }
         // stockLevel() {
         //     if (product.stock_level < 0) {
-        //         return 
+        //         return
         //     }
         // }
     },
-    
+
     computed: {
         users() {
             return this.$store.state.users;
         }
-        
+
         // Goddamn, filters not working for my usecase, going to need to find another GENIOUS solution!
-        
+
         // filteredProducts: function () {
         //     return self.products.filter(
         //         (product) => {
@@ -174,10 +175,10 @@ export default {
         //     )
         // }
     },
-    
+
     created() {
         this.grabProductList();
-        
+
     },
 
     mounted() {

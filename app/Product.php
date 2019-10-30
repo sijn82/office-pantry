@@ -10,15 +10,18 @@ class Product extends Model
     protected $fillable = [
 
         'is_active',
+        'brand',
+        'flavour',
         'code',
-        'name',
-        'case_price',
-        'case_size',
-        'unit_cost',
-        'unit_price',
+        'buying_case_cost',
+        'selling_case_price',
+        'buying_case_size',
+        'selling_case_size',
+        'buying_unit_cost',
+        'selling_unit_price',
         'vat',
+        'supplier',
         'sales_nominal',
-        'cost_nominal',
         'profit_margin',
         'stock_level'
     ];
