@@ -191,6 +191,41 @@
                         </div>
                     </b-col>
                 </b-row>
+                <b-row>
+                    <b-col>
+                        <label><b> Allergen Information </b></label>
+                        <div v-if="editing">
+                            <b-form-group>
+                                <b-form-checkbox    inline
+                                                    v-for="allergen in allergens"
+                                                    v-model="selected_allergens"
+                                                    :key="allergen.value"
+                                                    :value="allergen.value">
+                                                    <b> {{ allergen.text }} </b>
+                                </b-form-checkbox>
+                            </b-form-group>
+                        </div>
+                        <div v-else>
+                            <b-form-group>
+                                <b-form-checkbox    inline
+                                                    v-for="allergen in product.allergen_info"
+                                                    v-model="product.allergen_info"
+                                                    :key="allergen"
+                                                    :value="allergen">
+                                                    <b> {{ allergen }} </b>
+                                </b-form-checkbox>
+                            </b-form-group>
+                        </div>
+                    </b-col>
+                </b-row>
+                <b-row>
+                    <!-- <b-col>
+                        <p><b> {{ selected_allergens }} </b></p>
+                    </b-col> -->
+                    <b-col>
+                        <p hidden><b> {{ currently_selected_allergens }} </b></p>
+                    </b-col>
+                </b-row>
             </div>
         </ul>
     </div>
@@ -242,6 +277,19 @@ export default {
                 'Other',
             ],
             sales_nominal: ['4010', '4020', '4040', '4050', '4090'],
+            selected_allergens: [],
+            allergens: [
+                {text: 'Vegetarian', value: 'vegetarian'},
+                {text: 'Vegan', value: 'vegan'},
+                {text: 'Contains Nuts', value: 'contains-nuts'},
+                {text: 'Gluten Free', value: 'gluten-free'},
+                {text: 'Dairy Free', value: 'dairy-free'},
+                {text: 'Soy Free', value: 'soy-free'},
+                {text: 'High Protein', value: 'high-protein'},
+                {text: 'Sweet', value: 'sweet'},
+                {text: 'Savoury', value: 'savory'},
+                {text: 'Eco-friendly Packaging', value: 'eco-friendly-packaging'},
+            ],
         }
     },
 
@@ -254,6 +302,9 @@ export default {
         },
         computed_quantity_units: function () {
             return this.product.stock_level - this.quantity
+        },
+        currently_selected_allergens: function (allergen_info) {
+            return this.selected_allergens = this.product.allergen_info
         }
 
     },
@@ -312,10 +363,12 @@ export default {
                 sales_nominal: product.sales_nominal,
                 profit_margin: product.profit_margin,
                 stock_level: product.stock_level,
+                selected_allergens: this.selected_allergens,
                 shortest_stock_date: product.shortest_stock_date,
 
             }).then (response => {
-              console.log(response);
+                location.reload(true);
+                console.log(response);
             }).catch(error => console.log(error));
         },
 
@@ -358,7 +411,7 @@ export default {
 
     mounted() {
         console.log('Components Product Mounted');
-        //console.log(this.createSnackbox);
+        //console.log(this.product.allergen_info);
     }
 
 }

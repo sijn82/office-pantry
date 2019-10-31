@@ -105702,6 +105702,41 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['product', 'route', 'createSnackbox', 'createWholesaleSnackbox', 'createOtherbox', 'createWholesaleOtherbox', 'createDrinkbox', 'type'],
@@ -105713,7 +105748,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             status: ['Active', 'Inactive'],
             vat: ['Yes', 'No'],
             supplier: ['Booker', 'Epicurium', 'Kingdom Coffee', 'Supermarket', 'Craft Drink Co', 'Direct', 'Holley\'s Fine Foods', 'Essential Trading', 'Templeton Drinks', 'Majestic Wines', 'Enotria & Coe', 'LWC', 'Euroffice', 'Other'],
-            sales_nominal: ['4010', '4020', '4040', '4050', '4090']
+            sales_nominal: ['4010', '4020', '4040', '4050', '4090'],
+            selected_allergens: [],
+            allergens: [{ text: 'Vegetarian', value: 'vegetarian' }, { text: 'Vegan', value: 'vegan' }, { text: 'Contains Nuts', value: 'contains-nuts' }, { text: 'Gluten Free', value: 'gluten-free' }, { text: 'Dairy Free', value: 'dairy-free' }, { text: 'Soy Free', value: 'soy-free' }, { text: 'High Protein', value: 'high-protein' }, { text: 'Sweet', value: 'sweet' }, { text: 'Savoury', value: 'savory' }, { text: 'Eco-friendly Packaging', value: 'eco-friendly-packaging' }]
         };
     },
 
@@ -105727,6 +105764,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         computed_quantity_units: function computed_quantity_units() {
             return this.product.stock_level - this.quantity;
+        },
+        currently_selected_allergens: function currently_selected_allergens(allergen_info) {
+            return this.selected_allergens = this.product.allergen_info;
         }
 
     },
@@ -105782,9 +105822,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 sales_nominal: product.sales_nominal,
                 profit_margin: product.profit_margin,
                 stock_level: product.stock_level,
+                selected_allergens: this.selected_allergens,
                 shortest_stock_date: product.shortest_stock_date
 
             }).then(function (response) {
+                location.reload(true);
                 console.log(response);
             }).catch(function (error) {
                 return console.log(error);
@@ -105832,7 +105874,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     mounted: function mounted() {
         console.log('Components Product Mounted');
-        //console.log(this.createSnackbox);
+        //console.log(this.product.allergen_info);
     }
 });
 
@@ -106604,6 +106646,103 @@ var render = function() {
                   ])
                 ],
                 1
+              ),
+              _vm._v(" "),
+              _c(
+                "b-row",
+                [
+                  _c("b-col", [
+                    _c("label", [_c("b", [_vm._v(" Allergen Information ")])]),
+                    _vm._v(" "),
+                    _vm.editing
+                      ? _c(
+                          "div",
+                          [
+                            _c(
+                              "b-form-group",
+                              _vm._l(_vm.allergens, function(allergen) {
+                                return _c(
+                                  "b-form-checkbox",
+                                  {
+                                    key: allergen.value,
+                                    attrs: {
+                                      inline: "",
+                                      value: allergen.value
+                                    },
+                                    model: {
+                                      value: _vm.selected_allergens,
+                                      callback: function($$v) {
+                                        _vm.selected_allergens = $$v
+                                      },
+                                      expression: "selected_allergens"
+                                    }
+                                  },
+                                  [
+                                    _c("b", [
+                                      _vm._v(" " + _vm._s(allergen.text) + " ")
+                                    ])
+                                  ]
+                                )
+                              })
+                            )
+                          ],
+                          1
+                        )
+                      : _c(
+                          "div",
+                          [
+                            _c(
+                              "b-form-group",
+                              _vm._l(_vm.product.allergen_info, function(
+                                allergen
+                              ) {
+                                return _c(
+                                  "b-form-checkbox",
+                                  {
+                                    key: allergen,
+                                    attrs: { inline: "", value: allergen },
+                                    model: {
+                                      value: _vm.product.allergen_info,
+                                      callback: function($$v) {
+                                        _vm.$set(
+                                          _vm.product,
+                                          "allergen_info",
+                                          $$v
+                                        )
+                                      },
+                                      expression: "product.allergen_info"
+                                    }
+                                  },
+                                  [
+                                    _c("b", [
+                                      _vm._v(" " + _vm._s(allergen) + " ")
+                                    ])
+                                  ]
+                                )
+                              })
+                            )
+                          ],
+                          1
+                        )
+                  ])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "b-row",
+                [
+                  _c("b-col", [
+                    _c("p", { attrs: { hidden: "" } }, [
+                      _c("b", [
+                        _vm._v(
+                          " " + _vm._s(_vm.currently_selected_allergens) + " "
+                        )
+                      ])
+                    ])
+                  ])
+                ],
+                1
               )
             ],
             1
@@ -107312,6 +107451,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -107333,11 +107481,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 supplier: null,
                 sales_nominal: null,
                 profit_margin: '',
-                stock_level: 0
+                stock_level: 0,
+                selected_allergens: []
             },
             vat: ['Yes', 'No'],
             sales_nominal: ['4010', '4020', '4040', '4050', '4090'],
-            supplier: ['Booker', 'Epicurium', 'Kingdom Coffee', 'Supermarket', 'Craft Drink Co', 'Direct', 'Holley\'s Fine Foods', 'Essential Trading', 'Templeton Drinks', 'Majestic Wines', 'Enotria & Coe', 'LWC', 'Euroffice', 'Other']
+            supplier: ['Booker', 'Epicurium', 'Kingdom Coffee', 'Supermarket', 'Craft Drink Co', 'Direct', 'Holley\'s Fine Foods', 'Essential Trading', 'Templeton Drinks', 'Majestic Wines', 'Enotria & Coe', 'LWC', 'Euroffice', 'Other'],
+            allergens: [{ text: 'Vegetarian', value: 'vegetarian' }, { text: 'Vegan', value: 'vegan' }, { text: 'Contains Nuts', value: 'contains-nuts' }, { text: 'Gluten Free', value: 'gluten-free' }, { text: 'Dairy Free', value: 'dairy-free' }, { text: 'Soy Free', value: 'soy-free' }, { text: 'High Protein', value: 'high-protein' }, { text: 'Sweet', value: 'sweet' }, { text: 'Savoury', value: 'savory' }, { text: 'Eco-friendly Packaging', value: 'eco-friendly-packaging' }]
         };
     },
 
@@ -107839,6 +107989,41 @@ var render = function() {
                           ])
                         ],
                         1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "b-row",
+                [
+                  _c(
+                    "b-col",
+                    [
+                      _c("label", [_c("b", [_vm._v(" Allergens ")])]),
+                      _vm._v(" "),
+                      _c(
+                        "b-form-group",
+                        _vm._l(_vm.allergens, function(allergen) {
+                          return _c(
+                            "b-form-checkbox",
+                            {
+                              key: allergen.value,
+                              attrs: { inline: "", value: allergen.value },
+                              model: {
+                                value: _vm.form.selected_allergens,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.form, "selected_allergens", $$v)
+                                },
+                                expression: "form.selected_allergens"
+                              }
+                            },
+                            [_vm._v(" " + _vm._s(allergen.text) + " ")]
+                          )
+                        })
                       )
                     ],
                     1

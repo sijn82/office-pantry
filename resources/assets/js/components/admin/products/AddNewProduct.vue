@@ -102,6 +102,15 @@
                     </b-row>
                 </b-form-group>
 
+                <b-row>
+                    <b-col>
+                        <label><b> Allergens </b></label>
+                        <b-form-group>
+                            <b-form-checkbox inline v-for="allergen in allergens" v-model="form.selected_allergens" :key="allergen.value" :value="allergen.value"> {{ allergen.text }} </b-form-checkbox>
+                        </b-form-group>
+                    </b-col>
+                </b-row>
+
                 <div id="product-buttons">
                     <b-button type="submit" variant="primary"> Submit </b-button>
                     <b-button type="reset" variant="danger"> Reset </b-button>
@@ -159,6 +168,7 @@ export default {
                 sales_nominal: null,
                 profit_margin: '',
                 stock_level: 0,
+                selected_allergens: [],
             },
             vat: ['Yes', 'No'],
             sales_nominal: ['4010', '4020', '4040', '4050', '4090'],
@@ -177,6 +187,18 @@ export default {
                 'LWC',
                 'Euroffice',
                 'Other'
+            ],
+            allergens: [
+                {text: 'Vegetarian', value: 'vegetarian'},
+                {text: 'Vegan', value: 'vegan'},
+                {text: 'Contains Nuts', value: 'contains-nuts'},
+                {text: 'Gluten Free', value: 'gluten-free'},
+                {text: 'Dairy Free', value: 'dairy-free'},
+                {text: 'Soy Free', value: 'soy-free'},
+                {text: 'High Protein', value: 'high-protein'},
+                {text: 'Sweet', value: 'sweet'},
+                {text: 'Savoury', value: 'savory'},
+                {text: 'Eco-friendly Packaging', value: 'eco-friendly-packaging'},
             ],
         }
     },

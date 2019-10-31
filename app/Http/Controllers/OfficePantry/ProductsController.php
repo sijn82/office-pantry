@@ -57,6 +57,7 @@ class ProductsController extends Controller
         $newProduct->sales_nominal = $request['company_data']['sales_nominal'];
         $newProduct->profit_margin = $request['company_data']['profit_margin'];
         $newProduct->stock_level = $request['company_data']['stock_level'];
+        $newProduct->allergen_info = $request['company_data']['selected_allergens'];
         //$newProduct->shortest_stock_date = $request['company_data']['shortest_stock_date']; <-- I think it's highly unlikely we'll have this info to hand when adding the product to the system.
         $newProduct->save();
     }
@@ -87,6 +88,7 @@ class ProductsController extends Controller
             'sales_nominal' => request('sales_nominal'),
             'profit_margin' => request('profit_margin'),
             'stock_level' => request('stock_level'),
+            'allergen_info' => request('selected_allergens'),
             'shortest_stock_date' => request('shortest_stock_date')
         ]);
     }
