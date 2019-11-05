@@ -8,6 +8,7 @@
                 <b-button variant="primary" @click="showDetails()"> Details </b-button>
                 <b-button variant="warning" @click="enableEdit()"> Edit </b-button>
                 <b-button v-if="editing" class="btn btn-success" @click="updateFruitOrder(fruitbox)"> Save </b-button>
+                <b-button v-if="editing" class="btn" variant="danger" @click="destroyFruitOrder(fruitbox)"> Save </b-button>
                 <b-form-checkbox v-if="editing" v-model="skip_archive" value='true' unchecked-value='false'> Skip Fruitbox Archive Creation/Update </b-form-checkbox>
                 <b-form-text v-if="editing"> Skip fruitbox archiving if you're updating a mistake and do not need to keep the existing information. </b-form-text>
             </div>
@@ -473,6 +474,12 @@ export default {
                 console.log(response);
                 this.$emit('refresh-data', {company_details_id: fruitbox.company_details_id});
             }).catch(error => console.log(error));
+        },
+        destroyFruitOrder(fruitbox) {
+            this.editing = false;
+            axios.put('api/boxes/fruitbox/destroy/' + fruitbox.id, {
+                id: fruitbox.id,
+            });
         },
         // getFruitPartners() {
         //     this.$store.commit('getFruitPartners');

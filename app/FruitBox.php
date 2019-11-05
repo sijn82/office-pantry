@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class FruitBox extends Model
 {
     //
+    protected $casts = [
+        'order_changes' => 'object',
+    ];
+
     protected $fillable = [
 
         'is_active',
@@ -44,6 +48,10 @@ class FruitBox extends Model
         'tailoring_fee',
         'discount_multiple',
         'invoiced_at',
+        // Newly added fields to track changes
+        'order_changes',
+        'date_changed'
+
 
     ];
 
@@ -64,7 +72,7 @@ class FruitBox extends Model
         {
             return $this->belongsTo(CompanyDetails::class);
         }
-        // Looks like I've only added this relationship with fruitboxes and fruitpartners, 
+        // Looks like I've only added this relationship with fruitboxes and fruitpartners,
         // although the other boxes also use fruitpartners for delivery, dpd, apc etc are also classed as fruitpartners.
         public function fruit_partners()
         {

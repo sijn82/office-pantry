@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     protected $casts = [
-        'allergen_info' => 'array'
+        'allergen_info' => 'array',
+        'dietry_requirements' => 'array'
     ];
     //
     protected $fillable = [
@@ -27,7 +28,8 @@ class Product extends Model
         'sales_nominal',
         'profit_margin',
         'stock_level',
-        'allergen_info'
+        'allergen_info',
+        'dietry_requirements'
     ];
 
         /**

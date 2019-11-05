@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\CompanyDetails;
 use Illuminate\Http\Request;
 
+use Carbon\CarbonImmutable;
+
 class CompanyDetailsController extends Controller
 {
     /**
@@ -127,7 +129,9 @@ class CompanyDetailsController extends Controller
      */
     public function update(Request $request, $company_details_id)
     {
-        CompanyDetails::where('id', $company_details_id)->update([
+        $companyDetailsForUpdating = CompanyDetails::find($company_details_id);
+
+        $companyDetailsForUpdating->update([
             'is_active' => request('company_details.is_active'),
             // Company Name(s)
             'invoice_name' => request('company_details.invoice_name'),
@@ -166,6 +170,81 @@ class CompanyDetailsController extends Controller
             'monthly_surprise' => request('company_details.monthly_surprise'),
             'no_of_surprises' => request('company_details.no_of_surprises'),
         ]);
+
+        //----- Now we need to configure the order change check -----//
+
+        // We only want to check some fields for changes, as getChanges can't be filtered, we'll need to remove them afterwards.
+        $fields_we_can_ignore = [
+            'id',
+            'is_active',
+            'invoice_name',
+            'primary_contact_first_name',
+            'primary_contact_surname',
+            'primary_contact_job_title',
+            'primary_email',
+            'primary_tel',
+            'secondary_contact_first_name',
+            'secondary_contact_surname',
+            'secondary_contact_job_title',
+            'secondary_email',
+            'secondary_tel',
+            'invoice_address_line_1',
+            'invoice_address_line_2',
+            'invoice_address_line_3',
+            'invoice_city',
+            'invoice_region',
+            'invoice_postcode',
+            'invoice_email',
+            'monthly_surprise',
+            'no_of_surprises',
+            'branding_theme',
+            'surcharge',
+            'supplier_id',
+            'model',
+            'created_at',
+            'updated_at',
+            'order_changes',
+            'date_changed'
+        ];
+
+        // Effectively this just leaves the remaining fields as
+
+            // 'route_name',
+            // 'delivery_information',
+            // 'route_address_line_1',
+            // 'route_address_line_2',
+            // 'route_address_line_3',
+            // 'route_city',
+            // 'route_region',
+            // 'route_postcode',
+
+        // because these are the only fields which would affect the fruit partner making the delivery.
+
+            // So first let's get all the changes.
+            $order_changes = $companyDetailsForUpdating->getChanges();
+            dump($order_changes);
+            // Then loop through them all, removing the changes we don't need to track.
+            if ($order_changes) {
+                foreach ($order_changes as $key => $order_change) {
+                    if (in_array($key, $fields_we_can_ignore)) {
+                        unset($order_changes[$key]);
+                    }
+                }
+
+            }
+            dump($order_changes);
+            // With them removed, are there any changes left which we do want to track?
+            if ($order_changes) {
+                // If so let's grab the current time.
+                $carbon_now = CarbonImmutable::now('Europe/London');
+                // And save this info to the box.
+                $companyDetailsForUpdating->update([
+                    'order_changes' => $order_changes,
+                    'date_changed' => $carbon_now,
+                ]);
+            }
+
+        //----- End of configure the order change check -----//
     }
 
     /**

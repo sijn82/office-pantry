@@ -111,6 +111,15 @@
                     </b-col>
                 </b-row>
 
+                <b-row>
+                    <b-col>
+                        <label><b> Dietry Requirements </b></label>
+                        <b-form-group>
+                            <b-form-checkbox inline v-for="dietry_requirement in dietry_requirements" v-model="form.selected_dietry_requirements" :key="dietry_requirement.value" :value="dietry_requirement.value"> {{ dietry_requirement.text }} </b-form-checkbox>
+                        </b-form-group>
+                    </b-col>
+                </b-row>
+
                 <div id="product-buttons">
                     <b-button type="submit" variant="primary"> Submit </b-button>
                     <b-button type="reset" variant="danger"> Reset </b-button>
@@ -169,10 +178,12 @@ export default {
                 profit_margin: '',
                 stock_level: 0,
                 selected_allergens: [],
+                selected_dietry_requirements: [],
             },
             vat: ['Yes', 'No'],
-            sales_nominal: ['4010', '4020', '4040', '4050', '4090'],
+            sales_nominal: ['4010', '4020', '4021', '4022', '4023', '4024', '4040', '4050', '4090'],
             supplier: [
+
                 'Booker',
                 'Epicurium',
                 'Kingdom Coffee',
@@ -189,15 +200,30 @@ export default {
                 'Other'
             ],
             allergens: [
+
+                {text: 'Celery', value: 'celery'},
+                {text: 'Gluten', value: 'gluten'},
+                {text: 'Crustaceans', value: 'crustacians'},
+                {text: 'Eggs', value: 'eggs'},
+                {text: 'Fish', value: 'fish'},
+                {text: 'Lupin', value: 'lupin'},
+                {text: 'Milk', value: 'milk'},
+                {text: 'Molluscs', value: 'molluscs'},
+                {text: 'Mustard', value: 'mustard'},
+                {text: 'Tree Nuts', value: 'tree-nuts'},
+                {text: 'Peanuts', value:'peanuts'},
+                {text: 'Sesame', value:'sesame'},
+                {text: 'Soya', value: 'soya'},
+                {text: 'Sulphites', value: 'sulphites'},
+            ],
+            dietry_requirements: [
+
                 {text: 'Vegetarian', value: 'vegetarian'},
                 {text: 'Vegan', value: 'vegan'},
-                {text: 'Contains Nuts', value: 'contains-nuts'},
-                {text: 'Gluten Free', value: 'gluten-free'},
-                {text: 'Dairy Free', value: 'dairy-free'},
-                {text: 'Soy Free', value: 'soy-free'},
                 {text: 'High Protein', value: 'high-protein'},
                 {text: 'Sweet', value: 'sweet'},
                 {text: 'Savoury', value: 'savory'},
+                {text: 'Low Salt', value: 'low-salt'},
                 {text: 'Eco-friendly Packaging', value: 'eco-friendly-packaging'},
             ],
         }

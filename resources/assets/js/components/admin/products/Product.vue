@@ -226,6 +226,41 @@
                         <p hidden><b> {{ currently_selected_allergens }} </b></p>
                     </b-col>
                 </b-row>
+                <b-row>
+                    <b-col>
+                        <label><b> Dietry Requirements </b></label>
+                        <div v-if="editing">
+                            <b-form-group>
+                                <b-form-checkbox    inline
+                                                    v-for="dietry_requirement in dietry_requirements"
+                                                    v-model="selected_dietry_requirements"
+                                                    :key="dietry_requirement.value"
+                                                    :value="dietry_requirement.value">
+                                                    <b> {{ dietry_requirement.text }} </b>
+                                </b-form-checkbox>
+                            </b-form-group>
+                        </div>
+                        <div v-else>
+                            <b-form-group>
+                                <b-form-checkbox    inline
+                                                    v-for="dietry_requirement in product.dietry_requirements"
+                                                    v-model="product.dietry_requirements"
+                                                    :key="dietry_requirement"
+                                                    :value="dietry_requirement">
+                                                    <b> {{ dietry_requirement }} </b>
+                                </b-form-checkbox>
+                            </b-form-group>
+                        </div>
+                    </b-col>
+                </b-row>
+                <b-row>
+                    <!-- <b-col>
+                        <p><b> {{ selected_allergens }} </b></p>
+                    </b-col> -->
+                    <b-col>
+                        <p hidden><b> {{ currently_selected_dietry_requirements }} </b></p>
+                    </b-col>
+                </b-row>
             </div>
         </ul>
     </div>
@@ -276,18 +311,33 @@ export default {
                 'Euroffice',
                 'Other',
             ],
-            sales_nominal: ['4010', '4020', '4040', '4050', '4090'],
+            sales_nominal: ['4010', '4020', '4021', '4022', '4023', '4024', '4040', '4050', '4090'],
             selected_allergens: [],
             allergens: [
+
+                {text: 'Celery', value: 'celery'},
+                {text: 'Gluten', value: 'gluten'},
+                {text: 'Crustaceans', value: 'crustacians'},
+                {text: 'Eggs', value: 'eggs'},
+                {text: 'Fish', value: 'fish'},
+                {text: 'Lupin', value: 'lupin'},
+                {text: 'Milk', value: 'milk'},
+                {text: 'Molluscs', value: 'molluscs'},
+                {text: 'Mustard', value: 'mustard'},
+                {text: 'Tree Nuts', value: 'tree-nuts'},
+                {text: 'Peanuts', value:'peanuts'},
+                {text: 'Sesame', value:'sesame'},
+                {text: 'Soya', value: 'soya'},
+                {text: 'Sulphites', value: 'sulphites'},
+            ],
+            dietry_requirements: [
+
                 {text: 'Vegetarian', value: 'vegetarian'},
                 {text: 'Vegan', value: 'vegan'},
-                {text: 'Contains Nuts', value: 'contains-nuts'},
-                {text: 'Gluten Free', value: 'gluten-free'},
-                {text: 'Dairy Free', value: 'dairy-free'},
-                {text: 'Soy Free', value: 'soy-free'},
                 {text: 'High Protein', value: 'high-protein'},
                 {text: 'Sweet', value: 'sweet'},
                 {text: 'Savoury', value: 'savory'},
+                {text: 'Low Salt', value: 'low-salt'},
                 {text: 'Eco-friendly Packaging', value: 'eco-friendly-packaging'},
             ],
         }
@@ -305,6 +355,9 @@ export default {
         },
         currently_selected_allergens: function (allergen_info) {
             return this.selected_allergens = this.product.allergen_info
+        },
+        currently_selected_dietry_requirements: function (dietry_requirements) {
+            return this.selected_dietry_requirements = this.product.dietry_requirements
         }
 
     },
@@ -364,6 +417,7 @@ export default {
                 profit_margin: product.profit_margin,
                 stock_level: product.stock_level,
                 selected_allergens: this.selected_allergens,
+                selected_dietry_requirements :this.selected_dietry_requirements,
                 shortest_stock_date: product.shortest_stock_date,
 
             }).then (response => {

@@ -30,6 +30,7 @@
           @if ($alt_rice_total === 0) @else <th>Milk 1l Alt Rice</th> @endif
           @if ($alt_cashew_total === 0) @else <th>Milk 1l Alt Cashew</th> @endif
           @if ($alt_lactose_free_semi_total === 0) @else <th>Milk 1l Alt Lactose Free Semi</th> @endif
+          @if ($order_changes) <th>Updated This Week?</th> @endif
       </tr>
     </thead>
 
@@ -67,6 +68,7 @@
             @if ($alt_rice_total === 0) @elseif ($delivery->milk_1l_alt_rice === 0) <td></td> @else <td>{{ $delivery->milk_1l_alt_rice }}</td> @endif
             @if ($alt_cashew_total === 0) @elseif ($delivery->milk_1l_alt_cashew === 0) <td></td> @else <td>{{ $delivery->milk_1l_alt_cashew }}</td> @endif
             @if ($alt_lactose_free_semi_total === 0) @elseif ($delivery->milk_1l_alt_lactose_free_semi === 0) <td></td> @else <td>{{ $delivery->milk_1l_alt_lactose_free_semi }}</td> @endif
+            @if ($delivery->order_changes) <td>Yes</td> @endif
         </tr>
 
         @endforeach

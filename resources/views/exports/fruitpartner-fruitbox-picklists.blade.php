@@ -12,7 +12,7 @@
           @if ($satsumas_total === 0) @else <th>Satsumas</th> @endif
           @if ($pears_total === 0) @else <th>Pears</th> @endif
           @if ($bananas_total === 0) @else <th>Bananas</th> @endif
-          @if ($nectarines_total === 0) @else <th>Nectarines</th> @endif
+          @if ($nectarines_total === 0) @else <th>Stoned Fruit</th> @endif
           @if ($limes_total === 0) @else <th>Limes</th> @endif
           @if ($lemons_total === 0) @else <th>Lemons</th> @endif
           @if ($grapes_total === 0) @else <th>Grapes</th> @endif
@@ -25,6 +25,7 @@
           @if ($grapefruits_total === 0) @else <th>Grapefruits</th> @endif
           @if ($avocados_total === 0) @else <th>Avocados</th> @endif
           @if ($root_ginger_total === 0) @else <th>Root Ginger</th> @endif
+          @if ($order_changes) <th>Updated This Week?</th> @endif
       </tr>
 
     </thead>
@@ -60,6 +61,7 @@
                 @if ($grapefruits_total === 0) @elseif ($picklist->grapefruits === 0) <td></td> @else <td> {{ $picklist->grapefruits }} </td> @endif
                 @if ($avocados_total === 0) @elseif ($picklist->avocados === 0) <td></td> @else <td> {{ $picklist->avocados }} </td> @endif
                 @if ($root_ginger_total === 0) @elseif ($picklist->root_ginger === 0) <td></td> @else <td> {{ $picklist->root_ginger }} </td> @endif
+                @if ($picklist->order_changes) <td> Yes </td> @endif
             </tr>
 
         @endforeach

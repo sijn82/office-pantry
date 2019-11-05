@@ -498,8 +498,14 @@ class FruitBoxController extends Controller
 
         //----- Start of regular update process -----//
 
-        // dd($request);
-       FruitBox::where('id', $id)->update([
+        // In order to use observables, it would seem I need to break up the db call, even if only retrieving 1 entry, with the update request.
+
+        // FruitBox::where('id', $id)->update([
+
+        // Save the entry being updated into a variable.
+        $fruitboxForUpdating = FruitBox::find($id);
+        // Apply update call to the variable.
+        $fruitboxForUpdating->update([
            // 'id' => request('id'), // this shouldn't change so I could delete it but nahh...
            'is_active' => request('is_active'),
            'fruit_partner_id' => request('fruit_partner_id'),
@@ -536,6 +542,56 @@ class FruitBoxController extends Controller
            'discount_multiple' => request('discount_multiple'),
            'invoiced_at' => request('invoiced_at'),
        ]);
+
+       //----- Using an observable was educational but also created and infinite loop! -----//
+
+            // Putting the logic here and bypassing the observble.  If this works however it might be better to combine this into 1 update.
+
+            // We only want to check some fields for changes, as getChanges can't be filtered, we'll need to remove them afterwards.
+            $fields_we_can_ignore = [
+                'id',
+                'is_active',
+                'fruit_partner_id',
+                'name',
+                'company_details_id',
+                'type',
+                'previous_delivery',
+                'next_delivery',
+                'frequency',
+                'week_in_month',
+                'tailoring_fee',
+                'discount_multiple',
+                'invoiced_at',
+                'created_at',
+                'updated_at',
+                'order_changes',
+                'date_changed'
+            ];
+
+                // So first let's get all the changes.
+                $order_changes = $fruitboxForUpdating->getChanges();
+
+                // Then loop through them all, removing the changes we don't need to track.
+                if ($order_changes) {
+                    foreach ($order_changes as $key => $order_change) {
+                        if (in_array($key, $fields_we_can_ignore)) {
+                            unset($order_changes[$key]);
+                        }
+                    }
+
+                }
+                // With them removed, are there any changes left which we do want to track?
+                if ($order_changes) {
+                    // If so let's grab the current time.
+                    $carbon_now = CarbonImmutable::now('Europe/London');
+                    // And save this info to the box.
+                    $fruitboxForUpdating->update([
+                        'order_changes' => $order_changes,
+                        'date_changed' => $carbon_now,
+                    ]);
+                }
+
+       //----- End of Using an observable was educational but also created and infinite loop! -----//
 
        // When making an update to the fruitbox, we need to check there's still a route for its delivery.
        // If we've changed the delivery day for example this could easily lead us to having an order but not a route to deliver it on.

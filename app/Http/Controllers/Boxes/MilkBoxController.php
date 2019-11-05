@@ -122,13 +122,13 @@ class MilkBoxController extends Controller
                 // A route might not exist yet but when the company was set up a route name was inputted, so let's use that.
                 // $companyDetails = Company::findOrFail($request['company_data']['company_id']);
                 $companyDetails = CompanyDetails::findOrFail(request('company_data.company_details_id'));
-                
+
                 $assigned_route_tbc_monday = AssignedRoute::where('name', 'TBC (Monday)')->get();
                 $assigned_route_tbc_tuesday = AssignedRoute::where('name', 'TBC (Tuesday)')->get();
                 $assigned_route_tbc_wednesday = AssignedRoute::where('name', 'TBC (Wednesday)')->get();
                 $assigned_route_tbc_thursday = AssignedRoute::where('name', 'TBC (Thursday)')->get();
                 $assigned_route_tbc_friday = AssignedRoute::where('name', 'TBC (Friday)')->get();
-                
+
                 switch ($delivery_day) {
                     case 'Monday':
                         $assigned_route_id = $assigned_route_tbc_monday[0]->id;
@@ -146,7 +146,7 @@ class MilkBoxController extends Controller
                         $assigned_route_id = $assigned_route_tbc_friday[0]->id;
                         break;
                 }
-                
+
                 // We need to create a new entry.
                 $newRoute = new CompanyRoute();
                 // $newRoute->is_active = 'Active'; // Currently hard coded but this is also the default.
@@ -156,10 +156,10 @@ class MilkBoxController extends Controller
                 $newRoute->company_details_id = request('company_data.company_details_id');
                 $newRoute->route_name = $companyDetails->route_name;
                 $newRoute->postcode = $companyDetails->route_postcode;
-                
+
                 //  Route Summary Address isn't a field in the new model, instead I need to grab all route fields and combine them into the summary address.
                 // $newRoute->address = $companyDetails->route_summary_address;
-                
+
                 // An if empty check is being made on the optional fields so that we don't unnecessarily add ', ' to the end of an empty field.
                 $newRoute->address = $companyDetails->route_address_line_1 . ', '
                                     . $companyDetails->route_address_line_2 . ', '
@@ -167,7 +167,7 @@ class MilkBoxController extends Controller
                                     . $companyDetails->route_city . ', '
                                     . $companyDetails->route_region . ', '
                                     . $companyDetails->route_postcode;
-                
+
                 $newRoute->delivery_information = $companyDetails->delivery_information;
                 $newRoute->assigned_route_id = $assigned_route_id;
                 $newRoute->delivery_day = $delivery_day;
@@ -191,7 +191,7 @@ class MilkBoxController extends Controller
                 if (count(MilkBox::where('company_details_id', request('company_data.company_details_id'))->where('delivery_day', $delivery_day)->get()) > 0) {
 
                     // I'm not currently using this column, and have actually stripped it from the db.
-                    
+
                     // MilkBox::where('company_details_id', request('company_data.company_details_id'))->where('delivery_day', $delivery_day)->update([
                     //     'route_id' => $newlyCreatedRoute[0]->id
                     // ]);
@@ -210,14 +210,14 @@ class MilkBoxController extends Controller
                 // We can update the existing entry.
                 // Scrap that, as we're not saving any fruitbox data to the routes anymore we won't need to update anything here.
                 // Or at least that's my current thinking.  -- Well actually we could add the route id to the milkbox entry if we have one. --
-                
+
                 // EDIT: ACTUALLY NAH, THERE'S NO POINT.
                 // $existingRoute = CompanyRoute::where('company_details_id', request('company_data.company_details_id'))->where('delivery_day', $delivery_day)->get();
                 // // dd($existingRoute);
                 // MilkBox::where('company_details_id', request('company_data.company_details_id'))->where('delivery_day', $delivery_day)->update([
                 //     'route_id' => $existingRoute[0]->id
                 // ]);
-                // 
+                //
                 // $message = "Route ID: " . $existingRoute[0]->id . " added to Milkbox on $delivery_day saved.";
                 // Log::channel('slack')->info($message);
 
@@ -258,42 +258,42 @@ class MilkBoxController extends Controller
     public function update(Request $request, $id)
     {
         // dd($request);
-        
+
         $date = CarbonImmutable::now('Europe/London');
         $invoice_date = $date->format('ymd');
-        
+
         // We want to check whether the milkbox about to be updated has already had its old order invoiced.
         // So before we begin, let's grab the current data from the db.
         $existing_milkbox_entry = MilkBox::findOrFail($id);
-        
+
         // dd($existing_milkbox_entry);
         // And specifically the invoiced_at date, which despite being inserted from a Carbon date, is now considered a string?
         // So first it needs passing back into Carbon...
         $converted_invoiced_at_date = new CarbonImmutable($existing_milkbox_entry->invoiced_at);
-        
+
         // if skip-archive is true then we're deliberately trying to update the box and bypassing archive logic entirely.
         // if the current fruitbox order was updated wrongly this'll prevent the unwanted contents from being stored in the archives,
         // as it's just a mistake we all want to forget.
-        
+
         // EDIT: ACTUALLY THIS WOULD ALSO BE USEFUL FOR ALL THE ORDERS WHICH GET ADVANCED TO THE NEXT WEEK BUT WANT TO CHANGE THEIR ORDER SLIGHTLY.
         // WE DON'T NEED TO ARCHIVE THE EXISTING ORDER, IT HASN'T BEEN USED FOR ANYTHING, IT JUST HAD ITS DELIVERY DATE ADVANCED BY DEFAULT.
         // SKIPPING ARCHIVE MAY BECOME THE DEFAULT SCENARIO NOW WE HAVE MORE WAYS TO ADVANCE ORDERS.
-        
+
         if (request('skip_archive') === 'false') {
 
             // ...which we can then use to reformat both dates into the same style (->format('ymd')).
             // Now we can check if the entry was last updated on the same day as it was invoiced.  If so, odds are very good (100%?) that we have nothing new to archive and charge for.
             if ($existing_milkbox_entry->updated_at->format('ymd') == $converted_invoiced_at_date->format('ymd')) {
-        
+
                 Log::channel('slack')->info($existing_milkbox_entry->updated_at->format('ymd') . ' looks to be equal to this ' . $converted_invoiced_at_date->format('ymd'));
-                
+
                 // We don't actually want to use request here because request is holding all the updated information!
                 // What we want is to grab the existing information for that milkbox id and save that information as an archive!
-                
+
                 // Then the old order has already been process (invoiced) so we just need to create an archive, with an 'Inactive' status
                 // Though even if we want to save it as inactive, we should just check this wasn't already done earlier by another source.
                 // The archives, even or especially inactive files, should remain accurate and searchable in future.
-                
+
                 MilkBoxArchive::updateOrInsert(
                 [
                     // I think these two fields combined should be enough to determine whether the entry we're looking for is unique and exists.
@@ -336,25 +336,25 @@ class MilkBoxController extends Controller
                     'milk_1l_alt_rice' => $existing_milkbox_entry['milk_1l_alt_rice'],
                     'milk_1l_alt_cashew' => $existing_milkbox_entry['milk_1l_alt_cashew'],
                     'milk_1l_alt_lactose_free_semi' => $existing_milkbox_entry['milk_1l_alt_lactose_free_semi'],
-                
+
                 ]);
-                
+
             } else { // if ($existing_fruitbox_entry->updated_at->format('ymd') == $converted_invoiced_at_date->format('ymd'))
-                
+
                 Log::channel('slack')->info($existing_milkbox_entry->updated_at->format('ymd') . ' doesn\'t look to be equal to this ' . $converted_invoiced_at_date->format('ymd'));
-                
+
                 // Then the old order still needs to be processed (invoiced) so we need to create an archive, with an 'Active' status
                 // This way it'll get pulled into the next invoicing run of their chosen branding theme.
-                
+
                 MilkBoxArchive::updateOrInsert(
-                [   
+                [
                     // Technically, milkbox_id + next_delivery_week should be all that's needed but testing will probably prove me wrong.
                     'milkbox_id' => request('id'),
                     'next_delivery' => request('next_delivery'),
                 ],
                 [
-                    'is_active' => request('is_active'), 
-                    'delivery_day' => request('delivery_day'),   
+                    'is_active' => request('is_active'),
+                    'delivery_day' => request('delivery_day'),
                     'company_details_id' => request('company_details_id'),
                     'fruit_partner_id' => request('fruit_partner_id'),
                     'frequency' => request('frequency'),
@@ -390,11 +390,15 @@ class MilkBoxController extends Controller
                 ]);
             }
         } // if (request('skip-archive') == 'true')
-        
+
         //---------- Start of regular update process ----------//
-        
+
+        // Save the entry being updated into a variable.
+        $milkboxForUpdating = MilkBox::find($id);
+
+        // Apply update call to the variable.
         // Whatever else needs to be done, we need to make sure we update the entry, so let's get that sorted first.
-        MilkBox::where('id', $id)->update([
+        $milkboxForUpdating->update([
             'is_active' => request('is_active'),
             'fruit_partner_id' => request('fruit_partner_id'),
             // 'company_details_id' => request('company_details_id'); But is this going to change? No, it's not going to change.
@@ -433,10 +437,55 @@ class MilkBoxController extends Controller
             'milk_1l_alt_cashew' => request('milk_1l_alt_cashew'),
             'milk_1l_alt_lactose_free_semi' => request('milk_1l_alt_lactose_free_semi'),
         ]);
-        
+
+        //----- Now we need to configure the order change check -----//
+
+        // We only want to check some fields for changes, as getChanges can't be filtered, we'll need to remove them afterwards.
+        $fields_we_can_ignore = [
+            'id',
+            'is_active',
+            'fruit_partner_id',
+            'company_details_id',
+            'previous_delivery',
+            'next_delivery',
+            'frequency',
+            'week_in_month',
+            'invoiced_at',
+            'created_at',
+            'updated_at',
+            'order_changes',
+            'date_changed'
+        ];
+
+            // So first let's get all the changes.
+            $order_changes = $milkboxForUpdating->getChanges();
+
+            // Then loop through them all, removing the changes we don't need to track.
+            if ($order_changes) {
+                foreach ($order_changes as $key => $order_change) {
+                    if (in_array($key, $fields_we_can_ignore)) {
+                        unset($order_changes[$key]);
+                    }
+                }
+
+            }
+            // With them removed, are there any changes left which we do want to track?
+            if ($order_changes) {
+                // If so let's grab the current time.
+                $carbon_now = CarbonImmutable::now('Europe/London');
+                // And save this info to the box.
+                $milkboxForUpdating->update([
+                    'order_changes' => $order_changes,
+                    'date_changed' => $carbon_now,
+                ]);
+            }
+
+        //----- End of configure the order change check -----//
+
+
         // Now we need to check that the milkbox still has a deliverable route, if for example we've just changed then delivery day.
         if (count(CompanyRoute::where('company_details_id', request('company_details_id'))->where('delivery_day', request('delivery_day'))->get())) {
-            
+
             // We have nothing else we need to do.
             // $company = Company::findOrFail(request('company_id'));
             $company = CompanyDetails::findOrFail(request('company_details_id'));
@@ -444,34 +493,34 @@ class MilkBoxController extends Controller
             $route = CompanyRoute::where('company_details_id', request('company_details_id'))->where('delivery_day', request('delivery_day'))->get();
             // ^^^ Not true, we should be checking if the route is active already because if not we'll need to change that status to get pulled into the routes for exporting etc.
             if ($route[0]->is_active == 'Active') {
-                
+
                 $message = "Route for updated box called " . $company->route_name . " on " . request('delivery_day') . " already found.";
                 Log::channel('slack')->info($message);
-                
+
             } else {
-                
+
                 FruitBox::where('id', $id)->update([
                     'is_active' => 'Active'
                 ]);
-                
+
                 $message = "Route for updated box " . $company->route_name . " on " . request('delivery_day') . " already found but Inactive, Reactivating now...";
                 Log::channel('slack')->info($message);
             }
-            
+
         } elseif (request('fruit_partner_id') == 1) {
-            
+
             // If we're here, a route wasn't found for the new delivery day, and we've confirmed it's an Office Pantry delivery, so we'd better make one.
             // A route might not exist yet but when the company was set up a route name was inputted, so let's use that.
-            
+
             // $companyDetails = Company::findOrFail($request['company_id']);
             $companyDetails = CompanyDetails::findOrFail(request('company_details_id'));
-            
+
             $assigned_route_tbc_monday = AssignedRoute::where('name', 'TBC (Monday)')->get();
             $assigned_route_tbc_tuesday = AssignedRoute::where('name', 'TBC (Tuesday)')->get();
             $assigned_route_tbc_wednesday = AssignedRoute::where('name', 'TBC (Wednesday)')->get();
             $assigned_route_tbc_thursday = AssignedRoute::where('name', 'TBC (Thursday)')->get();
             $assigned_route_tbc_friday = AssignedRoute::where('name', 'TBC (Friday)')->get();
-            
+
             switch (request('delivery_day')) {
                 case 'Monday':
                     $assigned_route_id = $assigned_route_tbc_monday[0]->id;
@@ -489,26 +538,26 @@ class MilkBoxController extends Controller
                     $assigned_route_id = $assigned_route_tbc_friday[0]->id;
                     break;
             }
-            
+
             // We need to create a new entry.
             $newRoute = new CompanyRoute();
             // $newRoute->is_active = 'Active'; // Currently hard coded but this is also the default.
             $newRoute->company_details_id = request('company_details_id');
             $newRoute->route_name = $companyDetails->route_name;
             $newRoute->postcode = $companyDetails->route_postcode;
-            
+
             //  Route Summary Address isn't a field in the new model, instead I need to grab all route fields and combine them into the summary address.
             // $newRoute->address = $companyDetails->route_summary_address;
-            
+
             // An if empty check is being made on the optional fields so that we don't unnecessarily add ', ' to the end of an empty field.
             $newRoute->address = implode(", ", array_filter([
-                    $companyDetails->route_address_line_1, 
-                    $companyDetails->route_address_line_2, 
-                    $companyDetails->route_address_line_3, 
-                    $companyDetails->route_city, 
+                    $companyDetails->route_address_line_1,
+                    $companyDetails->route_address_line_2,
+                    $companyDetails->route_address_line_3,
+                    $companyDetails->route_city,
                     $companyDetails->route_region
                 ]));
-            
+
             $newRoute->delivery_information = $companyDetails->delivery_information;
             $newRoute->assigned_route_id = $assigned_route_id;
             $newRoute->delivery_day = request('delivery_day');
@@ -517,14 +566,14 @@ class MilkBoxController extends Controller
 
             $message = "Route $newRoute->company_name on " . request('delivery_day') . " saved.";
             Log::channel('slack')->info($message);
-            
+
         } else {
             $fruit_partner = FruitPartner::findOrFail(request('fruit_partner_id'));
             // This is an updated entry for a fruit third party, while we don't need to build a route, we should log the change as the fruit partner will need to know about it.
             // At the moment this will just get lost in the slack feed for laravel log, so we'll need to set up another channel just to send information like this in a readable manner.
             $message = "Route for updated box " . request('name') . " on " . request('delivery_day') . " not needed as it's delivered by our fruit partner " . $fruit_partner->name;
             Log::channel('slack')->info($message);
-            
+
         }
     }
 

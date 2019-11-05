@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class MilkBox extends Model
 {
+    protected $casts = [
+        'order_changes' => 'object',
+    ];
+
     //
     protected $fillable = [
         // Company order details
@@ -17,7 +21,7 @@ class MilkBox extends Model
         'frequency',
         'week_in_month',
         'delivery_day',
-        // Regular 2l 
+        // Regular 2l
         'semi_skimmed_2l',
         'skimmed_2l',
         'whole_2l',
@@ -47,6 +51,9 @@ class MilkBox extends Model
         'milk_1l_alt_lactose_free_semi',
         // Invoice details, currently keeping timestamps out of the editable range.
         'invoiced_at',
+        // Newly added fields to track changes
+        'order_changes',
+        'date_changed'
 
     ];
 
@@ -58,7 +65,7 @@ class MilkBox extends Model
         protected $hidden = [
             // 'password', 'remember_token',
         ];
-        
+
         // public function companies()
         // {
         //     return $this->belongsTo(Company::class);

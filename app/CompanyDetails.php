@@ -6,9 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class CompanyDetails extends Model
 {
+    protected $casts = [
+        'order_changes' => 'object',
+    ];
+    
     //
     protected $fillable = [
-        
+
         'is_active',
         // Company Name(s)
         'invoice_name',
@@ -47,7 +51,9 @@ class CompanyDetails extends Model
         'model',
         'monthly_surprise',
         'no_of_surprises',
-        
+        // Newly added fields to track changes
+        'order_changes',
+        'date_changed'
     ];
 
     /**
@@ -123,7 +129,7 @@ class CompanyDetails extends Model
     {
         return $this->hasMany(OtherBoxArchive::class);
     }
-    
+
     // This is a test to see if I can pull a list of relationships into 1 statement request
     public function invoicing_data()
     {

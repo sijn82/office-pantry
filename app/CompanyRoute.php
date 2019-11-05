@@ -32,7 +32,7 @@ class CompanyRoute extends Model
           protected $hidden = [
               // 'password', 'remember_token',
           ];
-          
+
           // public function companies()
           // {
           //     return $this->belongsTo(Company::class);

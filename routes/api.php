@@ -40,9 +40,11 @@ Route::group([
     // Fruitbox CRUD
     Route::post('fruitbox/add-new-fruitbox', 'FruitBoxController@store');
     Route::put('fruitbox/{id}', 'FruitBoxController@update');
+    Route::put('fruitbox/destroy/{id}', 'FruitBoxController@destroy');
     // Milkbox CRUD
     Route::post('milkbox/add-new-milkbox', 'MilkBoxController@store');
     Route::put('milkbox/{id}', 'MilkBoxController@update');
+    Route::put('milkbox/destroy/{id}', 'MilkBoxController@destroy');
     // Snackbox CRUD
     Route::post('snackboxes/save', 'SnackBoxController@store');
     Route::post('snackbox/update', 'SnackBoxController@update');

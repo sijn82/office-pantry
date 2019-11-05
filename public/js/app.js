@@ -77222,6 +77222,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -77313,6 +77314,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 return console.log(error);
             });
         },
+        destroyFruitOrder: function destroyFruitOrder(fruitbox) {
+            this.editing = false;
+            axios.put('api/boxes/fruitbox/destroy/' + fruitbox.id, {
+                id: fruitbox.id
+            });
+        },
 
         // getFruitPartners() {
         //     this.$store.commit('getFruitPartners');
@@ -77399,6 +77406,22 @@ var render = function() {
                 on: {
                   click: function($event) {
                     _vm.updateFruitOrder(_vm.fruitbox)
+                  }
+                }
+              },
+              [_vm._v(" Save ")]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.editing
+          ? _c(
+              "b-button",
+              {
+                staticClass: "btn",
+                attrs: { variant: "danger" },
+                on: {
+                  click: function($event) {
+                    _vm.destroyFruitOrder(_vm.fruitbox)
                   }
                 }
               },
@@ -105737,6 +105760,41 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['product', 'route', 'createSnackbox', 'createWholesaleSnackbox', 'createOtherbox', 'createWholesaleOtherbox', 'createDrinkbox', 'type'],
@@ -105748,9 +105806,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             status: ['Active', 'Inactive'],
             vat: ['Yes', 'No'],
             supplier: ['Booker', 'Epicurium', 'Kingdom Coffee', 'Supermarket', 'Craft Drink Co', 'Direct', 'Holley\'s Fine Foods', 'Essential Trading', 'Templeton Drinks', 'Majestic Wines', 'Enotria & Coe', 'LWC', 'Euroffice', 'Other'],
-            sales_nominal: ['4010', '4020', '4040', '4050', '4090'],
+            sales_nominal: ['4010', '4020', '4021', '4022', '4023', '4024', '4040', '4050', '4090'],
             selected_allergens: [],
-            allergens: [{ text: 'Vegetarian', value: 'vegetarian' }, { text: 'Vegan', value: 'vegan' }, { text: 'Contains Nuts', value: 'contains-nuts' }, { text: 'Gluten Free', value: 'gluten-free' }, { text: 'Dairy Free', value: 'dairy-free' }, { text: 'Soy Free', value: 'soy-free' }, { text: 'High Protein', value: 'high-protein' }, { text: 'Sweet', value: 'sweet' }, { text: 'Savoury', value: 'savory' }, { text: 'Eco-friendly Packaging', value: 'eco-friendly-packaging' }]
+            allergens: [{ text: 'Celery', value: 'celery' }, { text: 'Gluten', value: 'gluten' }, { text: 'Crustaceans', value: 'crustacians' }, { text: 'Eggs', value: 'eggs' }, { text: 'Fish', value: 'fish' }, { text: 'Lupin', value: 'lupin' }, { text: 'Milk', value: 'milk' }, { text: 'Molluscs', value: 'molluscs' }, { text: 'Mustard', value: 'mustard' }, { text: 'Tree Nuts', value: 'tree-nuts' }, { text: 'Peanuts', value: 'peanuts' }, { text: 'Sesame', value: 'sesame' }, { text: 'Soya', value: 'soya' }, { text: 'Sulphites', value: 'sulphites' }],
+            dietry_requirements: [{ text: 'Vegetarian', value: 'vegetarian' }, { text: 'Vegan', value: 'vegan' }, { text: 'High Protein', value: 'high-protein' }, { text: 'Sweet', value: 'sweet' }, { text: 'Savoury', value: 'savory' }, { text: 'Low Salt', value: 'low-salt' }, { text: 'Eco-friendly Packaging', value: 'eco-friendly-packaging' }]
         };
     },
 
@@ -105767,6 +105826,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         currently_selected_allergens: function currently_selected_allergens(allergen_info) {
             return this.selected_allergens = this.product.allergen_info;
+        },
+        currently_selected_dietry_requirements: function currently_selected_dietry_requirements(dietry_requirements) {
+            return this.selected_dietry_requirements = this.product.dietry_requirements;
         }
 
     },
@@ -105823,6 +105885,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 profit_margin: product.profit_margin,
                 stock_level: product.stock_level,
                 selected_allergens: this.selected_allergens,
+                selected_dietry_requirements: this.selected_dietry_requirements,
                 shortest_stock_date: product.shortest_stock_date
 
             }).then(function (response) {
@@ -106743,6 +106806,116 @@ var render = function() {
                   ])
                 ],
                 1
+              ),
+              _vm._v(" "),
+              _c(
+                "b-row",
+                [
+                  _c("b-col", [
+                    _c("label", [_c("b", [_vm._v(" Dietry Requirements ")])]),
+                    _vm._v(" "),
+                    _vm.editing
+                      ? _c(
+                          "div",
+                          [
+                            _c(
+                              "b-form-group",
+                              _vm._l(_vm.dietry_requirements, function(
+                                dietry_requirement
+                              ) {
+                                return _c(
+                                  "b-form-checkbox",
+                                  {
+                                    key: dietry_requirement.value,
+                                    attrs: {
+                                      inline: "",
+                                      value: dietry_requirement.value
+                                    },
+                                    model: {
+                                      value: _vm.selected_dietry_requirements,
+                                      callback: function($$v) {
+                                        _vm.selected_dietry_requirements = $$v
+                                      },
+                                      expression: "selected_dietry_requirements"
+                                    }
+                                  },
+                                  [
+                                    _c("b", [
+                                      _vm._v(
+                                        " " +
+                                          _vm._s(dietry_requirement.text) +
+                                          " "
+                                      )
+                                    ])
+                                  ]
+                                )
+                              })
+                            )
+                          ],
+                          1
+                        )
+                      : _c(
+                          "div",
+                          [
+                            _c(
+                              "b-form-group",
+                              _vm._l(_vm.product.dietry_requirements, function(
+                                dietry_requirement
+                              ) {
+                                return _c(
+                                  "b-form-checkbox",
+                                  {
+                                    key: dietry_requirement,
+                                    attrs: {
+                                      inline: "",
+                                      value: dietry_requirement
+                                    },
+                                    model: {
+                                      value: _vm.product.dietry_requirements,
+                                      callback: function($$v) {
+                                        _vm.$set(
+                                          _vm.product,
+                                          "dietry_requirements",
+                                          $$v
+                                        )
+                                      },
+                                      expression: "product.dietry_requirements"
+                                    }
+                                  },
+                                  [
+                                    _c("b", [
+                                      _vm._v(
+                                        " " + _vm._s(dietry_requirement) + " "
+                                      )
+                                    ])
+                                  ]
+                                )
+                              })
+                            )
+                          ],
+                          1
+                        )
+                  ])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "b-row",
+                [
+                  _c("b-col", [
+                    _c("p", { attrs: { hidden: "" } }, [
+                      _c("b", [
+                        _vm._v(
+                          " " +
+                            _vm._s(_vm.currently_selected_dietry_requirements) +
+                            " "
+                        )
+                      ])
+                    ])
+                  ])
+                ],
+                1
               )
             ],
             1
@@ -107460,6 +107633,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -107482,12 +107664,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 sales_nominal: null,
                 profit_margin: '',
                 stock_level: 0,
-                selected_allergens: []
+                selected_allergens: [],
+                selected_dietry_requirements: []
             },
             vat: ['Yes', 'No'],
-            sales_nominal: ['4010', '4020', '4040', '4050', '4090'],
+            sales_nominal: ['4010', '4020', '4021', '4022', '4023', '4024', '4040', '4050', '4090'],
             supplier: ['Booker', 'Epicurium', 'Kingdom Coffee', 'Supermarket', 'Craft Drink Co', 'Direct', 'Holley\'s Fine Foods', 'Essential Trading', 'Templeton Drinks', 'Majestic Wines', 'Enotria & Coe', 'LWC', 'Euroffice', 'Other'],
-            allergens: [{ text: 'Vegetarian', value: 'vegetarian' }, { text: 'Vegan', value: 'vegan' }, { text: 'Contains Nuts', value: 'contains-nuts' }, { text: 'Gluten Free', value: 'gluten-free' }, { text: 'Dairy Free', value: 'dairy-free' }, { text: 'Soy Free', value: 'soy-free' }, { text: 'High Protein', value: 'high-protein' }, { text: 'Sweet', value: 'sweet' }, { text: 'Savoury', value: 'savory' }, { text: 'Eco-friendly Packaging', value: 'eco-friendly-packaging' }]
+            allergens: [{ text: 'Celery', value: 'celery' }, { text: 'Gluten', value: 'gluten' }, { text: 'Crustaceans', value: 'crustacians' }, { text: 'Eggs', value: 'eggs' }, { text: 'Fish', value: 'fish' }, { text: 'Lupin', value: 'lupin' }, { text: 'Milk', value: 'milk' }, { text: 'Molluscs', value: 'molluscs' }, { text: 'Mustard', value: 'mustard' }, { text: 'Tree Nuts', value: 'tree-nuts' }, { text: 'Peanuts', value: 'peanuts' }, { text: 'Sesame', value: 'sesame' }, { text: 'Soya', value: 'soya' }, { text: 'Sulphites', value: 'sulphites' }],
+            dietry_requirements: [{ text: 'Vegetarian', value: 'vegetarian' }, { text: 'Vegan', value: 'vegan' }, { text: 'High Protein', value: 'high-protein' }, { text: 'Sweet', value: 'sweet' }, { text: 'Savoury', value: 'savory' }, { text: 'Low Salt', value: 'low-salt' }, { text: 'Eco-friendly Packaging', value: 'eco-friendly-packaging' }]
         };
     },
 
@@ -108022,6 +108206,54 @@ var render = function() {
                               }
                             },
                             [_vm._v(" " + _vm._s(allergen.text) + " ")]
+                          )
+                        })
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "b-row",
+                [
+                  _c(
+                    "b-col",
+                    [
+                      _c("label", [_c("b", [_vm._v(" Dietry Requirements ")])]),
+                      _vm._v(" "),
+                      _c(
+                        "b-form-group",
+                        _vm._l(_vm.dietry_requirements, function(
+                          dietry_requirement
+                        ) {
+                          return _c(
+                            "b-form-checkbox",
+                            {
+                              key: dietry_requirement.value,
+                              attrs: {
+                                inline: "",
+                                value: dietry_requirement.value
+                              },
+                              model: {
+                                value: _vm.form.selected_dietry_requirements,
+                                callback: function($$v) {
+                                  _vm.$set(
+                                    _vm.form,
+                                    "selected_dietry_requirements",
+                                    $$v
+                                  )
+                                },
+                                expression: "form.selected_dietry_requirements"
+                              }
+                            },
+                            [
+                              _vm._v(
+                                " " + _vm._s(dietry_requirement.text) + " "
+                              )
+                            ]
                           )
                         })
                       )

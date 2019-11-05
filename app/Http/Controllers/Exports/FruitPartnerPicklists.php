@@ -26,6 +26,7 @@ use App\FruitBox;
 use App\MilkBox;
 use App\CompanyDetails;
 use Illuminate\Support\Facades\Log;
+use Carbon\CarbonImmutable;
 
 class FruitPartnerPicklists implements
 WithMultipleSheets
@@ -38,6 +39,17 @@ WithMultipleSheets
 
     public function sheets(): array
     {
+        //----- Combined Details Tab -----//
+
+        if (!empty($this->fruitboxes) || !empty($this->milkboxes)) {
+            $sheets[] = new FruitPartnerCombinedDetails($this->fruitboxes, $this->milkboxes);
+        } else {
+            $sheets[] = 'Nothing to deliver!';
+        }
+
+        //----- End of Combined Details Tab -----//
+
+        //----- Fruitbox Picklists Tab -----//
 
         if (!empty($this->fruitboxes)) {
             // $this->fruitboxes looks like - [ Array Fruit Partner { Object Collection [ Fruitboxes { Fruitbox Attributes }]}] -
@@ -47,28 +59,23 @@ WithMultipleSheets
             // Just using this foreach to move into the fruitbox data, rather than the outer array, so I can group the fruitboxes by day.
             foreach ($this->fruitboxes as $fruitboxes) {
                 // This is fine at sorting by day, however we need to order the groups by mon - fri, not a - z (fri - wed) - why isn't this a built in function?!
-                // $byDay = $fruitbox->groupBy('delivery_day');
 
                 $monToFri = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
                 $ordersByMonToFri = $fruitboxes->sortBy( function ($fruitboxes) use ($monToFri) {
                     return array_search($fruitboxes->delivery_day, $monToFri);
                 });
-            //    dd($ordersByMonToFri);
             }
 
             $sheets[] = new FruitPartnerFruitOrders($ordersByMonToFri);
-
-            // foreach ($byDay as $key => $day) {
-            //     $sheets[] = new FruitPartnerFruitOrders($key, $day);
-            // }
-            // dd($byDay);
 
         } else {
             $sheets[] = 'No fruit for this week.';
         }
 
-        //----- Milk is suffieciantly handled by the combined class (of fruitbox total , milk breakdown and delivery details) -----//
+        //----- End of Fruitbox Picklists Tab -----//
+
+        //----- Milk is sufficiently handled by the combined class (of fruitbox total , milk breakdown and delivery details) -----//
         //----- So we're going to scrap it for now -----//
 
         // if (!empty($this->milkboxes)) {
@@ -86,16 +93,12 @@ WithMultipleSheets
 
         //----- End of milk logic and call to FruitPartnerMilkOrders -----//
 
-        if (!empty($this->fruitboxes) || !empty($this->milkboxes)) {
-            $sheets[] = new FruitPartnerCombinedDetails($this->fruitboxes, $this->milkboxes);
-        } else {
-            $sheets[] = 'Nothing to deliver!';
-        }
-        // dd($sheets);
+        // Don't forget to return $sheets! ... again. 
         return $sheets;
-    }
 
-}
+    } // End of public function sheets()
+
+} // End of FruitPartnerPicklists class
 
 class FruitPartnerFruitOrders implements
 FromView,
@@ -137,6 +140,7 @@ WithEvents
         $grapefruits_running_total = 0;
         $avocados_running_total = 0;
         $root_ginger_running_total = 0;
+        $order_changes = false;
 
          // this is somewhat silly, I injected the fruitpartner's name as a key earlier, now I'm essentially just stripping it out.
          // It does mean I have it accessible for display, rather than using the id but once I know exactly what I'm doing with it, I may revise this.
@@ -152,6 +156,10 @@ WithEvents
                  // $company->invoice_name
                  // Route name could suffer the same fate, however I think in practice this will be more flexible as it's not used by xero, so could be more easily fudged.
                  $fruitboxes->company_name = $company->route_name;
+
+                 //----- This is probably the best place to pull in the change information if I'm keeping it in it's own table -----//
+                 //----- However I think it will be quicker just to add two new columns to the boxes, then the information is already stored where I need it -----//
+
             // }
 
             $deliciously_red_apples_running_total += ($fruitboxes->deliciously_red_apples * $fruitboxes->fruitbox_total);
@@ -178,33 +186,18 @@ WithEvents
             $avocados_running_total += ($fruitboxes->avocados * $fruitboxes->fruitbox_total);
             $root_ginger_running_total += ($fruitboxes->root_ginger * $fruitboxes->fruitbox_total);
 
+            $now = CarbonImmutable::now();
+            $last_week = $now->subWeek();
 
+            // Instead of just checking a week back for all order changes, for some we can tap into their frequency.
+            // However if orders are only updated in the week building up to their delivery,
+            // this will just add unnecessary complexity to the check.
+            // -- For now, i'm going to leave it and see what happens in use.
+
+            if ($fruitboxes->date_changed > $last_week ) {
+                $order_changes = true;
+            }
          }
-         // dump($fruitboxes);
-
-         // Generate totals prior to going into template, which allows us to omit columns that would otherwise total 0.
-
-         // Edit: 25/10/19 Crap, this doesn't actually create accurate totals! It totals the amount of fruit if the companies only recieved 1 box.  Oops, I need a new solution.
-         // $deliciously_red_apples_total = $this->fruitpartner_fruitboxes->pluck('deliciously_red_apples')->sum();
-         // $pink_lady_apples_total = $this->fruitpartner_fruitboxes->pluck('pink_lady_apples')->sum();
-         // $red_apples_total = $this->fruitpartner_fruitboxes->pluck('red_apples')->sum();
-         // $green_apples_total = $this->fruitpartner_fruitboxes->pluck('green_apples')->sum();
-         // $satsumas_total = $this->fruitpartner_fruitboxes->pluck('satsumas')->sum();
-         // $pears_total = $this->fruitpartner_fruitboxes->pluck('pears')->sum();
-         // $bananas_total = $this->fruitpartner_fruitboxes->pluck('bananas')->sum();
-         // $nectarines_total = $this->fruitpartner_fruitboxes->pluck('nectarines')->sum();
-         // $limes_total = $this->fruitpartner_fruitboxes->pluck('limes')->sum();
-         // $lemons_total = $this->fruitpartner_fruitboxes->pluck('lemons')->sum();
-         // $grapes_total = $this->fruitpartner_fruitboxes->pluck('grapes')->sum();
-         // $seasonal_berries_total = $this->fruitpartner_fruitboxes->pluck('seasonal_berries')->sum();
-         // $oranges_total = $this->fruitpartner_fruitboxes->pluck('oranges')->sum();
-         // $cucumbers_total = $this->fruitpartner_fruitboxes->pluck('cucumbers')->sum();
-         // $mint_total = $this->fruitpartner_fruitboxes->pluck('mint')->sum();
-         // $organic_lemons_total = $this->fruitpartner_fruitboxes->pluck('organic_lemons')->sum();
-         // $kiwis_total = $this->fruitpartner_fruitboxes->pluck('kiwis')->sum();
-         // $grapefruits_total = $this->fruitpartner_fruitboxes->pluck('grapefruits')->sum();
-         // $avocados_total = $this->fruitpartner_fruitboxes->pluck('avocados')->sum();
-         // $root_ginger_total = $this->fruitpartner_fruitboxes->pluck('root_ginger')->sum();
 
          // See above and below for the new solution - it appears to work fine now. Fingers crossed.
          $deliciously_red_apples_total = $deliciously_red_apples_running_total;
@@ -250,6 +243,7 @@ WithEvents
             'grapefruits_total' => $grapefruits_total,
             'avocados_total' => $avocados_total,
             'root_ginger_total' => $root_ginger_total,
+            'order_changes' => $order_changes, // is this just to check if we need the 'Updated This Week?' column? Need to check. <-- Yep, it is. Good!
         ]);
     }
 
@@ -285,7 +279,6 @@ WithEvents
                 // dd($rowWidth . $highestRow);
                 $event->sheet->getDelegate()->getStyle('A' . $highestRow . ':' . $rowWidth . $highestRow)->applyFromArray($totals_border);
 
-                // Not sure why the columns array goes white from 'V' onwards, it doesn't seem to affect the excel results.
                 $columns = [
                     'A', 'B', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
                      'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'AA'];
@@ -302,6 +295,26 @@ WithEvents
                     $previousRow = ($row->getRowIndex() - 1);
                     //
                     $event->sheet->getStyle('C' . $selectedRow . ':D' . $selectedRow)->getAlignment()->setWrapText(true);
+
+                    //----- If 'Updated' column exists and this row has undated written in the row, make the company name yellow. -----//
+
+                        if ($event->sheet->getCell($rowWidth . $selectedRow) == 'Yes') {
+
+                            $companyName = 'A' . $selectedRow;
+
+                            $event->sheet->styleCells(
+                                $companyName,
+                                [
+                                    'fill' =>   [
+                                                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                                                    'color' => [
+                                                    'argb' => 'ffff66'
+                                                    ]
+                                                ]
+                                ]);
+                        }
+
+                    //----- End of if update column exists -----//
 
                     //----- Potential to apply a border to seperate the orders by week day -----//
 
@@ -570,6 +583,12 @@ WithEvents
         // Create a new object which will get populated one way or another depending on whether it contains fruit/milk or both.
         // $delivery_entry = new \stdClass;
 
+        // We only really need to set this once, so let's keep it out of the loop.
+        $now = CarbonImmutable::now();
+        $last_week = $now->subWeek();
+        $week_start = WeekStart::first();
+        // Hmmmn, do I want to do a group check, sending '$order_changes = true' if any are updated, or check them on an individual basis in the template?
+        $order_changes = false;
 
         if (!empty($this->fruitboxes)) {
             foreach ($this->fruitboxes as $key => $fruitboxes) {
@@ -604,11 +623,13 @@ WithEvents
                     //----- Moved logic up to here to handle all fruit & milk and just fruit deliveries -----//
                     $milkboxes = $this->milkboxes[$key];
                     // dump($milkboxes);
-                    $milkboxes ? $additional_milk = $milkboxes->where('company_details_id', $fruitbox->company_details_id)->where('delivery_day', $fruitbox->delivery_day)->first() : $additional_milk = $milkboxes;
+                    $milkboxes ? $additional_milk = $milkboxes->where('next_delivery', $week_start->current)->where('company_details_id', $fruitbox->company_details_id)->where('delivery_day', $fruitbox->delivery_day)->first() : $additional_milk = $milkboxes;
                     // $additional_milk = $milkboxes->where('company_details_id', $fruitbox->company_details_id)->where('delivery_day', $fruitbox->delivery_day)->first();
                     // dd($additional_milk);
 
                     if (!empty($additional_milk)) {
+
+
                         // Then if the check is working properly, we have a corresponding milkbox entry to add to the delivery route.
                         // First let's grab the delivery data pushed into the fruitbox (this could equally be taken from the milkbox data)
                         $delivery_entry->company_details_id = $fruitbox->company_details_id;
@@ -646,6 +667,36 @@ WithEvents
                         $delivery_entry->milk_1l_alt_rice = $additional_milk->milk_1l_alt_rice;
                         $delivery_entry->milk_1l_alt_cashew = $additional_milk->milk_1l_alt_cashew;
                         $delivery_entry->milk_1l_alt_lactose_free_semi = $additional_milk->milk_1l_alt_lactose_free_semi;
+
+                        $delivery_entry->order_changes = false; // <-- Before we check for changes we need to set this in case their aren't any.
+
+                        //----- We need to check for milk and fruit order updates plus company detail changes -----//
+
+                        if ($fruitbox->date_changed > $last_week) {
+                            // dd($fruitbox); //
+                            // Individual check
+                            // $delivery_entry->fruit_changes = true; <-- why over complicate things? Let's leave this for now.
+                            $delivery_entry->order_changes = true;
+                            // General check
+                            $order_changes = true;
+                        }
+
+                        if ($additional_milk->date_changed > $last_week) {
+                            // Individual check
+                            // $delivery_entry->milk_changes = true; <-- why over complicate things? Let's leave this for now.
+                            $delivery_entry->order_changes = true;
+                            // General check
+                            $order_changes = true;
+                        }
+
+                        if ($company_details->date_changed > $last_week) {
+                            // Individual check
+                            // $delivery_details->company_details_changes = true; <-- why over complicate things? Let's leave this for now.
+                            $delivery_entry->order_changes = true;
+                            // General check
+                            $order_changes = true;
+                        }
+
                         // Additonal debugging property.
                         $delivery_entry->status = 'Includes additional milk';
 
@@ -686,6 +737,30 @@ WithEvents
                         $delivery_entry->milk_1l_alt_rice = 0;
                         $delivery_entry->milk_1l_alt_cashew = 0;
                         $delivery_entry->milk_1l_alt_lactose_free_semi = 0;
+
+                        $delivery_entry->order_changes = false; // <-- Before we check for changes we need to set this in case their aren't any.
+
+                        //----- No milk order, still need to check for fruit and company detail changes though -----//
+
+                            if ($fruitbox->date_changed > $last_week) {
+                                // dd($fruitbox);
+                                // Individual check
+                                // $delivery_entry->fruit_changes = true; <-- Ignoring this for now.
+                                $delivery_entry->order_changes = true;
+                                // General check
+                                $order_changes = true;
+                            }
+
+                            if ($company_details->date_changed > $last_week) {
+                                // Individual check
+                                // $delivery_details->company_details_changes = true; <-- Ignoring this for now.
+                                $delivery_entry->order_changes = true;
+                                // General check
+                                $order_changes = true;
+                            }
+
+                        //----- End of No milk order, still need to check for fruit and company detail changes though -----//
+
                         // Additional debugging property
                         $delivery_entry->status = 'No additional milk';
                     }
@@ -700,7 +775,7 @@ WithEvents
             foreach ($this->milkboxes as $key => $milkboxes) {
                 foreach ($milkboxes as $milkbox) {
 
-                    // Ok, so each time we run a new order we need to unset and redefine the variable again or the results all end up lthe same asd the last entry.
+                    // Ok, so each time we run a new order we need to unset and redefine the variable again or the results all end up the same as the last entry.
                     // I stil feel there's a better solution to this but it's fine for now.
 
                     $delivery_entry = new \stdClass;
@@ -765,6 +840,29 @@ WithEvents
                             $delivery_entry->milk_1l_alt_rice = $milkbox->milk_1l_alt_rice;
                             $delivery_entry->milk_1l_alt_cashew = $milkbox->milk_1l_alt_cashew;
                             $delivery_entry->milk_1l_alt_lactose_free_semi = $milkbox->milk_1l_alt_lactose_free_semi;
+
+                            $delivery_entry->order_changes = false; // <-- Before we check for changes we need to set this in case their aren't any.
+
+                            //----- No fruit order, still need to check for milk and company detail changes though -----//
+
+                                if ($milkbox->date_changed > $last_week) {
+                                    // Individual check
+                                    // $delivery_entry->fruit_changes = true; <-- Ignoring this for now.
+                                    $delivery_entry->order_changes = true;
+                                    // General check
+                                    $order_changes = true;
+                                }
+
+                                if ($company_details->date_changed > $last_week) {
+                                    // Individual check
+                                    // $delivery_details->company_details_changes = true; <-- Ignoring this for now.
+                                    $delivery_entry->order_changes = true;
+                                    // General check
+                                    $order_changes = true;
+                                }
+
+                            //----- End of No milk order, still need to check for fruit and company detail changes though -----//
+
                             // Additional debugging property
                             $delivery_entry->status = 'No additional fruit';
 
@@ -847,13 +945,12 @@ WithEvents
          $alt_cashew_total = $flattened_back_to_orders_collection->pluck('milk_1l_alt_cashew')->sum();
          $alt_lactose_free_semi_total = $flattened_back_to_orders_collection->pluck('milk_1l_alt_lactose_free_semi')->sum();
 
-          //dd($orders);
 
-          $monToFri = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+         $monToFri = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
-          $ordersByMonToFri = $flattened_back_to_orders_collection->sortBy( function ($order) use ($monToFri) {
+         $ordersByMonToFri = $flattened_back_to_orders_collection->sortBy( function ($order) use ($monToFri) {
               return array_search($order->delivery_day, $monToFri);
-          });
+         });
 
          // dd($ordersByMonToFri);
 
@@ -881,6 +978,7 @@ WithEvents
             'alt_rice_total' => $alt_rice_total,
             'alt_cashew_total' => $alt_cashew_total,
             'alt_lactose_free_semi_total' => $alt_lactose_free_semi_total,
+            'order_changes' => $order_changes,
         ]);
 
         // dd($company_details);
@@ -933,6 +1031,27 @@ WithEvents
 
                     // dump($selectedRow);
                     // dump($previousRow);
+
+                    //----- If 'Updated' column exists and this row has undated written in the row, make the company name yellow. -----//
+
+                        if ($event->sheet->getCell($rowWidth . $selectedRow) == 'Yes') {
+
+                            $companyName = 'A' . $selectedRow;
+
+                            $event->sheet->styleCells(
+                                $companyName,
+                                [
+                                    'fill' =>   [
+                                                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                                                    'color' => [
+                                                    'argb' => 'ffff66'
+                                                    ]
+                                                ]
+                                ]);
+                        }
+
+                    //----- End of if update column exists -----//
+
                     //----- Potential to apply a border to seperate the orders by week day -----//
 
                         // This might be a good place to check if the value of the current row held in the cell of column 'b',
