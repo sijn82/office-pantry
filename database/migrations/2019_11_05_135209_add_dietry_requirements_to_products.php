@@ -15,7 +15,7 @@ class AddDietryRequirementsToProducts extends Migration
     {
         Schema::table('products', function (Blueprint $table) {
             //
-            $table->string('dietry_requirements');
+            $table->string('dietry_requirements')->nullable();
         });
     }
 
