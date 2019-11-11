@@ -31,6 +31,8 @@ use Carbon\CarbonImmutable;
 class FruitPartnerPicklists implements
 WithMultipleSheets
 {
+    public $timeout = 60;
+
     public function __construct($orders)
     {
         $this->fruitboxes = $orders->fruitboxes;
@@ -93,7 +95,7 @@ WithMultipleSheets
 
         //----- End of milk logic and call to FruitPartnerMilkOrders -----//
 
-        // Don't forget to return $sheets! ... again. 
+        // Don't forget to return $sheets! ... again.
         return $sheets;
 
     } // End of public function sheets()

@@ -17,6 +17,7 @@ use Illuminate\Contracts\Filesystem\Filesystem;
 
 class FruitPartnerController extends Controller
 {
+    public $timeout = 60;
     /**
      * Display a listing of the resource.
      *

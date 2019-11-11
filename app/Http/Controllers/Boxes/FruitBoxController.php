@@ -697,6 +697,6 @@ class FruitBoxController extends Controller
      */
     public function destroy($id)
     {
-        //
+        FruitBox::destroy($id);
     }
 }
