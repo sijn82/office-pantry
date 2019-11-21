@@ -1,19 +1,19 @@
-<template lang="html">
+<template >
     <div id="drinkboxes">
         <h3> Archived Drink Boxes </h3>
-        <!-- v-if="Object.keys(this.archived_drinkboxes).length" --> 
+        <!-- v-if="Object.keys(this.archived_drinkboxes).length" -->
         <!-- This (Object.keys) has been replaced with !Array.isArray to tackle the issue of it returning as an array if empty rather than an object if populated by archived orders -->
         <div v-if="!Array.isArray(this.archived_drinkboxes)">
-            <div v-for="(archived_drinkbox_week, key) in this.archived_drinkboxes"> 
-                
+            <div v-for="(archived_drinkbox_week, key) in this.archived_drinkboxes">
+
                 <h3> {{ key }} </h3>
-                
-                <archived-drinkbox class="drinkbox" 
-                    v-for="(archived_drinkbox, key) in archived_drinkbox_week" 
-                    :key="key" 
-                    :archived_drinkbox="archived_drinkbox" 
-                    :company="this.company" 
-                    @refresh-data="refreshData($event)"> {{ key }} 
+
+                <archived-drinkbox class="drinkbox"
+                    v-for="(archived_drinkbox, key) in archived_drinkbox_week"
+                    :key="key"
+                    :archived_drinkbox="archived_drinkbox"
+                    :company="company" 
+                    @refresh-data="refreshData($event)"> {{ key }}
                 </archived-drinkbox>
 
             </div>

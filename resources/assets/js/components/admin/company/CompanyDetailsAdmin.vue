@@ -1,4 +1,4 @@
-<template lang="html">
+<template >
     <div class="companybox">
         <b-container class="text-align-center margin-top-20">
             <h3> Company Details </h3>

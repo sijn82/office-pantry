@@ -1,4 +1,4 @@
-<template lang="html">
+<template >
     <div>
         <h3> Add New Other Box </h3>
         <div>

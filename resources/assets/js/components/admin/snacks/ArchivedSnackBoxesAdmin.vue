@@ -15,7 +15,7 @@
                         v-for="(archived_snackbox, key) in archived_snackbox_week"
                         :key="key"
                         :archived_snackbox="archived_snackbox"
-                        :company="this.company"
+                        :company="company"
                         @refresh-data="refreshData($event)"> {{ key }}
                     </archived-snackbox>
             </div>

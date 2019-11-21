@@ -1,4 +1,4 @@
-<template lang="html">
+<template >
     <div>
         <div id="edit-save-buttons">
             <h4> {{ archived_drinkbox[0].next_delivery_week }} </h4>

@@ -1,4 +1,4 @@
-<template lang="html">
+<template >
     <div class="invoice-options">
         <b-row class="margin-top-20 border-top">
             <h4 class="margin-top-20 margin-left-right-auto"> Invoice Options </h4>

@@ -1,4 +1,4 @@
-<template lang="html">
+<template >
     <div class="margin-30">
         <h3> Export Stuff </h3>
         <b-row class="padding-top-20">

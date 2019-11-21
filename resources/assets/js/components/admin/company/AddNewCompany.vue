@@ -1,4 +1,4 @@
-<template lang="html">
+<template >
     <div>
         <h3> Add New Company </h3>
         <div class="form-margin-40">

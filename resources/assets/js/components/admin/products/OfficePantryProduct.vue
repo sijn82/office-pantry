@@ -1,4 +1,4 @@
-<template lang="html">
+<template >
     <div class="office-pantry-product">
         <b-container>
             <b-row class="margin-height-10">

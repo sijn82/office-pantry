@@ -1,4 +1,4 @@
-<template lang="html">
+<template >
     <div class="">
         <!-- This is the searchbar to try and find a matching invoice if one exists in the db. -->
         <input v-model.lazy="invoice_name_lookup" type="text" name="" value="Lookup Invoice Name">

@@ -24,19 +24,20 @@
                 </b-form-group>
                     <p> Selected Delivery Day(s): {{ form.delivery_day }} </p> <!-- According to the docs this must be an array reference, however it seems to me this is happening anyway?  Interesting... -->
                     <!-- Company Select -->
-                <b-form-group id="milkbox-company-select" label="Select Company For Milkbox: ">
+                <!-- <b-form-group id="milkbox-company-select" label="Select Company For Milkbox: ">
                     <b-form-select v-model="form.company_details_id" v-if="user_associated_companies != undefined" :options="user_associated_companies" required>
                         <template slot="first">
-                            <option :value="null" disabled>-- Please select an option --</option>
+                            <option :value="null" disabled> Please select an option </option>
                         </template>
                     </b-form-select>
                     <b-form-select v-model="form.company_details_id" :options="company_selected" v-else required>
                         <template slot="first">
-                            <option :value="null" disabled>-- Please select an option --</option>
+                            <option :value="null" disabled> Please select an option </option>
                         </template>
                     </b-form-select>
-                    <p style="padding-top:10px;"> Selected Company: {{ form.company_details_id }} </p>
-                </b-form-group>
+
+                </b-form-group> -->
+                <p style="padding-top:10px;"> Selected Company: <b class="selected-company"> {{ form.company_details_id }} </b> </p>
                 <!-- Week Start of First Delivery -->
                 <b-form-group label="Week Start For First Delivery:" label-for="milkbox-first-delivery" description="Please enter the week start of the first delivery">
                     <b-form-input id="milkbox-first-delivery" type="date" v-model="form.first_delivery" placeholder="Enter milkbox first delivery week start" required></b-form-input>
@@ -201,6 +202,9 @@
         margin-top: 16px;
         font-weight: bold;
     }
+    .selected-company {
+        font-size: 2.2em;
+    }
     #milkbox-breakdown label {
         padding-top: 10px;
     }
@@ -226,8 +230,8 @@ export default {
             return {
                 form: {
                     is_active: 'Active',
-                    fruit_partner_id: 1,
-                    company_details_id: null, // If this is created by Frosh, how are they going to select the company to attach the order to?  A typed filter of a long list may be the best way.
+                    fruit_partner_id: this.company.supplier_id,
+                    company_details_id: this.company.route_name, // If this is created by Frosh, how are they going to select the company to attach the order to?  A typed filter of a long list may be the best way.
                     delivery_day: '',  // According to the docs this must be an array reference, however it seems to me this is happening anyway?  Interesting...
                     type: null, // Whilst not currently in use, this will determine between standard, berries and tailored, with tailored being the only one which can be edited (probably).
                     first_delivery: null, // This will be necessary to get the first delivery scheduled and for the frequency field to begin incrementing.

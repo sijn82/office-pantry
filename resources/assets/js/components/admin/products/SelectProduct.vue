@@ -1,19 +1,20 @@
 <template>
     <div class="col-sm-12">
         <b-input-group id="product-searchbar-select" class="col-sm-12" size="sm" append=" Product Search">
-            <b-form-input type="text" v-model.lazy="keywords"></b-form-input>
+            <b-form-input type="text" v-model.lazy="keywords_brand"></b-form-input>
+            <!-- <b-form-input type="text" v-model.lazy="keywords_flavour"></b-form-input> -->
         </b-input-group>
         <b-list-group v-if="results.length > 0">
             <div class="col-sm-12" v-for="result in results">
-                <b-list-group-item :variant="stock_level(result.stock_level)" class="d-flex justify-content-between align-items-center" button :key="result.id" @click="productData(result.id)"> {{ result.name }}
-                    <b-badge variant="primary" pill> £{{ result.unit_price }} </b-badge>
+        <b-list-group-item :variant="stock_level(result.stock_level)" class="d-flex justify-content-between align-items-center" button :key="result.id" @click="productData(result.id)"> {{ result.brand }} - {{ result.flavour }}
+                    <b-badge variant="primary" pill> £{{ result.selling_unit_price }} </b-badge>
                 </b-list-group-item>
 
             </div>
         </b-list-group>
 
         <!-- Selected Product: {{ this.product_data.product.name }}  I'm pretty sure this isn't used for anything but commenting out for now just in case.   -->
-        <!-- Selected Product: {{ this.$store.state.selectedProduct }} This isn't necessary here outside of debugging. -->
+        <!-- Selected Product: {{ this.$store.state.selectedProduct }}  This isn't necessary here outside of debugging. -->
 
     </div>
 </template>
@@ -27,12 +28,14 @@ export default {
     props: [],
     data() {
         return {
-            keywords: null,
+            keywords_brand: null,
+            keywords_flavour: null,
             selected: '',
             selected_results: null,
             product_data: {
                 product: {
-                    name: '',
+                    brand: '',
+                    flavour: '',
                 }
             },
             results: []
@@ -40,15 +43,18 @@ export default {
     },
 
     watch: {
-        keywords(after, before) {
+        keywords_brand(after, before) {
             this.fetch();
         },
+        // keywords_flavour(after, before) {
+        //     this.fetch();
+        // },
 
     },
-    
+
     computed: {
         // stock_level() {
-        // 
+        //
         // //    let apply_variant = function (stock_count) {
         //         if (stock_count < 20) {
         //             return 'Warning'
@@ -56,10 +62,10 @@ export default {
         //             return 'Primary'
         //         }
         //     }
-        // 
+        //
         // //    $count = apply_variant(this.result.stock_level)
         //     return $count
-        // 
+        //
         // }
     },
 
@@ -74,10 +80,12 @@ export default {
                     return "primary"
                 }
         },
-        
+
         fetch() {
-            axios.get('/api/office-pantry/products/search', { params: { keywords: this.keywords }})
-                .then(response => this.results = response.data)
+            axios.get('/api/office-pantry/products/search', { params: {
+                keywords_brand: this.keywords_brand,
+                // keywords_flavour: this.keywords_flavour
+            }}).then(response => this.results = response.data)
                 .catch(error => {});
         },
         // officeID(selected) {
@@ -92,7 +100,7 @@ export default {
                     this.product = response.data.product;
                     this.$store.commit('selectedProduct', this.product)
                 }).catch(error => {});
-                // 
+                //
         },
 
     },

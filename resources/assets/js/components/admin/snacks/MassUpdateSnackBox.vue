@@ -1,4 +1,4 @@
-<template lang="html">
+<template >
     <div>
         <div class="snackbox-recommended-procedure">
             <h1> Snackbox Process </h1>

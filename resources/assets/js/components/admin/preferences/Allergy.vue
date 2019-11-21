@@ -11,7 +11,7 @@
 
 <style lang="scss">
     .allergy-item {
-        
+
         p {
             font-weight: 300;
             display: inline-block;
@@ -21,7 +21,7 @@
             display: inline-block;
             float: right;
         }
-        
+
     }
 </style>
 
@@ -30,14 +30,14 @@
         props: ['name', 'id', 'column'],
         data() {
             return {
-            
+
             }
         },
         methods: {
             removeAllergy(id, column) {
                 this.$store.commit('removePreference', { id, column });
-                
-                axios.put('api/allergies/' + id, { 
+
+                axios.put('api/company/allergies/' + id, { 
                     id: id,
                 }).then (response => {
                     this.$emit('refresh-data');

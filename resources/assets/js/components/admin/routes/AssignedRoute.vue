@@ -1,4 +1,4 @@
-<template lang="html">
+<template >
     <div>
         <b-row class="padding-width-40 margin-height-5">
             <b-col class="font-weight-300"> <div v-if="editing"> <b-form-input v-model="assigned_route.name" type="text"></b-form-input> </div><div v-else> {{ assigned_route.name }} </div> </b-col>

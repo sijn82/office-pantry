@@ -16,9 +16,9 @@ use Illuminate\Http\Request;
 // Not sure if all or none of the routes listed in this page should be included with '::middleware('auth:api')'
 // but when I'm done moving the routes it'll be a breeze to do so.
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 //---- Moving routes into sensible groups for namespacing and authentication ease (hopefully). -----//
 
@@ -142,7 +142,7 @@ Route::group([
 
     Route::post('preferences/add-new-preference', 'PreferencesController@store');
     Route::post('preferences/selected', 'PreferencesController@show');
-    Route::post('preferences/remove', 'PreferencesController@remove');
+    Route::put('preferences/remove/{id}', 'PreferencesController@remove');
     // I'm pretty sure this was just used to test the random selection of a new product id,
     // but I'll double check that later, for now it's fine to keep.
     Route::get('random', 'PreferencesController@random');
@@ -169,6 +169,8 @@ Route::group([
     Route::put('fruit-partners/destroy/{id}', 'FruitPartnerController@destroy');
     // This might get moved to an import/export group later on.
     Route::get('export-fruitpartner-deliveries', 'FruitPartnerController@groupOrdersByFruitPartner');
+    Route::get('create-fruitpartner-export-jobs', 'FruitPartnerController@createJobsForEachFruitPartner');
+
     // Office Pantry Products
     Route::put('office-pantry-products/update/{id}', 'OfficePantryProductsController@update');
     Route::get('office-pantry-products/show', 'OfficePantryProductsController@show'); // Might do this differently tomorrow morning.

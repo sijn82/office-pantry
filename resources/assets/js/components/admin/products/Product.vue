@@ -228,26 +228,26 @@
                 </b-row>
                 <b-row>
                     <b-col>
-                        <label><b> Dietry Requirements </b></label>
+                        <label><b> Dietary Requirements </b></label>
                         <div v-if="editing">
                             <b-form-group>
                                 <b-form-checkbox    inline
-                                                    v-for="dietry_requirement in dietry_requirements"
-                                                    v-model="selected_dietry_requirements"
-                                                    :key="dietry_requirement.value"
-                                                    :value="dietry_requirement.value">
-                                                    <b> {{ dietry_requirement.text }} </b>
+                                                    v-for="dietary_requirement in dietary_requirements"
+                                                    v-model="selected_dietary_requirements"
+                                                    :key="dietary_requirement.value"
+                                                    :value="dietary_requirement.value">
+                                                    <b> {{ dietary_requirement.text }} </b>
                                 </b-form-checkbox>
                             </b-form-group>
                         </div>
                         <div v-else>
                             <b-form-group>
                                 <b-form-checkbox    inline
-                                                    v-for="dietry_requirement in product.dietry_requirements"
-                                                    v-model="product.dietry_requirements"
-                                                    :key="dietry_requirement"
-                                                    :value="dietry_requirement">
-                                                    <b> {{ dietry_requirement }} </b>
+                                                    v-for="dietary_requirement in product.dietary_requirements"
+                                                    v-model="product.dietary_requirements"
+                                                    :key="dietary_requirement"
+                                                    :value="dietary_requirement">
+                                                    <b> {{ dietary_requirement }} </b>
                                 </b-form-checkbox>
                             </b-form-group>
                         </div>
@@ -258,7 +258,7 @@
                         <p><b> {{ selected_allergens }} </b></p>
                     </b-col> -->
                     <b-col>
-                        <p hidden><b> {{ currently_selected_dietry_requirements }} </b></p>
+                        <p hidden><b> {{ currently_selected_dietary_requirements }} </b></p>
                     </b-col>
                 </b-row>
             </div>
@@ -313,6 +313,7 @@ export default {
             ],
             sales_nominal: ['4010', '4020', '4021', '4022', '4023', '4024', '4040', '4050', '4090'],
             selected_allergens: [],
+            selected_dietary_requirements: [],
             allergens: [
 
                 {text: 'Celery', value: 'celery'},
@@ -330,7 +331,7 @@ export default {
                 {text: 'Soya', value: 'soya'},
                 {text: 'Sulphites', value: 'sulphites'},
             ],
-            dietry_requirements: [
+            dietary_requirements: [
 
                 {text: 'Vegetarian', value: 'vegetarian'},
                 {text: 'Vegan', value: 'vegan'},
@@ -356,10 +357,13 @@ export default {
         currently_selected_allergens: function (allergen_info) {
             return this.selected_allergens = this.product.allergen_info
         },
-        currently_selected_dietry_requirements: function (dietry_requirements) {
-            return this.selected_dietry_requirements = this.product.dietry_requirements
-        }
-
+        currently_selected_dietary_requirements: function (dietary_requirements) {
+            return this.selected_dietary_requirements = this.product.dietary_requirements
+        },
+        // value_into_text: function (dietary_requirement) {
+        //     console.log(dietary_requirement);
+        //     return dietary_requirement.replace(/-/, ' ').toUpperCase();
+        // },
     },
 
     methods: {
@@ -417,7 +421,7 @@ export default {
                 profit_margin: product.profit_margin,
                 stock_level: product.stock_level,
                 selected_allergens: this.selected_allergens,
-                selected_dietry_requirements :this.selected_dietry_requirements,
+                selected_dietary_requirements :this.selected_dietary_requirements,
                 shortest_stock_date: product.shortest_stock_date,
 
             }).then (response => {

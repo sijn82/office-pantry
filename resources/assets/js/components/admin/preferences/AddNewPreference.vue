@@ -26,9 +26,10 @@
                         <b-col id="product-select">
                             <label> Select Product </label>
                             <select-product></select-product>
-                            <p> Selected Product: {{ $store.state.selectedProduct.name }} </p>
                         </b-col>
                         <b-col id="add-to-buttons">
+                            <p v-if="$store.state.selectedProduct.brand"> Selected Product: <b class="selected-product"> {{ $store.state.selectedProduct.brand }} - {{ $store.state.selectedProduct.flavour }} </b></p>
+                            <p v-else> Selected Product: <b class="selected-product"> None Selected </b></p>
                             <b-button @click="addToPreferences('likes')"> Add To Likes </b-button>
                             <b-button @click="addToPreferences('dislikes')"> Add To Dislikes </b-button>
                             <div class="essentials">
@@ -38,7 +39,7 @@
                         </b-col>
                     </b-row>
                     <b-row class="additional-padding">
-                        <b-col>
+                        <!-- <b-col>
                             <label> Select Allergy </label>
                             <b-form-select v-model="allergy" :options="this.$store.state.allergies_list" type="text" placeholder="Select Allergy">
                                 <template slot="first">
@@ -51,9 +52,25 @@
                             <label> Add New Allergy </label>
                             <b-form-input type="text" v-model="new_allergy" placeholder="Add a new allergy to list of options">  </b-form-input>
                             <b-button @click="addNewAllergy(new_allergy)"> Add </b-button>
-                        </b-col>
+                        </b-col> -->
+
                         <b-col>
-                            <label> Additional Notes </label>
+                            <label><h4> Allergens </h4></label>
+                            <b-form-group>
+                                <b-form-checkbox v-for="allergen in allergens" v-model="selected_allergens" :key="allergen.value" :value="allergen.value"> {{ allergen.text }} </b-form-checkbox>
+                            </b-form-group>
+                            <b-button @click="confirmAllergens(selected_allergens)"> Save </b-button>
+                        </b-col>
+
+                        <b-col>
+                            <label><h4> Dietary Requirements </h4></label>
+                            <b-form-group>
+                                <b-form-checkbox v-for="dietary_requirement in dietary_requirements" v-model="selected_dietary_requirements" :key="dietary_requirement.value" :value="dietary_requirement.value"> {{ dietary_requirement.text }} </b-form-checkbox>
+                            </b-form-group>
+                        </b-col>
+
+                        <b-col>
+                            <label><h4> Additional Notes </h4></label>
                             <b-form-textarea v-model="additional_info" :rows="3" :max-rows="6" placeholder="Enter unrealistic demands here..."></b-form-textarea>
                             <b-button @click="confirmAdditionalInfo(additional_info)"> Save </b-button>
                         </b-col>
@@ -70,6 +87,14 @@
 </template>
 
 <style lang="scss">
+    #new-preference-form::after {
+        content: ""; /* This is necessary for the pseudo element to work. */
+        display: block; /* This will put the pseudo element on its own line. */
+        margin: 0 auto; /* This will center the border. */
+        width: 70%; /* Change this to whatever width you want. */
+        padding-bottom: 20px; /* This creates some space between the element and the border. */
+        border-top: 1px solid #636b6f; /* This creates the border. Replace black with whatever color you want. */
+    }
     #add-to-buttons {
         button {
             margin: 10px 0;
@@ -77,6 +102,9 @@
         .essentials input {
             display: inline-block;
             max-width: 100px;
+        }
+        .selected-product {
+            font-size: 1.5em;
         }
     }
     .additional-padding {
@@ -105,11 +133,40 @@ export default {
             preferences: {},
             show_preferences: false,
             // selected_company: 'none selected',
+            selected_allergens: [],
+            selected_dietary_requirements: [],
+            allergens: [
+
+                {text: 'Celery', value: 'celery'},
+                {text: 'Gluten', value: 'gluten'},
+                {text: 'Crustaceans', value: 'crustacians'},
+                {text: 'Eggs', value: 'eggs'},
+                {text: 'Fish', value: 'fish'},
+                {text: 'Lupin', value: 'lupin'},
+                {text: 'Milk', value: 'milk'},
+                {text: 'Molluscs', value: 'molluscs'},
+                {text: 'Mustard', value: 'mustard'},
+                {text: 'Tree Nuts', value: 'tree-nuts'},
+                {text: 'Peanuts', value:'peanuts'},
+                {text: 'Sesame', value:'sesame'},
+                {text: 'Soya', value: 'soya'},
+                {text: 'Sulphites', value: 'sulphites'},
+            ],
+            dietary_requirements: [
+
+                {text: 'Vegetarian', value: 'vegetarian'},
+                {text: 'Vegan', value: 'vegan'},
+                {text: 'High Protein', value: 'high-protein'},
+                {text: 'Sweet', value: 'sweet'},
+                {text: 'Savoury', value: 'savory'},
+                {text: 'Low Salt', value: 'low-salt'},
+                {text: 'Eco-friendly Packaging', value: 'eco-friendly-packaging'},
+            ],
         }
     },
 
     computed: {
-        
+
         // selected_company: function (company) {
         //     console.log('yah, we got this ' . this.company);
         // }
@@ -125,38 +182,49 @@ export default {
     methods: {
         // I need to do something about what the is held for backend purposes and what the user sees.
         companySelected(company) {
-            console.log('Yah, we got this ' + company.invoice_name);
+            console.log('Yah, we got this ' + company.route_name); // <-- changed this to route name, think I should do the same with all of this but I have another problem to solve first!
             this.selected_company = company.id;
             return this.selected_company_invoice_name = company.invoice_name;
             //alert(company.id);
         },
-        
-        addNewAllergy(new_allergy) {
-            console.log(new_allergy);
-            
-            this.$store.commit('addNewAllergyToStore', new_allergy);
-        },
 
-        confirmAllergy(allergy) {
-
-            let company_details_id = this.selected_company;
-            let name = allergy;
+        confirmAllergens(selected_allergens) {
             axios.post('/api/company/allergies', {
-                new_allergy: { name, company_details_id },
-                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
-            }).then( response => {
-                alert('Uploaded new company allergy successfully!');
-                this.$emit('refresh-data', {company_details_id: this.selected_company});
-                // location.load(true);
-                // console.log(response.data[0].id);
-                // console.log(response.data[0].allergy);
-                let allergy = response.data[0].allergy;
-                let id = response.data[0].id
-                this.$store.commit('addAllergyToStore', { allergy, id });
-            }).catch(error => {
-                console.log(error)
-            });
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                selected_allergens: this.selected_allergens,
+                selected_dietary_requirements: this.selected_dietary_requirements,
+                selected_company: this.company.id
+            })
+            .then( response => { alert('Selected company allergies saved.')})
+            .catch( error => { alert(error)});
         },
+
+        // addNewAllergy(new_allergy) {
+        //     console.log(new_allergy);
+        //
+        //     this.$store.commit('addNewAllergyToStore', new_allergy);
+        // },
+        //
+        // confirmAllergy(allergy) {
+        //
+        //     let company_details_id = this.selected_company;
+        //     let name = allergy;
+        //     axios.post('/api/company/allergies', {
+        //         new_allergy: { name, company_details_id },
+        //         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
+        //     }).then( response => {
+        //         alert('Uploaded new company allergy successfully!');
+        //         this.$emit('refresh-data', {company_details_id: this.selected_company});
+        //         // location.load(true);
+        //         // console.log(response.data[0].id);
+        //         // console.log(response.data[0].allergy);
+        //         let allergy = response.data[0].allergy;
+        //         let id = response.data[0].id
+        //         this.$store.commit('addAllergyToStore', { allergy, id });
+        //     }).catch(error => {
+        //         console.log(error)
+        //     });
+        // },
 
         confirmAdditionalInfo(additional_info) {
 
@@ -179,8 +247,11 @@ export default {
 
         addToPreferences(preference) {
 
+            console.log(this.$store.state.selectedProduct.brand);
+
             let company_details_id = this.selected_company;
-            let product_name = this.$store.state.selectedProduct.name;
+            let product_brand = this.$store.state.selectedProduct.brand;
+            let product_flavour = this.$store.state.selectedProduct.flavour;
             let product_code = this.$store.state.selectedProduct.code;
             let product_quantity = this.essential_quantity;
             let preference_category = preference;
@@ -190,7 +261,7 @@ export default {
             // this.$store.commit('addPreferenceToStore', { preference, product_name });
 
             axios.post('/api/company/preferences/add-new-preference', {
-                preference: { company_details_id, product_name, product_code, product_quantity, preference_category },
+                preference: { company_details_id, product_brand, product_flavour, product_code, product_quantity, preference_category },
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             }).then( response => {
                  alert('Uploaded new preference successfully!');
@@ -204,10 +275,10 @@ export default {
                  if (category == 'snackbox_essentials') {
                      let quantity = response.data.preference[0].snackbox_essentials_quantity;
                  }
-                 console.log(name);
-                 
+                 //console.log(name);
+
                  this.$emit('refresh-data', {company_details_id: this.selected_company});
-                 this.$store.commit('addPreferenceToStore', { category, product:{ id, name, quantity }});
+                 this.$store.commit('addPreferenceToStore', { category, product:{ id, brand, flavour, quantity }});
                  // location.load(true);
             //     console.log(response.data);
             }).catch(error => console.log(error));
@@ -217,9 +288,9 @@ export default {
         },
 
         // getCompanyPreferences(company_details_id) {
-        // 
+        //
         //     let self = this;
-        // 
+        //
         //     axios.post('/api/preferences/selected', {
         //         id: company_details_id,
         //     }).then( response => {
@@ -229,9 +300,9 @@ export default {
         //         // console.log(self.preferences);
         //         // console.log(self.preferences.likes);
         //         this.show_preferences = true;
-        // 
+        //
         //     }).catch(error => console.log(error));
-        // 
+        //
         // },
 
         onSubmit (evt) {

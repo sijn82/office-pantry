@@ -1,4 +1,4 @@
-<template lang="html">
+<template >
     <div>
 
         <h4> Add New Fruit Partner </h4>

@@ -1,4 +1,4 @@
-<template lang="html">
+<template >
   <div class="">
       <b-row :class="">
           <b-col>

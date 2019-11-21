@@ -29,11 +29,12 @@ export const store = new Vuex.Store({
         selectedProduct: {
             id: null,
             code: null,
-            name: null,
-            case_price: null,
-            case_size: null,
-            unit_cost: null,
-            unit_price: null,
+            brand: null,
+            flavour: null,
+            selling_case_price: null,
+            selling_case_size: null,
+            //unit_cost: null,
+            selling_unit_price: null,
             stock_level: null,
             shortest_stock_date: null,
         }, // This one would also suffer if multiple users are selecting products for different orders etc...
@@ -69,17 +70,17 @@ export const store = new Vuex.Store({
         },
 
         addPreferenceToStore (state, preference) {
-            console.log(preference);
+            console.log(preference.product.brand + ' - ' + preference.product.flavour);
             if (preference.category == 'snackbox_likes') {
-                preference.product.snackbox_likes = preference.product.name;
+                preference.product.snackbox_likes = (preference.product.brand + ' - ' + preference.product.flavour);
                 state.setPreferences.snackbox_likes.push(preference.product);
                 console.log(state.setPreferences.snackbox_likes);
             } else if (preference.category == 'snackbox_dislikes') {
-                preference.product.snackbox_dislikes = preference.product.name;
+                preference.product.snackbox_dislikes = (preference.product.brand + ' - ' + preference.product.flavour);
                 state.setPreferences.snackbox_dislikes.push(preference.product);
                 console.log(state.setPreferences.snackbox_dislikes);
             } else if (preference.category == 'snackbox_essentials') {
-                preference.product.snackbox_essentials = preference.product.name;
+                preference.product.snackbox_essentials = (preference.product.brand + ' - ' + preference.product.flavour);
                 preference.product.snackbox_essentials_quantity = preference.product.quantity;
                 state.setPreferences.snackbox_essentials.push(preference.product);
                 console.log(state.setPreferences.snackbox_essentials);
@@ -192,11 +193,12 @@ export const store = new Vuex.Store({
 
             state.selectedProduct.id = product.id;
             state.selectedProduct.code = product.code;
-            state.selectedProduct.name = product.name;
-            state.selectedProduct.case_price = product.case_price;
-            state.selectedProduct.case_size = product.case_size;
-            state.selectedProduct.unit_cost = product.unit_cost;
-            state.selectedProduct.unit_price = product.unit_price;
+            state.selectedProduct.brand = product.brand;
+            state.selectedProduct.flavour = product.flavour;
+            state.selectedProduct.selling_case_price = product.selling_case_price;
+            state.selectedProduct.selling_case_size = product.selling_case_size;
+            //state.selectedProduct.unit_cost = product.unit_cost;
+            state.selectedProduct.selling_unit_price = product.selling_unit_price;
             state.selectedProduct.stock_level = product.stock_level;
             state.selectedProduct.shortest_stock_date = product.shortest_stock_date;
 
@@ -204,11 +206,12 @@ export const store = new Vuex.Store({
         removeSelectedProductFromStore (state) {
             state.selectedProduct.id = null;
             state.selectedProduct.code = null;
-            state.selectedProduct.name = null;
-            state.selectedProduct.case_price = null;
-            state.selectedProduct.case_size = null;
-            state.selectedProduct.unit_cost = null;
-            state.selectedProduct.unit_price = null;
+            state.selectedProduct.brand = null;
+            state.selectedProduct.flavour = null;
+            state.selectedProduct.selling_case_price = null;
+            state.selectedProduct.selling_case_size = null;
+            //state.selectedProduct.unit_cost = null;
+            state.selectedProduct.selling_unit_price = null;
             state.selectedProduct.stock_level = null;
             state.selectedProduct.shortest_stock_date = null;
         },

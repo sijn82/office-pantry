@@ -20,7 +20,7 @@
         button {
             display: inline-block;
             float: right;
-            
+
         }
 
     }
@@ -38,7 +38,7 @@
             removeAdditionalInfo(id, column) {
                 this.$store.commit('removePreference', { id, column }); // Again, if i'm moving from Store, I need to find a different way to update the view.
 
-                axios.put('api/additional-info/' + id, {
+                axios.put('api/company/additional-info/' + id, {
                     id: id,
                 }).then (response => {
                     this.$emit('refresh-data');

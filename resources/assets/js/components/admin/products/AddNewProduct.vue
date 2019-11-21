@@ -113,9 +113,9 @@
 
                 <b-row>
                     <b-col>
-                        <label><b> Dietry Requirements </b></label>
+                        <label><b> Dietary Requirements </b></label>
                         <b-form-group>
-                            <b-form-checkbox inline v-for="dietry_requirement in dietry_requirements" v-model="form.selected_dietry_requirements" :key="dietry_requirement.value" :value="dietry_requirement.value"> {{ dietry_requirement.text }} </b-form-checkbox>
+                            <b-form-checkbox inline v-for="dietary_requirement in dietary_requirements" v-model="form.selected_dietary_requirements" :key="dietary_requirement.value" :value="dietary_requirement.value"> {{ dietary_requirement.text }} </b-form-checkbox>
                         </b-form-group>
                     </b-col>
                 </b-row>
@@ -178,7 +178,7 @@ export default {
                 profit_margin: '',
                 stock_level: 0,
                 selected_allergens: [],
-                selected_dietry_requirements: [],
+                selected_dietary_requirements: [],
             },
             vat: ['Yes', 'No'],
             sales_nominal: ['4010', '4020', '4021', '4022', '4023', '4024', '4040', '4050', '4090'],
@@ -216,7 +216,7 @@ export default {
                 {text: 'Soya', value: 'soya'},
                 {text: 'Sulphites', value: 'sulphites'},
             ],
-            dietry_requirements: [
+            dietary_requirements: [
 
                 {text: 'Vegetarian', value: 'vegetarian'},
                 {text: 'Vegan', value: 'vegan'},

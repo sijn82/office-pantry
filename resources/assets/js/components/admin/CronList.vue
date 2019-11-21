@@ -1,4 +1,4 @@
-<template lang="html">
+<template >
     <div class="col-md-12">
         <h1> Cron Data </h1>
         <h5> When orders were last advanced to 'next delivery' date and will next be advanced again. </h5>

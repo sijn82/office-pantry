@@ -1,4 +1,4 @@
-<template lang="html">
+<template >
     <div>
         <h3 class="margin-top-40"> Assigned Routes List </h3>
         

@@ -38,7 +38,7 @@
         .quantity {
             padding-left: 10px;
         }
-        
+
     }
 </style>
 
@@ -47,15 +47,15 @@
         props: ['name', 'column', 'quantity', 'id'],
         data() {
             return {
-            
+
             }
         },
         methods: {
             removePreference(id, column) {
                 console.log(id);
                 this.$store.commit('removePreference', { id, column }); // If I continue to move this away from the Store, I'll need to rethink this line.
-                
-                axios.put('api/preferences/' + id, { 
+
+                axios.put('api/company/preferences/remove/' + id, { 
                     id: id,
                 }).then (response => {
                     this.$emit('refresh-data');

@@ -1,20 +1,20 @@
-<template lang="html">
+<template >
     <div id="otherboxes">
         <h3> Archived Other Boxes </h3>
         <!-- v-if="Object.keys(this.otherboxes).length" -->
         <div v-if="!Array.isArray(this.archived_otherboxes)">
-            <div v-for="(archived_otherbox_week, key) in this.archived_otherboxes"> 
-      
+            <div v-for="(archived_otherbox_week, key) in this.archived_otherboxes">
+
                 <h3> {{ key }} </h3>
-      
-                <archived-otherbox 
-                    class="otherbox" 
-                    v-for="(archived_otherbox, key) in archived_otherbox_week" 
-                    :key="key" :archived_otherbox="archived_otherbox" 
-                    :company="this.company" 
-                    @refresh-data="refreshData($event)"> {{ key }} 
+
+                <archived-otherbox
+                    class="otherbox"
+                    v-for="(archived_otherbox, key) in archived_otherbox_week"
+                    :key="key" :archived_otherbox="archived_otherbox"
+                    :company="company" 
+                    @refresh-data="refreshData($event)"> {{ key }}
                 </archived-otherbox>
-      
+
             </div>
         </div>
         <div v-else>

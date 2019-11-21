@@ -1,4 +1,4 @@
-<template lang="html">
+<template >
     <div id="otherboxes">
         <h3> Other Boxes </h3>
   

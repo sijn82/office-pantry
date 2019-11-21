@@ -21,9 +21,11 @@ Route::post('exporting', 'Company\CompanyRouteController@import')->name('import-
 // b) I hadn't/haven't spent the time to realise and maximise their use... yet.
 
 // Main homepage for guest/office/warehouse login - no authentication on route and end point for logged out users
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::view('/', 'welcome');
 
 // I think was auto generated?  Or I'm going in a different direction, either way I can probably remove it at a later date.
 // Actually this will serve the customer (after logging in) with a landing page featuring their listed company.... I think?
@@ -49,6 +51,9 @@ Route::view('/warehouse', 'warehouse')->middleware('auth:warehouse')->name('ware
 // Passport authentication
 Route::view('passport', 'passport')->name('passport');
 
+// View jobs and their completion success status
+Route::view('jobs', 'jobs')->name('jobs');
+Route::get('jobs', 'OfficePantry\FruitPartnerController@showJobs');
 // Only those with office authentication can access these routes.
 // All routes contained here now have the prefix 'office' to clearly indicate the login access needed to visit the url.
 Route::group(['middleware' => ['web','auth:office'], 'prefix' => 'office'], function () {

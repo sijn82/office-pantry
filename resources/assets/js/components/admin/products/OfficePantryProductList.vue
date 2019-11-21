@@ -1,4 +1,4 @@
-<template lang="html">
+<template >
     <div class="office-pantry-product-list">
             <!-- Main List Page Title -->
             <b-row>

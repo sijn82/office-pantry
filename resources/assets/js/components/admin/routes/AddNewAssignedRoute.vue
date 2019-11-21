@@ -1,4 +1,4 @@
-<template lang="html">
+<template >
     <div>
         <h4> Add New Assigned Route </h4>
         <b-form class="padding-width-40" id="assigned-route-form" @submit="onSubmit" @reset="onReset" v-if="show">

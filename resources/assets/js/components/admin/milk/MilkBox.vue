@@ -1,4 +1,4 @@
-<template lang="html">
+<template >
     <div>
         <!-- <ul> -->
             <div id="edit-save-buttons">

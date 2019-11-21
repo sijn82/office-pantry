@@ -1,4 +1,4 @@
-<template lang="html">
+<template >
     <div>
         <div id="edit-save-buttons">
             <h4> {{ otherbox[0].otherbox_id }} </h4>

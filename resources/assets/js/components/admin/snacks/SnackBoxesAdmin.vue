@@ -12,9 +12,9 @@
             <b-button variant="primary" @click="addNew()"> Add New SnackBox </b-button>
         </div>
 
-        <div v-if="Object.keys(this.snackboxes).length"> 
+        <div v-if="Object.keys(this.snackboxes).length">
 
-            <snackbox class="snackbox" v-for="(snackbox, key) in this.snackboxes" :key="key" :snackbox="snackbox" :company="this.company" @refresh-data="refreshData($event)"> {{ key }} </snackbox>
+            <snackbox class="snackbox" v-for="(snackbox, key) in this.snackboxes" :key="key" :snackbox="snackbox" :company="company" @refresh-data="refreshData($event)"> {{ key }} </snackbox>
 
         </div>
         <div v-else>
@@ -73,10 +73,10 @@
         data () {
             return {
                 snackbox: {
-                    
+
                 },
                 addnew: false,
-                
+
             }
         },
         methods: {
@@ -90,6 +90,9 @@
             refreshData($event) {
                 this.$emit('refresh-data', $event);
             },
+        },
+        mounted() {
+            console.log(this.company);
         }
     }
 </script>

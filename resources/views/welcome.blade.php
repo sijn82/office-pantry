@@ -30,7 +30,7 @@
                 height: 100vh;
             }
 
-            .flex-center {
+            #homepage.flex-center {
                 align-items: center;
                 display: flex;
                 justify-content: center;
@@ -87,9 +87,10 @@
         @yield('cron-styling')
         @yield('office-pantry-products-styling')
         @yield('import-styling')
+        @yield('jobs-styling')
     </head>
     <body>
-        <div class="flex-center position-ref full-height">
+        <div id="homepage" class="flex-center position-ref full-height">
             @if (Route::has('login'))
                 <div class="top-right links">
                     <!-- I'm going to need to make this a bit more elaborate - check which type of user is logged in and offer the right link to their logged in 'home' page -->
@@ -139,6 +140,7 @@
                     @yield('cron')
                     @yield('imports')
                     @yield('passport')
+                    @yield('jobs')
                  </div>
             </div>
         </div>

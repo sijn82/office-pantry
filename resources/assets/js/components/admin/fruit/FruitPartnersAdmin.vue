@@ -1,4 +1,4 @@
-<template lang="html">
+<template >
 
     <div id="fruitpartners">
         <h3> List of Existing Fruit Partners </h3>

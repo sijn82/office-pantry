@@ -1,4 +1,4 @@
-<template lang="html">
+<template >
     <div>
         <div id="edit-save-buttons">
             <h4> {{ drinkbox[0].drinkbox_id }} </h4>

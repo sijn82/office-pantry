@@ -1,4 +1,4 @@
-<template lang="html">
+<template >
     <div id="preferences-admin">
         <h3> Preferences </h3>
         <!-- SHow/Hide Add New Preference -->

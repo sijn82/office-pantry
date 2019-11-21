@@ -159,7 +159,7 @@ export default {
         officeData(id) {
 
             axios.get('/api/companies/' + id)
-                .then(response => this.company_data = response.data, console.log(this.company_data.fruitboxes) )
+                .then(response => this.company_data = response.data, console.log(this.company_data) )
                 .catch(error => {});
         }
     },

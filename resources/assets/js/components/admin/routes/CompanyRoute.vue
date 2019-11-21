@@ -1,4 +1,4 @@
-<template lang="html">
+<template >
     <div class="routes">
         <!-- <ul> -->
             <div id="edit-save-buttons">
