@@ -512,7 +512,7 @@ class FruitBoxController extends Controller
            'name' => request('name'),
            // 'company_details_id' => request('company_details_id'),
            // 'route_id' => request('route_id'),
-           // 'type' => request('type'), // I'm not currently offering an update to box type, instead a new box should be created.
+           'type' => request('type'),
            'next_delivery' => request('next_delivery'),
            'delivery_day' => request('delivery_day'),
            'frequency' => request('frequency'),

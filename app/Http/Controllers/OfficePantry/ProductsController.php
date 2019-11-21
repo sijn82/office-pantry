@@ -33,7 +33,8 @@ class ProductsController extends Controller
 
     public function search(Request $request)
     {
-        $product_search = Product::where('name', 'LIKE', '%' . $request->keywords . '%')->get();
+        // $product_search = Product::where('name', 'LIKE', '%' . $request->keywords . '%')->get();
+        $product_search = Product::where('brand', 'LIKE', '%' . $request->keywords_brand . '%')->get();
 
         return response()->json($product_search);
     }
@@ -58,7 +59,7 @@ class ProductsController extends Controller
         $newProduct->profit_margin = $request['company_data']['profit_margin'];
         $newProduct->stock_level = $request['company_data']['stock_level'];
         $newProduct->allergen_info = $request['company_data']['selected_allergens'];
-        $newProduct->dietry_requirements = $request['company_data']['selected_dietry_requirements'];
+        $newProduct->dietary_requirements = $request['company_data']['selected_dietary_requirements'];
         //$newProduct->shortest_stock_date = $request['company_data']['shortest_stock_date']; <-- I think it's highly unlikely we'll have this info to hand when adding the product to the system.
         $newProduct->save();
     }
@@ -90,7 +91,7 @@ class ProductsController extends Controller
             'profit_margin' => request('profit_margin'),
             'stock_level' => request('stock_level'),
             'allergen_info' => request('selected_allergens'),
-            'dietry_requirements' => request('selected_dietry_requirements'),
+            'dietary_requirements' => request('selected_dietary_requirements'),
             'shortest_stock_date' => request('shortest_stock_date')
         ]);
     }

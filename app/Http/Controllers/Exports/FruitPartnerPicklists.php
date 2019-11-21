@@ -144,6 +144,11 @@ WithEvents
         $root_ginger_running_total = 0;
         $order_changes = false;
 
+
+        $now = CarbonImmutable::now();
+        $last_week = $now->subWeek();
+
+
          // this is somewhat silly, I injected the fruitpartner's name as a key earlier, now I'm essentially just stripping it out.
          // It does mean I have it accessible for display, rather than using the id but once I know exactly what I'm doing with it, I may revise this.
          foreach ($this->fruitpartner_fruitboxes as $key => $fruitboxes) {
@@ -187,9 +192,6 @@ WithEvents
             $grapefruits_running_total += ($fruitboxes->grapefruits * $fruitboxes->fruitbox_total);
             $avocados_running_total += ($fruitboxes->avocados * $fruitboxes->fruitbox_total);
             $root_ginger_running_total += ($fruitboxes->root_ginger * $fruitboxes->fruitbox_total);
-
-            $now = CarbonImmutable::now();
-            $last_week = $now->subWeek();
 
             // Instead of just checking a week back for all order changes, for some we can tap into their frequency.
             // However if orders are only updated in the week building up to their delivery,

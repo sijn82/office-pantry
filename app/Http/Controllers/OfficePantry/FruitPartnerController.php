@@ -15,8 +15,15 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Contracts\Filesystem\Filesystem;
 
+use App\Jobs\ExportFruitPartnerDeliveries;
+use App\Jobs\ZipDownloadFruitPartnerDeliveries;
+use App\QueuedJobs;
+use App\Events\FruitPartnerQueued;
+
 class FruitPartnerController extends Controller
 {
+    // This may or may not work, even if it works it might not have the desired effect.
+    // If this just prolongs php before timeout it wont stop the server timing out.
     public $timeout = 60;
     /**
      * Display a listing of the resource.
@@ -170,6 +177,73 @@ class FruitPartnerController extends Controller
         return Excel::store(new Exports\FruitPartnerPicklists($orders), '/' . $week_start->current . '/' . 'fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.xlsx', 's3');
     }
 
+    public function downloadFruitPartnerZipFile($week_start)
+    {
+           // Cool(io) - $orders is now filled with orders.  Just orders, and the key used is the fruitpartner name as I'm sure that'll save some bother cometh the template.
+           // However, do I really want to put/keep them together when they're going to different templates?
+
+           // Code source -https://laraveldaily.com/how-to-create-zip-archive-with-files-and-download-it-in-laravel/
+           // This appears to work great locally, the next test is whether it will behave the same in the server environment (heroku)?
+
+           // works locally, heroku struggling
+           $zip_file = 'FruitPartner/fruitpartnerorders-' . $week_start->current . '.zip';
+           $zip_file = 'fruitpartnerorders-' . $week_start->current . '.zip';
+           $zip = new \ZipArchive();
+           $zip->open($zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+
+           //----- Had to make some wholesale changes to the previous code, now much smaller and using laravel 'Storage' functions rather than standard php -----//
+
+           // Made a tweak to where the files are stored, adding another sub directory limiting the zip download to only grab files in the folder of the current week start.
+           $files = Storage::disk('s3')->files($week_start->current);
+           //$files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
+           //dd($files);
+           // debugging anything with dd() in this foreach causes the page to timeout, dump() works but must be removed to successfully download anything.
+           foreach ($files as $file)
+           {
+               $content = Storage::disk('s3')->get($file);
+               // // We're skipping all subfolders
+               // if (!$file->isDir()) {
+               //     $filePath = $file->getRealPath();
+               //
+               //     // extracting filename with substr/strlen
+               //     $relativePath = substr($filePath, strlen($path) + 1);
+               //     //dump($filePath);
+               //     $zip->addFile($filePath, $relativePath);
+               // }
+               $zip->addFromString($file, $content);
+           }
+
+           $zip->close();
+           return response()->download($zip_file);
+    }
+
+    // FruitPartner delivery export moved into jobs queue, this function creates the jobs to be run.
+    public function createJobsForEachFruitPartner()
+    {
+        $fruitpartners = FruitPartner::all()->whereNotIn('id', [1]);
+        $week_start = WeekStart::first();
+
+        foreach ($fruitpartners as $fruitpartner) {
+
+            ExportFruitPartnerDeliveries::dispatch($fruitpartner, $week_start);
+            //event(new FruitPartnerQueued($fruitpartner));
+        }
+
+        //----- Hopefully all the jobs will have been created by this point -----//
+        //----- So we can add one final job which when run, notifies the admin, that they are able to download the zip file. -----//
+
+
+
+    }
+
+    public function showJobs()
+    {
+        // Created QueuedJobs Model and linked it to the 'jobs' table so I can use eloquent to pass results to the frontend.
+        $jobs = QueuedJobs::all();
+        return view('jobs', ['jobs' => $jobs]);
+        //return $jobs;
+        //dd($jobs);
+    }
 
     // This has become a weird part of my process but moving this logic to the export folder now so I can break $orders up into exports, probably two.
     // AT SOME POINT I REALLY NEED TO DELETE SUPERFLUOUS CODE!!!
@@ -196,7 +270,7 @@ class FruitPartnerController extends Controller
             //---------- Archive Checks ----------//
 
             // EDIT: Reviewing this again on 18/10/19 was after writing this!
-            //       At a glance I realsise why these are unlikely to need using, unless the fruit/milk boxes get updated before exprting the fruit partner orders.
+            //       At a glance I realsise why these are unlikely to need using, unless the fruit/milk boxes get updated before exporting the fruit partner orders.
             //       If these are required though I don't see where I'm using/adding these potential orders to the export?
 
             // Quick check that this returns something before making the request more specific, 'cause otherwise there be errors.
@@ -218,7 +292,10 @@ class FruitPartnerController extends Controller
             //    return \Excel::download(new Exports\FruitPartnerPicklists($fruitboxes), 'fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.xlsx');
             } else {
                 $orders->fruitboxes = null;
-                Log::channel('slack')->info('Fruit Partner: ' . $fruitpartner->name . ' has no Fruit Orders to be delivered this week.' );
+
+                // FOR TESTING PURPOSES LET'S STOP HOGGING THE LOGS WITH THIS OUTPUT!
+
+                // Log::channel('slack')->info('Fruit Partner: ' . $fruitpartner->name . ' has no Fruit Orders to be delivered this week.' );
             }
 
             if ($milkboxes->isNotEmpty()) {
@@ -226,67 +303,74 @@ class FruitPartnerController extends Controller
                 $orders->milkboxes[$fruitpartner->name] = $milkboxes;
             } else {
                 $orders->milkboxes = null;
-                Log::channel('slack')->info('Fruit Partner: ' . $fruitpartner->name . ' has no Milk Orders to be delivered this week.' );
+
+                // FOR TESTING PURPOSES LET'S STOP HOGGING THE LOGS WITH THIS OUTPUT!
+
+                // Log::channel('slack')->info('Fruit Partner: ' . $fruitpartner->name . ' has no Milk Orders to be delivered this week.' );
             }
             // What's going on here, I think if it fails the first check (no milk), then it goes straight into the do nothing pile regardless of havibng fruit orders?
             if ($orders->fruitboxes == null && $orders->milkboxes == null) {
                 // dd($orders);
             } else {
 
-                $this->download($orders, $fruitpartner, $week_start);
+                //$this->download($orders, $fruitpartner, $week_start);
+                //dump($fruitpartner);
+                // Instead of calling the download function here let's push it into the queue
+                // This way we can break the time intensive task into single fruitpartner jobs
+                // we can also move them onto a background worker to keep the main site running without pause.
+
+                ExportFruitPartnerDeliveries::dispatch($orders, $fruitpartner, $week_start);
+
             }
 
-             // return \Excel::download(new Exports\FruitPartnerPicklists($orders), 'fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.xlsx');
-            // return Excel::store(new Exports\FruitPartnerPicklists($orders),'invoices.pdf');
-            //return Excel::store(new Exports\FruitPartnerPicklists($orders), 'FruitPartners/fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.pdf', \PhpOffice\PhpSpreadsheet\Writer\Pdf\Tcpdf());
-            // dd($orders);
-            //return \Excel::store(new Exports\FruitPartnerPicklists($orders), 'fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.xlsx');
         }
-        // Cool(io) - $orders is now filled with orders.  Just orders, and the key used is the fruitpartner name as I'm sure that'll save some bother cometh the template.
-        // However, do I really want to put/keep them together when they're going to different templates?
+        // // Cool(io) - $orders is now filled with orders.  Just orders, and the key used is the fruitpartner name as I'm sure that'll save some bother cometh the template.
+        // // However, do I really want to put/keep them together when they're going to different templates?
+        //
+        // // Code source -https://laraveldaily.com/how-to-create-zip-archive-with-files-and-download-it-in-laravel/
+        // // This appears to work great locally, the next test is whether it will behave the same in the server environment (heroku)?
+        //
+        // // works locally, heroku struggling
+        // $zip_file = 'FruitPartner/fruitpartnerorders-' . $week_start->current . '.zip';
+        // $zip_file = 'fruitpartnerorders-' . $week_start->current . '.zip';
+        // $zip = new \ZipArchive();
+        // $zip->open($zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+        //
+        // //----- Had to make some wholesale changes to the previous code, now much smaller and using laravel 'Storage' functions rather than standard php -----//
+        //
+        // // Made a tweak to where the files are stored, adding another sub directory limiting the zip download to only grab files in the folder of the current week start.
+        // $files = Storage::disk('s3')->files($week_start->current);
+        // //$files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
+        // //dd($files);
+        // // debugging anything with dd() in this foreach causes the page to timeout, dump() works but must be removed to successfully download anything.
+        // foreach ($files as $file)
+        // {
+        //     $content = Storage::disk('s3')->get($file);
+        //     // // We're skipping all subfolders
+        //     // if (!$file->isDir()) {
+        //     //     $filePath = $file->getRealPath();
+        //     //
+        //     //     // extracting filename with substr/strlen
+        //     //     $relativePath = substr($filePath, strlen($path) + 1);
+        //     //     //dump($filePath);
+        //     //     $zip->addFile($filePath, $relativePath);
+        //     // }
+        //     $zip->addFromString($file, $content);
+        // }
+        //
+        // $zip->close();
+        // return response()->download($zip_file);
+        //
 
-        // return \Excel::download(new Exports\FruitPartnerPicklists($orders), 'fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.xlsx'); <-- All files are named after last fruit partner.
-        // dd($orders);
+        //----- New Approach, queuing jobs - however it turns out download functions can't be run in the background! -----//
 
-        // $zip_test = new \ZipArchive();
-        // dd($zip_test);
+        // ZipDownloadFruitPartnerDeliveries::dispatch($week_start);
 
-        // Code source -https://laraveldaily.com/how-to-create-zip-archive-with-files-and-download-it-in-laravel/
-        // This appears to work great locally, the next test is whether it will behave the same in the server environment (heroku)?
+        //----- Newer Approach - we need fire this off only when the queued jobs have been run and the files are ready for downloading -----//
 
-        // works locally, heroku struggling
-        $zip_file = 'FruitPartner/fruitpartnerorders-' . $week_start->current . '.zip';
-        $zip_file = 'fruitpartnerorders-' . $week_start->current . '.zip';
-        $zip = new \ZipArchive();
-        $zip->open($zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+        // As this can't be a queued job in itself, we need a way to tell the system/user we're ready to download the files.
+        downloadFruitPartnerZipFile($week_start);
 
-        //----- Had to make some wholesale changes to the previous code, now much smaller and using laravel 'Storage' functions rather than standard php -----//
-
-        // Made a tweak to where the files are stored, adding another sub directory limiting the zip download to only grab files in the folder of the current week start.
-        $files = Storage::disk('s3')->files($week_start->current);
-        //$files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
-        //dd($files);
-        // debugging anything with dd() in this foreach causes the page to timeout, dump() works but must be removed to successfully download anything.
-        foreach ($files as $file)
-        {
-            $content = Storage::disk('s3')->get($file);
-            // // We're skipping all subfolders
-            // if (!$file->isDir()) {
-            //     $filePath = $file->getRealPath();
-            //
-            //     // extracting filename with substr/strlen
-            //     $relativePath = substr($filePath, strlen($path) + 1);
-            //     //dump($filePath);
-            //     $zip->addFile($filePath, $relativePath);
-            // }
-            $zip->addFromString($file, $content);
-        }
-
-        $zip->close();
-        return response()->download($zip_file);
-
-
-
-
+        //----- End of New Approaches -----//
     }
 }

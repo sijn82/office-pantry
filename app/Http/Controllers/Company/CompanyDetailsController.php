@@ -233,6 +233,7 @@ class CompanyDetailsController extends Controller
 
             }
             dump($order_changes);
+
             // With them removed, are there any changes left which we do want to track?
             if ($order_changes) {
                 // If so let's grab the current time.

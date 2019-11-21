@@ -187,7 +187,7 @@ class OfficeDashboardController extends Controller
 
             $archived_otherboxes = $archived_otherbox_items->groupBy(['otherbox_id', 'next_delivery_week']);
 
-            // dd($archived_otherboxes);
+             // dd($snackboxes);
         // return view('companies', ['companies' => $company, 'fruitboxes' => $fruitboxes, 'milkboxes' => $milkboxes, 'routes' => $routes]);
         return [
                     'company' => $company, 'fruitboxes' => $fruitboxes, 'milkboxes' => $milkboxes, 'routes' => $routes,
