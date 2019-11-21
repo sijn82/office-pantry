@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class SnackBox extends Model
 {
     // This is the new, fancy and super shiny version.
-    
+
     protected $fillable = [
-        
+
         // Snackbox Info
         'snackbox_id',
         'is_active',
@@ -32,14 +32,16 @@ class SnackBox extends Model
         'case_price',
         'invoiced_at'
     ];
-    
-    // public function companies()
-    // {
-    //     return $this->belongsTo(Company::class);
-    // }
+
     public function companies()
     {
         return $this->belongsTo(CompanyDetails::class);
     }
-    
+
+    public function allergies_and_dietary_requirements()
+    {
+        return $this->hasOne(SnackBox::class);
+
+    }
+
 }

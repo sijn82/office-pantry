@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddDietryRequirementsToProducts extends Migration
+class AdddietaryRequirementsToProducts extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,7 @@ class AddDietryRequirementsToProducts extends Migration
     {
         Schema::table('products', function (Blueprint $table) {
             //
-            $table->string('dietry_requirements')->nullable();
+            $table->string('dietary_requirements')->nullable();
         });
     }
 

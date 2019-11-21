@@ -8,7 +8,7 @@ class Product extends Model
 {
     protected $casts = [
         'allergen_info' => 'array',
-        'dietry_requirements' => 'array'
+        'dietary_requirements' => 'array'
     ];
     //
     protected $fillable = [
@@ -29,7 +29,7 @@ class Product extends Model
         'profit_margin',
         'stock_level',
         'allergen_info',
-        'dietry_requirements'
+        'dietary_requirements'
     ];
 
         /**
