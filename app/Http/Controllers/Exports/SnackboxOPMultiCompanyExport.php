@@ -29,19 +29,19 @@ class SnackboxOPMultiCompanyExport
        $snackboxes = session()->get('snackbox_OP_multicompany');
        // dd(session()->all());
         if ($snackboxes == 'None for this week') {
-            
+
             Log::channel('slack')->info('Snackbox OP Multicompany - None for this week');
             return view('none-for-this-week');
-       
+
         } else {
-               
+
             return view('exports.snackboxes-multi-company', [
                'chunks'         =>   $snackboxes,
                'product_list'   =>   $product_list
             ]);
         }
    }
-   
+
    public function title(): string
    {
        return 'OP MultiCompany';
@@ -57,7 +57,7 @@ class SnackboxOPMultiCompanyExport
            AfterSheet::class    => function(AfterSheet $event) {
 
                $cellRange = 'A1:G1'; // All headers
-               $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setSize(18);
+               $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setSize(40);
                $event->sheet->getDelegate()->getPageSetup()->setFitToWidth(1);
                $event->sheet->getDelegate()->getPageSetup()->setFitToHeight(0);
                $event->sheet->getDelegate()->getPageSetup()->setOrientation('landscape');
@@ -103,13 +103,13 @@ class SnackboxOPMultiCompanyExport
                              $event->sheet->getDelegate()->getRowDimension($selectedRow)->setRowHeight(80);
                              $event->sheet->getDelegate()->getStyle($centeredCellRange)->getAlignment()->setHorizontal('center');
                              $event->sheet->getDelegate()->getStyle($fullCellRange)->getAlignment()->setVertical('center');
-                             $event->sheet->getDelegate()->getStyle($fullCellRange)->getFont()->setSize(36);
+                             $event->sheet->getDelegate()->getStyle($fullCellRange)->getFont()->setSize(40);
                          }
                          // if the value for Column A is 'Packed By' then we're styling a nother uniquely displayed row.
                          if ($event->sheet->getDelegate()->getCell('A' . $selectedRow)->getValue() == 'Packed By: .....................')
                          {
                              $event->sheet->getDelegate()->getRowDimension($selectedRow)->setRowHeight(80);
-                             $event->sheet->getDelegate()->getStyle($fullCellRange)->getFont()->setSize(36);
+                             $event->sheet->getDelegate()->getStyle($fullCellRange)->getFont()->setSize(40);
                          }
                          // if it's neither of those and not an empty row, then it's a snack/drink item and company order; now it's time for some additional conditional styling.
                           if ( $event->sheet->getDelegate()->getCell('A' . $selectedRow)->getValue() != NULL
@@ -119,7 +119,7 @@ class SnackboxOPMultiCompanyExport
 
                           {
                               $event->sheet->getDelegate()->getStyle($centeredCellRange)->getAlignment()->setHorizontal('center');
-                              $event->sheet->getDelegate()->getStyle($fullCellRange)->getFont()->setSize(24);
+                              $event->sheet->getDelegate()->getStyle($fullCellRange)->getFont()->setSize(40);
                               $event->sheet->getDelegate()->getRowDimension($fullCellRange)->setRowHeight(40);
 
                               // This foreach will create the grey lines defining/seperating the columns.
