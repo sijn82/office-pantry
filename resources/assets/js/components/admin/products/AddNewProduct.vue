@@ -1,8 +1,7 @@
 <template>
     <div>
-        <b-container style="text-align: center;" sm="12">
-            <h3> Add New Product </h3>
-
+        <b-button class="button-addnew" variant="primary" size="lg" @click="addProduct()"> Add New Product </b-button>
+        <b-container v-if="add_product" style="text-align: center;" sm="12">
             <b-form id="new-product-form" @submit="onSubmit" @reset="onReset">
 
                 <b-form-group>
@@ -140,6 +139,10 @@
     }
 }
 
+    .button-addnew {
+        margin-bottom: 20px;
+    }
+
 #new-product-form:after {
     content: ""; /* This is necessary for the pseudo element to work. */
     display: block; /* This will put the pseudo element on its own line. */
@@ -226,10 +229,17 @@ export default {
                 {text: 'Low Salt', value: 'low-salt'},
                 {text: 'Eco-friendly Packaging', value: 'eco-friendly-packaging'},
             ],
+            add_product: false,
         }
     },
     methods: {
-
+        addProduct() {
+            if (this.add_product == false) {
+                this.add_product = true
+            } else {
+                this.add_product = false
+            }
+        },
         onSubmit (evt) {
           evt.preventDefault();
           let self = this;

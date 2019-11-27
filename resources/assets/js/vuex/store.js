@@ -242,7 +242,7 @@ export const store = new Vuex.Store({
         getTypes (state) {
             axios.get('/api/boxes/types/select').then( response => {
                 response.data.forEach( element => {
-                    console.log(element);
+                    //console.log(element);
                     var check = state.types_list.findIndex( list => list == element.type )
                     if (check === -1) {
                         state.types_list.push(element.type);
@@ -254,7 +254,7 @@ export const store = new Vuex.Store({
         getFruitPartners (state) {
             axios.get('/api/office-pantry/fruit-partners/select').then( response => {
                 response.data.forEach( element => {
-                    console.log(element);
+                    //console.log(element);
                     var check = state.fruit_partners_list.findIndex( list => list.id == element.id)
                     if (check === -1) {
                         state.fruit_partners_list.push(element);
@@ -266,7 +266,7 @@ export const store = new Vuex.Store({
         getAssignedRoutes (state) {
             axios.get('/api/office-pantry/assigned-routes/select').then( response => {
                 response.data.forEach( element => {
-                    console.log(element);
+                    //console.log(element);
                     var check = state.assigned_routes_list.findIndex( list => list.id == element.id)
                     if (check === -1) {
                         state.assigned_routes_list.push(element);
@@ -278,7 +278,7 @@ export const store = new Vuex.Store({
         getWeekStart (state) {
             axios.get('/api/office-pantry/week-start/select').then( response => {
                 // response.data.forEach( element => {
-                    console.log(response);
+                    //console.log(response);
                     var check = state.week_start.findIndex( list => list.id == response.data.id)
                     if (check === -1) {
                         state.week_start.push(response.data);
@@ -290,7 +290,7 @@ export const store = new Vuex.Store({
         getCronData (state) {
             axios.get('/api/office-pantry/cron-data/select').then(
                 response => {
-                    console.log(response);
+                    //console.log(response);
                     var check = state.cron_data.findIndex( list => list.id == response.data.id)
                     if (check === -1) {
                         state.cron_data.push(response.data);

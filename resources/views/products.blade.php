@@ -6,3 +6,11 @@
   <products-list></products-list>
 </div>
 @endsection
+
+@section('product-styles')
+<style>
+    #homepage.flex-center {
+      display: block;
+    }
+</style>
+@endsection

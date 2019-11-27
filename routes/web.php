@@ -52,12 +52,15 @@ Route::view('/warehouse', 'warehouse')->middleware('auth:warehouse')->name('ware
 Route::view('passport', 'passport')->name('passport');
 
 // View jobs and their completion success status
-Route::view('jobs', 'jobs')->name('jobs');
-Route::get('jobs', 'OfficePantry\FruitPartnerController@showJobs');
+
 // Only those with office authentication can access these routes.
 // All routes contained here now have the prefix 'office' to clearly indicate the login access needed to visit the url.
 Route::group(['middleware' => ['web','auth:office'], 'prefix' => 'office'], function () {
 
+    // Calling this jobs because I'd originally planned to use/show queued jobs but now it makes more sense to call it fruit partner exports.
+    // Will sort this when it's fully working.
+    Route::view('fruit-partner-deliveries.export', 'fruitpartners');
+    Route::get('fruit-partner-deliveries/export', 'OfficePantry\FruitPartnerController@fruitPartnersList');
 
     // Add a new company
     Route::view('companies/new', 'new-company')->name('company.new');

@@ -117,6 +117,7 @@ class OfficeDashboardController extends Controller
 
             $preferences = $company->preference;
             $allergies = $company->allergy;
+            //dd($allergies); This is an empty array if there are no allergies associated yet.
             $additional_info = $company->additional_info;
             // dd($additional_info);
 

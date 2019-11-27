@@ -16,9 +16,11 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Contracts\Filesystem\Filesystem;
 
 use App\Jobs\ExportFruitPartnerDeliveries;
+
 use App\Jobs\ZipDownloadFruitPartnerDeliveries;
 use App\QueuedJobs;
 use App\Events\FruitPartnerQueued;
+use App\Events\FruitPartnerProcessed;
 
 class FruitPartnerController extends Controller
 {
@@ -38,7 +40,7 @@ class FruitPartnerController extends Controller
     public function listFruitPartners() {
          // After updating a fruitpartner, the postgresql id looks to have changed.  WHY WOULD IT WANT TO DO THIS?!
          // I also have an 'id' column, which hasn't changed but hte sortBy below doesn't appear to be using it, instead still ordering by postgresql id.
-         // I NEED TO LEARN MORE ABOUT THIS BEHAVIOUR WHEN TRING TO CONTROL THE ORDER WHICH LISTS ARE DISPLAYED.
+         // I NEED TO LEARN MORE ABOUT THIS BEHAVIOUR WHEN TRYING TO CONTROL THE ORDER WHICH LISTS ARE DISPLAYED.
 
         $fruit_partners = FruitPartner::all();
         // dd($fruit_partners);
@@ -177,7 +179,7 @@ class FruitPartnerController extends Controller
         return Excel::store(new Exports\FruitPartnerPicklists($orders), '/' . $week_start->current . '/' . 'fruit-partner-' . $fruitpartner->name . '-orders-' . $week_start->current . '.xlsx', 's3');
     }
 
-    public function downloadFruitPartnerZipFile($week_start)
+    public function downloadFruitPartnerZipFile()
     {
            // Cool(io) - $orders is now filled with orders.  Just orders, and the key used is the fruitpartner name as I'm sure that'll save some bother cometh the template.
            // However, do I really want to put/keep them together when they're going to different templates?
@@ -185,8 +187,10 @@ class FruitPartnerController extends Controller
            // Code source -https://laraveldaily.com/how-to-create-zip-archive-with-files-and-download-it-in-laravel/
            // This appears to work great locally, the next test is whether it will behave the same in the server environment (heroku)?
 
+           $week_start = WeekStart::find(1);
+
            // works locally, heroku struggling
-           $zip_file = 'FruitPartner/fruitpartnerorders-' . $week_start->current . '.zip';
+           //$zip_file = 'FruitPartner/fruitpartnerorders-' . $week_start->current . '.zip';
            $zip_file = 'fruitpartnerorders-' . $week_start->current . '.zip';
            $zip = new \ZipArchive();
            $zip->open($zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
@@ -214,6 +218,7 @@ class FruitPartnerController extends Controller
            }
 
            $zip->close();
+           //dd($zip_file);
            return response()->download($zip_file);
     }
 
@@ -226,6 +231,7 @@ class FruitPartnerController extends Controller
         foreach ($fruitpartners as $fruitpartner) {
 
             ExportFruitPartnerDeliveries::dispatch($fruitpartner, $week_start);
+            event(new FruitPartnerProcessed($fruitpartner));
             //event(new FruitPartnerQueued($fruitpartner));
         }
 
@@ -236,13 +242,27 @@ class FruitPartnerController extends Controller
 
     }
 
+    // This function show the queued jobs, however they spend so little time in the table, I wonder if it's worth it.
     public function showJobs()
     {
         // Created QueuedJobs Model and linked it to the 'jobs' table so I can use eloquent to pass results to the frontend.
         $jobs = QueuedJobs::all();
+        dd($jobs);
         return view('jobs', ['jobs' => $jobs]);
         //return $jobs;
         //dd($jobs);
+    }
+
+    public function fruitPartnersList()
+    {
+
+        // In combination with the Vue function of the same name, I want to grab all the names (or id's) of the fruitpartners,
+        // with each event transmitted from Pusher, push that fruitpartner from the list until it's empty.  Once empty, we can unlock the download button.
+
+        $fruitpartners = FruitPartner::all()->whereNotIn('id', [1]);
+        //dd($fruitpartners);
+        return view('fruit-partner-deliveries.export', ['fruitpartners' => $fruitpartners]);
+
     }
 
     // This has become a weird part of my process but moving this logic to the export folder now so I can break $orders up into exports, probably two.

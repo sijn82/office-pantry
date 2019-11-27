@@ -366,10 +366,10 @@ export default {
     mounted () {
         this.$store.commit('getFruitPartners');
         //  Passport test, ran out of time in the day.
-          axios.get('/api/user').then(response => {
-              console.log(response.data);
-
-          });
+          // axios.get('/api/user').then(response => {
+          //     console.log(response.data);
+          //
+          // });
     }
 }
 

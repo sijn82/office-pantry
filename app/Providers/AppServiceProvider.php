@@ -30,10 +30,10 @@ class AppServiceProvider extends ServiceProvider
         // FruitBox::observe(FruitBoxObserver::class);
         // MilkBox::observe(MilkBoxObserver::class);
 
-        Queue::after(function ($connection, $job, $data) {
-
-            event(new FruitPartnerProcessed($data));
-        });
+        // Queue::after(function ($connection, $job, $data) {
+        //
+        //     event(new FruitPartnerProcessed($data));
+        // });
     }
 
     /**

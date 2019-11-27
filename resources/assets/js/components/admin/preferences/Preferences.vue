@@ -86,15 +86,22 @@
             <b-col>
                 <div class="allergies">
                     <h4> Allergies </h4>
-                    <div  v-for="allergy in this.allergies[0].allergy">
-                        <!-- <p > {{ like.snackbox_likes }} </p> -->
-                        <allergy v-if="allergy != null"
-                                    :name="allergy"
-                                    :column="'allergies'"
-                                    @refresh-data="refreshData(this.allergies[0].company_details_id)">
-                        </allergy>
+                    <!-- Existing approach of existing allergies associated with the company -->
+                    <!-- Commenting oout for now to test the new approach without duplicate info - will need to update the destroy function for either approach. -->
+                    <!-- <div v-if="allergies.length > 0" >
+                        <div v-for="allergy in this.allergies[0].allergy">
+                            <allergy v-if="allergy != null"
+                                        :name="allergy"
+                                        :column="'allergies'"
+                                        @refresh-data="refreshData(this.allergies[0].company_details_id)">
+                            </allergy>
+                        </div>
                     </div>
-                    <!-- start of alternative approach for review -->
+                    <div v-else>
+                        <p> No allergies selected </p>
+                    </div> -->
+
+                    <!-- start of alternative approach of existing allergies for review -->
                     <div v-if="editing">
                         <b-form-group>
                             <b-form-checkbox    inline
@@ -107,7 +114,7 @@
                         </b-form-group>
                     </div>
                     <div v-else>
-                        <b-form-group>
+                        <b-form-group v-if="this.allergies.length > 0">
                             <b-form-checkbox    inline
                                                 v-for="allergen in this.allergies[0].allergy"
                                                 v-model="selected_allergens"
@@ -116,6 +123,9 @@
                                                 <b> {{ allergen }} </b>
                             </b-form-checkbox>
                         </b-form-group>
+                        <b-form-group v-else>
+                            <p> No allergens selected </p>
+                        </b-form-group>
                     </div>
                     <!-- end of alternative approach for review -->
                 </div>
@@ -123,13 +133,18 @@
             <b-col>
                 <div class="dietary_requirements">
                     <h4> Dietary Requirements </h4>
-                    <div  v-for="dietary_requirement in this.allergies[0].dietary_requirements">
-                        <!-- <p > {{ like.snackbox_likes }} </p> -->
-                        <allergy v-if="dietary_requirement != null"
-                                    :name="dietary_requirement"
-                                    :column="'dietary_requirements'"
-                                    @refresh-data="refreshData(this.allergies[0].company_details_id)">
-                        </allergy>
+                    <div v-if="allergies.dietary_requirements">
+                        <div v-for="dietary_requirement in this.allergies[0].dietary_requirements">
+                            <!-- <p > {{ like.snackbox_likes }} </p> -->
+                            <allergy v-if="dietary_requirement != null"
+                                        :name="dietary_requirement"
+                                        :column="'dietary_requirements'"
+                                        @refresh-data="refreshData(this.allergies[0].company_details_id)">
+                            </allergy>
+                        </div>
+                    </div>
+                    <div v-else>
+                        <p> No dietary requirements selected </p>
                     </div>
                 </div>
             </b-col>
@@ -219,11 +234,17 @@ export default {
         }
     },
     computed: {
-        currently_selected_allergens: function (allergen_info) {
-            return this.selected_allergens = this.allergies[0].allergy
+        currently_selected_allergens: function () {
+            if (this.allergies.length > 0) {
+                return this.selected_allergens = this.allergies[0].allergy
+            }
+
         },
         currently_selected_dietary_requirements: function (dietary_requirements) {
-            return this.selected_dietary_requirements = this.allergies[0].dietary_requirements
+            if (this.allergies.length > 0) {
+                return this.selected_dietary_requirements = this.allergies[0].dietary_requirements
+            }
+
         },
     },
     methods: {
@@ -249,7 +270,7 @@ export default {
         console.log(this.additional_info);
         console.log(this.preferences);
         console.log('allergies below')
-        console.log(this.allergies[0].allergy);
+        console.log(this.allergies);
     }
 
 }

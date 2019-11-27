@@ -9,24 +9,24 @@
 @endsection
 
 @section('company-assets')
-  <style>
-  
+<style>
+
     .delivery-info {
-      text-align:left;
-      padding-left: 20px;
+        text-align:left;
+        padding-left: 20px;
     }
     #assigned_route-dropdown {
-      margin-bottom: 60px;
+        margin-bottom: 60px;
     }
-    .flex-center {
-      display: block;
+    #homepage.flex-center {
+        display: block;
     }
     h3.route-header {
-      margin-top: 30px;
-      margin-bottom: 10px;
-      padding-left: 50px;
-      padding-right: 50px;
+        margin-top: 30px;
+        margin-bottom: 10px;
+        padding-left: 50px;
+        padding-right: 50px;
     }
 
-  </style>
+</style>
 @endsection

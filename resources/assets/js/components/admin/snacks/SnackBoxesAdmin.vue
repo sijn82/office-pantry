@@ -92,6 +92,8 @@
             },
         },
         mounted() {
+            console.log('testing this below');
+            console.log(this.snackboxes);
             console.log(this.company);
         }
     }

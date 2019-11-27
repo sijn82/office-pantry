@@ -184,7 +184,7 @@ export default {
         companySelected(company) {
             console.log('Yah, we got this ' + company.route_name); // <-- changed this to route name, think I should do the same with all of this but I have another problem to solve first!
             this.selected_company = company.id;
-            return this.selected_company_invoice_name = company.invoice_name;
+            return this.selected_company_route_name = company.route_name;
             //alert(company.id);
         },
 
@@ -278,7 +278,7 @@ export default {
                  //console.log(name);
 
                  this.$emit('refresh-data', {company_details_id: this.selected_company});
-                 this.$store.commit('addPreferenceToStore', { category, product:{ id, brand, flavour, quantity }});
+                 this.$store.commit('addPreferenceToStore', { category, product:{ id, name, quantity }});
                  // location.load(true);
             //     console.log(response.data);
             }).catch(error => console.log(error));

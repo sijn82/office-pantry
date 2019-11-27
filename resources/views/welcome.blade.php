@@ -88,6 +88,7 @@
         @yield('office-pantry-products-styling')
         @yield('import-styling')
         @yield('jobs-styling')
+        @yield('product-styles')
     </head>
     <body>
         <div id="homepage" class="flex-center position-ref full-height">

@@ -37,7 +37,7 @@
                     </b-form-select>
 
                 </b-form-group> -->
-                <p style="padding-top:10px;"> Selected Company: <b class="selected-company"> {{ form.company_details_id }} </b> </p>
+                <p style="padding-top:10px;"> Selected Company: <b class="selected-company"> {{ form.company_details_route_name }} </b> </p>
                 <!-- Week Start of First Delivery -->
                 <b-form-group label="Week Start For First Delivery:" label-for="milkbox-first-delivery" description="Please enter the week start of the first delivery">
                     <b-form-input id="milkbox-first-delivery" type="date" v-model="form.first_delivery" placeholder="Enter milkbox first delivery week start" required></b-form-input>
@@ -231,8 +231,9 @@ export default {
                 form: {
                     is_active: 'Active',
                     fruit_partner_id: this.company.supplier_id,
-                    company_details_id: this.company.route_name, // If this is created by Frosh, how are they going to select the company to attach the order to?  A typed filter of a long list may be the best way.
-                    delivery_day: '',  // According to the docs this must be an array reference, however it seems to me this is happening anyway?  Interesting...
+                    company_details_route_name: this.company.route_name, // If this is created by Frosh, how are they going to select the company to attach the order to?  A typed filter of a long list may be the best way.
+                    company_details_id: this.company.id,
+                    delivery_day: [],  // According to the docs this must be an array reference, however it seems to me this is happening anyway?  Interesting...
                     type: null, // Whilst not currently in use, this will determine between standard, berries and tailored, with tailored being the only one which can be edited (probably).
                     first_delivery: null, // This will be necessary to get the first delivery scheduled and for the frequency field to begin incrementing.
                     frequency: null, // Also new to the system, this will determine between daily, weekly, fortnightly and monthly, or bespoke.  This may then be connected to the cron/events when checking if a company is due for orders.
@@ -283,7 +284,7 @@ export default {
               // alert(JSON.stringify(this.form));
               axios.post('/api/boxes/milkbox/add-new-milkbox', {
                   company_data: self.form,
-                  headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'), 'Content-Type': 'text/csv'},
+                  headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                   // user_id: self.userData.id // This hasn't been setup yet so proabably won't work yet?!
               }).then(function (response) {
                   alert('Uploaded new milkbox successfully!');

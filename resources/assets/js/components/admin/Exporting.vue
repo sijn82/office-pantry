@@ -13,12 +13,12 @@
                 <b-col cols="6">
                 <b-form enctype="multipart/form-data" @submit.prevent="importRejiggedRoutes">
                 <b-form-file v-model="rejigged_routes_file" :state="Boolean(rejigged_routes_file)" placeholder="Choose a file..." drop-placeholder="Drop file here" @change="newFileUpload"></b-form-file>
-                
+
                 <b-button type="submit" variant="info"> Import Rejigged Routes (Unwritten) </b-button>
             </b-form>
             </b-col> -->
             <b-col>
-                <b-button href="/api/office-pantry/export-fruitpartner-deliveries" type="submit" variant="info"> Export Fruit Partner Deliveries </b-button>
+                <b-button href="/office/fruit-partner-deliveries/export" variant="info"> Export Fruit Partner Deliveries </b-button>
             </b-col>
             <b-col></b-col>
         </b-row>
@@ -90,7 +90,7 @@
                         <b-button variant="outline-primary" href="export-snackbox-apc-unique"> Export APC Unique </b-button>
                         <b-form-text>
                           This final row caters for unique orders, using the same multi-company template as the first row.
-                        </b-form-text> 
+                        </b-form-text>
                     </div> -->
                     <div id="exportWholesaleButtons">
                         <h4> Process Wholesale (Snackbox, Drinkbox & Otherbox) Orders into Picklists </h4>
@@ -137,21 +137,21 @@
         margin-top: 20px;
         div {
             margin: 10px;
-        
+
             #buttonsToProcessSnackboxes {
-                
+
             }
             #exportMultiCompanyButtons {
-            
+
             }
             #exportSingleCompanyButtons {
-            
+
             }
             #exportUniqueButtons {
-            
+
             }
             #exportWholesaleButtons {
-            
+
             }
         }
     }
@@ -166,7 +166,7 @@ export default {
     },
     methods: {
         newFileUpload(event) {
-        // 
+        //
         // let formData = new FormData();
         //     formData.append(this.rejigged_routes_file, event.target.result)
         //     console.log(formData)
@@ -176,7 +176,7 @@ export default {
             this.rejigged_routes_file = event.target.result
             }
         },
-        
+
         importRejiggedRoutes() {
             let self = this;
             axios.post('/api/import-rejigged-routes', {

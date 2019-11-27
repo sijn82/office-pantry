@@ -164,6 +164,7 @@ Route::group([
     // Fruit Partner Products i.e 1 x fruitbox = £20, 2 x fruitbox = 18.50 etc.
     Route::post('fruit-partners/add-new-fruitpartner', 'FruitPartnerController@store');
     Route::get('fruit-partners/select', 'FruitPartnerController@listFruitPartners');
+    Route::get('fruit-partners-export/download-zip', 'FruitPartnerController@downloadFruitPartnerZipFile');
     Route::get('fruit_partners/{id}', 'FruitPartnerController@show'); // <-- not sure where this is used, will edit when I stumble across it or take a proper look.
     Route::put('fruit-partners/update/{id}', 'FruitPartnerController@update');
     Route::put('fruit-partners/destroy/{id}', 'FruitPartnerController@destroy');

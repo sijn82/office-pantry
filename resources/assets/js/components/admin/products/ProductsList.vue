@@ -8,7 +8,7 @@
 
         <b-row class="filters">
             <b-col>
-                <h3> Search </h3>
+                <h3> Search (Brand) </h3>
                 <b-form-input type="text" v-model="keywords"></b-form-input>
             </b-col>
             <b-col>
@@ -37,7 +37,7 @@
                 </b-form-select>
             </b-col>
             <b-form-text> * Ignore this filter for now, it's not actually built to do anything yet! </b-form-text> -->
-        </b-row>    
+        </b-row>
 
         <b-row class="product-list-headers">
             <b-col><h3> Brand </h3></b-col>
@@ -99,7 +99,16 @@
 import axios from 'axios';
 
 export default {
-    props: ['route', 'createSnackbox', 'createWholesaleSnackbox', 'createOtherbox', 'createDrinkbox', 'type', 'product', 'quantity'],
+    props: [
+        'route',
+        'createSnackbox',
+        'createWholesaleSnackbox',
+        'createOtherbox',
+        'createDrinkbox',
+        'type',
+        'product', //  I think this is historic, the products in product is coming from an axios call.  Some more of these might be superfluous too.
+        'quantity'
+    ],
     data() {
         return {
             products: [],
@@ -110,7 +119,7 @@ export default {
             vat_select: null,
             vat: ['Yes', 'No'],
             sales_nominal_select: null,
-            sales_nominal: ['4010', '4020', '4040', '4050', '4090'],
+            sales_nominal: ['4010', '4020', '4021', '4022', '4023', '4024', '4040', '4050', '4090'],
             stock_level_select: null,
             stock_level: [
                 { value: "<= 0", text: 'Less than Zero'},
@@ -130,7 +139,7 @@ export default {
     methods: {
         fetch() {
             let self = this;
-            axios.get('/api/office-pantry/products/search', { params: { keywords: this.keywords }})
+            axios.get('/api/office-pantry/products/search', { params: { keywords_brand: this.keywords }})
                 .then(response => self.products = response.data)
                 .catch(error => {});
         },
@@ -183,7 +192,7 @@ export default {
 
     mounted() {
         console.log('Component Product Lists Mounted');
-        console.log(this.route);
+        //console.log(this.route);
     }
 }
 

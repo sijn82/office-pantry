@@ -114,8 +114,8 @@ class ExportFruitPartnerDeliveries implements ShouldQueue
         //----- Braodcast event to pusher -----//
 
         // I want to send the job success, or failure to the event below - if I can't access the success failure of the queue, maybe I can use try/catch intsead sending a string 'sucess' or 'failure' to it instead?
-        // event(new FruitPartnerProcessed($this->fruitpartner));
-        
+
+
         //----- End of broadcast event with pusher -----//
 
         // instead of calling the download function, we can just place the (download function) code into the handler
