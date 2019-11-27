@@ -53,8 +53,9 @@ window.Echo = new Echo({
     // key: process.env.MIX_PUSHER_APP_KEY,
     // cluster: process.env.MIX_PUSHER_APP_CLUSTER,
     // key: '148094ba501adac4c6e4',    // NEED TO REMOVE THESE HARDCODED VALUES AND WORK OUT WHY THE ENV FILE WASN'T BEING USED!
-    // cluster: 'eu',                  // DITTO WITH THIS VALUE TOO!!
-    key: env('PUSHER_APP_KEY'),
-    cluster: env('PUSHER_APP_CLUSTER'),
+    key: 'f64841190f062db2bf15',
+    cluster: 'eu',                  // DITTO WITH THIS VALUE TOO!!
+    // key: PUSHER_APP_KEY,
+    // cluster: PUSHER_APP_CLUSTER,
     encrypted: true
 });
