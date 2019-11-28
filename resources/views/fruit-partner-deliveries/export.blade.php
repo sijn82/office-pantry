@@ -8,7 +8,7 @@
                         <span class="pull-left">Queue Reports</span>
                     </div>
                     <div class="panel-body">
-                        <jobs :fruitpartners="{{ $fruitpartners }}"></jobs>
+                        <jobs></jobs>
                     </div>
                 </div>
             </div>
@@ -25,3 +25,4 @@
 </style>
 
 @endsection
+ <!-- :fruitpartners="{{ $fruitpartners }}" -->

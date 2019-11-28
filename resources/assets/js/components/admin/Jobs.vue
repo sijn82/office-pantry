@@ -25,23 +25,32 @@
 
 <script>
 export default {
-    props: ['fruitpartners'],
+    //props: ['fruitpartners'],
     data() {
         return {
-            allJobs: this.jobs,
-            remainingFruitPartners: this.fruitpartners,
+            //allJobs: this.jobs,
+            remainingFruitPartners: [],
             count: 0,
-            max: this.fruitpartners.length,
+            max: 0,
         }
     },
     methods: {
         createFruitPartnerJobs: function () {
             axios.get('/api/office-pantry/create-fruitpartner-export-jobs');
         },
+        grabFruitPartners: function () {
+            axios.get('/api/office-pantry/fruit-partners/select').then( response => {
+                this.fruitpartners = response.data,
+                this.max = this.fruitpartners.length,
+                console.log(this.fruitpartners)
+            });
+        }
 
     },
     created() {
         let vm = this
+
+        vm.grabFruitPartners();
         // vm.refreshAllJobs = (e) => axios.get('jobs').then((e) => (vm.allJobs = e.data))
         // vm.allFruitPartners = (e) => axios.get('api/office-pantry/fruit-partners/select').then((e) => {vm.fruitpartners = e.data, console.log(vm.fruitpartners)})
         Echo.channel('fruitpartner-queue')

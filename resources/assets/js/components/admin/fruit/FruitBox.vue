@@ -438,6 +438,7 @@ export default {
                 id: fruitbox.id,
                 is_active: fruitbox.is_active,
                 fruit_partner_id: fruitbox.fruit_partner_id,
+                type: fruitbox.type,
                 name: fruitbox.name,
                 company_details_id: fruitbox.company_details_id,
                 route_id: fruitbox.route_id,

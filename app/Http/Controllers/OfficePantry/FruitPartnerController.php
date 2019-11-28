@@ -259,9 +259,10 @@ class FruitPartnerController extends Controller
         // In combination with the Vue function of the same name, I want to grab all the names (or id's) of the fruitpartners,
         // with each event transmitted from Pusher, push that fruitpartner from the list until it's empty.  Once empty, we can unlock the download button.
 
-        $fruitpartners = FruitPartner::all()->whereNotIn('id', [1]);
+        // $fruitpartners = FruitPartner::all()->whereNotIn('id', [1]);
+        $fruitpartners = FruitPartner::whereNotIn('id', [1])->get();
         //dd($fruitpartners);
-        return view('fruit-partner-deliveries.export', ['fruitpartners' => [$fruitpartners]]);
+        return view('fruit-partner-deliveries.export', ['fruitpartners' => $fruitpartners]);
 
     }
 
