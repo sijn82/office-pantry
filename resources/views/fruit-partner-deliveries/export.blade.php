@@ -25,4 +25,3 @@
 </style>
 
 @endsection
- <!-- :fruitpartners="{{ $fruitpartners }}" -->

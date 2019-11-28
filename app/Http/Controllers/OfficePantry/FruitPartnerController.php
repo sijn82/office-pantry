@@ -261,8 +261,10 @@ class FruitPartnerController extends Controller
 
         // $fruitpartners = FruitPartner::all()->whereNotIn('id', [1]);
         $fruitpartners = FruitPartner::whereNotIn('id', [1])->get();
+
+        return $fruitpartners;
         //dd($fruitpartners);
-        return view('fruit-partner-deliveries.export', ['fruitpartners' => $fruitpartners]);
+        //return view('fruit-partner-deliveries.export', ['fruitpartners' => $fruitpartners]);
 
     }
 

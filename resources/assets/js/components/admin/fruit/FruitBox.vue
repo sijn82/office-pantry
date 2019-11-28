@@ -474,6 +474,7 @@ export default {
             }).then (response => {
                 console.log(response);
                 this.$emit('refresh-data', {company_details_id: fruitbox.company_details_id});
+                alert('Fruitbox Updated');
             }).catch(error => alert(error));
         },
         destroyFruitOrder(fruitbox) {

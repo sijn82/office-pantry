@@ -31,7 +31,7 @@ export default {
             //allJobs: this.jobs,
             remainingFruitPartners: [],
             count: 0,
-            max: 0,
+            max: 1,
         }
     },
     methods: {
@@ -39,10 +39,12 @@ export default {
             axios.get('/api/office-pantry/create-fruitpartner-export-jobs');
         },
         grabFruitPartners: function () {
-            axios.get('/api/office-pantry/fruit-partners/select').then( response => {
+            axios.get('/api/office-pantry/fruit-partner-deliveries/export').then( response => {
                 this.fruitpartners = response.data,
-                this.max = this.fruitpartners.length,
-                console.log(this.fruitpartners)
+                console.log(this.fruitpartners),
+                this.remainingFruitPartners = this.fruitpartners,
+                this.max = this.fruitpartners.length
+
             });
         }
 

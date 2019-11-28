@@ -163,7 +163,8 @@ Route::group([
     Route::put('assigned-route/{id}', 'AssignedRouteController@destroy');
     // Fruit Partner Products i.e 1 x fruitbox = £20, 2 x fruitbox = 18.50 etc.
     Route::post('fruit-partners/add-new-fruitpartner', 'FruitPartnerController@store');
-    Route::get('fruit-partners/select', 'FruitPartnerController@listFruitPartners');
+    Route::get('fruit-partners/select', 'FruitPartnerController@listFruitPartners'); // All fruitpartners including Office Pantry (for adding fruit/milk boxes)
+    Route::get('fruit-partner-deliveries/export', 'FruitPartnerController@fruitPartnersList'); // Fruit Partners excluding Office Pantry for processing/exporting their orders.
     Route::get('fruit-partners-export/download-zip', 'FruitPartnerController@downloadFruitPartnerZipFile');
     Route::get('fruit_partners/{id}', 'FruitPartnerController@show'); // <-- not sure where this is used, will edit when I stumble across it or take a proper look.
     Route::put('fruit-partners/update/{id}', 'FruitPartnerController@update');

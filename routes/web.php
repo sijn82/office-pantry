@@ -59,8 +59,8 @@ Route::group(['middleware' => ['web','auth:office'], 'prefix' => 'office'], func
 
     // Calling this jobs because I'd originally planned to use/show queued jobs but now it makes more sense to call it fruit partner exports.
     // Will sort this when it's fully working.
-    Route::view('fruit-partner-deliveries.export', 'fruitpartners');
-    Route::get('fruit-partner-deliveries/export', 'OfficePantry\FruitPartnerController@fruitPartnersList');
+    Route::view('fruit-partner-deliveries/export', 'fruit-partner-deliveries.export');
+    // Route::get('fruit-partner-deliveries/export', 'OfficePantry\FruitPartnerController@fruitPartnersList');
 
     // Add a new company
     Route::view('companies/new', 'new-company')->name('company.new');
