@@ -229,6 +229,8 @@ export default {
                 {text: 'Savoury', value: 'savory'},
                 {text: 'Low Salt', value: 'low-salt'},
                 {text: 'Eco-friendly Packaging', value: 'eco-friendly-packaging'},
+                {text: 'Gluten Free', value: 'gluten-free'},
+                {text: 'Organic', value: 'organic'},
             ],
 
         }
