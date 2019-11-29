@@ -23,7 +23,7 @@ class CompanyDetailsController extends Controller
 
     public function search(Request $request)
     {
-        $company_search = CompanyDetails::where('route_name', 'LIKE', '%' . $request->keywords . '%')->get();
+        $company_search = CompanyDetails::where('route_name', 'ILIKE', '%' . $request->keywords . '%')->get();
 
         return response()->json($company_search);
     }
@@ -54,7 +54,14 @@ class CompanyDetailsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Ok let's start getting valdiation in here to prevent submission errors and provide better feedback to the user.
+
+        // Hang on I need to combine this with vue in order to translate the validation results to the user...
+        // Need to research that first, will return to this.
+
+
+
+
         // dd($request);
         $new_company = new CompanyDetails();
         // $new_company->is_active = request('company_details.);

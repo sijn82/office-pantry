@@ -34,7 +34,7 @@ class ProductsController extends Controller
     public function search(Request $request)
     {
         // $product_search = Product::where('name', 'LIKE', '%' . $request->keywords . '%')->get();
-        $product_search = Product::where('brand', 'LIKE', '%' . $request->keywords_brand . '%')->get();
+        $product_search = Product::where('brand', 'ILIKE', '%' . $request->keywords_brand . '%')->get();
 
         return response()->json($product_search);
     }

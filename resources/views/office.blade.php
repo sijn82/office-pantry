@@ -85,8 +85,6 @@
                         <div>
                             <h3> Review / Update Company Data </h3>
                             <p> Use the company search below to update existing or create new; company data and orders. </p>
-                            <p> The search is currently case sensitive, so if you don't find what you're looking for, add capitals. </p>
-                            <p> This is because of the switch to postgresql (database) and I'll be fixing this annoying quirk in phase 2. </p>
                             <search-companies></search-companies>
                         </div>
                     </div>
