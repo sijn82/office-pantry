@@ -50,6 +50,7 @@ WithMultipleSheets
     {
         $correctOrderMonTue =   [
                                         '1.15 - Float',
+                                        '1.21 -',
                                         '1.20 - Extra Float',
                                         '1.19 - Float 3',
                                         '1.18 - East London',
@@ -69,6 +70,7 @@ WithMultipleSheets
                                         '1.03 - M25 South',
                                         '1.02 - Serviced Thames',
                                         '1.01 - Serviced London',
+                                        '2.04 -',
                                         '2.03 - Tue Float',
                                         '2.02 - Tue Multidrop',
                                         '2.01 - Tue Serviced',
