@@ -395,7 +395,7 @@ export default {
         return {
             fruit_partner_name: '',
             frequency: ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'],
-            week_in_month: ['First', 'Second', 'Third', 'Forth', 'Last'],
+            week_in_month: ['First', 'Second', 'Third', 'Fourth', 'Last'],
             discountable_options: ['Yes', 'No'],
             editing: false,
             details: false,

@@ -235,7 +235,7 @@ export default {
             delivered_by_options: ['DPD', 'APC', 'OP'],
             days_of_week: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
             frequency_options: ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'],
-            week_in_month_options: ['First', 'Second', 'Third', 'Forth', 'Last'],
+            week_in_month_options: ['First', 'Second', 'Third', 'Fourth', 'Last'],
         }
     },
     computed: {

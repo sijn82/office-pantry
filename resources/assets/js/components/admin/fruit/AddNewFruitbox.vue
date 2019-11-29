@@ -275,7 +275,7 @@ export default {
                 },
                 types: ['Standard', 'Berry', 'Seasonal', 'Tailored', 'Orange Juicer', 'Banana'],
                 frequency: ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'],
-                week_in_month: ['First', 'Second', 'Third', 'Forth', 'Last'],
+                week_in_month: ['First', 'Second', 'Third', 'Fourth', 'Last'],
                 discountable_options: ['Yes', 'No'],
                 company_selected: [{
                     value: this.company.id,

@@ -147,7 +147,7 @@
                 frequency: null,
                 frequency_options: ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'],
                 week_in_month: null,
-                week_in_month_options: ['First', 'Second', 'Third', 'Forth', 'Last'],
+                week_in_month_options: ['First', 'Second', 'Third', 'Fourth', 'Last'],
                 // no_of_boxes: 0,
                 next_delivery_week: null,
                 selected_company: 'none selected',

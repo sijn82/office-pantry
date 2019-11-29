@@ -128,7 +128,7 @@ export default {
             },
             fruit_partner_name: '',
             frequency: ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'],
-            week_in_month: ['First', 'Second', 'Third', 'Forth', 'Last'],
+            week_in_month: ['First', 'Second', 'Third', 'Fourth', 'Last'],
             editing: false,
             details: false,
             addnew: false,

@@ -268,7 +268,7 @@ export default {
                     lactose_free_semi_skimmed_1l: 0,
                 },
                 frequency: ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'],
-                week_in_month: ['First', 'Second', 'Third', 'Forth', 'Last'],
+                week_in_month: ['First', 'Second', 'Third', 'Fourth', 'Last'],
                 company_selected: [{
                     value: this.company.id,
                     text: this.company.route_name

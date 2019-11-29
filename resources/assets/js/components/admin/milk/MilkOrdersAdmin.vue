@@ -11,7 +11,7 @@
             <b-button variant="primary" @click="addNew()"> Add New Milkbox </b-button>
         </div>
 
-        <div v-if="this.milkboxes.length"> 
+        <div v-if="this.milkboxes.length">
             <!-- {{ milkbox.company_name }} -->
 
             <milkbox class="milkbox" v-for="milkbox in this.milkboxes" :milkbox="milkbox" :key="milkbox.id" @refresh-data="refreshData($event)"></milkbox>
@@ -92,7 +92,7 @@ export default {
 
             fruit_partner_name: '',
             frequency: ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'],
-            week_in_month: ['First', 'Second', 'Third', 'Forth', 'Last'],
+            week_in_month: ['First', 'Second', 'Third', 'Fourth', 'Last'],
             editing: false,
             details: false,
             addnew: false,
@@ -102,7 +102,7 @@ export default {
 
     },
     methods: {
-        
+
         addNew() {
             if (this.addnew == false) {
                 this.addnew = true;

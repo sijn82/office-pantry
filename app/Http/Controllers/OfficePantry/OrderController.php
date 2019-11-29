@@ -121,7 +121,7 @@ class OrderController extends Controller
 
                 } elseif ($fruitbox->frequency === 'Monthly') {
 
-                    // This will hold either the value first, second, third, forth or last.
+                    // This will hold either the value first, second, third, fourth or last.
                     $week = $fruitbox->week_in_month;
                     // This will check the month of the last delivery and then advance by one month,
                     // before saving that month as a string to be parsed later in $mondayOfMonth variable.
@@ -175,7 +175,7 @@ class OrderController extends Controller
 
                 } elseif ($milkbox->frequency === 'Monthly') {
 
-                    // This will hold either the value first, second, third, forth or last.
+                    // This will hold either the value first, second, third, fourth or last.
                     $week = $milkbox->week_in_month;
                     // This will check the month of the last delivery and then advance by one month,
                     // before saving that month as a string to be parsed later in $mondayOfMonth variable.
@@ -283,7 +283,7 @@ class OrderController extends Controller
 
                     } elseif ($fruitbox->frequency === 'Monthly') {
 
-                        // This will hold either the value first, second, third, forth or last.
+                        // This will hold either the value first, second, third, fourth or last.
                          $week = $fruitbox->week_in_month;
                         // This will check the month of the last delivery and then advance by one month,
                         // before saving that month as a string to be parsed later in $mondayOfMonth variable.
@@ -473,7 +473,7 @@ class OrderController extends Controller
 
                     } elseif ($milkbox->frequency === 'Monthly') {
 
-                        // This will hold either the value first, second, third, forth or last.
+                        // This will hold either the value first, second, third, fourth or last.
                          $week = $milkbox->week_in_month;
                         // This will check the month of the last delivery and then advance by one month,
                         // before saving that month as a string to be parsed later in $mondayOfMonth variable.
@@ -661,7 +661,7 @@ class OrderController extends Controller
 
                 } elseif ($frequency_recovered === 'Monthly') {
 
-                    // This will hold either the value first, second, third, forth or last.
+                    // This will hold either the value first, second, third, fourth or last.
                     $week = $snackbox[0]->week_in_month;
                     // This will check the month of the last delivery and then advance by one month,
                     // before saving that month as a string to be parsed later in $mondayOfMonth variable.
@@ -702,7 +702,7 @@ class OrderController extends Controller
 
                         } elseif ($snackbox_entry->frequency === 'Monthly') {
 
-                            // This will hold either the value first, second, third, forth or last.
+                            // This will hold either the value first, second, third, fourth or last.
                             $week = $snackbox_entry->week_in_month;
                             // This will check the month of the last delivery and then advance by one month,
                             // before saving that month as a string to be parsed later in $mondayOfMonth variable.
@@ -878,7 +878,7 @@ class OrderController extends Controller
 
             } elseif ($frequency_recovered === 'Monthly') {
 
-                // This will hold either the value first, second, third, forth or last.
+                // This will hold either the value first, second, third, fourth or last.
                 $week = $drinkbox[0]->week_in_month;
                 // This will check the month of the last delivery and then advance by one month,
                 // before saving that month as a string to be parsed later in $mondayOfMonth variable.
@@ -918,7 +918,7 @@ class OrderController extends Controller
 
                     } elseif ($drinkbox_entry->frequency === 'Monthly') {
 
-                        // This will hold either the value first, second, third, forth or last.
+                        // This will hold either the value first, second, third, fourth or last.
                         $week = $drinkbox_entry->week_in_month;
                         // This will check the month of the last delivery and then advance by one month,
                         // before saving that month as a string to be parsed later in $mondayOfMonth variable.
@@ -1068,7 +1068,7 @@ class OrderController extends Controller
 
             } elseif ($frequency_recovered === 'Monthly') {
 
-                // This will hold either the value first, second, third, forth or last.
+                // This will hold either the value first, second, third, fourth or last.
                 $week = $otherbox[0]->week_in_month;
                 // This will check the month of the last delivery and then advance by one month,
                 // before saving that month as a string to be parsed later in $mondayOfMonth variable.
@@ -1110,7 +1110,7 @@ class OrderController extends Controller
 
                     } elseif ($otherbox_entry->frequency === 'Monthly') {
 
-                        // This will hold either the value first, second, third, forth or last.
+                        // This will hold either the value first, second, third, fourth or last.
                          $week = $otherbox_entry->week_in_month;
                         // This will check the month of the last delivery and then advance by one month,
                         // before saving that month as a string to be parsed later in $mondayOfMonth variable.

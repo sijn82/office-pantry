@@ -3,7 +3,7 @@
     <div id="milkboxes">
         <h3> Archived Milk Boxes </h3>
 
-        <div v-if="this.archived_milkboxes.length"> 
+        <div v-if="this.archived_milkboxes.length">
             <!-- {{ milkbox.company_name }} -->
 
             <archived-milkbox class="milkbox" v-for="archived_milkbox in this.archived_milkboxes" :archived_milkbox="archived_milkbox" :key="archived_milkbox.id"></archived-milkbox>
@@ -84,7 +84,7 @@ export default {
 
             fruit_partner_name: '',
             frequency: ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'],
-            week_in_month: ['First', 'Second', 'Third', 'Forth', 'Last'],
+            week_in_month: ['First', 'Second', 'Third', 'Fourth', 'Last'],
             editing: false,
             details: false,
             addnew: false,
@@ -94,7 +94,7 @@ export default {
 
     },
     methods: {
-        
+
         // addNew() {
         //     if (this.addnew == false) {
         //         this.addnew = true;
