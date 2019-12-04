@@ -14,6 +14,10 @@ window.Vue = require('vue');
 import BootstrapVue from 'bootstrap-vue';
 Vue.use(BootstrapVue);
 
+import { ValidationProvider, extend } from 'vee-validate';
+// Register it globally
+Vue.component('ValidationProvider', ValidationProvider);
+
 import 'bootstrap';
 import { store } from './vuex/store';
 

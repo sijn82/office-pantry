@@ -27,6 +27,34 @@
                     </template>
                 </b-form-select>
             </b-col>
+            <b-col>
+                <h4> Dietary Requirement </h4>
+                <b-form-select v-model="dietary_requirement" :options="dietary_requirements">
+                    <template slot="first">
+                            <option :value="null" disabled> Please select an option </option>
+                    </template>
+                </b-form-select>
+                <h4 v-if="dietary_requirement !== null" class="additional_filter"> Additional Dietary Requirement </h4>
+                <b-form-select v-if="dietary_requirement !== null" v-model="additional_dietary_requirement" :options="dietary_requirements">
+                    <template slot="first">
+                            <option :value="null" disabled> Please select an option </option>
+                    </template>
+                </b-form-select>
+            </b-col>
+            <b-col>
+                <h4> Allergens </h4>
+                <b-form-select v-model="allergen" :options="allergens">
+                    <template slot="first">
+                            <option :value="null" disabled> Please select an option </option>
+                    </template>
+                </b-form-select>
+                <h4 v-if="allergen !== null" class="additional_filter"> Additional Allergen </h4>
+                <b-form-select v-if="allergen !== null" v-model="additional_allergen" :options="allergens">
+                    <template slot="first">
+                            <option :value="null" disabled> Please select an option </option>
+                    </template>
+                </b-form-select>
+            </b-col>
             <!-- Why ask to ignore when we can just comment it out for now! -->
             <!-- <b-col>
                 <h4> Stock Level * </h4>
@@ -46,23 +74,31 @@
             <b-col><h3> Options </h3></b-col>
         </b-row>
 
-            <div class="products" v-for="product in products">
-                <div v-if="product.vat == vat_select || vat_select == null">
-                    <div v-if="product.sales_nominal == sales_nominal_select || sales_nominal_select == null">
-                        <!-- This stock level thingy isn't a great plan, better would be to write a function and then get that to output a usable result. -->
-                        <!-- <div v-if="product.stock_level || stock_level_select == null"> -->
-                            <product    v-on:addProduct="addProductToOrder($event)"
-                                        :createSnackbox="createSnackbox"
-                                        :createWholesaleSnackbox="createWholesaleSnackbox"
-                                        :createOtherbox="createOtherbox"
-                                        :createDrinkbox="createDrinkbox"
-                                        :type="type"
-                                        :product="product">
-                            </product>
-                        <!-- </div> -->
+        <!-- Wow this has really got out of hand, it works but I should find out if this is bad practise and replace it with a better solution! -->
+        <div class="products" v-for="product in products">
+            <div v-if="product.vat == vat_select || vat_select == null">
+                <div v-if="product.sales_nominal == sales_nominal_select || sales_nominal_select == null">
+                    <div v-if="product.dietary_requirements.includes(dietary_requirement) || dietary_requirement == null">
+                        <div v-if="product.dietary_requirements.includes(additional_dietary_requirement) || additional_dietary_requirement == null">
+                            <div v-if="!product.allergen_info.includes(allergen) || allergen == null">
+                                <div v-if="!product.allergen_info.includes(additional_allergen) || additional_allergen == null">
+
+                                    <product    v-on:addProduct="addProductToOrder($event)"
+                                                :createSnackbox="createSnackbox"
+                                                :createWholesaleSnackbox="createWholesaleSnackbox"
+                                                :createOtherbox="createOtherbox"
+                                                :createDrinkbox="createDrinkbox"
+                                                :type="type"
+                                                :product="product">
+                                    </product>
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+        </div>
 
     </div>
 </template>
@@ -91,6 +127,9 @@
     }
     .filters {
         padding: 20px 40px;
+    }
+    .additional_filter {
+        margin-top: 10px;
     }
 </style>
 
@@ -125,6 +164,37 @@ export default {
                 { value: "<= 0", text: 'Less than Zero'},
                 { value: "> 0 && < 20", text: 'Less than 20 Units'},
                 { value: ">= 20 && <= 100", text: 'Between 20 & 100 Units'},
+            ],
+            allergen: null,
+            additional_allergen: null,
+            allergens: [
+                {text: 'Celery', value: 'celery'},
+                {text: 'Gluten', value: 'gluten'},
+                {text: 'Crustaceans', value: 'crustacians'},
+                {text: 'Eggs', value: 'eggs'},
+                {text: 'Fish', value: 'fish'},
+                {text: 'Lupin', value: 'lupin'},
+                {text: 'Milk', value: 'milk'},
+                {text: 'Molluscs', value: 'molluscs'},
+                {text: 'Mustard', value: 'mustard'},
+                {text: 'Tree Nuts', value: 'tree-nuts'},
+                {text: 'Peanuts', value:'peanuts'},
+                {text: 'Sesame', value:'sesame'},
+                {text: 'Soya', value: 'soya'},
+                {text: 'Sulphites', value: 'sulphites'},
+            ],
+            dietary_requirement: null,
+            additional_dietary_requirement: null,
+            dietary_requirements: [
+                {text: 'Vegetarian', value: 'vegetarian'},
+                {text: 'Vegan', value: 'vegan'},
+                {text: 'High Protein', value: 'high-protein'},
+                {text: 'Sweet', value: 'sweet'},
+                {text: 'Savoury', value: 'savory'},
+                {text: 'Low Salt', value: 'low-salt'},
+                {text: 'Eco-friendly Packaging', value: 'eco-friendly-packaging'},
+                {text: 'Gluten Free', value: 'gluten-free'},
+                {text: 'Organic', value: 'organic'},
             ],
         }
     },

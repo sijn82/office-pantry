@@ -8,7 +8,7 @@
             <div class="col-sm-12" v-for="result in results">
         <b-list-group-item :variant="stock_level(result.stock_level)" class="d-flex justify-content-between align-items-center" button :key="result.id" @click="productData(result.id)"> {{ result.brand }} - {{ result.flavour }}
                     <b-badge variant="primary" pill> £{{ result.selling_unit_price }} </b-badge>
-                </b-list-group-item>
+        </b-list-group-item>
 
             </div>
         </b-list-group>

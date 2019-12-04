@@ -26,10 +26,11 @@ class SnackBox extends Model
         // Product Information
         'product_id',
         'code',
-        'name',
+        'brand',
+        'flavour',
         'quantity',
-        'unit_price',
-        'case_price',
+        'selling_unit_price',
+        'selling_case_price',
         'invoiced_at'
     ];
 

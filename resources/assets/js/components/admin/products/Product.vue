@@ -11,7 +11,8 @@
                             <h4 :class="{
                                             'none-in-stock' : matchNumberToColour(product.stock_level),
                                             'some-in-stock' : !matchNumberToColour(product.stock_level),
-                                            'a-few-in-stock' : !matchNumberToColour(product.stock_level) && product.stock_level <= 20}">
+                                            'a-few-in-stock' : !matchNumberToColour(product.stock_level) && product.stock_level <= 20
+                                        }">
                                             Units: {{ computed_quantity_units }} / {{ product.is_active }}
                             </h4>
                         </div>
@@ -19,30 +20,37 @@
                             <h4 :class="{
                                             'none-in-stock' : matchNumberToColour(product.stock_level),
                                             'some-in-stock' : !matchNumberToColour(product.stock_level),
-                                            'a-few-in-stock' : !matchNumberToColour(product.stock_level) && product.stock_level <= 20}">
+                                            'a-few-in-stock' : !matchNumberToColour(product.stock_level) && product.stock_level <= 20
+                                        }">
                                             Cases: {{ number_of_cases }} / {{ product.is_active }}
                             </h4>
                         </div>
                     </b-col>
                     <b-col>
-                        <b-button size="sm" v-if="!createSnackbox && !createWholesaleSnackbox && !createDrinkbox && !createOtherbox" variant="primary" @click="showDetails()"> Details </b-button>
-                        <b-button size="sm" v-if="!createSnackbox && !createWholesaleSnackbox && !createDrinkbox && !createOtherbox" variant="warning" @click="enableEdit()"> Edit </b-button>
-                        <b-button size="sm" v-if="editing && !createSnackbox && !createWholesaleSnackbox && !createDrinkbox && !createOtherbox" variant="success" @click="updateProduct(product)"> Save </b-button>
-                        <b-button size="sm" v-if="!createSnackbox && !createWholesaleSnackbox && !createDrinkbox && !createOtherbox" variant="danger" @click="deleteProduct(product)"> Delete </b-button>
-                        <b-button size="sm" v-if="createSnackbox" variant="outline-success" @click="addProductToSnackbox(product, quantity)"> Add To Snackbox </b-button>
-                        <b-button size="sm" v-if="createWholesaleSnackbox" variant="outline-success" @click="addProductToSnackbox(product, quantity)"> Add To Wholesale Snackbox </b-button>
-                        <b-button size="sm" v-if="createOtherbox" variant="outline-success" @click="addProductToOtherbox(product, quantity)"> Add To Otherbox </b-button>
-                        <b-button size="sm" v-if="createDrinkbox" variant="outline-success" @click="addProductToDrinkbox(product, quantity)"> Add To Drinkbox </b-button>
-                        <div v-if="createSnackbox || createOtherbox || createDrinkbox && type === 'Unique' || createDrinkbox && type === 'monthly-special'">
-                            <b-input-group append="Unit(s)">
-                                <b-form-input size="sm" v-model="quantity" class="quantity-input" type="number"></b-form-input>
-                            </b-input-group>
-                        </div>
-                        <div v-else-if="createWholesaleSnackbox || createDrinkbox && type === 'Regular' || createWholesaleOtherbox">
-                            <b-input-group append="Case(s)">
-                                <b-form-input size="sm" v-model="quantity" class="quantity-input" type="number"></b-form-input>
-                            </b-input-group>
-                        </div>
+                        <b-row>
+                            <b-col>
+                                <div v-if="createSnackbox || createOtherbox || createDrinkbox && type === 'Unique' || createDrinkbox && type === 'monthly-special'">
+                                    <b-input-group size="sm" append="Unit(s)">
+                                        <b-form-input size="sm" v-model="quantity" class="quantity-input" type="number"></b-form-input>
+                                    </b-input-group>
+                                </div>
+                                <div v-else-if="createWholesaleSnackbox || createDrinkbox && type === 'Regular' || createWholesaleOtherbox">
+                                    <b-input-group size="sm" append="Case(s)">
+                                        <b-form-input size="sm" v-model="quantity" class="quantity-input" type="number"></b-form-input>
+                                    </b-input-group>
+                                </div>
+                            </b-col>
+                            <b-col>
+                                <b-button size="sm" v-if="!createSnackbox && !createWholesaleSnackbox && !createDrinkbox && !createOtherbox" variant="primary" @click="showDetails()"> Details </b-button>
+                                <b-button size="sm" v-if="!createSnackbox && !createWholesaleSnackbox && !createDrinkbox && !createOtherbox" variant="warning" @click="enableEdit()"> Edit </b-button>
+                                <b-button size="sm" v-if="editing && !createSnackbox && !createWholesaleSnackbox && !createDrinkbox && !createOtherbox" variant="success" @click="updateProduct(product)"> Save </b-button>
+                                <b-button size="sm" v-if="!createSnackbox && !createWholesaleSnackbox && !createDrinkbox && !createOtherbox" variant="danger" @click="deleteProduct(product)"> Delete </b-button>
+                                <b-button size="sm" v-if="createSnackbox" variant="outline-success" @click="addProductToSnackbox(product, quantity)"> Add To Snackbox </b-button>
+                                <b-button size="sm" v-if="createWholesaleSnackbox" variant="outline-success" @click="addProductToSnackbox(product, quantity)"> Add To Wholesale Snackbox </b-button>
+                                <b-button size="sm" v-if="createOtherbox" variant="outline-success" @click="addProductToOtherbox(product, quantity)"> Add To Otherbox </b-button>
+                                <b-button size="sm" v-if="createDrinkbox" variant="outline-success" @click="addProductToDrinkbox(product, quantity)"> Add To Drinkbox </b-button>
+                            </b-col>
+                        </b-row>
                     </b-col>
                 </b-row>
             </div>

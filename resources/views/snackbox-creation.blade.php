@@ -7,5 +7,9 @@
 </div>
 @endsection
 @section('snackbox-create-styles')
-
+<style>
+    #homepage.flex-center {
+      display: block;
+    }
+</style>
 @endsection

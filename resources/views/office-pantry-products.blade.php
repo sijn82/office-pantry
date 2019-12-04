@@ -8,7 +8,7 @@
 
 @section('office-pantry-products-styling')
 <style media="screen">
-    .flex-center {
+    #homepage.flex-center {
         display: block;
     }
 </style>

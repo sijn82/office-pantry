@@ -8,12 +8,12 @@ class SnackBoxArchive extends Model
 {
     // OK, so it looks as though If I specify a new primary key, I also need to destroy etc via that key.
     // This doesn't actually work for my use, so I need to scrap it.  If only I knew what problem I'd solved earlier specifying the snackbox_id as the primary key?!
-    
+
     // protected $primaryKey = 'snackbox_id';
     // public $incrementing = false;
-    
+
     protected $fillable = [
-        
+
         // Snackbox Info
         'snackbox_id',
         'is_active',
@@ -30,10 +30,11 @@ class SnackBoxArchive extends Model
         // Product Information
         'product_id',
         'code',
-        'name',
+        'brand',
+        'flavour',
         'quantity',
-        'unit_price',
-        'case_price',
+        'selling_unit_price',
+        'selling_case_price',
         'invoiced_at'
     ];
 

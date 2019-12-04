@@ -79,7 +79,7 @@
         @yield('routing-display-assets')
         @yield('company-assets')
         @yield('process-snackboxes-styling')
-        @yield('snackbox-create-styling')
+        @yield('snackbox-create-styles')
         @yield('preferences-assets')
         @yield('assigned-routes-styling')
         @yield('exporting-styles')
@@ -89,6 +89,7 @@
         @yield('import-styling')
         @yield('jobs-styling')
         @yield('product-styles')
+        @yield('fruit-partner-styling')
     </head>
     <body>
         <div id="homepage" class="flex-center position-ref full-height">

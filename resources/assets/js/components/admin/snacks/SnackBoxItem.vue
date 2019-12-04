@@ -2,7 +2,10 @@
   <div class="">
       <b-row :class="">
           <b-col>
-              <p> {{ snackbox_item.name }} </p>
+              <p> {{ snackbox_item.brand }} </p>
+          </b-col>
+          <b-col>
+              <p> {{ snackbox_item.flavour }} </p>
           </b-col>
           <b-col>
               <div v-if="edit">
@@ -13,8 +16,8 @@
               </div>
           </b-col>
           <b-col>
-              <p v-if="snackbox_item.type !== 'wholesale'"> {{ snackbox_item.unit_price }} </p>
-              <p v-else> {{ snackbox_item.case_price }} </p>
+              <p v-if="snackbox_item.type !== 'wholesale'"> {{ snackbox_item.selling_unit_price }} </p>
+              <p v-else> {{ snackbox_item.selling_case_price }} </p>
           </b-col>
           <b-col>
               <b-button size="sm" variant="warning" @click="editor()"> Edit </b-button>

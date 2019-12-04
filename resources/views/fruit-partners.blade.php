@@ -6,3 +6,10 @@
 </div>
 @endsection
 
+@section('fruit-partner-styling')
+<style>
+    #homepage.flex-center {
+      display: block;
+    }
+</style>
+@endsection

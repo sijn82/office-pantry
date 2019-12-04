@@ -16,7 +16,10 @@
                     </b-col>
                     <b-col>
                         <label><b> Route Name* </b></label>
-                        <b-form-input v-model="form.route_name" required></b-form-input>
+                        <ValidationProvider v-slot="{ errors }" name="route_name" rules="required">
+                            <b-form-input v-model="form.route_name" ></b-form-input>
+                            <span> {{ errors[0] }} </span>
+                        </ValidationProvider>
                     </b-col>
                 </b-row>
                 <b-row class="margin-top-20">
@@ -219,7 +222,18 @@
 
 <script>
 
+
+    import { extend } from 'vee-validate';
+    import { required, email } from 'vee-validate/dist/rules';
+
+    // Override the default message.
+    extend('required', {
+      ...required,
+      message: 'This {_field_} field is required'
+    });
+
 export default {
+
     data () {
         return {
             form: {

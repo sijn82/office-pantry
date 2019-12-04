@@ -752,10 +752,11 @@ class SnackBoxController extends Controller
         $addProduct->next_delivery_week = request('snackbox_details.next_delivery_week');
         $addProduct->product_id = request('product.id');
         $addProduct->code = request('product.code');
-        $addProduct->name = request('product.name');
+        $addProduct->brand = request('product.brand');
+        $addProduct->flavour = request('product.flavour');
         $addProduct->quantity = request('product.quantity');
-        $addProduct->unit_price = request('product.unit_price');
-        $addProduct->case_price = request('product.case_price');
+        $addProduct->selling_unit_price = request('product.selling_unit_price');
+        $addProduct->selling_case_price = request('product.selling_case_price');
         $addProduct->save();
 
         // Looks I found a neat one liner to sort out reducing stock levels - I'm also guessing 'increment' will sort out returning stock too.
@@ -854,10 +855,11 @@ class SnackBoxController extends Controller
                             'previous_delivery_week' => $snackbox_item->previous_delivery_week,
                             // Product Info
                             'code' => $snackbox_item->code,
-                            'name' => $snackbox_item->name,
+                            'brand' => $snackbox_item->brand,
+                            'flavour' => $snackbox_item->flavour,
                             'quantity' => $snackbox_item->quantity,
-                            'unit_price' => $snackbox_item->unit_price,
-                            'case_price' => $snackbox_item->case_price,
+                            'selling_unit_price' => $snackbox_item->selling_unit_price,
+                            'selling_case_price' => $snackbox_item->selling_case_price,
                             'invoiced_at' => $snackbox_item->invoiced_at,
                         ]);
 
@@ -889,10 +891,11 @@ class SnackBoxController extends Controller
                             'previous_delivery_week' => $snackbox_item->previous_delivery_week,
                             // Product Info
                             'code' => $snackbox_item->code,
-                            'name' => $snackbox_item->name,
+                            'brand' => $snackbox_item->brand,
+                            'flavour' => $snackbox_item->flavour,
                             'quantity' => $snackbox_item->quantity,
-                            'unit_price' => $snackbox_item->unit_price,
-                            'case_price' => $snackbox_item->case_price,
+                            'selling_unit_price' => $snackbox_item->selling_unit_price,
+                            'selling_case_price' => $snackbox_item->selling_case_price,
                             'invoiced_at' => $snackbox_item->invoiced_at,
                         ]);
                     }
@@ -946,10 +949,11 @@ class SnackBoxController extends Controller
             // Product Information
             $empty_snackbox->product_id = 0;
             $empty_snackbox->code = null;
-            $empty_snackbox->name = null;
+            $empty_snackbox->brand = null;
+            $empty_snackbox->flavour = null;
             $empty_snackbox->quantity = null;
-            $empty_snackbox->unit_price = null;
-            $empty_snackbox->case_price = null;
+            $empty_snackbox->selling_unit_price = null;
+            $empty_snackbox->selling_case_price = null;
             $empty_snackbox->invoiced_at = null;
             $empty_snackbox->save();
 
@@ -963,6 +967,79 @@ class SnackBoxController extends Controller
 
          // If I take this approach, it would work fine for once a week processing but if we switch this to daily, then I'd need to either restrict mass updates in the same way
          // or write some logic to cater for this.
+     }
+
+     // I might only keep this temporarily, however I want to keep my chain of thought fresh, and while the comments are useful for reference they also kinda get in the way. :)
+     public function massUpdateTypeV2(Request $request)
+     {
+         // As we're going to be updating all the boxes of a particular type, let's grab them and group them by snackbox_id (to process them box by box)
+         $snackboxes = Snackbox::where('type', request('type'))->where('is_active', 'Active')->get()->groupBy('snackbox_id');
+
+         // Now we can loop through each box
+         foreach ($snackboxes as $snackbox) {
+
+             // Grabbing the data unique to each box, not each item.
+
+             // Snackbox Info
+             $snackbox_id_recovered = $snackbox[0]->snackbox_id;
+             $delivered_by_recovered = $snackbox[0]->delivered_by;
+             $delivery_date_recovered = $snackbox[0]->delivery_day;
+             $no_of_boxes_recovered = $snackbox[0]->no_of_boxes;
+             $snack_cap_recovered = $snackbox[0]->snack_cap;
+             // Company Info
+             $company_details_id_recovered = $snackbox[0]->company_details_id;
+             $frequency_recovered = $snackbox[0]->frequency;
+             $week_in_month_recovered = $snackbox[0]->week_in_month;
+             $previous_delivery_week_recovered = $snackbox[0]->previous_delivery_week;
+             $next_delivery_week_recovered = $snackbox[0]->next_delivery_week;
+
+             // Now we can process each snack within the snackbox
+             foreach ($snackbox as $snack) {
+
+                 // Before we mass update all the boxes we want to save a record of the previous contents.
+                     // Option A - firstOrCreate - look for an existing match, if we find one * DO NOTHING *, or create the entry if not.
+                     // Option B - updateOrCreate - look for an existing match, if we find one * REPLACE IT *, or create the entry if not.
+                 // In the original version of this function I've gone with Option A - I assume for reasons, we'll see.
+
+                 SnackBoxArchive::firstOrCreate(
+                 [
+                     // If this is written the same way as updateOrInsert, this is the initial check
+                     'snackbox_id' => $snack->snackbox_id,
+                     'next_delivery_week' => $snack->next_delivery_week,
+                     'product_id' => $snack->product_id,
+                 ],
+                 [
+                     // Snackbox Info
+                     'is_active' => $snack->is_active, // Mind you we're only getting the 'Active' ones, so this could be hardcoded.
+                     'delivered_by' => $snack->delivered_by,
+                     'no_of_boxes' => $snack->no_of_boxes,
+                     'snack_cap' => $snack->snack_cap,
+                     'type' => $snack->type,
+                     // Company Info
+                     'company_details_id' => $snack->company_details_id,
+                     'delivery_day' => $snack->delivery_day,
+                     'frequency' => $snack->frequency,
+                     'previous_delivery_week' => $snack->previous_delivery_week,
+                     // Product info
+                     'code' => $snack->code,
+                     'brand' => $snack->brand,
+                     'flavour' => $snack->flavour,
+                     'quantity' => $snack->quantity,
+                     'selling_unit_price' => $snack->selling_unit_price,
+                     'selling_case_price' => $snack->selling_case_price,
+                     'invoiced_at' => $snack->invoiced_at,
+                 ]);
+
+                 // Destroy each item from the box, ready to repopulate
+                 // Do not destroy the default snackbox container which will have a product id of 0.
+                 if ($snack->product_id !== 0) {
+                     SnackBox::destroy($snack->id);
+                 }
+             } // end of foreach $snackbox as $snack (i.e back to $snackbox scale not item by item.)
+
+             $likes = Preference::where('company_details_id', $snack->company_details_id)->where('snackbox_likes', '!=', null)->pluck('snackbox_likes')->toArray();
+             $dislikes = Preference::where('company_details_id', $snack->company_details_id)->where('snackbox_dislikes', '!=', null)->pluck('snackbox_dislikes')->toArray();
+         }
      }
 
      public function massUpdateType(Request $request)
@@ -1068,7 +1145,7 @@ class SnackBoxController extends Controller
                         'is_active' => $snack->is_active, // Mind you we're only getting the 'Active' ones, so this could be hardcoded.
                         'delivered_by' => $snack->delivered_by,
                         'no_of_boxes' => $snack->no_of_boxes,
-                        'snack_cap' => $snack->no_of_boxes,
+                        'snack_cap' => $snack->snack_cap,
                         'type' => $snack->type,
                         // Company Info
                         'company_details_id' => $snack->company_details_id,
@@ -1077,10 +1154,11 @@ class SnackBoxController extends Controller
                         'previous_delivery_week' => $snack->previous_delivery_week,
                         // Product info
                         'code' => $snack->code,
-                        'name' => $snack->name,
+                        'brand' => $snack->brand,
+                        'flavour' => $snack->flavour,
                         'quantity' => $snack->quantity,
-                        'unit_price' => $snack->unit_price,
-                        'case_price' => $snack->case_price,
+                        'selling_unit_price' => $snack->selling_unit_price,
+                        'selling_case_price' => $snack->selling_case_price,
                         'invoiced_at' => $snack->invoiced_at,
                     ]);
 

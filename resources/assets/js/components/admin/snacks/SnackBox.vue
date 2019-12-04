@@ -135,7 +135,15 @@
                 </b-row>
                 <b-row class="margin-top-10">
                     <b-col>
-                        <h4> Product Name </h4>
+                        <h4> Add To Snackbox </h4>
+                    </b-col>
+                </b-row>
+                <b-row class="margin-top-10">
+                    <b-col>
+                        <h4> Product Brand </h4>
+                    </b-col>
+                    <b-col>
+                        <h4> Product Flavour </h4>
                     </b-col>
                     <b-col>
                         <h4> Stock Level </h4>
@@ -156,7 +164,10 @@
                 </b-row>
                 <b-row v-if="this.$store.state.selectedProduct.id">
                     <b-col>
-                        <p> {{ this.$store.state.selectedProduct.name }} </p>
+                        <p> {{ this.$store.state.selectedProduct.brand }} </p>
+                    </b-col>
+                    <b-col>
+                        <p> {{ this.$store.state.selectedProduct.flavour }} </p>
                     </b-col>
                     <b-col>
                         <p v-if="snackbox[0].type !== 'wholesale'"> {{ (this.$store.state.selectedProduct.stock_level - quantity) }} </p>
@@ -166,8 +177,8 @@
                         <p> {{ this.$store.state.selectedProduct.shortest_stock_date }} </p>
                     </b-col>
                     <b-col>
-                        <p v-if="snackbox[0].type !== 'wholesale'"> {{ this.$store.state.selectedProduct.unit_price }} </p>
-                        <p v-else> {{ this.$store.state.selectedProduct.case_price }} </p>
+                        <p v-if="snackbox[0].type !== 'wholesale'"> {{ this.$store.state.selectedProduct.selling_unit_price }} </p>
+                        <p v-else> {{ this.$store.state.selectedProduct.selling_case_price }} </p>
                     </b-col>
                     <b-col>
                         <b-form-input v-model="quantity" type="number"></b-form-input>
@@ -178,8 +189,14 @@
                 </b-row>
             </div>
             <b-row class="margin-top-10">
+                <b-col><h4> Current Snackbox Contents </h4></b-col>
+            </b-row>
+            <b-row class="margin-top-10">
                 <b-col>
-                    <p><b> Product Name </b></p>
+                    <p><b> Product Brand </b></p>
+                </b-col>
+                <b-col>
+                    <p><b> Product Flavour </b></p>
                 </b-col>
                 <b-col>
                     <p><b> Quantity In Box </b></p>
@@ -240,7 +257,7 @@ export default {
     },
     computed: {
         case_stock_level() {
-            let stock_level = Math.floor(this.$store.state.selectedProduct.stock_level / this.$store.state.selectedProduct.case_size)
+            let stock_level = Math.floor(this.$store.state.selectedProduct.stock_level / this.$store.state.selectedProduct.selling_case_size)
             return ( Number.isNaN(stock_level) ? '' : stock_level)
         },
         snackbox_total() {
@@ -266,7 +283,7 @@ export default {
 
             // Now we use the function by passing in the snackbox array, and the two properties we need to multiply - saving it as the current total cost.
             // First a quick check, on whether we need to tally up case prices for wholesale, or unit prices for regular snackboxes.
-            (this.snackbox[0].type === 'wholesale') ? $snackbox_total = sum(this.snackbox, 'case_price', 'quantity') : $snackbox_total = sum(this.snackbox, 'unit_price', 'quantity');
+            (this.snackbox[0].type === 'wholesale') ? $snackbox_total = sum(this.snackbox, 'selling_case_price', 'quantity') : $snackbox_total = sum(this.snackbox, 'selling_unit_price', 'quantity');
 
             return $snackbox_total;
         }
@@ -287,10 +304,11 @@ export default {
                 product: {
                     id: this.$store.state.selectedProduct.id,
                     code: this.$store.state.selectedProduct.code,
-                    name: this.$store.state.selectedProduct.name,
+                    brand: this.$store.state.selectedProduct.brand,
+                    flavour: this.$store.state.selectedProduct.flavour,
                     quantity: this.quantity,
-                    unit_price: this.$store.state.selectedProduct.unit_price,
-                    case_price: this.$store.state.selectedProduct.case_price,
+                    selling_unit_price: this.$store.state.selectedProduct.selling_unit_price,
+                    selling_case_price: this.$store.state.selectedProduct.selling_case_price,
                 },
                 snackbox_details: snackbox,
 
