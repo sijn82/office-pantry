@@ -109,7 +109,7 @@ class OrderController extends Controller
 
         foreach ($fruitboxes as $fruitbox) {
 
-            if ($fruitbox->next_delivery < Carbon::now()) {
+            //if ($fruitbox->next_delivery < Carbon::now()) {
 
                 // Add the old next_delivery_week to the last_delivery_week field.
                 $lastDelivery = $fruitbox->next_delivery;
@@ -171,7 +171,7 @@ class OrderController extends Controller
                 ]);
 
                 //----- End of Advance the Fruitbox Orders -----//
-            }
+        //    }
         }
 
         //----- End of Fruitboxes -----//
@@ -181,7 +181,7 @@ class OrderController extends Controller
 
         foreach ($milkboxes as $milkbox) {
 
-            if ($milkbox->next_delivery < Carbon::now()) {
+        //    if ($milkbox->next_delivery < Carbon::now()) {
 
                 // echo $milkbox->name . '\'s next delivery was outdated but has been changed from ' . $milkbox->next_delivery . " to ";
 
@@ -237,7 +237,7 @@ class OrderController extends Controller
                 ]);
 
                 //----- End of Advance the Milkbox Orders -----//
-        }
+    //    }
 
         //----- End of Milkboxes -----//
         }
