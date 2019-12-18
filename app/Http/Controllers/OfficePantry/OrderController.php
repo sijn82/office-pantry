@@ -98,6 +98,10 @@ class OrderController extends Controller
         ]);
     }
 
+    // THIS IS A TEMPORARY SHORTCUT TO THE ORDER ADVANCEMENT FUNCTION
+    // - SOME CHANGES MADE TO THIS NEED TO BE APPLIED TO THE FULL FUNCTION BUT I'M STILL TESTING HOW IT HANDLES THE SWITCH ONTO THE NEW YEAR BEFORE IMPLEMENTING THE REWORK.
+    // SUMMARY OF CHANGES SO FAR
+    // - ADD 'NO OVERFLOW' TO MONTHS AND YEARS TO PREVENT 31 DAYS AND I SUSPECT LEAP YEARS ADVANCING BY AN ADDITIONAL MONTH (OR YEAR) BECAUSE OF A SURPLUS DAY.
     public function fudgeOrderAdvancement()
     {
         //----- Fruitboxes -----//
@@ -121,17 +125,36 @@ class OrderController extends Controller
 
                 } elseif ($fruitbox->frequency === 'Monthly') {
 
+
+                    //dump($fruitbox->next_delivery);
                     // This will hold either the value first, second, third, fourth or last.
                     $week = $fruitbox->week_in_month;
+                    //dump($week);
+
                     // This will check the month of the last delivery and then advance by one month,
                     // before saving that month as a string to be parsed later in $mondayOfMonth variable.
-                    $month = Carbon::parse($fruitbox->next_delivery)->addMonth()->englishMonth;
+                    $month = Carbon::parse($fruitbox->next_delivery)->addMonthNoOverflow()->englishMonth;
+                    //dump($month);
                     // Create new instance of Carbon to use as the primer for $carbon::parse() below.
                     $carbon = new Carbon;
                     // An alternative to setting the month above and parsing below would be to parse the phrase '$week . ' monday of NEXT month'
                     // and allow it use the carbon date of when the function is run however I'm currently prefering this approach
                     // as it weighs more heavily on the last delivery date rather than when processes are run.
                     $mondayOfMonth = $carbon::parse($week . ' monday of ' . $month);
+
+                    if ($lastDelivery > $mondayOfMonth) {
+                        //dd('Happy New Year');
+                        // This only happens when we advance the month from december to january.
+                        // The parse doesn't know to advance the year so we actually go back in time.
+                        // To tackle this issue, we add a year to the next_delivery date
+                        // THERE MUST BE A BETTER WAY TO DO THIS BUT MEH, OTHER THINGS TO DO.
+                        $year = Carbon::parse($fruitbox->next_delivery)->addYearNoOverflow()->year;
+                        // Then recalculate the parsed date to use the new year calendar and not the previous!
+                        $mondayOfMonth = $carbon::parse($week . ' monday of ' . $month . ' ' . $year);
+                        //dump($mondayOfMonth);
+                    }
+
+                    // dd($mondayOfMonth);
                     // Set the newly parsed delivery date.
                     $fruitbox->next_delivery = $mondayOfMonth;
 
@@ -179,15 +202,26 @@ class OrderController extends Controller
                     $week = $milkbox->week_in_month;
                     // This will check the month of the last delivery and then advance by one month,
                     // before saving that month as a string to be parsed later in $mondayOfMonth variable.
-                    $month = Carbon::parse($milkbox->next_delivery)->addMonth()->englishMonth;
+                    $month = Carbon::parse($milkbox->next_delivery)->addMonthNoOverflow()->englishMonth;
                     // Create new instance of Carbon to use as the primer for $carbon::parse() below.
                     $carbon = new Carbon;
                     // An alternative to setting the month above and parsing below would be to parse the phrase '$week . ' monday of NEXT month'
                     // and allow it use the carbon date of when the function is run however I'm currently prefering this approach
                     // as it weighs more heavily on the last delivery date rather than when processes are run.
                     $mondayOfMonth = $carbon::parse($week . ' monday of ' . $month);
+
+                    if ($lastDelivery > $mondayOfMonth) {
+
+                        // Same issue/solution as fruit (see fruit for related comments)
+                        $year = Carbon::parse($milkbox->next_delivery)->addYearNoOverflow()->year;
+                        // Then recalculate the parsed date to use the new year calendar and not the previous!
+                        $mondayOfMonth = $carbon::parse($week . ' monday of ' . $month . ' ' . $year);
+
+                    }
+
                     // Set the newly parsed delivery date.
                     $milkbox->next_delivery = $mondayOfMonth;
+
 
                 } else {
 
