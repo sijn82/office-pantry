@@ -3,8 +3,8 @@
 
       <tr>
           <th>Company Name</th>
-          <th>Box Type</th>
           <th>Delivery Day</th>
+          <th>Box Type</th>
           <th>Fruit Boxes</th>
           @if ($deliciously_red_apples_total === 0) @else <th>Deliciously Red Apples</th> @endif
           @if ($pink_lady_apples_total === 0) @else <th>Pink Lady Apples</th> @endif
@@ -40,8 +40,8 @@
 
             <tr>
                 <td>{{ $picklist->company_name }}</td>
-                <td> {{ $picklist->type }} </td>
                 <td>{{ $picklist->delivery_day }}</td>
+                <td>{{ $picklist->type }}</td>
                 <td>{{ $picklist->fruitbox_total }}</td>
                 @if ($deliciously_red_apples_total === 0) @elseif ($picklist->deliciously_red_apples === 0) <td></td> @else <td> {{ $picklist->deliciously_red_apples }} </td> @endif
                 @if ($pink_lady_apples_total === 0) @elseif ($picklist->pink_lady_apples === 0) <td></td> @else <td> {{ $picklist->pink_lady_apples }} </td> @endif
