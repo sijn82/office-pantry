@@ -96,6 +96,8 @@ WithMultipleSheets
 
         $correctOrderWedThurFri =   [
                                         '3.00 - Weds Float',
+                                        '3.10 - Go West',
+                                        '3.09 - ',
                                         '3.08 - Float 2',
                                         '3.07 - Extra',
                                         '3.06 - Extra Float',
