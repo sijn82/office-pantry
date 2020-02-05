@@ -32,12 +32,24 @@ class Product extends Model
         'dietary_requirements'
     ];
 
-        /**
-         * The attributes that should be hidden for arrays.
-         *
-         * @var array
-         */
-        protected $hidden = [
-            // 'password', 'remember_token',
-        ];
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        // 'password', 'remember_token',
+    ];
+
+    // public function snackbox()
+    // {
+    //     return $this->hasMany(SnackBox::class);
+    // }
+
+    // This will replace the allergies part of the allergies_and_dietary_requirements() function above.
+    public function allergy_info()
+    {   // In this instance connection_type/connection_id are the expected column names so don't really need declaring.
+        return $this->morphMany('App\AllergyInfo', 'connectable', 'connection_type', 'connection_id');
+    }
+
 }

@@ -1,7 +1,7 @@
 <template >
     <div>
         <!-- <ul> -->
-            <div id="edit-save-buttons">
+            <div id="fruitbox-preview-info">
                 <h4> {{ fruitbox.name }} </h4>
                 <h5> {{ fruitbox.next_delivery }} </h5>
                 <p> {{ fruitbox.delivery_day }} - {{ fruitbox.is_active }} </p>
@@ -12,7 +12,7 @@
                 <b-form-checkbox v-if="editing" v-model="skip_archive" value='true' unchecked-value='false'> Skip Fruitbox Archive Creation/Update </b-form-checkbox>
                 <b-form-text v-if="editing"> Skip fruitbox archiving if you're updating a mistake and do not need to keep the existing information. </b-form-text>
             </div>
-            <div id="fruit-details" v-show="details">
+            <div id="fruit-details" v-show="details" :class="{ margin_top_20: details }">
                 <b-row id="top-details" :class="fruitbox.is_active" sm="12" class="b-row-padding">
                     <b-col class="col-sm-4">
                         <label><b> Fruitbox ID </b></label>
@@ -384,7 +384,12 @@
 </template>
 
 <style lang="scss" scoped>
+    #fruitbox-preview-info {
 
+    }
+    .margin_top_20 {
+        margin-top: 20px;
+    }
 
 </style>
 

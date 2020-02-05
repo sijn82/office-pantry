@@ -42,7 +42,7 @@
                                 <p> {{ fruit.route_id }} </p>
                             </div>
                         </b-col>
-                    </b-row> 
+                    </b-row>
 
                      <b-row :class="fruit.is_active" sm="12">
                         <b-col class="col-sm-3">
@@ -229,7 +229,7 @@
     </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 
     #edit-save-buttons {
         padding-bottom: 5px;
@@ -242,7 +242,7 @@
         background-color: rgba(201, 16, 16, 0.5);
     }
     .fruitbox {
-        padding-right: 40px;
+        //padding-right: 40px;
         li {
         list-style: none;
         }

@@ -201,29 +201,29 @@ WithEvents
             if ($fruitboxes->date_changed > $last_week ) {
                 $order_changes = true;
             }
-         }
+        }
 
-         // See above and below for the new solution - it appears to work fine now. Fingers crossed.
-         $deliciously_red_apples_total = $deliciously_red_apples_running_total;
-         $pink_lady_apples_total = $pink_lady_apples_running_total;
-         $red_apples_total = $red_apples_running_total;
-         $green_apples_total = $green_apples_running_total;
-         $satsumas_total = $satsumas_running_total;
-         $pears_total = $pears_running_total;
-         $bananas_total = $bananas_running_total;
-         $nectarines_total = $nectarines_running_total;
-         $limes_total = $limes_running_total;
-         $lemons_total = $lemons_running_total;
-         $grapes_total = $grapes_running_total;
-         $seasonal_berries_total = $seasonal_berries_running_total;
-         $oranges_total = $oranges_running_total;
-         $cucumbers_total = $cucumbers_running_total;
-         $mint_total = $mint_running_total;
-         $organic_lemons_total = $organic_lemons_running_total;
-         $kiwis_total = $kiwis_running_total;
-         $grapefruits_total = $grapefruits_running_total;
-         $avocados_total = $avocados_running_total;
-         $root_ginger_total = $root_ginger_running_total;
+        // See above and below for the new solution - it appears to work fine now. Fingers crossed.
+        $deliciously_red_apples_total = $deliciously_red_apples_running_total;
+        $pink_lady_apples_total = $pink_lady_apples_running_total;
+        $red_apples_total = $red_apples_running_total;
+        $green_apples_total = $green_apples_running_total;
+        $satsumas_total = $satsumas_running_total;
+        $pears_total = $pears_running_total;
+        $bananas_total = $bananas_running_total;
+        $nectarines_total = $nectarines_running_total;
+        $limes_total = $limes_running_total;
+        $lemons_total = $lemons_running_total;
+        $grapes_total = $grapes_running_total;
+        $seasonal_berries_total = $seasonal_berries_running_total;
+        $oranges_total = $oranges_running_total;
+        $cucumbers_total = $cucumbers_running_total;
+        $mint_total = $mint_running_total;
+        $organic_lemons_total = $organic_lemons_running_total;
+        $kiwis_total = $kiwis_running_total;
+        $grapefruits_total = $grapefruits_running_total;
+        $avocados_total = $avocados_running_total;
+        $root_ginger_total = $root_ginger_running_total;
 
         return view('exports.fruitpartner-fruitbox-picklists', [
             'picklists' => $this->fruitpartner_fruitboxes,
@@ -589,7 +589,7 @@ WithEvents
 
         // We only really need to set this once, so let's keep it out of the loop.
         $now = CarbonImmutable::now();
-        $last_week = $now->subWeek();
+        $last_week = $now->subWeek(); // this could be based on frequency but 7 days will do for now.
         $week_start = WeekStart::first();
         // Hmmmn, do I want to do a group check, sending '$order_changes = true' if any are updated, or check them on an individual basis in the template?
         $order_changes = false;
@@ -626,12 +626,95 @@ WithEvents
 
                     //----- Moved logic up to here to handle all fruit & milk and just fruit deliveries -----//
                     $milkboxes = $this->milkboxes[$key];
-                    // dump($milkboxes);
-                    $milkboxes ? $additional_milk = $milkboxes->where('next_delivery', $week_start->current)->where('company_details_id', $fruitbox->company_details_id)->where('delivery_day', $fruitbox->delivery_day)->first() : $additional_milk = $milkboxes;
-                    // $additional_milk = $milkboxes->where('company_details_id', $fruitbox->company_details_id)->where('delivery_day', $fruitbox->delivery_day)->first();
-                    // dd($additional_milk);
+
+                    // EDIT 3/2/20: THIS WAS FINE FOR ONE MILKBOX PER DELIVERY, NOW THERE MIGHT BE MORE THAN ONE SO COMMENTING THIS OUT.
+                    // $milkboxes ? $additional_milk = $milkboxes->where('next_delivery', $week_start->current)->where('company_details_id', $fruitbox->company_details_id)->where('delivery_day', $fruitbox->delivery_day)->first() : $additional_milk = $milkboxes;
+                    $milkboxes ? $additional_milk = $milkboxes->where('next_delivery', $week_start->current)->where('company_details_id', $fruitbox->company_details_id)->where('delivery_day', $fruitbox->delivery_day)->all() : $additional_milk = $milkboxes;
 
                     if (!empty($additional_milk)) {
+                        //dd($additional_milk);
+                        // EDIT 3/2/20
+                        // It turns out I need to allow for 2+ milk orders on the same delivery, so I'm going to create a running total to allow for these cases.
+
+                        // Set the total variables.
+
+                        // 2l
+                        $total_semi_skimmed_2l = 0;
+                        $total_skimmed_2l = 0;
+                        $total_whole_2l = 0;
+                        // 1l
+                        $total_semi_skimmed_1l = 0;
+                        $total_skimmed_1l = 0;
+                        $total_whole_1l = 0;
+                        // 2l organic
+                        $total_organic_semi_skimmed_2l = 0;
+                        $total_organic_skimmed_2l = 0;
+                        $total_organic_whole_2l = 0;
+                        // 1l organic
+                        $total_organic_semi_skimmed_1l = 0;
+                        $total_organic_skimmed_1l = 0;
+                        $total_organic_whole_1l = 0;
+                        // Alt pt 1
+                        $total_milk_1l_alt_coconut = 0;
+                        $total_milk_1l_alt_unsweetened_almond = 0;
+                        $total_milk_1l_alt_almond = 0;
+                        // Alt pt 2
+                        $total_milk_1l_alt_unsweetened_soya = 0;
+                        $total_milk_1l_alt_soya = 0;
+                        $total_milk_1l_alt_soya_chocolate = 0;
+                        // Alt pt 3
+                        $total_milk_1l_alt_oat = 0;
+                        $total_milk_1l_alt_cashew = 0;
+                        $total_milk_1l_alt_hazelnut = 0;
+                        // Alt pt 4
+                        $total_milk_1l_alt_rice = 0;
+                        $total_milk_1l_alt_lactose_free_semi = 0;
+
+                        // Loop through the orders creating running milk totals
+
+                        foreach ($additional_milk as $milk_order) {
+                            //dd($milk_order);
+                            // 2l
+                            $total_semi_skimmed_2l += $milk_order->semi_skimmed_2l;
+                            $total_skimmed_2l += $milk_order->skimmed_2l;
+                            $total_whole_2l += $milk_order->whole_2l;
+                            // 1l
+                            $total_semi_skimmed_1l += $milk_order->semi_skimmed_1l;
+                            $total_skimmed_1l += $milk_order->skimmed_1l;
+                            $total_whole_1l += $milk_order->whole_1l;
+                            // 2l organic
+                            $total_organic_semi_skimmed_2l += $milk_order->organic_semi_skimmed_2l;
+                            $total_organic_skimmed_2l += $milk_order->organic_skimmed_2l;
+                            $total_organic_whole_2l += $milk_order->organic_whole_2l;
+                            // 1l organic
+                            $total_organic_semi_skimmed_1l += $milk_order->organic_semi_skimmed_1l;
+                            $total_organic_skimmed_1l += $milk_order->organic_skimmed_1l;
+                            $total_organic_whole_1l += $milk_order->organic_whole_1l;
+                            // Alt pt 1
+                            $total_milk_1l_alt_unsweetened_almond += $milk_order->milk_1l_alt_unsweetened_almond;
+                            $total_milk_1l_alt_almond += $milk_order->milk_1l_alt_almond;
+                            $total_milk_1l_alt_coconut += $milk_order->milk_1l_alt_coconut;
+                            // Alt pt 2
+                            $total_milk_1l_alt_unsweetened_soya += $milk_order->milk_1l_alt_unsweetened_soya;
+                            $total_milk_1l_alt_soya += $milk_order->milk_1l_alt_soya;
+                            $total_milk_1l_alt_soya_chocolate += $milk_order->milk_1l_alt_soya_chocolate;
+                            // Alt pt 3
+                            $total_milk_1l_alt_oat += $milk_order->milk_1l_alt_oat;
+                            $total_milk_1l_alt_cashew += $milk_order->milk_1l_alt_cashew;
+                            $total_milk_1l_alt_hazelnut += $milk_order->milk_1l_alt_hazelnut;
+                            // Alt pt 4
+                            $total_milk_1l_alt_rice += $milk_order->milk_1l_alt_rice;
+                            $total_milk_1l_alt_lactose_free_semi += $milk_order->milk_1l_alt_lactose_free_semi;
+
+                            // This will still only check if the milkbox order has changed, not what was delivered, or whether there was another box last time.
+                            if ($milk_order->date_changed > $last_week || $milk_order->frequency !== 'Weekly') {
+                                // Individual check
+                                // $delivery_entry->milk_changes = true; <-- why over complicate things? Let's leave this for now.
+                                $delivery_entry->order_changes = true;
+                                // General check
+                                $order_changes = true;
+                            }
+                        }
 
 
                         // Then if the check is working properly, we have a corresponding milkbox entry to add to the delivery route.
@@ -645,34 +728,46 @@ WithEvents
                         $delivery_entry->fruitbox_total = $fruitbox->fruitbox_total;
                         // Now let's grab all the milk related data from the $additional_milk entry.
                         // Regular Milk Order
-                        $delivery_entry->semi_skimmed_2l = $additional_milk->semi_skimmed_2l;
-                        $delivery_entry->skimmed_2l = $additional_milk->skimmed_2l;
-                        $delivery_entry->whole_2l = $additional_milk->whole_2l;
-                        $delivery_entry->semi_skimmed_1l = $additional_milk->semi_skimmed_1l;
-                        $delivery_entry->skimmed_1l = $additional_milk->skimmed_1l;
-                        $delivery_entry->whole_1l = $additional_milk->whole_1l;
+                        $delivery_entry->semi_skimmed_2l = $total_semi_skimmed_2l;
+                        $delivery_entry->skimmed_2l = $total_skimmed_2l;
+                        $delivery_entry->whole_2l = $total_whole_2l;
+                        $delivery_entry->semi_skimmed_1l = $total_semi_skimmed_1l;
+                        $delivery_entry->skimmed_1l = $total_skimmed_1l;
+                        $delivery_entry->whole_1l = $total_whole_1l;
                         // Organic Milk
-                        $delivery_entry->organic_semi_skimmed_1l = $additional_milk->organic_semi_skimmed_1l;
-                        $delivery_entry->organic_skimmed_1l = $additional_milk->organic_skimmed_1l;
-                        $delivery_entry->organic_whole_1l = $additional_milk->organic_whole_1l;
-                        $delivery_entry->organic_semi_skimmed_2l = $additional_milk->organic_semi_skimmed_2l;
-                        $delivery_entry->organic_skimmed_2l = $additional_milk->organic_skimmed_2l;
-                        $delivery_entry->organic_whole_2l = $additional_milk->organic_whole_2l;
+                        $delivery_entry->organic_semi_skimmed_2l = $total_organic_semi_skimmed_2l;
+                        $delivery_entry->organic_skimmed_2l = $total_organic_skimmed_2l;
+                        $delivery_entry->organic_whole_2l = $total_organic_whole_2l;
+                        $delivery_entry->organic_semi_skimmed_1l = $total_organic_semi_skimmed_1l;
+                        $delivery_entry->organic_skimmed_1l = $total_organic_skimmed_1l;
+                        $delivery_entry->organic_whole_1l = $total_organic_whole_1l;
                         // Milk Alternatives
                         // Pt 1
-                        $delivery_entry->milk_1l_alt_coconut = $additional_milk->milk_1l_alt_coconut;
-                        $delivery_entry->milk_1l_alt_unsweetened_almond = $additional_milk->milk_1l_alt_unsweetened_almond;
-                        $delivery_entry->milk_1l_alt_almond = $additional_milk->milk_1l_alt_almond;
+                        $delivery_entry->milk_1l_alt_unsweetened_almond = $total_milk_1l_alt_unsweetened_almond;
+                        $delivery_entry->milk_1l_alt_almond = $total_milk_1l_alt_almond;
+                        $delivery_entry->milk_1l_alt_coconut = $total_milk_1l_alt_coconut;
                         // Pt 2
-                        $delivery_entry->milk_1l_alt_unsweetened_soya = $additional_milk->milk_1l_alt_unsweetened_soya;
-                        $delivery_entry->milk_1l_alt_soya = $additional_milk->milk_1l_alt_soya;
-                        $delivery_entry->milk_1l_alt_oat = $additional_milk->milk_1l_alt_oat;
+                        $delivery_entry->milk_1l_alt_unsweetened_soya = $total_milk_1l_alt_unsweetened_soya;
+                        $delivery_entry->milk_1l_alt_soya = $total_milk_1l_alt_soya;
+                        $delivery_entry->milk_1l_alt_soya_chocolate = $total_milk_1l_alt_soya_chocolate;
                         // Pt 3
-                        $delivery_entry->milk_1l_alt_rice = $additional_milk->milk_1l_alt_rice;
-                        $delivery_entry->milk_1l_alt_cashew = $additional_milk->milk_1l_alt_cashew;
-                        $delivery_entry->milk_1l_alt_lactose_free_semi = $additional_milk->milk_1l_alt_lactose_free_semi;
+                        $delivery_entry->milk_1l_alt_oat = $total_milk_1l_alt_oat;
+                        $delivery_entry->milk_1l_alt_cashew = $total_milk_1l_alt_cashew;
+                        $delivery_entry->milk_1l_alt_hazelnut = $total_milk_1l_alt_hazelnut;
+                        // Pt 4
+                        $delivery_entry->milk_1l_alt_rice = $total_milk_1l_alt_rice;
+                        $delivery_entry->milk_1l_alt_lactose_free_semi = $total_milk_1l_alt_lactose_free_semi;
 
-                        $delivery_entry->order_changes = false; // <-- Before we check for changes we need to set this in case their aren't any.
+                        // Now we have the milk check for changes further up, we need to make sure the value hasn't already been set to true.
+                        // if (isset($delivery_entry->order_changes) !== true) {
+                        //     // Then we can set it to false.
+                        //     $delivery_entry->order_changes = false;
+                        // }
+
+                        // New an improved check - does the same as before but is a little more readable. :)
+                        $delivery_entry->order_changes = $delivery_entry->order_changes ?? false;
+
+                         // <-- Before we check for changes we need to set this in case their aren't any.
 
                         //----- We need to check for milk and fruit order updates plus company detail changes -----//
 
@@ -685,13 +780,15 @@ WithEvents
                             $order_changes = true;
                         }
 
-                        if ($additional_milk->date_changed > $last_week) {
-                            // Individual check
-                            // $delivery_entry->milk_changes = true; <-- why over complicate things? Let's leave this for now.
-                            $delivery_entry->order_changes = true;
-                            // General check
-                            $order_changes = true;
-                        }
+                        // Moved milk check from here to the loop above in case we have more than one order to combine into the route
+
+                        // if ($additional_milk->date_changed > $last_week) {
+                        //     // Individual check
+                        //     // $delivery_entry->milk_changes = true; <-- why over complicate things? Let's leave this for now.
+                        //     $delivery_entry->order_changes = true;
+                        //     // General check
+                        //     $order_changes = true;
+                        // }
 
                         if ($company_details->date_changed > $last_week) {
                             // Individual check
@@ -730,16 +827,19 @@ WithEvents
                         $delivery_entry->organic_whole_2l = 0;
                         // Alternative Milk
                         // Pt 1
-                        $delivery_entry->milk_1l_alt_coconut = 0;
                         $delivery_entry->milk_1l_alt_unsweetened_almond = 0;
                         $delivery_entry->milk_1l_alt_almond = 0;
+                        $delivery_entry->milk_1l_alt_coconut = 0;
                         // Pt 2
                         $delivery_entry->milk_1l_alt_unsweetened_soya = 0;
                         $delivery_entry->milk_1l_alt_soya = 0;
-                        $delivery_entry->milk_1l_alt_oat = 0;
+                        $delivery_entry->milk_1l_alt_soya_chocolate = 0;
                         // Pt 3
-                        $delivery_entry->milk_1l_alt_rice = 0;
+                        $delivery_entry->milk_1l_alt_oat = 0;
                         $delivery_entry->milk_1l_alt_cashew = 0;
+                        $delivery_entry->milk_1l_alt_hazelnut = 0;
+                        // Pt 4
+                        $delivery_entry->milk_1l_alt_rice = 0;
                         $delivery_entry->milk_1l_alt_lactose_free_semi = 0;
 
                         $delivery_entry->order_changes = false; // <-- Before we check for changes we need to set this in case their aren't any.
@@ -776,17 +876,153 @@ WithEvents
         } // End of if (!empty($this->fruitboxes))
 
         if (!empty($this->milkboxes)) {
+            // $this->milkboxes is currently a collection (array of objects) of orders for a specific fruitpartner.  Not organised by company or day.
+
+            // i.e
+                    //             array:1 [▼
+                    //   "5 A Day Fresh Fruit & Veg" => Collection {#526 ▼
+                    //     #items: array:4 [▼
+                    //       0 => MilkBox {#512 ▶}
+                    //       1 => MilkBox {#511 ▶}
+                    //       2 => MilkBox {#510 ▶}
+                    //       3 => MilkBox {#509 ▶}
+                    //     ]
+                    //   }
+                    // ]
+
             foreach ($this->milkboxes as $key => $milkboxes) {
+
+                $milkboxes_grouped_by_company_and_delivery_day = $milkboxes->groupBy(['company_details_id', 'delivery_day']);
+
+                foreach ($milkboxes_grouped_by_company_and_delivery_day as $milkboxes_by_days) {
+                    foreach ($milkboxes_by_days as $day => $milkboxes_by_day) {
+                        //dd($milkboxes_by_day);
+                        if (count($milkboxes_by_day) > 1) {
+
+                            // Some values should be the same for all the orders, for simplicity let's grab it from the first entry.
+                            $company_id = $milkboxes_by_day[0]->company_details_id;
+                            $company_details = CompanyDetails::find($company_id);
+
+                            // Added but untested, however I did the same but with milk to the fruitboxes so it should be fine?
+                            $fruitboxes = $this->fruitboxes[$key];
+                            // dump($fruitboxes);
+                            // Call to a member function where() on null, throws error - needs fixing!!
+                            $fruitboxes ? $additional_fruit = $fruitboxes->where('company_details_id', $company_id)->where('delivery_day', $day)->first() : $additional_fruit = $fruitboxes;
+
+                            if (empty($additional_fruit)) {
+
+                                // Then we have a milk only delivery - fingers crossed.
+
+                                // Then we need to merge the orders into 1 delivery.  So let's create a new delivery entry to push into the order array.
+                                $delivery_entry = new \stdClass;
+                                $delivery_entry->order_changes = false;
+
+                                // we need to check if the frequency of either box isn't weekly - updating $delivery_entry->order_changes to true if so.
+                                foreach ($milkboxes_by_day as $milkbox) {
+                                    if ($milkbox->frequency !== 'Weekly' || $milkbox->date_changed > $last_week) {
+                                        // Individual check
+                                        $delivery_entry->order_changes = true;
+                                        // General check
+                                        $order_changes = true;
+                                    }
+                                }
+
+                                // We don't need to worry about multiple boxes here, they still only have one company details to change.
+                                // Although I could wrap it up in the milkbox checks and let it check twice to save a few lines?
+                                if ($company_details->date_changed > $last_week) {
+                                    // Individual check
+                                    // $delivery_details->company_details_changes = true; <-- Ignoring this for now.
+                                    $delivery_entry->order_changes = true;
+                                    // General check
+                                    $order_changes = true;
+                                }
+
+                                // Grab delivery information
+                                $delivery_entry->company_details_id = $company_details->id;
+                                $delivery_entry->company_details_route_name = $company_details->route_name;
+                                $delivery_entry->company_details_delivery_information = $company_details->delivery_information;
+                                $delivery_entry->company_details_postcode = $company_details->route_postcode;
+                                $delivery_entry->company_details_summary_address = implode(", ", array_filter([
+                                        $company_details->route_address_line_1,
+                                        $company_details->route_address_line_2,
+                                        $company_details->route_address_line_3,
+                                        $company_details->route_city,
+                                        $company_details->route_region
+                                    ]));
+
+                                $delivery_entry->delivery_day = $milkboxes_by_day[0]->delivery_day;
+                                $delivery_entry->fruitbox_total = 0;
+
+                                // we need to combine these orders into one $delivery_entry.
+                                //2l
+                                $delivery_entry->semi_skimmed_2l = $milkboxes_by_day->sum('semi_skimmed_2l');
+                                $delivery_entry->skimmed_2l = $milkboxes_by_day->sum('skimmed_2l');
+                                $delivery_entry->whole_2l = $milkboxes_by_day->sum('whole_2l');
+                                // 1l
+                                $delivery_entry->semi_skimmed_1l = $milkboxes_by_day->sum('semi_skimmed_1l');
+                                $delivery_entry->skimmed_1l = $milkboxes_by_day->sum('skimmed_1l');
+                                $delivery_entry->whole_1l = $milkboxes_by_day->sum('whole_1l');
+                                // Organic 2l
+                                $delivery_entry->organic_semi_skimmed_2l = $milkboxes_by_day->sum('organic_semi_skimmed_2l');
+                                $delivery_entry->organic_skimmed_2l = $milkboxes_by_day->sum('organic_skimmed_2l');
+                                $delivery_entry->organic_whole_2l = $milkboxes_by_day->sum('organic_whole_2l');
+                                // Organic 1l
+                                $delivery_entry->organic_semi_skimmed_1l = $milkboxes_by_day->sum('organic_semi_skimmed_1l');
+                                $delivery_entry->organic_skimmed_1l = $milkboxes_by_day->sum('organic_skimmed_1l');
+                                $delivery_entry->organic_whole_1l = $milkboxes_by_day->sum('organic_whole_1l');
+                                // Alt pt 1
+                                $delivery_entry->milk_1l_alt_unsweetened_almond = $milkboxes_by_day->sum('milk_1l_alt_unsweetened_almond');
+                                $delivery_entry->milk_1l_alt_almond = $milkboxes_by_day->sum('milk_1l_alt_almond');
+                                $delivery_entry->milk_1l_alt_coconut = $milkboxes_by_day->sum('milk_1l_alt_coconut');
+                                // Alt pt 2
+                                $delivery_entry->milk_1l_alt_unsweetened_soya = $milkboxes_by_day->sum('milk_1l_alt_unsweetened_soya');
+                                $delivery_entry->milk_1l_alt_soya = $milkboxes_by_day->sum('milk_1l_alt_soya');
+                                $delivery_entry->milk_1l_alt_soya_chocolate = $milkboxes_by_day->sum('milk_1l_alt_soya_chocolate');
+                                // Alt pt 3
+                                $delivery_entry->milk_1l_alt_oat = $milkboxes_by_day->sum('milk_1l_alt_oat');
+                                $delivery_entry->milk_1l_alt_cashew = $milkboxes_by_day->sum('milk_1l_alt_cashew');
+                                $delivery_entry->milk_1l_alt_hazelnut = $milkboxes_by_day->sum('milk_1l_alt_hazelnut');
+                                // Alt pt 4
+                                $delivery_entry->milk_1l_alt_rice = $milkboxes_by_day->sum('milk_1l_alt_rice');
+                                $delivery_entry->milk_1l_alt_lactose_free_semi = $milkboxes_by_day->sum('milk_1l_alt_lactose_free_semi');
+
+                                // Additional debugging property
+                                $delivery_entry->status = 'No additional fruit';
+
+                                $orders[] = $delivery_entry; // <-- Now this only gets added if it contains a milk only order.
+                                                             // This is to prevent a fruit order being added twice because the details were not updated prior to this.
+                                 unset($delivery_entry); // <-- Same as above, unset ready to redeclared at the top of the foreach.
+
+                                // we need to get rid of the other entry, or both if we're creating a new entry rather than updating one of them.
+                                // I think creating the delivery_entry within here and removing both milkboxes from the collection makes the most sense to me.
+
+                                $milkbox_ids = $milkboxes_by_day->pluck('id')->toArray();
+                                //dd($milkbox_ids);
+                                //dump($milkboxes);
+                                foreach ($milkboxes as $id => $milkbox) {
+                                    if (in_array($milkbox->id, $milkbox_ids)){
+                                        $milkboxes->forget($id);
+                                    }
+
+                                }
+                                //dd($milkboxes);
+
+                            } // end of if (empty($additional_fruit))
+                        } // end of if (count($milkboxes_by_day) > 1)
+                    } // end of foreach ($milkboxes_by_days as $milkboxes_by_day)
+                } // end of foreach ($milkboxes_grouped_by_company_and_delivery_day as $milkboxes_by_days)
+                //dd($milkboxes);
+
+                // That's all the multi milkbox drops dealt with, now we can process the rest normally.
                 foreach ($milkboxes as $milkbox) {
 
                     // Ok, so each time we run a new order we need to unset and redefine the variable again or the results all end up the same as the last entry.
-                    // I stil feel there's a better solution to this but it's fine for now.
+                    // I still feel there's a better solution to this but it's fine for now.
 
                     $delivery_entry = new \stdClass;
                     // Added but untested, however I did the same but with milk to the fruitboxes so it should be fine?
                     $fruitboxes = $this->fruitboxes[$key];
-                    // dump($fruitboxes);
-                    // Call to a member function where() on null, throws error - needs fixing!!
+
                     $fruitboxes ? $additional_fruit = $fruitboxes->where('company_details_id', $milkbox->company_details_id)->where('delivery_day', $milkbox->delivery_day)->first() : $additional_fruit = $fruitboxes;
 
                     if (empty($additional_fruit)) {
@@ -825,24 +1061,27 @@ WithEvents
                             $delivery_entry->skimmed_1l = $milkbox->skimmed_1l;
                             $delivery_entry->whole_1l = $milkbox->whole_1l;
                             // Organic Milk
-                            $delivery_entry->organic_semi_skimmed_1l = $milkbox->organic_semi_skimmed_1l;
-                            $delivery_entry->organic_skimmed_1l = $milkbox->organic_skimmed_1l;
-                            $delivery_entry->organic_whole_1l = $milkbox->organic_whole_1l;
                             $delivery_entry->organic_semi_skimmed_2l = $milkbox->organic_semi_skimmed_2l;
                             $delivery_entry->organic_skimmed_2l = $milkbox->organic_skimmed_2l;
                             $delivery_entry->organic_whole_2l = $milkbox->organic_whole_2l;
+                            $delivery_entry->organic_semi_skimmed_1l = $milkbox->organic_semi_skimmed_1l;
+                            $delivery_entry->organic_skimmed_1l = $milkbox->organic_skimmed_1l;
+                            $delivery_entry->organic_whole_1l = $milkbox->organic_whole_1l;
                             // Alternative Milk
                             // Pt 1
-                            $delivery_entry->milk_1l_alt_coconut = $milkbox->milk_1l_alt_coconut;
                             $delivery_entry->milk_1l_alt_unsweetened_almond = $milkbox->milk_1l_alt_unsweetened_almond;
                             $delivery_entry->milk_1l_alt_almond = $milkbox->milk_1l_alt_almond;
+                            $delivery_entry->milk_1l_alt_coconut = $milkbox->milk_1l_alt_coconut;
                             // Pt 2
                             $delivery_entry->milk_1l_alt_unsweetened_soya = $milkbox->milk_1l_alt_unsweetened_soya;
                             $delivery_entry->milk_1l_alt_soya = $milkbox->milk_1l_alt_soya;
-                            $delivery_entry->milk_1l_alt_oat = $milkbox->milk_1l_alt_oat;
+                            $delivery_entry->milk_1l_alt_soya_chocolate = $milkbox->milk_1l_alt_soya_chocolate;
                             // Pt 3
-                            $delivery_entry->milk_1l_alt_rice = $milkbox->milk_1l_alt_rice;
+                            $delivery_entry->milk_1l_alt_oat = $milkbox->milk_1l_alt_oat;
                             $delivery_entry->milk_1l_alt_cashew = $milkbox->milk_1l_alt_cashew;
+                            $delivery_entry->milk_1l_alt_hazelnut = $milkbox->milk_1l_alt_hazelnut;
+                            // Pt 4
+                            $delivery_entry->milk_1l_alt_rice = $milkbox->milk_1l_alt_rice;
                             $delivery_entry->milk_1l_alt_lactose_free_semi = $milkbox->milk_1l_alt_lactose_free_semi;
 
                             $delivery_entry->order_changes = false; // <-- Before we check for changes we need to set this in case their aren't any.
@@ -939,14 +1178,20 @@ WithEvents
          $organic_skimmed_1l_total = $flattened_back_to_orders_collection->pluck('organic_skimmed_1l')->sum();
          $organic_whole_1l_total = $flattened_back_to_orders_collection->pluck('organic_whole_1l')->sum();
          // Alternative Milk
-         $alt_coconut_total = $flattened_back_to_orders_collection->pluck('milk_1l_alt_coconut')->sum();
+         // pt 1
          $alt_unsweetened_almond_total = $flattened_back_to_orders_collection->pluck('milk_1l_alt_unsweetened_almond')->sum();
          $alt_almond_total = $flattened_back_to_orders_collection->pluck('milk_1l_alt_almond')->sum();
+         $alt_coconut_total = $flattened_back_to_orders_collection->pluck('milk_1l_alt_coconut')->sum();
+         // pt 2
          $alt_unsweetened_soya_total = $flattened_back_to_orders_collection->pluck('milk_1l_alt_unsweetened_soya')->sum();
          $alt_soya_total = $flattened_back_to_orders_collection->pluck('milk_1l_alt_soya')->sum();
+         $alt_soya_chocolate_total = $flattened_back_to_orders_collection->pluck('milk_1l_alt_soya_chocolate')->sum();
+         // pt 3
          $alt_oat_total = $flattened_back_to_orders_collection->pluck('milk_1l_alt_oat')->sum();
-         $alt_rice_total = $flattened_back_to_orders_collection->pluck('milk_1l_alt_rice')->sum();
          $alt_cashew_total = $flattened_back_to_orders_collection->pluck('milk_1l_alt_cashew')->sum();
+         $alt_hazelnut_total = $flattened_back_to_orders_collection->pluck('milk_1l_alt_hazelnut')->sum();
+         // pt 4
+         $alt_rice_total = $flattened_back_to_orders_collection->pluck('milk_1l_alt_rice')->sum();
          $alt_lactose_free_semi_total = $flattened_back_to_orders_collection->pluck('milk_1l_alt_lactose_free_semi')->sum();
 
 
@@ -961,26 +1206,36 @@ WithEvents
         return view('exports.fruitpartner-combined-details', [
             // 'deliveries' => $orders,
             'deliveries' => $ordersByMonToFri,
+            // 2l
             'semi_skimmed_2l_total' => $semi_skimmed_2l_total,
             'skimmed_2l_total' => $skimmed_2l_total,
             'whole_2l_total' => $whole_2l_total,
+            // 1l
             'semi_skimmed_1l_total' => $semi_skimmed_1l_total,
             'skimmed_1l_total' => $skimmed_1l_total,
-            'organic_whole_1l_total' => $organic_whole_1l_total,
+            'whole_1l_total' => $whole_1l_total,
+            // 2l organic
             'organic_semi_skimmed_2l_total' => $organic_semi_skimmed_2l_total,
             'organic_skimmed_2l_total' => $organic_skimmed_2l_total,
             'organic_whole_2l_total' => $organic_whole_2l_total,
+            // 1l organic
             'organic_semi_skimmed_1l_total' => $organic_semi_skimmed_1l_total,
             'organic_skimmed_1l_total' => $organic_skimmed_1l_total,
-            'whole_1l_total' => $whole_1l_total,
-            'alt_coconut_total' => $alt_coconut_total,
+            'organic_whole_1l_total' => $organic_whole_1l_total,
+            // alt pt 1
             'alt_unsweetened_almond_total' => $alt_unsweetened_almond_total,
             'alt_almond_total' => $alt_almond_total,
+            'alt_coconut_total' => $alt_coconut_total,
+            // alt pt 2
             'alt_unsweetened_soya_total' => $alt_unsweetened_soya_total,
             'alt_soya_total' => $alt_soya_total,
+            'alt_soya_chocolate_total' => $alt_soya_chocolate_total,
+            // alt pt 3
             'alt_oat_total' => $alt_oat_total,
-            'alt_rice_total' => $alt_rice_total,
             'alt_cashew_total' => $alt_cashew_total,
+            'alt_hazelnut_total' => $alt_hazelnut_total,
+            // alt pt 4
+            'alt_rice_total' => $alt_rice_total,
             'alt_lactose_free_semi_total' => $alt_lactose_free_semi_total,
             'order_changes' => $order_changes,
         ]);
@@ -1108,10 +1363,11 @@ WithEvents
                             // Using those coordinates we can grab the value of that cell, the column header.
                             $cellHeaderValue = $event->sheet->getDelegate()->getCell($cellHeaderCoordinates);
                             // dump($cellHeaderValue);
-                            // If that value matches either of these 3 headers, it's for semi skimmed milk - so let's give it a green background.
+                            // If that value matches either of these 4 headers, it's for semi skimmed milk - so let's give it a green background.
                             if (    $cellHeaderValue == 'Milk 2l Semi-Skimmed' ||
                                     $cellHeaderValue == 'Milk 1l Semi-Skimmed' ||
-                                    $cellHeaderValue == 'Organic 1l Semi Skimmed') {
+                                    $cellHeaderValue == 'Organic 2l Semi-Skimmed' ||
+                                    $cellHeaderValue == 'Organic 1l Semi-Skimmed') {
 
                                 // Cool, after a bunch of fiddling, this does what it should!
                                 // However I'm thinking it would be quit nice to give the headers the same treatment.
@@ -1133,6 +1389,7 @@ WithEvents
                             // Now let's do the same with skimmed, giving it a red background.
                             } elseif (  $cellHeaderValue == 'Milk 2l Skimmed' ||
                                         $cellHeaderValue == 'Milk 1l Skimmed' ||
+                                        $cellHeaderValue == 'Organic 2l Skimmed' ||
                                         $cellHeaderValue == 'Organic 1l Skimmed') {
 
                                 if ( is_numeric($cell->getValue()) // ||
@@ -1153,6 +1410,7 @@ WithEvents
                             // And blue for whole milk
                             } elseif (  $cellHeaderValue == 'Milk 2l Whole' ||
                                         $cellHeaderValue == 'Milk 1l Whole' ||
+                                        $cellHeaderValue == 'Organic 2l Whole' ||
                                         $cellHeaderValue == 'Organic 1l Whole') {
 
                                 if ( is_numeric($cell->getValue()) // ||
@@ -1171,14 +1429,17 @@ WithEvents
                                     ]);
                                 }
                             // The rest are all alternative milks, so let's give it ummm, *exhales*... yellow?
-                            } elseif (  $cellHeaderValue == 'Milk 1l Alt Coconut' ||
+                            } elseif (
                                         $cellHeaderValue == 'Milk 1l Alt Unsweetened Almond' ||
                                         $cellHeaderValue == 'Milk 1l Alt Almond' ||
+                                        $cellHeaderValue == 'Milk 1l Alt Coconut' ||
                                         $cellHeaderValue == 'Milk 1l Alt Unsweetened Soya' ||
                                         $cellHeaderValue == 'Milk 1l Alt Soya' ||
+                                        $cellHeaderValue == 'Milk 1l Alt Soya Chocolate' ||
                                         $cellHeaderValue == 'Milk 1l Alt Oat' ||
-                                        $cellHeaderValue == 'Milk 1l Alt Rice' ||
                                         $cellHeaderValue == 'Milk 1l Alt Cashew' ||
+                                        $cellHeaderValue == 'Milk 1l Alt Hazelnut' ||
+                                        $cellHeaderValue == 'Milk 1l Alt Rice' ||
                                         $cellHeaderValue == 'Milk 1l Alt Lactose Free Semi') {
 
                                 if ( is_numeric($cell->getValue()) // ||

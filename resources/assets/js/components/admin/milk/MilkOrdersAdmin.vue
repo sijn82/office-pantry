@@ -128,6 +128,9 @@ export default {
         },
         refreshData($event) {
             this.$emit('refresh-data', $event);
+            // Added 14/01/20 to close add new panel on form completion.
+            // This will close when an update (created/updated/deleted) is made to any fruitbox box but I don't see that being an issue.
+            this.addnew = false;
         },
 
         changeName(name) {

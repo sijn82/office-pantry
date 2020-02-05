@@ -182,7 +182,7 @@
         p {
             font-weight: 300;
             font-size: 1.2em;
-            margin: 20px 80px;
+            margin: 20px 40px;
             b {
             font-size: 1.3em;
             }

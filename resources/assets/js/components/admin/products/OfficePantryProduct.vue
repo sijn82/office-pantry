@@ -4,7 +4,7 @@
             <b-row class="margin-height-10">
                 <b-col>
                     <div v-if="editing">
-                        <b-form-input v-model="product.name"></b-form-input>
+                        <b-form-input type="text" v-model="product.name"></b-form-input>
                     </div>
                     <div v-else>
                         <p> {{ product.name }} </p>
@@ -12,7 +12,7 @@
                 </b-col>
                 <b-col>
                     <div v-if="editing">
-                        <b-form-input v-model="product.price"></b-form-input>
+                        <b-form-input type="number" v-model="product.price"></b-form-input>
                     </div>
                     <div v-else>
                         <p> {{ product.price }} </p>
@@ -36,10 +36,19 @@
                 </b-col>
                 <b-col>
                     <div v-if="editing">
-                        <b-button variant="success" @click="saveChange(product)" size="sm"> Save </b-button>
+                        <b-row>
+                            <b-button-group size="sm" >
+                                <b-button variant="success" @click="saveChange(product)"> Save </b-button>
+                                <b-button variant="danger" @click="enableEdit()"> Cancel </b-button>
+                            </b-button-group>
+                        </b-row>
                     </div>
                     <div v-else>
-                        <b-button variant="warning" @click="enableEdit()" size="sm"> Edit </b-button>
+                        <b-row>
+                            <b-col>
+                                <b-button variant="warning" size="sm" @click="enableEdit()"> Edit </b-button>
+                            </b-col>
+                        </b-row>
                     </div>
                 </b-col>
             </b-row>

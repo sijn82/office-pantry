@@ -13,6 +13,7 @@ class Allergy extends Model
 
     protected $fillable = [
         'company_details_id',
+        'snackbox_id',
         'allergy',
         'dietary_requirements'
     ];
@@ -26,6 +27,13 @@ class Allergy extends Model
 
     public function snackbox()
     {
-        return $this->belongsTo(SnackBox::class);
+        // What I want to represent - Allergy belongs to many Snackboxes but only where the (Allergy) snackbox_id matches (snackbox) snackbox_id, or (if Allergy->snackbox_id == null) companydetails_id.
+
+        return $this->belongsToMany(SnackBox::class, 'snackbox_id', 'snackbox_id');
+    }
+
+    public function allergy()
+    {
+        return $this->belongsToMany(AllergyInfo::class);
     }
 }

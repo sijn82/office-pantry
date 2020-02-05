@@ -38,6 +38,12 @@ class OfficePantryProductsController extends Controller
     public function store(Request $request)
     {
         //
+        $new_op_product = new OfficePantryProducts;
+        $new_op_product->name = request('name');
+        $new_op_product->price = request('price');
+        $new_op_product->sales_nominal = request('sales_nominal');
+        $new_op_product->vat = request('vat');
+        $new_op_product->save();
     }
 
     /**
@@ -48,11 +54,14 @@ class OfficePantryProductsController extends Controller
      */
     public function show(OfficePantryProducts $officePantryProducts)
     {
-        //
-        $office_pantry_products = OfficePantryProducts::all();
-        
-        return $office_pantry_products;
-        
+        // This could do with some better ordering on show.
+        $office_pantry_products = OfficePantryProducts::where('sales_nominal', '4040')->orderBy('id', 'asc')->get();
+        $fruit_partner_products = OfficePantryProducts::where('sales_nominal', '4050')->orderBy('id', 'asc')->get();
+
+        // This now returns an array of 2 lists.  Split back into two variables in the component mount.
+        // The only differenece between the two lists are the soles nominal, the lists are rendered side by side for now.
+            return [$office_pantry_products, $fruit_partner_products];
+
     }
 
     /**

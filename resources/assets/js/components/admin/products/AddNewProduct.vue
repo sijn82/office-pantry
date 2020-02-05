@@ -9,12 +9,12 @@
                         <!-- Product Brand -->
                         <b-col class="col-sm-4" id="product-name">
                             <label> Brand </label>
-                            <b-form-input id="product-brand" type="text" v-model="form.brand" placeholder="Enter unique product name" required></b-form-input>
+                            <b-form-input id="product-brand" type="text" v-model="form.brand" placeholder="Enter product brand" required></b-form-input>
                         </b-col>
                         <!-- Product Flavour -->
                         <b-col class="col-sm-4" id="product-name">
                             <label> Flavour </label>
-                            <b-form-input id="product-flavour" type="text" v-model="form.flavour" placeholder="Enter unique product name" required></b-form-input>
+                            <b-form-input id="product-flavour" type="text" v-model="form.flavour" placeholder="Enter product flavour" required></b-form-input>
                         </b-col>
                         <!-- Product Code -->
                         <b-col class="col-sm-4" id="product-code">
@@ -29,37 +29,37 @@
                         <b-col class="col-sm-4" id="product-case-cost">
                             <!-- Product Case Cost -->
                             <label> Buying Case Cost </label>
-                            <b-form-input v-model="form.buying_case_cost" type="number"></b-form-input>
+                            <b-form-input v-model="form.buying_case_cost" type="number" step="any"></b-form-input>
                         </b-col>
                         <b-col class="col-sm-4" id="product-case-price">
                             <!-- Product Case Price -->
                             <label> Selling Case Price </label>
                             <!-- This needs to be formula linked - selling_case_price = (selling_unit_price * selling_case_size) -->
-                            <b-form-input v-model="form.selling_case_price" type="number"></b-form-input>
+                            <b-form-input v-model="form.selling_case_price" type="number" step="any"></b-form-input>
                             <p class="selected-option"> Selling Case Price: {{ form.selling_case_price = form.selling_unit_price * form.selling_case_size }} </p>
                         </b-col>
                         <b-col class="col-sm-4" id="buying-case-size">
                             <!-- Buying Case Size -->
                             <label> Buying Case Size </label>
-                            <b-form-input v-model="form.buying_case_size" type="number"></b-form-input>
+                            <b-form-input v-model="form.buying_case_size" type="number" step="any"></b-form-input>
                         </b-col>
                     </b-row>
                     <b-row sm="12">
                         <b-col class="col-sm-4" id="selling-case-size">
                             <!-- Selling Case Size -->
                             <label> Selling Case Size </label>
-                            <b-form-input v-model="form.selling_case_size" type="number"></b-form-input>
+                            <b-form-input v-model="form.selling_case_size" type="number" step="any"></b-form-input>
                         </b-col>
                         <b-col class="col-sm-4" id="product-unit-price">
                             <!-- Product Unit Price -->
                             <label> Selling Unit Price </label>
-                            <b-form-input v-model="form.selling_unit_price" type="number"></b-form-input>
+                            <b-form-input v-model="form.selling_unit_price" type="number" step="any"></b-form-input>
                             <p class="selected-option"> Buying Unit Cost: {{ form.buying_unit_cost = form.buying_case_cost / form.buying_case_size }} </p>
                         </b-col>
                         <!-- Product Stock Level -->
                         <b-col class="col-sm-4" id="product-case-stock-level">
                             <label> Stock Level (Singles) </label>
-                            <b-form-input v-model="form.stock_level" type="number"></b-form-input>
+                            <b-form-input v-model="form.stock_level" type="number" step="any"></b-form-input>
                             <p class="selected-option"> Product Profit Margin: {{ form.profit_margin = (form.selling_unit_price - form.buying_unit_cost) / form.selling_unit_price * 100 }} % </p>
                         </b-col>
                     </b-row>
@@ -206,7 +206,7 @@ export default {
 
                 {text: 'Celery', value: 'celery'},
                 {text: 'Gluten', value: 'gluten'},
-                {text: 'Crustaceans', value: 'crustacians'},
+                {text: 'Crustaceans', value: 'crustaceans'},
                 {text: 'Eggs', value: 'eggs'},
                 {text: 'Fish', value: 'fish'},
                 {text: 'Lupin', value: 'lupin'},
@@ -247,12 +247,12 @@ export default {
           let self = this;
           // alert(JSON.stringify(this.form));
           axios.post('/api/office-pantry/products/add-new-product', {
-              company_data: self.form,
+              product_data: self.form,
               headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
               // user_id: self.userData.id // This hasn't been setup yet so probably won't work yet?!
           }).then(function (response) {
               alert('Uploaded new product successfully!');
-              location.reload(true); // This refreshes the browser and pulls the updated variables from the database into the vue component.
+              //location.reload(true); // This refreshes the browser and pulls the updated variables from the database into the vue component.
               console.log(response.data);
              // self.$emit('update-products'); <-- started this but got no further passing the command to the product list component. Add it to the todo list, for now just reload the page.
           }).catch(error => console.log(error));

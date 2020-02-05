@@ -78,12 +78,13 @@
         <div class="products" v-for="product in products">
             <div v-if="product.vat == vat_select || vat_select == null">
                 <div v-if="product.sales_nominal == sales_nominal_select || sales_nominal_select == null">
-                    <div v-if="product.dietary_requirements.includes(dietary_requirement) || dietary_requirement == null">
+                    <!-- <div v-if="product.dietary_requirements.includes(dietary_requirement) || dietary_requirement == null">
                         <div v-if="product.dietary_requirements.includes(additional_dietary_requirement) || additional_dietary_requirement == null">
                             <div v-if="!product.allergen_info.includes(allergen) || allergen == null">
-                                <div v-if="!product.allergen_info.includes(additional_allergen) || additional_allergen == null">
+                                <div v-if="!product.allergen_info.includes(additional_allergen) || additional_allergen == null"> -->
 
                                     <product    v-on:addProduct="addProductToOrder($event)"
+                                                @refresh-data="grabProductList()"
                                                 :createSnackbox="createSnackbox"
                                                 :createWholesaleSnackbox="createWholesaleSnackbox"
                                                 :createOtherbox="createOtherbox"
@@ -92,10 +93,10 @@
                                                 :product="product">
                                     </product>
 
-                                </div>
+                                <!-- </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -145,8 +146,8 @@ export default {
         'createOtherbox',
         'createDrinkbox',
         'type',
-        'product', //  I think this is historic, the products in product is coming from an axios call.  Some more of these might be superfluous too.
-        'quantity'
+        'product', //  I think this is historic, or actually is it to do with the product passed through in the emitted event to add the selected product to the box?
+        'quantity' // same with this one, i'm passing a product and quantity to the store.
     ],
     data() {
         return {
@@ -170,7 +171,7 @@ export default {
             allergens: [
                 {text: 'Celery', value: 'celery'},
                 {text: 'Gluten', value: 'gluten'},
-                {text: 'Crustaceans', value: 'crustacians'},
+                {text: 'Crustaceans', value: 'crustaceans'},
                 {text: 'Eggs', value: 'eggs'},
                 {text: 'Fish', value: 'fish'},
                 {text: 'Lupin', value: 'lupin'},
@@ -218,12 +219,7 @@ export default {
             this.$emit('addProduct', [product, quantity]);
             this.order = 'one item';
         },
-        test() {
-            // store.commit('increment'); This is the example in the documentation.
-            this.$store.commit('increment'); // This is the only way I could get it to work?  What's the difference?  Why is nothing straightforward?
-            // console.log(store.state.count); This is the example in the documentation.
-            console.log(this.$store.state.count); // This is the only way I could get it to work?
-        },
+
         grabProductList() {
             let self = this;
             axios.get('/api/office-pantry/products').then( response => {

@@ -5,22 +5,14 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
     state: {
-        // count: 0,
-        // users: [
-        //     {id: 1, name: 'Simon', registered: false},
-        //     {id: 2, name: 'Josh', registered: false},
-        //     {id: 3, name: 'David', registered: false},
-        //     {id: 4, name: 'Charles', registered: false},
-        //     {id: 5, name: 'Giles', registered: false},
-        //     {id: 5, name: 'Frankie', registered: false},
-        // ],
+        
         week_start: [], // This is a good use of the store as it's used in multiple places and only changes once a week, multiple concurrent users wouldn't be an issue.
         cron_data: [],
         allergies_list: [], // another good use of store, as it only populates a list of options which are equally useful to all users in real time.
         types_list: [], // another good use of store, as it only populates a list of options which are equally useful to all users in real time.
         fruit_partners_list: [], // another good use of store, as it only populates a list of options which are equally useful to all users in real time.
         assigned_routes_list: [], // another good use of store, as it only populates a list of options which are equally useful to all users in real time.
-        snackbox: [], // so long as only one user is making a snackbox at a time, this would be fine, multiple users inputting snackboxes would break this currently.
+        snackbox: [], // so long as only one user is making a snackbox at a time, this would be fine, multiple users inputting snackboxes would break this currently. <-- IS THIS TRUE?
         otherbox: [], // so long as only one user is making a snackbox at a time, this would be fine, multiple users inputting snackboxes would break this currently.
         drinkbox: [], // so long as only one user is making a snackbox at a time, this would be fine, multiple users inputting snackboxes would break this currently.
         selectedCompany: {
@@ -53,9 +45,6 @@ export const store = new Vuex.Store({
         //delivery_days: state => { return state.week_start[0].delivery_days }
     },
     mutations: {
-        increment (state) {
-            state.count++
-        },
 
         // Add items to store for frontend / backend syncronisity
         // and order building.

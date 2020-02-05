@@ -14,6 +14,7 @@
         </b-list-group>
         <div v-if="this.company_data.company != null">
             <company-details-admin
+                @refresh-data="officeData($event.company_details_id)"
                 :company="this.company_data.company">
             </company-details-admin>
         </div>
@@ -42,6 +43,7 @@
         </div>
         <div v-if="this.company_data.routes != null">
             <routes-admin
+                @refresh-data="officeData($event.company_details_id)"
                 :routes="this.company_data.routes">
             </routes-admin>
         </div>
@@ -72,6 +74,7 @@
 
         <div v-if="this.company_data.archived_fruitboxes != null">
             <archived-fruit-orders-admin
+                @refresh-data="officeData($event.company_details_id)"
                 :company="this.company_data.company"
                 :archived_fruitboxes="this.company_data.archived_fruitboxes">
             </archived-fruit-orders-admin>
@@ -79,6 +82,7 @@
 
         <div v-if="this.company_data.archived_milkboxes != null">
             <archived-milk-orders-admin
+                @refresh-data="officeData($event.company_details_id)"
                 :company="this.company_data.company"
                 :archived_milkboxes="this.company_data.archived_milkboxes">
             </archived-milk-orders-admin>
@@ -164,7 +168,7 @@ export default {
         }
     },
     mounted() {
-        //console.log(this.company_data);
+        console.log(this.company_data);
     }
 }
 </script>

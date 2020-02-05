@@ -4,8 +4,12 @@
 namespace App\Http\Controllers\OfficePantry;
 use App\Http\Controllers\Controller;
 
-use App\Product;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+
+use App\Product;
+use App\Allergy;
+use App\AllergyInfo;
 
 // require 'vendor/autoload.php';
 
@@ -25,7 +29,9 @@ class ProductsController extends Controller
     public function index()
     {
         //
-        $products = Product::orderBy('brand', 'asc')->orderBy('flavour', 'asc')->get();
+        $products = Product::with('allergy_info.allergy')->orderBy('brand', 'asc')->orderBy('flavour', 'asc')->get();
+
+        // dd($products);
 
         return response()->json($products);
         // return view ('products', ['products' => $products]);
@@ -34,7 +40,7 @@ class ProductsController extends Controller
     public function search(Request $request)
     {
         // $product_search = Product::where('name', 'LIKE', '%' . $request->keywords . '%')->get();
-        $product_search = Product::where('brand', 'ILIKE', '%' . $request->keywords_brand . '%')->get();
+        $product_search = Product::with('allergy_info.allergy')->where('brand', 'ILIKE', '%' . $request->keywords_brand . '%')->get();
 
         return response()->json($product_search);
     }
@@ -42,26 +48,43 @@ class ProductsController extends Controller
 
     public function store(Request $request)
     {
-        $newProduct = new Product();
-        $newProduct->is_active = $request['company_data']['is_active'];
-        $newProduct->brand = $request['company_data']['brand'];
-        $newProduct->flavour = $request['company_data']['flavour'];
-        $newProduct->code = $request['company_data']['code'];
-        $newProduct->buying_case_cost = $request['company_data']['buying_case_cost'];
-        $newProduct->selling_case_price = $request['company_data']['selling_case_price'];
-        $newProduct->buying_case_size = $request['company_data']['buying_case_size'];
-        $newProduct->selling_case_size = $request['company_data']['selling_case_size'];
-        $newProduct->buying_unit_cost = $request['company_data']['buying_unit_cost'];
-        $newProduct->selling_unit_price = $request['company_data']['selling_unit_price'];
-        $newProduct->vat = $request['company_data']['vat'];
-        $newProduct->supplier = $request['company_data']['supplier'];
-        $newProduct->sales_nominal = $request['company_data']['sales_nominal'];
-        $newProduct->profit_margin = $request['company_data']['profit_margin'];
-        $newProduct->stock_level = $request['company_data']['stock_level'];
-        $newProduct->allergen_info = $request['company_data']['selected_allergens'];
-        $newProduct->dietary_requirements = $request['company_data']['selected_dietary_requirements'];
-        //$newProduct->shortest_stock_date = $request['company_data']['shortest_stock_date']; <-- I think it's highly unlikely we'll have this info to hand when adding the product to the system.
-        $newProduct->save();
+        // Everything wrapped in this transaction must complete or the all the changes are rolled back to before the code within the transaction was run.
+        DB::transaction(function () {
+            //dd(request());
+
+            $newProduct = new Product();
+            $newProduct->is_active = request('product_data.is_active');
+            $newProduct->brand = request('product_data.brand');
+            $newProduct->flavour = request('product_data.flavour');
+            $newProduct->code = request('product_data.code');
+            $newProduct->buying_case_cost = request('product_data.buying_case_cost');
+            $newProduct->selling_case_price = request('product_data.selling_case_price');
+            $newProduct->buying_case_size = request('product_data.buying_case_size');
+            $newProduct->selling_case_size = request('product_data.selling_case_size');
+            $newProduct->buying_unit_cost = request('product_data.buying_unit_cost');
+            $newProduct->selling_unit_price = request('product_data.selling_unit_price');
+            $newProduct->vat = request('product_data.vat');
+            $newProduct->supplier = request('product_data.supplier');
+            $newProduct->sales_nominal = request('product_data.sales_nominal');
+            $newProduct->profit_margin = request('product_data.profit_margin');
+            $newProduct->stock_level = request('product_data.stock_level');
+            //$newProduct->shortest_stock_date = $request['company_data']['shortest_stock_date']; <-- I think it's highly unlikely we'll have this info to hand when adding the product to the system.
+            $newProduct->save();
+
+            // Now we need to save the allergens to the product.  To do this we'll need to save the product first and retrieve the newly created id.
+            // Which Laravel has kindly made immediately available to us.
+            // Laravel also allows us to use the established variable to tap into its relationships.
+
+            foreach (request('product_data.selected_allergens') as $selected_allergy) {
+
+                $allergy = Allergy::where('slug', $selected_allergy)->first();
+                // Due to the relationship already established, the connection_id and connection_type are automatically added.
+                // This just leaves the allergy_id which I think has to be added by grabbing the matching allergy entry and saving it below.
+                $newProduct->allergy_info()->create([
+                    'allergy_id' => $allergy->id,
+                ]);
+            }
+        });
     }
 
     /**
@@ -73,6 +96,42 @@ class ProductsController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // Product Info
+        $product = Product::find($id);
+        // Product Allergies via allergy_info relationship
+        $allergy_info = $product->allergy_info;
+        // As I can't remove items from the request, saving this to a variable, then it works fine.
+        $selected_allergens = request('selected_allergens');
+
+        // This will check all held allergies for this product, removing them from the requested allergies to submit
+        // i.e request('selected_allergies').  If the allergy isn't in the array, we're going to remove it from the held values.
+        foreach ($product->allergy_info as $info) {
+
+            if (in_array($info->allergy->slug, $selected_allergens)) {
+                // Then we already have a record of this allergy/product combo
+                $key = array_search($info->allergy->slug, $selected_allergens);
+                // Get the key for this item in the array and remove it (from consideration).
+                unset($selected_allergens[$key]);
+            } else {
+                // We have a record of the Product/Allergy but this no longer seems to be the case.
+                // Perhaps it was added by mistake, or a new receipe has removed that allergen.
+                AllergyInfo::destroy($info->id);
+            }
+        }
+
+        // What we're left with should only be a list of allergies not currently associated with the product.
+        foreach ($selected_allergens as $new_allergen) {
+            // Grab info on this allergy by checking it's 'slug' value.
+            //dd($selected_allergens);
+            $allergy = Allergy::where('slug', $new_allergen)->first();
+            // Save this info along with the product_id as a new allergy info connection.
+            $newAllergyInfo = new AllergyInfo();
+            $newAllergyInfo->allergy_id = $allergy->id;
+            $newAllergyInfo->connection_id = $product->id;
+            $newAllergyInfo->connection_type = 'App\\Product';
+            $newAllergyInfo->save();
+        }
+
         // dd($request);
         Product::where('id', $id)->update([
             'is_active' => request('is_active'),
@@ -90,10 +149,15 @@ class ProductsController extends Controller
             'sales_nominal' => request('sales_nominal'),
             'profit_margin' => request('profit_margin'),
             'stock_level' => request('stock_level'),
-            'allergen_info' => request('selected_allergens'),
-            'dietary_requirements' => request('selected_dietary_requirements'),
+            // NEITHER OF THESE ARE GOING TO BE ATTACHED TO THE PRODUCT TABLE, USING RELATIONAL TABLES INSTEAD.
+
+            // 'allergen_info' => request('selected_allergens'),
+            // 'dietary_requirements' => request('selected_dietary_requirements'),
+
             'shortest_stock_date' => request('shortest_stock_date')
         ]);
+
+
     }
 
 
@@ -215,7 +279,25 @@ class ProductsController extends Controller
      */
     public function destroy($id)
     {
-        //
-        Product::destroy($id);
+        // Now if we destroy the product we should also destroy the connected allergies as well.
+
+        DB::transaction(function () use ($id) {
+
+            // dd($id);
+            // destroy the connected allergies
+            $product = Product::find($id);
+
+            // Now we need to loop through each associated allergy_info and delete it.
+            foreach ($product->allergy_info as $allergy_info) {
+
+                $allergy_info->delete();
+            }
+
+            // Now we can destroy the product itself.
+            Product::destroy($id);
+        });
+
+
+
     }
 }

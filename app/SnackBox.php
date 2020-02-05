@@ -39,10 +39,29 @@ class SnackBox extends Model
         return $this->belongsTo(CompanyDetails::class);
     }
 
+    // This is part of my new 2020 approach to snackboxes.
+    public function products()
+    {
+        return $this->hasMany(Product::class,'id', 'product_id');
+    }
+
+    // This relationship is untested but more a theoretical placeholder.
+    // EDIT : Actually I think it's now in use!
     public function allergies_and_dietary_requirements()
     {
-        return $this->hasOne(SnackBox::class);
+        return $this->hasOne(Allergy::class, 'snackbox_id', 'snackbox_id');
 
+    }
+
+    public function box_items()
+    {
+        return $this->morphMany('App\OrderItem', 'orderable', 'box_type', 'box_id');
+    }
+    
+    // This will replace the allergies part of the allergies_and_dietary_requirements() function above.
+    public function allergy_info()
+    {   // In this instance connection_type/connection_id are the expected column names so don't really need declaring.
+        return $this->morphMany('App\AllergyInfo', 'connectable', 'connection_type', 'connection_id');
     }
 
 }

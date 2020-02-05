@@ -86,22 +86,11 @@
             <b-col>
                 <div class="allergies">
                     <h4> Allergies </h4>
-                    <!-- Existing approach of existing allergies associated with the company -->
-                    <!-- Commenting oout for now to test the new approach without duplicate info - will need to update the destroy function for either approach. -->
-                    <!-- <div v-if="allergies.length > 0" >
-                        <div v-for="allergy in this.allergies[0].allergy">
-                            <allergy v-if="allergy != null"
-                                        :name="allergy"
-                                        :column="'allergies'"
-                                        @refresh-data="refreshData(this.allergies[0].company_details_id)">
-                            </allergy>
-                        </div>
-                    </div>
-                    <div v-else>
-                        <p> No allergies selected </p>
-                    </div> -->
 
-                    <!-- start of alternative approach of existing allergies for review -->
+                    <b-button class="allergy-buttons" v-if="!editing" variant="warning" size="sm" @click="enableEdit()"> Edit </b-button>
+                    <b-button class="allergy-buttons" v-if="editing" variant="danger" size="sm" @click="enableEdit()"> Cancel </b-button>
+                    <b-button class="allergy-buttons" v-if="editing" variant="success" size="sm" @click="updateAllergies()"> Save </b-button>
+
                     <div v-if="editing">
                         <b-form-group>
                             <b-form-checkbox    inline
@@ -116,18 +105,17 @@
                     <div v-else>
                         <b-form-group v-if="this.allergies.length > 0">
                             <b-form-checkbox    inline
-                                                v-for="allergen in this.allergies[0].allergy"
-                                                v-model="selected_allergens"
-                                                :key="allergen"
-                                                :value="allergen">
-                                                <b> {{ allergen }} </b>
+                                                v-for="allergen in this.allergies"
+                                                :key="allergen.allergy.slug"
+                                                :value="allergen.allergy.slug"
+                                                :checked="allergen.allergy.slug">
+                                                <b> {{ allergen.allergy.name }} </b>
                             </b-form-checkbox>
                         </b-form-group>
                         <b-form-group v-else>
                             <p> No allergens selected </p>
                         </b-form-group>
                     </div>
-                    <!-- end of alternative approach for review -->
                 </div>
             </b-col>
             <b-col>
@@ -189,15 +177,19 @@
     </div>
 </template>
 
-<style>
+<style lang="scss">
     #preferences {
-
+        .allergies {
+            .allergy-buttons {
+                margin-bottom: 10px;
+            }
+        }
     }
 </style>
 
 <script>
 export default {
-    props:['preferences', 'likes', 'dislikes', 'essentials', 'allergies', 'additional_info'],
+    props:['company', 'preferences', 'likes', 'dislikes', 'essentials', 'allergies', 'additional_info'],
     data() {
         return {
             editing: false,
@@ -207,7 +199,7 @@ export default {
 
                 {text: 'Celery', value: 'celery'},
                 {text: 'Gluten', value: 'gluten'},
-                {text: 'Crustaceans', value: 'crustacians'},
+                {text: 'Crustaceans', value: 'crustaceans'},
                 {text: 'Eggs', value: 'eggs'},
                 {text: 'Fish', value: 'fish'},
                 {text: 'Lupin', value: 'lupin'},
@@ -237,9 +229,13 @@ export default {
     },
     computed: {
         currently_selected_allergens: function () {
-            if (this.allergies.length > 0) {
-                return this.selected_allergens = this.allergies[0].allergy
+            this.selected_allergens_set = new Set();
+
+            for (let key in this.allergies) {
+                console.log(this.allergies[key].allergy.slug)
+                this.selected_allergens_set.add(this.allergies[key].allergy.slug)
             }
+            return this.selected_allergens = Array.from(this.selected_allergens_set)
 
         },
         currently_selected_dietary_requirements: function (dietary_requirements) {
@@ -252,7 +248,25 @@ export default {
     methods: {
         refreshData(company_details_id){
             this.$emit('refresh-data', {company_details_id: company_details_id});
-        }
+        },
+        enableEdit() {
+            if (this.editing == false) {
+                  this.editing = true;
+                  this.details = true;
+            } else {
+                  this.editing = false;
+            }
+        },
+        updateAllergies() {
+            axios.put('/api/company/allergies/update/', {
+            selected_allergens: this.selected_allergens,
+            selected_company: this.company.id,
+        }).then (response => {
+            //location.reload(true);
+            //this.$emit('refresh-data', {company_details_id: this.company.id});
+            console.log(response);
+        }).catch(error => console.log(error));
+        },
         // Pretty sure I'm not using this anymore so commenting it out to see if anything breaks.
 
         // removePreference(id){

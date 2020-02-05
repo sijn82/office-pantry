@@ -66,22 +66,22 @@ WithTitle
 
         // We also want a record of when these entries were invoiced.  So at the same time we deactivate the box, we can add the Invoice Date.
         // The question is whether we want this to be its own button/function, or actioned automatically?
-        // Personally I feel a confirmation button might be a good idea, the only question is how to prevent admins forgetting this part 
+        // Personally I feel a confirmation button might be a good idea, the only question is how to prevent admins forgetting this part
         // and how I'd fix it if they did?
-        
+
         // EDIT: THIS DOESN'T LIMIT THE INVOICING TO WEEKLY ORDERS ONLY YET. IT'S JUST GOING TO GRAB ALL ORDERS FOR THE WEEK START DATE!!
         // I NEED TO FILTER BY BRANDING THEMES.  EXCLUDING MONTHLY ORDERS WHICH WILL BE HANDLED BY A MONTHLY INVOICES EXPORT FUNCTION.
-        
+
         // These options passed into the whereIn clause are (or should hopefully be) all the weekly payment orders for invoicing.
         $companies = CompanyDetails::where('is_active', 'Active')->whereIn('branding_theme', ['BACS', 'GoCardless', 'Paypal (Stripe)', 'Weekly Standing Order', 'Eden Branding Theme'])->with([
             'fruitbox' => function ($query) {
                 $query->where('is_active', 'Active')->where('next_delivery', $this->week_start);
             },
-            
+
             // Now we need to check the fruitbox archives for any boxes that have been updated before invoicing,
             // their status will remain active as there is still work to be done with these box details.
             // If the status is inactive, this means the box was invoiced prior to being updated and is now only needed for our records.
-            
+
             'fruitbox_archive' => function ($query) {
                 $query->where('is_active', 'Active')->where('next_delivery', $this->week_start);
             },
@@ -111,7 +111,7 @@ WithTitle
                 $query->where('is_active', 'Active')->where('next_delivery_week', $this->week_start);
             }
             ])->get();
-            
+
             // dd($companies);
             // Moved this out of the foreach loop as we only need to set these variables once.
 
@@ -156,7 +156,7 @@ WithTitle
             // Discounts to apply if the order total is equal to or greater than the value.
             // Only apply one or the other, not both!
             $discount10 = 100; // 10% discount on orders over £100.
-            $discount15 = 300; // 15% discount on orders over £300. 
+            $discount15 = 300; // 15% discount on orders over £300.
 
             // The counter starts every run of invoices at the invoice date + 001.
             $counter = 1; // I need it out of the foreach ($companies as $company) loop to prevent the counter being reset to 1 each time.
@@ -166,7 +166,7 @@ WithTitle
         foreach ($companies as $company) {
             // dd($companies);
             // Each box type needs to be processed slightly differently, so we need 5 dedicated foreach loops.
-            
+
             //---------- Unset Some Variables ----------//
 
                 unset($sales_invoices);
@@ -396,7 +396,7 @@ WithTitle
 
                         // So, fun story, we don't offer the multiple fruitbox discount for all boxes.
                         // Without rhyme or reason to when this happens, I've added a yes/no dropdown on the box information.
-                        
+
                         // update - 24/7/19 it looks like berry boxes are causing a default charge of £20 on top of the cost of berries.
                         // I think a solution might be to skip them from adding to box totals entirely.
                         if (strtolower( $fruitbox->type ) === 'berry' ) {
@@ -470,7 +470,7 @@ WithTitle
 
                         // So, fun story, we don't offer the multiple fruitbox discount for all boxes.
                         // Without rhyme or reason to when this happens, I've added a yes/no dropdown on the box information.
-                        
+
                         // update - 24/7/19 it looks like berry boxes are causing a default charge of £20 on top of the cost of berries.
                         // I think a solution might be to skip them from adding to box totals entirely.
                         if (strtolower( $fruitbox->type ) === 'berry' ) {
@@ -545,7 +545,7 @@ WithTitle
 
                         // So, fun story, we don't offer the multiple fruitbox discount for all boxes.
                         // Without rhyme or reason to when this happens, I've added a yes/no dropdown on the box information.
-                        
+
                         // update - 24/7/19 it looks like berry boxes are causing a default charge of £20 on top of the cost of berries.
                         // I think a solution might be to skip them from adding to box totals entirely.
                         if (strtolower( $fruitbox_archive->type ) === 'berry' ) {
@@ -561,7 +561,7 @@ WithTitle
                         $tailoring_fee_weekly_total += ( $fruitbox_archive->fruitbox_total * $fruitbox_archive->tailoring_fee );
                     }
 
-                } else { // These orders are handles by a fruit partner
+                } else { // These orders are handled by a fruit partner
 
                     if ( strtolower( $fruitbox_archive->type ) === 'seasonal' ) {
                         $punnets_weekly_total_fruit_partner += ( $fruitbox_archive->fruitbox_total * 2 );
@@ -618,7 +618,7 @@ WithTitle
 
                         // So, fun story, we don't offer the multiple fruitbox discount for all boxes.
                         // Without rhyme or reason to when this happens, I've added a yes/no dropdown on the box information.
-                        
+
                         // update - 24/7/19 it looks like berry boxes are causing a default charge of £20 on top of the cost of berries.
                         // I think a solution might be to skip them from adding to box totals entirely.
                         if (strtolower( $fruitbox_archive->type ) === 'berry' ) {
@@ -1466,12 +1466,12 @@ WithTitle
                                                                 //---------- End of Milkbox -----------//
 
                                                                 //---------- Snackbox ----------//
-            
+
             //----- New approach to process archived and active orders together. -----//
-            
+
             //----- Stripping out the entries where product_id == 0 was introduced on 8/8/19 to fix a bug where any orders that included this line were skipped! -----//
             //----- This is because I wrote this code at a time when I thought only empty boxes would include this line.  Now it'll probably be in most boxes so we need to account for that. -----//
-            
+
             // Grab currently active snackboxes
             $current = $company->snackboxes->where('product_id', '!==', 0)->groupBy('snackbox_id');
             // Now add any archived but still active (yet to be invoiced) snackboxes
@@ -1481,20 +1481,20 @@ WithTitle
             // dump($combined);
             // Before grouping the new collection by snackbox_id
             // $snackboxes = $combined->groupBy('snackbox_id');
-            
+
             // This means that if an archived box with the same snackbox_id as a current snackbox, they will be processed together.  This is fine (possibly even great) for a weekly order but
             // I still need to find a solution to the monthly invoices. <-- EDIT: NOPE! Snackcap applies to the combined total for each snackbox_id now, which gives an unintended discount.
             // BACK TO THE DRAWING BOARD.
-        
-            
+
+
             // Maybe I need to process monthly invoices as 4 weekly invoices, combining a new total at the end.
             // This is to ensure odiscounts are only applied if they match the weekly threshold and not with a combined total over the month.
-            
+
 
             // At its most basic we just want to group the snackbox entries by snackbox_id
-            
+
             // $snackboxes = $company->snackboxes->groupBy('snackbox_id');
-            
+
             // dd($snackboxes);
 
             // Grouping by snack cap would mean adding the various number of boxes up.
@@ -1515,17 +1515,17 @@ WithTitle
             //---------- End of Actually instead of grouping them by snackbox_id ----------//
 
             //----- Now I'm trying to decide where to put the snackbox_archive entries?  -----//
-            
-                // Ideally I'd like to reuse as much of this code as possible, so instead of over-analysing the issue 
+
+                // Ideally I'd like to reuse as much of this code as possible, so instead of over-analysing the issue
                 // I'm going to put the call here and see what it does to the results.
-                
+
                 // This groups the archives by snackbox_id, then within that array, further groups them by next_delivery_week.
                 // It does exactly what I wanted it to do but for weekly invoicing is this strictly necessary, or just an overcomplication?
                 // $archived_snackboxes = $company->snackbox_archive->groupBy(['snackbox_id', 'next_delivery_week']);
-                
+
             // $archived_snackboxes = $company->snackbox_archive->groupBy('snackbox_id');
-                
-    
+
+
 
             //----- Wrapped the snackbox processing with a simple foreach to run the current snackbox orders and then do the same with archived -----//
 
@@ -1600,7 +1600,7 @@ WithTitle
 
                         // if ($snack_cap !== null) { // <-- Should i check snack_cap or type === 'wholesale'?
                         if ($type !== strtolower('wholesale')) { // <-- Going to use type for now, as I haven't prevented misuse of snack_cap yet.
-                            
+
                             // dump($snackbox_total_before_snack_cap);
                             // dump($snack_cap);
                             // dump($number_of_items_in_snackbox);
@@ -1657,7 +1657,7 @@ WithTitle
                     // } <-- Initial if statement breaking invoicing!!!
                 } // end of foreach ($company->snackboxes as $snackbox)
         //    } // end of - if (isset($snackboxes[0]->product_id))
-        }    
+        }
             // Ok, now I have an array of objects holding snackbox information.
             // Each object is a separate entry with a breakdown of vat registered products minus vat, the vat total and zero rated products total.
             // As well as a grand total I can access, to more easily determine whether the customer has spent enough for a further discount.
@@ -1686,20 +1686,20 @@ WithTitle
             //----- End of Snackbox -----//
 
             //----- Drinkbox -----//
-            
+
             // 8/8/19 update: FORGOT TO WRITE IN PROCESSING OF DRINK AND OTHER BOX ARCHIVES!
-            
+
             // Since we're treating them as individual entries let's put them all into one array, and hopefully limit the additional code needed to process them.
-            
+
             $current_drinkboxes = $company->drinkboxes->where('product_id', '!==', 0);
             $archived_drinkboxes = $company->drinkbox_archive->where('product_id', '!==', 0);
-            
+
             $combined_drinkbox_orders = [$current_drinkboxes, $archived_drinkboxes];
 
             // dd($combined_drinkbox_orders);
-            
+
             foreach ($combined_drinkbox_orders as $drinkbox_order) {
-                
+
                 foreach ($drinkbox_order as $drinkbox_item) {
 
                     // It looks like drinks are processed differently to snacks.
@@ -1746,15 +1746,15 @@ WithTitle
                 } // end of foreach ($company->drinkboxes as $drinkbox)
             } // end of foreach ($combined_drinkbox_orders as $drinkbox_order)
 
-            
-            
+
+
             // if the company doesn't have any drink boxes to invoice then we need to declare this variable as an array for array_sum not to have a hissy fit.
             // not sure I got through the first round of testing without spotting encountering this!
-            
+
             if (!isset($drinks_total)) {
                 $drinks_total = [];
             }
-            
+
             // dd($drinkboxes_ready_for_invoicing);
             // dd($drinks_total);
             $drinks_grand_total = array_sum($drinks_total);
@@ -1762,16 +1762,16 @@ WithTitle
             //----- End of Drinkbox -----//
 
             //----- Otherbox -----//
-            
+
             $current_otherboxes = $company->otherboxes->where('product_id', '!==', 0);
             $archived_otherboxes = $company->otherbox_archive->where('product_id', '!==', 0);
-            
+
             $combined_otherbox_orders = [$current_otherboxes, $archived_otherboxes];
 
             // dd($combined_drinkbox_orders);
-            
+
             foreach ($combined_otherbox_orders as $otherbox_order) {
-            
+
                 foreach ($otherbox_order as $otherbox_item) {
                     if ($otherbox_item->product_id > 0) {
 
@@ -1807,13 +1807,13 @@ WithTitle
 
                 } // end of foreach ($company->otherbox as $otherbox)
             }
-            
-            
+
+
             // same as drinks, if the company doesn't have an other box to invoice, we need to set the variable as an array.
             if (!isset($other_total)) {
                 $other_total = [];
             }
-            
+
             $other_grand_total = array_sum($other_total);
             // dd($other_grand_total);
 
@@ -1824,14 +1824,14 @@ WithTitle
             // Could move this to join the other variable declarations at the top, should I keep it.
             $company_invoice_discountable_total = 0;
             // $snackbox_grand_total = 0;
-            
+
             // check if we have any snackboxes ready for invoicing, if not set the variables expected further down the line.
             if (!isset($snackboxes_ready_for_invoicing)) {
-                
+
                 $snackboxes_ready_for_invoicing = [];
                 $snackbox_grand_total_array = [];
             }
-            
+
             foreach ($snackboxes_ready_for_invoicing as $snackbox) {
 
                 $snackbox_grand_total_array[] = $snackbox->snackbox_total_cost;
@@ -2057,9 +2057,9 @@ WithTitle
                 $grouped_invoice[$invoice->snack_cap][] = $invoice;
             }
 
-            
+
             if (isset($grouped_invoice)) {
-            
+
                 foreach ($grouped_invoice as $key => $group) {
 
                     // Let's ensure we reset the values for each snack cap group.
@@ -2185,24 +2185,24 @@ WithTitle
 
              // Could put this elsewhere but it's here for now to make it easy to find, while I sort it out.
              // $order_total = 0;
-             
-             
+
+
              //---------- Invoice number counter ----------//
-             
+
                 // Need to implement the $counter++ for invoice number here so that each company increases the $counter by 1 and not the invoice line.
                 // However I've also had to set it at the VERY BEGINNING of this function so that it isn't reset to one with each new company.
-             
-             
+
+
                 //----- Time To Loop Through Invoices Inserting Remaining Fields -----//
-        
+
                 // Now we (should) have all the invoices we need to process this week
                 // All that remains is to add 'invoice_number', 'invoice_date' and 'due_date'
-                
+
                 // - Invoice Number is sequential (EDIT: BUT ONLY INCREASES ON A PER COMPANY BASIS), and effectively begins at yy-mm-dd-001 each time invoicing is run.
-                
-        
+
+
                 // Let's set the dates
-        
+
                 // Let's grab today's (relative to when invoice function is run) date without any formatting, to maximise its reuse.
                 $date = CarbonImmutable::now('Europe/London');
                 // The invoice date is the week start (monday) of the invoicing week.
@@ -2210,13 +2210,13 @@ WithTitle
                 // Invoice date is just the day the invoice function is run.
                 $invoice_date = $date->format('ymd');
                 // Date Xero will take the payments.
-                $due_date = $date->addDay(0)->format('d/m/Y'); 
-                
-                // ^ Day 0 is actually the preferred date to check whether payments are due to be made.  
+                $due_date = $date->addDay(0)->format('d/m/Y');
+
+                // ^ Day 0 is actually the preferred date to check whether payments are due to be made.
                 // | I'm going to replace this with a variable to make it amendable to suit the situation though.
-                
+
                 // I could and maybe should move all these checks to the top of the function as we don't need to set this each time we process (invoice) a different company.
-             
+
                 // dd($sales_invoices);
               //---------- Invoice number counter ----------//
 
@@ -2230,7 +2230,7 @@ WithTitle
 
                  $sales_invoice->invoice_name = $company->invoice_name;
                  $sales_invoice->email_address = $company->primary_email; // <-- THIS NEEDS CHANGING FOR THE INVOICE EMAIL ADDRESS ONCE I'VE ADDED IT TO COMPANY DETAILS!
-                 
+
                  $sales_invoice->invoice_number = $invoice_date . str_pad($counter, 3, 0, STR_PAD_LEFT);
                  $sales_invoice->invoice_date = $week_start;
                  $sales_invoice->due_date = $due_date;
@@ -2260,15 +2260,15 @@ WithTitle
 
                  $completed_sales_invoices[] = $sales_invoice;
              } // end of foreach ($sales_invoices as $sales_invoice)
-             
+
              // I need to prevent the invoice number incrementing for every company, and only every company who has at least one invoice.
              // Isset doesn't work because even a variable which is an empty array, is still set, however empty works like a charm.
 
              if (!empty($sales_invoices)) {
-                 
+
                  $counter++;
              }
-             
+
              unset($sales_invoices);
 
             //----- End of merge orders for invoicing -----//
@@ -2289,22 +2289,22 @@ WithTitle
         // dd($due_date);
 
         // foreach ($completed_sales_invoices as $sales_invoice) {
-        // 
+        //
         //         $counter++;
         //         $sales_invoice->invoice_number = $invoice_date . str_pad($counter, 3, 0, STR_PAD_LEFT);
         //         $sales_invoice->invoice_date = $week_start;
         //         $sales_invoice->due_date = $due_date;
         // }
-        
+
         // dd($completed_sales_invoices);
         if (!isset($completed_sales_invoices)) {
             $completed_sales_invoices = [];
-        }    
+        }
             return view('exports.invoice-results', [
                 'invoices' => $completed_sales_invoices
             ]);
     } // end of view():
-        
+
     public function title(): string
     {
         return $this->week_start;

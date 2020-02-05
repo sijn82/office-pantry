@@ -21,12 +21,19 @@ use App\Preference;
 use App\CompanyDetails;
 use App\CompanyRoute;
 use App\AssignedRoute;
+use App\Allergy;
+use App\OrderItem;
+
+use App\Traits\Orders;
 
 
 
 set_time_limit(0);
 class SnackBoxController extends Controller
 {
+
+    use Orders;
+
         protected $week_start;
 
         public function __construct()
@@ -438,6 +445,23 @@ class SnackBoxController extends Controller
         //
     }
 
+
+    public function test()
+    {
+        $snackbox = SnackBox::find(363);
+
+        foreach ($snackbox->box_items->where('delivery_date', $snackbox->next_delivery_week) as $order_item) {
+            dump($order_item->product->brand . ' ' . $order_item->product->flavour);
+        }
+
+
+        //dd('were here and not redirected');
+        // foreach ($snackboxes as $snackbox) {
+        //     dump($snackbox->products);
+        // }
+
+    }
+
     // This function saves new snackboxes, with or without products contained.
     // The most important element to create for the update function ( which create a new standard box ) is a snackbox id.
     // Though obviously connecting that snackbox to a company id and delivery info etc is integral to it being useful! :)
@@ -637,14 +661,21 @@ class SnackBoxController extends Controller
         //---------- Update the box entry with quantity ----------//
     }
 
+    public function increaseSnackboxOrderItemQuantity(Request $request)
+    {
+        $this->increaseOrderItemQuantity($request);
+    }
+
     // This function is just used to update the snackbox company/delivery info - everything but the contents basically.
     // If the delivery day is changed then a check is made to see if we have a route for them already (on that day), creating it for them if not.
     public function updateDetails(Request $request)
     {
-        // dd(request('snackbox_details'));
-        $snackbox = SnackBox::where('snackbox_id', request('snackbox_details.snackbox_id'))->get();
 
-        foreach ($snackbox as $snackbox_entry ) {
+        $snackbox = SnackBox::where('snackbox_id', request('snackbox_details.snackbox_id'))->get();
+        // Not sure I actually need this as I have the relationship availble while in the controller.
+        $associated_allergens = Allergy::where('snackbox_id', request('snackbox_details.snackbox_id'))->first();
+
+        foreach ($snackbox as $snackbox_entry) {
             $snackbox_entry->update([
                 'is_active' => request('snackbox_details.is_active'),
                 'delivered_by' => request('snackbox_details.delivered_by'),
@@ -656,6 +687,16 @@ class SnackBoxController extends Controller
                 'week_in_month' => request('snackbox_details.week_in_month'),
                 'next_delivery_week' => request('snackbox_details.next_delivery_week'),
             ]);
+        }
+
+        if ($snackbox[0]->allergies_and_dietary_requirements->allergy !== request('snackbox_details.snackbox_selected_allergens')) {
+            dump($snackbox[0]->allergies_and_dietary_requirements->allergy);
+            $snackbox[0]->allergies_and_dietary_requirements->allergy->update([
+                'allergy' => request('snackbox_details.snackbox_selected_allergens'),
+            ]);
+        } else {
+            dump($snackbox[0]->allergies_and_dietary_requirements->allergy);
+            dump(request('snackbox_details.snackbox_selected_allergens'));
         }
 
         // We only want to create a route if Office Pantry are delivering it directly.
@@ -727,6 +768,11 @@ class SnackBoxController extends Controller
         }
     }
 
+    public function updateBoxDetails($request)
+    {
+        $snackbox = SnackBox::find();
+    }
+
     // This is just (?) used to add/remove contents from an existing box.  This may well be used to tailor a box after it's creation and before delivery, so automatiucally creating a archive
     // could cause more trouble than it's worth.
 
@@ -763,6 +809,15 @@ class SnackBoxController extends Controller
         // Just in case there's a problem saving the new product, we'll only worry about reducing the stock levels if we get this far without hitting an error.
         Product::find(request('product.id'))->decrement('stock_level', request('product.quantity'));
     }
+
+    // While the function addProductToBox has been moved to a trait function, I (think) I still need to call it via a route/controller function.
+    public function addProductToSnackBoxV2(Request $request)
+    {
+        // Using the function from App\Trait\Orders;
+        $this->addProductToBox($request);
+
+    }
+
 
     /**
      * Display the specified resource.
@@ -969,11 +1024,197 @@ class SnackBoxController extends Controller
          // or write some logic to cater for this.
      }
 
+     //----- Functions used in the massUpdateTypeV2 function -----//
+
+     public function removeOutOfStockLikes($like)
+     {
+         // $like is a combination of the products' brand and flavour, specifying the variables we want create in list, assigns them to from exploding the $like
+         list($brand, $flavour) = explode(' - ', $like);
+         // This will only return a countable $option if the item is in stock.
+         $option = Product::where('brand', $brand)->where('flavour', $flavour)->where('stock_level', '>', 0)->get();
+         // If $option count returns nothing, it's not in stock and can be removed from selectable products this time around.
+         if (!count($option)) {
+             // Search for the product in array of $likes and grab its position (key) in array.
+             $like_key = array_search($like, $likes);
+             // Now use this key to unset (remove) the product from usable list of likes.
+             unset($likes[$like_key]);
+         }
+     }
+
+     public function checkProductForCompanyAllergies($new_standard_snack, $company_details_id_recovered, $snackbox_id_recovered, $products_already_in_box = [], $dislikes_by_id = [])
+     {
+         // First I need to get hold of the snackbox specific allergens.
+
+         // Grab the first instance of the snackbox based on the snackbox_id.  The allergies should be connected to each entry so it doesn't really matter which one we get.
+         $snackbox = SnackBox::where('snackbox_id', $snackbox_id_recovered)->first();
+         // Now we can check its relationship with allergies and see if any are connected to this snackbox_id.
+         $allergies_and_dietary_requirements = $snackbox->allergies_and_dietary_requirements;
+
+         if ($allergies_and_dietary_requirements['allergy']) {
+             // Then we have some allergies associated with this snackbox_id, so let's compare the allergies to the allergens included in this snack.
+             // Any matches are returned as an array, which we save to $conflicting_allergies.
+             $conflicting_allergies = array_intersect($new_standard_snack['allergen_info'], $allergies_and_dietary_requirements['allergy']);
+
+         } else {
+             // If they don't exist, I need to look for company allergens.
+             $company = CompanyDetails::find($company_details_id_recovered);
+             $company_allergies = $company->allergies;
+
+             if ($company_allergies['allergy']) {
+
+                 // If they exist we can check the company allergies for conflicts instead
+                 $conflicting_allergies = array_intersect($new_standard_snack['allergen_info'], $company_allergies['allergy']);
+             } else {
+                 $conflicting_allergies = [];
+             }
+         }
+
+         // If they don't exist either, we can either just return the snack or check it with dietary requirements.
+        if ($conflicting_allergies) {
+
+            $conflicting_snack_value = ( $new_standard_snack['selling_unit_price'] * $new_standard_snack['quantity'] );
+
+            // If we have a conflicting allergy, then we need to reselect a product but we should reduce the possible pool of products,
+            // excluding ones that also contain those allergens and those listed in their dislikes.
+
+            // 1) Don't include products with the listed allergens
+            // 2) Don't include any items listed in their dislikes either
+            // 3) Or any already in the box.  This could factor in how many are in the box but for now, if it's already in, we don't want any more.
+            // 4) Ensure it's a snack, and not a drink etc.
+            // 5) And the value isn't more than the product/quantity we're replacing.
+            // 6) And finally that the item is even in stock!
+
+            $snack_replacement_options = Product::whereNotIn('allergen_info', $conflicting_allergies)
+                                                ->whereNotIn('id', $dislikes_by_id)
+                                                ->whereNotIn('id', $products_already_in_box)
+                                                ->where('sales_nominal', '4010')
+                                                ->where('selling_unit_price', '<=', $conflicting_snack_value)
+                                                ->where('stock_level', '>', 0)->get();
+
+            // 7) Save it to a collection so we can select a product at random.
+            $snack_replacement = $snack_replacement_options->random();
+            // Now work out how many of the item is a fair replacement but rounding down (we're not that nice!)
+            $new_quantity = (floor($conflicting_snack_value / $snack_replacement->selling_unit_price));
+            // Override the old quantity with the newly calculated one.
+            $new_standard_snack['quantity'] = $new_quantity;
+
+            // return the replacement new standard snack.
+            return $new_standard_snack;
+
+        } else {
+            // return the original new standard snack.
+            return $new_standard_snack;
+        }
+    }
+
+     public function replaceDislikedItemWithOneFromLikes($likes, $new_standard_snack)
+     {
+         // Array_rand grabs an item from $likes at random, the 1 signifies that we only want 1 random item - returning the item key from the array.
+         $key = array_rand($likes, 1);
+         // Now we can select it from the $likes array.
+         $selection = $likes[$key];
+         list($liked_brand, $liked_flavour) = explode(' - ', $selection);
+
+         //dd($liked_brand);
+
+         $old_product = Product::find($new_standard_snack['id']);
+         $product_details = Product::where('brand', $liked_brand)->where('flavour', $liked_flavour)->get();
+
+         // This will need further work but so far, we find out the value of product quantity to be replaced
+         // i.e value of product to be replaced (£1.50) multiplied by quantity in standard snackbox for this week (3), totals £4.50 of stock needing to be substituted.
+
+         $old_standard_snack_value = ( $new_standard_snack['quantity'] * $old_product->selling_unit_price );
+
+         // Now we have a total to be divided by the new product unit price
+         // I'm using ceil to ensure we get a whole number that keeps the product/quantity value at a minimum of what it was before.
+         // I still need to elaborate on this further to limit the quantity at 3 and prevent multiple low value items as a replacement,
+         // however this will come later, let's get it working like this first!
+
+         $new_quantity = ( $old_standard_snack_value / $product_details->selling_unit_price );
+
+         // If the new quantity has risen to 4 or more, then the randomly selected product is likely a low value item and shouldn't really dominate the box contents.
+         // In this scenario we'd like to select a second item to add some variety.
+
+         // I'm not sure what the best approach for this is yet?
+         // 1. What would we do if the next randomly selected item is far more expensive than the randomly selected product 1 it's replacing?
+         // - should we reduce the quantity of randomly selected product 1?
+         // - what if randomly selected product 2 is more expensive than the original item being replaced?
+         // - we don't want the default behaviour to make office pantry less profit.
+         // 2.
+
+         $new_standard_snack['quantity'] = ceil($new_quantity);
+         //$new_standard_snack['product_id'] = $product_details[0]->product_id; //  This looks wrong?  I'm pretty sure it should be $product_details[0]->id?
+         $new_standard_snack['product_id'] = $product_details->id;
+         $new_standard_snack['code'] = $product_details->code;
+         $new_standard_snack['brand'] = $product_details->brand;
+         $new_standard_snack['flavour'] = $product_details->flavour;
+         $new_standard_snack['selling_unit_price'] = $product_details->selling_unit_price;
+         $new_standard_snack['selling_case_price'] = $product_details->selling_case_price;
+
+         return $new_standard_snack;
+     }
+
+     public function replaceDislikedItemWithOneFromNeutralSnackPool($dislikes, $new_standard_snack, $products_already_in_box)
+     {
+         // Then the company either didn't have any specified likes or we don't have the item in stock
+         // Instead all we can do is reselect from the list of Products in stock.
+
+         $old_product = Product::find($new_standard_snack['id']);
+
+         dd($old_product);
+         $old_standard_snack_value = ( $new_standard_snack['quantity'] * $old_product->selling_unit_price );
+
+         foreach ($dislikes as $dislike) {
+             list($disliked_brand, $disliked_flavour) = explode(' - ', $dislike);
+             $disliked_product = Product::where('brand', $disliked_brand)->where('flavour', $disliked_flavour)->get();
+             $disliked_products[] = $disliked_product[0]->id;
+         }
+
+         // Now let's grab all product options, so long as they're not in the company dislikes section, or already in the box.
+         // Let's also limit it to mixed snack products i.e not drinks etc, where the unit value (of 1 item) isn't worth more than the replacement (total) that we're trying to make.
+         // And that we have at least one of the item in stock.
+
+         $products_in_stock = Product::whereNotIn('id', $disliked_products)
+                                 ->whereNotIn('id', $products_already_in_box)
+                                 ->where('sales_nominal', '4010')
+                                 ->where('selling_unit_price', '<=', $old_standard_snack_value)
+                                 ->where('stock_level', '>', 0)
+                                 ->pluck('id')->toArray(); // <-- We now have an array of possible products to choose from as a replacement.
+
+         $key = array_rand($products_in_stock, 1);
+         // Now we can select it from the $likes array.
+         $selection = $products_in_stock[$key];
+
+         $product_details = Product::find('id', $selection);
+
+         $new_quantity = ( $old_standard_snack_value / $product_details->selling_unit_price );
+
+         // Now we've selected a replacement product, we just need to overwrite details of the old item, with the new.
+
+         $new_standard_snack['quantity'] = ceil($new_quantity);
+         //$new_standard_snack['product_id'] = $product_details[0]->product_id; //  This looks wrong?  I'm pretty sure it should be $product_details[0]->id?
+         $new_standard_snack['product_id'] = $product_details->id;
+         $new_standard_snack['code'] = $product_details->code;
+         $new_standard_snack['brand'] = $product_details->brand;
+         $new_standard_snack['flavour'] = $product_details->flavour;
+         $new_standard_snack['unit_price'] = $product_details->selling_unit_price;
+         $new_standard_snack['case_price'] = $product_details->selling_case_price;
+
+
+         return $new_standard_snack;
+     }
+
      // I might only keep this temporarily, however I want to keep my chain of thought fresh, and while the comments are useful for reference they also kinda get in the way. :)
      public function massUpdateTypeV2(Request $request)
      {
+
+         // dd(request('order'));
+
          // As we're going to be updating all the boxes of a particular type, let's grab them and group them by snackbox_id (to process them box by box)
-         $snackboxes = Snackbox::where('type', request('type'))->where('is_active', 'Active')->get()->groupBy('snackbox_id');
+         // *** should this be further limited to snackboxes for this next delivery week?  Otherwise a whole bunch of boxes not due for delivery will be assigned stock! I'm doing it! ***
+         $snackboxes = Snackbox::where('type', request('type'))->where('is_active', 'Active')->where('next_delivery_week', $this->week_start)->get()->groupBy('snackbox_id');
+
+         // dd($snackboxes);
 
          // Now we can loop through each box
          foreach ($snackboxes as $snackbox) {
@@ -1039,6 +1280,78 @@ class SnackBoxController extends Controller
 
              $likes = Preference::where('company_details_id', $snack->company_details_id)->where('snackbox_likes', '!=', null)->pluck('snackbox_likes')->toArray();
              $dislikes = Preference::where('company_details_id', $snack->company_details_id)->where('snackbox_dislikes', '!=', null)->pluck('snackbox_dislikes')->toArray();
+
+             // Convert the human readable dislike names into a more useful array of id's.
+             foreach ($dislikes as $dislike) {
+                 list($brand, $flavour) = explode(' - ', $dislike);
+                 // This will only return a countable $option if the item is in stock.
+                 $dislikes_by_id[] = Product::where('brand', $brand)->where('flavour', $flavour)->pluck('id');
+             }
+
+
+             // There's no point including any 'liked' items in this array if we don't have any of them in stock,
+             // so let's check the name in Products and see what the stock level looks like.
+             foreach ($likes as $like) {
+                 // I've moved this logic out of the function so I can try to keep it as simple as possible to read.
+                 // I may change this again, or refactor more functions this way - we will see.
+                 $this->removeOutOfStockLikes($like);
+             }
+
+             // create an array of id's we can check through later so we don't replace items with ones already included in the box.
+             foreach (request('order') as $new_standard_snack) {
+                 $products_already_in_box[] = $new_standard_snack['id'];
+             }
+
+             // now we can process the snacks in the box, if it's a disliked item, we're gonna need to replace it, otherwise we're good to save it
+             foreach (request('order') as $new_standard_snack) {
+
+                // if new snack item is in company list of dislikes and at least one of their listed likes is in stock.
+                // i've changed the search to match the way it should look in the dislikes array.
+                if (in_array(($new_standard_snack['brand'] . ' - ' . $new_standard_snack['flavour']), $dislikes) && !empty($likes)) {
+
+                    // REPLACE SNACKBOX ITEM AS IT'S LISTED IN THE COMPANY DISLIKES AND THEY HAVE LIKED ITEM(S) IN STOCK
+                    $this->replaceDislikedItemWithOneFromLikes($likes, $new_standard_snack);
+
+                 // if the new standard snack is in the company list of dislikes but we have nothing in stock they really 'like'
+                } elseif (in_array(($new_standard_snack['brand'] . ' - ' . $new_standard_snack['flavour']), $dislikes) && empty($likes)) {
+
+                    // THEY DISLIKE THIS SNACK ITEM BUT NOTHING THEY LIKE IS IN STOCK - REPICK ITEM FROM THE SNACKS IN STOCK.
+                    $this->replaceDislikedItemWithOneFromNeutralSnackPool($dislikes, $new_standard_snack, $products_already_in_box);
+
+                }
+
+                // $dislikes_by_id will only be created if the company has at least one dislike to push into the array - I could set it before hand, or give it a default value here.
+                // I'm putting the allergy check here so that disliked products have already had the chance to be removed, replacements have been made and we can do one final check again before the saving the snack to the box.
+                // Should I include Dietary Requirements or is that more of an ops assist for filtering products?
+                $this->checkProductForCompanyAllergies($new_standard_snack, $company_details_id_recovered, $snackbox_id_recovered, $products_already_in_box = [], $dislikes_by_id = []);
+
+                 // if we're here, the (original) product, or its replacement should be fine to add to the company snackbox.
+
+                 $new_snackbox = new SnackBox();
+                 // Snackbox Info
+                 $new_snackbox->snackbox_id = $snackbox_id_recovered;
+                 $new_snackbox->delivered_by = $delivered_by_recovered;
+                 $new_snackbox->no_of_boxes = $no_of_boxes_recovered;
+                 $new_snackbox->snack_cap = $snack_cap_recovered;
+                 $new_snackbox->type = $request['type'];
+                 // Company Info
+                 $new_snackbox->company_details_id = $company_details_id_recovered;
+                 $new_snackbox->delivery_day = $delivery_date_recovered;
+                 $new_snackbox->frequency = $frequency_recovered;
+                 $new_snackbox->week_in_month = $week_in_month_recovered;
+                 $new_snackbox->previous_delivery_week = $previous_delivery_week_recovered;
+                 $new_snackbox->next_delivery_week = $next_delivery_week_recovered;
+                 // Product Information
+                 $new_snackbox->product_id = (isset($new_standard_snack['product_id'])) ? $new_standard_snack['product_id'] : $new_standard_snack['id'];
+                 $new_snackbox->code = $new_standard_snack['code'];
+                 $new_snackbox->brand = $new_standard_snack['brand'];
+                 $new_snackbox->flavour = $new_standard_snack['flavour'];
+                 $new_snackbox->quantity = $new_standard_snack['quantity'];
+                 $new_snackbox->selling_unit_price = $new_standard_snack['selling_unit_price'];
+                 $new_snackbox->selling_case_price = $new_standard_snack['selling_case_price'];
+                 $new_snackbox->save();
+
+             } // end of foreach ($request['order'] as $new_standard_snack)
          }
      }
 
@@ -1408,45 +1721,52 @@ class SnackBoxController extends Controller
      */
     public function destroyItem($id, Request $request)
     {
-        // We need some logic here to decide if the item to be deleted is the last item in the snackbox.
-        // Grab all the entries with the same snackbox_id.
-        $snackbox_total_items = SnackBox::where('snackbox_id', request('snackbox_id'))->get();
+        // NEW APPROACH
+            //dd($id);  // I have a sneaky suspicion this may have worked fine.  The error was for displaying the change on the frontend.
+            $this->removeProductFromBox($id);
 
 
-        // However we also need to return the quantity, as it's no longer being delivered, to maintain accurate stock levels.
-        // Use the id of the snackbox entry...
-        $snackbox_item = SnackBox::find(request('id'));
+        // PREVIOUS APPROACH
 
-        // New addition, if the snackbox is wholesale we need to multiply the quantity by case size in order to get an accurate number of units to return to stock.
-        if (request('type') === 'wholesale') {
-                // currently untested...
-                $product_case_size = Product::where($snackbox_item->product_id)->pluck('case_size')->first();
-                $case_to_unit_adjustment = ($product_case_size * $snackbox_item->quantity);
-                Product::find($snackbox_item->product_id)->increment('stock_level', $case_to_unit_adjustment);
-        }
-        // ...to grab the associated product_id and increment the stock level by the quantity; before we strip out or destroy the entry.
-        Product::find($snackbox_item->product_id)->increment('stock_level', $snackbox_item->quantity);
-
-        // If we've only retrieved 1 entry then this is the last vestige of box data and should be preserved.
-        if (count($snackbox_total_items) === 1) {
-            // To prevent an accidental extinction event, we don't want to destroy the entire entry, just strip out the product details and change the product_id to 0.
-            // Having some update logic in the destroy function is probably breaking best practice rules, but I'm sure i'll be able to refactor it one day!
-
-
-            SnackBox::where('id', $id)->update([
-                'product_id' => 0,
-                'code' => null,
-                'name' => null,
-                'quantity' => null,
-                'unit_price' => null,
-                'case_price' => null,
-            ]);
-
-        } else {
-
-            // We still have another entry with the necessary box info, so we can destroy this one.
-            SnackBox::destroy($id);
-        }
+        // // We need some logic here to decide if the item to be deleted is the last item in the snackbox.
+        // // Grab all the entries with the same snackbox_id.
+        // $snackbox_total_items = SnackBox::where('snackbox_id', request('snackbox_id'))->get();
+        //
+        //
+        // // However we also need to return the quantity, as it's no longer being delivered, to maintain accurate stock levels.
+        // // Use the id of the snackbox entry...
+        // $snackbox_item = SnackBox::find(request('id'));
+        //
+        // // New addition, if the snackbox is wholesale we need to multiply the quantity by case size in order to get an accurate number of units to return to stock.
+        // if (request('type') === 'wholesale') {
+        //         // currently untested...
+        //         $product_case_size = Product::where($snackbox_item->product_id)->pluck('case_size')->first();
+        //         $case_to_unit_adjustment = ($product_case_size * $snackbox_item->quantity);
+        //         Product::find($snackbox_item->product_id)->increment('stock_level', $case_to_unit_adjustment);
+        // }
+        // // ...to grab the associated product_id and increment the stock level by the quantity; before we strip out or destroy the entry.
+        // Product::find($snackbox_item->product_id)->increment('stock_level', $snackbox_item->quantity);
+        //
+        // // If we've only retrieved 1 entry then this is the last vestige of box data and should be preserved.
+        // if (count($snackbox_total_items) === 1) {
+        //     // To prevent an accidental extinction event, we don't want to destroy the entire entry, just strip out the product details and change the product_id to 0.
+        //     // Having some update logic in the destroy function is probably breaking best practice rules, but I'm sure i'll be able to refactor it one day!
+        //
+        //
+        //     SnackBox::where('id', $id)->update([
+        //         'product_id' => 0,
+        //         'code' => null,
+        //         'name' => null,
+        //         'quantity' => null,
+        //         'unit_price' => null,
+        //         'case_price' => null,
+        //     ]);
+        //
+        // } else {
+        //
+        //     // We still have another entry with the necessary box info, so we can destroy this one.
+        //     SnackBox::destroy($id);
+        // }
 
     }
 

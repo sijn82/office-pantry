@@ -336,13 +336,13 @@ class FruitPartnerController extends Controller
                 // dd($orders);
             } else {
 
-                //$this->download($orders, $fruitpartner, $week_start);
+                $this->download($orders, $fruitpartner, $week_start);
                 //dump($fruitpartner);
                 // Instead of calling the download function here let's push it into the queue
                 // This way we can break the time intensive task into single fruitpartner jobs
                 // we can also move them onto a background worker to keep the main site running without pause.
 
-                ExportFruitPartnerDeliveries::dispatch($orders, $fruitpartner, $week_start);
+                //ExportFruitPartnerDeliveries::dispatch($orders, $fruitpartner, $week_start);
 
             }
 

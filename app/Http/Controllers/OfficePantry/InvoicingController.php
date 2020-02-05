@@ -52,10 +52,10 @@ class InvoicingController extends Controller
 
     public function weekly_invoicing_export()
     {
-        return \Excel::download(new Exports\WeeklyInvoicesExport(), 'weekly_invoicing-' . $this->week_start . '.csv');
+        return \Excel::download(new Exports\WeeklyInvoicesExportV2(), 'weekly_invoicing-' . $this->week_start . '.csv');
     }
-    
-    
+
+
     // There's a tempation to have this function do more than just apply an invoice date but should it?
     // I'm thinking I could also make archived files 'Inactive' at this point so they can drop off subsequent searches, as we don't really need them for anything anymore.
     public function confirm_weekly_invoicing()
@@ -63,8 +63,8 @@ class InvoicingController extends Controller
         // This is the same query used in running the weekly invoices so we should be catching the exact same orders.
         // I will have to check to make sure this is as absolute as I think, and that any change made in one is also made in the other.
         // What could go wrong.
-        
-        
+
+
         $companies = CompanyDetails::where('is_active', 'Active')
                                     ->whereIn('branding_theme', ['BACS', 'GoCardless', 'Paypal (Stripe)', 'Weekly Standing Order', 'Eden Branding Theme']) // <-- Still need to get confirmation on these!
                                     ->with([
@@ -99,69 +99,69 @@ class InvoicingController extends Controller
                                                 $query->where('is_active', 'Active')->where('next_delivery_week', $this->week_start);
                                             }
                                     ])->get();
-            
+
             // dd($companies);
-            
+
             //----- Grab current date for invoiced_at field -----//
-            
+
             // Let's grab today's (relative to when invoice confirmation function is run) date without any formatting, to maximise its reuse.
             $date = CarbonImmutable::now('Europe/London');
 
             // Invoice date is just the day the invoice function is run.
             $invoice_date = $date->format('Y-m-d');
-             
+
             //----- Loop through each company with qualifying orders -----//
-            
+
             foreach ($companies as $company) {
-                
+
                 //----- Fruitboxes -----//
                 dump($company->fruitbox);
-                
+
                 foreach ($company->fruitbox as $fruitbox) {
                     // As this is from the active fruitboxes (not archived), we might want to reuse this order for their next delivery - so let's just add an 'invoiced_at' date to the entry.
                     // $fruitbox->invoiced_at = $date; // <-- Why was I not using the invoice date for this?  I'm going to chnage them all to $invoice_Date but keeping this here as reference.
                     $fruitbox->invoiced_at = $invoice_date;
                     $fruitbox->save();
-                    
+
                     //dump($fruitbox);
                 }
-                
+
                 //----- Archived Fruitboxes -----//
-                
+
                 foreach ($company->fruitbox_archive as $fruitbox_archive) {
                     // As this is from the archive, their current order has now changed.  In this case we can make the box inactive as well as adding the 'invoiced_at' date.
                     $fruitbox_archive->invoiced_at = $invoice_date;
                     $fruitbox_archive->is_active = 'Inactive';
                     $fruitbox_archive->save();
-                    
+
                     //dump($fruitbox_archive);
                 }
-                
+
                 //----- Milkboxes -----//
                 dump($company->milkbox);
-                
+
                 foreach ($company->milkbox as $milkbox) {
                     $milkbox->invoiced_at = $invoice_date;
                     $milkbox->save();
-                    
+
                     //dump($milkbox);
                 }
-                
+
                 //----- Archived Milkboxes -----//
                 //dd($company->milkbox_archive);
-                
+
                 foreach ($company->milkbox_archive as $milkbox_archive) {
                     $milkbox_archive->invoiced_at = $invoice_date;
                     $milkbox_archive->is_active = 'Inactive';
                     $milkbox_archive->save();
-                    
+
                     //dump($milkbox_archive);
                 }
-                
+
                 //----- Snackboxes -----//
-                
+
                 foreach ($company->snackboxes->groupBy('snackbox_id') as $snackbox) {
-                    
+
                     // Do we want to add an invoice date to boxes that are effectively empty?
                     // These would be a $snackbox that has a single entry with a 'product_id' of 0.
                     // NOPE... well let's say no for now.
@@ -174,17 +174,17 @@ class InvoicingController extends Controller
                             // Otherwise let's slap an 'invoiced_at' date on there and save it.
                             $snackbox_item->invoiced_at = $invoice_date;
                             $snackbox_item->save();
-                            
+
                         //    dump($snackbox_item);
                         }
                     }
                     // dump($snackbox);
                 }
-                
+
                 //----- Archived Snackboxes -----//
-                
+
                 foreach ($company->snackbox_archive->groupBy('snackbox_id') as $snackbox_archive) {
-                    
+
                     // Do we want to add an invoice date to boxes that are effectively empty?
                     // These would be a $snackbox that has a single entry with a 'product_id' of 0.
                     // NOPE... well let's say no for now.
@@ -199,19 +199,19 @@ class InvoicingController extends Controller
                             $snackbox_archive_item->invoiced_at = $invoice_date;
                             $snackbox_archive_item->is_active = 'Inactive';
                             $snackbox_archive_item->save();
-                            
+
                         //    dump($snackbox_archive_item);
                         }
                     }
                     // dump($snackbox);
                 }
-                
+
                 //----- Drinkboxes -----//
-                
+
                 foreach ($company->drinkboxes->groupBy('drinkbox_id') as $drinkbox) {
                     // dd($drinkbox);
                     foreach ($drinkbox as $drinkbox_item) {
-                        // OK so for consistency I'm going add this for now but it's kinda pointless, 
+                        // OK so for consistency I'm going add this for now but it's kinda pointless,
                         // but then adding an invoice date to items which haven't been invoiced is also WRONG!.
                         if ($drinkbox_item->product_id === 0) {
                             // Currently do nothing? Yeah, ok.
@@ -221,13 +221,13 @@ class InvoicingController extends Controller
                         }
                     }
                 }
-                
+
                 //----- Archived Drinkboxes -----//
-                
+
                 foreach ($company->drinkbox_archive->groupBy('drinkbox_id') as $drinkbox_archive) {
                     // dd($drinkbox_archive);
                     foreach ($drinkbox_archive as $drinkbox_archive_item) {
-                        // OK so for consistency I'm going add this for now but it's kinda pointless, 
+                        // OK so for consistency I'm going add this for now but it's kinda pointless,
                         // but then adding an invoice date to items which haven't been invoiced is also WRONG!.
                         if ($drinkbox_archive_item->product_id === 0) {
                             // Currently do nothing? Yeah alright let's deactivate them at least.
@@ -239,13 +239,13 @@ class InvoicingController extends Controller
                         }
                     }
                 }
-                
+
                 //----- Otherboxes -----//
-                
+
                 foreach ($company->otherboxes->groupBy('otherbox_id') as $otherbox) {
                     // dd($otherbox);
                     foreach ($otherbox as $otherbox_item) {
-                        // OK so for consistency I'm going add this for now but it's kinda pointless, 
+                        // OK so for consistency I'm going add this for now but it's kinda pointless,
                         // but then adding an invoice date to items which haven't been invoiced is also WRONG!.
                         if ($otherbox_item->product_id === 0) {
                             // Currently do nothing? Yeah, ok.
@@ -255,13 +255,13 @@ class InvoicingController extends Controller
                         }
                     }
                 }
-                
+
                 //----- Archived Otherboxes -----//
-                
+
                 foreach ($company->otherbox_archive->groupBy('otherbox_id') as $otherbox_archive) {
                     // dd($otherbox_archive);
                     foreach ($otherbox_archive as $otherbox_archive_item) {
-                        // OK so for consistency I'm going add this for now but it's kinda pointless, 
+                        // OK so for consistency I'm going add this for now but it's kinda pointless,
                         // but then adding an invoice date to items which haven't been invoiced is also WRONG!.
                         if ($otherbox_archive_item->product_id === 0) {
                             // Currently do nothing? Yeah alright let's deactivate them at least.
@@ -273,13 +273,13 @@ class InvoicingController extends Controller
                         }
                     }
                 }
-                
+
             } // End of foreach ($companies as $company)
             return redirect('office');
     }
 
     // This weekly_invoicing function has been moved to Exports folder and now results in a csv file.
-    // See funtion above.
+    // See function above. I.E (i think) weekly_invoicing_export() which is now the function above the function above. :)
 
     public function weekly_invoicing()
     {
@@ -325,31 +325,33 @@ class InvoicingController extends Controller
 
             // Moved this out of the foreach loop as we only need to set these variables once.
 
+            // Urghh, I still need to stop relying on hard coded values here!
+
             //----- OP Products -----//
-                //----- Milkbox Variables -----//
-                    $milk_1l = OfficePantryProducts::findOrFail(1);
-                    $milk_2l = OfficePantryProducts::findOrFail(2);
-                    $milk_alt = OfficePantryProducts::findOrFail(3);
-                    $milk_1l_org = OfficePantryProducts::findOrFail(4);
-                    $milk_2l_org = OfficePantryProducts::findOrFail(5);
                 //----- Fruitbox Varibles -----//
-                    $fruitbox_x1 = OfficePantryProducts::findOrFail(6);
-                    $fruitbox_x2 = OfficePantryProducts::findOrFail(7);
-                    $fruitbox_x3 = OfficePantryProducts::findOrFail(8);
-                    $fruitbox_x4 = OfficePantryProducts::findOrFail(9);
-                    $fruitbox_x7_plus = OfficePantryProducts::findOrFail(10);
-                //----- Milkbox Variables (Fruit Partner) -----//
-                    $milk_1l_fruit_partner = OfficePantryProducts::findOrFail(11);
-                    $milk_2l_fruit_partner = OfficePantryProducts::findOrFail(12);
-                    $milk_alt_fruit_partner = OfficePantryProducts::findOrFail(13);
-                    $milk_1l_org_fruit_partner = OfficePantryProducts::findOrFail(14);
-                    $milk_2l_org_fruit_partner = OfficePantryProducts::findOrFail(15);
+                    $fruitbox_x1 = OfficePantryProducts::findOrFail(1);
+                    $fruitbox_x2 = OfficePantryProducts::findOrFail(2);
+                    $fruitbox_x3 = OfficePantryProducts::findOrFail(3);
+                    $fruitbox_x4 = OfficePantryProducts::findOrFail(4);
+                    $fruitbox_x7_plus = OfficePantryProducts::findOrFail(5);
+                //----- Milkbox Variables -----//
+                    $milk_1l = OfficePantryProducts::findOrFail(6);
+                    $milk_2l = OfficePantryProducts::findOrFail(7);
+                    $milk_alt = OfficePantryProducts::findOrFail(8);
+                    $milk_1l_org = OfficePantryProducts::findOrFail(9);
+                    $milk_2l_org = OfficePantryProducts::findOrFail(10);
                 //----- Fruitbox Variables (Fruit Partner) -----//
-                    $fruitbox_x1_fruit_partner = OfficePantryProducts::findOrFail(16);
-                    $fruitbox_x2_fruit_partner = OfficePantryProducts::findOrFail(17);
-                    $fruitbox_x3_fruit_partner = OfficePantryProducts::findOrFail(18);
-                    $fruitbox_x4_fruit_partner = OfficePantryProducts::findOrFail(19);
-                    $fruitbox_x7_plus_fruit_partner = OfficePantryProducts::findOrFail(20);
+                    $fruitbox_x1_fruit_partner = OfficePantryProducts::findOrFail(11);
+                    $fruitbox_x2_fruit_partner = OfficePantryProducts::findOrFail(12);
+                    $fruitbox_x3_fruit_partner = OfficePantryProducts::findOrFail(13);
+                    $fruitbox_x4_fruit_partner = OfficePantryProducts::findOrFail(14);
+                    $fruitbox_x7_plus_fruit_partner = OfficePantryProducts::findOrFail(15);
+                //----- Milkbox Variables (Fruit Partner) -----//
+                    $milk_1l_fruit_partner = OfficePantryProducts::findOrFail(16);
+                    $milk_2l_fruit_partner = OfficePantryProducts::findOrFail(17);
+                    $milk_alt_fruit_partner = OfficePantryProducts::findOrFail(18);
+                    $milk_1l_org_fruit_partner = OfficePantryProducts::findOrFail(19);
+                    $milk_2l_org_fruit_partner = OfficePantryProducts::findOrFail(20);
             //----- End of OP Products -----//
 
             //---------- Snackbox Functions ----------//

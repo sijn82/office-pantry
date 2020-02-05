@@ -129,6 +129,7 @@ Vue.component('products-list', require('./components/admin/products/ProductsList
 Vue.component('add-new-product', require('./components/admin/products/AddNewProduct.vue').default);
 Vue.component('select-product', require('./components/admin/products/SelectProduct.vue').default);
 // Office Pantry Products Related
+Vue.component('add-new-office-pantry-product', require('./components/admin/products/AddNewOfficePantryProduct.vue').default);
 Vue.component('office-pantry-product-list', require('./components/admin/products/OfficePantryProductList.vue').default);
 Vue.component('office-pantry-product', require('./components/admin/products/OfficePantryProduct.vue').default);
 // Preference & Allergy Related

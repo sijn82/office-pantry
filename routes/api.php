@@ -19,6 +19,15 @@ use Illuminate\Http\Request;
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
+Route::get('test', 'Boxes\SnackBoxController@test');
+
+//----- THESE 2 ROUTES ARE FOR ONE OFF USE -----//
+//----- COMMENTING THEM OUT TO PREVENT ACCIDENTAL REUSE! -----//
+
+// Route::get('experiment', 'Company\AllergyInfoController@buildAllergiesFromProductList');
+// Route::get('create-allergies', 'Company\AllergyController@multiStore');
+
+//----- END OF COMMENTING THEM OUT TO PREVENT ACCIDENTAL REUSE! -----//
 
 //---- Moving routes into sensible groups for namespacing and authentication ease (hopefully). -----//
 
@@ -47,10 +56,12 @@ Route::group([
     Route::put('milkbox/destroy/{id}', 'MilkBoxController@destroy');
     // Snackbox CRUD
     Route::post('snackboxes/save', 'SnackBoxController@store');
-    Route::post('snackbox/update', 'SnackBoxController@update');
+    // Route::post('snackbox/update', 'SnackBoxController@update'); // thisn is the old function path to update the snackbox item quantity.
+    Route::post('snackbox/update-item-quantity', 'SnackBoxController@increaseSnackboxOrderItemQuantity'); // this is the new one.
     Route::post('snackbox/details', 'SnackBoxController@updateDetails');
-    Route::post('snackbox/add-product', 'SnackBoxController@addProductToSnackbox');
-    Route::put('snackbox/destroy/{id}', 'SnackBoxController@destroyItem');
+    // Route::post('snackbox/add-product', 'SnackBoxController@addProductToSnackbox'); // Commenting out while I work on addproducttobox replacement function.
+    Route::post('snackbox/add-product', 'SnackBoxController@addProductToSnackBoxV2');
+    Route::put('snackbox/destroy-item/{id}', 'SnackBoxController@destroyItem');
     Route::put('snackbox/destroy-box/{id}', 'SnackBoxController@destroyBox');
     // Drinkbox CRUD
     Route::post('drinkboxes/save', 'DrinkBoxController@store');
@@ -88,7 +99,8 @@ Route::group([
     Route::put('archived-otherbox/destroy-box/{id}', 'ArchivedOtherBoxController@destroyBox');
 
     //----- Mass Update Snackboxes -----//
-    Route::post('snackboxes/standard/update', 'SnackBoxController@massUpdateType');
+    // Route::post('snackboxes/standard/update', 'SnackBoxController@massUpdateType');
+    Route::post('snackboxes/standard/update', 'SnackBoxController@massUpdateTypeV2'); // testing the new function out before replacing the old one entirely.
     Route::get('types/select', 'SnackBoxController@showTypes');
     // Export Fruitbox Picklists
     Route::get('export-fruitbox-picklists', 'FruitBoxController@fruitbox_export');
@@ -119,9 +131,12 @@ Route::group([
     Route::post('additional-info', 'AdditionalInfoController@addAdditionalInfo');
     Route::put('additional-info/{id}', 'AdditionalInfoController@destroy');
 
-    Route::get('allergies/select', 'AllergyController@showAllergies');
-    Route::post('allergies', 'AllergyController@addAllergy');
-    Route::put('allergies/{id}', 'AllergyController@destroy');
+    // THESE 3 ROUTES ARE ALL FOR THE OLD WAY OF HANDLING ALLERGIES, WILL NEED UPDATING/REPLACING.
+
+    // Route::get('allergies/select', 'AllergyController@showAllergies');
+    Route::post('allergies', 'AllergyInfoController@addCompanyAllergies');
+    Route::put('allergies/update', 'AllergyInfoController@updateCompanyAllergies');
+    // Route::put('allergies/{id}', 'AllergyController@destroy');
 
     Route::post('company-details/add-new-company', 'CompanyDetailsController@store');
     Route::put('company-details/update/{company_details_id}', 'CompanyDetailsController@update');
@@ -174,6 +189,7 @@ Route::group([
     Route::get('create-fruitpartner-export-jobs', 'FruitPartnerController@createJobsForEachFruitPartner');
 
     // Office Pantry Products
+    Route::put('office-pantry-products/new', 'OfficePantryProductsController@store');
     Route::put('office-pantry-products/update/{id}', 'OfficePantryProductsController@update');
     Route::get('office-pantry-products/show', 'OfficePantryProductsController@show'); // Might do this differently tomorrow morning.
     //Invoicing

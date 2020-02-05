@@ -14,6 +14,7 @@ class MilkBox extends Model
     protected $fillable = [
         // Company order details
         'is_active',
+        'name', // new 09/01/20
         'fruit_partner_id',
         'company_details_id',
         'previous_delivery',
@@ -49,6 +50,9 @@ class MilkBox extends Model
         'milk_1l_alt_rice',
         'milk_1l_alt_cashew',
         'milk_1l_alt_lactose_free_semi',
+        // Alt pt4 (new 09/01/20)
+        'milk_1l_alt_hazelnut',
+        'milk_1l_alt_soya_chocolate',
         // Invoice details, currently keeping timestamps out of the editable range.
         'invoiced_at',
         // Newly added fields to track changes

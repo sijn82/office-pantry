@@ -139,7 +139,7 @@ export default {
 
                 {text: 'Celery', value: 'celery'},
                 {text: 'Gluten', value: 'gluten'},
-                {text: 'Crustaceans', value: 'crustacians'},
+                {text: 'Crustaceans', value: 'crustaceans'},
                 {text: 'Eggs', value: 'eggs'},
                 {text: 'Fish', value: 'fish'},
                 {text: 'Lupin', value: 'lupin'},
@@ -194,7 +194,7 @@ export default {
             axios.post('/api/company/allergies', {
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 selected_allergens: this.selected_allergens,
-                selected_dietary_requirements: this.selected_dietary_requirements,
+                // selected_dietary_requirements: this.selected_dietary_requirements,
                 selected_company: this.company.id
             })
             .then( response => { alert('Selected company allergies saved.')})
@@ -330,8 +330,7 @@ export default {
         }
     },
     mounted() {
-
-         this.$store.commit('getAllergies');
+         // this.$store.commit('getAllergies'); <-- We now get allergies differently, commenting this out for now to remove the error on retrieval, until I redo this or delete it.
     }
 }
 </script>

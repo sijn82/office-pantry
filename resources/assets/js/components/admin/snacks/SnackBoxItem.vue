@@ -2,10 +2,10 @@
   <div class="">
       <b-row :class="">
           <b-col>
-              <p> {{ snackbox_item.brand }} </p>
+              <p> {{ snackbox_item.product.brand }} </p>
           </b-col>
           <b-col>
-              <p> {{ snackbox_item.flavour }} </p>
+              <p> {{ snackbox_item.product.flavour }} </p>
           </b-col>
           <b-col>
               <div v-if="edit">
@@ -16,8 +16,8 @@
               </div>
           </b-col>
           <b-col>
-              <p v-if="snackbox_item.type !== 'wholesale'"> {{ snackbox_item.selling_unit_price }} </p>
-              <p v-else> {{ snackbox_item.selling_case_price }} </p>
+              <p v-if="snackbox_item.type !== 'wholesale'"> {{ snackbox_item.product.selling_unit_price }} </p>
+              <p v-else> {{ snackbox_item.product.selling_case_price }} </p>
           </b-col>
           <b-col>
               <b-button size="sm" variant="warning" @click="editor()"> Edit </b-button>
@@ -35,7 +35,7 @@
 <script>
 
     export default {
-        props: ['snackbox_item'],
+        props: ['snackbox_item', 'company_details_id'],
         data () {
             return {
                 edit: false,
@@ -50,19 +50,19 @@
                 }
             },
             deleteSnackBoxItem(snackbox_item) {
-                axios.put('api/boxes/snackbox/destroy/' + snackbox_item.id, {
+                axios.put('api/boxes/snackbox/destroy-item/' + snackbox_item.id, {
                     id: snackbox_item.id,
-                    snackbox_id: snackbox_item.snackbox_id,
+                    //snackbox_id: snackbox_item.snackbox_id, // EDIT: 20/01/20 - I'll not need this anymore, if I need to destroy the box as well, I have to do this another way.
                 }).then ( (response) => {
                     //location.reload(true); // What am I doing with the store on this one?  Will I need this?
-                    this.$emit('refresh-data', {company_details_id: snackbox_item.company_details_id})
+                    this.$emit('refresh-data', {company_details_id: this.company_details_id})
                     console.log(response);
                 }).catch(error => console.log(error));
             },
             editQuantity(snackbox_item) {
-                axios.post('api/boxes/snackbox/update', {
-                    snackbox_item_id: snackbox_item.id,
-                    snackbox_item_quantity: snackbox_item.quantity,
+                axios.post('api/boxes/snackbox/update-item-quantity', {
+                    item_id: snackbox_item.id,
+                    item_quantity: snackbox_item.quantity,
                 }).then (response => {
                     //location.reload(true); // What am I doing with the store on this one?  Will I need this?
                     console.log(response);

@@ -78,7 +78,6 @@
         background-color: rgba(201, 16, 16, 0.5);
     }
     .fruitbox {
-        // padding-right: 40px;
         padding-left: 0;
         li {
         list-style: none;
@@ -158,6 +157,9 @@ export default {
     methods: {
         refreshData($event) {
             this.$emit('refresh-data', $event);
+            // Added 14/01/20 to close add new panel on form completion.
+            // This will close when an update (created/updated/deleted) is made to any fruitbox box but I don't see that being an issue.
+            this.addnew = false;
         },
         addNew() {
             if (this.addnew == false) {

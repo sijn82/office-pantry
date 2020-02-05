@@ -7,19 +7,23 @@ use App\Http\Controllers\Exports;
 
 use App\FruitBox;
 use App\FruitBoxArchive;
-// use App\Company;
 use App\CompanyDetails;
 use App\CompanyRoute;
 use App\FruitPartner;
 use App\WeekStart;
 use App\AssignedRoute;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Support\Facades\Auth;
 use Carbon\CarbonImmutable;
+
+use App\Traits\Routes;
 
 class FruitBoxController extends Controller
 {
+    use Routes;
+
     protected $week_start;
     protected $delivery_days;
 
@@ -159,46 +163,44 @@ class FruitBoxController extends Controller
         // ]);
 
 
-        foreach (request('company_data.delivery_day') as $delivery_day)
+        foreach (request('delivery_day') as $delivery_day)
         {
             // Instead of creating a validation rule to check for unique name/day combo's we can make a quick db call, and skip creation if we already have a result.
-            if (count(Fruitbox::where('name', request('company_data.name'))->where('delivery_day', $delivery_day)->get()) == 0) // Going to change this !count when I'm testing this section again.
+            if (count(Fruitbox::where('company_details_id', request('company_details_id'))->where('name', request('name'))->where('delivery_day', $delivery_day)->get()) == 0) // Going to change this !count when I'm testing this section again.
             {
-                // dd($request);
                 $newFruitbox = new Fruitbox();
                 $newFruitbox->is_active = 'Active'; // Currently hard coded but this is also the default.
-                $newFruitbox->fruit_partner_id = request('company_data.fruit_partner_id');
-                $newFruitbox->name = request('company_data.name');
-                $newFruitbox->company_details_id = request('company_data.company_details_id');
-                //$newFruitbox->route_id = request('company_data.route_id');
-                $newFruitbox->type = request('company_data.type');
-                $newFruitbox->next_delivery = request('company_data.first_delivery');
-                $newFruitbox->frequency = request('company_data.frequency');
-                $newFruitbox->week_in_month = request('company_data.week_in_month');
+                $newFruitbox->fruit_partner_id = request('fruit_partner_id');
+                $newFruitbox->name = request('name');
+                $newFruitbox->company_details_id = request('company_details_id');
+                $newFruitbox->type = request('type');
+                $newFruitbox->next_delivery = request('first_delivery');
+                $newFruitbox->frequency = request('frequency');
+                $newFruitbox->week_in_month = request('week_in_month');
                 $newFruitbox->delivery_day = $delivery_day;
-                $newFruitbox->fruitbox_total = request('company_data.fruitbox_total');
-                $newFruitbox->deliciously_red_apples = request('company_data.deliciously_red_apples');
-                $newFruitbox->pink_lady_apples = request('company_data.pink_lady_apples');
-                $newFruitbox->red_apples = request('company_data.red_apples');
-                $newFruitbox->green_apples = request('company_data.green_apples');
-                $newFruitbox->satsumas = request('company_data.satsumas');
-                $newFruitbox->pears = request('company_data.pears');
-                $newFruitbox->bananas = request('company_data.bananas');
-                $newFruitbox->nectarines = request('company_data.nectarines');
-                $newFruitbox->limes = request('company_data.limes');
-                $newFruitbox->lemons = request('company_data.lemons');
-                $newFruitbox->grapes = request('company_data.grapes');
-                $newFruitbox->seasonal_berries = request('company_data.seasonal_berries');
-                $newFruitbox->oranges = request('company_data.oranges');
-                $newFruitbox->cucumbers = request('company_data.cucumbers');
-                $newFruitbox->mint = request('company_data.mint');
-                $newFruitbox->organic_lemons = request('company_data.organic_lemons');
-                $newFruitbox->kiwis = request('company_data.kiwis');
-                $newFruitbox->grapefruits = request('company_data.grapefruits');
-                $newFruitbox->avocados = request('company_data.avocados');
-                $newFruitbox->root_ginger = request('company_data.root_ginger');
-                $newFruitbox->tailoring_fee = request('company_data.tailoring_fee');
-                $newFruitbox->discount_multiple = request('company_data.discount_multiple');
+                $newFruitbox->fruitbox_total = request('fruitbox_total');
+                $newFruitbox->deliciously_red_apples = request('deliciously_red_apples');
+                $newFruitbox->pink_lady_apples = request('pink_lady_apples');
+                $newFruitbox->red_apples = request('red_apples');
+                $newFruitbox->green_apples = request('green_apples');
+                $newFruitbox->satsumas = request('satsumas');
+                $newFruitbox->pears = request('pears');
+                $newFruitbox->bananas = request('bananas');
+                $newFruitbox->nectarines = request('nectarines');
+                $newFruitbox->limes = request('limes');
+                $newFruitbox->lemons = request('lemons');
+                $newFruitbox->grapes = request('grapes');
+                $newFruitbox->seasonal_berries = request('seasonal_berries');
+                $newFruitbox->oranges = request('oranges');
+                $newFruitbox->cucumbers = request('cucumbers');
+                $newFruitbox->mint = request('mint');
+                $newFruitbox->organic_lemons = request('organic_lemons');
+                $newFruitbox->kiwis = request('kiwis');
+                $newFruitbox->grapefruits = request('grapefruits');
+                $newFruitbox->avocados = request('avocados');
+                $newFruitbox->root_ginger = request('root_ginger');
+                $newFruitbox->tailoring_fee = request('tailoring_fee');
+                $newFruitbox->discount_multiple = request('discount_multiple');
                 $newFruitbox->save();
 
                 $message = "Fruitbox $newFruitbox->name on $delivery_day saved.";
@@ -206,7 +208,7 @@ class FruitBoxController extends Controller
 
             } else {
 
-                $box_name = request('company_data.name');
+                $box_name = request('name');
 
                 $message = "Fruitbox $box_name / $delivery_day combo already exists!";
                 Log::channel('slack')->info($message);
@@ -214,79 +216,14 @@ class FruitBoxController extends Controller
 
 
             // Once the Fruitbox has been created we need to check for an existing route on the given delivery day, or create a new one for populating.
-            if (count(CompanyRoute::where('company_details_id', request('company_data.company_details_id'))->where('delivery_day', $delivery_day)->get()) == 0) {
+            if (count(CompanyRoute::where('company_details_id', request('company_details_id'))->where('delivery_day', $delivery_day)->get()) == 0) {
 
-                // Let's grab the current weekstart, we don't really need it but this will give us the week the company started with us.  Which might be nice to know.
-                $currentWeekStart = Weekstart::findOrFail(1);
-
-                // A route might not exist yet but when the company was set up a route name was inputted, so let's use that.
-                // $companyDetails = Company::findOrFail($request['company_data']['company_id']);
-                $companyDetails = CompanyDetails::findOrFail(request('company_data.company_details_id'));
-
-                $assigned_route_tbc_monday = AssignedRoute::where('name', 'TBC (Monday)')->get();
-                $assigned_route_tbc_tuesday = AssignedRoute::where('name', 'TBC (Tuesday)')->get();
-                $assigned_route_tbc_wednesday = AssignedRoute::where('name', 'TBC (Wednesday)')->get();
-                $assigned_route_tbc_thursday = AssignedRoute::where('name', 'TBC (Thursday)')->get();
-                $assigned_route_tbc_friday = AssignedRoute::where('name', 'TBC (Friday)')->get();
-
-                switch ($delivery_day) {
-                    case 'Monday':
-                        $assigned_route_id = $assigned_route_tbc_monday[0]->id;
-                        break;
-                    case 'Tuesday':
-                        $assigned_route_id = $assigned_route_tbc_tuesday[0]->id;
-                        break;
-                    case 'Wednesday':
-                        $assigned_route_id = $assigned_route_tbc_wednesday[0]->id;
-                        break;
-                    case 'Thursday':
-                        $assigned_route_id = $assigned_route_tbc_thursday[0]->id;
-                        break;
-                    case 'Friday':
-                        $assigned_route_id = $assigned_route_tbc_friday[0]->id;
-                        break;
-                }
-
-                // We need to create a new entry.
-                $newRoute = new CompanyRoute();
-                $newRoute->is_active = 'Active'; // Currently hard coded but this is also the default.
-                // $newRoute->week_start = $currentWeekStart->current;
-                // $newRoute->previous_delivery_week_start = null // This doesn't need to be here as there will never be a previous delivery for a new route (obvs) but I'm noting all fields in new route table here, for now.
-                // $newRoute->next_delivery_week_start = $request['company_data']['first_delivery'];
-                $newRoute->company_details_id = request('company_data.company_details_id');
-                $newRoute->route_name = $companyDetails->route_name;
-                $newRoute->postcode = $companyDetails->route_postcode;
-                //  Route Summary Address isn't a field in the new model, instead I need to grab all route fields and combine them into the summary address.
-                // $newRoute->address = $companyDetails->route_summary_address;
-
-                $newRoute->address = implode(", ", array_filter([
-                        $companyDetails->route_address_line_1,
-                        $companyDetails->route_address_line_2,
-                        $companyDetails->route_address_line_3,
-                        $companyDetails->route_city,
-                        $companyDetails->route_region
-                    ]));
-
-                $newRoute->delivery_information = $companyDetails->delivery_information;
-                $newRoute->assigned_route_id = $assigned_route_id;
-                $newRoute->delivery_day = $delivery_day;
-                // $newRoute->assigned_to = 'TBC'; // Another one hardcoded here but is also the default (database value).
-                // $newRoute->position_on_route = null; // Until it's on a route we can't know its position, this will always start off as null.
-                // $newRoute->fruit_crates = 0; // This will also be the default, a new route doesn't mean a new company.
-                // $newRoute->snacks = null; // Thinking of keeping these fields in the routes table, they'll be editable fields, updated manually.
-                // $newRoute->drinks = null; // Thinking of keeping these fields in the routes table, they'll be editable fields, updated manually.
-                // $newRoute->other =  null; // Thinking of keeping these fields in the routes table, they'll be editable fields, updated manually.
-                $newRoute->save();
-
-                $message = "Route $newRoute->route_name on $delivery_day saved.";
-                Log::channel('slack')->info($message);
+                // If we're here, we need to create a new route
+                $this->createNewRoute(request(), $delivery_day);
 
             } else {
 
-                // We can update the existing entry.
-                // Scrap that, as we're not saving any fruitbox data to the routes anymore we won't need to update anything here.
-                // Or at least that's my current thinking.
-
+                // We already have a route this delivery can go on - so we dont need to do anything else.
             }
 
         } // End Of Foreach - ($request['company_data']['delivery_day'] as $delivery_day)
@@ -511,7 +448,6 @@ class FruitBoxController extends Controller
            'fruit_partner_id' => request('fruit_partner_id'),
            'name' => request('name'),
            // 'company_details_id' => request('company_details_id'),
-           // 'route_id' => request('route_id'),
            'type' => request('type'),
            'next_delivery' => request('next_delivery'),
            'delivery_day' => request('delivery_day'),
@@ -600,83 +536,29 @@ class FruitBoxController extends Controller
        if (count(CompanyRoute::where('company_details_id', request('company_details_id'))->where('delivery_day', request('delivery_day'))->get())) {
 
            // We have nothing else we need to do.
-
            // ^^^ Not true, we should be checking if the route is active already because if not we'll need to change that status to get pulled into the routes for exporting etc.
-           $route = CompanyRoute::where('company_details_id', request('company_details_id'))->where('delivery_day', request('delivery_day'))->get();
 
-           if ($route[0]->is_active == 'Active') {
-
-               $message = "Route for updated box " . request('name') . " on " . request('delivery_day') . " already found.";
-               Log::channel('slack')->info($message);
-
-           } else {
-
-               FruitBox::where('id', $id)->update([
-                   'is_active' => 'Active'
-               ]);
-
-               $message = "Route for updated box " . request('name') . " on " . request('delivery_day') . " already found but Inactive, Reactivating now...";
-               Log::channel('slack')->info($message);
-           }
+           // ^^^ EDIT: 16/01/20 - OH MY, ANOTHER RETHINK AND I'M BACK TO MY ORIGINAL PLAN - WHY BOTHER DEACTIVATING ROUTES, JUST DELETE THEM IF NOT NEEDED.
+           // $route = CompanyRoute::where('company_details_id', request('company_details_id'))->where('delivery_day', request('delivery_day'))->get();
+           // if ($route[0]->is_active == 'Active') {
+           //
+           //     $message = "Route for updated box " . request('name') . " on " . request('delivery_day') . " already found.";
+           //     Log::channel('slack')->info($message);
+           //
+           // } else {
+           //
+           //     FruitBox::where('id', $id)->update([
+           //         'is_active' => 'Active'
+           //     ]);
+           //
+           //     $message = "Route for updated box " . request('name') . " on " . request('delivery_day') . " already found but Inactive, Reactivating now...";
+           //     Log::channel('slack')->info($message);
+           // }
 
        } elseif (request('fruit_partner_id') == 1) {
 
-           // If we're here, a route wasn't found for the new delivery day, and we've confirmed it's an Office Pantry delivery, so we'd better make one.
-           // A route might not exist yet but when the company was set up a route name was inputted, so let's use that.
-
-           // $companyDetails = Company::findOrFail($request['company_id']);
-           $companyDetails = CompanyDetails::findOrFail(request('company_details_id'));
-
-           $assigned_route_tbc_monday = AssignedRoute::where('name', 'TBC (Monday)')->get();
-           $assigned_route_tbc_tuesday = AssignedRoute::where('name', 'TBC (Tuesday)')->get();
-           $assigned_route_tbc_wednesday = AssignedRoute::where('name', 'TBC (Wednesday)')->get();
-           $assigned_route_tbc_thursday = AssignedRoute::where('name', 'TBC (Thursday)')->get();
-           $assigned_route_tbc_friday = AssignedRoute::where('name', 'TBC (Friday)')->get();
-
-           switch (request('delivery_day')) {
-               case 'Monday':
-                   $assigned_route_id = $assigned_route_tbc_monday[0]->id;
-                   break;
-               case 'Tuesday':
-                   $assigned_route_id = $assigned_route_tbc_tuesday[0]->id;
-                   break;
-               case 'Wednesday':
-                   $assigned_route_id = $assigned_route_tbc_wednesday[0]->id;
-                   break;
-               case 'Thursday':
-                   $assigned_route_id = $assigned_route_tbc_thursday[0]->id;
-                   break;
-               case 'Friday':
-                   $assigned_route_id = $assigned_route_tbc_friday[0]->id;
-                   break;
-           }
-
-           //dd($companyDetails);
-           // We need to create a new entry.
-           $newRoute = new CompanyRoute();
-           // $newRoute->is_active = 'Active'; // Currently hard coded but this is also the default.
-           $newRoute->company_details_id = request('company_details_id');
-           $newRoute->route_name = $companyDetails->route_name;
-           $newRoute->postcode = $companyDetails->route_postcode;
-
-           //  Route Summary Address isn't a field in the new model, instead I need to grab all route fields and combine them into the summary address.
-           // $newRoute->address = $companyDetails->route_summary_address;
-
-           // An if empty check is being made on the optional fields so that we don't unnecessarily add ', ' to the end of an empty field.
-           $newRoute->address = $companyDetails->route_address_line_1 . ', '
-                               . $companyDetails->route_address_line_2 . ', '
-                               . $companyDetails->route_address_line_3 . ', '
-                               . $companyDetails->route_city . ', '
-                               . $companyDetails->route_region . ', '
-                               . $companyDetails->route_postcode;
-
-           $newRoute->delivery_information = $companyDetails->delivery_information;
-           $newRoute->assigned_route_id = $assigned_route_id;
-           $newRoute->delivery_day = request('delivery_day');
-           $newRoute->save();
-
-           $message = "Route $newRoute->route_name on " . request('delivery_day') . " saved.";
-           Log::channel('slack')->info($message);
+           // If we're here, we need to create a new route
+           $this->createNewRoute(request());
 
        } else {
 

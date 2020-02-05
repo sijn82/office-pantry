@@ -9,7 +9,7 @@ class CompanyDetails extends Model
     protected $casts = [
         'order_changes' => 'object',
     ];
-    
+
     //
     protected $fillable = [
 
@@ -130,9 +130,9 @@ class CompanyDetails extends Model
         return $this->hasMany(OtherBoxArchive::class);
     }
 
-    // This is a test to see if I can pull a list of relationships into 1 statement request
-    public function invoicing_data()
-    {
-        return $this->morphTo();
+    // This will replace the allergies part of the allergies_and_dietary_requirements() function.
+    public function allergy_info()
+    {   // In this instance connection_type/connection_id are the expected column names so don't really need declaring.
+        return $this->morphMany('App\AllergyInfo', 'connectable', 'connection_type', 'connection_id');
     }
 }

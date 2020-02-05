@@ -9,6 +9,7 @@
                         <b-button class="margin-left-10" variant="warning" @click="editing()"> Cancel </b-button>
                     </div>
                     <div v-else>
+                        <b-button variant="primary" @click="showDetails()"> Details </b-button>
                         <b-button variant="warning" @click="editing()"> Edit </b-button>
                     </div>
                 </b-col>
@@ -48,322 +49,324 @@
                     </div>
                 </b-col>
             </b-row>
-            <b-row class="margin-top-20">
-                <b-col>
-                    <h4> Primary Contact </h4>
-                </b-col>
-            </b-row>
-            <b-row>
-                <b-col>
-                    <label> Primary Contact First Name </label>
-                    <div v-if="edit">
-                        <b-form-input v-model="company.primary_contact_first_name"></b-form-input>
-                    </div>
-                    <div v-else>
-                        <p> {{ company.primary_contact_first_name }} </p>
-                    </div>
-                </b-col>
-                <b-col>
-                    <label> Primary Contact Surname </label>
-                    <div v-if="edit">
-                        <b-form-input v-model="company.primary_contact_surname"></b-form-input>
-                    </div>
-                    <div v-else>
-                        <p> {{ company.primary_contact_surname }} </p>
-                    </div>
-                </b-col>
-                <b-col>
-                    <label> Primary Contact Job Title </label>
-                    <div v-if="edit">
-                        <b-form-input v-model="company.primary_contact_job_title"></b-form-input>
-                    </div>
-                    <div v-else>
-                        <p> {{ company.primary_contact_job_title }} </p>
-                    </div>
-                </b-col>
-                <b-col>
-                    <label> Primary Contact Email </label>
-                    <div v-if="edit">
-                        <b-form-input v-model="company.primary_email"></b-form-input>
-                    </div>
-                    <div v-else>
-                        <p> {{ company.primary_email }} </p>
-                    </div>
-                </b-col>
-                <b-col>
-                    <label> Primary Contact Telephone </label>
-                    <div v-if="edit">
-                        <b-form-input v-model="company.primary_tel"></b-form-input>
-                    </div>
-                    <div v-else>
-                        <p> {{ company.primary_tel }} </p>
-                    </div>
-                </b-col>
-            </b-row>
-            <b-row class="margin-top-20">
-                <b-col>
-                    <h4> Secondary Contact </h4>
-                </b-col>
-            </b-row>
-            <b-row>
-                <b-col>
-                    <label> Secondary Contact First Name </label>
-                    <div v-if="edit">
-                        <b-form-input v-model="company.secondary_contact_first_name"></b-form-input>
-                    </div>
-                    <div v-else>
-                        <p> {{ company.secondary_contact_first_name }} </p>
-                    </div>
-                </b-col>
-                <b-col>
-                    <label> Secondary Contact Surname </label>
-                    <div v-if="edit">
-                        <b-form-input v-model="company.secondary_contact_surname"></b-form-input>
-                    </div>
-                    <div v-else>
-                        <p> {{ company.secondary_contact_surname }} </p>
-                    </div>
-                </b-col>
-                <b-col>
-                    <label> Secondary Contact Job Title </label>
-                    <div v-if="edit">
-                        <b-form-input v-model="company.secondary_contact_job_title"></b-form-input>
-                    </div>
-                    <div v-else>
-                        <p> {{ company.secondary_contact_job_title }} </p>
-                    </div>
-                </b-col>
-                <b-col>
-                    <label> Secondary Contact Email </label>
-                    <div v-if="edit">
-                        <b-form-input v-model="company.secondary_email"></b-form-input>
-                    </div>
-                    <div v-else>
-                        <p> {{ company.secondary_email }} </p>
-                    </div>
-                </b-col>
-                <b-col>
-                    <label> Secondary Contact Telephone </label>
-                    <div v-if="edit">
-                        <b-form-input v-model="company.secondary_tel"></b-form-input>
-                    </div>
-                    <div v-else>
-                        <p> {{ company.secondary_tel }} </p>
-                    </div>
-                </b-col>
-            </b-row>
-            <b-row class="margin-top-20">
-                <b-col>
-                    <h4> Delivery Info </h4>
-                </b-col>
-            </b-row>
-            <b-row>
-                <b-col>
-                    <label> Delivery Information </label>
-                    <div v-if="edit">
-                        <b-form-textarea v-model="company.delivery_information" :rows="3" :max-rows="6"></b-form-textarea>
-                    </div>
-                    <div v-else>
-                        <p> {{ company.delivery_information }} </p>
-                    </div>
-                </b-col>
-            </b-row>
-            <b-row class="margin-top-20">
-                <b-col>
-                    <h4> Route Address Info </h4>
-                </b-col>
-            </b-row>
-            <b-row>
-                <b-col>
-                    <label> Route Address Line 1* </label>
-                    <div v-if="edit">
-                        <b-form-input v-model="company.route_address_line_1" required></b-form-input>
-                    </div>
-                    <div v-else>
-                        <p> {{ company.route_address_line_1 }} </p>
-                    </div>
-                </b-col>
-                <b-col>
-                    <label> Route Address Line 2 </label>
-                    <div v-if="edit">
-                        <b-form-input v-model="company.route_address_line_2"></b-form-input>
-                    </div>
-                    <div v-else>
-                        <p> {{ company.route_address_line_2 }} </p>
-                    </div>
-                </b-col>
-                <b-col>
-                    <label> Route Address Line 3 </label>
-                    <div v-if="edit">
-                        <b-form-input v-model="company.route_address_line_3"></b-form-input>
-                    </div>
-                    <div v-else>
-                        <p> {{ company.route_address_line_3 }} </p>
-                    </div>
-                </b-col>
-                <b-col>
-                    <label> Route City* </label>
-                    <div v-if="edit">
-                        <b-form-input v-model="company.route_city" required></b-form-input>
-                    </div>
-                    <div v-else>
-                        <p> {{ company.route_city }} </p>
-                    </div>
-                </b-col>
-                <b-col>
-                    <label> Route Region </label>
-                    <div v-if="edit">
-                        <b-form-input v-model="company.route_region"></b-form-input>
-                    </div>
-                    <div v-else>
-                        <p> {{ company.route_region }} </p>
-                    </div>
-                </b-col>
-                <b-col>
-                    <label> Route Postcode* </label>
-                    <div v-if="edit">
-                        <b-form-input v-model="company.route_postcode" required></b-form-input>
-                    </div>
-                    <div v-else>
-                        <p> {{ company.route_postcode }} </p>
-                    </div>
-                </b-col>
-            </b-row>
-            <b-row class="margin-top-20">
-                <b-col>
-                    <h4> Invoice Address Info </h4>
-                </b-col>
-            </b-row>
-            <b-row>
-                <b-col>
-                    <label> Invoice Address Line 1 </label>
-                    <div v-if="edit">
-                        <b-form-input v-model="company.invoice_address_line_1"></b-form-input>
-                    </div>
-                    <div v-else>
-                        <p> {{ company.invoice_address_line_1 }} </p>
-                    </div>
-                </b-col>
-                <b-col>
-                    <label> Invoice Address Line 2 </label>
-                    <div v-if="edit">
-                        <b-form-input v-model="company.invoice_address_line_2"></b-form-input>
-                    </div>
-                    <div v-else>
-                        <p> {{ company.invoice_address_line_2 }} </p>
-                    </div>
-                </b-col>
-                <b-col>
-                    <label> Invoice Address Line 3 </label>
-                    <div v-if="edit">
-                        <b-form-input v-model="company.invoice_address_line_3"></b-form-input>
-                    </div>
-                    <div v-else>
-                        <p> {{ company.invoice_address_line_3 }} </p>
-                    </div>
-                </b-col>
-                <b-col>
-                    <label> Invoice City </label>
-                    <div v-if="edit">
-                        <b-form-input v-model="company.invoice_city"></b-form-input>
-                    </div>
-                    <div v-else>
-                        <p> {{ company.invoice_city }} </p>
-                    </div>
-                </b-col>
-                <b-col>
-                    <label> Invoice Region </label>
-                    <div v-if="edit">
-                        <b-form-input v-model="company.invoice_region"></b-form-input>
-                    </div>
-                    <div v-else>
-                        <p> {{ company.invoice_region }} </p>
-                    </div>
-                </b-col>
-                <b-col>
-                    <label> Invoice Postcode </label>
-                    <div v-if="edit">
-                        <b-form-input v-model="company.invoice_postcode"></b-form-input>
-                    </div>
-                    <div v-else>
-                        <p> {{ company.invoice_postcode }} </p>
-                    </div>
-                </b-col>
-            </b-row>
-            <b-row>
-                <b-col>
-                    <label> Invoice Email </label>
-                    <div v-if="edit">
-                        <b-form-input type="email" v-model="company.invoice_email"></b-form-input>
-                    </div>
-                    <div v-else>
-                        <p> {{ company.invoice_email }} </p>
-                    </div>
-                </b-col>
-            </b-row>
-            <b-row class="margin-top-20">
-                <b-col>
-                    <label> Branding Theme </label>
-                    <div v-if="edit">
-                        <b-form-select v-model="company.branding_theme" :options="payment_options"></b-form-select>
-                    </div>
-                    <div v-else>
-                        <p> {{ company.branding_theme }} </p>
-                    </div>
-                </b-col>
-                <b-col>
-                    <label> Surcharge (%) </label>
-                    <div v-if="edit">
-                        <b-form-input v-model="company.surcharge" type="number"></b-form-input>
-                    </div>
-                    <div v-else>
-                        <p> {{ company.surcharge }} </p>
-                    </div>
-                </b-col>
-                <b-col>
-                    <label> Delivered By </label>
-                    <div v-if="edit">
-                        <b-form-select v-model="company.supplier_id">
-                            <template slot="first">
-                                <option :value="null" disabled> Please select an option </option>
-                            </template>
-                            <option v-for="fruit_partner in $store.state.fruit_partners_list" :value="fruit_partner.id"> {{ fruit_partner.name }} </option>
-                        </b-form-select>
-                    </div>
-                    <div v-else>
-                        <p> {{ company.supplier_id }} </p>
-                    </div>
-                </b-col>
-                <b-col>
-                    <label> Model </label>
-                    <div v-if="edit">
-                        <b-form-select v-model="company.model" :options="model_options"></b-form-select>
-                    </div>
-                    <div v-else>
-                        <p> {{ company.model }} </p>
-                    </div>
-                </b-col>
-            </b-row>
-            <b-row>
-                <b-col>
-                    <label> Monthly Surprise </label>
-                    <div v-if="edit">
-                        <b-form-radio-group v-model="company.monthly_surprise" :options="monthly_surprise_options"></b-form-radio-group>
-                    </div>
-                    <div v-else>
-                        <p> {{ company.monthly_surprise }} </p>
-                    </div>
-                </b-col>
-                <b-col>
-                    <label> Number of (Surprised) Staff </label>
-                    <div v-if="edit">
-                        <b-form-input type="number" v-model="company.no_of_surprises"></b-form-input>
-                    </div>
-                    <div v-else>
-                        <p> {{ company.no_of_surprises }} </p>
-                    </div>
-                </b-col>
-            </b-row>
+            <div v-if="details">
+                <b-row class="margin-top-20">
+                    <b-col>
+                        <h4> Primary Contact </h4>
+                    </b-col>
+                </b-row>
+                <b-row>
+                    <b-col>
+                        <label> Primary Contact First Name </label>
+                        <div v-if="edit">
+                            <b-form-input v-model="company.primary_contact_first_name"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ company.primary_contact_first_name }} </p>
+                        </div>
+                    </b-col>
+                    <b-col>
+                        <label> Primary Contact Surname </label>
+                        <div v-if="edit">
+                            <b-form-input v-model="company.primary_contact_surname"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ company.primary_contact_surname }} </p>
+                        </div>
+                    </b-col>
+                    <b-col>
+                        <label> Primary Contact Job Title </label>
+                        <div v-if="edit">
+                            <b-form-input v-model="company.primary_contact_job_title"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ company.primary_contact_job_title }} </p>
+                        </div>
+                    </b-col>
+                    <b-col>
+                        <label> Primary Contact Email </label>
+                        <div v-if="edit">
+                            <b-form-input v-model="company.primary_email"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ company.primary_email }} </p>
+                        </div>
+                    </b-col>
+                    <b-col>
+                        <label> Primary Contact Telephone </label>
+                        <div v-if="edit">
+                            <b-form-input v-model="company.primary_tel"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ company.primary_tel }} </p>
+                        </div>
+                    </b-col>
+                </b-row>
+                <b-row class="margin-top-20">
+                    <b-col>
+                        <h4> Secondary Contact </h4>
+                    </b-col>
+                </b-row>
+                <b-row>
+                    <b-col>
+                        <label> Secondary Contact First Name </label>
+                        <div v-if="edit">
+                            <b-form-input v-model="company.secondary_contact_first_name"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ company.secondary_contact_first_name }} </p>
+                        </div>
+                    </b-col>
+                    <b-col>
+                        <label> Secondary Contact Surname </label>
+                        <div v-if="edit">
+                            <b-form-input v-model="company.secondary_contact_surname"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ company.secondary_contact_surname }} </p>
+                        </div>
+                    </b-col>
+                    <b-col>
+                        <label> Secondary Contact Job Title </label>
+                        <div v-if="edit">
+                            <b-form-input v-model="company.secondary_contact_job_title"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ company.secondary_contact_job_title }} </p>
+                        </div>
+                    </b-col>
+                    <b-col>
+                        <label> Secondary Contact Email </label>
+                        <div v-if="edit">
+                            <b-form-input v-model="company.secondary_email"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ company.secondary_email }} </p>
+                        </div>
+                    </b-col>
+                    <b-col>
+                        <label> Secondary Contact Telephone </label>
+                        <div v-if="edit">
+                            <b-form-input v-model="company.secondary_tel"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ company.secondary_tel }} </p>
+                        </div>
+                    </b-col>
+                </b-row>
+                <b-row class="margin-top-20">
+                    <b-col>
+                        <h4> Delivery Info </h4>
+                    </b-col>
+                </b-row>
+                <b-row>
+                    <b-col>
+                        <label> Delivery Information </label>
+                        <div v-if="edit">
+                            <b-form-textarea v-model="company.delivery_information" :rows="3" :max-rows="6"></b-form-textarea>
+                        </div>
+                        <div v-else>
+                            <p> {{ company.delivery_information }} </p>
+                        </div>
+                    </b-col>
+                </b-row>
+                <b-row class="margin-top-20">
+                    <b-col>
+                        <h4> Route Address Info </h4>
+                    </b-col>
+                </b-row>
+                <b-row>
+                    <b-col>
+                        <label> Route Address Line 1* </label>
+                        <div v-if="edit">
+                            <b-form-input v-model="company.route_address_line_1" required></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ company.route_address_line_1 }} </p>
+                        </div>
+                    </b-col>
+                    <b-col>
+                        <label> Route Address Line 2 </label>
+                        <div v-if="edit">
+                            <b-form-input v-model="company.route_address_line_2"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ company.route_address_line_2 }} </p>
+                        </div>
+                    </b-col>
+                    <b-col>
+                        <label> Route Address Line 3 </label>
+                        <div v-if="edit">
+                            <b-form-input v-model="company.route_address_line_3"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ company.route_address_line_3 }} </p>
+                        </div>
+                    </b-col>
+                    <b-col>
+                        <label> Route City* </label>
+                        <div v-if="edit">
+                            <b-form-input v-model="company.route_city" required></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ company.route_city }} </p>
+                        </div>
+                    </b-col>
+                    <b-col>
+                        <label> Route Region </label>
+                        <div v-if="edit">
+                            <b-form-input v-model="company.route_region"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ company.route_region }} </p>
+                        </div>
+                    </b-col>
+                    <b-col>
+                        <label> Route Postcode* </label>
+                        <div v-if="edit">
+                            <b-form-input v-model="company.route_postcode" required></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ company.route_postcode }} </p>
+                        </div>
+                    </b-col>
+                </b-row>
+                <b-row class="margin-top-20">
+                    <b-col>
+                        <h4> Invoice Address Info </h4>
+                    </b-col>
+                </b-row>
+                <b-row>
+                    <b-col>
+                        <label> Invoice Address Line 1 </label>
+                        <div v-if="edit">
+                            <b-form-input v-model="company.invoice_address_line_1"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ company.invoice_address_line_1 }} </p>
+                        </div>
+                    </b-col>
+                    <b-col>
+                        <label> Invoice Address Line 2 </label>
+                        <div v-if="edit">
+                            <b-form-input v-model="company.invoice_address_line_2"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ company.invoice_address_line_2 }} </p>
+                        </div>
+                    </b-col>
+                    <b-col>
+                        <label> Invoice Address Line 3 </label>
+                        <div v-if="edit">
+                            <b-form-input v-model="company.invoice_address_line_3"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ company.invoice_address_line_3 }} </p>
+                        </div>
+                    </b-col>
+                    <b-col>
+                        <label> Invoice City </label>
+                        <div v-if="edit">
+                            <b-form-input v-model="company.invoice_city"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ company.invoice_city }} </p>
+                        </div>
+                    </b-col>
+                    <b-col>
+                        <label> Invoice Region </label>
+                        <div v-if="edit">
+                            <b-form-input v-model="company.invoice_region"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ company.invoice_region }} </p>
+                        </div>
+                    </b-col>
+                    <b-col>
+                        <label> Invoice Postcode </label>
+                        <div v-if="edit">
+                            <b-form-input v-model="company.invoice_postcode"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ company.invoice_postcode }} </p>
+                        </div>
+                    </b-col>
+                </b-row>
+                <b-row>
+                    <b-col>
+                        <label> Invoice Email </label>
+                        <div v-if="edit">
+                            <b-form-input type="email" v-model="company.invoice_email"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ company.invoice_email }} </p>
+                        </div>
+                    </b-col>
+                </b-row>
+                <b-row class="margin-top-20">
+                    <b-col>
+                        <label> Branding Theme </label>
+                        <div v-if="edit">
+                            <b-form-select v-model="company.branding_theme" :options="payment_options"></b-form-select>
+                        </div>
+                        <div v-else>
+                            <p> {{ company.branding_theme }} </p>
+                        </div>
+                    </b-col>
+                    <b-col>
+                        <label> Surcharge (%) </label>
+                        <div v-if="edit">
+                            <b-form-input v-model="company.surcharge" type="number"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ company.surcharge }} </p>
+                        </div>
+                    </b-col>
+                    <b-col>
+                        <label> Delivered By </label>
+                        <div v-if="edit">
+                            <b-form-select v-model="company.supplier_id">
+                                <template slot="first">
+                                    <option :value="null" disabled> Please select an option </option>
+                                </template>
+                                <option v-for="fruit_partner in $store.state.fruit_partners_list" :value="fruit_partner.id"> {{ fruit_partner.name }} </option>
+                            </b-form-select>
+                        </div>
+                        <div v-else>
+                            <p> {{ company.supplier_id }} </p>
+                        </div>
+                    </b-col>
+                    <b-col>
+                        <label> Model </label>
+                        <div v-if="edit">
+                            <b-form-select v-model="company.model" :options="model_options"></b-form-select>
+                        </div>
+                        <div v-else>
+                            <p> {{ company.model }} </p>
+                        </div>
+                    </b-col>
+                </b-row>
+                <b-row>
+                    <b-col>
+                        <label> Monthly Surprise </label>
+                        <div v-if="edit">
+                            <b-form-radio-group v-model="company.monthly_surprise" :options="monthly_surprise_options"></b-form-radio-group>
+                        </div>
+                        <div v-else>
+                            <p> {{ company.monthly_surprise }} </p>
+                        </div>
+                    </b-col>
+                    <b-col>
+                        <label> Number of (Surprised) Staff </label>
+                        <div v-if="edit">
+                            <b-form-input type="number" v-model="company.no_of_surprises"></b-form-input>
+                        </div>
+                        <div v-else>
+                            <p> {{ company.no_of_surprises }} </p>
+                        </div>
+                    </b-col>
+                </b-row>
+            </div>
         </b-container>
     </div>
 </template>
@@ -405,6 +408,7 @@ export default {
     data () {
         return {
             edit: false,
+            details: false,
             payment_options: [
               { text: 'Please select an option', value: null },
               'BACS', 'GoCardless', 'GoCardless In Advance', 'Invoiced In Advance',
@@ -427,6 +431,13 @@ export default {
                 this.edit = false;
             } else {
                 this.edit = true;
+            }
+        },
+        showDetails () {
+            if (this.details === true) {
+                this.details = false;
+            } else {
+                this.details = true;
             }
         },
         updateCompanyDetails (company) {

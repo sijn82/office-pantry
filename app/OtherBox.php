@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class OtherBox extends Model
 {
     protected $fillable = [
-        
+
         // OtherBox Info
         'otherbox_id',
         'is_active',
@@ -29,13 +29,14 @@ class OtherBox extends Model
         'case_price',
         'invoiced_at',
     ];
-    
-    // public function companies()
-    // {
-    //     return $this->belongsTo(Company::class);
-    // }
+
     public function companies()
     {
         return $this->belongsTo(CompanyDetails::class);
+    }
+
+    public function box_items()
+    {
+        return $this->morphMany('App\OrderItem', 'orderable');
     }
 }

@@ -1,8 +1,7 @@
 <template>
     <div class="col-sm-12">
-        <b-input-group id="product-searchbar-select" class="col-sm-12" size="sm" append=" Product Search">
+        <b-input-group id="product-searchbar-select" class="col-sm-12" size="sm" append="Product Search">
             <b-form-input type="text" v-model.lazy="keywords_brand"></b-form-input>
-            <!-- <b-form-input type="text" v-model.lazy="keywords_flavour"></b-form-input> -->
         </b-input-group>
         <b-list-group v-if="results.length > 0">
             <div class="col-sm-12" v-for="result in results">

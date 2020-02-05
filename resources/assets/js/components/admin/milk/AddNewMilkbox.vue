@@ -12,6 +12,10 @@
                     </b-form-select>
                     <p> Selected: {{ form.fruit_partner_id }} </p>
                 </b-form-group>
+                <!-- MilkBox Name -->
+                <label> Name </label>
+                <b-form-input v-model="form.name">  </b-form-input>
+
                 <!-- Delivery Days -->
                 <b-form-group id="milkbox-delivery-days" label="Select Delivery Day(s): ">
                     <b-form-checkbox-group v-model="form.delivery_day"><!-- Unable to use required here without writing some additional validation logic, allowing 1+ value(s) to be checked, instead of all -->
@@ -168,8 +172,22 @@
                             <b-form-input v-model="form.soya_1l" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                         <b-col class="col-sm-4">
+                            <label> 1L Soya Chocolate </label>
+                            <b-form-input v-model="form.soya_chocolate_1l" type="number" min="0" max="100"></b-form-input>
+                        </b-col>
+                    </b-row>
+                    <b-row>
+                        <b-col class="col-sm-4">
                             <label> 1L Oat </label>
                             <b-form-input v-model="form.oat_1l" type="number" min="0" max="100"></b-form-input>
+                        </b-col>
+                        <b-col class="col-sm-4">
+                            <label> 1L Cashew </label>
+                            <b-form-input v-model="form.cashew_1l" type="number" min="0" max="100"></b-form-input>
+                        </b-col>
+                        <b-col class="col-sm-4">
+                            <label> 1L Hazelnut </label>
+                            <b-form-input v-model="form.hazelnut_1l" type="number" min="0" max="100"></b-form-input>
                         </b-col>
                     </b-row>
                     <b-row sm="12">
@@ -177,10 +195,7 @@
                             <label> 1L Rice </label>
                             <b-form-input v-model="form.rice_1l" type="number" min="0" max="100"></b-form-input>
                         </b-col>
-                        <b-col class="col-sm-4">
-                            <label> 1L Cashew </label>
-                            <b-form-input v-model="form.cashew_1l" type="number" min="0" max="100"></b-form-input>
-                        </b-col>
+
                         <b-col class="col-sm-4">
                             <label> 1L Lactose Free Semi-Skimmed </label>
                             <b-form-input v-model="form.lactose_free_semi_skimmed_1l" type="number" min="0" max="100"></b-form-input>
@@ -230,6 +245,7 @@ export default {
             return {
                 form: {
                     is_active: 'Active',
+                    name: this.company.route_name,
                     fruit_partner_id: this.company.supplier_id,
                     company_details_route_name: this.company.route_name, // If this is created by Frosh, how are they going to select the company to attach the order to?  A typed filter of a long list may be the best way.
                     company_details_id: this.company.id,
@@ -261,11 +277,16 @@ export default {
                     // Alt pt2
                     unsweetened_soya_1l: 0,
                     soya_1l: 0,
-                    oat_1l: 0,
+                    soya_chocolate_1l: 0,
                     // Alt pt3
-                    rice_1l: 0,
+                    oat_1l: 0,
                     cashew_1l: 0,
+                    hazelnut_1l: 0,
+                    // Alt Pt4
+                    rice_1l: 0,
                     lactose_free_semi_skimmed_1l: 0,
+
+
                 },
                 frequency: ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'],
                 week_in_month: ['First', 'Second', 'Third', 'Fourth', 'Last'],
@@ -283,7 +304,39 @@ export default {
               let self = this;
               // alert(JSON.stringify(this.form));
               axios.post('/api/boxes/milkbox/add-new-milkbox', {
-                  company_data: self.form,
+                  //company_data: self.form,
+                  is_active: self.form.is_active,
+                  name: self.form.name,
+                  fruit_partner_id: self.form.fruit_partner_id,
+                  company_details_id: self.form.company_details_id,
+                  route_id: self.form.route_id,
+                  first_delivery: self.form.first_delivery,
+                  delivery_day: self.form.delivery_day,
+                  frequency: self.form.frequency,
+                  week_in_month: self.form.week_in_month,
+                  semi_skimmed_2l: self.form.semi_skimmed_2l,
+                  skimmed_2l: self.form.skimmed_2l,
+                  whole_2l: self.form.whole_2l,
+                  semi_skimmed_1l: self.form.semi_skimmed_1l,
+                  skimmed_1l: self.form.skimmed_1l,
+                  whole_1l: self.form.whole_1l,
+                  organic_semi_skimmed_2l: self.form.organic_semi_skimmed_2l,
+                  organic_skimmed_2l: self.form.organic_skimmed_2l,
+                  organic_whole_2l: self.form.organic_whole_2l,
+                  organic_semi_skimmed_1l: self.form.organic_semi_skimmed_1l,
+                  organic_skimmed_1l: self.form.organic_skimmed_1l,
+                  organic_whole_1l: self.form.organic_whole_1l,
+                  coconut_1l: self.form.coconut_1l,
+                  unsweetened_almond_1l: self.form.unsweetened_almond_1l,
+                  almond_1l: self.form.almond_1l,
+                  unsweetened_soya_1l: self.form.unsweetened_soya_1l,
+                  soya_1l: self.form.soya_1l,
+                  soya_chocolate_1l: self.form.soya_chocolate_1l,
+                  oat_1l: self.form.oat_1l,
+                  cashew_1l: self.form.cashew_1l,
+                  hazelnut_1l: self.form.hazelnut_1l,
+                  rice_1l: self.form.rice_1l,
+                  lactose_free_semi_skimmed_1l: self.form.lactose_free_semi_skimmed_1l,
                   headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                   // user_id: self.userData.id // This hasn't been setup yet so proabably won't work yet?!
               }).then(function (response) {
@@ -297,8 +350,9 @@ export default {
               evt.preventDefault();
               /* Reset our form values */
 
-              this.form.company_details_id = null;
-              this.form.route_id = null;
+              this.form.company_details_id = this.company.id;
+              this.form.name = this.company.route_name,
+              //this.form.route_id = null; // I don't think this is being used anymore.
               this.form.delivery_day = '';
               this.form.frequency = '';
               this.form.week_in_month = null,
@@ -319,9 +373,11 @@ export default {
               this.form.almond_1l = 0;
               this.form.unsweetened_soya_1l = 0;
               this.form.soya_1l = 0;
+              this.form.soya_chocolate_1l = 0;
               this.form.oat_1l = 0;
-              this.form.rice_1l = 0;
               this.form.cashew_1l = 0;
+              this.form.hazelnut_1l = 0;
+              this.form.rice_1l = 0;
               this.form.lactose_free_semi_skimmed_1l = 0;
 
             }

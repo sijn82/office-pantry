@@ -11,13 +11,14 @@ class CreateProductsTable extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up() // THIS MIGRATION IS OUT OF DATE!
     {
         Schema::create('products', function (Blueprint $table) {
             $table->increments('id');
             $table->string('is_active')->default('Active');
             $table->string('code')->unique();
-            $table->string('name')->unique();
+            $table->string('brand');
+            $table->string('flavour');
             $table->decimal('purchase_case_price', 8, 2);
             $table->decimal('retail_case_price', 8, 2)->nullable();
             $table->integer('case_size');

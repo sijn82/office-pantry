@@ -243,7 +243,7 @@ export default {
                     name: this.company.route_name,
                     company_details_id: this.company.id, // If this is created by Frosh, how are they going to select the company to attach the order to?  A typed filter of a long list may be the best way.
                     route_id: null, // This will also need a way to filter from all possible routes, however once a company has been confirmed, the options could easily fit on a dropdown.
-                    delivery_day: '',  // According to the docs this must be an array reference, however it seems to me this is happening anyway?  Interesting...
+                    delivery_day: [],  // According to the docs this must be an array reference, however it seems to me this is happening anyway?  Interesting...
                     type: null, // Whilst not currently in use, this will determine between standard, berries and tailored, with tailored being the only one which can be edited (probably).
                     first_delivery: null, // This will be necessary to get the first delivery scheduled and for the frequency field to begin incrementing.
                     frequency: null, // Also new to the system, this will determine between daily, weekly, fortnightly and monthly, or bespoke.  This may then be connected to the cron/events when checking if a company is due for orders.
@@ -360,7 +360,40 @@ export default {
               let self = this;
               // alert(JSON.stringify(this.form));
               axios.post('/api/boxes/fruitbox/add-new-fruitbox', {
-                  company_data: self.form,
+                  // company_data: self.form,
+                  is_active: 'Active',
+                  fruit_partner_id: self.form.fruit_partner_id,
+                  name: self.form.name,
+                  company_details_id: self.form.company_details_id,
+                  delivery_day: self.form.delivery_day,
+                  type: self.form.type,
+                  first_delivery: self.form.first_delivery,
+                  frequency: self.form.frequency,
+                  week_in_month: self.form.week_in_month,
+                  fruitbox_total: self.form.fruitbox_total,
+                  deliciously_red_apples: self.form.deliciously_red_apples,
+                  pink_lady_apples: self.form.pink_lady_apples,
+                  red_apples: self.form.red_apples,
+                  green_apples: self.form.green_apples,
+                  satsumas: self.form.satsumas,
+                  pears: self.form.pears,
+                  bananas: self.form.bananas,
+                  nectarines: self.form.nectarines,
+                  limes: self.form.limes,
+                  lemons: self.form.lemons,
+                  grapes: self.form.grapes,
+                  seasonal_berries: self.form.seasonal_berries,
+                  oranges: self.form.oranges,
+                  cucumbers: self.form.cucumbers,
+                  mint: self.form.mint,
+                  organic_lemons: self.form.organic_lemons,
+                  kiwis: self.form.kiwis,
+                  grapefruits: self.form.grapefruits,
+                  avocados: self.form.avocados,
+                  root_ginger: self.form.root_ginger,
+                  tailoring_fee: self.form.tailoring_fee,
+                  discount_multiple: self.form.discount_multiple,
+
                   headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                   // user_id: self.userData.id // This hasn't been setup yet so proabably won't work yet?!
               }).then(function (response) {
@@ -407,30 +440,7 @@ export default {
 
             }
         },
-        // created() {
-        //     this.form.fruitbox_total = 0;
-        //     this.form.deliciously_red_apples = this.form.deliciously_red_apples || '';
-        //     this.form.pink_lady_apples = this.form.pink_lady_apples || '';
-        //     this.form.red_apples = this.form.red_apples || '';
-        //     this.form.green_apples = this.form.green_apples || '';
-        //     this.form.satsumas = this.form.satsumas || '';
-        //     this.form.pears = this.form.pears || '';
-        //     this.form.bananas = this.form.bananas || '';
-        //     this.form.nectarines = this.form.nectarines || '';
-        //     this.form.limes = this.form.limes || '';
-        //     this.form.lemons = this.form.lemons || '';
-        //     this.form.grapes = this.form.grapes || '';
-        //     this.form.seasonal_berries = this.form.seasonal_berries || '';
-        //     this.form.oranges = this.form.oranges || '';
-        //     this.form.cucumbers = this.form.cucumbers || '';
-        //     this.form.mint = this.form.mint || '';
-        //     this.form.organic_lemons = this.form.organic_lemons || '';
-        //     this.form.kiwis = this.form.kiwis || '';
-        //     this.form.grapefruits = this.form.grapefruits || '';
-        //     this.form.avocados = this.form.avocados || '';
-        //     this.form.root_ginger = this.form.root_ginger || '';
-        //     this.form.tailoring_fee = this.form.tailoring_fee || '';
-        // },
+        
         mounted() {
 
             // this.$store.commit('getFruitPartners'); //  So long as this is mounted whether an attempt is made to create a new box, then this will limit the calls from 5+ to 5. - EDIT: Aiming lower.

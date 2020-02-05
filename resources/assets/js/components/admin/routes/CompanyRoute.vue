@@ -72,7 +72,7 @@
                         </div>
                     </b-col>
                 </b-row>
-                
+
                 <b-row :class="route.is_active" class="b-row-padding" sm="12">
                     <b-col class="col-sm-4">
                         <label><b> Snacks </b></label>
@@ -210,7 +210,7 @@ export default {
             this.editing = false;
             console.log(route);
             console.log(route.id);
-            axios.put('api/company-route/update/' + route.id, {
+            axios.put('api/company/company-route/update/' + route.id, {
                 id: route.id,
                 company_details_id: route.company_details_id,
                 is_active: route.is_active,
@@ -231,16 +231,17 @@ export default {
             }).catch(error => console.log(error));
         },
         deleteRoute(route) {
-            axios.put('api/company-route/delete/' + route.id, { 
+            axios.put('api/company/company-route/delete/' + route.id, {
                 id: route.id,
             }).then (response => {
-                // location.reload(true); // This refreshes the browser and pulls the updated variables from the database into the vue component.
+                alert('Route deleted!');
+                this.$emit('refresh-data', {company_details_id: route.company_details_id});
                 console.log(response);
             }).catch(error => console.log(error));
         },
     },
     mounted() {
-        
+
         // this.$store.commit('getAssignedRoutes'); // <-- Moved this up a component.
     }
 }

@@ -216,11 +216,11 @@
                         <div v-else>
                             <b-form-group>
                                 <b-form-checkbox    inline
-                                                    v-for="allergen in product.allergen_info"
-                                                    v-model="product.allergen_info"
-                                                    :key="allergen"
-                                                    :value="allergen">
-                                                    <b> {{ allergen }} </b>
+                                                    v-for="allergen in product.allergy_info"
+                                                    :key="allergen.allergy.slug"
+                                                    :value="allergen.allergy.slug"
+                                                    :checked="allergen.allergy.slug">
+                                                    <b> {{ allergen.allergy.name }} </b>
                                 </b-form-checkbox>
                             </b-form-group>
                         </div>
@@ -326,7 +326,7 @@ export default {
 
                 {text: 'Celery', value: 'celery'},
                 {text: 'Gluten', value: 'gluten'},
-                {text: 'Crustaceans', value: 'crustacians'},
+                {text: 'Crustaceans', value: 'crustaceans'},
                 {text: 'Eggs', value: 'eggs'},
                 {text: 'Fish', value: 'fish'},
                 {text: 'Lupin', value: 'lupin'},
@@ -364,8 +364,14 @@ export default {
         computed_quantity_units: function () {
             return this.product.stock_level - this.quantity
         },
-        currently_selected_allergens: function (allergen_info) {
-            return this.selected_allergens = this.product.allergen_info
+        currently_selected_allergens: function () {
+            this.selected_allergens_set = new Set();
+            //console.log(this.product.allergy_info);
+            for (let key in this.product.allergy_info) {
+                //console.log(this.product.allergy_info[key].allergy.slug)
+                 this.selected_allergens_set.add(this.product.allergy_info[key].allergy.slug)
+            }
+            return this.selected_allergens = Array.from(this.selected_allergens_set)
         },
         currently_selected_dietary_requirements: function (dietary_requirements) {
             return this.selected_dietary_requirements = this.product.dietary_requirements
@@ -435,7 +441,8 @@ export default {
                 shortest_stock_date: product.shortest_stock_date,
 
             }).then (response => {
-                location.reload(true);
+                //location.reload(true);
+                this.$emit('refresh-data');
                 console.log(response);
             }).catch(error => console.log(error));
         },
@@ -444,7 +451,8 @@ export default {
             axios.put('/api/office-pantry/products/destroy/' + product.id, {
                 id: product.id,
             }).then (response => {
-                location.reload(true); // If I stored the current products in the store rather than like this, I wouldn't need to reload the page to update the view.
+                this.$emit('refresh-data');
+                //location.reload(true); // If I stored the current products in the store rather than like this, I wouldn't need to reload the page to update the view.
                 console.log(response);
             }).catch(error => console.log(error));
         },
@@ -479,7 +487,7 @@ export default {
 
     mounted() {
         console.log('Components Product Mounted');
-        //console.log(this.product.allergen_info);
+        console.log(this.product.allergy_info);
     }
 
 }
