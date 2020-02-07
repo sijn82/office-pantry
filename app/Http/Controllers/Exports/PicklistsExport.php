@@ -50,6 +50,7 @@ WithMultipleSheets
     {
         $correctOrderMonTue =   [
                                         '1.15 - Float',
+                                        '1.23 -',
                                         '1.22 -',
                                         '1.21 -',
                                         '1.20 - Extra Float',
