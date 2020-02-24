@@ -30,6 +30,7 @@ class CreateProductsTable extends Migration
             $table->integer('stock_level')->nullable();
             $table->date('shortest_stock_date')->nullable();
             $table->string('sales_nominal');
+            $table->string('supplier')->nullable();
             // Temporary fields needed to populate allergies and dietary requirements tables, then can be deleted.
             $table->string('allergen_info')->nullable();
             $table->string('dietary_requirements')->nullable();
