@@ -11,7 +11,7 @@ class CreateProductsTable extends Migration
      *
      * @return void
      */
-    public function up() // THIS MIGRATION IS OUT OF DATE!
+    public function up() // This migration has been updated!
     {
         Schema::create('products', function (Blueprint $table) {
             $table->increments('id');
@@ -19,17 +19,20 @@ class CreateProductsTable extends Migration
             $table->string('code')->unique();
             $table->string('brand');
             $table->string('flavour');
-            $table->decimal('purchase_case_price', 8, 2);
-            $table->decimal('retail_case_price', 8, 2)->nullable();
-            $table->integer('case_size');
-            $table->decimal('unit_cost', 8, 2)->nullable();
-            $table->decimal('unit_price', 8, 2)->nullable();
+            $table->decimal('buying_case_cost', 8, 2);
+            $table->decimal('buying_case_size', 8, 2);
+            $table->decimal('buying_unit_cost', 8, 2)->nullable(); // even though it should always have a value, allowing nullable, or should i?
+            $table->decimal('selling_case_price', 8, 2);
+            $table->decimal('selling_case_size', 8, 2);
+            $table->decimal('selling_unit_price', 8, 2)->nullable();
             $table->string('vat');
             $table->decimal('profit_margin', 8, 2)->nullable(); // While this field is automatically calculated, wholesale case prices may bypass the necessary unit price field.
             $table->integer('stock_level')->nullable();
             $table->date('shortest_stock_date')->nullable();
             $table->string('sales_nominal');
-            // $table->string('cost_nominal')->nullable(); // Not used so may as well remove.
+            // Temporary fields needed to populate allergies and dietary requirements tables, then can be deleted.
+            $table->string('allergen_info')->nullable();
+            $table->string('dietary_requirements')->nullable();
             $table->timestamps();
         });
     }

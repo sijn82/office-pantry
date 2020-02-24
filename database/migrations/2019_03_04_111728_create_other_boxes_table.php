@@ -11,7 +11,7 @@ class CreateOtherBoxesTable extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up() // Migration Updated!
     {
         Schema::create('other_boxes', function (Blueprint $table) {
             $table->increments('id');
@@ -29,12 +29,12 @@ class CreateOtherBoxesTable extends Migration
             $table->date('previous_delivery_week')->nullable();
             $table->date('next_delivery_week');
             // Product Information
-            $table->integer('product_id')->default(0);
-            $table->string('code')->nullable();
-            $table->string('name')->nullable();
-            $table->integer('quantity')->nullable();
-            $table->decimal('unit_price')->nullable();
-            $table->decimal('case_price')->nullable();
+            // $table->integer('product_id')->default(0);
+            // $table->string('code')->nullable();
+            // $table->string('name')->nullable();
+            // $table->integer('quantity')->nullable();
+            // $table->decimal('unit_price')->nullable();
+            // $table->decimal('case_price')->nullable();
             $table->date('invoiced_at')->nullable();
             $table->timestamps();
         });

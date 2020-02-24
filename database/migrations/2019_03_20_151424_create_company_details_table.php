@@ -11,7 +11,7 @@ class CreateCompanyDetailsTable extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up() // Migration Updated!
     {
         Schema::create('company_details', function (Blueprint $table) {
             $table->increments('id');
@@ -53,6 +53,9 @@ class CreateCompanyDetailsTable extends Migration
             $table->string('model')->nullable();
             $table->string('monthly_special')->default('TBC');
             $table->string('no_of_surprises')->default(0);
+            // Track change to Company Details
+            $table->string('order_changes')->nullable();
+            $table->date('date_changed')->nullable();
             $table->timestamps();
         });
     }
