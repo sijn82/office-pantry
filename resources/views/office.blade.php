@@ -13,6 +13,8 @@
                             @endif
                     </div>
 
+                    <b style="color:red;font-size:84px;margin:auto;"> Play Area! </b>
+
                     <div class="card-body">
                         <h3> Processing Tasks </h3>
                         <h4> Old System </h4>
