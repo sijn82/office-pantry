@@ -38,12 +38,8 @@ class FruitPartnerController extends Controller
     }
 
     public function listFruitPartners() {
-         // After updating a fruitpartner, the postgresql id looks to have changed.  WHY WOULD IT WANT TO DO THIS?!
-         // I also have an 'id' column, which hasn't changed but hte sortBy below doesn't appear to be using it, instead still ordering by postgresql id.
-         // I NEED TO LEARN MORE ABOUT THIS BEHAVIOUR WHEN TRYING TO CONTROL THE ORDER WHICH LISTS ARE DISPLAYED.
 
         $fruit_partners = FruitPartner::all();
-        // dd($fruit_partners);
         return $fruit_partners;
     }
 

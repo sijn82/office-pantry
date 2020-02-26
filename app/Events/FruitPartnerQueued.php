@@ -37,7 +37,7 @@ class FruitPartnerQueued implements ShouldBroadcast
     public function broadcastOn()
     {
         //dd($this->fruitpartner);
-         return new Channel('fruitpartner-queue');
+         return new Channel('fruitpartner-staging-queue');
         // return new Channel('office-pantry-development');
     }
     

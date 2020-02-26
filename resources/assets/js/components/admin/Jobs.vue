@@ -55,7 +55,7 @@ export default {
         vm.grabFruitPartners();
         // vm.refreshAllJobs = (e) => axios.get('jobs').then((e) => (vm.allJobs = e.data))
         // vm.allFruitPartners = (e) => axios.get('api/office-pantry/fruit-partners/select').then((e) => {vm.fruitpartners = e.data, console.log(vm.fruitpartners)})
-        Echo.channel('fruitpartner-queue')
+        Echo.channel('fruitpartner-staging-queue')
          //Echo.channel('office-pantry-development')
             .listen('.add', (e)  => { vm.refreshAllJobs(e), console.log(e) })
             .listen('.processed', (e) => {

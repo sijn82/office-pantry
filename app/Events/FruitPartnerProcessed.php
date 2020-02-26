@@ -34,7 +34,7 @@ class FruitPartnerProcessed implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('fruitpartner-queue');
+        return new Channel('fruitpartner-staging-queue');
     }
 
     public function broadcastAs()
