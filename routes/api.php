@@ -24,7 +24,7 @@ Route::get('test', 'Boxes\SnackBoxController@test');
 //----- THESE 2 ROUTES ARE FOR ONE OFF USE -----//
 //----- COMMENTING THEM OUT TO PREVENT ACCIDENTAL REUSE! -----//
 
-// Route::get('experiment', 'Company\AllergyInfoController@buildAllergiesFromProductList');
+Route::get('experiment', 'Company\AllergyInfoController@buildAllergiesFromProductList');
 // Route::get('create-allergies', 'Company\AllergyController@multiStore');
 
 //----- END OF COMMENTING THEM OUT TO PREVENT ACCIDENTAL REUSE! -----//
