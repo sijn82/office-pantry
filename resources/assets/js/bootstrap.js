@@ -50,12 +50,11 @@ window.Pusher = require('pusher-js');
 
 window.Echo = new Echo({
     broadcaster: 'pusher',
-    // key: process.env.MIX_PUSHER_APP_KEY,
-    // cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-    // key: '148094ba501adac4c6e4',    // NEED TO REMOVE THESE HARDCODED VALUES AND WORK OUT WHY THE ENV FILE WASN'T BEING USED! <-- Local key
-    key: 'f64841190f062db2bf15',  // heroku staging
-    cluster: 'eu',                  // DITTO WITH THIS VALUE TOO!!
-    // key: PUSHER_APP_KEY,
-    // cluster: PUSHER_APP_CLUSTER,
+
+    //key: '148094ba501adac4c6e4',    // NEED TO REMOVE THESE HARDCODED VALUES AND WORK OUT WHY THE ENV FILE WASN'T BEING USED! <-- Local key
+    //key: 'f64841190f062db2bf15',  // heroku staging
+    //cluster: 'eu',                  // DITTO WITH THIS VALUE TOO!!
+    key: PUSHER_APP_KEY,
+    cluster: PUSHER_APP_CLUSTER,
     encrypted: true
 });
