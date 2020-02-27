@@ -54,7 +54,7 @@ window.Echo = new Echo({
     //key: '148094ba501adac4c6e4',    // NEED TO REMOVE THESE HARDCODED VALUES AND WORK OUT WHY THE ENV FILE WASN'T BEING USED! <-- Local key
     //key: 'f64841190f062db2bf15',  // heroku staging
     //cluster: 'eu',                  // DITTO WITH THIS VALUE TOO!!
-    key: PUSHER_APP_KEY,
-    cluster: PUSHER_APP_CLUSTER,
+    key: env('PUSHER_APP_KEY'),
+    cluster: env('PUSHER_APP_CLUSTER'),
     encrypted: true
 });
