@@ -578,8 +578,8 @@ WithEvents
         // It may not make much difference to how the function runs but it would at least be clearer.
         // EDIT: HUH, JUST USED '$milkboxes' BEFORE DECLARING THEM IN THE FOREACH AND IT CAME BACK UNDEFINED
         // - at least I now know, '$fruitboxes' & '$milkboxes' passed into the construct are stuck here.
-        $this->fruitboxes = $fruitboxes;
-        $this->milkboxes = $milkboxes;
+        $fruitboxes ? $fruitboxes = $this->fruitboxes : $fruitboxes = [];
+        $milkboxes ? $milkboxes = $this->milkboxes : $milkboxes = [];
     }
 
     public function view(): View
@@ -625,7 +625,7 @@ WithEvents
                     // I could do something here, instead of adding a new foreach clause stipulating the same thing.
 
                     //----- Moved logic up to here to handle all fruit & milk and just fruit deliveries -----//
-                    $this->milkboxes[$key] ? $milkboxes = $this->milkboxes[$key] : $milkboxes = null;
+                    array_key_exists($key, $this->milkboxes) ? $milkboxes = $this->milkboxes[$key] : $milkboxes = null;
 
                     // EDIT 3/2/20: THIS WAS FINE FOR ONE MILKBOX PER DELIVERY, NOW THERE MIGHT BE MORE THAN ONE SO COMMENTING THIS OUT.
                     // $milkboxes ? $additional_milk = $milkboxes->where('next_delivery', $week_start->current)->where('company_details_id', $fruitbox->company_details_id)->where('delivery_day', $fruitbox->delivery_day)->first() : $additional_milk = $milkboxes;
