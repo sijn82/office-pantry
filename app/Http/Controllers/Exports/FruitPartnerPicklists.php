@@ -578,8 +578,8 @@ WithEvents
         // It may not make much difference to how the function runs but it would at least be clearer.
         // EDIT: HUH, JUST USED '$milkboxes' BEFORE DECLARING THEM IN THE FOREACH AND IT CAME BACK UNDEFINED
         // - at least I now know, '$fruitboxes' & '$milkboxes' passed into the construct are stuck here.
-        $fruitboxes ? $fruitboxes = $this->fruitboxes : $fruitboxes = [];
-        $milkboxes ? $milkboxes = $this->milkboxes : $milkboxes = [];
+        $fruitboxes ? $this->fruitboxes = $fruitboxes : $this->fruitboxes = [];
+        $milkboxes ? $this->milkboxes = $milkboxes : $this->milkboxes = [];
     }
 
     public function view(): View
