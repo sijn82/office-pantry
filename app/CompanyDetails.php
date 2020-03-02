@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\WeekStart;
+
 use Illuminate\Database\Eloquent\Model;
 
 class CompanyDetails extends Model
@@ -65,6 +67,17 @@ class CompanyDetails extends Model
         // 'password', 'remember_token',
     ];
 
+    public function __construct()
+    {
+        $week_start = WeekStart::first();
+
+        if ($week_start !== null) {
+            $this->week_start = $week_start->current;
+            $this->delivery_days = $week_start->delivery_days;
+        }
+
+    }
+
     // These declare the relationships between models (tables within the database).
     public function users()
     {
@@ -108,9 +121,10 @@ class CompanyDetails extends Model
     {
         return $this->hasMany(AdditionalInfo::class);
     }
-    // Archived Orders
+    // Archived Orders <-- I either don't need these or I could reference FruitBox::class with constraints (if that's a thing?).
     public function fruitbox_archive()
     {
+        // i.e return $this->hasMany(FruitBox::class)->where('next_delivery', '<', $this->week_start)->where('invoiced_at', 'null')->get();
         return $this->hasMany(FruitBoxArchive::class);
     }
     public function milkbox_archive()

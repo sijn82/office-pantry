@@ -13,6 +13,8 @@ use App\Product;
 use App\Preference;
 use App\FruitPartner;
 
+use App\WeekStart;
+
 class OfficeDashboardController extends Controller
 {
     /**
@@ -38,8 +40,19 @@ class OfficeDashboardController extends Controller
     //     return view('home');
     // }
 
+    public function __construct()
+    {
+        $week_start = WeekStart::first();
+
+        if ($week_start !== null) {
+            $this->week_start = $week_start->current;
+            $this->delivery_days = $week_start->delivery_days;
+        }
+    }
+
     public function show(CompanyDetails $company)
     {
+        //dd($this->week_start);
 
         // THIS ISN'T TAKING ADVANTAGE OF EAGER LOADING, AS I'M NOT MAKING THE INITIAL DB QUERY HERE, I DON'T WANT TO SPEND TIME REFACTORING EVERYTHING.
         // INSTEAD I'LL MAKE IT WORK LIKE THIS FOR NOW AND THEN, WHEN THE NEED OR TIME IS GREATER I CAN REDO IT.
@@ -60,18 +73,21 @@ class OfficeDashboardController extends Controller
 
             //---------- Fruitboxes ----------//
 
-            $fruitboxes = $company->fruitbox;
+            $fruitboxes = $company->fruitbox()->where('next_delivery', '>=', $this->week_start)->get();
             //dd($fruitboxes);
             // $fruitpartner->name will break if there's a box retrieved without a fruitpartner
             // but this shouldn't be an issue if a placeholder fruitpartner is given when the box is created,
             // should the actual fruitpartner not be known at that point.
             foreach ($fruitboxes as $fruitbox) {
-                // dd($fruitbox['id']);
-                $fruitpartner_id = $fruitbox['fruit_partner_id'];
-                $fruitpartner = FruitPartner::find($fruitpartner_id);
-                // dd($fruitpartner);
-                $fruitpartner_name = $fruitpartner->name;
-                $fruitbox->fruit_partner_name = $fruitpartner_name;
+
+                $fruitbox->load('fruit_partner')->get();
+                // dd($fruitbox->fruit_partner->name);
+                // // dd($fruitbox['id']);
+                // $fruitpartner_id = $fruitbox['fruit_partner_id'];
+                // $fruitpartner = FruitPartner::find($fruitpartner_id);
+                // // dd($fruitpartner);
+                // $fruitpartner_name = $fruitpartner->name;
+                // $fruitbox->fruit_partner_name = $fruitpartner_name;
             }
 
             $fruitboxesByMonToFri = $fruitboxes->sortBy( function ($fruitboxes) use ($monToFri) {
@@ -194,7 +210,9 @@ class OfficeDashboardController extends Controller
 
             //---------- Archived Fruitboxes ----------//
 
-            $archived_fruitboxes = $company->fruitbox_archive()->where('is_active', 'Active')->get();
+            // Edit - 02/03/2020
+            // $archived_fruitboxes = $company->fruitbox_archive()->where('is_active', 'Active')->get();
+            $archived_fruitboxes = $company->fruitbox()->where('next_delivery', '<',  $this->week_start)->get();
 
             foreach ($archived_fruitboxes as $archived_fruitbox) {
                 $fruitpartner_id = $archived_fruitbox['fruit_partner_id'];

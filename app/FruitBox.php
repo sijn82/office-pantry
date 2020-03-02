@@ -74,8 +74,8 @@ class FruitBox extends Model
         }
         // Looks like I've only added this relationship with fruitboxes and fruitpartners,
         // although the other boxes also use fruitpartners for delivery, dpd, apc etc are also classed as fruitpartners.
-        public function fruit_partners()
+        public function fruit_partner()
         {
-            return $this->belongsTo(FruitPartner::class);
+            return $this->belongsTo(FruitPartner::class, 'fruit_partner_id');
         }
 }

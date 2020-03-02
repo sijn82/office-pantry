@@ -42,7 +42,7 @@
                             <p> Selected: {{ fruitbox.fruit_partner_id }} </p>
                         </div>
                         <div v-else>
-                            <p> {{ fruitbox.fruit_partner_name }} </p>
+                            <p> {{ fruitbox.fruit_partner.name }} </p>
                         </div>
                     </b-col>
                 </b-row>
