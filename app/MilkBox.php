@@ -78,4 +78,9 @@ class MilkBox extends Model
         {
             return $this->belongsTo(CompanyDetails::class);
         }
+
+        public function fruit_partner()
+        {
+            return $this->belongsTo(FruitPartner::class, 'fruit_partner_id');
+        }
 }

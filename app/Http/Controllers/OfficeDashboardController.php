@@ -80,7 +80,11 @@ class OfficeDashboardController extends Controller
             // should the actual fruitpartner not be known at that point.
             foreach ($fruitboxes as $fruitbox) {
 
+                // using the established relationship between models i.e FruitBox belongsTo FruitPartner
                 $fruitbox->load('fruit_partner')->get();
+
+                // A load of stuff we don't need to force in anymore. :)
+
                 // dd($fruitbox->fruit_partner->name);
                 // // dd($fruitbox['id']);
                 // $fruitpartner_id = $fruitbox['fruit_partner_id'];
@@ -104,12 +108,15 @@ class OfficeDashboardController extends Controller
             // but this shouldn't be an issue if a placeholder fruitpartner is given when the box is created,
             // should the actual fruitpartner not be known at that point.
             foreach ($milkboxes as $milkbox) {
+
+                $milkbox->load('fruit_partner')->get();
+
                 // dd($fruitbox['id']);
-                $fruitpartner_id = $milkbox['fruit_partner_id'];
-                $fruitpartner = FruitPartner::find($fruitpartner_id);
-                // dd($fruitpartner);
-                $fruitpartner_name = $fruitpartner->name;
-                $milkbox->fruit_partner_name = $fruitpartner_name;
+                // $fruitpartner_id = $milkbox['fruit_partner_id'];
+                // $fruitpartner = FruitPartner::find($fruitpartner_id);
+                // // dd($fruitpartner);
+                // $fruitpartner_name = $fruitpartner->name;
+                // $milkbox->fruit_partner_name = $fruitpartner_name;
             }
 
             $milkboxesByMonToFri = $milkboxes->sortBy( function ($milkboxes) use ($monToFri) {

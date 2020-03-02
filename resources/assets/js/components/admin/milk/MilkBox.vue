@@ -38,7 +38,7 @@
                             <p> Selected: {{ milkbox.fruit_partner_id }} </p>
                         </div>
                         <div v-else>
-                            <p>  {{ milkbox.fruit_partner_name }} </p>
+                            <p>  {{ milkbox.fruit_partner.name }} </p>
                         </div>
                     </b-col>
                     <b-col>
