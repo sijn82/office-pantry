@@ -45,13 +45,13 @@ class SnackBox extends Model
         return $this->hasMany(Product::class,'id', 'product_id');
     }
 
-    // This relationship is untested but more a theoretical placeholder.
-    // EDIT : Actually I think it's now in use!
-    public function allergies_and_dietary_requirements()
-    {
-        return $this->hasOne(Allergy::class, 'snackbox_id', 'snackbox_id');
+    // // This relationship is untested but more a theoretical placeholder.
+    // // EDIT : Actually I think it's now in use!
+    // public function allergies_and_dietary_requirements()
+    // {
+    //     return $this->hasOne(Allergy::class, 'snackbox_id', 'snackbox_id');
 
-    }
+    // }
 
     public function box_items()
     {

@@ -16,7 +16,7 @@ class CreateOfficePantryProductsTable extends Migration
         Schema::create('office_pantry_products', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->integer('price');
+            $table->double('price');
             $table->string('sales_nominal');
             $table->string('vat');
             $table->timestamps();

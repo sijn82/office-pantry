@@ -333,7 +333,7 @@
                             </b-form-select>
                         </div>
                         <div v-else>
-                            <p> {{ company.supplier_id }} </p>
+                            <p> {{ company.fruit_partner.name }} </p>
                         </div>
                     </b-col>
                     <b-col>

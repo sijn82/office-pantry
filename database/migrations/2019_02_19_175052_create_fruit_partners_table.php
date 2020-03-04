@@ -35,8 +35,8 @@ class CreateFruitPartnersTable extends Migration
             $table->string('status')->nullable();
             $table->integer('no_of_customers')->nullable();
             $table->string('use_op_boxes')->nullable();
-            $table->string('finance')->nullable();
-            $table->string('additional_info')->nullable(); // This can hold box prices, specific reminders etc.
+            $table->longtext('finance')->nullable();
+            $table->longtext('additional_info')->nullable(); // This can hold box prices, specific reminders etc.
             $table->timestamps();
         });
     }

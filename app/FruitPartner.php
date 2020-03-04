@@ -34,6 +34,10 @@ class FruitPartner extends Model
 
     ];
 
+    public function company()
+    {
+        return $this->hasMany(CompanyDetails::class, 'supplier_id');
+    }
 
     public function fruitbox()
     {

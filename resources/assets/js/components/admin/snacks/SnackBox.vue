@@ -26,10 +26,20 @@
                         <b-form-select v-model="snackbox.is_active">
                             <option value="Active"> Active </option>
                             <option value="Inactive"> Inactive </option>
+                            <option value="Paused"> Paused </option>
                         </b-form-select>
                     </div>
                     <div v-else>
                         <p> {{ snackbox.is_active }} </p>
+                    </div>
+                </b-col>
+                <b-col>
+                    <label> Name </label>
+                    <div v-if="editing">
+                        <b-form-input v-model="snackbox.name"></b-form-input>
+                    </div>
+                    <div v-else>
+                        <p> {{ snackbox.name }} </p>
                     </div>
                 </b-col>
                 <b-col>

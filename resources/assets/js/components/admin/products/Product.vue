@@ -486,8 +486,8 @@ export default {
     },
 
     mounted() {
-        console.log('Components Product Mounted');
-        console.log(this.product.allergy_info);
+        // console.log('Components Product Mounted');
+        // console.log(this.product.allergy_info);
     }
 
 }

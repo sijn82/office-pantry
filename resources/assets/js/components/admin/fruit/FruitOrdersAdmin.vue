@@ -77,6 +77,9 @@
     .Inactive {
         background-color: rgba(201, 16, 16, 0.5);
     }
+    .Paused {
+        background-color: rgba(30,144,255 ,1 );
+    }
     .fruitbox {
         padding-left: 0;
         li {

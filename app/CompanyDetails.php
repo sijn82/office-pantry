@@ -79,15 +79,29 @@ class CompanyDetails extends Model
     }
 
     // These declare the relationships between models (tables within the database).
+
+    // Company Details
+
+    // This is just the default fruitpartner used to pre-populate forms with.
+    // Can be overridden by the relationship between each box and fruitpartner.
+    
+    public function fruit_partner()
+    {
+        return $this->belongsTo(FruitPartner::class, 'supplier_id');
+    }
+
     public function users()
     {
         return $this->hasMany(User::class);
     }
+
     public function company_routes()
     {
         return $this->hasMany(CompanyRoute::class);
     }
+
     // Current Orders
+
     public function fruitbox()
     {
         return $this->hasMany(FruitBox::class);
@@ -108,45 +122,22 @@ class CompanyDetails extends Model
     {
         return $this->hasMany(OtherBox::class);
     }
+
     // Preferences
+
     public function preference()
     {
-        return $this->hasMany(Preference::class);
-    }
-    public function allergy()
-    {
-        return $this->hasMany(Allergy::class);
-    }
-    public function additional_info()
-    {
-        return $this->hasMany(AdditionalInfo::class);
-    }
-    // Archived Orders <-- I either don't need these or I could reference FruitBox::class with constraints (if that's a thing?).
-    public function fruitbox_archive()
-    {
-        // i.e return $this->hasMany(FruitBox::class)->where('next_delivery', '<', $this->week_start)->where('invoiced_at', 'null')->get();
-        return $this->hasMany(FruitBoxArchive::class);
-    }
-    public function milkbox_archive()
-    {
-        return $this->hasMany(MilkBoxArchive::class);
-    }
-    public function snackbox_archive()
-    {
-        return $this->hasMany(SnackBoxArchive::class);
-    }
-    public function drinkbox_archive()
-    {
-        return $this->hasMany(DrinkBoxArchive::class);
-    }
-    public function otherbox_archive()
-    {
-        return $this->hasMany(OtherBoxArchive::class);
+        return $this->morphMany('App\Preference', 'preferable', 'connection_type', 'connection_id');
     }
 
-    // This will replace the allergies part of the allergies_and_dietary_requirements() function.
     public function allergy_info()
     {   // In this instance connection_type/connection_id are the expected column names so don't really need declaring.
         return $this->morphMany('App\AllergyInfo', 'connectable', 'connection_type', 'connection_id');
     }
+
+    public function additional_info()
+    {
+        return $this->hasMany(AdditionalInfo::class);
+    }
+
 }

@@ -48,7 +48,7 @@ class CreateMilkBoxesTable extends Migration
             // Alt pt2
             $table->integer('milk_1l_alt_unsweetened_soya')->default(0);
             $table->integer('milk_1l_alt_soya')->default(0);
-            $table->integer('milk_1l_soya_chocolate')->default(0);
+            $table->integer('milk_1l_alt_soya_chocolate')->default(0);
             // Alt pt3
             $table->integer('milk_1l_alt_oat')->default(0);
             $table->integer('milk_1l_alt_cashew')->default(0);

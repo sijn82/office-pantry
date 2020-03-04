@@ -15,21 +15,20 @@ class Preference extends Model
      */
     protected $fillable = [
     
-        'company_details_id',
-        'snackbox_likes',
-        'snackbox_dislikes',
-        'snackbox_essentials',
-        'snackbox_essentials_quantity',
-        // 'allergies',
-        // 'additional_notes',
+        'connection_type',
+        'connection_id',
+        'product_id',
+
     ];
     
     // public function companies()
     // {
-    //     return $this->belongsTo(Company::class);
+    //     return $this->belongsTo(CompanyDetails::class);
     // }
-    public function companies()
+
+    public function preferable()
     {
-        return $this->belongsTo(CompanyDetails::class);
+        return $this->morphTo();
     }
+    
 }

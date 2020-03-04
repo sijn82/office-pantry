@@ -37,6 +37,12 @@ class OtherBox extends Model
 
     public function box_items()
     {
-        return $this->morphMany('App\OrderItem', 'orderable');
+        return $this->morphMany('App\OrderItem', 'orderable', 'box_type', 'box_id');
+    }
+    
+    // This will replace the allergies part of the allergies_and_dietary_requirements() function above.
+    public function allergy_info()
+    {   // In this instance connection_type/connection_id are the expected column names so don't really need declaring.
+        return $this->morphMany('App\AllergyInfo', 'connectable', 'connection_type', 'connection_id');
     }
 }

@@ -92,9 +92,21 @@ export const store = new Vuex.Store({
         addNewAllergyToStore (state, allergy) {
             state.allergies_list.push(allergy);
         },
+        
+        // Edit 04-03-20: Added a quick check that the value isn't already contained in the types_list array.
+        // Adding it to the array if not, or console logging a message if it is.
         addNewTypeToStore (state, type) {
-            state.types_list.push(type);
+
+                var check = state.types_list.indexOf(type)
+
+                if (check === -1) {
+                    state.types_list.push(type);
+                } else {
+                    console.log(type + ' already in types list')
+                }
+
         },
+
         addFruitPartnerToStore (state, fruit_partner) {
             console.log(fruit_partner);
             state.fruit_partners_list.push(fruit_partner);

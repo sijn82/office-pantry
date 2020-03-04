@@ -30,7 +30,7 @@ class CreateCompanyDetailsTable extends Migration
             $table->string('secondary_contact_job_title')->nullable();
             $table->string('secondary_email')->nullable();
             $table->string('secondary_tel')->nullable();
-            $table->string('delivery_information')->nullable();
+            $table->longtext('delivery_information')->nullable();
             // Route Address
             $table->string('route_address_line_1');
             $table->string('route_address_line_2')->nullable();
@@ -51,10 +51,10 @@ class CreateCompanyDetailsTable extends Migration
             $table->integer('surcharge')->nullable();
             $table->integer('supplier_id')->nullable();
             $table->string('model')->nullable();
-            $table->string('monthly_special')->default('TBC');
-            $table->string('no_of_surprises')->default(0);
+            $table->string('monthly_special')->nullable()->default('TBC');
+            $table->string('no_of_surprises')->nullable()->default(0);
             // Track change to Company Details
-            $table->string('order_changes')->nullable();
+            $table->longtext('order_changes')->nullable();
             $table->date('date_changed')->nullable();
             $table->timestamps();
         });

@@ -37,7 +37,7 @@
                         <label><b> Fruitbox Fruit Partner </b></label>
                         <div v-if="editing">
                             <b-form-select v-model="fruitbox.fruit_partner_id">
-                                <option v-for="fruit_partner in $store.state.fruit_partners_list" :value="fruit_partner.id"> {{ fruit_partner.name }} </option>
+                                <option v-for="fruit_partner in $store.state.fruit_partners_list" :key="fruit_partner.id" :value="fruit_partner.id"> {{ fruit_partner.name }} </option>
                             </b-form-select>
                             <p> Selected: {{ fruitbox.fruit_partner_id }} </p>
                         </div>
@@ -62,9 +62,9 @@
                         <label><b> Fruitbox Status </b></label>
                         <div v-if="editing">
                             <b-form-select v-model="fruitbox.is_active">
-
                                 <option value="Active"> Active </option>
                                 <option value="Inactive"> Inactive </option>
+                                <option value="Paused"> Paused </option>
                             </b-form-select>
                         </div>
                         <div v-else>
