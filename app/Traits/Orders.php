@@ -15,7 +15,7 @@ trait Orders
         $addProduct->quantity = request('product.quantity'); // This can be passed from the frontend, depending on which product has been selected.
         $addProduct->box_id = request('box_details.id'); // This can be passed from the frontend, depending on which box is being edited.
         $addProduct->box_type = "App\\" . request('box_type'); // This can be passed from the frontend, depending on which form is being submitted.
-        $addProduct->delivery_date = request('box_details.delivery_week'); // This can be passed from the frontend, depending on which box is being edited.
+        $addProduct->delivery_week = request('box_details.delivery_week'); // This can be passed from the frontend, depending on which box is being edited.
         $addProduct->save();
 
         // Now we just need to adjust the stock levels.

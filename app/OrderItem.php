@@ -13,7 +13,7 @@ class OrderItem extends Model
         'quantity',
         'box_id',
         'box_type',
-        'delivery_date'
+        'delivery_week'
     ];
 
     public function orderable()

@@ -450,7 +450,7 @@ class SnackBoxController extends Controller
     {
         $snackbox = SnackBox::find(363);
 
-        foreach ($snackbox->box_items->where('delivery_date', $snackbox->delivery_week) as $order_item) {
+        foreach ($snackbox->box_items->where('delivery_week', $snackbox->delivery_week) as $order_item) {
             dump($order_item->product->brand . ' ' . $order_item->product->flavour);
         }
 

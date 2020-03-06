@@ -629,7 +629,7 @@ WithEvents
 
                     // EDIT 3/2/20: THIS WAS FINE FOR ONE MILKBOX PER DELIVERY, NOW THERE MIGHT BE MORE THAN ONE SO COMMENTING THIS OUT.
                     // $milkboxes ? $additional_milk = $milkboxes->where('delivery_date', $week_start->current)->where('company_details_id', $fruitbox->company_details_id)->where('delivery_day', $fruitbox->delivery_day)->first() : $additional_milk = $milkboxes;
-                    $milkboxes ? $additional_milk = $milkboxes->where('delivery_date', $week_start->current)->where('company_details_id', $fruitbox->company_details_id)->where('delivery_day', $fruitbox->delivery_day)->all() : $additional_milk = $milkboxes;
+                    $milkboxes ? $additional_milk = $milkboxes->where('delivery_week', $week_start->current)->where('company_details_id', $fruitbox->company_details_id)->where('delivery_day', $fruitbox->delivery_day)->all() : $additional_milk = $milkboxes;
 
                     if (!empty($additional_milk)) {
                         //dd($additional_milk);

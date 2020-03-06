@@ -146,7 +146,7 @@ WithEvents
     {
         // $picklists_with_berries = Picklist::where('week_start', $this->week_starting)->where('seasonal_berries', '>', 0)->where('delivery_day', $this->route_day)->orderBy('assigned_to', 'desc')->get();
         
-        $fruitbox_with_berries = FruitBox::where('delivery_date', $this->week_starting)->where('is_active', 'Active')->where('fruit_partner_id', 1)->where('seasonal_berries', '>', 0)->where('delivery_day', $this->route_day)->get();
+        $fruitbox_with_berries = FruitBox::where('delivery_week', $this->week_starting)->where('is_active', 'Active')->where('fruit_partner_id', 1)->where('seasonal_berries', '>', 0)->where('delivery_day', $this->route_day)->get();
         //dd($fruitbox_with_berries);
         // Now that 'assigned_to' lives as an ID within the routes it needs to be merged together with assigned_routes,
         // before taking the assigned_to value and pulling it into the fruitbox collection.  

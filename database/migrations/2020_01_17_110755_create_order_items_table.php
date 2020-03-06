@@ -19,7 +19,7 @@ class CreateOrderItemsTable extends Migration
             $table->integer('quantity');
             $table->integer('box_id');
             $table->string('box_type');
-            $table->date('delivery_date');
+            $table->date('delivery_week');
             $table->timestamps();
         });
     }

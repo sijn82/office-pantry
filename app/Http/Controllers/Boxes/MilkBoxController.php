@@ -218,7 +218,7 @@ class MilkBoxController extends Controller
                 [
                     // I think these two fields combined should be enough to determine whether the entry we're looking for is unique and exists.
                     'milkbox_id' => $existing_milkbox_entry['id'],
-                    'delivery_date' => $existing_milkbox_entry['delivery_date'],
+                    'delivery_week' => $existing_milkbox_entry['delivery_week'],
                 ],
                 [
                     'is_active' => 'Inactive',
