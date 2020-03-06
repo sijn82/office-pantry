@@ -4,7 +4,7 @@
             <div id="milkbox-preview-info">
                 <h4 v-if="milkbox.name !== null"> {{ milkbox.name }} </h4>
                 <h4> {{ milkbox.delivery_day }} </h4>
-                <h5> {{ milkbox.next_delivery }} </h5>
+                <h5> {{ milkbox.delivery_week }} </h5>
                 <p> {{ milkbox.is_active }} </p>
                 <b-button variant="primary" @click="showDetails()"> Details </b-button>
                 <b-button variant="warning" @click="enableEdit()"> Edit </b-button>
@@ -44,10 +44,10 @@
                     <b-col>
                         <label><b> Next Delivery </b></label>
                         <div v-if="editing">
-                            <b-form-input v-model="milkbox.next_delivery" type="date"></b-form-input>
+                            <b-form-input v-model="milkbox.delivery_week" type="date"></b-form-input>
                         </div>
                         <div v-else>
-                            <p> {{ milkbox.next_delivery }} </p>
+                            <p> {{ milkbox.delivery_week }} </p>
                         </div>
                     </b-col>
                 </b-row>
@@ -462,7 +462,7 @@ export default {
                 fruit_partner_id: milkbox.fruit_partner_id,
                 company_details_id: milkbox.company_details_id,
                 route_id: milkbox.route_id,
-                next_delivery: milkbox.next_delivery,
+                delivery_week: milkbox.delivery_week,
                 delivery_day: milkbox.delivery_day,
                 frequency: milkbox.frequency,
                 week_in_month: milkbox.week_in_month,

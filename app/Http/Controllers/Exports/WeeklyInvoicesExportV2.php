@@ -356,7 +356,7 @@ WithTitle
         // These options passed into the whereIn clause are (or should hopefully be) all the weekly payment orders for invoicing.
         $companies = CompanyDetails::where('is_active', 'Active')->whereIn('branding_theme', ['BACS', 'GoCardless', 'Paypal (Stripe)', 'Weekly Standing Order', 'Eden Branding Theme'])->with([
             'fruitbox' => function ($query) {
-                $query->where('is_active', 'Active')->where('next_delivery', $this->week_start);
+                $query->where('is_active', 'Active')->where('delivery_week', $this->week_start);
             },
 
             // Now we need to check the fruitbox archives for any boxes that have been updated before invoicing,
@@ -364,32 +364,32 @@ WithTitle
             // If the status is inactive, this means the box was invoiced prior to being updated and is now only needed for our records.
 
             'fruitbox_archive' => function ($query) {
-                $query->where('is_active', 'Active')->where('next_delivery', $this->week_start);
+                $query->where('is_active', 'Active')->where('delivery_week', $this->week_start);
             },
             'milkbox' => function ($query) {
-                $query->where('is_active', 'Active')->where('next_delivery', $this->week_start);
+                $query->where('is_active', 'Active')->where('delivery_week', $this->week_start);
             },
             'milkbox_archive' => function ($query) {
-                $query->where('is_active', 'Active')->where('next_delivery', $this->week_start);
+                $query->where('is_active', 'Active')->where('delivery_week', $this->week_start);
             },
             'snackboxes' => function ($query) {
-                $query->where('is_active', 'Active')->where('next_delivery_week', $this->week_start);
+                $query->where('is_active', 'Active')->where('delivery_week', $this->week_start);
             },
             'snackbox_archive' => function ($query) {
-                $query->where('is_active', 'Active')->where('next_delivery_week', $this->week_start);
+                $query->where('is_active', 'Active')->where('delivery_week', $this->week_start);
             },
             'drinkboxes' => function ($query) {
-                $query->where('is_active', 'Active')->where('next_delivery_week', $this->week_start);
+                $query->where('is_active', 'Active')->where('delivery_week', $this->week_start);
             },
             // Drinkbox archive will go here...
             'drinkbox_archive' => function ($query) {
-                $query->where('is_active', 'Active')->where('next_delivery_week', $this->week_start);
+                $query->where('is_active', 'Active')->where('delivery_week', $this->week_start);
             },
             'otherboxes' => function ($query) {
-                $query->where('is_active', 'Active')->where('next_delivery_week', $this->week_start);
+                $query->where('is_active', 'Active')->where('delivery_week', $this->week_start);
             },
             'otherbox_archive' => function ($query) {
-                $query->where('is_active', 'Active')->where('next_delivery_week', $this->week_start);
+                $query->where('is_active', 'Active')->where('delivery_week', $this->week_start);
             }
             ])->get();
 
@@ -1279,9 +1279,9 @@ WithTitle
                 // Ideally I'd like to reuse as much of this code as possible, so instead of over-analysing the issue
                 // I'm going to put the call here and see what it does to the results.
 
-                // This groups the archives by snackbox_id, then within that array, further groups them by next_delivery_week.
+                // This groups the archives by snackbox_id, then within that array, further groups them by delivery_week.
                 // It does exactly what I wanted it to do but for weekly invoicing is this strictly necessary, or just an overcomplication?
-                // $archived_snackboxes = $company->snackbox_archive->groupBy(['snackbox_id', 'next_delivery_week']);
+                // $archived_snackboxes = $company->snackbox_archive->groupBy(['snackbox_id', 'delivery_week']);
 
             // $archived_snackboxes = $company->snackbox_archive->groupBy('snackbox_id');
 

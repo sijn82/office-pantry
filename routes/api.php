@@ -21,6 +21,8 @@ use Illuminate\Http\Request;
 // });
 Route::get('test', 'Boxes\SnackBoxController@test');
 
+Route::get('order-advancement', 'OfficePantry\OrderController@newFangledOrderAdvancement');
+
 //----- THESE 2 ROUTES ARE FOR ONE OFF USE -----//
 //----- COMMENTING THEM OUT TO PREVENT ACCIDENTAL REUSE! -----//
 

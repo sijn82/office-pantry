@@ -13,6 +13,7 @@ class SnackBox extends Model
         // Snackbox Info
         'snackbox_id',
         'is_active',
+        'name',
         'delivered_by',
         'no_of_boxes',
         'snack_cap',
@@ -22,15 +23,15 @@ class SnackBox extends Model
         'delivery_day',
         'frequency',
         'previous_delivery_week',
-        'next_delivery_week',
+        'delivery_week',
         // Product Information
-        'product_id',
-        'code',
-        'brand',
-        'flavour',
-        'quantity',
-        'selling_unit_price',
-        'selling_case_price',
+        // 'product_id',
+        // 'code',
+        // 'brand',
+        // 'flavour',
+        // 'quantity',
+        // 'selling_unit_price',
+        // 'selling_case_price',
         'invoiced_at'
     ];
 

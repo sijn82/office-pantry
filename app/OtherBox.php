@@ -11,6 +11,7 @@ class OtherBox extends Model
         // OtherBox Info
         'otherbox_id',
         'is_active',
+        'name',
         'delivered_by_id',
         // 'no_of_boxes',
         'type',
@@ -19,14 +20,14 @@ class OtherBox extends Model
         'delivery_day',
         'frequency',
         'previous_delivery_week',
-        'next_delivery_week',
+        'delivery_week',
         // Product Information
-        'product_id',
-        'code',
-        'name',
-        'quantity',
-        'unit_price',
-        'case_price',
+        // 'product_id',
+        // 'code',
+        // 'name',
+        // 'quantity',
+        // 'unit_price',
+        // 'case_price',
         'invoiced_at',
     ];
 

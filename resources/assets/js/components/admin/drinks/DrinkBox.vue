@@ -2,7 +2,7 @@
     <div>
         <div id="edit-save-buttons">
             <h4> {{ drinkbox[0].drinkbox_id }} </h4>
-            <h5> {{ drinkbox[0].next_delivery_week }} </h5>
+            <h5> {{ drinkbox[0].delivery_week }} </h5>
             <p> {{ drinkbox[0].delivery_day }} - {{ drinkbox[0].is_active }} </p>
             <b-button variant="primary" @click="showDetails()"> Details </b-button>
             <b-button variant="warning" @click="enableEdit()"> Edit </b-button>
@@ -91,12 +91,12 @@
                     </div>
                 </b-col>
                 <b-col>
-                    <label><b> Next Delivery Week </b></label>
+                    <label><b> Delivery Week </b></label>
                     <div v-if="editing">
-                        <b-form-input v-model="drinkbox[0].next_delivery_week" type="date"></b-form-input>
+                        <b-form-input v-model="drinkbox[0].delivery_week" type="date"></b-form-input>
                     </div>
                     <div v-else>
-                        <p> {{ drinkbox[0].next_delivery_week }} </p>
+                        <p> {{ drinkbox[0].delivery_week }} </p>
                     </div>
                 </b-col>
             </b-row>

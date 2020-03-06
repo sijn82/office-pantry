@@ -450,7 +450,7 @@ class SnackBoxController extends Controller
     {
         $snackbox = SnackBox::find(363);
 
-        foreach ($snackbox->box_items->where('delivery_date', $snackbox->next_delivery_week) as $order_item) {
+        foreach ($snackbox->box_items->where('delivery_date', $snackbox->delivery_week) as $order_item) {
             dump($order_item->product->brand . ' ' . $order_item->product->flavour);
         }
 
@@ -478,7 +478,7 @@ class SnackBoxController extends Controller
         $delivery_day = request('details.delivery_day');
         $frequency = request('details.frequency');
         $week_in_month = request('details.week_in_month');
-        $next_delivery_week_start = request('details.next_delivery_week');
+        $delivery_week = request('details.delivery_week');
 
         if (!empty($request->order)) {
 
@@ -498,7 +498,7 @@ class SnackBoxController extends Controller
                 $new_snackbox->delivery_day = $delivery_day;
                 $new_snackbox->frequency = $frequency;
                 $new_snackbox->week_in_month = $week_in_month;
-                $new_snackbox->next_delivery_week = $next_delivery_week_start;
+                $new_snackbox->delivery_week = $delivery_week;
                 $new_snackbox->product_id = $item['id'];
                 $new_snackbox->code = $item['code'];
                 $new_snackbox->name = $item['name'];
@@ -542,7 +542,7 @@ class SnackBoxController extends Controller
             $new_snackbox->delivery_day = $delivery_day;
             $new_snackbox->frequency = $frequency;
             $new_snackbox->week_in_month = $week_in_month;
-            $new_snackbox->next_delivery_week = $next_delivery_week_start;
+            $new_snackbox->delivery_week = $delivery_week_start;
             $new_snackbox->save();
         }
 
@@ -685,7 +685,7 @@ class SnackBoxController extends Controller
                 'delivery_day' => request('snackbox_details.delivery_day'),
                 'frequency' => request('snackbox_details.frequency'),
                 'week_in_month' => request('snackbox_details.week_in_month'),
-                'next_delivery_week' => request('snackbox_details.next_delivery_week'),
+                'delivery_week' => request('snackbox_details.delivery_week'),
             ]);
         }
 
@@ -795,7 +795,7 @@ class SnackBoxController extends Controller
         $addProduct->frequency = request('snackbox_details.frequency');
         $addProduct->week_in_month = request('snackbox_details.week_in_month');
         $addProduct->previous_delivery_week = request('snackbox_details.previous_delivery_week');
-        $addProduct->next_delivery_week = request('snackbox_details.next_delivery_week');
+        $addProduct->delivery_week = request('snackbox_details.delivery_week');
         $addProduct->product_id = request('product.id');
         $addProduct->code = request('product.code');
         $addProduct->brand = request('product.brand');
@@ -884,7 +884,7 @@ class SnackBoxController extends Controller
                     foreach ($snackbox as $snackbox_item) {
 
                         // I'm currently switching all create new instances with updateOrInsert instances to prevent the possibility of duplicates.
-                        // Snack_id and next_delivery_week isn't sufficient a check but combined with product_id we should be good.
+                        // Snack_id and delivery_week isn't sufficient a check but combined with product_id we should be good.
                         // The only issue would be if the box has two entries for the same product rather than removing the original entry and combining the quantity.
                         // I should maybe prevent this from happening at all but for now just telling admins not to add duplicate product entries to the same box would suffice/save time.
 
@@ -892,7 +892,7 @@ class SnackBoxController extends Controller
                         [
                             // Initial checks for matching entry
                             'snackbox_id' => $snackbox_item->snackbox_id,
-                            'next_delivery_week' => $snackbox_item->next_delivery_week,
+                            'delivery_week' => $snackbox_item->delivery_week,
                             'product_id' => $snackbox_item->product_id,
                         ],
                         [
@@ -928,7 +928,7 @@ class SnackBoxController extends Controller
                         [
                             // Initial checks for matching entry
                             'snackbox_id' => $snackbox_item->snackbox_id,
-                            'next_delivery_week' => $snackbox_item->next_delivery_week,
+                            'delivery_week' => $snackbox_item->delivery_week,
                             'product_id' => $snackbox_item->product_id,
                         ],
                         [
@@ -972,7 +972,7 @@ class SnackBoxController extends Controller
             $frequency_recovered = $snackbox[0]->frequency;
             $week_in_month_recovered = $snackbox[0]->week_in_month;
             $previous_delivery_week_recovered = $snackbox[0]->previous_delivery_week;
-            $next_delivery_week_recovered = $snackbox[0]->next_delivery_week;
+            $delivery_week_recovered = $snackbox[0]->delivery_week;
 
             // Now we can loop through each entry and delete them
             foreach ($snackbox as $snack_item) {
@@ -1000,7 +1000,7 @@ class SnackBoxController extends Controller
             $empty_snackbox->frequency = $frequency_recovered;
             $empty_snackbox->week_in_month = $week_in_month_recovered;
             $empty_snackbox->previous_delivery_week = $previous_delivery_week_recovered;
-            $empty_snackbox->next_delivery_week = $next_delivery_week_recovered;
+            $empty_snackbox->delivery_week = $delivery_week_recovered;
             // Product Information
             $empty_snackbox->product_id = 0;
             $empty_snackbox->code = null;
@@ -1212,7 +1212,7 @@ class SnackBoxController extends Controller
 
          // As we're going to be updating all the boxes of a particular type, let's grab them and group them by snackbox_id (to process them box by box)
          // *** should this be further limited to snackboxes for this next delivery week?  Otherwise a whole bunch of boxes not due for delivery will be assigned stock! I'm doing it! ***
-         $snackboxes = Snackbox::where('type', request('type'))->where('is_active', 'Active')->where('next_delivery_week', $this->week_start)->get()->groupBy('snackbox_id');
+         $snackboxes = Snackbox::where('type', request('type'))->where('is_active', 'Active')->where('delivery_week', $this->week_start)->get()->groupBy('snackbox_id');
 
          // dd($snackboxes);
 
@@ -1232,7 +1232,7 @@ class SnackBoxController extends Controller
              $frequency_recovered = $snackbox[0]->frequency;
              $week_in_month_recovered = $snackbox[0]->week_in_month;
              $previous_delivery_week_recovered = $snackbox[0]->previous_delivery_week;
-             $next_delivery_week_recovered = $snackbox[0]->next_delivery_week;
+             $delivery_week_recovered = $snackbox[0]->delivery_week;
 
              // Now we can process each snack within the snackbox
              foreach ($snackbox as $snack) {
@@ -1246,7 +1246,7 @@ class SnackBoxController extends Controller
                  [
                      // If this is written the same way as updateOrInsert, this is the initial check
                      'snackbox_id' => $snack->snackbox_id,
-                     'next_delivery_week' => $snack->next_delivery_week,
+                     'delivery_week' => $snack->delivery_week,
                      'product_id' => $snack->product_id,
                  ],
                  [
@@ -1340,7 +1340,7 @@ class SnackBoxController extends Controller
                  $new_snackbox->frequency = $frequency_recovered;
                  $new_snackbox->week_in_month = $week_in_month_recovered;
                  $new_snackbox->previous_delivery_week = $previous_delivery_week_recovered;
-                 $new_snackbox->next_delivery_week = $next_delivery_week_recovered;
+                 $new_snackbox->delivery_week = $delivery_week_recovered;
                  // Product Information
                  $new_snackbox->product_id = (isset($new_standard_snack['product_id'])) ? $new_standard_snack['product_id'] : $new_standard_snack['id'];
                  $new_snackbox->code = $new_standard_snack['code'];
@@ -1372,7 +1372,7 @@ class SnackBoxController extends Controller
         // BUT WHAT DO WE DO ABOUT A BOX WITH A DELIVERY DATE SET IN THE FUTURE, FROM BEING UPDATED EACH WEEK UNTIL ITS ACTUAL DELIVERY DATE?
         // CURRENT LOGIC WOULD HAVE THESE CREATED IN ARCHIVE UNTIL DELIVERY DATE UNLESS THEY WERE SET TO INACTIVE WHICH KINDA DEFEATS THE PURPOSE OF SETTING IT UP IN ADVANCE!
 
-        // Maybe 'IS_ACTIVE' could be changed to include more options, such as 'PAUSED' - Which waits until the 'next_delivery_week' matches current delivery week (a new thing I could create)
+        // Maybe 'IS_ACTIVE' could be changed to include more options, such as 'PAUSED' - Which waits until the 'delivery_week' matches current delivery week (a new thing I could create)
         // before changing its status to ACTIVE?
         // Hmmn, though as we process orders a week in advance, we'd need to set this to act a week in advance, which is annoying?
         // We also cant use the current 'WEEK START' variable as this is manually changed and wouldn't be a reliable way to activate orders?
@@ -1415,15 +1415,15 @@ class SnackBoxController extends Controller
             $frequency_recovered = $snackbox[0]->frequency;
             $week_in_month_recovered = $snackbox[0]->week_in_month;
             $previous_delivery_week_recovered = $snackbox[0]->previous_delivery_week;
-            $next_delivery_week_recovered = $snackbox[0]->next_delivery_week;
+            $delivery_week_recovered = $snackbox[0]->delivery_week;
 
-            // We can't updateOrInsert (per snack line) based on the uniqueness of snackbox_id/next_delivery_week in the archives due to having multiple rows (one for each item) in the snackbox.
-            // However taking it up a level to here, we can check if the snackbox_id/next_delivery_week currently exists in the snackbox_archives.
+            // We can't updateOrInsert (per snack line) based on the uniqueness of snackbox_id/delivery_week in the archives due to having multiple rows (one for each item) in the snackbox.
+            // However taking it up a level to here, we can check if the snackbox_id/delivery_week currently exists in the snackbox_archives.
 
             // While I quite like this approach and I'm sure it does a job, I've now implemented updateOrInsert everywhere else, using product_id to make the check more specific to each entry.
             // To try and create predictable behaviour I'm going to change this as well, so the same checks are being made throughout the site.
 
-            // $has_archive = SnackBoxArchive::where('snackbox_id', $snackbox_id_recovered)->where('next_delivery_week', $next_delivery_week_recovered)->get();
+            // $has_archive = SnackBoxArchive::where('snackbox_id', $snackbox_id_recovered)->where('delivery_week', $delivery_week_recovered)->get();
 
 
             if (count($snackbox)) { // Now I'm not checking all of the snackbox entries I don't need to worry about empty boxes. Though I suppose it's not doing any harm either.
@@ -1434,11 +1434,11 @@ class SnackBoxController extends Controller
                     // but keep a record of what they've had in the past, either for our records or because we invoice them monthly etc...
 
                     // updateOrCreate wont work here because there will be numerous entries with matching information
-                    // Snackbox_id & Next_delivery_week
+                    // Snackbox_id & delivery_week
 
                     // So we need to think of something else to determine whether to update or create.
                     // Also when trying to 'groupBy' - 'snackbox_id' from the 'snackbox_archives', it'll group all archived entries into one box
-                    // so we need to add a second stipulation to 'groupBy - 'snackbox_id' & 'next_delivery_week'
+                    // so we need to add a second stipulation to 'groupBy - 'snackbox_id' & 'delivery_week'
 
                     //----- HAVE I TACKLED THIS YET? IS IT SOMETHING I NEED TO CONSIDER AND FIX - MUST CHECK!! -----//
 
@@ -1450,7 +1450,7 @@ class SnackBoxController extends Controller
                     [
                         // If this is written the same way as updateOrInsert, this is the initial check
                         'snackbox_id' => $snack->snackbox_id,
-                        'next_delivery_week' => $snack->next_delivery_week,
+                        'delivery_week' => $snack->delivery_week,
                         'product_id' => $snack->product_id,
                     ],
                     [
@@ -1492,7 +1492,7 @@ class SnackBoxController extends Controller
                     //     $archived_snackbox->delivery_day = $snack->delivery_day;
                     //     $archived_snackbox->frequency = $snack->frequency;
                     //     $archived_snackbox->previous_delivery_week = $snack->previous_delivery_week;
-                    //     $archived_snackbox->next_delivery_week = $snack->next_delivery_week;
+                    //     $archived_snackbox->delivery_week = $snack->delivery_week;
                     //     // Product Information
                     //     $archived_snackbox->product_id = $snack->product_id;
                     //     $archived_snackbox->code = $snack->code;
@@ -1505,7 +1505,7 @@ class SnackBoxController extends Controller
                     //     // But what should we do if it does?
                     //     // What are the possible reasons for this?
                     //
-                    //     // 1. Mass update has already been run for this 'type', backing up orders for that 'next_delivery_week' (i.e the previous week).
+                    //     // 1. Mass update has already been run for this 'type', backing up orders for that 'delivery_week' (i.e the previous week).
                     //     // 2. An update to a company snackbox (i.e not a mass update) <-- This isn't in place yet and I'm not sure it should be unless specifically requested via a button to back up contents before editing?
                     //     // 3. OR SHOULD I JUST CREATE A SPECIFIC TIME WHEN ALL SNACKBOX ORDERS ARE EMPTIED AND ARCHIVES CREATED?
                     //     // - IF BOXES ARE EMPTIED PRIOR TO MASS UPDATING, WE WOULDN'T NEED TO DO THAT HERE EITHER?
@@ -1685,7 +1685,7 @@ class SnackBoxController extends Controller
                     $new_snackbox->frequency = $frequency_recovered;
                     $new_snackbox->week_in_month = $week_in_month_recovered;
                     $new_snackbox->previous_delivery_week = $previous_delivery_week_recovered;
-                    $new_snackbox->next_delivery_week = $next_delivery_week_recovered;
+                    $new_snackbox->delivery_week = $delivery_week_recovered;
                     // Product Information
                     // dump($new_standard_snack->product_id);
                     // dump(isset($new_standard_snack['product_id'])); // <-- Need

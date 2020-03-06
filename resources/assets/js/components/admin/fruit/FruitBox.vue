@@ -3,7 +3,7 @@
         <!-- <ul> -->
             <div id="fruitbox-preview-info">
                 <h4> {{ fruitbox.name }} </h4>
-                <h5> {{ fruitbox.next_delivery }} </h5>
+                <h5> {{ fruitbox.delivery_week }} </h5>
                 <p> {{ fruitbox.delivery_day }} - {{ fruitbox.is_active }} </p>
                 <b-button variant="primary" @click="showDetails()"> Details </b-button>
                 <b-button variant="warning" @click="enableEdit()"> Edit </b-button>
@@ -117,12 +117,12 @@
                         </div>
                     </b-col>
                     <b-col>
-                        <label><b> Next Delivery </b></label>
+                        <label><b> Delivery Week </b></label>
                         <div v-if="editing">
-                            <b-form-input type="date" v-model="fruitbox.next_delivery"></b-form-input>
+                            <b-form-input type="date" v-model="fruitbox.delivery_week"></b-form-input>
                         </div>
                         <div v-else>
-                            <p> {{ fruitbox.next_delivery }} </p>
+                            <p> {{ fruitbox.delivery_week }} </p>
                         </div>
                     </b-col>
                     <b-col>
@@ -450,7 +450,7 @@ export default {
                 delivery_day: fruitbox.delivery_day,
                 frequency: fruitbox.frequency,
                 week_in_month: fruitbox.week_in_month,
-                next_delivery: fruitbox.next_delivery,
+                delivery_week: fruitbox.delivery_week,
                 fruitbox_total: fruitbox.fruitbox_total,
                 deliciously_red_apples: fruitbox.deliciously_red_apples,
                 pink_lady_apples: fruitbox.pink_lady_apples,

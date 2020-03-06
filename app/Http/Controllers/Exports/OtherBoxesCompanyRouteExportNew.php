@@ -94,7 +94,7 @@ ShouldAutoSize
         //$currentWeekStart = Weekstart::findOrFail(1); <-- Replaced by passing the variable from OtherBoxesCompanyRouteExportNew class and constructing it.
         
         // Other than a valid week start, all we need to know is what day we're processing and that the orders are 'Active'.
-        $otherboxes = OtherBox::where('is_active', 'Active')->where('next_delivery_week', $this->week_start)->where('delivery_day', $this->day)->where('delivered_by_id', 1)->get();
+        $otherboxes = OtherBox::where('is_active', 'Active')->where('delivery_week', $this->week_start)->where('delivery_day', $this->day)->where('delivered_by_id', 1)->get();
         
         // dd($otherboxes);
         // Rather than grouping the boxes by otherbox_id we actually want to know how many of a product we need to buy, so let's group them by product_id instead.

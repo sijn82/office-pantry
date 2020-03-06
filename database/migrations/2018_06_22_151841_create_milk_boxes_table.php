@@ -21,7 +21,7 @@ class CreateMilkBoxesTable extends Migration
             $table->integer('fruit_partner_id');
             $table->integer('company_details_id');
             $table->date('previous_delivery')->nullable();
-            $table->date('next_delivery');
+            $table->date('delivery_week');
             $table->string('frequency');
             $table->string('week_in_month')->nullable();
             $table->string('delivery_day');

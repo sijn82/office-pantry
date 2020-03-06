@@ -40,7 +40,7 @@ class SnackboxUniqueExportNew
     {
         $currentWeekStart = Weekstart::findOrFail(1);
 
-        $snackboxes = SnackBox::where('delivered_by', $this->courier)->where('next_delivery_week', $currentWeekStart->current)
+        $snackboxes = SnackBox::where('delivered_by', $this->courier)->where('delivery_week', $currentWeekStart->current)
                                 ->where('product_id', '!=', 0)->where('wholesale', '=', null)->where('type', '=', 'unique')->get();
 
 

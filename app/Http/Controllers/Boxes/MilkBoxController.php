@@ -74,7 +74,7 @@ class MilkBoxController extends Controller
                 $newMilkbox->fruit_partner_id = request('fruit_partner_id');
                 $newMilkbox->company_details_id = request('company_details_id');
                 //$newMilkbox->route_id = request('company_data.route_id'); // Not using this for anything.
-                $newMilkbox->next_delivery = request('first_delivery');
+                $newMilkbox->delivery_week = request('first_delivery');
                 $newMilkbox->frequency = request('frequency');
                 $newMilkbox->week_in_month = request('week_in_month');
                 $newMilkbox->delivery_day = $delivery_day;
@@ -218,7 +218,7 @@ class MilkBoxController extends Controller
                 [
                     // I think these two fields combined should be enough to determine whether the entry we're looking for is unique and exists.
                     'milkbox_id' => $existing_milkbox_entry['id'],
-                    'next_delivery' => $existing_milkbox_entry['next_delivery'],
+                    'delivery_date' => $existing_milkbox_entry['delivery_date'],
                 ],
                 [
                     'is_active' => 'Inactive',
@@ -272,9 +272,9 @@ class MilkBoxController extends Controller
 
                 MilkBoxArchive::updateOrInsert(
                 [
-                    // Technically, milkbox_id + next_delivery_week should be all that's needed but testing will probably prove me wrong.
+                    // Technically, milkbox_id + delivery_week should be all that's needed but testing will probably prove me wrong.
                     'milkbox_id' => request('id'),
-                    'next_delivery' => request('next_delivery'),
+                    'delivery_week' => request('delivery_week'),
                 ],
                 [
                     'is_active' => request('is_active'),
@@ -331,7 +331,7 @@ class MilkBoxController extends Controller
             'is_active' => request('is_active'),
             'name' => request('name'),
             'fruit_partner_id' => request('fruit_partner_id'),
-            'next_delivery' => request('next_delivery'), // Being able to change this is actually very important!
+            'delivery_week' => request('delivery_week'), // Being able to change this is actually very important!
             'delivery_day' => request('delivery_day'),
             'frequency' => request('frequency'),
             'week_in_month' => request('week_in_month'),  // This is an optional field only necessary if the frequency is monthly, or potentially bespoke.
@@ -377,7 +377,7 @@ class MilkBoxController extends Controller
             'fruit_partner_id',
             'company_details_id',
             'previous_delivery',
-            'next_delivery',
+            'delivery_week',
             'frequency',
             'week_in_month',
             'invoiced_at',

@@ -108,7 +108,7 @@ class SnackboxUniqueSingleCompanyCollectionExportNew
        
       // dd('got this far...');
        
-       $snackboxes = SnackBox::where('delivered_by', $this->courier)->where('next_delivery_week', $this->week_start)->where('delivery_day', $this->day)->where('no_of_boxes', '>', 1)
+       $snackboxes = SnackBox::where('delivered_by', $this->courier)->where('delivery_week', $this->week_start)->where('delivery_day', $this->day)->where('no_of_boxes', '>', 1)
                              ->where('product_id', '!=', 0)->where('type', 'unique')->get();
                              
        //dd($snackboxes);

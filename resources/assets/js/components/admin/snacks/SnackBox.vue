@@ -3,7 +3,7 @@
 
         <div id="edit-save-buttons">
             <h4> {{ snackbox.snackbox_id }} </h4>
-            <h5> {{ snackbox.next_delivery_week }} </h5>
+            <h5> {{ snackbox.delivery_week }} </h5>
             <p> {{ snackbox.delivery_day }} - {{ snackbox.is_active }} </p>
             <!-- <p><b> {{ this.company }} </b></p> -->
             <b-button variant="primary" @click="showDetails()"> Details </b-button>
@@ -124,10 +124,10 @@
                 <b-col>
                     <label><b> Next Delivery Week </b></label>
                     <div v-if="editing">
-                        <b-form-input v-model="snackbox.next_delivery_week" type="date"></b-form-input>
+                        <b-form-input v-model="snackbox.delivery_week" type="date"></b-form-input>
                     </div>
                     <div v-else>
-                        <p> {{ snackbox.next_delivery_week }} </p>
+                        <p> {{ snackbox.delivery_week }} </p>
                     </div>
                 </b-col>
             </b-row>

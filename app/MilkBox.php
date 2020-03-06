@@ -18,7 +18,7 @@ class MilkBox extends Model
         'fruit_partner_id',
         'company_details_id',
         'previous_delivery',
-        'next_delivery',
+        'delivery_week',
         'frequency',
         'week_in_month',
         'delivery_day',

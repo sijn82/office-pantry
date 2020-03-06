@@ -250,10 +250,10 @@ WithEvents
         $currentWeekStart = Weekstart::findOrFail(1);
 
         // If it matches, it's on for delivery this week.
-        $fruitboxesForDelivery = FruitBox::where('next_delivery', $currentWeekStart->current)->where('is_active', 'Active')->get();
+        $fruitboxesForDelivery = FruitBox::where('delivery_week', $currentWeekStart->current)->where('is_active', 'Active')->get();
 
         // Now the same for milk, and yes I called the same field, with the same purpose something different each time.  I shouldn't be allowed to wield this much power.
-        $milkboxesForDelivery = MilkBox::where('next_delivery', $currentWeekStart->current)->where('is_active', 'Active')->get();
+        $milkboxesForDelivery = MilkBox::where('delivery_week', $currentWeekStart->current)->where('is_active', 'Active')->get();
 
         // Let's grab all the routes. (old approach)
         //$routeInfoAll = Route::where('assigned_to', $this->routesolo)->where('is_active', 'Active')->get();
@@ -273,7 +273,7 @@ WithEvents
             // ---------- Fruit Deliveries ---------- //
 
             // For each route in the routes table, we check the associated Company ID for a FruitBox - that's Active, On Delivery For This Week and on this Delivery Day.
-            $fruitboxesForDelivery = FruitBox::where('company_details_id', $routeInfoSolo->company_details_id)->where('next_delivery', $currentWeekStart->current)
+            $fruitboxesForDelivery = FruitBox::where('company_details_id', $routeInfoSolo->company_details_id)->where('delivery_week', $currentWeekStart->current)
                                                 ->where('delivery_day', $routeInfoSolo->delivery_day)->where('is_active', 'Active')->where('fruit_partner_id', 1)->get();
             // Set variable value.
             $fruitbox_totals = 0;
@@ -300,7 +300,7 @@ WithEvents
             // ---------- Milk Deliveries ---------- //
 
             // For each route in the routes table, we check the associated Company ID for a MilkBox - that's Active, On Delivery For This Week and on this Delivery Day.
-            $milkboxesForDelivery = MilkBox::where('company_details_id', $routeInfoSolo->company_details_id)->where('next_delivery', $currentWeekStart->current)
+            $milkboxesForDelivery = MilkBox::where('company_details_id', $routeInfoSolo->company_details_id)->where('delivery_week', $currentWeekStart->current)
                                            ->where('delivery_day', $routeInfoSolo->delivery_day)->where('is_active', 'Active')->where('fruit_partner_id', 1)->get();
 
             // Unlike FruitBoxes there shouldn't be any more than one entry, so totalling isn't necessary - however there may be no milk on the route.
@@ -324,7 +324,7 @@ WithEvents
             //----- Snackbox Processing Pt1 - Regular Boxes and Wholesale -----//
             
             // This will grab each entry in the snackbox, not each specific snackbox (i.e we only need to grab one entry per snackbox_id)
-            $snackboxesForDelivery = SnackBox::where('company_details_id', $routeInfoSolo->company_details_id)->where('next_delivery_week', $currentWeekStart->current)
+            $snackboxesForDelivery = SnackBox::where('company_details_id', $routeInfoSolo->company_details_id)->where('delivery_week', $currentWeekStart->current)
                                              ->where('delivery_day', $routeInfoSolo->delivery_day)->where('is_active', 'Active')
                                              ->where('delivered_by', 'OP')->get();
                                              
@@ -349,7 +349,7 @@ WithEvents
             
             //----- Snackbox Processing Pt2 - Unique Drinkboxes (Adding Unique Drinkboxes to the Box Total shared with Snackboxes on Routing) -----//
                 
-            $unique_drinkboxes = Drinkbox::where('company_details_id', $routeInfoSolo->company_details_id)->where('next_delivery_week', $currentWeekStart->current)
+            $unique_drinkboxes = Drinkbox::where('company_details_id', $routeInfoSolo->company_details_id)->where('delivery_week', $currentWeekStart->current)
                                          ->where('delivery_day', $routeInfoSolo->delivery_day)->where('is_active', 'Active')->where('delivered_by_id', 1)
                                          ->where('type', 'Unique')->get();
                 
@@ -424,7 +424,7 @@ WithEvents
             
             // Time to do the same with drinks, however this will need to be handled slightly differently as the drinks are sold in cases,
             // so the box total here really reflects the number of cases, or in other words, each individual entry in the box.                         
-            $drinkboxesForDelivery = DrinkBox::where('company_details_id', $routeInfoSolo->company_details_id)->where('next_delivery_week', $currentWeekStart->current)
+            $drinkboxesForDelivery = DrinkBox::where('company_details_id', $routeInfoSolo->company_details_id)->where('delivery_week', $currentWeekStart->current)
                                              ->where('delivery_day', $routeInfoSolo->delivery_day)->where('is_active', 'Active')->where('delivered_by_id', 1)
                                              ->where('type', 'Regular')->get();
                                              
@@ -460,7 +460,7 @@ WithEvents
             //----- Otherbox processing -----//      
             
             // Finally we have the other category, which is a mishmash of items.  Each entry needs to display its name and quantity.                    
-            $otherboxesForDelivery = OtherBox::where('company_details_id', $routeInfoSolo->company_details_id)->where('next_delivery_week', $currentWeekStart->current)
+            $otherboxesForDelivery = OtherBox::where('company_details_id', $routeInfoSolo->company_details_id)->where('delivery_week', $currentWeekStart->current)
                                              ->where('delivery_day', $routeInfoSolo->delivery_day)->where('is_active', 'Active')->where('delivered_by_id', 1)->get();                     
             
             // We still want to group them.                     

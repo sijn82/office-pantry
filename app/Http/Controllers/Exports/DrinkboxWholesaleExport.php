@@ -100,7 +100,7 @@ class DrinkboxWholesaleExportCollection
     {
         $currentWeekStart = Weekstart::findOrFail(1);
 
-        $drinkboxes = DrinkBox::where('delivered_by_id', $this->courier)->where('next_delivery_week', $this->week_start)
+        $drinkboxes = DrinkBox::where('delivered_by_id', $this->courier)->where('delivery_week', $this->week_start)
                                 ->where('product_id', '!=', 0)->where('delivery_day', $this->day)->get();
         //dd($drinkboxes);
         

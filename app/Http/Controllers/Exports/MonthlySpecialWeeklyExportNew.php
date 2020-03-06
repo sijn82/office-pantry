@@ -56,11 +56,11 @@ ShouldAutoSize
         
         // Grab the Mystery Boxes
         
-        $monthly_special_snacks = SnackBox::where('next_delivery_week', $this->week_start)->where('type', 'monthly-special')->where('product_id', '!=', 0)->get();
+        $monthly_special_snacks = SnackBox::where('delivery_week', $this->week_start)->where('type', 'monthly-special')->where('product_id', '!=', 0)->get();
 
-        $monthly_special_drinks = DrinkBox::where('next_delivery_week', $this->week_start)->where('type', 'monthly-special')->where('product_id', '!=', 0)->get();
+        $monthly_special_drinks = DrinkBox::where('delivery_week', $this->week_start)->where('type', 'monthly-special')->where('product_id', '!=', 0)->get();
     
-        $monthly_special_other = OtherBox::where('next_delivery_week', $this->week_start)->where('type', 'monthly-special')->where('product_id', '!=', 0)->get();
+        $monthly_special_other = OtherBox::where('delivery_week', $this->week_start)->where('type', 'monthly-special')->where('product_id', '!=', 0)->get();
         
         // I can group each box type by its ID
         

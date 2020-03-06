@@ -178,7 +178,7 @@ WithEvents
         // $currentWeekStart = Weekstart::findOrFail(1);
 
         // If it matches, it's on for delivery this week and delivered/packed by office pantry.
-        $fruitboxesForDelivery = FruitBox::where('next_delivery', $this->week_start)->where('is_active', 'Active')->where('fruit_partner_id', 1)->get();
+        $fruitboxesForDelivery = FruitBox::where('delivery_date', $this->week_start)->where('is_active', 'Active')->where('fruit_partner_id', 1)->get();
 
         foreach ($fruitboxesForDelivery as $fruitbox)
         {

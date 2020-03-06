@@ -103,7 +103,7 @@ class SnackboxMultiCompanyCollectionExportNew
         // It would be nice if I could make the 'delivered_by' variable a conditional passed by the button pressed. 
         // If it was I could use the same function to process OP/APC/DPD and any others in future.
         // Though for right now let's hard code it and get the rest of the logic in place.
-        $snackboxes = SnackBox::where('delivered_by', $this->courier)->where('next_delivery_week', $this->week_start)->where('delivery_day', $this->day)->where('no_of_boxes', '=', 1)
+        $snackboxes = SnackBox::where('delivered_by', $this->courier)->where('delivery_week', $this->week_start)->where('delivery_day', $this->day)->where('no_of_boxes', '=', 1)
                                 ->where('product_id', '!=', 0)->whereNotIn('type', ['wholesale', 'unique'])->get();
        
         // Group the snackbox entries by snackbox_id to pull each order together

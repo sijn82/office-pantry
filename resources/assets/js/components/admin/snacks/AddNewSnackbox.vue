@@ -50,7 +50,7 @@
             </b-col>
             <b-col>
                 <label> Next Delivery Week Start </label>
-                <b-form-input type="date" v-model="next_delivery_week" size="sm"></b-form-input>
+                <b-form-input type="date" v-model="delivery_week" size="sm"></b-form-input>
             </b-col>
             <b-col>
                 <label> Delivered By </label>
@@ -88,23 +88,26 @@
 
         <div class="order-selections">
             <b-row><b-col><h4> Product Name </h4></b-col><b-col><h4> Quantity </h4></b-col><b-col><h4> Price </h4></b-col><b-col>  </b-col></b-row>
-            <div v-for="snack in $store.state.snackbox ">
-                 <b-row>
-                     <b-col>
-                         <p> {{ snack.name }} </p>
-                     </b-col>
-                     <b-col>
-                         <p> {{ snack.quantity }} </p>
-                     </b-col>
-                     <b-col>
-                         <p v-if="createWholesaleSnackbox"> {{ (snack.unit_price * snack.case_size) }} </p>
-                         <p v-else> {{ snack.unit_price }} </p>
-                     </b-col>
-                     <b-col>
-                         <b-button size="sm" variant="danger" @click="removeProduct(snack.id)"> Remove </b-button>
-                     </b-col>
-                 </b-row>
-             </div>
+            <div v-for="snack in $store.state.snackbox" :key="snack.id">
+                <b-row>
+                    <b-col>
+                        <p> {{ snack.brand }} </p>
+                    </b-col>
+                    <b-col>
+                        <p> {{ snack.flavour }} </p>
+                    </b-col>
+                    <b-col>
+                        <p> {{ snack.quantity }} </p>
+                    </b-col>
+                    <b-col>
+                        <p v-if="createWholesaleSnackbox"> {{ (snack.unit_price * snack.case_size) }} </p>
+                        <p v-else> {{ snack.unit_price }} </p>
+                    </b-col>
+                    <b-col>
+                        <b-button size="sm" variant="danger" @click="removeProduct(snack.id)"> Remove </b-button>
+                    </b-col>
+                </b-row>
+            </div>
               <b-row>
                   <b-col>  </b-col>
                   <b-col>  </b-col>
@@ -195,7 +198,7 @@ export default {
             week_in_month: null,
             week_in_month_options: ['First', 'Second', 'Third', 'Fourth', 'Last'],
             no_of_boxes: 0,
-            next_delivery_week: null,
+            delivery_week: null,
             selected_company: 'none selected',
         }
     },
@@ -281,7 +284,7 @@ export default {
                     delivery_day: this.delivery_day,
                     frequency: this.frequency,
                     week_in_month: this.week_in_month,
-                    next_delivery_week: this.next_delivery_week
+                    delivery_week: this.delivery_week
                 },
                 order: this.$store.state.snackbox,
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},

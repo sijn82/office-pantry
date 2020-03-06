@@ -38,7 +38,7 @@ ShouldAutoSize
         // First we need to check for orders that are due for delivery this week.  We can compare their next delivery date with the current week start date.
         
         // Other than a valid week start, all we need to know is what day we're processing and that the orders are 'Active'.
-        $otherboxes = OtherBox::where('is_active', 'Active')->where('next_delivery_week', $this->week_start)->get();
+        $otherboxes = OtherBox::where('is_active', 'Active')->where('delivery_week', $this->week_start)->get();
         
         // dd($otherboxes);
         // Rather than grouping the boxes by otherbox_id we actually want to know how many of a product we need to buy, so let's group them by product_id instead.

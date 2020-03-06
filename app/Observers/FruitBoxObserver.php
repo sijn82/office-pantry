@@ -86,7 +86,7 @@ class FruitBoxObserver
 //     3 => "company_details_id"
 //     4 => "type"
 //     5 => "previous_delivery"
-//     6 => "next_delivery"
+//     6 => "delivery_week"
 //     7 => "frequency"
 //     8 => "week_in_month"
 //     9 => "delivery_day"
@@ -134,7 +134,7 @@ class FruitBoxObserver
 //     "company_details_id" => 1
 //     "type" => "Orange Juicer"
 //     "previous_delivery" => "2019-08-26"
-//     "next_delivery" => "2019-09-02"
+//     "delivery_week" => "2019-09-02"
 //     "frequency" => "Fortnightly"
 //     "week_in_month" => null
 //     "delivery_day" => "Wednesday"
@@ -173,7 +173,7 @@ class FruitBoxObserver
 //     "company_details_id" => 1
 //     "type" => "Orange Juicer"
 //     "previous_delivery" => "2019-08-26"
-//     "next_delivery" => "2019-09-02"
+//     "delivery_week" => "2019-09-02"
 //     "frequency" => "Weekly"
 //     "week_in_month" => null
 //     "delivery_day" => "Wednesday"

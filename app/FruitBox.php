@@ -20,7 +20,7 @@ class FruitBox extends Model
         //'route_id',
         'type',
         'previous_delivery',
-        'next_delivery',
+        'delivery_week',
         'frequency',
         'week_in_month',
         'delivery_day',

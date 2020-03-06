@@ -22,7 +22,7 @@ class CreateFruitBoxesTable extends Migration
             // $table->integer('route_id'); // not sure i need this, i'm certainly not using it currently!
             $table->string('type');
             $table->date('previous_delivery')->nullable();
-            $table->date('next_delivery');
+            $table->date('delivery_week');
             $table->string('frequency');
             $table->string('week_in_month')->nullable();
             $table->string('delivery_day');

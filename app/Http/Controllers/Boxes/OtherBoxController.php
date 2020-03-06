@@ -94,7 +94,7 @@ class OtherBoxController extends Controller
                 $new_otherbox->delivery_day = request('details.delivery_day');
                 $new_otherbox->frequency = request('details.frequency');
                 $new_otherbox->week_in_month = request('details.week_in_month');
-                $new_otherbox->next_delivery_week = request('details.next_delivery_week');
+                $new_otherbox->delivery_week = request('details.delivery_week');
                 // Now we get to the elements which we want to loop through.
                 $new_otherbox->product_id = $item['id'];
                 $new_otherbox->code = $item['code'];
@@ -124,7 +124,7 @@ class OtherBoxController extends Controller
             $new_otherbox->delivery_day = request('details.delivery_day');
             $new_otherbox->frequency = request('details.frequency');
             $new_otherbox->week_in_month = request('details.week_in_month');
-            $new_otherbox->next_delivery_week = request('details.next_delivery_week');
+            $new_otherbox->delivery_week = request('details.delivery_week');
             $new_otherbox->save();
         }
 
@@ -262,7 +262,7 @@ class OtherBoxController extends Controller
                             $otherbox_archive_entry->frequency = $otherbox_item->frequency;
                             $otherbox_archive_entry->week_in_month = $otherbox_item->week_in_month;
                             $otherbox_archive_entry->previous_delivery_week = $otherbox_item->previous_delivery_week;
-                            $otherbox_archive_entry->next_delivery_week = $otherbox_item->next_delivery_week;
+                            $otherbox_archive_entry->delivery_week = $otherbox_item->delivery_week;
                             // Product Information
                             $otherbox_archive_entry->product_id = $otherbox_item->product_id;
                             $otherbox_archive_entry->code = $otherbox_item->code;
@@ -297,7 +297,7 @@ class OtherBoxController extends Controller
                             $otherbox_archive_entry->frequency = $otherbox_item->frequency;
                             $otherbox_archive_entry->week_in_month = $otherbox_item->week_in_month;
                             $otherbox_archive_entry->previous_delivery_week = $otherbox_item->previous_delivery_week;
-                            $otherbox_archive_entry->next_delivery_week = $otherbox_item->next_delivery_week;
+                            $otherbox_archive_entry->delivery_week = $otherbox_item->delivery_week;
                             // Product Information
                             $otherbox_archive_entry->product_id = $otherbox_item->product_id;
                             $otherbox_archive_entry->code = $otherbox_item->code;
@@ -328,7 +328,7 @@ class OtherBoxController extends Controller
                 $frequency_recovered = $otherbox[0]->frequency;
                 $week_in_month_recovered = $otherbox[0]->week_in_month;
                 $previous_delivery_week_recovered = $otherbox[0]->previous_delivery_week;
-                $next_delivery_week_recovered = $otherbox[0]->next_delivery_week;
+                $delivery_week_recovered = $otherbox[0]->delivery_week;
                 
                 // Now we can loop through each entry and delete them
                 foreach ($otherbox as $other_item) {
@@ -354,7 +354,7 @@ class OtherBoxController extends Controller
                 $empty_otherbox->frequency = $frequency_recovered;
                 $empty_otherbox->week_in_month = $week_in_month_recovered;
                 $empty_otherbox->previous_delivery_week = $previous_delivery_week_recovered;
-                $empty_otherbox->next_delivery_week = $next_delivery_week_recovered;
+                $empty_otherbox->delivery_week = $delivery_week_recovered;
                 // Product Information
                 $empty_otherbox->product_id = 0;
                 $empty_otherbox->code = null;
@@ -403,7 +403,7 @@ class OtherBoxController extends Controller
                  'delivery_day' => request('otherbox_details.delivery_day'),
                  'frequency' => request('otherbox_details.frequency'),
                  'week_in_month' => request('otherbox_details.week_in_month'),
-                 'next_delivery_week' => request('otherbox_details.next_delivery_week'),
+                 'delivery_week' => request('otherbox_details.delivery_week'),
              ]);
          }
 
@@ -489,7 +489,7 @@ class OtherBoxController extends Controller
          $addProduct->frequency = request('otherbox_details.frequency');
          $addProduct->week_in_month = request('otherbox_details.week_in_month');
          $addProduct->previous_delivery_week = request('otherbox_details.previous_delivery_week');
-         $addProduct->next_delivery_week = request('otherbox_details.next_delivery_week');
+         $addProduct->delivery_week = request('otherbox_details.delivery_week');
          $addProduct->product_id = request('product.id');
          $addProduct->code = request('product.code');
          $addProduct->name = request('product.name');

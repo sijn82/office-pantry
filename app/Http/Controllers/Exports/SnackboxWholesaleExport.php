@@ -106,7 +106,7 @@ class SnackboxWholesaleSingleCompanyExportNew
         // Though for right now let's hard code it and get the rest of the logic in place.
        
         // Edit: This is now done, as you can see = I'm the best!
-        $snackboxes = SnackBox::where('delivered_by', $this->courier)->where('next_delivery_week', $this->week_start)
+        $snackboxes = SnackBox::where('delivered_by', $this->courier)->where('delivery_week', $this->week_start)
                                 ->where('product_id', '!=', 0)->where('type', '=', 'wholesale')->where('delivery_day', $this->day)->get();
         //dd($snackboxes);
         $snackboxesGroupedById = $snackboxes->groupBy('snackbox_id');

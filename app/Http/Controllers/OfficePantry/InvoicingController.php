@@ -69,34 +69,34 @@ class InvoicingController extends Controller
                                     ->whereIn('branding_theme', ['BACS', 'GoCardless', 'Paypal (Stripe)', 'Weekly Standing Order', 'Eden Branding Theme']) // <-- Still need to get confirmation on these!
                                     ->with([
                                             'fruitbox' => function ($query) {
-                                                $query->where('is_active', 'Active')->where('next_delivery', $this->week_start);
+                                                $query->where('is_active', 'Active')->where('delivery_week', $this->week_start);
                                             },
                                             'fruitbox_archive' => function ($query) {
-                                                $query->where('is_active', 'Active')->where('next_delivery', $this->week_start);
+                                                $query->where('is_active', 'Active')->where('delivery_week', $this->week_start);
                                             },
                                             'milkbox' => function ($query) {
-                                                $query->where('is_active', 'Active')->where('next_delivery', $this->week_start);
+                                                $query->where('is_active', 'Active')->where('delivery_week', $this->week_start);
                                             },
                                             'milkbox_archive' => function ($query) {
-                                                $query->where('is_active', 'Active')->where('next_delivery', $this->week_start);
+                                                $query->where('is_active', 'Active')->where('delivery_week', $this->week_start);
                                             },
                                             'snackboxes' => function ($query) {
-                                                $query->where('is_active', 'Active')->where('next_delivery_week', $this->week_start);
+                                                $query->where('is_active', 'Active')->where('delivery_week', $this->week_start);
                                             },
                                             'snackbox_archive' => function ($query) {
-                                                $query->where('is_active', 'Active')->where('next_delivery_week', $this->week_start);
+                                                $query->where('is_active', 'Active')->where('delivery_week', $this->week_start);
                                             },
                                             'drinkboxes' => function ($query) {
-                                                $query->where('is_active', 'Active')->where('next_delivery_week', $this->week_start);
+                                                $query->where('is_active', 'Active')->where('delivery_week', $this->week_start);
                                             },
                                             'drinkbox_archive' => function ($query) {
-                                                $query->where('is_active', 'Active')->where('next_delivery_week', $this->week_start);
+                                                $query->where('is_active', 'Active')->where('delivery_week', $this->week_start);
                                             },
                                             'otherboxes' => function ($query) {
-                                                $query->where('is_active', 'Active')->where('next_delivery_week', $this->week_start);
+                                                $query->where('is_active', 'Active')->where('delivery_week', $this->week_start);
                                             },
                                             'otherbox_archive' => function ($query) {
-                                                $query->where('is_active', 'Active')->where('next_delivery_week', $this->week_start);
+                                                $query->where('is_active', 'Active')->where('delivery_week', $this->week_start);
                                             }
                                     ])->get();
 
@@ -294,31 +294,31 @@ class InvoicingController extends Controller
 
         $companies = CompanyDetails::where('is_active', 'Active')->with([
             'fruitbox' => function ($query) {
-                $query->where('is_active', 'Active')->where('next_delivery', $this->week_start);
+                $query->where('is_active', 'Active')->where('delivery_week', $this->week_start);
             },
             // Now we need to check the fruitbox archives for any boxes that have been updated before invoicing,
             // their status will remain active as there is still work to be done with these box details.
             // If the status is inactive, this means the box was invoiced prior to being updated and is now only needed for our records.
             'fruitbox_archive' => function ($query) {
-                $query->where('is_active', 'Active')->where('next_delivery', $this->week_start);
+                $query->where('is_active', 'Active')->where('delivery_week', $this->week_start);
             },
             'milkbox' => function ($query) {
-                $query->where('is_active', 'Active')->where('next_delivery', $this->week_start);
+                $query->where('is_active', 'Active')->where('delivery_week', $this->week_start);
             },
             'milkbox_archive' => function ($query) {
-                $query->where('is_active', 'Active')->where('next_delivery', $this->week_start);
+                $query->where('is_active', 'Active')->where('delivery_week', $this->week_start);
             },
             // Milkbox archive check will go here...
             'snackboxes' => function ($query) {
-                $query->where('is_active', 'Active')->where('next_delivery_week', $this->week_start);
+                $query->where('is_active', 'Active')->where('delivery_week', $this->week_start);
             },
             // Snackbox archive will go here...
             'drinkboxes' => function ($query) {
-                $query->where('is_active', 'Active')->where('next_delivery_week', $this->week_start);
+                $query->where('is_active', 'Active')->where('delivery_week', $this->week_start);
             },
             // Drinkbox archive will go here...
             'otherboxes' => function ($query) {
-                $query->where('is_active', 'Active')->where('next_delivery_week', $this->week_start);
+                $query->where('is_active', 'Active')->where('delivery_week', $this->week_start);
             }
             // , and finally the otherbox archive check will go here.
             ])->get();

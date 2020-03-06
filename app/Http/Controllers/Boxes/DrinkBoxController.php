@@ -94,7 +94,7 @@ class DrinkBoxController extends Controller
                 $new_drinkbox->delivery_day = request('details.delivery_day');
                 $new_drinkbox->frequency = request('details.frequency');
                 $new_drinkbox->week_in_month = request('details.week_in_month');
-                $new_drinkbox->next_delivery_week = request('details.next_delivery_week');
+                $new_drinkbox->delivery_week = request('details.delivery_week');
                 // Now we get to the elements which we want to loop through.
                 $new_drinkbox->product_id = $item['id'];
                 $new_drinkbox->code = $item['code'];
@@ -120,7 +120,7 @@ class DrinkBoxController extends Controller
             $new_drinkbox->delivery_day = request('details.delivery_day');
             $new_drinkbox->frequency = request('details.frequency');
             $new_drinkbox->week_in_month = request('details.week_in_month');
-            $new_drinkbox->next_delivery_week = request('details.next_delivery_week');
+            $new_drinkbox->delivery_week = request('details.delivery_week');
             $new_drinkbox->save();
         }
         
@@ -261,7 +261,7 @@ class DrinkBoxController extends Controller
                             $drinkbox_archive_entry->frequency = $drinkbox_item->frequency;
                             $drinkbox_archive_entry->week_in_month = $drinkbox_item->week_in_month;
                             $drinkbox_archive_entry->previous_delivery_week = $drinkbox_item->previous_delivery_week;
-                            $drinkbox_archive_entry->next_delivery_week = $drinkbox_item->next_delivery_week;
+                            $drinkbox_archive_entry->delivery_week = $drinkbox_item->delivery_week;
                             // Product Information
                             $drinkbox_archive_entry->product_id = $drinkbox_item->product_id;
                             $drinkbox_archive_entry->code = $drinkbox_item->code;
@@ -296,7 +296,7 @@ class DrinkBoxController extends Controller
                             $drinkbox_archive_entry->frequency = $drinkbox_item->frequency;
                             $drinkbox_archive_entry->week_in_month = $drinkbox_item->week_in_month;
                             $drinkbox_archive_entry->previous_delivery_week = $drinkbox_item->previous_delivery_week;
-                            $drinkbox_archive_entry->next_delivery_week = $drinkbox_item->next_delivery_week;
+                            $drinkbox_archive_entry->delivery_week = $drinkbox_item->delivery_week;
                             // Product Information
                             $drinkbox_archive_entry->product_id = $drinkbox_item->product_id;
                             $drinkbox_archive_entry->code = $drinkbox_item->code;
@@ -327,7 +327,7 @@ class DrinkBoxController extends Controller
                 $frequency_recovered = $drinkbox[0]->frequency;
                 $week_in_month_recovered = $drinkbox[0]->week_in_month;
                 $previous_delivery_week_recovered = $drinkbox[0]->previous_delivery_week;
-                $next_delivery_week_recovered = $drinkbox[0]->next_delivery_week;
+                $delivery_week_recovered = $drinkbox[0]->delivery_week;
                 
                 // Now we can loop through each entry and delete them
                 foreach ($drinkbox as $drink_item) {
@@ -353,7 +353,7 @@ class DrinkBoxController extends Controller
                 $empty_drinkbox->frequency = $frequency_recovered;
                 $empty_drinkbox->week_in_month = $week_in_month_recovered;
                 $empty_drinkbox->previous_delivery_week = $previous_delivery_week_recovered;
-                $empty_drinkbox->next_delivery_week = $next_delivery_week_recovered;
+                $empty_drinkbox->delivery_week = $delivery_week_recovered;
                 // Product Information
                 $empty_drinkbox->product_id = 0;
                 $empty_drinkbox->code = null;
@@ -399,7 +399,7 @@ class DrinkBoxController extends Controller
                  'delivery_day' => request('drinkbox_details.delivery_day'),
                  'frequency' => request('drinkbox_details.frequency'),
                  'week_in_month' => request('drinkbox_details.week_in_month'),
-                 'next_delivery_week' => request('drinkbox_details.next_delivery_week'),
+                 'delivery_week' => request('drinkbox_details.delivery_week'),
              ]);
          }
          
@@ -485,7 +485,7 @@ class DrinkBoxController extends Controller
          $addProduct->frequency = request('drinkbox_details.frequency');
          $addProduct->week_in_month = request('drinkbox_details.week_in_month');
          $addProduct->previous_delivery_week = request('drinkbox_details.previous_delivery_week');
-         $addProduct->next_delivery_week = request('drinkbox_details.next_delivery_week');
+         $addProduct->delivery_week = request('drinkbox_details.delivery_week');
          $addProduct->product_id = request('product.id');
          $addProduct->code = request('product.code');
          $addProduct->name = request('product.name');

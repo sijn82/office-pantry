@@ -287,8 +287,8 @@ class FruitPartnerController extends Controller
             $orders = new \stdClass;
 
             // These are all the boxes due for delivery this week.
-            $fruitboxes = $fruitpartner->fruitbox->where('next_delivery', $week_start->current)->where('is_active', 'Active');
-            $milkboxes = $fruitpartner->milkbox->where('next_delivery', $week_start->current)->where('is_active', 'Active');
+            $fruitboxes = $fruitpartner->fruitbox->where('delivery_week', $week_start->current)->where('is_active', 'Active');
+            $milkboxes = $fruitpartner->milkbox->where('delivery_week', $week_start->current)->where('is_active', 'Active');
 
             //---------- Archive Checks ----------//
 
@@ -299,12 +299,12 @@ class FruitPartnerController extends Controller
             // Quick check that this returns something before making the request more specific, 'cause otherwise there be errors.
             if ($fruitpartner->fruitbox_archive) {
                 // These are the archived boxes, although I'm not sure how relevant they'll be as this function is run (weekly?) before orders have been delivered.
-                $archived_fruitboxes = $fruitpartner->fruitbox_archive->where('next_delivery', $week_start->current)->where('is_active', 'Active');
+                $archived_fruitboxes = $fruitpartner->fruitbox_archive->where('delivery_week', $week_start->current)->where('is_active', 'Active');
             }
             // Quick check that this returns something before making the request more specific, 'cause otherwise there be errors.
             if ($fruitpartner->milkbox_archive) {
                 // Still not sure we'll actually be using them but all the more reason to make sure they don't throw errors.
-                $archived_milkboxes = $fruitpartner->milkbox_archive->where('next_delivery', $week_start->current)->where('is_active', 'Active');
+                $archived_milkboxes = $fruitpartner->milkbox_archive->where('delivery_week', $week_start->current)->where('is_active', 'Active');
             }
 
             //---------- End of Archive Checks ----------//

@@ -2,7 +2,7 @@
     <div>
         <div id="edit-save-buttons">
             <h4> {{ otherbox[0].otherbox_id }} </h4>
-            <h5> {{ otherbox[0].next_delivery_week }} </h5>
+            <h5> {{ otherbox[0].delivery_week }} </h5>
             <p> {{ otherbox[0].delivery_day }} - {{ otherbox[0].is_active }} </p>
             <b-button variant="primary" @click="showDetails()"> Details </b-button>
             <b-button variant="warning" @click="enableEdit()"> Edit </b-button>
@@ -93,10 +93,10 @@
                 <b-col>
                     <label><b> Next Delivery Week </b></label>
                     <div v-if="editing">
-                        <b-form-input v-model="otherbox[0].next_delivery_week" type="date"></b-form-input>
+                        <b-form-input v-model="otherbox[0].delivery_week" type="date"></b-form-input>
                     </div>
                     <div v-else>
-                        <p> {{ otherbox[0].next_delivery_week }} </p>
+                        <p> {{ otherbox[0].delivery_week }} </p>
                     </div>
                 </b-col>
             </b-row>

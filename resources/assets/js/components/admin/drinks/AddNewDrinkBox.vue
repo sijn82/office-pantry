@@ -28,7 +28,7 @@
                     </b-col>
                     <b-col>
                         <label> Next Delivery Week Start </label>
-                        <b-form-input type="date" v-model="next_delivery_week" size="sm"></b-form-input>
+                        <b-form-input type="date" v-model="delivery_week" size="sm"></b-form-input>
                     </b-col>
                     <b-col>
                         <label> Delivered By </label>
@@ -146,7 +146,7 @@
                 week_in_month: null,
                 week_in_month_options: ['First', 'Second', 'Third', 'Fourth', 'Last'],
                 no_of_boxes: 0,
-                next_delivery_week: null,
+                delivery_week: null,
                 selected_company: 'none selected',
             }
         },
@@ -183,7 +183,7 @@
                         delivery_day: this.delivery_day,
                         frequency: this.frequency,
                         week_in_month: this.week_in_month,
-                        next_delivery_week: this.next_delivery_week
+                        delivery_week: this.delivery_week
                     },
                     order: this.$store.state.drinkbox,
                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},

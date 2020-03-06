@@ -67,7 +67,7 @@ class OfficeDashboardController extends Controller
 
         //---------- Fruitboxes ----------//
 
-        $fruitboxes = $company->fruitbox()->where('next_delivery', '>=', $this->week_start)->get();
+        $fruitboxes = $company->fruitbox()->where('delivery_week', '>=', $this->week_start)->get();
 
         foreach ($fruitboxes as $fruitbox) {
 
@@ -109,12 +109,12 @@ class OfficeDashboardController extends Controller
 
         //---------- Snackboxes (New Approach) ----------//
 
-        $snackboxes = $company->snackboxes->where('next_delivery_week', '>=', $this->week_start);
+        $snackboxes = $company->snackboxes->where('delivery_week', '>=', $this->week_start);
      
         foreach ($snackboxes as $snackbox) {
             // Load relationship info, making box_items available.
             $snackbox->load(['box_items' => function ($query) use ($snackbox) {
-                    $query->where('delivery_date', $snackbox->next_delivery_week);
+                    $query->where('delivery_date', $snackbox->delivery_week);
             }]);
 
             foreach ($snackbox->box_items as $box_item) {
@@ -127,12 +127,12 @@ class OfficeDashboardController extends Controller
 
         //---------- Drinkboxes (New Approach) ----------//
 
-        $drinkboxes = $company->drinkboxes->where('next_delivery_week', '>=', $this->week_start);
+        $drinkboxes = $company->drinkboxes->where('delivery_week', '>=', $this->week_start);
      
         foreach ($drinkboxes as $drinkbox) {
             // Load relationship info, making box_items available.
             $drinkbox->load(['box_items' => function ($query) use ($drinkbox) {
-                    $query->where('delivery_date', $drinkbox->next_delivery_week);
+                    $query->where('delivery_date', $drinkbox->delivery_week);
             }]);
 
             foreach ($drinkbox->box_items as $box_item) {
@@ -143,12 +143,12 @@ class OfficeDashboardController extends Controller
 
         //---------- Otherboxes (New Approach) ----------//
 
-        $otherboxes = $company->otherboxes->where('next_delivery_week', '>=', $this->week_start);
+        $otherboxes = $company->otherboxes->where('delivery_week', '>=', $this->week_start);
      
         foreach ($otherboxes as $otherbox) {
             // Load relationship info, making box_items available.
             $otherbox->load(['box_items' => function ($query) use ($otherbox) {
-                    $query->where('delivery_date', $otherbox->next_delivery_week);
+                    $query->where('delivery_date', $otherbox->delivery_week);
             }]);
 
             foreach ($otherbox->box_items as $box_item) {
@@ -173,32 +173,32 @@ class OfficeDashboardController extends Controller
 
         // Edit - 02/03/2020
         // $archived_fruitboxes = $company->fruitbox_archive()->where('is_active', 'Active')->get();
-        $archived_fruitboxes = $company->fruitbox()->where('next_delivery', '<',  $this->week_start)->where('invoiced_at', null)->get();
+        $archived_fruitboxes = $company->fruitbox()->where('delivery_date', '<',  $this->week_start)->where('invoiced_at', null)->get();
 
         foreach ($archived_fruitboxes as $archived_fruitbox) {
             $archived_fruitbox->load('fruit_partner')->get();
         }
 
-        $order_by_delivery_week_archived_fruitboxes = $archived_fruitboxes->sortBy('next_delivery');
+        $order_by_delivery_week_archived_fruitboxes = $archived_fruitboxes->sortBy('delivery_date');
 
         //---------- Archived Milkboxes ----------//
 
-        $archived_milkboxes = $company->milkbox()->where('next_delivery', '<',  $this->week_start)->where('invoiced_at', null)->get();
+        $archived_milkboxes = $company->milkbox()->where('delivery_date', '<',  $this->week_start)->where('invoiced_at', null)->get();
 
         foreach ($archived_milkboxes as $archived_milkbox) {
             $archived_milkbox->load('fruit_partner')->get();
         }
 
-        $order_by_delivery_week_archived_milkboxes = $archived_milkboxes->sortBy('next_delivery');
+        $order_by_delivery_week_archived_milkboxes = $archived_milkboxes->sortBy('delivery_date');
 
         //---------- Archived Snackboxes (New Approach) ----------//
 
-        $archived_snackboxes = $company->snackboxes->where('next_delivery_week', '<', $this->week_start)->where('invoiced_at', null);
+        $archived_snackboxes = $company->snackboxes->where('delivery_week', '<', $this->week_start)->where('invoiced_at', null);
      
         foreach ($archived_snackboxes as $archived_snackbox) {
             // Load relationship info, making box_items available.
             $archived_snackbox->load(['box_items' => function ($query) use ($archived_snackbox) {
-                    $query->where('delivery_date', $archived_snackbox->next_delivery_week);
+                    $query->where('delivery_date', $archived_snackbox->delivery_week);
             }]);
 
             foreach ($archived_snackbox->box_items as $box_item) {
@@ -209,12 +209,12 @@ class OfficeDashboardController extends Controller
 
         //---------- Archived Drinkboxes ----------//
 
-        $archived_drinkboxes = $company->drinkboxes->where('next_delivery_week', '<', $this->week_start)->where('invoiced_at', null);
+        $archived_drinkboxes = $company->drinkboxes->where('delivery_week', '<', $this->week_start)->where('invoiced_at', null);
      
         foreach ($archived_drinkboxes as $archived_drinkbox) {
             // Load relationship info, making box_items available.
             $archived_drinkbox->load(['box_items' => function ($query) use ($archived_drinkbox) {
-                    $query->where('delivery_date', $archived_drinkbox->next_delivery_week);
+                    $query->where('delivery_date', $archived_drinkbox->delivery_week);
             }]);
 
             foreach ($archived_snackbox->box_items as $box_item) {
@@ -225,12 +225,12 @@ class OfficeDashboardController extends Controller
 
         //---------- Archived Otherboxes ----------//
 
-        $archived_otherboxes = $company->otherboxes->where('next_delivery_week', '<', $this->week_start)->where('invoiced_at', null);
+        $archived_otherboxes = $company->otherboxes->where('delivery_week', '<', $this->week_start)->where('invoiced_at', null);
      
         foreach ($archived_otherboxes as $archived_otherbox) {
             // Load relationship info, making box_items available.
             $archived_otherbox->load(['box_items' => function ($query) use ($archived_otherbox) {
-                    $query->where('delivery_date', $archived_otherbox->next_delivery_week);
+                    $query->where('delivery_date', $archived_otherbox->delivery_week);
             }]);
 
             foreach ($archived_snackbox->box_items as $box_item) {

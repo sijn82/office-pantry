@@ -46,7 +46,7 @@ class FruitBoxController extends Controller
 
     public function addRouteInfoToFruitPicklists()
     {
-        $fruitboxes = FruitBox::where('is_active', 'Active')->where('next_delivery', $this->week_start)->get();
+        $fruitboxes = FruitBox::where('is_active', 'Active')->where('delivery_week', $this->week_start)->get();
 
         $alphabetise = function($a, $b)
         {
@@ -135,7 +135,7 @@ class FruitBoxController extends Controller
         //     'fruit_partner_id' => 'required',
         //     'name' => 'required',
         //     'type' => 'required',
-        //     'next_delivery' => 'required',
+        //     'delivery_week' => 'required',
         //     'frequency' => 'required',
         //     'delivery_day' => 'required',
         //     'fruitbox_total' => 'required',
@@ -174,7 +174,7 @@ class FruitBoxController extends Controller
                 $newFruitbox->name = request('name');
                 $newFruitbox->company_details_id = request('company_details_id');
                 $newFruitbox->type = request('type');
-                $newFruitbox->next_delivery = request('first_delivery');
+                $newFruitbox->delivery_week = request('first_delivery');
                 $newFruitbox->frequency = request('frequency');
                 $newFruitbox->week_in_month = request('week_in_month');
                 $newFruitbox->delivery_day = $delivery_day;
@@ -276,8 +276,8 @@ class FruitBoxController extends Controller
             // HOWEVER, this also requires the updated box to be advanced to the next delivery date, SO THAT IT ISN'T INVOICED TWICE!!
 
         // If it passes this check below, the previous box has been paid for and just needs to be archived with a deactived status.
-        // There's also a good chance the next_delivery_date has since been advanced,
-        // do we want to want to save the archive with the old next_delivery_date? If so we'll need to grab it from the db before updating the stored values.
+        // There's also a good chance the delivery_week has since been advanced,
+        // do we want to want to save the archive with the old delivery_week? If so we'll need to grab it from the db before updating the stored values.
 
         //----- If I'm not comparing dates, do I need to worry about any of this? Worth checking... -----//
 
@@ -323,7 +323,7 @@ class FruitBoxController extends Controller
                 FruitBoxArchive::updateOrInsert(
                     [ // Check the values contained in this array for a matching record.  If we find it, update the record, otherwise add a new entry.
                         'fruitbox_id' => $existing_fruitbox_entry->id,
-                        'next_delivery' => $existing_fruitbox_entry->next_delivery
+                        'delivery_week' => $existing_fruitbox_entry->delivery_week
                     ],
                     [
                         'is_active' => 'Inactive',
@@ -381,7 +381,7 @@ class FruitBoxController extends Controller
                 FruitBoxArchive::updateOrInsert(
                     [ // Check the values contained in this array for a matching record.  If we find it, update the record, otherwise add a new entry.
                         'fruitbox_id' => $existing_fruitbox_entry->id,
-                        'next_delivery' => $existing_fruitbox_entry->next_delivery
+                        'delivery_week' => $existing_fruitbox_entry->delivery_week
                     ],
                     [
                         'is_active' => 'Active',
@@ -449,7 +449,7 @@ class FruitBoxController extends Controller
            'name' => request('name'),
            // 'company_details_id' => request('company_details_id'),
            'type' => request('type'),
-           'next_delivery' => request('next_delivery'),
+           'delivery_week' => request('delivery_week'),
            'delivery_day' => request('delivery_day'),
            'frequency' => request('frequency'),
            'week_in_month' => request('week_in_month'),
@@ -492,7 +492,7 @@ class FruitBoxController extends Controller
                 'company_details_id',
                 'type',
                 'previous_delivery',
-                'next_delivery',
+                'delivery_week',
                 'frequency',
                 'week_in_month',
                 'tailoring_fee',

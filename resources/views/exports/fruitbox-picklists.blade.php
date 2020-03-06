@@ -96,7 +96,7 @@
         @endphp
             
         <tr>
-            <td>{{ $picklist->next_delivery }}</td>
+            <td>{{ $picklist->delivery_week }}</td>
             <td>{{ $picklist->name }}</td>
             <td>{{ $picklist->fruit_crates }}</td>
             <td>{{ $picklist->fruitbox_total }}</td>

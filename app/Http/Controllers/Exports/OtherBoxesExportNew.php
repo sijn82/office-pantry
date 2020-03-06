@@ -98,7 +98,7 @@ WithEvents
         //$currentWeekStart = Weekstart::findOrFail(1);
         
         // Other than a valid week start, all we need to know is what day we're processing and that the orders are 'Active'.
-        $otherboxes = OtherBox::where('is_active', 'Active')->where('next_delivery_week', $this->week_start)->where('delivery_day', $this->day)->get();
+        $otherboxes = OtherBox::where('is_active', 'Active')->where('delivery_week', $this->week_start)->where('delivery_day', $this->day)->get();
         
         foreach ($otherboxes as $otherbox_items) {
         

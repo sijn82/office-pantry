@@ -32,7 +32,7 @@ class CreateSnackBoxesTable extends Migration
             $table->string('frequency');
             $table->string('week_in_month')->nullable();
             $table->string('previous_delivery_week')->nullable(); // Do I really want to keep this field now all the boxes will remain in the snackbox table?
-            $table->string('next_delivery_week');
+            $table->string('delivery_week');
             // Product Information
             // $table->integer('product_id')->default(0);
             // $table->string('code')->nullable();

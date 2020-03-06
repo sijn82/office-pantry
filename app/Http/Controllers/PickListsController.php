@@ -94,7 +94,7 @@ class PickListsController extends Controller
     
     // public function fruitboxPicklists()
     // {
-    //     $picklists = FruitBox::where('next_delivery', $this->week_start)->where('is_active', 'Active')->get();
+    //     $picklists = FruitBox::where('delivery_week', $this->week_start)->where('is_active', 'Active')->get();
     // 
     //     dd($picklists);
     // }

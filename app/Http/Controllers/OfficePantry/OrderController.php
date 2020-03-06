@@ -33,6 +33,13 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
+
+        public function __construct()
+        {
+            $weekstart = WeekStart::first();
+            $this->weekstart = $weekstart->current;
+        }
+
     /**
      * Display a listing of the resource.
      *
@@ -97,6 +104,257 @@ class OrderController extends Controller
             'next_run' => $edited_next_run_date,
         ]);
     }
+
+
+    public function createNextDeliveryDate($box)
+    {
+        // Add the old delivery_week to the last_delivery_week field.
+        $lastDelivery = $box->delivery_week;
+
+        // this is the only line of code which will differ depending on when the frequency selected
+        if ($box->frequency === 'Weekly') {
+            // Push the date forward a week
+            $box->delivery_week = Carbon::parse($box->delivery_week)->addWeek(1);
+
+        } elseif ($box->frequency === 'Fortnightly') {
+            // push the date forward two weeks
+            $box->delivery_week = Carbon::parse($box->delivery_week)->addWeek(2);
+
+        } elseif ($box->frequency === 'Monthly') {
+
+            // This will hold either the value first, second, third, fourth or last.
+            $week = $box->week_in_month;
+
+            // This will check the month of the last delivery and then advance by one month,
+            // before saving that month as a string to be parsed later in $mondayOfMonth variable.
+            $month = Carbon::parse($box->delivery_week)->addMonthNoOverflow()->englishMonth;
+
+            // Create new instance of Carbon to use as the primer for $carbon::parse() below.
+            $carbon = new Carbon;
+            // An alternative to setting the month above and parsing below would be to parse the phrase '$week . ' monday of NEXT month'
+            // and allow it use the carbon date of when the function is run however I'm currently prefering this approach
+            // as it weighs more heavily on the last delivery date rather than when processes are run.
+            $mondayOfMonth = $carbon::parse($week . ' monday of ' . $month);
+
+            if ($lastDelivery > $mondayOfMonth) {
+                //dd('Happy New Year');
+                // This only happens when we advance the month from december to january.
+                // The parse doesn't know to advance the year so we actually go back in time.
+                // To tackle this issue, we add a year to the delivery_week date
+                // THERE MUST BE A BETTER WAY TO DO THIS BUT MEH, OTHER THINGS TO DO.
+                $year = Carbon::parse($box->delivery_week)->addYearNoOverflow()->year;
+                // Then recalculate the parsed date to use the new year calendar and not the previous!
+                $mondayOfMonth = $carbon::parse($week . ' monday of ' . $month . ' ' . $year);
+            }
+
+            // Set the newly parsed delivery date.
+            $box->delivery_week = $mondayOfMonth;
+
+        } else {
+            // Nothing should get here as the frequency is a drop down (selection) of options, and we specifically grabbed only weekly, fortnightly, and monthly orders
+        }
+
+    }
+
+    // So the new backend means a new approach to order advancement.  Lets see how this goes.  
+    public function newFangledOrderAdvancement()
+    {
+        // As we're not reusing the same box each week anymore, we no longer need to worry about archives 
+        // but we do need to worry about making unnecessary/unwanted boxes by creating a fresh entry for every box each week.
+
+        // To tackle this we're only interested in the boxes dated for this weekstart. 
+        // Any set in the future can wait until we're processing that week.
+        // Conversely, any set in the past are to be considered archive entries.
+
+        // We can ignore any boxes with a 'Paused' or 'Inactive' status.
+        // We can also ignore any boxes where the frequency isn't weekly, fortnightly or monthly, i.e bespoke.
+        // Active boxes need recreating with a new delivery date, based on the previous delivery and the associated frequency of that fruitbox.
+
+        //----- FruitBoxes -----//
+
+        $active_fruitboxes = FruitBox::where('delivery_week', $this->weekstart)->where('is_active', 'Active')->whereIn('frequency', ['Weekly', 'Fortnightly', 'Monthly'])->get();
+
+        foreach ($active_fruitboxes as $fruitbox) {
+
+            $previous_delivery_week = $fruitbox->delivery_week;
+            // Now we have a function to update the next delivery_week value for any fruit, milk, snack, drink, or other box.  
+            $this->createNextDeliveryDate($fruitbox);
+            // dd($previous_delivery_week . ' updated to ' . $fruitbox->delivery_week->format('Y-m-d'));
+
+            // $fruitbox->delivery_week now holds the new delivery_date so we can go ahead and create the new FruitBox entry.
+
+            $new_fruitbox = new FruitBox();
+            $new_fruitbox->is_active = 'Active'; // Currently hard coded but this is also the default.
+            $new_fruitbox->fruit_partner_id = $fruitbox->fruit_partner_id;
+            $new_fruitbox->name = $fruitbox->name;
+            $new_fruitbox->company_details_id = $fruitbox->company_details_id;
+            $new_fruitbox->type = $fruitbox->type;
+            $new_fruitbox->previous_delivery = $previous_delivery_week; // Previous delivery date. If a box gets paused this will allow us to see for how long that has been the case.
+            $new_fruitbox->delivery_week =  $fruitbox->delivery_week; // New delivery date created by passing the $fruitbox through createNextDeliveryDate().
+            $new_fruitbox->frequency = $fruitbox->frequency;
+            $new_fruitbox->week_in_month = $fruitbox->week_in_month;
+            $new_fruitbox->delivery_day = $fruitbox->delivery_day;
+            $new_fruitbox->fruitbox_total = $fruitbox->fruitbox_total;
+            $new_fruitbox->deliciously_red_apples = $fruitbox->deliciously_red_apples;
+            $new_fruitbox->pink_lady_apples = $fruitbox->pink_lady_apples;
+            $new_fruitbox->red_apples = $fruitbox->red_apples;
+            $new_fruitbox->green_apples = $fruitbox->green_apples;
+            $new_fruitbox->satsumas = $fruitbox->satsumas;
+            $new_fruitbox->pears = $fruitbox->pears;
+            $new_fruitbox->bananas = $fruitbox->bananas;
+            $new_fruitbox->nectarines = $fruitbox->nectarines;
+            $new_fruitbox->limes = $fruitbox->limes;
+            $new_fruitbox->lemons = $fruitbox->lemons;
+            $new_fruitbox->grapes = $fruitbox->grapes;
+            $new_fruitbox->seasonal_berries = $fruitbox->seasonal_berries;
+            $new_fruitbox->oranges = $fruitbox->oranges;
+            $new_fruitbox->cucumbers = $fruitbox->cucumbers;
+            $new_fruitbox->mint = $fruitbox->mint;
+            $new_fruitbox->organic_lemons = $fruitbox->organic_lemons;
+            $new_fruitbox->kiwis = $fruitbox->kiwis;
+            $new_fruitbox->grapefruits = $fruitbox->grapefruits;
+            $new_fruitbox->avocados = $fruitbox->avocados;
+            $new_fruitbox->root_ginger = $fruitbox->root_ginger;
+            $new_fruitbox->tailoring_fee = $fruitbox->tailoring_fee;
+            $new_fruitbox->discount_multiple = $fruitbox->discount_multiple;
+            $new_fruitbox->save();
+        }
+
+        //----- Milkboxes -----//
+
+        $active_milkboxes = MilkBox::where('delivery_week', $this->weekstart)->where('is_active', 'Active')->whereIn('frequency', ['Weekly', 'Fortnightly', 'Monthly'])->get();
+
+        foreach ($active_milkboxes as $milkbox) {
+
+            $previous_delivery_week = $milkbox->delivery_week;
+
+            $this->createNextDeliveryDate($milkbox);
+
+            $new_milkbox = new MilkBox();
+            $new_milkbox->is_active = $milkbox->is_active;
+            $new_milkbox->name = $milkbox->name;
+            $new_milkbox->fruit_partner_id = $milkbox->fruit_partner_id;
+            $new_milkbox->company_details_id = $milkbox->company_details_id;
+            $new_milkbox->previous_delivery = $previous_delivery_week;
+            $new_milkbox->delivery_week = $milkbox->delivery_week;
+            $new_milkbox->frequency = $milkbox->frequency;
+            $new_milkbox->week_in_month = $milkbox->week_in_month;
+            $new_milkbox->delivery_day = $milkbox->delivery_day;
+            // Regular 2l
+            $new_milkbox->semi_skimmed_2l = $milkbox->semi_skimmed_2l;
+            $new_milkbox->skimmed_2l = $milkbox->skimmed_2l;
+            $new_milkbox->whole_2l = $milkbox->whole_2l;
+            // Regular 1l
+            $new_milkbox->semi_skimmed_1l = $milkbox->semi_skimmed_1l;
+            $new_milkbox->skimmed_1l = $milkbox->skimmed_1l;
+            $new_milkbox->whole_1l = $milkbox->whole_1l;
+            // Organic 1l
+            $new_milkbox->organic_semi_skimmed_1l = $milkbox->organic_semi_skimmed_1l;
+            $new_milkbox->organic_skimmed_1l = $milkbox->organic_skimmed_1l;
+            $new_milkbox->organic_whole_1l = $milkbox->organic_whole_1l;
+            // Organic 2l
+            $new_milkbox->organic_semi_skimmed_2l = $milkbox->organic_semi_skimmed_2l;
+            $new_milkbox->organic_skimmed_2l = $milkbox->organic_skimmed_2l;
+            $new_milkbox->organic_whole_2l = $milkbox->organic_whole_2l;
+            // Alternative 1l options
+            $new_milkbox->milk_1l_alt_coconut = $milkbox->milk_1l_alt_coconut;
+            $new_milkbox->milk_1l_alt_unsweetened_almond = $milkbox->milk_1l_alt_unsweetened_almond;
+            $new_milkbox->milk_1l_alt_almond = $milkbox->milk_1l_alt_almond;
+            // Alt pt2
+            $new_milkbox->milk_1l_alt_unsweetened_soya = $milkbox->milk_1l_alt_unsweetened_soya;
+            $new_milkbox->milk_1l_alt_soya = $milkbox->milk_1l_alt_soya;
+            $new_milkbox->milk_1l_alt_oat = $milkbox->milk_1l_alt_oat;
+            // Alt pt3
+            $new_milkbox->milk_1l_alt_rice = $milkbox->milk_1l_alt_rice;
+            $new_milkbox->milk_1l_alt_cashew = $milkbox->milk_1l_alt_cashew;
+            $new_milkbox->milk_1l_alt_lactose_free_semi = $milkbox->milk_1l_alt_lactose_free_semi;
+            // Alt pt4 (new 09/01/20)
+            $new_milkbox->milk_1l_alt_hazelnut = $milkbox->milk_1l_alt_hazelnut;
+            $new_milkbox->milk_1l_alt_soya_chocolate = $milkbox->milk_1l_alt_soya_chocolate;
+            $new_milkbox->save();     
+        }
+
+        // Snackboxes
+
+        $active_snackboxes = SnackBox::where('delivery_week', $this->weekstart)->where('is_active', 'Active')->whereIn('frequency', ['Weekly', 'Fortnightly', 'Monthly'])->get();
+
+        foreach ($active_snackboxes as $snackbox) {
+
+            $previous_delivery_week = $snackbox->delivery_week;
+  
+            $this->createNextDeliveryDate($snackbox);
+
+            $new_snackbox = new SnackBox();
+            $new_snackbox->is_active = 'Active';
+            $new_snackbox->name = $snackbox->name;
+            $new_snackbox->delivered_by = $snackbox->delivered_by; // Maybe this should be uniform too - is it supplier id, fruit_partner_id or delivered_by?  Choose and stick with it!
+            $new_snackbox->no_of_boxes = $snackbox->no_of_boxes;
+            $new_snackbox->snack_cap = $snackbox->snack_cap; // Is this staying or going, if going we need to have the set box prices entered and pulled into invoicing.  A price id attached to the box would make life easier.
+            $new_snackbox->type = $snackbox->type;
+            $new_snackbox->company_details_id = $snackbox->company_details_id;
+            $new_snackbox->delivery_day = $snackbox->delivery_day;
+            $new_snackbox->frequency = $snackbox->frequency;
+            $new_snackbox->week_in_month = $snackbox->week_in_month;
+            $new_snackbox->previous_delivery_week = $previous_delivery_week;
+            $new_snackbox->delivery_week = $snackbox->delivery_week;
+            $new_snackbox->save();
+        }
+        // Drinkboxes
+
+        $active_drinkboxes = DrinkBox::where('delivery_week', $this->weekstart)->where('is_active', 'Active')->whereIn('frequency', ['Weekly', 'Fortnightly', 'Monthly'])->get();
+
+        foreach ($active_drinkboxes as $drinkbox) {
+
+            $previous_delivery_week = $drinkbox->delivery_week;
+  
+            $this->createNextDeliveryDate($drinkbox);
+
+            $new_drinkbox = new DrinkBox();
+            $new_drinkbox->is_active = 'Active';
+            $new_drinkbox->name = $drinkbox->name;
+            $new_drinkbox->delivered_by = $drinkbox->delivered_by;
+            $new_drinkbox->type = $drinkbox->type;
+            $new_drinkbox->company_details_id = $drinkbox->company_details_id;
+            $new_drinkbox->delivery_day = $drinkbox->delivery_day;
+            $new_drinkbox->frequency = $drinkbox->frequency;
+            $new_drinkbox->week_in_month = $drinkbox->week_in_month;
+            $new_drinkbox->previous_delivery_week = $previous_delivery_week;
+            $new_drinkbox->delivery_week = $drinkbox->delivery_week;
+            $new_drinkbox->save();
+        }
+
+
+        // Otherboxes
+
+        $active_otherboxes = OtherBox::where('delivery_week', $this->weekstart)->where('is_active', 'Active')->whereIn('frequency', ['Weekly', 'Fortnightly', 'Monthly'])->get();
+
+        foreach ($active_otherboxes as $otherbox) {
+
+            $previous_delivery_week = $otherbox->delivery_week;
+  
+            $this->createNextDeliveryDate($otherbox);
+
+            $new_otherbox = new OtherBox();
+            $new_otherbox->is_active = 'Active';
+            $new_otherbox->name = $otherbox->name;
+            $new_otherbox->delivered_by = $otherbox->delivered_by;
+            $new_otherbox->type = $otherbox->type;
+            $new_otherbox->company_details_id = $otherbox->company_details_id;
+            $new_otherbox->delivery_day = $otherbox->delivery_day;
+            $new_otherbox->frequency = $otherbox->frequency;
+            $new_otherbox->week_in_month = $otherbox->week_in_month;
+            $new_otherbox->previous_delivery_week = $previous_delivery_week;
+            $new_otherbox->delivery_week = $otherbox->delivery_week;
+            $new_otherbox->save();
+        }
+    }
+
+
+
+
+
+
+
 
     // THIS IS A TEMPORARY SHORTCUT TO THE ORDER ADVANCEMENT FUNCTION
     // - SOME CHANGES MADE TO THIS NEED TO BE APPLIED TO THE FULL FUNCTION BUT I'M STILL TESTING HOW IT HANDLES THE SWITCH ONTO THE NEW YEAR BEFORE IMPLEMENTING THE REWORK.
