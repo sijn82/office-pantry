@@ -114,7 +114,7 @@ return [
             'charset' => 'utf8',
             'prefix' => '',
             'schema' => 'public',
-            'sslmode' => 'prefer',
+            'sslmode' => 'prefer', 
         ],
         
         'pgsql_production' => [

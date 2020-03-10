@@ -189,7 +189,7 @@ class OrderController extends Controller
             $new_fruitbox->name = $fruitbox->name;
             $new_fruitbox->company_details_id = $fruitbox->company_details_id;
             $new_fruitbox->type = $fruitbox->type;
-            $new_fruitbox->previous_delivery = $previous_delivery_week; // Previous delivery date. If a box gets paused this will allow us to see for how long that has been the case.
+            $new_fruitbox->previous_delivery_week = $previous_delivery_week; // Previous delivery date. If a box gets paused this will allow us to see for how long that has been the case.
             $new_fruitbox->delivery_week =  $fruitbox->delivery_week; // New delivery date created by passing the $fruitbox through createNextDeliveryDate().
             $new_fruitbox->frequency = $fruitbox->frequency;
             $new_fruitbox->week_in_month = $fruitbox->week_in_month;
@@ -235,7 +235,7 @@ class OrderController extends Controller
             $new_milkbox->name = $milkbox->name;
             $new_milkbox->fruit_partner_id = $milkbox->fruit_partner_id;
             $new_milkbox->company_details_id = $milkbox->company_details_id;
-            $new_milkbox->previous_delivery = $previous_delivery_week;
+            $new_milkbox->previous_delivery_week = $previous_delivery_week;
             $new_milkbox->delivery_week = $milkbox->delivery_week;
             $new_milkbox->frequency = $milkbox->frequency;
             $new_milkbox->week_in_month = $milkbox->week_in_month;

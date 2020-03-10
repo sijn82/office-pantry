@@ -19,7 +19,7 @@ class FruitBox extends Model
         'company_details_id',
         //'route_id',
         'type',
-        'previous_delivery',
+        'previous_delivery_week',
         'delivery_week',
         'frequency',
         'week_in_month',

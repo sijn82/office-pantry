@@ -17,7 +17,7 @@ class MilkBox extends Model
         'name', // new 09/01/20
         'fruit_partner_id',
         'company_details_id',
-        'previous_delivery',
+        'previous_delivery_week',
         'delivery_week',
         'frequency',
         'week_in_month',

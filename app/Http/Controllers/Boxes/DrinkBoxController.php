@@ -217,6 +217,7 @@ class DrinkBoxController extends Controller
         //
     }
     
+    // We don't need this function anymore either.
     public function archiveAndEmptyDrinkBoxes () 
     {
         $drinkboxes = DrinkBox::where('is_active', 'Active')->get()->groupBy('drinkbox_id');
