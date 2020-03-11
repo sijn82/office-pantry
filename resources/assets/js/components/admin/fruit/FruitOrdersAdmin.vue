@@ -13,9 +13,48 @@
             <b-button variant="primary" @click="addNew()"> Add New Fruitbox </b-button>
         </div>
 
+        <h4> Scheduled Boxes </h4>
+
+        <div v-if="this.scheduled_fruitboxes.length"> {{ fruitbox.company_name }}
+
+            <fruitbox   class="fruitbox" 
+                        v-for="fruitbox in this.scheduled_fruitboxes" 
+                        :key="fruitbox.id" 
+                        :fruitbox="fruitbox" 
+                        @refresh-data="refreshData($event)">
+            </fruitbox>
+
+        </div>
+        <div v-else>
+            <ul><li style="list-style:none;"> ~ Nothing To See Here ~ </li></ul>
+        </div>
+
+        <h4> Active Boxes </h4>
+
         <div v-if="this.fruitboxes.length"> {{ fruitbox.company_name }}
 
-            <fruitbox class="fruitbox" v-for="fruitbox in this.fruitboxes" :key="fruitbox.id" :fruitbox="fruitbox" @refresh-data="refreshData($event)"></fruitbox>
+            <fruitbox   class="fruitbox" 
+                        v-for="fruitbox in this.fruitboxes" 
+                        :key="fruitbox.id" 
+                        :fruitbox="fruitbox" 
+                        @refresh-data="refreshData($event)">
+            </fruitbox>
+
+        </div>
+        <div v-else>
+            <ul><li style="list-style:none;"> ~ Nothing To See Here ~ </li></ul>
+        </div>
+
+        <h4> Paused Boxes </h4>
+
+        <div v-if="this.paused_fruitboxes.length"> {{ fruitbox.company_name }}
+
+            <fruitbox   class="fruitbox" 
+                        v-for="fruitbox in this.paused_fruitboxes" 
+                        :key="fruitbox.id" 
+                        :fruitbox="fruitbox" 
+                        @refresh-data="refreshData($event)">
+            </fruitbox>
 
         </div>
         <div v-else>
@@ -105,7 +144,7 @@
 
 <script>
 export default {
-    props: ['fruitboxes', 'company'],
+    props: ['scheduled_fruitboxes', 'fruitboxes', 'paused_fruitboxes', 'archived_fruitboxes', 'company'],
     data () {
         return {
             fruitbox: {

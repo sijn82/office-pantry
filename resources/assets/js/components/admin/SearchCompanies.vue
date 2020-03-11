@@ -27,11 +27,14 @@
                 :additional_info="this.company_data.additional_info">
             </preferences-admin>
         </div>
-        <div v-if="this.company_data.fruitboxes != null">
+        <div v-if="this.company_data.scheduled_fruitboxes != null || this.company_data.fruitboxes || this.company_data.paused_fruitboxes || this.company_data.archived_fruitboxes">
             <fruit-orders-admin
                 @refresh-data="officeData($event.company_details_id)"
                 :company="this.company_data.company"
-                :fruitboxes="this.company_data.fruitboxes">
+                :scheduled_fruitboxes="this.company_data.scheduled_fruitboxes"
+                :fruitboxes="this.company_data.fruitboxes"
+                :paused_fruitboxes="this.company_data.paused_fruitboxes"
+                :archived_fruitboxes="this.company_data.archived_fruitboxes">
             </fruit-orders-admin>
         </div>
         <div v-if="this.company_data.milkboxes != null">

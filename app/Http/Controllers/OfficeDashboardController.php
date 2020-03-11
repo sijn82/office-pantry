@@ -65,9 +65,47 @@ class OfficeDashboardController extends Controller
         // This is just to have a default fruit partner which is used to pre-populate box forms.
         $company->load('fruit_partner')->get();
 
+                                                //---------- Scheduled orders set in advance of this delivery week ----------//
+
+        //---------- Scheduled Fruitboxes ----------//        
+
+        $scheduled_fruitboxes = $company->fruitbox()->where('delivery_week', '>', $this->week_start)->get();
+
+        foreach ($scheduled_fruitboxes as $scheduled_fruitbox) {
+
+            // using the established relationship between models i.e FruitBox belongsTo FruitPartner
+            $scheduled_fruitbox->load('fruit_partner')->get();
+
+        }
+
+        // Organising my day for the current orders makes sense but should these be ordered by delivery week (then probably day)
+        $scheduled_fruitboxesByMonToFri = $scheduled_fruitboxes->sortBy( function ($scheduled_fruitboxes) use ($monToFri) {
+            return array_search($scheduled_fruitboxes->delivery_day, $monToFri);
+        });
+        
+
+        //---------- Scheduled Milkboxes ----------//        
+
+        $scheduled_milkboxes = $company->milkbox()->where('delivery_week', '>', $this->week_start)->get();
+
+        foreach ($scheduled_milkboxes as $scheduled_milkbox) {
+
+            $scheduled_milkbox->load('fruit_partner')->get();
+
+        }
+
+        $scheduled_milkboxesByMonToFri = $scheduled_milkboxes->sortBy( function ($scheduled_milkboxes) use ($monToFri) {
+            return array_search($scheduled_milkboxes->delivery_day, $monToFri);
+        });
+
+
+
+
+                                                //---------- Current orders for this delivery week ----------//
+
         //---------- Fruitboxes ----------//
 
-        $fruitboxes = $company->fruitbox()->where('delivery_week', '>=', $this->week_start)->get();
+        $fruitboxes = $company->fruitbox()->where('delivery_week', '=', $this->week_start)->where('is_active', 'Active')->get();
 
         foreach ($fruitboxes as $fruitbox) {
 
@@ -84,7 +122,7 @@ class OfficeDashboardController extends Controller
 
         //---------- Milkboxes ----------//
 
-        $milkboxes = $company->milkbox;
+        $milkboxes = $company->milkbox()->where('delivery_week', '=', $this->week_start)->where('is_active', 'Active')->get();
 
         foreach ($milkboxes as $milkbox) {
 
@@ -169,6 +207,43 @@ class OfficeDashboardController extends Controller
         $additional_info = $company->additional_info;
         // dd($additional_info);
 
+
+                                                //---------- Paused orders awaiting reactivation ----------//
+
+        //---------- Paused Fruitboxes ----------//
+
+        $paused_fruitboxes = $company->fruitbox()->where('is_active', 'Paused')->get();
+
+        foreach ($paused_fruitboxes as $paused_fruitbox) {
+
+            // using the established relationship between models i.e FruitBox belongsTo FruitPartner
+            $paused_fruitbox->load('fruit_partner')->get();
+
+        }
+
+        $paused_fruitboxesByMonToFri = $paused_fruitboxes->sortBy( function ($paused_fruitboxes) use ($monToFri) {
+            return array_search($paused_fruitboxes->delivery_day, $monToFri);
+        });
+        
+        //---------- Paused Milkboxes ----------//
+
+        $paused_milkboxes = $company->milkbox()->where('is_active', 'Paused')->get();
+
+        foreach ($paused_milkboxes as $paused_milkbox) {
+
+            // using the established relationship between models i.e FruitBox belongsTo FruitPartner
+            $paused_milkbox->load('fruit_partner')->get();
+
+        }
+
+        $paused_milkboxesByMonToFri = $paused_milkboxes->sortBy( function ($paused_milkboxes) use ($monToFri) {
+            return array_search($paused_milkboxes->delivery_day, $monToFri);
+        });
+
+
+                                                //---------- Archived orders still to be invoiced ----------//
+
+
         //---------- Archived Fruitboxes ----------//
 
         // Edit - 02/03/2020
@@ -240,8 +315,23 @@ class OfficeDashboardController extends Controller
         }
 
         return [
-                    'company' => $company, 'fruitboxes' => $fruitboxesByMonToFri->values(), 'milkboxes' => $milkboxesByMonToFri->values(), 'routes' => $routesByMonToFri->values(),
-                    'snackboxes' => $snackboxes, 'drinkboxes' => $drinkboxes, 'otherboxes' => $otherboxes,
+                    'company' => $company, 
+                    'scheduled_fruitboxes' => $scheduled_fruitboxesByMonToFri->values(),
+                    'scheduled_milkboxes' => $scheduled_milkboxesByMonToFri->values(),                     
+                    // 'scheduled_snackboxes' => $scheduled_snackboxes, 
+                    // 'scheduled_drinkboxes' => $scheduled_drinkboxes, 
+                    // 'scheduled_otherboxes' => $scheduled_otherboxes,
+                    'fruitboxes' => $fruitboxesByMonToFri->values(), 
+                    'milkboxes' => $milkboxesByMonToFri->values(),                     
+                    'snackboxes' => $snackboxes, 
+                    'drinkboxes' => $drinkboxes, 
+                    'otherboxes' => $otherboxes,
+                    'paused_fruitboxes' => $paused_fruitboxesByMonToFri->values(), 
+                    'paused_milkboxes' => $paused_milkboxesByMonToFri->values(),                     
+                    // 'paused_snackboxes' => $paused_snackboxes, 
+                    // 'paused_drinkboxes' => $paused_drinkboxes, 
+                    // 'paused_otherboxes' => $paused_otherboxes,
+                    'routes' => $routesByMonToFri->values(),
                     'preferences' => $preferences,
                     'allergies' => $allergy_infos,
                     'additional_info' => $additional_info,

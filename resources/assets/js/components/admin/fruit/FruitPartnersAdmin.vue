@@ -13,7 +13,12 @@
 
         <div class="fruitpartner-list">
 
-            <fruitpartner class="fruitpartner" v-for="fruitpartner in $store.state.fruit_partners_list" :key="fruitpartner.id" :fruitpartner="fruitpartner" @refresh-data="refreshData($event)"></fruitpartner>
+            <fruitpartner   class="fruitpartner" 
+                            v-for="fruitpartner in $store.state.fruit_partners_list" 
+                            :key="fruitpartner.id" 
+                            :fruitpartner="fruitpartner" 
+                            @refresh-data="refreshData($event)">
+            </fruitpartner>
 
         </div>
         <!-- <div v-else>
