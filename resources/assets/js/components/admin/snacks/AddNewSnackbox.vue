@@ -1,12 +1,18 @@
 <template>
-    <div id="build-snackboxes">
+    <div id="new-snackbox">
         <b-row class="order-options">
-            <b-col>
+            <!-- <b-col>
                 <div class="build-order-button">
                     <h4> Build Order </h4>
                     <b-button variant="primary" v-model="createSnackbox" @click="creatingSnackbox()"> Create Snackbox </b-button>
                     <b-button variant="info" class="margin-top-20" v-model="createWholesaleSnackbox" @click="creatingWholesaleSnackbox()"> Create Wholesale Snackbox </b-button>
                 </div>
+            </b-col> -->
+            <b-col id="company-select">
+                <label> Selected Company </label>
+                <!-- <select-company v-on:selected-company="companySelected"></select-company>
+                <p> ID: {{ selected_company }} </p> -->
+                <h4 class="font-weight-300"> {{ companySelected(this.company) }} </h4>
             </b-col>
             <b-col>
                 <label> Select Type </label>
@@ -30,11 +36,13 @@
         </b-row>
         <!-- This should split the select company and snack cap onto it's own row. -->
         <b-row>
-            <b-col id="company-select">
-                <label> Selected Company </label>
-                <!-- <select-company v-on:selected-company="companySelected"></select-company>
-                <p> ID: {{ selected_company }} </p> -->
-                <h4 class="font-weight-300"> {{ companySelected(this.company) }} </h4>
+            <b-col>
+                <label> Name </label>
+                <b-form-input v-model="name" size="sm" type="text"></b-form-input>
+            </b-col>
+            <b-col v-if="!createWholesaleSnackbox">
+                <label> No. of Boxes </label>
+                <b-form-input v-model="no_of_boxes" size="sm" type="number" min="0"></b-form-input>
             </b-col>
             <b-col v-if="!createWholesaleSnackbox">
                 <label> Snack Cap </label>
@@ -42,27 +50,29 @@
                 <!-- ':state' and 'b-form-invalid-feedback' has been an interesting diversion but without 'required' to enforce it, kinda pointless for now. -->
                 <b-form-invalid-feedback> This is a required field, £0 would make the box free! </b-form-invalid-feedback>
             </b-col>
-        </b-row>
-        <b-row class="order-options">
-            <b-col v-if="!createWholesaleSnackbox">
-                <label> No. of Boxes </label>
-                <b-form-input v-model="no_of_boxes" size="sm" type="number" min="0"></b-form-input>
-            </b-col>
             <b-col>
                 <label> Next Delivery Week Start </label>
                 <b-form-input type="date" v-model="delivery_week" size="sm"></b-form-input>
             </b-col>
+        </b-row>
+        <b-row>
+            <b-col>
+                <!-- Delivery Days -->
+                <b-form-group id="fruitbox-delivery-days" label="Select Delivery Day(s): ">
+                    <b-form-checkbox-group v-model="delivery_day"><!-- Unable to use required here without writing some additional validation logic, allowing 1+ value(s) to be checked, instead of all -->
+                        <b-form-checkbox value="Monday">Monday</b-form-checkbox>
+                        <b-form-checkbox value="Tuesday">Tuesday</b-form-checkbox>
+                        <b-form-checkbox value="Wednesday">Wednesday</b-form-checkbox>
+                        <b-form-checkbox value="Thursday">Thursday</b-form-checkbox>
+                        <b-form-checkbox value="Friday">Friday</b-form-checkbox>
+                    </b-form-checkbox-group>
+                </b-form-group>
+            </b-col>
+        </b-row>
+        <b-row>
             <b-col>
                 <label> Delivered By </label>
                 <b-form-select v-model="delivered_by" :options="delivered_by_options" size="sm">
-                    <template slot="first">
-                            <option :value="null" disabled> Please select an option </option>
-                    </template>
-                </b-form-select>
-            </b-col>
-            <b-col>
-                <label> Delivery Day </label>
-                <b-form-select v-model="delivery_day" :options="delivery_day_options" size="sm">
                     <template slot="first">
                             <option :value="null" disabled> Please select an option </option>
                     </template>
@@ -86,63 +96,20 @@
             </b-col>
         </b-row>
 
-        <div class="order-selections">
-            <b-row><b-col><h4> Product Name </h4></b-col><b-col><h4> Quantity </h4></b-col><b-col><h4> Price </h4></b-col><b-col>  </b-col></b-row>
-            <div v-for="snack in $store.state.snackbox" :key="snack.id">
-                <b-row>
-                    <b-col>
-                        <p> {{ snack.brand }} </p>
-                    </b-col>
-                    <b-col>
-                        <p> {{ snack.flavour }} </p>
-                    </b-col>
-                    <b-col>
-                        <p> {{ snack.quantity }} </p>
-                    </b-col>
-                    <b-col>
-                        <p v-if="createWholesaleSnackbox"> {{ (snack.unit_price * snack.case_size) }} </p>
-                        <p v-else> {{ snack.unit_price }} </p>
-                    </b-col>
-                    <b-col>
-                        <b-button size="sm" variant="danger" @click="removeProduct(snack.id)"> Remove </b-button>
-                    </b-col>
-                </b-row>
-            </div>
-              <b-row>
-                  <b-col>  </b-col>
-                  <b-col>  </b-col>
-                  <b-col><p> Total: £{{ total }} </p></b-col>
-                  <b-col>
-                      <!-- <b-button size="sm" variant="warning" @click="saveStandardSnackbox()"> Save as New Standard Box </b-button>
-                      <b-form-text> This option will <b> update all boxes of the 'type' selected </b> in the input option above.  </b-form-text> -->
-                  </b-col>
-              </b-row>
-              <b-row class="margin-top">
-                  <b-col>  </b-col>
-                  <b-col>  </b-col>
-                  <b-col>  </b-col>
-                  <b-col>
-                      <b-button size="sm" variant="success" @click="saveCompanySnackbox()"> Save Exclusively to Company </b-button>
-                      <b-form-text> This option will <b> only update this box </b>, regardless of 'type'.  </b-form-text>
-                  </b-col>
-              </b-row>
-            <!-- <snackbox :product="product" :quantity="quantity"></snackbox> -->
-        </div>
+        <b-row class="margin-top">
+            <b-col>
+                <div id="snackbox-buttons">
+                    <b-button type="submit" variant="primary" @click="saveCompanySnackbox()"> Submit </b-button>
+                    <b-button type="reset" variant="danger" @click="onReset()"> Reset </b-button>
+                </div>
+            </b-col>
+        </b-row>
 
-        <!-- This (products-list) is the parent component for products and pulls that component into this view as well.
-        The button above changes the state of the createSnackbox data variable,
-        offering an additional 'add to snackbox' button to each product. -->
-        <div v-if="createSnackbox || createWholesaleSnackbox">
-            <products-list v-on:addProduct="addProductToOrder($event)" :createSnackbox="createSnackbox" :createWholesaleSnackbox="createWholesaleSnackbox"></products-list>
-        </div>
-        <div class="margin-top-20" v-else>
-            <p><b> Click on the 'Create Snackbox', or 'Create Wholesale Snackbox' button above to begin adding products. </b></p>
-        </div>
     </div>
 </template>
 
 <style lang="scss">
-#build-snackboxes {
+#new-snackbox {
     label {
         font-weight: 400;
     }
@@ -170,28 +137,37 @@
         margin-top: 20px;
     }
 }
+#new-snackbox:after {
+        content: ""; /* This is necessary for the pseudo element to work. */
+        display: block; /* This will put the pseudo element on its own line. */
+        margin: 0 auto; /* This will center the border. */
+        width: 70%; /* Change this to whatever width you want. */
+        padding-top: 30px; /* This creates some space between the element and the border. */
+        margin-bottom: 30px; /*  */
+        border-bottom: 1px solid #636b6f; /* This creates the border. Replace black with whatever color you want. */
+}
 
 
 </style>
 
 <script>
 export default {
-    props:[ 'addProductToSnackbox', 'product', 'quantity', // after looking at drinkbox, I'm not sure these are actually being used anymore?
-            'company' // Added this to the new snackbox props so I can do away with the 'select company searchbar' and autopopulate it instead - I'll need an alternative for customwer facing probably.
-    ],
+    props:{
+        company: Object,
+    },
     data() {
         return {
             createSnackbox: false,
             createWholesaleSnackbox: false,
-            order: 'empty',
-            company_id: 0,
+            //order: 'empty', edit 16/03/2020: if we're not adding products here, we won't need this.
+            //company_id: 0, edit 16/03/2020: i don't think this is being used anywhere either.
+            name: this.company.route_name,
             snack_cap: null,
-             // total_start: 0,
             delivered_by: null,
             delivered_by_options: ['DPD', 'APC', 'OP'],
             type: null,
             new_type: null,
-            delivery_day: null,
+            delivery_day: [],
             delivery_day_options: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
             frequency: null,
             frequency_options: ['Weekly', 'Fortnightly', 'Monthly', 'Bespoke'],
@@ -264,19 +240,16 @@ export default {
               this.type = 'wholesale';
             }
         },
-        // addProductToOrder($event) {
-        //     alert($event);
-        //     this.order = 'one item';
+        // removeProduct(id) {
+        //     console.log(id);
+        //     this.$store.commit('removeFromSnackbox', id);
         // },
-        removeProduct(id) {
-            console.log(id);
-            this.$store.commit('removeFromSnackbox', id);
-        },
         saveCompanySnackbox() {
 
             axios.post('/api/boxes/snackboxes/save', {
                 company_details_id: this.selected_company,
-                details: {
+                // details: {
+                    name: this.name,
                     delivered_by: this.delivered_by,
                     no_of_boxes: this.no_of_boxes,
                     snack_cap: this.snack_cap,
@@ -284,9 +257,9 @@ export default {
                     delivery_day: this.delivery_day,
                     frequency: this.frequency,
                     week_in_month: this.week_in_month,
-                    delivery_week: this.delivery_week
-                },
-                order: this.$store.state.snackbox,
+                    delivery_week: this.delivery_week,
+               // },
+                //order: this.$store.state.snackbox,
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             }).then( (response) => {
                 alert('Uploaded new Company snackbox successfully!');
@@ -295,6 +268,22 @@ export default {
                 // console.log(response.data);
             }).catch(error => console.log(error));
         },
+
+        onReset () {
+            
+            /* Reset our form values */
+            this.name = this.company.route_name,
+            this.type = null,
+            this.no_of_boxes = 0,
+            this.snack_cap = null,
+            this.delivery_week = null,
+            this.delivered_by = null,
+            this.delivery_day = null,
+            this.frequency = null,
+            this.week_in_month = null
+
+        },
+
         // saveStandardSnackbox() {
         //     this.$store.dispatch('saveStandardSnackboxToDB', this.type );
         //

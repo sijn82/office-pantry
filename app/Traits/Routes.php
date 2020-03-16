@@ -15,6 +15,10 @@ trait Routes
     {
         $companyDetails = CompanyDetails::findOrFail(request('company_details_id'));
 
+        // Edit 16-03-2020: Just a thought.
+        // As the only thing that changes between routes is the delivery day, I could probably use it to determine the query and shorten this to 1 db call?
+        // I.e $assigned_route = AssignedRoute::where('name', 'TBC (' . $delivery_day . ')')->get();
+
         $assigned_route_tbc_monday = AssignedRoute::where('name', 'TBC (Monday)')->get();
         $assigned_route_tbc_tuesday = AssignedRoute::where('name', 'TBC (Tuesday)')->get();
         $assigned_route_tbc_wednesday = AssignedRoute::where('name', 'TBC (Wednesday)')->get();

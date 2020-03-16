@@ -2,10 +2,9 @@
     <div>
 
         <div id="edit-save-buttons">
-            <h4> {{ snackbox.snackbox_id }} </h4>
+            <h4> {{ snackbox.name }} </h4>
             <h5> {{ snackbox.delivery_week }} </h5>
             <p> {{ snackbox.delivery_day }} - {{ snackbox.is_active }} </p>
-            <!-- <p><b> {{ this.company }} </b></p> -->
             <b-button variant="primary" @click="showDetails()"> Details </b-button>
             <b-button variant="warning" @click="enableEdit()"> Edit </b-button>
             <b-button v-if="editing" class="btn btn-success" @click="updateDetails(snackbox)"> Save </b-button>
@@ -14,12 +13,6 @@
 
         <div class="snackbox-details" v-if="details">
             <b-row id="top-details" :class="snackbox.is_active">
-                <b-col>
-                    <label><b> Snackbox Id </b></label>
-                    <div>
-                        <p> {{ snackbox.snackbox_id }} </p>
-                    </div>
-                </b-col>
                 <b-col>
                     <label><b> Snackbox Status </b></label>
                     <div v-if="editing">
@@ -34,7 +27,7 @@
                     </div>
                 </b-col>
                 <b-col>
-                    <label> Name </label>
+                    <label><b> Name </b></label>
                     <div v-if="editing">
                         <b-form-input v-model="snackbox.name"></b-form-input>
                     </div>
@@ -42,6 +35,17 @@
                         <p> {{ snackbox.name }} </p>
                     </div>
                 </b-col>
+                <b-col>
+                    <label><b> Type </b></label>
+                    <div v-if="editing">
+                        <b-form-select v-model="snackbox.type" :options="this.$store.state.types_list"></b-form-select>
+                    </div>
+                    <div v-else>
+                        <p> {{ snackbox.type }} </p>
+                    </div>
+                </b-col>
+            </b-row>
+            <b-row :class="snackbox.is_active" class="padding-top-10">
                 <b-col>
                     <label><b> Delivered By </b></label>
                     <div v-if="editing">
@@ -73,15 +77,6 @@
 
             <b-row :class="snackbox.is_active" class="padding-top-10">
                 <b-col>
-                    <label><b> Type </b></label>
-                    <div v-if="editing">
-                        <b-form-select v-model="snackbox.type" :options="this.$store.state.types_list"></b-form-select>
-                    </div>
-                    <div v-else>
-                        <p> {{ snackbox.type }} </p>
-                    </div>
-                </b-col>
-                <b-col>
                     <label><b> Delivery Day </b></label>
                     <div v-if="editing">
                         <b-form-select v-model="snackbox.delivery_day" :options="days_of_week"></b-form-select>
@@ -99,9 +94,6 @@
                         <p> {{ snackbox.frequency }} </p>
                     </div>
                 </b-col>
-            </b-row>
-
-            <b-row id="bottom-details" :class="snackbox.is_active" class="padding-top-10">
                 <b-col v-if="snackbox.frequency === 'Monthly'">
                     <label><b> Week In Month </b></label>
                     <div v-if="editing">
@@ -111,6 +103,9 @@
                         <p> {{ snackbox.week_in_month }} </p>
                     </div>
                 </b-col>
+            </b-row>
+
+            <b-row id="bottom-details" :class="snackbox.is_active" class="padding-top-10">
                 <b-col v-if="snackbox.previous_delivery_week !== null">
                     <label><b> Previous Delivery Date </b></label>
                     <div>
@@ -118,17 +113,17 @@
                     </div>
                 </b-col>
                 <b-col>
-                    <label><b> Last Invoiced At </b></label>
-                    <p> {{ snackbox.invoiced_at }} </p>
-                </b-col>
-                <b-col>
-                    <label><b> Next Delivery Week </b></label>
+                    <label><b> Delivery Week </b></label>
                     <div v-if="editing">
                         <b-form-input v-model="snackbox.delivery_week" type="date"></b-form-input>
                     </div>
                     <div v-else>
                         <p> {{ snackbox.delivery_week }} </p>
                     </div>
+                </b-col>
+                <b-col>
+                    <label><b> Last Invoiced At </b></label>
+                    <p> {{ snackbox.invoiced_at }} </p>
                 </b-col>
             </b-row>
 

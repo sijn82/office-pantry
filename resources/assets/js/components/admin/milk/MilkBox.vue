@@ -10,7 +10,6 @@
                 <b-button variant="warning" @click="enableEdit()"> Edit </b-button>
                 <b-button v-if="editing" class="btn btn-success" @click="updateMilkOrder(milkbox)"> Save </b-button>
                 <b-button v-if="editing" class="btn" variant="danger" @click="destroyMilkOrder(milkbox)"> Delete </b-button>
-                <b-form-checkbox v-if="editing" v-model="skip_archive" value='true' unchecked-value='false'> Skip Milkbox Archive Creation/Update </b-form-checkbox>
             </div>
             <div id="milk-details" v-show="details" :class="{ margin_top_20: details }">
                 <b-row id="top-details" :class="milkbox.is_active" sm="12" class="b-row-padding">
@@ -33,7 +32,7 @@
                         <label><b> Milkbox Fruit Partner </b></label>
                         <div v-if="editing">
                             <b-form-select v-model="milkbox.fruit_partner_id">
-                                <option v-for="fruit_partner in $store.state.fruit_partners_list" :value="fruit_partner.id"> {{ fruit_partner.name }} </option>
+                                <option v-for="fruit_partner in $store.state.fruit_partners_list" :key="fruit_partner.id" :value="fruit_partner.id"> {{ fruit_partner.name }} </option>
                             </b-form-select>
                             <p> Selected: {{ milkbox.fruit_partner_id }} </p>
                         </div>
@@ -430,7 +429,6 @@ export default {
             editing: false,
             details: false,
             addnew: false,
-            skip_archive: 'true',
         }
     },
     methods: {

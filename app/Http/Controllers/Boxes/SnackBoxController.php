@@ -13,11 +13,9 @@ use Session;
 
 use Illuminate\Http\Request;
 use App\SnackBox;
-use App\SnackBoxArchive;
 use App\WeekStart;
 use App\Product;
 use App\Preference;
-// use App\Company;
 use App\CompanyDetails;
 use App\CompanyRoute;
 use App\AssignedRoute;
@@ -25,6 +23,10 @@ use App\Allergy;
 use App\OrderItem;
 
 use App\Traits\Orders;
+use App\Traits\Routes;
+
+// Can be deleted when fully removed from the controller
+use App\SnackBoxArchive;
 
 
 
@@ -33,6 +35,7 @@ class SnackBoxController extends Controller
 {
 
     use Orders;
+    use Routes;
 
         protected $week_start;
 
@@ -46,6 +49,57 @@ class SnackBoxController extends Controller
             }
 
         }
+
+        // Edit 16-02-2020: Now that several things have changed and all (or certainly most) existing functions need tweaking again,
+        // I'm going to repopulate the top of this controller with the new and improved functions before removing the outdated functions as they're replaced.
+
+        public function store()
+        {
+           // dd(request('delivery_day'));
+
+            foreach (request('delivery_day') as $delivery_day) {
+
+                // Boxes are simpler now - we just need some basic info to associate with order items later on.
+
+                $new_snackbox = new SnackBox();
+                // Active is the default of is_active so we can just leave it to do its thing.  
+                // However I don't see the default value listed in pgadmin?  Time to test.
+                $new_snackbox->company_details_id = request('company_details_id');
+                $new_snackbox->name = request('name');
+                $new_snackbox->type = request('type');
+                $new_snackbox->delivered_by = request('delivered_by');
+                $new_snackbox->no_of_boxes = request('no_of_boxes');
+                $new_snackbox->snack_cap = request('snack_cap');
+                $new_snackbox->delivery_day = $delivery_day;
+                $new_snackbox->frequency = request('frequency');
+                $new_snackbox->week_in_month = request('week_in_month');
+                $new_snackbox->delivery_week = request('delivery_week');
+                $new_snackbox->save();
+
+                // Though we still need to make sure there's a route to deliver the box on.
+
+        
+                if (count(CompanyRoute::where('company_details_id', request('company_details_id'))->where('delivery_day', $delivery_day)->get()) == 0) {
+
+                    // If we're here, we need to create a new route
+                    // (Interesting fact :) ) All we're using from request() is the company_details_id
+                    $this->createNewRoute(request(), $delivery_day);
+
+                } else {
+
+                    // We already have a route this delivery can go on - so we dont need to do anything else.
+                }
+            }
+
+            
+        }
+
+
+
+
+
+
+
 
         // public function snackbox_test () {
         //     // dd('well this worked fine? what\'s going on?!!');
@@ -469,7 +523,7 @@ class SnackBoxController extends Controller
     // Edit 13-03-2020: Ignore the above, this is going to get a complete overhaul and snackbox_id is getting replaced with a regular id and a more readable name,
     // among the plethora of changes.  Don't worry this new approach is sooooo much better!
 
-    public function store(Request $request)
+    public function storeOldVersion(Request $request)
     {
         // dd($request);
         // dd($request->order);
