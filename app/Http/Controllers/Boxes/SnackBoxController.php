@@ -466,6 +466,9 @@ class SnackBoxController extends Controller
     // The most important element to create for the update function ( which create a new standard box ) is a snackbox id.
     // Though obviously connecting that snackbox to a company id and delivery info etc is integral to it being useful! :)
 
+    // Edit 13-03-2020: Ignore the above, this is going to get a complete overhaul and snackbox_id is getting replaced with a regular id and a more readable name,
+    // among the plethora of changes.  Don't worry this new approach is sooooo much better!
+
     public function store(Request $request)
     {
         // dd($request);
@@ -478,7 +481,7 @@ class SnackBoxController extends Controller
         $delivery_day = request('details.delivery_day');
         $frequency = request('details.frequency');
         $week_in_month = request('details.week_in_month');
-        $delivery_week = request('details.delivery_week');
+        $delivery_week_start = request('details.delivery_week');
 
         if (!empty($request->order)) {
 

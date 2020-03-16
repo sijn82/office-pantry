@@ -2,24 +2,87 @@
 
     <div id="milkboxes">
         <h3> Milk Boxes </h3>
+        <div v-if="showinfo">
 
-        <div v-if="addnew">
-            <b-button class="add-new-close" variant="danger" @click="addNew()"> Close </b-button>
-            <add-new-milkbox :company="this.company" @refresh-data="refreshData($event)"></add-new-milkbox>
-        </div>
-        <div v-else class="add-new-close">
-            <b-button variant="primary" @click="addNew()"> Add New Milkbox </b-button>
-        </div>
+            <b-button variant="success" @click="showInfo()" style="margin-bottom:20px"> Hide Info </b-button>
 
-        <div v-if="this.milkboxes.length">
-            <!-- {{ milkbox.company_name }} -->
+            <div v-if="addnew">
+                <b-button class="add-new-close" variant="danger" @click="addNew()"> Close </b-button>
+                <add-new-milkbox :company="this.company" @refresh-data="refreshData($event)"></add-new-milkbox>
+            </div>
+            <div v-else class="add-new-close">
+                <b-button variant="primary" @click="addNew()"> Add New Milkbox </b-button>
+            </div>
 
-            <milkbox class="milkbox" v-for="milkbox in this.milkboxes" :milkbox="milkbox" :key="milkbox.id" @refresh-data="refreshData($event)"></milkbox>
+            <div v-if="this.scheduled_milkboxes.length || this.milkboxes.length || this.paused_milkboxes.length || this.archived_milkboxes.length">
 
+                <h4> Scheduled Boxes </h4>
+
+                <div v-if="this.scheduled_milkboxes.length">  <!-- {{ milkbox.company_name }} -->
+
+                    <milkbox    class="milkbox" 
+                                v-for="milkbox in this.scheduled_milkboxes" 
+                                :milkbox="milkbox" 
+                                :key="milkbox.id" 
+                                @refresh-data="refreshData($event)">
+                    </milkbox>
+
+                </div>
+                <div v-else>
+                    <ul><li style="list-style:none;"> ~ Nothing To See Here ~ </li></ul>
+                </div>
+
+                <h4 class="margin-top-20"> Active Boxes </h4>
+
+                <div v-if="this.milkboxes.length">  <!-- {{ milkbox.company_name }} -->
+
+                    <milkbox    class="milkbox" 
+                                v-for="milkbox in this.milkboxes" 
+                                :milkbox="milkbox" 
+                                :key="milkbox.id" 
+                                @refresh-data="refreshData($event)">
+                    </milkbox>
+
+                </div>
+                <div v-else>
+                    <ul><li style="list-style:none;"> ~ Nothing To See Here ~ </li></ul>
+                </div>
+
+                <h4 class="margin-top-20"> Paused Boxes </h4>
+
+                <div v-if="this.paused_milkboxes.length">  <!-- {{ milkbox.company_name }} -->
+
+                    <milkbox    class="milkbox" 
+                                v-for="milkbox in this.paused_milkboxes" 
+                                :milkbox="milkbox" 
+                                :key="milkbox.id" 
+                                @refresh-data="refreshData($event)">
+                    </milkbox>
+
+                </div>
+                <div v-else>
+                    <ul><li style="list-style:none;"> ~ Nothing To See Here ~ </li></ul>
+                </div>
+
+                <h4 class="margin-top-20"> Archived Boxes (Awaiting Invoice) </h4>
+
+                <div v-if="this.archived_milkboxes.length">  <!-- {{ milkbox.company_name }} -->
+
+                    <milkbox    class="milkbox" 
+                                v-for="milkbox in this.archived_milkboxes" 
+                                :milkbox="milkbox" 
+                                :key="milkbox.id" 
+                                @refresh-data="refreshData($event)">
+                    </milkbox>
+
+                </div>
+                <div v-else>
+                    <ul><li style="list-style:none;"> ~ Nothing To See Here ~ </li></ul>
+                </div>
+            </div>
+            <div v-else> There are no associated milkboxes.  Please add one to begin. </div>
         </div>
-        <div v-else>
-            <ul class="milkbox"><li style="list-style:none;"> ~ Nothing To See Here ~ </li></ul>
-        </div>
+        <div v-else><b-button variant="success" @click="showInfo()"> Show Info </b-button></div>
     </div>
 </template>
 
@@ -86,7 +149,12 @@
 
 <script>
 export default {
-    props: ['milkboxes', 'company'],
+    props: {    scheduled_milkboxes: Array, 
+                milkboxes: Array, 
+                paused_milkboxes: Array,
+                archived_milkboxes: Array,
+                company: Object
+    },
     data () {
         return {
 
@@ -96,6 +164,7 @@ export default {
             editing: false,
             details: false,
             addnew: false,
+            showinfo: false,
         }
     },
     computed: {
@@ -124,6 +193,13 @@ export default {
                 this.details = false;
             } else {
                 this.details = true;
+            }
+        },
+        showInfo() {
+            if (this.showinfo == true) {
+                this.showinfo = false;
+            } else {
+                this.showinfo = true;
             }
         },
         refreshData($event) {

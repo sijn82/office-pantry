@@ -2,18 +2,26 @@
     <div id="routes">
         <h3> Routes </h3>
 
-        <div v-if="this.routes.length"> {{ routes.company_name }}
+        <div v-if="showinfo">
 
-            <company-route class="routebox" v-for="route in this.routes" :route="route" :key="route.id" @refresh-data="refreshData($event)"></company-route>
+            <b-button variant="success" @click="showInfo()" style="margin-bottom:20px"> Hide Info </b-button>
+
+            <div v-if="this.routes.length"> {{ routes.company_name }}
+
+                <company-route class="routebox" v-for="route in this.routes" :route="route" :key="route.id" @refresh-data="refreshData($event)"></company-route>
+
+            </div>
+            <div v-else>
+                <ul><li style="list-style:none;"> There are no associated routes.  Add an order to auto generate one. </li></ul>
+            </div>
 
         </div>
-        <div v-else>
-            <ul><li style="list-style:none;"> ~ Nothing To See Here ~ </li></ul>
-        </div>
+        <div v-else><b-button variant="success" @click="showInfo()"> Show Info </b-button></div>
     </div>
 </template>
 
-<style>
+<style lang="scss">
+
     #routes {
         margin-top: 20px;
         text-align: center;
@@ -56,13 +64,20 @@ export default {
 
     data () {
         return {
-
+            showinfo: false,
         }
     },
     methods: {
         refreshData($event) {
             this.$emit('refresh-data', $event);
-        }
+        },
+        showInfo() {
+            if (this.showinfo == true) {
+                this.showinfo = false;
+            } else {
+                this.showinfo = true;
+            }
+        },
     },
 
     mounted() {

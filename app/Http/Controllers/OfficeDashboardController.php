@@ -69,7 +69,7 @@ class OfficeDashboardController extends Controller
 
         //---------- Scheduled Fruitboxes ----------//        
 
-        $scheduled_fruitboxes = $company->fruitbox()->where('delivery_week', '>', $this->week_start)->get();
+        $scheduled_fruitboxes = $company->fruitbox()->where('delivery_week', '>', $this->week_start)->where('is_active', 'Active')->get();
 
         foreach ($scheduled_fruitboxes as $scheduled_fruitbox) {
 
@@ -86,7 +86,7 @@ class OfficeDashboardController extends Controller
 
         //---------- Scheduled Milkboxes ----------//        
 
-        $scheduled_milkboxes = $company->milkbox()->where('delivery_week', '>', $this->week_start)->get();
+        $scheduled_milkboxes = $company->milkbox()->where('delivery_week', '>', $this->week_start)->where('is_active', 'Active')->get();
 
         foreach ($scheduled_milkboxes as $scheduled_milkbox) {
 

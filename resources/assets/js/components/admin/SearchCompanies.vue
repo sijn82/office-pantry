@@ -27,7 +27,9 @@
                 :additional_info="this.company_data.additional_info">
             </preferences-admin>
         </div>
-        <div v-if="this.company_data.scheduled_fruitboxes != null || this.company_data.fruitboxes || this.company_data.paused_fruitboxes || this.company_data.archived_fruitboxes">
+        <!--    This v-if != null check is more about preventing the component building before data has been pulled through 
+                - one check would suffice but eh, I have four for now -->
+        <div v-if="this.company_data.scheduled_fruitboxes != null || this.company_data.fruitboxes != null || this.company_data.paused_fruitboxes != null || this.company_data.archived_fruitboxes != null">
             <fruit-orders-admin
                 @refresh-data="officeData($event.company_details_id)"
                 :company="this.company_data.company"
@@ -41,7 +43,10 @@
             <milk-orders-admin
                 @refresh-data="officeData($event.company_details_id)"
                 :company="this.company_data.company"
-                :milkboxes="this.company_data.milkboxes">
+                :scheduled_milkboxes="this.company_data.scheduled_milkboxes"
+                :milkboxes="this.company_data.milkboxes"
+                :paused_milkboxes="this.company_data.paused_milkboxes"
+                :archived_milkboxes="this.company_data.archived_milkboxes">
             </milk-orders-admin>
         </div>
         <div v-if="this.company_data.routes != null">
@@ -71,6 +76,8 @@
                 :otherboxes="this.company_data.otherboxes">
             </other-orders-admin>
         </div>
+
+        <!-- Think I might remove this whole section and replace it with a box specific category -->
         <div class="archive-header" v-if="this.company_data.archived_fruitboxes != null || this.company_data.archived_milkboxes != null">
             <h2> Archived Orders (Awaiting Invoice) </h2>
         </div>
@@ -145,7 +152,7 @@ export default {
     },
 
     watch: {
-        keywords(after, before) {
+        keywords(before, after) {
             this.fetch();
         },
 
@@ -172,6 +179,7 @@ export default {
     },
     mounted() {
         console.log(this.company_data);
+        console.log(this.company_data.snackboxes + ' = Snackbox Status');
     }
 }
 </script>

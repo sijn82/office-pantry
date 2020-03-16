@@ -2,64 +2,91 @@
 
     <div id="fruitboxes">
         <h3> Fruit Boxes </h3>
+        <div v-if="showinfo">
 
-        <div v-if="addnew">
-            <b-button class="add-new-close" variant="danger" @click="addNew()"> Close </b-button>
-            <!-- <transition name="show-add-new"> -->
-                <add-new-fruitbox :company="this.company" @refresh-data="refreshData($event)"></add-new-fruitbox>
-            <!-- </transition> -->
+            <b-button variant="success" @click="showInfo()" style="margin-bottom:20px"> Hide Info </b-button>
+
+            <div v-if="addnew">
+                <b-button class="add-new-close" variant="danger" @click="addNew()"> Close </b-button>
+                <!-- <transition name="show-add-new"> -->
+                    <add-new-fruitbox :company="this.company" @refresh-data="refreshData($event)"></add-new-fruitbox>
+                <!-- </transition> -->
+            </div>
+            <div v-else class="add-new-close">
+                <b-button variant="primary" @click="addNew()"> Add New Fruitbox </b-button>
+            </div>
+
+            <div v-if="this.scheduled_fruitboxes.length || this.fruitboxes.length || this.paused_fruitboxes.length || this.archived_fruitboxes.length">
+
+                <h4> Scheduled Boxes </h4>
+
+                <div v-if="this.scheduled_fruitboxes.length"> {{ fruitbox.company_name }}
+ 
+                    <fruitbox   class="fruitbox" 
+                                v-for="fruitbox in this.scheduled_fruitboxes" 
+                                :key="fruitbox.id" 
+                                :fruitbox="fruitbox" 
+                                @refresh-data="refreshData($event)">
+                    </fruitbox>
+
+                </div>
+                <div v-else>
+                    <ul><li style="list-style:none;"> ~ Nothing To See Here ~ </li></ul>
+                </div>
+
+                <h4 class="margin-top-20"> Active Boxes </h4>
+
+                <div v-if="this.fruitboxes.length"> {{ fruitbox.company_name }}
+
+                    <fruitbox   class="fruitbox" 
+                                v-for="fruitbox in this.fruitboxes" 
+                                :key="fruitbox.id" 
+                                :fruitbox="fruitbox" 
+                                @refresh-data="refreshData($event)">
+                    </fruitbox>
+
+                </div>
+                <div v-else>
+                    <ul><li style="list-style:none;"> ~ Nothing To See Here ~ </li></ul>
+                </div>
+
+                <h4 class="margin-top-20"> Paused Boxes </h4>
+
+                <div v-if="this.paused_fruitboxes.length"> {{ fruitbox.company_name }}
+                    
+                    <fruitbox   class="fruitbox" 
+                                v-for="fruitbox in this.paused_fruitboxes" 
+                                :key="fruitbox.id" 
+                                :fruitbox="fruitbox" 
+                                @refresh-data="refreshData($event)">
+                    </fruitbox>
+
+                </div>
+                <div v-else>
+ 
+                    <ul><li style="list-style:none;"> ~ Nothing To See Here ~ </li></ul>
+                </div>
+
+                <h4 class="margin-top-20"> Archived Boxes (Awaiting Invoice) </h4>
+
+                <div v-if="this.archived_fruitboxes.length"> {{ fruitbox.company_name }}
+                    
+                    <fruitbox   class="fruitbox" 
+                                v-for="fruitbox in this.archived_fruitboxes" 
+                                :key="fruitbox.id" 
+                                :fruitbox="fruitbox" 
+                                @refresh-data="refreshData($event)">
+                    </fruitbox>
+
+                </div>
+                <div v-else>
+
+                    <ul><li style="list-style:none;"> ~ Nothing To See Here ~ </li></ul>
+                </div>
+            </div>
+            <div v-else> There are no associated fruitboxes.  Please add one to begin. </div>
         </div>
-        <div v-else class="add-new-close">
-            <b-button variant="primary" @click="addNew()"> Add New Fruitbox </b-button>
-        </div>
-
-        <h4> Scheduled Boxes </h4>
-
-        <div v-if="this.scheduled_fruitboxes.length"> {{ fruitbox.company_name }}
-
-            <fruitbox   class="fruitbox" 
-                        v-for="fruitbox in this.scheduled_fruitboxes" 
-                        :key="fruitbox.id" 
-                        :fruitbox="fruitbox" 
-                        @refresh-data="refreshData($event)">
-            </fruitbox>
-
-        </div>
-        <div v-else>
-            <ul><li style="list-style:none;"> ~ Nothing To See Here ~ </li></ul>
-        </div>
-
-        <h4> Active Boxes </h4>
-
-        <div v-if="this.fruitboxes.length"> {{ fruitbox.company_name }}
-
-            <fruitbox   class="fruitbox" 
-                        v-for="fruitbox in this.fruitboxes" 
-                        :key="fruitbox.id" 
-                        :fruitbox="fruitbox" 
-                        @refresh-data="refreshData($event)">
-            </fruitbox>
-
-        </div>
-        <div v-else>
-            <ul><li style="list-style:none;"> ~ Nothing To See Here ~ </li></ul>
-        </div>
-
-        <h4> Paused Boxes </h4>
-
-        <div v-if="this.paused_fruitboxes.length"> {{ fruitbox.company_name }}
-
-            <fruitbox   class="fruitbox" 
-                        v-for="fruitbox in this.paused_fruitboxes" 
-                        :key="fruitbox.id" 
-                        :fruitbox="fruitbox" 
-                        @refresh-data="refreshData($event)">
-            </fruitbox>
-
-        </div>
-        <div v-else>
-            <ul><li style="list-style:none;"> ~ Nothing To See Here ~ </li></ul>
-        </div>
+        <div v-else><b-button variant="success" @click="showInfo()"> Show Info </b-button></div>
     </div>
 </template>
 
@@ -144,7 +171,13 @@
 
 <script>
 export default {
-    props: ['scheduled_fruitboxes', 'fruitboxes', 'paused_fruitboxes', 'archived_fruitboxes', 'company'],
+    props: {
+        scheduled_fruitboxes: Array, 
+        fruitboxes: Array, 
+        paused_fruitboxes: Array, 
+        archived_fruitboxes: Array, 
+        company: Object
+    },
     data () {
         return {
             fruitbox: {
@@ -189,6 +222,7 @@ export default {
             editing: false,
             details: false,
             addnew: false,
+            showinfo: false,
         }
     },
     computed: {
@@ -224,6 +258,13 @@ export default {
                 this.details = false;
             } else {
                 this.details = true;
+            }
+        },
+        showInfo() {
+            if (this.showinfo == true) {
+                this.showinfo = false;
+            } else {
+                this.showinfo = true;
             }
         },
         updateFruitOrder(fruitbox) {
