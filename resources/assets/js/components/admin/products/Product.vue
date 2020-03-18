@@ -463,11 +463,13 @@ export default {
         // }
 
         addProductToSnackbox(product, quantity) {
+
+            console.log(this.type)
              // var $snackbox = [];
             product.quantity = quantity;
             // $snackbox.push({product: product, quantity: quantity});
             // $snackbox.push({product: product});
-            this.$store.commit('addSnackboxToStore', product);
+            this.$store.commit('addSnackboxToStore', [product, this.type]);
         },
         addProductToOtherbox(product, quantity) {
              // var $snackbox = [];

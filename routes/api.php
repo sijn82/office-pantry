@@ -58,12 +58,13 @@ Route::group([
     Route::put('milkbox/destroy/{id}', 'MilkBoxController@destroy');
     // Snackbox CRUD
     Route::post('snackboxes/save', 'SnackBoxController@store');
-    // Route::post('snackbox/update', 'SnackBoxController@update'); // thisn is the old function path to update the snackbox item quantity.
+    // Route::post('snackbox/update', 'SnackBoxController@update'); // this is the old function path to update the snackbox item quantity.
     Route::post('snackbox/update-item-quantity', 'SnackBoxController@increaseSnackboxOrderItemQuantity'); // this is the new one.
-    Route::post('snackbox/details', 'SnackBoxController@updateDetails');
+    // Route::post('snackbox/details', 'SnackBoxController@updateDetails');  // this is the old route to update box details
+    Route::post('snackbox/details', 'SnackBoxController@updateBoxDetails');
     // Route::post('snackbox/add-product', 'SnackBoxController@addProductToSnackbox'); // Commenting out while I work on addproducttobox replacement function.
     Route::post('snackbox/add-product', 'SnackBoxController@addProductToSnackBoxV2');
-    Route::put('snackbox/destroy-item/{id}', 'SnackBoxController@destroyItem');
+    Route::put('snackbox/remove-product/{id}', 'SnackBoxController@removeProduct');
     Route::put('snackbox/destroy-box/{id}', 'SnackBoxController@destroyBox');
     // Drinkbox CRUD
     Route::post('drinkboxes/save', 'DrinkBoxController@store');

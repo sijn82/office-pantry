@@ -1,96 +1,19 @@
 <template >
     <div>
-        <div class="snackbox-recommended-procedure">
-            <h1> Snackbox Process </h1>
-            <b-row>
-                <b-col>
-                    <h4> Step 1: </h4>
-                    <p>
-                        Go into Company Admin Panel and create any new company snackboxes.
-                        Leave them empty if you wish to mass update them by 'type' (at Step 2) later on.
-                    </p>
-                </b-col>
-                <b-col>
-                    <h4> Step 2: </h4>
-                    <p>
-                        Mass Update Snackboxes (By Type).
-                    </p>
-                    <h4> Step 3: </h4>
-                    <p>
-                        Manually update the rest, including any tweaks needed to the mass updated boxes, on a per company basis.
-                    </p>
-                </b-col>
-                <b-col>
-                    <h4> Step 4: </h4>
-                    <p>
-                        Now the boxes are tailored and ready to go, run picklists,
-                        routes and any other stuff you need that needs this data.
-                    </p>
-                </b-col>
-                <b-col>
-                    <h4> Step 5: </h4>
-                    <p>
-                        In an ideal world, run invoicing for all orders this week.
-                        Measures are in place to allow this to be done after Step 6 (fingers crossed).
-                    </p>
-                </b-col>
-                <b-col>
-                    <h4> Step 6: </h4>
-                    <p>
-                        Archive and empty the snackboxes, ready to repeat the process.
-                    </p>
-                </b-col>
-            </b-row>
-        </div>
-        <div class="archive-and-empty">
-            <h1> Archive And Empty Snackboxes (Drinkboxes & Otherboxes) </h1>
-            <b-row>
-                <b-col>
-                    <p>
-                        This button will <b> archive the contents of all 'active' snackboxes. </b>
-                        If the box has an 'invoiced_at' date the box is saved to the archives as 'inactive'.
-                        We only need it for our records.  However, if the box is missing an invoice date it will be saved as 'active'.
-                    </p>
-                    <p>
-                        This is to ensure it gets pulled into the next invoicing run for that branding theme and can be viewed in the company archives section of the admin panel.
-                    </p>
-                </b-col>
-                <b-col>
-                    <p>
-                        Next it reuses the box data, i.e snackbox_id, type, frequency etc and builds an empty box.
-                        This box is then ready for when its 'type' is mass updated,
-                        or the box is altered manually through the company admin panel.
-                    </p>
-                    <p>
-                        <b> If you're happy to archive and empty these boxes (and no longer need them for picklists, or routes) - push the button. </b>
-                    </p>
-                </b-col>
-                <b-col class="archive-and-empty-button-group">
-                    <b-button size="lg" href="archive-and-empty" variant="danger"> Archive And Empty Snackboxes </b-button>
-                    <b-button size="lg" href="/office/drinkboxes/archive-and-empty" variant="danger"> Archive And Empty Drinkboxes </b-button>
-                    <b-button size="lg" href="/office/otherboxes/archive-and-empty" variant="danger"> Archive And Empty Otherboxes </b-button>
-                </b-col>
-            </b-row>
-        </div>
         <div class="mass-update-snackbox">
             <h1> Mass Update Snackbox (By Type) </h1>
             <b-row>
                 <b-col>
                     <p>
-                        If you've <b> already archived and emptied the existing snackboxes from last week, you're ready to mass update any selected 'type' with products. </b>
-                        Should a company dislike an item in the box you create (by listing it in their 'Preferences' under 'Dislike'),
-                        it will attempt to pick a different item (in stock) from their listed likes.
-                        Increasing, or decreasing the quantity to match the replaced product value as closely as possible.
-                        This is a work in progress but if the company doesn't have anything listed in their likes section,
-                        it will default to picking something from else from general stock.
-                        In the future we'll also be able to autopopulate boxes with a companies listed 'Essentials',
-                        however it's only useful at the moment to keep a record of what they really want for manual replacement.
+                        Since orders no longer need emptying, and archived orders are just those orders whose delivery date has now passed.  We can drastically simplify this process.
+                        All we need to ensure now is that the orders have been advanced, so that the snackboxes for the next processing week have been created.  
+                        Then simply select the snackbox type you wish to mass update and add some products.  When you're done, click submit and let the magic happen.
                     </p>
                     <p>
                         As a side note, should you populate a 'type' with products and then add a new box of that 'type',
                         it will not be autopoulated with products (until the mass update for that 'type' is next run -
-                        <b> Do not just re-run it, archive and stock level chaos will ensue! </b>).
-                        Instead you'll have to do it manually in the company admin panel.
+                        <b> Do not just re-run it, as stock level chaos will ensue! </b>).
+                        Instead you'll have to do it manually in the company admin panel until/unless I hear I need to prioritise this feature.
                     </p>
                 </b-col>
             </b-row>
@@ -140,7 +63,7 @@
                 </b-row>
             </div>
             <div>
-                <products-list v-on:addProduct="addProductToOrder($event)" :createSnackbox="createSnackbox"></products-list>
+                <products-list v-on:addProduct="addProductToOrder($event)" :createSnackbox="createSnackbox" :type="this.type"></products-list>
             </div>
         </div>
     </div>

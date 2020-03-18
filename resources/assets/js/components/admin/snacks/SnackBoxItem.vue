@@ -50,7 +50,7 @@
                 }
             },
             deleteSnackBoxItem(snackbox_item) {
-                axios.put('api/boxes/snackbox/destroy-item/' + snackbox_item.id, {
+                axios.put('api/boxes/snackbox/remove-product/' + snackbox_item.id, {
                     id: snackbox_item.id,
                     //snackbox_id: snackbox_item.snackbox_id, // EDIT: 20/01/20 - I'll not need this anymore, if I need to destroy the box as well, I have to do this another way.
                 }).then ( (response) => {
