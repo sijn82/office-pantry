@@ -436,23 +436,39 @@ export default {
         },
         updateDetails(snackbox) {
             axios.post('api/boxes/snackbox/details', {
-                snackbox_details: snackbox,
+                // snackbox_details: snackbox,
+                id: snackbox.id,
+                is_active: snackbox.is_active,
+                name: snackbox.name,
+                delivered_by: snackbox.delivered_by,
+                no_of_boxes: snackbox.no_of_boxes,
+                snack_cap: snackbox.snack_cap,
+                type: snackbox.type,
+                company_details_id: snackbox.company_details_id,
+                delivery_day: snackbox.delivery_day,
+                frequency: snackbox.frequency,
+                week_in_month: snackbox.week_in_month,
+                previous_delivery_week: snackbox.previous_delivery_week,
+                delivery_week: snackbox.delivery_week,
+                invoiced_at: snackbox.invoiced_at,
+
                 snackbox_selected_allergens: this.selected_allergens
             }).then (response => {
                 alert('Snackbox Updated Successfully!');
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?
-                console.log(response);
+                // console.log(response);
+                self.$emit('refresh-data', {company_details_id: snackbox.company_details_id}) // Just notice not declared self? Seems to be working though?
             }).catch(error => console.log(error));
         },
         deleteSnackBox(snackbox) {
             let self = this;
-            axios.put('api/boxes/snackbox/destroy-box/' + snackbox.snackbox_id, {
-                snackbox_id: snackbox.snackbox_id,
+            axios.put('api/boxes/snackbox/destroy-box/' + snackbox.id, {
+                id: snackbox.id,
             }).then ( (response) => {
                 alert('Snackbox Deleted!');
                 //location.reload(true); // What am I doing with the store on this one?  Will I need this?
-                console.log(response);
-                console.log(snackbox.company_details_id);
+                // console.log(response);
+                // console.log(snackbox.company_details_id);
                 self.$emit('refresh-data', {company_details_id: snackbox.company_details_id})
             }).catch(error => console.log(error));
         },

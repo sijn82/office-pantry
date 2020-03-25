@@ -78,7 +78,10 @@
         </div>
 
         <!-- Think I might remove this whole section and replace it with a box specific category -->
-        <div class="archive-header" v-if="this.company_data.archived_fruitboxes != null || this.company_data.archived_milkboxes != null">
+
+        <!-- So lets comment it out before removing entirely -->
+
+        <!-- <div class="archive-header" v-if="this.company_data.archived_fruitboxes != null || this.company_data.archived_milkboxes != null">
             <h2> Archived Orders (Awaiting Invoice) </h2>
         </div>
 
@@ -117,7 +120,7 @@
                 :company="this.company_data.company"
                 :archived_otherboxes="this.company_data.archived_otherboxes">
             </archived-other-orders-admin>
-        </div>
+        </div> -->
         <!-- <div v-else>
             <p>empty</p>
         </div> -->

@@ -90,6 +90,7 @@ class SnackBoxController extends Controller
 
     public function updateBoxDetails(Request $request)
     {
+        //dd(request());
         $snackbox = SnackBox::find(request('id'));
         $snackbox->is_active = request('is_active');
         $snackbox->name = request('name');
@@ -103,6 +104,17 @@ class SnackBoxController extends Controller
         $snackbox->delivery_week = request('delivery_week');
         $snackbox->invoiced_at = request('invoiced_at'); // Do we want to allow this to be manually updated or restricted to the invoicing function only?
         $snackbox->save();
+
+        // Ah, we also need to check if there's still a route for the updated details (in case we just chnged the delivery day).
+        if (count(CompanyRoute::where('company_details_id', request('company_details_id'))->where('delivery_day', request('delivery_day'))->get()) == 0) {
+
+            // If we're here, we need to create a new route
+            $this->createNewRoute(request());
+
+        } else {
+            // We already have a route this delivery can go on - so we dont need to do anything else.
+        }
+
     }
 
     // While the function addProductToBox has been moved to a trait function, I (think) I still need to call it via a route/controller function.
@@ -139,7 +151,16 @@ class SnackBoxController extends Controller
          $snackboxes = SnackBox::where('is_active', 'Active')->where('type', request('type'))->where('delivery_week', $this->week_start)->get();
 
          foreach ($snackboxes as $snackbox) {
-             
+
+            // Foreach snackbox we need to create OrderItems for each item in the request('order');
+            // 'product_id',
+            // 'quantity',
+            // 'box_id',
+            // 'box_type',
+            // 'delivery_week'
+
+             dd(request('order'));
+             dd(request('type'));
          }
      }
 

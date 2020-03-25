@@ -48,14 +48,18 @@ export const store = new Vuex.Store({
 
         // Add items to store for frontend / backend syncronisity
         // and order building.
-        addSnackboxToStore (state, [product, type]) {
-            console.log(type + ' added to store yup yup')
-            Vue.set(state.snackbox, type);
-            state.snackbox[type] = [];
-            state.snackbox[type].push(product);
+        // addSnackboxToStore (state, [product, type]) {
+        //     console.log(type + ' added to store yup yup')
+        //     Vue.set(state.snackbox, type);
+        //     state.snackbox[type] = [];
+        //     state.snackbox[type].push(product);
             
     
-            console.log(state.snackbox)
+        //     console.log(state.snackbox)
+        // },
+
+        addSnackboxToStore (state, product) {
+            state.snackbox.push(product);
         },
         addOtherboxToStore (state, product) {
             state.otherbox.push(product);

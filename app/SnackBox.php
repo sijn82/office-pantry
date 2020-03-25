@@ -11,7 +11,7 @@ class SnackBox extends Model
     protected $fillable = [
 
         // Snackbox Info
-        'snackbox_id',
+        
         'is_active',
         'name',
         'delivered_by',

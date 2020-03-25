@@ -88,6 +88,7 @@
                 }
             },
             refreshData($event) {
+                this.addnew = false;
                 this.$emit('refresh-data', $event);
             },
         },
