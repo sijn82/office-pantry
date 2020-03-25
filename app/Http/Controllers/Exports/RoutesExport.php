@@ -115,6 +115,8 @@ class RoutesExport implements WithMultipleSheets
                                         '5.02 - Fri Multidrop',
                                         '5.01 - Fri Serviced',
                                         '5.00 - Float',
+                                        '6.00 -',
+                                        '6.01 -',
                                         'TBC',
                                         '26 - Friday Route 2',
                                         '25 - Friday Route',
