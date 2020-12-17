@@ -297,7 +297,7 @@ class OrderController extends Controller
                 // If the 'next_delivery' date (value) has passed, we probably need to update it.
                 // This check will also help to prevent the next_delivery date being increased before that (particular) delivery has been sent.
 
-                if ($fruitbox->next_delivery < Carbon::now()) {
+                // if ($fruitbox->next_delivery < Carbon::now()) { //comment out temporarily!
 
                     // Add the old next_delivery_week to the last_delivery_week field.
                     $lastDelivery = $fruitbox->next_delivery;
@@ -486,7 +486,7 @@ class OrderController extends Controller
                 // If the 'next_delivery' date (value) has passed, we probably need to update it.
                 // This check will also help to prevent the next_delivery date being increased before that (particular) delivery has been sent.
 
-                if ($milkbox->next_delivery < Carbon::now()) {
+                // if ($milkbox->next_delivery < Carbon::now()) { // commenting out temporarily
 
                     // echo $milkbox->name . '\'s next delivery was outdated but has been changed from ' . $milkbox->next_delivery . " to ";
 
@@ -717,7 +717,7 @@ class OrderController extends Controller
 
                 foreach ($snackbox as $snackbox_entry) {
 
-                    if ($snackbox_entry->next_delivery_week < Carbon::now()) {
+                    // if ($snackbox_entry->next_delivery_week < Carbon::now()) { // commenting out temporarily
 
                         $lastDelivery = $snackbox_entry->next_delivery_week;
 
@@ -933,7 +933,7 @@ class OrderController extends Controller
 
             foreach ($drinkbox as $drinkbox_entry) {
 
-                if ($drinkbox_entry->next_delivery_week < Carbon::now()) {
+                // if ($drinkbox_entry->next_delivery_week < Carbon::now()) { //commenting out temporarily
 
                     $lastDelivery = $drinkbox_entry->next_delivery_week;
 
@@ -1125,7 +1125,7 @@ class OrderController extends Controller
 
             foreach ($otherbox as $otherbox_entry) {
 
-                if ($otherbox_entry->next_delivery_week < Carbon::now()) {
+                // if ($otherbox_entry->next_delivery_week < Carbon::now()) { //commenting out temporarily
 
                     $lastDelivery = $otherbox_entry->next_delivery_week;
 
