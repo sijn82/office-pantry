@@ -472,7 +472,7 @@ class OrderController extends Controller
                     ]);
 
                     // echo $fruitbox->next_delivery . "<br/>";
-                } // end of if ($next_delivery < Carbon::now()), the else clause should only contain orders set to a time in the future, so we don't need to do anything.
+                //} // end of if ($next_delivery < Carbon::now()), the else clause should only contain orders set to a time in the future, so we don't need to do anything.
             } // end of foreach ($fruitboxes as $fruitbox)
 
         // ---------- Milkboxes ---------- //
@@ -659,7 +659,7 @@ class OrderController extends Controller
                         'invoiced_at' => null,
                     ]);
 
-                } //  end of if ($milkbox->next_delivery < Carbon::now())
+               // } //  end of if ($milkbox->next_delivery < Carbon::now())
             } // foreach ($milkboxes as $milkbox)
 
         // ---------- Snackboxes ---------- //
@@ -854,7 +854,7 @@ class OrderController extends Controller
                         // we could destroy the box entries like this, now that we have the archive created.
                         Snackbox::destroy($snackbox_entry->id);
 
-                    } // end of if ($snackbox_entry->next_delivery_week < Carbon::now())
+                  //  } // end of if ($snackbox_entry->next_delivery_week < Carbon::now())
 
                 } // end of foreach ($snackbox as $snackbox_entry)
 
@@ -1047,7 +1047,7 @@ class OrderController extends Controller
 
                     DrinkBox::destroy($drinkbox_entry->id);
 
-                } // if ($drinkbox_entry->next_delivery_week < Carbon::now())
+              //  } // if ($drinkbox_entry->next_delivery_week < Carbon::now())
             } // foreach ($drinkbox as $drinkbox_entry)
 
             // Right so now the box has been backed up as an archive and deleted (!), let's recreate it again ready for reuse (phew) :)
@@ -1239,7 +1239,7 @@ class OrderController extends Controller
 
                     OtherBox::destroy($otherbox_entry->id);
 
-                } // if ($otherbox_entry->next_delivery_week < Carbon::now())
+              //  } // if ($otherbox_entry->next_delivery_week < Carbon::now())
             } // foreach ($otherbox as $otherbox_entry)
 
             // Right so now the box has been backed up as an archive and deleted (!), let's recreate it again ready for reuse (phew) :)
