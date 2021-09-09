@@ -45,7 +45,7 @@ Route::get('/login/warehouse', 'Auth\LoginController@showWarehouseLoginForm')->n
 Route::post('/login/office', 'Auth\LoginController@officeLogin');
 Route::post('/login/warehouse', 'Auth\LoginController@warehouseLogin');
 // If Login details matched the corresponding db table info, redirect the user to their dashboard to carry out tasks or, just hangout.
-Route::view('/office', 'office')->middleware('auth:office')->name('office');
+Route::view('/office', 'office')->name('office');
 Route::view('/warehouse', 'warehouse')->middleware('auth:warehouse')->name('warehouse');
 
 // Passport authentication
@@ -55,7 +55,9 @@ Route::view('passport', 'passport')->name('passport');
 
 // Only those with office authentication can access these routes.
 // All routes contained here now have the prefix 'office' to clearly indicate the login access needed to visit the url.
-Route::group(['middleware' => ['web','auth:office'], 'prefix' => 'office'], function () {
+// Route::group(['middleware' => ['web','auth:office'], 'prefix' => 'office'], function () {
+
+Route::group(['middleware' => ['web','auth'], 'prefix' => 'office'], function () {
 
     // Calling this jobs because I'd originally planned to use/show queued jobs but now it makes more sense to call it fruit partner exports.
     // Will sort this when it's fully working.

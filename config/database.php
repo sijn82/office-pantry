@@ -1,22 +1,22 @@
 <?php
 
-$url = parse_url(getenv("DATABASE_URL"));
- // dd($url['path']);
+// $url = parse_url(getenv("DATABASE_URL"));
+//  // dd($url['path']);
  
- if ($url['path'] == "") {
+//  if ($url['path'] == "") {
      
-     $host = null;
-     $username = null;
-     $password = null;
-     $database = null;
+//      $host = null;
+//      $username = null;
+//      $password = null;
+//      $database = null;
      
- } else {
+//  } else {
      
-    $host = $url["host"];
-    $username = $url["user"];
-    $password = $url["pass"];
-    $database = substr($url["path"], 1);
-}
+//     $host = $url["host"];
+//     $username = $url["user"];
+//     $password = $url["pass"];
+//     $database = substr($url["path"], 1);
+// }
 
 return [
 
@@ -31,7 +31,7 @@ return [
     |
     */
 
-     'default' => env('DB_CONNECTION', 'pgsql_staging'),
+     'default' => env('DB_CONNECTION', 'mysql'),
     // 'default' => env('DB_CONNECTION', 'pgsql_local'),
     // 'default' => 'pgsql_production',
 
@@ -104,31 +104,31 @@ return [
             'sslmode' => 'prefer',
         ],
         // staging development - new-system branch
-        'pgsql_staging' => [
-            'driver' => 'pgsql',
-            'port' => '5432',
-            'host'     => $host,
-            'database' => $database,
-            'username' => $username,
-            'password' => $password,
-            'charset' => 'utf8',
-            'prefix' => '',
-            'schema' => 'public',
-            'sslmode' => 'prefer', 
-        ],
+        // 'pgsql_staging' => [
+        //     'driver' => 'pgsql',
+        //     'port' => '5432',
+        //     'host'     => $host,
+        //     'database' => $database,
+        //     'username' => $username,
+        //     'password' => $password,
+        //     'charset' => 'utf8',
+        //     'prefix' => '',
+        //     'schema' => 'public',
+        //     'sslmode' => 'prefer', 
+        // ],
         
-        'pgsql_production' => [
-            'driver' => 'pgsql',
-            'port' => '5432',
-            'host'     => $host,
-            'database' => $database,
-            'username' => $username,
-            'password' => $password,
-            'charset' => 'utf8',
-            'prefix' => '',
-            'schema' => 'public',
-            'sslmode' => 'prefer',
-        ],
+        // 'pgsql_production' => [
+        //     'driver' => 'pgsql',
+        //     'port' => '5432',
+        //     'host'     => $host,
+        //     'database' => $database,
+        //     'username' => $username,
+        //     'password' => $password,
+        //     'charset' => 'utf8',
+        //     'prefix' => '',
+        //     'schema' => 'public',
+        //     'sslmode' => 'prefer',
+        // ],
 
         'sqlsrv' => [
             'driver' => 'sqlsrv',

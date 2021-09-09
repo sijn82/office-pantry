@@ -288,7 +288,7 @@
         }
     }
     .quantity-input {
-        width: 50px;
+        // width: 50px; // this seems to hide the number 0 or its inputted replacement - needs replacing with a better solution!
         display: inline-block;
     }
 </style>

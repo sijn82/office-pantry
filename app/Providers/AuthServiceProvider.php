@@ -26,7 +26,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
-        Passport::routes();
+        // trying to update the op system and strip out passport/multi authentication at the same time... for now.
+        // Passport::routes();
     }
 }

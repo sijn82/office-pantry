@@ -92,15 +92,15 @@ class LoginController extends Controller
 
         // commenting this out for now until I know whether the new version of this works.
 
-        if (Auth::guard('office')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember'))) {
+        // if (Auth::guard('office')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember'))) {
 
             // $user = OfficeTeam::where('email', $request->email);
             //
             // $token = $user->createToken('office-pantry-token')->accessToken;
 
             return redirect()->intended('/office');
-        }
-        return back()->withInput($request->only('email', 'remember'));
+        // }
+        // return back()->withInput($request->only('email', 'remember'));
 
         // new version resulted in locking me out of the whole site.  Not good, so going back a couple of steps and gathering more info!
 

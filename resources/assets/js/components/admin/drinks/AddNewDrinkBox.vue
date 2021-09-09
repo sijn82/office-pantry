@@ -7,7 +7,7 @@
                     <b-col>
                         <div class="build-order-button">
                             <h4> Build Order </h4>
-                            <b-button v-model="createDrinkbox" @click="creatingDrinkbox()"> Create Drinkbox </b-button>
+                            <b-button v-model="createDrinkbox" @click="creatingDrinkbox()"> Select Products </b-button>
                         </div>
                     </b-col>
 

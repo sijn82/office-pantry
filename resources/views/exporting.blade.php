@@ -15,7 +15,7 @@
 
     <form class="rejigged-import" enctype="multipart/form-data" method="POST" action="{{ route('import-rejigged-routes') }}">
         @csrf
-        <input class="" type="file" name="rejigged-routes-file"> </input>
+        <input class="" type="file" name="rejigged-routes-file">
         <button class="btn btn-primary" type="submit">Import Xlsx</button>
     </form>
 
@@ -30,7 +30,7 @@
     @endif
 
     <!-- A gazillion buttons to download stuff regarding snacks, drinks and other! -->
-    <exporting></exporting>
+    <exporting></exporting> <!-- why is this in red?  I'd assume it was broken if it wasn't working! -->
 
     <!-- Just berries -->
     <berry-picklist></berry-picklist>
