@@ -52,17 +52,6 @@
                             and spend some dedicated time on it - add it to the list!! -->
 
                         <!-- <h4> Create New Users </h4>
-                        <ul>
-                            <li style="list-style:none;">
-                                <a href=" {{ route('register') }}"> Add New Customer Admin </a>
-                            </li>
-                            <li style="list-style:none;">
-                                <a href=" {{ route('register.office') }}"> Add New Office Admin </a>
-                            </li>
-                            <li style="list-style:none;">
-                                <a href=" {{ route('register.warehouse') }}"> Add New Warehouse Admin </a>
-                            </li>
-                        </ul> -->
 
                         <h4> View / Add New System Ingredients </h4>
                         <ul>
