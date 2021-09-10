@@ -7,6 +7,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 use Illuminate\Auth\AuthenticationException;
 use Auth;
+use Throwable;
 
 class Handler extends ExceptionHandler
 {
@@ -32,10 +33,10 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param  \Exception  $exception
+     * @param  \Throwable  $exception
      * @return void
      */
-    public function report(Exception $exception)
+    public function report(Throwable $exception)
     {
         parent::report($exception);
     }
@@ -47,38 +48,47 @@ class Handler extends ExceptionHandler
      * @param  \Exception  $exception
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Exception $exception)
+    public function render($request, Throwable $exception)
     {
         return parent::render($request, $exception);
     }
-    
-    
-        protected function unauthenticated($request, AuthenticationException $exception)
-        {
-            // dd($request);
-            if ($request->expectsJson()) {
-                return response()->json(['error' => 'Unauthenticated.'], 401);
-            }
 
-            if ($request->is('office') || $request->is('office/*' || $request->is('register/office'))) {
-                return redirect()->guest('/login/office');
-            }
-            
-            if (    $request->is('api/export-picklists') 
-                ||  $request->is('api/export-picklists-full')
-                ||  $request->is('api/export-routing')
-                ||  $request->is('api/export-companies')        
-            ) {
-                return redirect()->guest('/login/office');
-            }
-
-            if (    $request->is('warehouse') 
-                ||  $request->is('warehouse/*') 
-                ||  $request->is('register/warehouse')
-            ) {
-                return redirect()->guest('/login/warehouse');
-            }
-
-            return redirect()->guest(route('login'));
+    protected function whoopsHandler()
+    {
+        try {
+            return app(\Whoops\Handler\HandlerInterface::class);
+        } catch (\Illuminate\Contracts\Container\BindingResolutionException $e) {
+            return parent::whoopsHandler();
         }
+    }
+    
+    
+    protected function unauthenticated($request, AuthenticationException $exception)
+    {
+        // dd($request);
+        if ($request->expectsJson()) {
+            return response()->json(['error' => 'Unauthenticated.'], 401);
+        }
+
+        if ($request->is('office') || $request->is('office/*' || $request->is('register/office'))) {
+            return redirect()->guest('/login/office');
+        }
+        
+        if (    $request->is('api/export-picklists') 
+            ||  $request->is('api/export-picklists-full')
+            ||  $request->is('api/export-routing')
+            ||  $request->is('api/export-companies')        
+        ) {
+            return redirect()->guest('/login/office');
+        }
+
+        if (    $request->is('warehouse') 
+            ||  $request->is('warehouse/*') 
+            ||  $request->is('register/warehouse')
+        ) {
+            return redirect()->guest('/login/warehouse');
+        }
+
+        return redirect()->guest(route('login'));
+    }
 }

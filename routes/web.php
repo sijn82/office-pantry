@@ -33,11 +33,9 @@ Route::get('/home', 'HomeController@showCompany')->name('home')->middleware('aut
 
 // Register for office or warehouse login
 // Get the registration form
-Route::get('/register/office', 'Auth\RegisterController@showOfficeRegisterForm')->name('register.office');
-Route::get('/register/warehouse', 'Auth\RegisterController@showWarehouseRegisterForm')->middleware('auth:office')->name('register.warehouse');
+// DELETED
 // Post the submitted form details
-Route::post('/register/office', 'Auth\RegisterController@createOffice');
-Route::post('/register/warehouse', 'Auth\RegisterController@createWarehouse');
+// DELETED
 // Get the login form
 Route::get('/login/office', 'Auth\LoginController@showOfficeLoginForm')->name('login.office');
 Route::get('/login/warehouse', 'Auth\LoginController@showWarehouseLoginForm')->name('login.warehouse');
