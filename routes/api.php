@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,8 +31,8 @@ Route::group([
     // middleware currently throws a 401 unauthenticated error when turned on.
 
     'middleware' => [
-        // 'auth:office'//,
-        'auth:api'
+        //'auth:office'//,
+        // 'auth:api'
     ]
 ], function () {
 

@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 use Carbon\CarbonImmutable;
+use Maatwebsite\Excel\Facades\Excel;
 
 class FruitBoxController extends Controller
 {
@@ -37,7 +38,7 @@ class FruitBoxController extends Controller
     // n.b still needs 2 model replacements AssignedRoute and CompanyRoute, for hardcoded options and Route respectively.
     public function fruitbox_export()
     {
-        return \Excel::download(new Exports\FruitboxPicklistsExport($this->week_start), 'picklists' . $this->week_start . '.xlsx');
+        return Excel::download(new Exports\FruitboxPicklistsExport($this->week_start), 'picklists' . $this->week_start . '.xlsx');
     }
 
     public function addRouteInfoToFruitPicklists()
