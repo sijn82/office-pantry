@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -257,3 +260,198 @@ Auth::routes();
 // Route::get('/password/reset','Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
 
 // Route::view('/home', 'home')->middleware('auth');
+
+
+Route::group([
+    'namespace' => 'Boxes',
+    'prefix' => 'api/boxes',
+    //'guard' => 'office',
+    // middleware currently throws a 401 unauthenticated error when turned on.
+
+    'middleware' => [
+        'office'//,
+        // 'auth:api'
+    ]
+], function () {
+
+                        //----- Current Orders -----//
+
+    // Fruitbox CRUD
+    Route::post('fruitbox/add-new-fruitbox', 'FruitBoxController@store');
+    Route::put('fruitbox/{id}', 'FruitBoxController@update');
+    Route::put('fruitbox/destroy/{id}', 'FruitBoxController@destroy');
+    // Milkbox CRUD
+    Route::post('milkbox/add-new-milkbox', 'MilkBoxController@store');
+    Route::put('milkbox/{id}', 'MilkBoxController@update');
+    Route::put('milkbox/destroy/{id}', 'MilkBoxController@destroy');
+    // Snackbox CRUD
+    Route::post('snackboxes/save', 'SnackBoxController@store');
+    Route::post('snackbox/update', 'SnackBoxController@update');
+    Route::post('snackbox/details', 'SnackBoxController@updateDetails');
+    Route::post('snackbox/add-product', 'SnackBoxController@addProductToSnackbox');
+    Route::put('snackbox/destroy/{id}', 'SnackBoxController@destroyItem');
+    Route::put('snackbox/destroy-box/{id}', 'SnackBoxController@destroyBox');
+    // Drinkbox CRUD
+    Route::post('drinkboxes/save', 'DrinkBoxController@store');
+    Route::post('drinkbox/update', 'DrinkBoxController@update');
+    Route::post('drinkbox/details', 'DrinkBoxController@updateDetails');
+    Route::post('drinkbox/add-product', 'DrinkBoxController@addProductToDrinkbox');
+    Route::put('drinkbox/destroy/{id}', 'DrinkBoxController@destroyItem');
+    Route::put('drinkbox/destroy-box/{id}', 'DrinkBoxController@destroyBox');
+    // Otherbox CRUD
+    Route::post('otherboxes/save', 'OtherBoxController@store');
+    Route::post('otherbox/update', 'OtherBoxController@update');
+    Route::post('otherbox/details', 'OtherBoxController@updateDetails');
+    Route::post('otherbox/add-product', 'OtherBoxController@addProductToOtherbox');
+    // Route::put('otherbox/destroy/{id}', 'OtherBoxController@destroy'); // Don't think I'm using this, going to replace it anyway.
+    Route::put('otherbox/destroy/{id}', 'OtherBoxController@destroyItem');
+    Route::put('otherbox/destroy-box/{id}', 'OtherBoxController@destroyBox');
+
+                        //----- Archived Orders -----//
+
+    // Archived Fruitbox
+    Route::put('archived-fruitbox/update/{id}', 'ArchivedFruitBoxController@updateArchivedFruitBox');
+    Route::put('archived-fruitbox/destroy/{id}', 'ArchivedFruitBoxController@deleteArchivedFruitBox');
+    // Archived Milkbox
+    Route::put('archived-milkbox/update/{id}', 'ArchivedMilkBoxController@updateArchivedMilkBox');
+    Route::put('archived-milkbox/destroy/{id}', 'ArchivedMilkBoxController@deleteArchivedMilkBox');
+    // Archived Snackbox
+    Route::post('archived-snackbox/details', 'ArchivedSnackBoxController@updateDetails');
+    Route::put('archived-snackbox/destroy/{id}', 'ArchivedSnackBoxController@destroyItem');
+    Route::put('archived-snackbox/destroy-box/{id}', 'ArchivedSnackBoxController@destroyBox');
+    // Archived Drinkbox
+    Route::put('archived-drinkbox/destroy/{id}', 'ArchivedDrinkBoxController@destroyItem');
+    Route::put('archived-drinkbox/destroy-box/{id}', 'ArchivedDrinkBoxController@destroyBox');
+    // Archived Otherbox
+    Route::put('archived-otherbox/destroy/{id}', 'ArchivedOtherBoxController@destroyItem');
+    Route::put('archived-otherbox/destroy-box/{id}', 'ArchivedOtherBoxController@destroyBox');
+
+    //----- Mass Update Snackboxes -----//
+    Route::post('snackboxes/standard/update', 'SnackBoxController@massUpdateType');
+    Route::get('types/select', 'SnackBoxController@showTypes');
+    // Export Fruitbox Picklists
+    Route::get('export-fruitbox-picklists', 'FruitBoxController@fruitbox_export');
+    // Not 100% sure if this one is in use?
+    Route::get('fruitbox-picklists', 'FruitBoxController@addRouteInfoToFruitPicklists');
+    // Or this remarkably similar one :)
+    Route::get('fruitbox-picklists', 'FruitBoxController@addRouteInfoToFruitPicklists');
+    // And this almost certainly isn't used... In fact I'm even going to comment it out for (ever) now.
+    // Route::get('importFruitBox', 'FruitBoxController@store');
+    // Again, not sure exactly sure the purpose of this route, obviously it's an export but is it a picklist? Is it currently in use?
+    Route::get('otherbox-export', 'OtherBoxController@download_otherboxes');
+
+
+    // Old System Routes
+    Route::post('upload-snackbox-product-codes', 'SnackBoxController@upload_products_and_codes');
+    Route::post('upload-snackbox-orders', 'SnackBoxController@upload_snackbox_orders');
+});
+
+// Aside from boxes which got their own group these are the controllers which handle company specific data.
+// I could maybe put everything in here, and add a further subgroup of 'boxes' but for now this is an improvement on what I had.
+
+Route::group([
+    'namespace' => 'Company',
+    'prefix' => 'api/company',
+    //'middleware' => ['auth:api','auth:office']
+], function () {
+
+    Route::post('additional-info', 'AdditionalInfoController@addAdditionalInfo');
+    Route::put('additional-info/{id}', 'AdditionalInfoController@destroy');
+
+    Route::get('allergies/select', 'AllergyController@showAllergies');
+    Route::post('allergies', 'AllergyController@addAllergy');
+    Route::put('allergies/{id}', 'AllergyController@destroy');
+
+    Route::post('company-details/add-new-company', 'CompanyDetailsController@store');
+    Route::put('company-details/update/{company_details_id}', 'CompanyDetailsController@update');
+    Route::get('companies/search', 'CompanyDetailsController@search');
+
+    // New system exporting functions, now moved to their new homes but still partially incomplete (DO NOT EXPECT THEM TO RUN RIGHT NOW!)
+    // Route::get('export-fruitbox-picklists', 'FruitBoxController@fruitbox_export');
+
+    // The next 3 routes should really go into their own group I think, using a more bespoke controller, until I do that, they'll just have to live here for now.
+    Route::get('export-routing', 'CompanyRouteController@download_new_routes');
+    Route::get('export-routing-override', 'CompanyRouteController@download_new_routes_override');
+    //Import Rejigged Routes (New System)
+    Route::post('import-rejigged-routes', 'CompanyRouteController@import');
+
+    // Company route CRUD - note that the autogeneration of routes means create isn't necessary and I never seem to use read in the default way.
+    Route::put('company-route/update/{id}', 'CompanyRouteController@update');
+    Route::put('company-route/delete/{id}', 'CompanyRouteController@destroy');
+
+    Route::post('preferences/add-new-preference', 'PreferencesController@store');
+    Route::post('preferences/selected', 'PreferencesController@show');
+    Route::put('preferences/remove/{id}', 'PreferencesController@remove');
+    // I'm pretty sure this was just used to test the random selection of a new product id,
+    // but I'll double check that later, for now it's fine to keep.
+    Route::get('random', 'PreferencesController@random');
+});
+
+
+// Essentially this is a group of system functions where, less concerned with specific orders,
+// these are the bits that enable the generation/processing/delivery of company orders.
+Route::group([
+    'namespace' => 'OfficePantry',
+    'prefix' => 'api/office-pantry',
+    //'middleware' => 'auth:office'
+], function () {
+    // Assigned routes i.e our own delivery routes.
+    Route::post('assigned-route/add-new-assigned-route', 'AssignedRouteController@store');
+    Route::post('assigned-routes/update', 'AssignedRouteController@update');
+    Route::get('assigned-routes/select', 'AssignedRouteController@listAssignedRoutes');
+    Route::put('assigned-route/{id}', 'AssignedRouteController@destroy');
+    // Fruit Partner Products i.e 1 x fruitbox = £20, 2 x fruitbox = 18.50 etc.
+    Route::post('fruit-partners/add-new-fruitpartner', 'FruitPartnerController@store');
+    Route::get('fruit-partners/select', 'FruitPartnerController@listFruitPartners'); // All fruitpartners including Office Pantry (for adding fruit/milk boxes)
+    Route::get('fruit-partner-deliveries/export', 'FruitPartnerController@fruitPartnersList'); // Fruit Partners excluding Office Pantry for processing/exporting their orders.
+    Route::get('fruit-partners-export/download-zip', 'FruitPartnerController@downloadFruitPartnerZipFile');
+    Route::get('fruit_partners/{id}', 'FruitPartnerController@show'); // <-- not sure where this is used, will edit when I stumble across it or take a proper look.
+    Route::put('fruit-partners/update/{id}', 'FruitPartnerController@update');
+    Route::put('fruit-partners/destroy/{id}', 'FruitPartnerController@destroy');
+    // This might get moved to an import/export group later on.
+    Route::get('export-fruitpartner-deliveries', 'FruitPartnerController@groupOrdersByFruitPartner');
+    Route::get('create-fruitpartner-export-jobs', 'FruitPartnerController@createJobsForEachFruitPartner');
+
+    // Office Pantry Products
+    Route::put('office-pantry-products/update/{id}', 'OfficePantryProductsController@update');
+    Route::get('office-pantry-products/show', 'OfficePantryProductsController@show'); // Might do this differently tomorrow morning.
+    //Invoicing
+    Route::get('weekly-invoicing', 'InvoicingController@weekly_invoicing_export');
+    Route::get('confirm-weekly-invoicing', 'InvoicingController@confirm_weekly_invoicing');
+    // I think was just used to grab a few products once... will comment it out for now.
+    //Route::get('imports/readfile', 'ProductsController@import');
+    // Products (generic) i.e Cranberry Smokey ALmonds & Corn.
+    Route::put('products/update/{id}', 'ProductsController@update');
+    Route::put('products/destroy/{id}', 'ProductsController@destroy');
+
+    Route::post('products/add-new-product', 'ProductsController@store');
+    // Route::get('products/{id}', 'OfficeDashboardController@showProduct'); // why does this break the search function, if placed (here) above the 'products/search'
+    Route::get('products/search', 'ProductsController@search');
+    Route::get('products', 'ProductsController@index');
+
+    // To be useful at a later date when more of the process has been implimented.
+    //Route::get('importProduct', 'ProductsController@storeCSV');
+
+    // Update the week_start variable.
+    Route::post('import-week-start', 'WeekStartController@storeWeekStart');
+    Route::post('import-week-start-days', 'WeekStartController@storeDeliveryDays');
+    Route::get('week-start/select', 'WeekStartController@showAndSet');
+
+    Route::get('orders', 'OrderController@index');
+    Route::get('process-orders', 'OrderController@addOrdersToRoutes');
+    Route::get('carbon', 'OrderController@advanceNextOrderDeliveryDate');
+    Route::get('cron-data/select', 'OrderController@showCronData');
+    Route::post('cron-data/update', 'OrderController@updateCronData');
+
+    //----- Temporary hack to advance orders without worrying about whether the boxes have been invoiced, or to make archives - fruit & milk only! -----//
+    Route::get('fudge-order-advancement', 'OrderController@fudgeOrderAdvancement');
+});
+
+// Routes still looking for a folder to call home.
+
+Route::post('api/companies/selected', 'OfficeDashboardController@showSelectedCompanyData');
+Route::get('api/companies/selected', 'OfficeDashboardController@showSelectedCompanyData');
+Route::get('api/companies/{company}', 'OfficeDashboardController@show')->middleware('office'); //
+
+Route::get('api/products/{id}', 'OfficeDashboardController@showProduct'); // but works fine when placed below it here? <-- that was before, now I've moved it again what will happen?
+Route::put('api/preferences/{id}', 'OfficeDashboardController@destroy');
