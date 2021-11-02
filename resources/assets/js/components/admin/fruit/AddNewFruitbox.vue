@@ -243,7 +243,7 @@ export default {
                     name: this.company.route_name,
                     company_details_id: this.company.id, // If this is created by Frosh, how are they going to select the company to attach the order to?  A typed filter of a long list may be the best way.
                     route_id: null, // This will also need a way to filter from all possible routes, however once a company has been confirmed, the options could easily fit on a dropdown.
-                    delivery_day: '',  // According to the docs this must be an array reference, however it seems to me this is happening anyway?  Interesting...
+                    delivery_day: [],  // According to the docs this must be an array reference, however it seems to me this is happening anyway?  Interesting...
                     type: null, // Whilst not currently in use, this will determine between standard, berries and tailored, with tailored being the only one which can be edited (probably).
                     first_delivery: null, // This will be necessary to get the first delivery scheduled and for the frequency field to begin incrementing.
                     frequency: null, // Also new to the system, this will determine between daily, weekly, fortnightly and monthly, or bespoke.  This may then be connected to the cron/events when checking if a company is due for orders.
@@ -378,7 +378,7 @@ export default {
               this.form.name = '';
               this.form.company_details_id = this.company.id;
               this.form.route_id = null;
-              this.form.delivery_day = '';
+              this.form.delivery_day = [];
               this.form.type = null;
               this.form.frequency = '';
               this.form.week_of_month = null;

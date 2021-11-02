@@ -51,7 +51,7 @@ class CreateCompanyDetailsTable extends Migration
             $table->integer('surcharge')->nullable();
             $table->integer('supplier_id')->nullable();
             $table->string('model')->nullable();
-            $table->string('monthly_special')->default('TBC');
+            $table->string('monthly_surprise')->default('TBC');
             $table->string('no_of_surprises')->default(0);
             $table->timestamps();
         });

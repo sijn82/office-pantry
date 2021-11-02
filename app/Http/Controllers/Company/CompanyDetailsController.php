@@ -63,6 +63,8 @@ class CompanyDetailsController extends Controller
 
 
         // dd($request);
+
+
         $new_company = new CompanyDetails();
         // $new_company->is_active = request('company_details.);
         // Company Name(s)
@@ -100,7 +102,7 @@ class CompanyDetailsController extends Controller
         $new_company->surcharge = request('company_details.surcharge');
         $new_company->supplier_id = request('company_details.supplier_id');
         $new_company->model = request('company_details.model');
-        $new_company->monthly_surprise = request('company_details.monthly_surprise');
+        $new_company->monthly_surprise = request('company_details.monthly_surprise') ? request('company_details.monthly_surprise') : 'TBC';
         $new_company->no_of_surprises = request('company_details.no_of_surprises');
         $new_company->save();
     }

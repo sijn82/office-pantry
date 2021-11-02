@@ -32,7 +32,7 @@ Route::group([
 
     'middleware' => [
         //'auth:office'//,
-        // 'auth:api'
+        'auth:api'
     ]
 ], function () {
 
@@ -213,7 +213,7 @@ Route::group([
 
 Route::post('companies/selected', 'OfficeDashboardController@showSelectedCompanyData');
 Route::get('companies/selected', 'OfficeDashboardController@showSelectedCompanyData');
-Route::get('companies/{company}', 'OfficeDashboardController@show')->middleware('auth:api'); //
+Route::get('companies/{company}', 'OfficeDashboardController@show')->middleware('office'); //
 
 Route::get('products/{id}', 'OfficeDashboardController@showProduct'); // but works fine when placed below it here? <-- that was before, now I've moved it again what will happen?
 Route::put('preferences/{id}', 'OfficeDashboardController@destroy');
