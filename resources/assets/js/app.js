@@ -24,32 +24,32 @@ import 'bootstrap';
  
  Vue.component(
      'passport-clients',
-     require('./components/passport/Clients.vue')
+     require('./components/passport/Clients.vue').default
  );
  
  Vue.component(
      'passport-authorized-clients',
-     require('./components/passport/AuthorizedClients.vue')
+     require('./components/passport/AuthorizedClients.vue').default
  );
  
  Vue.component(
      'passport-personal-access-tokens',
-     require('./components/passport/PersonalAccessTokens.vue')
+     require('./components/passport/PersonalAccessTokens.vue').default
  );
 
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
-Vue.component('products', require('./components/Products.vue'));
-Vue.component('companies', require('./components/Companies.vue'));
-Vue.component('picklists', require('./components/Picklists.vue'));
-Vue.component('routes', require('./components/Routes.vue'));
-Vue.component('update-picklist-n-routes', require('./components/UpdatePicklistNRoutes.vue'));
-Vue.component('update-week-start', require('./components/UpdateWeekStart.vue'));
-Vue.component('import-fod-file', require('./components/ImportFodFile.vue'));
-Vue.component('import-snacks-n-drinks-file', require('./components/ImportSnacksNDrinksFile.vue'));
-Vue.component('import-rejigged-routes-file', require('./components/ImportRejiggedRoutesFile.vue'));
-Vue.component('add-new-company', require('./components/AddNewCompany.vue'));
-Vue.component('process-snacks-into-templates', require('./components/ProcessSnacksIntoTemplates.vue'));
-Vue.component('berry-picklist', require('./components/BerryPicklist.vue'));
+Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('products', require('./components/Products.vue').default);
+Vue.component('companies', require('./components/Companies.vue').default);
+Vue.component('picklists', require('./components/Picklists.vue').default);
+Vue.component('routes', require('./components/Routes.vue').default);
+Vue.component('update-picklist-n-routes', require('./components/UpdatePicklistNRoutes.vue').default);
+Vue.component('update-week-start', require('./components/UpdateWeekStart.vue').default);
+Vue.component('import-fod-file', require('./components/ImportFodFile.vue').default);
+Vue.component('import-snacks-n-drinks-file', require('./components/ImportSnacksNDrinksFile.vue').default);
+Vue.component('import-rejigged-routes-file', require('./components/ImportRejiggedRoutesFile.vue').default);
+Vue.component('add-new-company', require('./components/AddNewCompany.vue').default);
+Vue.component('process-snacks-into-templates', require('./components/ProcessSnacksIntoTemplates.vue').default);
+Vue.component('berry-picklist', require('./components/BerryPicklist.vue').default);
 
 const app = new Vue({
     el: '#app'

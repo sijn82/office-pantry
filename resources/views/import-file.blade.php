@@ -16,6 +16,9 @@
 .flex-center {
   display: block;
 }
+.import-file-fod-csv {
+  padding-bottom: 30px;
+}
 
 </style>
 @endsection
