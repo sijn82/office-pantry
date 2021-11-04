@@ -11,6 +11,9 @@
 |
 */
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -31,7 +34,7 @@ Route::get('import-file', function () {
 });
 Route::get('import-products', ['as' => 'import-products', function () {
     return view('process-snackboxes');
-}]);
+}])->middleware('auth:office');
 Route::get('companies/new', function () {
     return view('new-company');
 });

@@ -83,8 +83,7 @@
                     @auth
                         <a href="{{ url('/home') }}">Home</a>
                     @else
-                        <a href="{{ route('login') }}">Login</a>
-                        <a href="{{ route('register') }}">Register</a>
+
                     @endauth
                 </div>
             @endif
@@ -96,7 +95,7 @@
 
                 <div class="links">
                     <a href="{{ route('login/office') }}">Office Login</a>
-                    <a href="{{ route('login/warehouse') }}">Warehouse Login</a>
+                    <!-- <a href="{{ route('login/warehouse') }}">Warehouse Login</a> -->
                     <a href="https://laravel-news.com">Stocklist</a>
                     <a href="https://forge.laravel.com">Invoices</a>
                     <a href="https://github.com/laravel/laravel">Payments</a>

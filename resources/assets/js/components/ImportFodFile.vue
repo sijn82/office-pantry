@@ -63,6 +63,9 @@
         margin-top: 10px;
         margin-bottom: 10px;
     }
+    .form-control {
+        height: auto;
+    }
 
 </style>
 
