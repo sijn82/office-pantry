@@ -39,7 +39,7 @@ class CreateRoutesTable extends Migration
             $table->integer('milk_1l_alt_lactose_free_semi')->nullable();
             $table->string('drinks')->nullable();
             $table->string('snacks')->nullable();
-            $table->string('other')->nullable();
+            $table->string('other', 2000)->nullable();
             $table->string('assigned_to')->default('TBC');
             $table->string('delivery_day'); // The mispositioning of this field upsets me but for now it's much quicker to keep it and not corrupt the current data for live upload.
             $table->integer('position_on_route')->nullable();

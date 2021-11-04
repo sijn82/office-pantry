@@ -35,8 +35,8 @@ return [
     |
     */
 
-    // 'default' => env('DB_CONNECTION', 'mysql'),
-    'default' => 'pgsql_production',
+    'default' => env('DB_CONNECTION', 'pgsql'),
+    // 'default' => 'pgsql_production',
 
     /*
     |--------------------------------------------------------------------------

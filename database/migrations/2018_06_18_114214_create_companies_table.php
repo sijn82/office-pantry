@@ -18,7 +18,7 @@ class CreateCompaniesTable extends Migration
             $table->string('is_active')->default('Active');
             $table->string('invoice_name')->nullable();
             $table->string('route_name')->nullable();
-            $table->string('box_names')->nullable();
+            $table->string('box_names', 500)->nullable();
             $table->string('primary_contact')->nullable();
             $table->string('primary_email')->nullable();
             $table->string('secondary_email')->nullable();
