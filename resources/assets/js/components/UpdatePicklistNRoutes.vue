@@ -23,9 +23,9 @@
 
 <style lang="scss">
 
-.flex-center {
-  display: block;
-}
+// .flex-center {
+//   display: block;
+// }
 
 ul#update-picklist-n-routes-menu {
   list-style: none;

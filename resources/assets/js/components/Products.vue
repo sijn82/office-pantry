@@ -26,9 +26,9 @@
 </template>
 
 <style>
-  .flex-center {
+  /* .flex-center {
     display: block;
-  }
+  } */
   .no-list-style {
     list-style: none;
   }

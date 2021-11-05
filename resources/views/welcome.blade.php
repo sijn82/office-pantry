@@ -69,11 +69,16 @@
             }
         </style>
 
-        @yield('importing-csv-files')
-        @yield('routing-assets')
-        @yield('routing-display-assets')
-        @yield('company-assets')
-        @yield('process-snackboxes-styling')
+
+
+        @if (Request::path() !== '/')
+            @yield('importing-csv-files')
+            @yield('routing-assets')
+            @yield('routing-display-assets')
+            @yield('company-assets')
+            @yield('process-snackboxes-styling')
+        @endif
+
         
     </head>
     <body>
@@ -96,9 +101,9 @@
                 <div class="links">
                     <a href="{{ route('login/office') }}">Office Login</a>
                     <!-- <a href="{{ route('login/warehouse') }}">Warehouse Login</a> -->
-                    <a href="https://laravel-news.com">Stocklist</a>
+                    {{-- <a href="https://laravel-news.com">Stocklist</a>
                     <a href="https://forge.laravel.com">Invoices</a>
-                    <a href="https://github.com/laravel/laravel">Payments</a>
+                    <a href="https://github.com/laravel/laravel">Payments</a> --}}
                 </div>
 
 

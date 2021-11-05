@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
 Route::get('import-csv', function () {
     return view('importCSV');
 });
@@ -77,14 +77,14 @@ Route::view('/', 'welcome');
 
 Route::get('/login/office', 'Auth\LoginController@showOfficeLoginForm')->name('login/office');
 Route::get('/login/warehouse', 'Auth\LoginController@showWarehouseLoginForm')->name('login/warehouse');
-Route::get('/register/office', 'Auth\RegisterController@showOfficeRegisterForm');
-Route::get('/register/warehouse', 'Auth\RegisterController@showWarehouseRegisterForm')->middleware('auth:office');
+// Route::get('/register/office', 'Auth\RegisterController@showOfficeRegisterForm');
+// Route::get('/register/warehouse', 'Auth\RegisterController@showWarehouseRegisterForm')->middleware('auth:office');
 
 Route::post('/login/office', 'Auth\LoginController@officeLogin');
 Route::post('/login/warehouse', 'Auth\LoginController@warehouseLogin');
-Route::post('/register/office', 'Auth\RegisterController@createOffice');
-Route::post('/register/warehouse', 'Auth\RegisterController@createWarehouse');
+// Route::post('/register/office', 'Auth\RegisterController@createOffice');
+// Route::post('/register/warehouse', 'Auth\RegisterController@createWarehouse');
 
-Route::view('/home', 'home')->middleware('auth');
+// Route::view('/home', 'home')->middleware('auth');
 Route::view('/office', 'office')->middleware('auth:office');
-Route::view('/warehouse', 'warehouse')->middleware('auth:warehouse');
+// Route::view('/warehouse', 'warehouse')->middleware('auth:warehouse');
