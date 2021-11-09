@@ -625,7 +625,7 @@ WithEvents
                     // I could do something here, instead of adding a new foreach clause stipulating the same thing.
 
                     //----- Moved logic up to here to handle all fruit & milk and just fruit deliveries -----//
-                    $milkboxes = $this->milkboxes[$key];
+                    $milkboxes = isset($this->milkboxes[$key]) ? $this->milkboxes[$key] : null; // This is now throwing an error, not sure why but maybe this will bypass it 09/11/2021 
                     // dump($milkboxes);
                     $milkboxes ? $additional_milk = $milkboxes->where('next_delivery', $week_start->current)->where('company_details_id', $fruitbox->company_details_id)->where('delivery_day', $fruitbox->delivery_day)->first() : $additional_milk = $milkboxes;
                     // $additional_milk = $milkboxes->where('company_details_id', $fruitbox->company_details_id)->where('delivery_day', $fruitbox->delivery_day)->first();
@@ -784,7 +784,7 @@ WithEvents
 
                     $delivery_entry = new \stdClass;
                     // Added but untested, however I did the same but with milk to the fruitboxes so it should be fine?
-                    $fruitboxes = $this->fruitboxes[$key];
+                    $fruitboxes = isset($this->fruitboxes[$key]) ? $this->fruitboxes[$key] : null; // This is now throwing an error, not sure why but maybe this will bypass it 09/11/2021 
                     // dump($fruitboxes);
                     // Call to a member function where() on null, throws error - needs fixing!!
                     $fruitboxes ? $additional_fruit = $fruitboxes->where('company_details_id', $milkbox->company_details_id)->where('delivery_day', $milkbox->delivery_day)->first() : $additional_fruit = $fruitboxes;
