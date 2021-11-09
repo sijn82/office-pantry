@@ -91,6 +91,8 @@ class SnackboxOPSingleCompanyExport
                      $middleCells = ['B' . $selectedRow, 'C' . $selectedRow, 'D' . $selectedRow];
                      // dd($chosenCells);
 
+                    //  dd($fullCellRange);
+
                      $chosenCellsArray = $event->sheet->getDelegate()
                          ->rangeToArray(
                              $chosenCells,     // The worksheet range that we want to retrieve
@@ -174,7 +176,8 @@ class SnackboxOPSingleCompanyExport
                           {
                               $event->sheet->getDelegate()->getStyle($centeredCellRange)->getAlignment()->setHorizontal('center');
                               $event->sheet->getDelegate()->getStyle($fullCellRange)->getFont()->setSize(24);
-                              $event->sheet->getDelegate()->getRowDimension($fullCellRange)->setRowHeight(40);
+                            //   $event->sheet->getDelegate()->getRowDimension($fullCellRange)->setRowHeight(40); // This isn't working anymore?! // 09/11/2021 
+                              $event->sheet->getDelegate()->getRowDimension($selectedRow)->setRowHeight(40); // Hoping by passing in a single value rather than cell range is enough to fix it // 09/11/2021
 
                               // This foreach will create the grey lines defining/seperating the columns.
                               foreach ($middleCells as $selectedCell) {

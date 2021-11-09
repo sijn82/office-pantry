@@ -108,8 +108,13 @@ class FruitOrderingDocumentController extends Controller
         // $delivery_days = $request->delivery_days ? 'wed-thur-fri' : '';
         $delivery_days = $request->delivery_days;
 
+        // dd($request->fod_csv);
+
         // strip out the automatic base encoding with wrong mime after file upload form
-        $request_mime_fix = str_replace('data:application/vnd.ms-excel;base64,','',$request->fod_csv);
+        // $request_mime_fix = str_replace('data:application/vnd.ms-excel;base64,','',$request->fod_csv);
+
+        // It looks like the file is being processed with a more accurate mime - assume this is a result of the package updates.  Not sure if this will be sufficent to fix the whole process though? // 09/11/2021 updates.
+        $request_mime_fix = str_replace('data:text/csv;base64,','',$request->fod_csv);
         // now we can decode the remainder of the encoded data string
         $requestcsv = base64_decode($request_mime_fix);
         // however it now has some unwated unicode characters i.e the 'no break space' - (U+00A0) and use json_encode to make them visible
@@ -119,6 +124,8 @@ class FruitOrderingDocumentController extends Controller
         // and return the file ready for storage
         $ready_csv = json_decode($csv_data_fixed);
 
+        // dd($ready_csv);
+
         // this is how we determine where to put the file, these variables are populated with the $week_start variable at the top of this class
         // and the request parameters attached to the form on submission.
         Storage::put('public/fod/fod-' . $this->week_start . '-inc-zeros-' . $delivery_days . '-noheaders-utf8-nobom.csv', $ready_csv);
@@ -126,7 +133,7 @@ class FruitOrderingDocumentController extends Controller
         // i've decided to place this here, processing the request immediately after storing a copy
         // because i can't think of a reason why the file would be uploaded without processing them straight away.
         if (($handle = fopen('../storage/app/public/fod/fod-' . $this->week_start . '-inc-zeros-' . $delivery_days . '-noheaders-utf8-nobom.csv', 'r')) !== FALSE) {
-               while (($data = fgetcsv ($handle,',')) !== FALSE) {
+               while (($data = fgetcsv ($handle, 0, ',')) !== FALSE) {
 
                    // this is just to test the data a little before we risk putting stuff automatically into the database.
                    echo $data[0] . ' is ' . strlen($data[0]) . ' characters long and ' . json_encode($data[1]) . ' is also ' . strlen($data[1]) . '<br>';

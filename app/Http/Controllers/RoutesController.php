@@ -98,7 +98,11 @@ class RoutesController extends Controller
         $delivery_days = $request->delivery_days;
 
         // strip out the automatic base encoding with wrong mime after file upload form
-        $request_mime_fix = str_replace('data:application/vnd.ms-excel;base64,','',$request->rejigged_routes_csv);
+        // $request_mime_fix = str_replace('data:application/vnd.ms-excel;base64,','',$request->rejigged_routes_csv);
+
+        // It looks like the file is being processed with a more accurate mime - assume this is a result of the package updates.  Not sure if this will be sufficent to fix the whole process though? // 09/11/2021 updates.
+        $request_mime_fix = str_replace('data:text/csv;base64,','',$request->snackbox_orders);
+
         // now we can decode the remainder of the encoded data string
         $requestcsv = base64_decode($request_mime_fix);
         // however it now has some unwated unicode characters i.e the 'no break space' - (U+00A0) and use json_encode to make them visible
@@ -413,7 +417,11 @@ class RoutesController extends Controller
         $delivery_days = $request->delivery_days;
 
         // strip out the automatic base encoding with wrong mime after file upload form
-        $request_mime_fix = str_replace('data:application/vnd.ms-excel;base64,','',$request->snacks_n_drinks_csv);
+        // $request_mime_fix = str_replace('data:application/vnd.ms-excel;base64,','',$request->snacks_n_drinks_csv);
+
+        // It looks like the file is being processed with a more accurate mime - assume this is a result of the package updates.  Not sure if this will be sufficent to fix the whole process though? // 09/11/2021 updates.
+        $request_mime_fix = str_replace('data:text/csv;base64,','',$request->snackbox_orders);
+
         // now we can decode the remainder of the encoded data string
         $requestcsv = base64_decode($request_mime_fix);
         // however it now has some unwated unicode characters i.e the 'no break space' - (U+00A0) and use json_encode to make them visible
