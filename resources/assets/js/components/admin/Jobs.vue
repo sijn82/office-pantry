@@ -10,6 +10,7 @@
         <!-- <ul v-for="(fruitpartner, index) in remainingFruitPartners" :key="index" >
             <li width="80%"><b>{{ fruitpartner.name }}</b></li>
         </ul> -->
+        <b-button class="button-download" variant="warning" href="/api/office-pantry/fruit-partners-export/download-zip"> Emergency Download Fruit Partner Orders </b-button>
 </div>
 </template>
 
