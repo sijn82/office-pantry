@@ -57,5 +57,5 @@ window.Echo = new Echo({
     cluster: 'eu',                  // DITTO WITH THIS VALUE TOO!!
     // key: PUSHER_APP_KEY,
     // cluster: PUSHER_APP_CLUSTER,
-    encrypted: true
+    // encrypted: true
 });
